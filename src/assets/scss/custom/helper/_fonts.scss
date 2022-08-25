@@ -1,0 +1,21 @@
+$icon-fill: 0 !default;
+$icon-weight: 200 !default;
+$icon-grade: 0 !default;
+$iocn-optical-size: 24 !default;
+$font-size-base: 0.875rem !default;
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' $icon-fill,
+  'wght' $icon-weight,
+  'GRAD' $icon-grade,
+  'opsz' $iocn-optical-size;
+}
+.material-symbols-outlined.filled{
+  font-variation-settings:
+  'FILL' 1,
+  'wght' $icon-weight,
+  'GRAD' $icon-grade,
+  'opsz' 20;
+  font-size: $font-size-base;
+}
