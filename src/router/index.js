@@ -80,6 +80,12 @@ const childRoutes = (prop, mode) => [
     component: () => import('../views/Book/Book')
   },
   {
+    path: 'book-details',
+    name: prop + '.book-details',
+    meta: { auth: true, name: 'BookDetails' },
+    component: () => import('../views/Book/BookDetails')
+  },
+  {
     path: 'infographic',
     name: prop + '.infographic',
     meta: { auth: true, name: 'Infographic' },

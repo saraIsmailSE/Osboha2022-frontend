@@ -58,7 +58,7 @@
                 ariaControls="pills-contact" role="tab" :ariaSelected="false" title="المجموعات" />
               <tab-nav-items class="col-sm-3 p-0" :active="false" id="pills-statistics-tab" href="#profile-statistics"
                 ariaControls="pills-contact" role="tab" :ariaSelected="false" title="احصائيات" />
-            </tab-nav>
+              </tab-nav>
           </div>
         </div>
       </iq-card>
@@ -140,6 +140,30 @@
                 </iq-card>
                 <!-- ########## END FRIENDS ########## -->
 
+                <!-- ########## START FRIENDS ########## -->
+                <iq-card>
+                  <template v-slot:headerTitle>
+                    <h4 class="card-title">الاجازات</h4>
+                  </template>
+                  <template v-slot:headerAction>
+                    <p class="m-0"><a href="javacsript:void();">مشاهدة الكل</a></p>
+                  </template>
+                  <template v-slot:body>
+                    <ul class="profile-img-gallary p-0 m-0 list-unstyled">
+                      <li v-for="(exceprtion, index) in exceptions" :key="index">
+                        <h5 class="mt-2">{{ exceprtion.title }} || {{exceprtion.date}}</h5>
+                        <p v-if="exceprtion.title=='freeze'">
+                        يحق لك التجميد بعد 
+                          {{exceprtion.date}} 
+                        </p>
+                        
+                      </li>
+                    </ul>
+                    <button class="btn btn-primary d-block w-100 mt-3">طلب اجازة</button>
+                  </template>
+                </iq-card>
+                <!-- ########## END EXCEPTIONS ########## -->
+
               </div>
               <div class="col-lg-8">
                 <div id="post-modal-data" class="iq-card">
@@ -156,7 +180,8 @@
             </div>
           </div>
         </tab-content-item>
-
+        
+        <!-- ########## START ABOUT ########## -->
         <tab-content-item :active="false" id="profile-about" aria-labelled-by="pills-about-tab">
           <iq-card>
             <template v-slot:body>
@@ -164,6 +189,8 @@
             </template>
           </iq-card>
         </tab-content-item>
+        <!-- ########## End ABOUT ########## -->
+
 
         <!-- ########## START GROUPS ########## -->
         <tab-content-item :active="false" id="profile-group" aria-labelled-by="pills-group-tab">
@@ -202,7 +229,7 @@
 <script>
 import { socialvue } from '../../config/pluginInit'
 import ListGroups from '../../components/group/ListView1.vue'
-import About from '../SocailMain/Profile/ProfileFriends/About.vue'
+import About from './About.vue'
 import Post from '../../components/post/Post.vue'
 import AddPost from '../../components/post/AddPost'
 import Marks from '../../components/statistics/Marks.vue'
@@ -657,6 +684,12 @@ export default {
           date: '24-02-2000'
         },
       ],
+      exceptions:[
+        {
+          title:'freeze',
+          date:'20-09-2990'
+      }
+    ],
     }
   },
   methods: {

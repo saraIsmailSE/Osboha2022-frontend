@@ -31,7 +31,7 @@
 
                     </div>
                     <div class="col-6">
-                <button type="submit" class="btn btn-primary d-block w-100">عرض الأطروحات </button>
+                <button type="submit" class="btn btn-primary d-block w-100" @click="bookDetails()">عرض الأطروحات </button>
                         
                     </div>
                 </div>
@@ -41,6 +41,7 @@
     </div>
 </template>
 <script>
+    import router from '../../router'
 export default {
     name: 'BookCard',
     props: {
@@ -54,8 +55,11 @@ export default {
         resolve_img_url: function (path) {
             let images = require.context('../../assets/images', false, /\.png$|\.jpg$/)
             return images("./" + path)
+        },
+        bookDetails(){
+            router.push({ name: "social.book-details"})
         }
+        
     }
 }
 </script>
-Footer

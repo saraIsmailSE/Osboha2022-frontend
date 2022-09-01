@@ -31,7 +31,6 @@ export default {
                 value: '250'
               }
             ],
-            hasCertificate: false
           },
           {
             backgroundImg: 'profile-bg.jpg',
@@ -52,7 +51,6 @@ export default {
                 value: '250'
               }
             ],
-            hasCertificate: false
           },
           {
             backgroundImg: 'profile-bg.jpg',
@@ -73,7 +71,6 @@ export default {
                 value: '250'
               }
             ],
-            hasCertificate: false
           },
           {
             backgroundImg: 'profile-bg.jpg',
@@ -94,7 +91,6 @@ export default {
                 value: '250'
               }
             ],
-            hasCertificate: false
           },
           {
             backgroundImg: 'profile-bg.jpg',
@@ -115,7 +111,6 @@ export default {
                 value: '250'
               }
             ],
-            hasCertificate: false
           },
           {
             backgroundImg: 'profile-bg.jpg',
@@ -136,7 +131,6 @@ export default {
                 value: '250'
               }
             ],
-            hasCertificate: false
           },
           {
             backgroundImg: 'profile-bg.jpg',
@@ -157,7 +151,6 @@ export default {
                 value: '250'
               }
             ],
-            hasCertificate: true
           },
           {
             backgroundImg: 'profile-bg.jpg',
@@ -178,7 +171,6 @@ export default {
                 value: '250'
               }
             ],
-            hasCertificate: false
           },
         ]
     }
