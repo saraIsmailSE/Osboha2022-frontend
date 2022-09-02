@@ -15,9 +15,12 @@
                 <div class="blog-description">
                     <h6>
                     الصفحات المنجزة: {{thesis.pages}}
+                    <rate :rate="thesis.rate" />
                     </h6>
                     <p>{{thesis.body}}</p>
-                    <rate :rate="thesis.rate" />
+                    <Comment v-if="thesis.comments" :no_comments="false" :comments="thesis.comments" />
+                    <CreateComment />
+
                 </div>
             </div>
         </div>
@@ -25,11 +28,15 @@
 </template>
 <script>
 import rate from '../rate/rate.vue'
+import Comment from '../../post/Comment.vue'
+import CreateComment from '../../post/CreateComment.vue'
 
 export default {
     name: 'ListTesis',
     components: {
         rate,
+        Comment,
+        CreateComment,
     },
     props: {
         thesis: { type: Object }

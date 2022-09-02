@@ -51,29 +51,7 @@
                            </div>
                         </div>
                         <div class="card-body">
-                           <createThesis/>
-
-
-                           <!-- <form>
-                              <div class="form-group">
-                                 <label for="email1" class="form-label">Email address:</label>
-                                 <input type="email" class="form-control" id="email1">
-                              </div>
-                              <div class="form-group">
-                                 <label for="pwd" class="form-label">Password:</label>
-                                 <input type="password" class="form-control" id="pwd">
-                              </div>
-                              <div class="form-group">
-                                 <label for="exampleFormControlTextarea1" class="form-label">Comment</label>
-                                 <textarea class="form-control" id="exampleFormControlTextarea1" rows="4"></textarea>
-                              </div>
-                              <div class="form-check mb-3 w-100">
-                                 <input class="form-check-input" type="checkbox" id="remember-box" value="option1">
-                                 <label class="form-check-label" for="remember-box">Remember me</label>
-                              </div>
-                              <button type="submit" class="btn btn-primary me-2">Submit</button>
-                              <button type="submit" class="btn bg-soft-danger">Cancel</button>
-                           </form> -->
+                           <createThesis />
                         </div>
                      </div>
                   </div>
@@ -98,35 +76,51 @@
              {
                 pages: 30,
                 body: `لوريم ايبسوم دولار سيت أميت ,كونسيكتيتور أدايبا يسكينج أليايت,سيت دو أيوسمود تيمبور
+  
+  أنكايديديونتيوت لابوري ات دولار ماجنا أليكيوا . يوت انيم أد مينيم فينايم,كيواس نوستريد
+  
+  أكسير سيتاشن يللأمكو لابورأس نيسي يت أليكيوب أكس أيا كوممودو كونسيكيوات . ديواس
+  
+  أيوتي أريري دولار إن ريبريهينديرأيت فوليوبتاتي فيلايت أيسسي كايلليوم دولار أيو فيجايت
+  
+  نيولا باراياتيور. أيكسسيبتيور ساينت أوككايكات كيوبايداتات نون بروايدينت ,سيونت ان كيولبا
+  
+  كيو أوفيسيا ديسيريونتموليت انيم أيدي ايست لابوريوم.`,
+                rate: 3,
+                comments: [
+                   {
+                      author: 'USER',
+                      author_image: '03.jpg',
+                      created_at: '12-06-2019',
+                      body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
+                   },
+                   {
+                      image: 'profile-bg9.jpg',
+                      author: 'USER',
+                      author_image: '03.jpg',
+                      created_at: '12-06-2019',
+                      body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
+                   },
+                ]
  
- أنكايديديونتيوت لابوري ات دولار ماجنا أليكيوا . يوت انيم أد مينيم فينايم,كيواس نوستريد
- 
- أكسير سيتاشن يللأمكو لابورأس نيسي يت أليكيوب أكس أيا كوممودو كونسيكيوات . ديواس
- 
- أيوتي أريري دولار إن ريبريهينديرأيت فوليوبتاتي فيلايت أيسسي كايلليوم دولار أيو فيجايت
- 
- نيولا باراياتيور. أيكسسيبتيور ساينت أوككايكات كيوبايداتات نون بروايدينت ,سيونت ان كيولبا
- 
- كيو أوفيسيا ديسيريونتموليت انيم أيدي ايست لابوريوم.`,
-                rate: 3
              },
-
+ 
              {
-                pages: 7-19,
+                pages: 7 - 19,
                 body: `لوريم ايبسوم دولار سيت أميت ,كونسيكتيتور أدايبا يسكينج أليايت,سيت دو أيوسمود تيمبور
- 
- أنكايديديونتيوت لابوري ات دولار ماجنا أليكيوا . يوت انيم أد مينيم فينايم,كيواس نوستريد
- 
- أكسير سيتاشن يللأمكو لابورأس نيسي يت أليكيوب أكس أيا كوممودو كونسيكيوات . ديواس
- 
- أيوتي أريري دولار إن ريبريهينديرأيت فوليوبتاتي فيلايت أيسسي كايلليوم دولار أيو فيجايت
- 
- نيولا باراياتيور. أيكسسيبتيور ساينت أوككايكات كيوبايداتات نون بروايدينت ,سيونت ان كيولبا
- 
- كيو أوفيسيا ديسيريونتموليت انيم أيدي ايست لابوريوم.`,
+  
+  أنكايديديونتيوت لابوري ات دولار ماجنا أليكيوا . يوت انيم أد مينيم فينايم,كيواس نوستريد
+  
+  أكسير سيتاشن يللأمكو لابورأس نيسي يت أليكيوب أكس أيا كوممودو كونسيكيوات . ديواس
+  
+  أيوتي أريري دولار إن ريبريهينديرأيت فوليوبتاتي فيلايت أيسسي كايلليوم دولار أيو فيجايت
+  
+  نيولا باراياتيور. أيكسسيبتيور ساينت أوككايكات كيوبايداتات نون بروايدينت ,سيونت ان كيولبا
+  
+  كيو أوفيسيا ديسيريونتموليت انيم أيدي ايست لابوريوم.`,
                 rate: 5
              },
-             
+ 
           ]
        }
     }

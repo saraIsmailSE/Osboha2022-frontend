@@ -27,23 +27,40 @@
                 </div>
                 <div class="row">
                     <div class="col-6">
-                <button type="submit" class="btn btn-primary d-block w-100">كتابة أطروحة</button>
+                        <button type="submit" class="btn btn-primary d-block w-100" data-bs-toggle="modal"
+                            data-bs-target="#modals">كتابة أطروحة</button>
 
                     </div>
                     <div class="col-6">
-                <button type="submit" class="btn btn-primary d-block w-100" @click="bookDetails()">عرض الأطروحات </button>
-                        
+                        <button type="submit" class="btn btn-primary d-block w-100" @click="bookDetails()">عرض الأطروحات
+                        </button>
+
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+    <modal id="modals" dialogClass="modal-fullscreen-sm-down" tabindex="-1" title="Create Post"
+        aria-labelledby="modalsLabel" aria-hidden="true">
+        <model-header>
+          <h5 class="modal-title" id="modalsLabel">اسم الكتاب || أطروحة جديدة </h5>
+          <a href="javascript:void(0);" class="lh-1" data-bs-dismiss="modal">
+            <span class="material-symbols-outlined">close</span>
+          </a>
+        </model-header>
+        <model-body>
+            <createThesis />
+        </model-body>
+      </modal>
 </template>
 <script>
-    import router from '../../router'
+import router from '../../router'
+import createThesis from '../../components/book/theses/create.vue'
 export default {
     name: 'BookCard',
+    components:{
+        createThesis,
+    },
     props: {
         cardInfo: { type: Object },
     },
@@ -56,10 +73,10 @@ export default {
             let images = require.context('../../assets/images', false, /\.png$|\.jpg$/)
             return images("./" + path)
         },
-        bookDetails(){
-            router.push({ name: "social.book-details"})
+        bookDetails() {
+            router.push({ name: "social.book-details" })
         }
-        
+
     }
 }
 </script>
