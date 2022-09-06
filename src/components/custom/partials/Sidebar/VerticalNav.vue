@@ -46,7 +46,7 @@
                 <i class="icon material-symbols-outlined">
                     groups
                 </i>
-                <span class="item-name">مجموعة القراءة</span>
+                <span class="item-name">المجموعات </span>
             </router-link>
         </li>
         <!-- ###### Books ###### -->

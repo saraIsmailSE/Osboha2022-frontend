@@ -6,7 +6,7 @@ const state = {
   categoryList: [
     {
       id: 1,
-      name: 'All Task',
+      name: 'انجاز الكل',
       color: 'success',
       isHidden: true
     },

@@ -56,7 +56,7 @@
                 <button type="submit" class="btn btn-primary float-end" >Sign Up</button>
               </div>
               <div class="sign-info">
-                <span class="dark-color d-inline-block line-height-2">Already Have Account ? <router-link :to="{ name: 'auth1.sign-in1'}">Log In</router-link></span>
+                <span class="dark-color d-inline-block line-height-2">Already Have Account ? <router-link :to="{ name: 'auth.sign-in'}">Log In</router-link></span>
                 <ul class="iq-social-media">
                     <li>
                       <a href="#">
@@ -125,7 +125,7 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.$router.push({ name: 'auth1.sign-in1' })
+      this.$router.push({ name: 'auth.sign-in' })
     }
   }
 }

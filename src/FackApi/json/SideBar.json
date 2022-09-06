@@ -786,7 +786,7 @@
             "name": "sidebar.login",
             "is_active": false,
             "link": {
-              "name": "auth1.sign-in1"
+              "name": "auth.sign-in"
             },
             "class_name": "",
             "is_icon_class": true,
@@ -797,7 +797,7 @@
             "name": "sidebar.register",
             "is_active": false,
             "link": {
-              "name": "auth1.sign-up1"
+              "name": "auth.sign-up1"
             },
             "class_name": "",
             "is_icon_class": true,
@@ -808,7 +808,7 @@
             "name": "sidebar.recoverPassword",
             "is_active": false,
             "link": {
-              "name": "auth1.password-reset1"
+              "name": "auth.password-reset1"
             },
             "class_name": "",
             "is_icon_class": true,
@@ -819,7 +819,7 @@
             "name": "sidebar.confirmMail",
             "is_active": false,
             "link": {
-              "name": "auth1.confirm-mail1"
+              "name": "auth.confirm-mail1"
             },
             "class_name": "",
             "is_icon_class": true,
@@ -830,7 +830,7 @@
             "name": "sidebar.lockScreen",
             "is_active": false,
             "link": {
-              "name": "auth1.lock-screen1"
+              "name": "auth.lock-screen1"
             },
             "class_name": "",
             "is_icon_class": true,
