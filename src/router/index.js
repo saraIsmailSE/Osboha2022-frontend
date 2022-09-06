@@ -41,37 +41,37 @@ const childRoutes = (prop, mode) => [
     path: 'profileimage',
     name: prop + '.profileimage',
     meta: { auth: true, name: 'Profile Image' },
-    component: () => import('../views/SocailMain/Profile/ProfileImage')
+    component: () => import('../views/OsbohaMain/Profile/ProfileImage')
   },
   {
     path: 'profilevideo',
     name: prop + '.profilevideo',
     meta: { auth: true, name: 'Profile Video' },
-    component: () => import('../views/SocailMain/Profile/ProfileVideo')
+    component: () => import('../views/OsbohaMain/Profile/ProfileVideo')
   },
   {
     path: 'profileevent',
     name: prop + '.profileevent',
     meta: { auth: true, name: 'Profile Event' },
-    component: () => import('../views/SocailMain/Profile/ProfileEvent')
+    component: () => import('../views/OsbohaMain/Profile/ProfileEvent')
   },
   {
     path: 'event-detail',
     name: prop + '.event-detail',
     meta: { auth: true, name: 'Event-Detail' },
-    component: () => import('../views/SocailMain/Profile/Event-Detail')
+    component: () => import('../views/OsbohaMain/Profile/Event-Detail')
   },
   {
     path: 'profilebadges',
     name: prop + '.profilebadges',
     meta: { auth: true, name: 'Profile Badges' },
-    component: () => import('../views/SocailMain/Profile/ProfileBadges')
+    component: () => import('../views/OsbohaMain/Profile/ProfileBadges')
   },
   {
     path: 'profileforum',
     name: prop + '.profileforum',
     meta: { auth: true, name: 'Profile Forum' },
-    component: () => import('../views/SocailMain/Profile/ProfileForum')
+    component: () => import('../views/OsbohaMain/Profile/ProfileForum')
   },
   {
     path: 'book',
@@ -101,50 +101,56 @@ const childRoutes = (prop, mode) => [
     path: 'group',
     name: prop + '.group',
     meta: { auth: true, name: 'Group' },
-    component: () => import('../views/SocailMain/Group/Group')
+    component: () => import('../views/OsbohaMain/Group/Group')
   },
   {
     path: 'group-detail',
     name: prop + '.group-detail',
     meta: { auth: true, name: 'Group detail' },
-    component: () => import('../views/SocailMain/Group/Group-detail')
+    component: () => import('../views/OsbohaMain/Group/Group-detail')
+  },
+  {
+    path: '/ambassadors-reading',
+    name: prop + './ambassadors-reading',
+    meta: { auth: true, name: 'Ambassadors reading' },
+    component: () => import('../views/OsbohaMain/Group/Ambassadors/ambassadorsReading')
   },
   {
     path: 'friendlist',
     name: prop + '.friendlist',
     meta: { auth: true, name: 'Friend List' },
-    component: () => import('../views/SocailMain/Friends/FriendList')
+    component: () => import('../views/OsbohaMain/Friends/FriendList')
   },
   {
     path: 'friendprofile',
     name: prop + '.friendprofile',
     meta: { auth: true, name: 'Friend profile' },
-    component: () => import('../views/SocailMain/Friends/FriendProfile')
+    component: () => import('../views/OsbohaMain/Friends/FriendProfile')
   },
   {
     path: 'notification',
     name: prop + '.notification',
     meta: { auth: true, name: 'Notification' },
-    component: () => import('../views/SocailMain/Notifications/Notification')
+    component: () => import('../views/OsbohaMain/Notifications/Notification')
   },
   {
     path: 'file',
     name: prop + '.file',
     meta: { auth: true, name: 'File' },
-    component: () => import('../views/SocailMain/File/File')
+    component: () => import('../views/OsbohaMain/File/File')
   },
   {
     path: 'friendrequest',
     name: prop + '.friendrequest',
     meta: { auth: true, name: 'Friend Request' },
-    component: () => import('../views/SocailMain/Friends/FriendRequest')
+    component: () => import('../views/OsbohaMain/Friends/FriendRequest')
   },
 ]
 const blankchildRoutes = (prop, mode) => [
   {
-    path: 'signin',
-    name: prop + '.sign-in1',
-    component: () => import('../views/AuthPages/Default/SignIn1')
+    path: '/auth/signin',
+    name: prop + '.sign-in',
+    component: () => import('../views/AuthPages/Default/SignIn')
   },
   {
     path: 'signup',
@@ -199,19 +205,19 @@ const blogchildRoutes = (prop, mode = false) => [
     path: 'blog-grid',
     name: prop + '.blog-grid',
     meta: { auth: true, name: 'blog-grid' },
-    component: () => import('../views/SocailMain/Blog/BlogGrid')
+    component: () => import('../views/OsbohaMain/Blog/BlogGrid')
   },
   {
     path: 'blog-list',
     name: prop + '.blog-list',
     meta: { auth: true, name: 'blog-list' },
-    component: () => import('../views/SocailMain/Blog/BlogList')
+    component: () => import('../views/OsbohaMain/Blog/BlogList')
   },
   {
     path: 'blog-detail',
     name: prop + '.blog-detail',
     meta: { auth: true, name: 'blog-detail' },
-    component: () => import('../views/SocailMain/Blog/BlogDetail')
+    component: () => import('../views/OsbohaMain/Blog/BlogDetail')
   }
 ]
 const iconChildRoute = (prop, mode = false) => [
@@ -385,7 +391,7 @@ const routes = [
     path: '/auth',
     name: 'auth',
     component: () => import('../layouts/Empty'),
-    children: blankchildRoutes('auth1')
+    children: blankchildRoutes('auth')
   },
   {
     path: '/pages',
@@ -454,5 +460,19 @@ const router = createRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  // redirect to login page if user is not logged in and trying to access a restricted page
+  const publicPages = ['/auth/signin', '/auth/signup']
+  const authRequired = !publicPages.includes(to.path)
+  const loggedIn = localStorage.getItem('user')
+  console.log(loggedIn)
+  if (authRequired && !loggedIn) {
+    return next('/auth/signin')
+  }
+
+  next()
+})
+
 
 export default router

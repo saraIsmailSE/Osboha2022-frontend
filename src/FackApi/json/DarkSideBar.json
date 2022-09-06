@@ -811,7 +811,7 @@
         "name": "sidebar.login",
         "is_active": false,
         "link": {
-          "name": "dark.auth1.sign-in1"
+          "name": "dark.auth.sign-in"
         },
         "class_name": "",
         "is_icon_class": true,
@@ -822,7 +822,7 @@
         "name": "sidebar.register",
         "is_active": false,
         "link": {
-          "name": "dark.auth1.sign-up1"
+          "name": "dark.auth.sign-up1"
         },
         "class_name": "",
         "is_icon_class": true,
@@ -833,7 +833,7 @@
         "name": "sidebar.recoverPassword",
         "is_active": false,
         "link": {
-          "name": "dark.auth1.password-reset1"
+          "name": "dark.auth.password-reset1"
         },
         "class_name": "",
         "is_icon_class": true,
@@ -844,7 +844,7 @@
         "name": "sidebar.confirmMail",
         "is_active": false,
         "link": {
-          "name": "dark.auth1.confirm-mail1"
+          "name": "dark.auth.confirm-mail1"
         },
         "class_name": "",
         "is_icon_class": true,
@@ -855,7 +855,7 @@
         "name": "sidebar.lockScreen",
         "is_active": false,
         "link": {
-          "name": "dark.auth1.lock-screen1"
+          "name": "dark.auth.lock-screen1"
         },
         "class_name": "",
         "is_icon_class": true,

@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.$router.push({ name: 'auth1.sign-in1' })
+      this.$router.push({ name: 'auth.sign-in' })
     }
   }
 }
