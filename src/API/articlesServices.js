@@ -1,9 +1,20 @@
-import { api } from "./Intercepter";
+import { api } from "./Intercepter"
 
-//asmaa 220909
 export default {
-  getAllArticles() {
-    const articles = api.get("article/");
-    return articles;
+  getAll: async () => {
+
+    const articles = await api.get("article/");
+    (articles.data)
+    return articles.data.data;
   },
-};
+  getOne() {
+    return true;
+
+  },
+  updateArticle(id) {
+    return true;
+
+  },
+
+}
+

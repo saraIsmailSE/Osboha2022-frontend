@@ -1,13 +1,12 @@
 import axios from "axios";
-import TokenService from "../Services/token.service";
+import UserInfo from "../Services/userInfoService";
 
-const token = TokenService.getLocalAccessToken();
-
+const token = UserInfo.getLocalAccessToken();
+ 
 const api = axios.create({
-  baseURL: "http://localhost:8000/api",
-  headers: {
-    Authorization: "Bearer " + token,
-  },
+  baseURL: 'http://localhost:8000/api',headers: {'Authorization': 'Bearer '+token}
 });
+
+ 
 
 export { api };

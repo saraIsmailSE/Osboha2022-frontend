@@ -1,16 +1,16 @@
-import api from "./api";
-import TokenService from "./token.service";
+import {api} from "../api/Intercepter";
+import UserInfo from "./userInfoService";
 
 class AuthService {
-  login({ email, password }) {
+  login({ username, password }) {
     return api
-      .post("/login", {
-        email,
+      .post("/auth/signin", {
+        username,
         password
       })
       .then((response) => {
         if (response.data.accessToken) {
-          TokenService.setUser(response.data);
+          UserInfo.setUser(response.data);
         }
 
         return response.data;
@@ -18,11 +18,11 @@ class AuthService {
   }
 
   logout() {
-    TokenService.removeUser();
+    UserInfo.removeUser();
   }
 
   register({ username, email, password }) {
-    return api.post("/register", {
+    return api.post("/auth/signup", {
       username,
       email,
       password
