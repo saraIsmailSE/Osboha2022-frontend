@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-import articlesServices from "../../API/articlesServices";
+import ArticleService from "../../API/services/articles.services";
 export default {
   name: "ListArticles",
   components: {},
@@ -63,7 +63,7 @@ export default {
     //   return images("./" + path);
     // },
     async getArticles() {
-      this.articles = await articlesServices.getAll();
+      this.articles = await ArticleService.getAll();
     },
   },
 };
