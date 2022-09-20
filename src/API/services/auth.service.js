@@ -21,11 +21,14 @@ class AuthService {
     UserInfo.removeUser();
   }
 
-  async register({ username, email, password }) {
-    return await api.post("/auth/signup", {
-      username,
+  async register(name, gender, email, phone, password, user_type) {
+    return await api.post("/register", {
+      name,
+      gender,
       email,
-      password
+      phone,
+      password,
+      user_type,
     });
   }
 }

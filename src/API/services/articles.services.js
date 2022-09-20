@@ -19,7 +19,7 @@ class ArticlesService {
   async getOne(id) {
     try {
       const article = await api.post(`/article/show`, {article_id: id});
-      return article.data
+      return article.data;
     }catch(error){
       return error;
     }
