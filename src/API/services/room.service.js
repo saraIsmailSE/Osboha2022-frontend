@@ -1,8 +1,10 @@
 import { api } from "../Intercepter"
+import tokenService from "./token.service";
 
 class RoomService {
-    async create(name, type, messages_status, creator_id){
+    async create(name, type, messages_status){
         try{
+            const creator_id = tokenService.getUser().id;
             return api.post('/room/create', {name, type, messages_status, creator_id});
         }catch(error){
             return error;
