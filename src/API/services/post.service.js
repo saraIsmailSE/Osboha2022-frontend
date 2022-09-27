@@ -17,7 +17,9 @@ class PostService {
         formData.append('timeline_id', timeline_id);
         formData.append('body', body);
         try{
-            return await api.post('/post/create', {formData})
+            return await api.post('/post/create', formData, {
+                headers: {"Content-type": "multipart/form-data"},
+            })
         }catch(error){
             return error;
         }
@@ -54,3 +56,5 @@ class PostService {
         }
     }
 }
+
+export default new PostService();
