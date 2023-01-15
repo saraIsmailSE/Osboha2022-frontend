@@ -13,161 +13,134 @@ export default {
       bookInfos:
         [
           {
-            backgroundImg: 'profile-bg.jpg',
-            groupImg: '150x150.jpg',
-            title: 'BOOK Name',
-            text: 'Lorem Ipsum',
+            id: '1.jpg',
+            title: 'الاقتصاد في درس واحد',
+            text: 'هنري هازليت',
             extraInfo: [
               {
-                info: 'نوع الكتاب',
-                value: 'منهجي'
+                info: 'المستوى',
+                value: 'متوسط'
               },
               {
-                info: 'فئة الكتاب',
-                value: 'ثقافي'
+                info: 'الفئة',
+                value: 'ثقافية'
               },
               {
-                info: 'عدد الصفحات',
+                info: 'الصفحات',
                 value: '250'
               }
             ],
           },
           {
-            backgroundImg: 'profile-bg.jpg',
-            groupImg: '150x150.jpg',
-            title: 'BOOK Name',
-            text: 'Lorem Ipsum',
+            id: '2.jpg',
+            title: 'إلى من ضاقت عليه نفسه',
+            text: 'يحيى اليحيى',
             extraInfo: [
               {
-                info: 'نوع الكتاب',
-                value: 'منهجي'
+                info: 'المستوى',
+                value: 'متوسط'
               },
               {
-                info: 'فئة الكتاب',
-                value: 'ثقافي'
+                info: 'الفئة',
+                value: 'ثقافية'
               },
               {
-                info: 'عدد الصفحات',
+                info: 'الصفحات',
                 value: '250'
               }
             ],
           },
           {
-            backgroundImg: 'profile-bg.jpg',
-            groupImg: '150x150.jpg',
-            title: 'BOOK Name',
-            text: 'Lorem Ipsum',
+            id: '3.jpg',
+            title: 'أولادنا بين التبعية والاستقلال',
+            text: 'عبد العزيز الخضراء',
             extraInfo: [
               {
-                info: 'نوع الكتاب',
-                value: 'منهجي'
+                info: 'المستوى',
+                value: 'متوسط'
               },
               {
-                info: 'فئة الكتاب',
-                value: 'ثقافي'
+                info: 'الفئة',
+                value: 'ثقافية'
               },
               {
-                info: 'عدد الصفحات',
+                info: 'الصفحات',
                 value: '250'
               }
             ],
           },
           {
-            backgroundImg: 'profile-bg.jpg',
-            groupImg: '150x150.jpg',
-            title: 'BOOK Name',
-            text: 'Lorem Ipsum',
+            id: '4.jpg',
+            title: 'كيف تفوز في مشاكل البكاء',
+            text: 'سينيتا ويثام',
             extraInfo: [
               {
-                info: 'نوع الكتاب',
-                value: 'منهجي'
+                info: 'المستوى',
+                value: 'متوسط'
               },
               {
-                info: 'فئة الكتاب',
-                value: 'ثقافي'
+                info: 'الفئة',
+                value: 'ثقافية'
               },
               {
-                info: 'عدد الصفحات',
+                info: 'الصفحات',
                 value: '250'
               }
             ],
           },
           {
-            backgroundImg: 'profile-bg.jpg',
-            groupImg: '150x150.jpg',
-            title: 'BOOK Name',
-            text: 'Lorem Ipsum',
+            id: '5.jpg',
+            title: 'لماذا نكتب',
+            text: 'ميرديث ماران',
             extraInfo: [
               {
-                info: 'نوع الكتاب',
-                value: 'منهجي'
+                info: 'المستوى',
+                value: 'متوسط'
               },
               {
-                info: 'فئة الكتاب',
-                value: 'ثقافي'
+                info: 'الفئة',
+                value: 'ثقافية'
               },
               {
-                info: 'عدد الصفحات',
+                info: 'الصفحات',
                 value: '250'
               }
             ],
           },
           {
-            backgroundImg: 'profile-bg.jpg',
-            groupImg: '150x150.jpg',
-            title: 'BOOK Name',
-            text: 'Lorem Ipsum',
+            id: '6.jpg',
+            title: 'اسمي أحمر',
+            text: 'اورهان باموق',
             extraInfo: [
               {
-                info: 'نوع الكتاب',
-                value: 'منهجي'
+                info: 'المستوى',
+                value: 'متوسط'
               },
               {
-                info: 'فئة الكتاب',
-                value: 'ثقافي'
+                info: 'الفئة',
+                value: 'ثقافية'
               },
               {
-                info: 'عدد الصفحات',
+                info: 'الصفحات',
                 value: '250'
               }
             ],
           },
           {
-            backgroundImg: 'profile-bg.jpg',
-            groupImg: '150x150.jpg',
-            title: 'BOOK Name',
-            text: 'Lorem Ipsum',
+            id: '5.jpg',
+            title: 'لماذا نكتب',
+            text: 'ميرديث ماران',
             extraInfo: [
               {
-                info: 'نوع الكتاب',
-                value: 'منهجي'
+                info: 'المستوى',
+                value: 'متوسط'
               },
               {
-                info: 'فئة الكتاب',
-                value: 'ثقافي'
+                info: 'الفئة',
+                value: 'ثقافية'
               },
               {
-                info: 'عدد الصفحات',
-                value: '250'
-              }
-            ],
-          },
-          {
-            backgroundImg: 'profile-bg.jpg',
-            groupImg: '150x150.jpg',
-            title: 'BOOK Name',
-            text: 'Lorem Ipsum',
-            extraInfo: [
-              {
-                info: 'نوع الكتاب',
-                value: 'منهجي'
-              },
-              {
-                info: 'فئة الكتاب',
-                value: 'ثقافي'
-              },
-              {
-                info: 'عدد الصفحات',
+                info: 'الصفحات',
                 value: '250'
               }
             ],

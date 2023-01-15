@@ -1,16 +1,15 @@
 <template>
     <div class="d-grid gap-3 d-grid-template-1fr-19">
         <div class="card mb-0">
-            <div class="top-bg-image">
-                <img :src="resolve_img_url(cardInfo.backgroundImg)" class="img-fluid w-100" alt="group-bg" />
-
-
+            <div class="position-absolute top-0 end-0 p-2 rounded-start" style="background-color:#278036; opacity: 50%;">
+                <h6 class="text-white">
+                    كتاب منهجي
+                </h6>
             </div>
+
             <div class="card-body text-center">
-                <div class="group-icon">
-                    <img :src="resolve_img_url(cardInfo.groupImg)" alt="profile-img"
-                        class="rounded-circle img-fluid avatar-120" />
-                </div>
+                <img :src="resolve_img_url(cardInfo.id)" class="img-fluid rounded w-75 mt-3" alt="blog-img" />
+
                 <div class="group-info pt-3 pb-3">
                     <h4>
                         <router-link :to="{ name: 'social.book' }">{{ cardInfo.title }}</router-link>
@@ -70,7 +69,7 @@ export default {
     },
     methods: {
         resolve_img_url: function (path) {
-            let images = require.context('../../assets/images', false, /\.png$|\.jpg$/)
+            let images = require.context('../../assets/images/books', false, /\.png$|\.jpg$/)
             return images("./" + path)
         },
         bookDetails() {

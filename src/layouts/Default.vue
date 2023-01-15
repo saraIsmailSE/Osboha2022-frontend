@@ -109,7 +109,7 @@ export default {
           title: 'Store Checkout'
         },
         {
-          img: require('@/assets/images/profile-bg.jpg'),
+          img: require('@/assets/images/books/book-banner.png'),
           title: 'Book'
         },
         {

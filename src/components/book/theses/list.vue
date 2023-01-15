@@ -4,12 +4,14 @@
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div class="user-image mb-3">
-                        <img class="avatar-80 rounded" src="@/assets/images/user/01.jpg" alt="#" data-original-title=""
+                        <img class="avatar-80 rounded" src="@/assets/images/avatar/avatar-04.jpg" alt="#" data-original-title=""
                             title="">
                     </div>
                     <div class="ms-3">
                         <h5>Kaya Scodelario</h5>
-                        <p>سفير</p>
+                        <span class="badge bg-primary rounded-pill"> &nbsp;   سفير    &nbsp;</span>
+                        &nbsp;
+                        <span class="badge bg-success rounded-pill"> &nbsp;   جودة الكتب    &nbsp;</span>
                     </div>
                 </div>
                 <div class="blog-description">
