@@ -44,7 +44,7 @@ export default {
     },
     methods: {
         resolve_img_url: function (path) {
-            let images = require.context('../../assets/images/', false, /\.png$|\.jpg$/)
+            let images = require.context('../../assets/images/avatar', false, /\.png$|\.jpg$/)
             return images("./" + path)
         }
     },
