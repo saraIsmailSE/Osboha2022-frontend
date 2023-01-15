@@ -1,13 +1,16 @@
 <template>
+  <BooksFilter/>
+  <hr/>
   <div class="d-grid gap-3 d-grid-template-1fr-19">
     <BookCard v-for="bookInfo in bookInfos" :key="bookInfo.id" :cardInfo="bookInfo" />
   </div>
 </template>
 <script>
 import BookCard from '../../components/book/BookCard.vue';
+import BooksFilter from '../../components/filters/booksFilter.vue';
 export default {
   name: 'Book',
-  components: { BookCard },
+  components: { BookCard ,BooksFilter},
   data() {
     return {
       bookInfos:
@@ -150,3 +153,4 @@ export default {
   }
 }
 </script>
+
