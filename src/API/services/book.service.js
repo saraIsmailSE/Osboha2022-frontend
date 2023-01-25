@@ -24,9 +24,9 @@ class BookService {
         }
     }
 
-    async getAll(){
+    async getAll(page){
         try{
-            const books = api.get('/book');
+            const books = await api.get(`books?page=` + page);
             return books.data;
         }catch(error){
             return error;
