@@ -28,15 +28,7 @@
                      يجب أن يكون هذا حلما. لا تقلق. هذا كله خطأ. لا أعرف ما هو ولكن عندما أقبلك ، يكون الأمر أشبه بتقبيل
                      أخي. أعتقد أن هذا ليس له أي معنى ، أليس كذلك؟ ماذا كنت تفعل في منتصف الشارع ، طفل في مثل سنك. أمي
                      أبي. فقط استدر ، McFly ، وابتعد. هل أنت أصم يا (ماك فلاي)؟ أغلق الباب واضربه.
-
-                     مرحباً يا دكتور أين أنت؟ حار ، يسوع المسيح ، د. يا يسوع المسيح ، دكتور ، لقد تفككت أينشتاين. أنا
-                     أضمن ذلك. توقف ، لقد قاموا بالفعل بتنظيف هذا المكان ، يبدو جديدًا. أغلق فمك القذر ، أنا لست من هذا
-                     النوع من الفتيات.
-
-                     جورج. أنا ، أنا آسف ، السيد ماكفلاي ، أعني ، لقد بدأت للتو في ارتداء المعطف الثاني. قل ، لماذا تركت
-                     هؤلاء الأولاد يدفعونك هكذا؟ نعم ، اعطني علامة تبويب. انظر ، يجب أن تستمع إلي.
-
-                     أنت جورج مكفلاي. نعم حسنا. وثيقة. هيا ، هيا لنذهب. إنه شاب غريب جدا.
+                     <a>... المزيد </a>
                   </p>
                </div>
             </div>
@@ -55,14 +47,8 @@
 
                   <div class="col-lg-12">
                      <div class="card card-block card-stretch card-height blog">
-                        <div class="card-header d-flex justify-content-between">
-                           <div class="header-title">
-                              <h4 class="card-title">أضف أطروحة</h4>
-                           </div>
-                        </div>
-                        <div class="card-body">
-                           <createThesis />
-                        </div>
+                        <button type="submit" class="btn btn-primary d-block w-100" data-bs-toggle="modal"
+                           data-bs-target="#modals">كتابة أطروحة</button>
                      </div>
                   </div>
                </div>
@@ -70,6 +56,18 @@
          </div>
       </div>
    </div>
+   <modal id="modals" dialogClass="modal-fullscreen-sm-down" tabindex="-1" title="Create Post"
+      aria-labelledby="modalsLabel" aria-hidden="true">
+      <model-header>
+         <h5 class="modal-title" id="modalsLabel">اسم الكتاب || أطروحة جديدة </h5>
+         <a href="javascript:void(0);" class="lh-1" data-bs-dismiss="modal">
+            <span class="material-symbols-outlined">close</span>
+         </a>
+      </model-header>
+      <model-body>
+         <createThesis />
+      </model-body>
+   </modal>
 </template>
 <script>
 import listThesis from '../../components/book/theses/list.vue'

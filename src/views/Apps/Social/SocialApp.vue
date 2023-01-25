@@ -139,20 +139,20 @@ export default {
           id: 1,
           images: ['profile-bg9.jpg'],
           author: 'USER',
-          author_image: '03.jpg',
+          author_image: 'avatar-01.jpg',
           created_at: '12-06-2019',
           body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
           comments: [
             {
               author: 'USER',
-              author_image: '03.jpg',
+              author_image: 'avatar-01.jpg',
               created_at: '12-06-2019',
               body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
             },
             {
               image: 'profile-bg9.jpg',
               author: 'USER',
-              author_image: '03.jpg',
+              author_image: 'avatar-01.jpg',
               created_at: '12-06-2019',
               body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
             },
@@ -161,33 +161,33 @@ export default {
         {
           id: 2,
           author: 'USER 2',
-          author_image: '03.jpg',
+          author_image: 'avatar-01.jpg',
           created_at: '12-06-2019',
           body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-              comments: [
+          comments: [
             {
               author: 'USER',
-              author_image: '03.jpg',
+              author_image: 'avatar-01.jpg',
               created_at: '12-06-2019',
               body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
             },
             {
               image: ['profile-bg9.jpg'],
               author: 'USER',
-              author_image: '03.jpg',
+              author_image: 'avatar-01.jpg',
               created_at: '12-06-2019',
               body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
             },
-              {
+            {
               author: 'USER',
-              author_image: '03.jpg',
+              author_image: 'avatar-01.jpg',
               created_at: '12-06-2019',
               body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
             },
             {
               image: 'profile-bg9.jpg',
               author: 'USER',
-              author_image: '03.jpg',
+              author_image: 'avatar-01.jpg',
               created_at: '12-06-2019',
               body: 'Lorem ipsum dolor sit amet, aucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
             },
@@ -197,12 +197,27 @@ export default {
           id: 3,
           images: ['p1.jpg', 'p2.jpg'],
           author: 'USER 3',
-          author_image: '03.jpg',
+          author_image: 'avatar-01.jpg',
           created_at: '12-06-2019',
           body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
 
         },
-      ]
+      ],
+      suggestionEvent: [
+        {
+          img: require('../../../assets/images/page-img/42.png'),
+          title: 'Iqonic Studio',
+          des: 'Lorem Ipsum',
+          otherImg: require('../../../assets/images/small/img-1.jpg')
+        },
+        {
+          img: require('../../../assets/images/page-img/43.png'),
+          title: 'Cakes & Bakes ',
+          des: 'Lorem Ipsum',
+          otherImg: require('../../../assets/images/small/img-2.jpg')
+        }
+      ],
+
 
 
     }

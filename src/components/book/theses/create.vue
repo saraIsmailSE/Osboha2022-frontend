@@ -44,20 +44,8 @@
                 <div class="form-group">
                     <h5 class="form-label">الصفحات</h5>
                 </div>
-                <div class="row">
-                    <div class="form-check custom-radio form-check-inline form-group col-5">
-                        <input type="radio" id="customRadio8" name="customRadio-2" class="form-check-input"
-                            @change="showTotal()">
-                        <label class="form-check-label" for="customRadio8"> عدد كلي </label>
-                    </div>
-                    <div class="form-check custom-radio form-check-inline form-group col-5">
-                        <input type="radio" id="customRadio8" name="customRadio-2" class="form-check-input" checked=""
-                            @change="showStartEnd()">
-                        <label class="form-check-label" for="customRadio8"> بداية ونهاية </label>
-                    </div>
-                </div>
             </div>
-            <div class="form-group col-6" v-if="startEnd">
+            <div class="form-group col-6">
                 <select class="form-select" data-trigger name="choices-single-default" id="choices-single-default">
                     <option value="">صفحة البداية</option>
                     <option value="Choice 1">Choice 1</option>
@@ -65,17 +53,13 @@
                     <option value="Choice 3">Choice 3</option>
                 </select>
             </div>
-            <div class="form-group col-6" v-if="startEnd">
+            <div class="form-group col-6">
                 <select class="form-select" data-trigger name="choices-single-default" id="choices-single-default">
                     <option value="">صفحة النهاية</option>
                     <option value="Choice 1">Choice 1</option>
                     <option value="Choice 2">Choice 2</option>
                     <option value="Choice 3">Choice 3</option>
                 </select>
-            </div>
-            <div class="form-group" v-if="total">
-                <label class="form-label" for="totalPages">العدد الكلي للصفحات</label>
-                <input type="text" class="rounded form-control" id="totalPages">
             </div>
             <div class="form-group" v-if="thesis">
                 <label class="form-label" for="thesisBody">الأطروحة</label>
