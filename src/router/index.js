@@ -77,7 +77,9 @@ const childRoutes = (prop, mode) => [
     path: 'book',
     name: prop + '.book',
     meta: { auth: true, name: 'Book' },
-    component: () => import('../views/Book/Book')
+    component: () => import('../views/Book/Book'),
+    props: route => ({ page: parseInt(route.query.page) || 1 })
+
   },
   {
     path: 'book-details',
