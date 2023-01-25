@@ -215,6 +215,17 @@ export default {
         this.books = response.books.data;
       }
     },
+    checkActive(item) {
+      let className = ''
+      if (this.current == item) {
+        className = 'active'
+      }
+      else {
+        className = className + ' done'
+      }
+      return className
+    }
+
   },
   computed: {
     hasNextPage() {
@@ -229,3 +240,30 @@ export default {
 }
 </script>
 
+<style scoped>
+.events {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pagination {
+  display: flex;
+  width: 290px;
+  padding: 0;
+}
+
+.pagination a {
+  flex: 1;
+  text-decoration: none;
+  color: #2c3e50;
+}
+
+#page-prev {
+  text-align: left;
+}
+
+#page-next {
+  text-align: right;
+}
+</style>
