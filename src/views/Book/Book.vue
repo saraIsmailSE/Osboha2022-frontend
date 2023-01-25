@@ -1,16 +1,46 @@
 <template>
-  <BooksFilter/>
-  <hr/>
+  <BooksFilter />
+  <hr />
   <div class="d-grid gap-3 d-grid-template-1fr-19">
     <BookCard v-for="bookInfo in bookInfos" :key="bookInfo.id" :cardInfo="bookInfo" />
   </div>
+  <div class=" text-center mt-3">
+
+    <ul class="pagination w-100">
+      <router-link class="page-item page-link" :to="{ name: 'social.book', query: { page: page - 1 } }" rel="prev"
+        v-if="page != 1">
+        السابق
+      </router-link>
+      <li class="page-item page-link" :class="checkActive(page)">
+        <router-link class="page-item page-link" :to="{ name: 'social.book', query: { page: page } }">
+          {{ page }}
+        </router-link>
+      </li>
+
+      <router-link class="page-item page-link" :to="{ name: 'social.book', query: { page: page + 1 } }" rel="next"
+        v-if="hasNextPage">
+        التالي
+      </router-link>
+
+    </ul>
+  </div>
+
 </template>
 <script>
 import BookCard from '../../components/book/BookCard.vue';
 import BooksFilter from '../../components/filters/booksFilter.vue';
+import bookService from '../../API/services/book.service'
+import { watchEffect } from 'vue'
+
 export default {
   name: 'Book',
-  components: { BookCard ,BooksFilter},
+  components: { BookCard, BooksFilter },
+  created() {
+    watchEffect(() => {
+      this.books = null
+      this.getBooks(this.page);
+    })
+  },
   data() {
     return {
       bookInfos:
@@ -148,9 +178,54 @@ export default {
               }
             ],
           },
-        ]
+        ],
+
+      books: [],
+      totalBooks: 0,
+      current: 1,
+      search: "",
+      empty: "",
+
     }
-  }
+  },
+  methods: {
+    async getBooks(page) {
+      const response = await bookService.getAll(page);
+      this.books = response.books.data;
+      this.totalBooks = response.books.total
+      this.current = page
+    },
+
+    async filteredBooks() {
+      this.empty = ''
+
+      if (this.search) {
+        const response = await bookService.getBookByName(this.search);
+        if (response == 'empty') {
+          this.empty = 'لا يوجد كتاب بهذا الاسم'
+        }
+        else {
+          this.books = response.data;
+          this.totalBooks = response.total
+
+        }
+      }
+      else {
+        const response = await bookService.getAllBooks(this.page);
+        this.books = response.books.data;
+      }
+    },
+  },
+  computed: {
+    hasNextPage() {
+      var totalPages = Math.ceil(this.totalBooks / 10)
+      return this.page < totalPages
+    },
+    totalPages() {
+      return Math.ceil(this.totalBooks / 10)
+    },
+  },
+
 }
 </script>
 
