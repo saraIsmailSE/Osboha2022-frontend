@@ -26,8 +26,8 @@ class BookService {
 
     async getAll(page){
         try{
-            const books = await api.get(`books?page=` + page);
-            return books.data;
+            const books = await api.get(`book?page=` + page);
+            return books.data.data;
         }catch(error){
             return error;
         }
@@ -59,12 +59,32 @@ class BookService {
         }
     }
 
-    async getBooksByLevel(level){
+    async getBooksByLevel(level,page){
         try{
-            const books =  await api.post(`/book/book-by-level`, {level});
-            return books.data;
+            const books =  await api.post(`/book/book-by-level?page=${page}`, {level});
+            return books.data.data;
         }catch(error){
             return error;
+        }
+    }
+
+    async getBooksByName(name,page){
+        try{
+            const books =  await api.post(`/book/book-by-name?page=${page}`, {name});
+            return books.data.data;
+        }catch(error){
+            console.log(error)
+            return '';
+        }
+    }
+
+    async getBooksByLanguage(language,page){
+        try{
+            const books =  await api.post(`/book/book-by-language?page=${page}`, {language});
+            return books.data.data;
+        }catch(error){
+            console.log(error)
+            return '';
         }
     }
 
@@ -74,6 +94,36 @@ class BookService {
             return books.data;
         }catch(error){
             return error;
+        }
+    }
+
+    async getRecentAddedBooks(){
+        try{
+            const books =  await api.get(`/book/recent-added-books`);
+            return books.data.data;
+        }catch(error){
+            console.log(error)
+            return '';
+        }
+    }
+
+    async getMostReadableBooks(){
+        try{
+            const books =  await api.get(`/book/most-readable-books`);
+            return books.data.data;
+        }catch(error){
+            console.log(error)
+            return '';
+        }
+    }
+
+    async getRandomBook(){
+        try{
+            const book =  await api.get(`/book/random-book`);
+            return book.data.data;
+        }catch(error){
+            console.log(error)
+            return '';
         }
     }
 }
