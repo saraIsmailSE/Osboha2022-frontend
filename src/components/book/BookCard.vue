@@ -128,7 +128,7 @@ export default {
     bookTypeLanguage() {
       //get type
       let result = "كتاب ";
-      const bookType = this.cardInfo.type.type;
+      const bookType = this.cardInfo.type.type.toLowerCase();
 
       if (bookType == "normal") {
         result += "منهجي";
@@ -142,10 +142,10 @@ export default {
 
       result += " - ";
       //get language
-      const language = this.cardInfo.language.language;
-      if (language.toLowerCase() == "arabic") {
+      const language = this.cardInfo.language.language.toLowerCase();
+      if (language == "arabic") {
         result += "عربي";
-      } else if (language.toLowerCase() == "english") {
+      } else if (language == "english") {
         result += "إنجليزي";
       }
       return result;

@@ -58,9 +58,12 @@ export default {
       // this.books = null;
       if (this.search) {
         this.searchBookByName(this.search);
-      } else if (this.selectedSection > 0 && this.selectedSection < this.sections.length) {
+      } else if (
+        this.selectedSection > 0 &&
+        this.selectedSection < this.sections.length
+      ) {
         this.filterBooks(this.selectedSection);
-      } else if(this.selectedSection < this.sections.length) {
+      } else if (this.selectedSection < this.sections.length) {
         this.getBooks(this.page);
       }
     });
@@ -234,8 +237,7 @@ export default {
 
     //filter books based on the level or language
     async filterBooks(index) {
-      console.log('index', index)
-      this.toggleActiveFilter(index)
+      this.toggleActiveFilter(index);
 
       let response = null;
 
@@ -276,7 +278,6 @@ export default {
           response = await bookService.getMostReadableBooks();
         } else if (index == this.randomBook) {
           response = await bookService.getRandomBook();
-       
         }
       }
 
@@ -284,16 +285,14 @@ export default {
         this.books = response.books;
         this.totalBooks = response.total;
         this.current = this.page;
-      } else if(response && index > this.sections.length){
-        this.books = response.length > 1 ? response : [response]
-        this.totalBooks = response.length
-        this.current = this.page
-      }
-      else {
+      } else if (response && index > this.sections.length) {
+        this.books = response.length > 1 ? response : [response];
+        this.totalBooks = response.length;
+        this.current = this.page;
+      } else {
         this.empty = "لا يوجد كتب!";
         this.books = [];
       }
-      console.log('res: ', this.books)
     },
     //search books by their name
     async searchBookByName(searchKey) {
@@ -356,12 +355,17 @@ export default {
       return this.page < this.totalPages;
     },
     totalPages() {
-      console.log('ceitl', Math.ceil(this.totalBooks / this.booksPerPage))
       return Math.ceil(this.totalBooks / this.booksPerPage);
     },
-    recentAddedBooks(){return this.sections.length + 1},
-      mostReadableBooks(){ return this.recentAddedBooks + 1},
-      randomBook(){ return this.mostReadableBooks + 1},
+    recentAddedBooks() {
+      return this.sections.length + 1;
+    },
+    mostReadableBooks() {
+      return this.recentAddedBooks + 1;
+    },
+    randomBook() {
+      return this.mostReadableBooks + 1;
+    },
   },
 };
 </script>

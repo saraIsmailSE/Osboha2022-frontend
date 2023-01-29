@@ -112,16 +112,22 @@ export default {
     checkActive(activeStatus) {
       return activeStatus ? "active" : "";
     },
-    filterResults(index){
-      this.searchModel = ''
-      this.filterBooks(index)
-    }
+    filterResults(index) {
+      this.searchModel = "";
+      this.filterBooks(index);
+    },
   },
   computed: {
-    
-    recentAddedBooks(){return this.sections.length + 1},
-      mostReadableBooks(){ return this.recentAddedBooks + 1},
-      randomBook(){ return this.mostReadableBooks + 1},}
+    recentAddedBooks() {
+      return this.sections.length + 1;
+    },
+    mostReadableBooks() {
+      return this.recentAddedBooks + 1;
+    },
+    randomBook() {
+      return this.mostReadableBooks + 1;
+    },
+  },
 };
 </script>
 
