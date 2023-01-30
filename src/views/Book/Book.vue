@@ -1,243 +1,373 @@
 <template>
-  <BooksFilter />
+  <BooksFilter
+    :sections="sections"
+    :toggleActiveFilter="toggleActiveFilter"
+    :searchBookByName="searchBookByName"
+    :filterBooks="filterBooks"
+  />
   <hr />
+  <div v-if="empty" class="alert alert-danger">{{ empty }}</div>
   <div class="d-grid gap-3 d-grid-template-1fr-19">
-    <BookCard v-for="bookInfo in bookInfos" :key="bookInfo.id" :cardInfo="bookInfo" />
+    <BookCard
+      v-for="bookInfo in books"
+      :key="bookInfo.id"
+      :cardInfo="bookInfo"
+    />
   </div>
-  <div class=" text-center mt-3">
-
+  <div class="text-center mt-3">
     <ul class="pagination w-100">
-      <router-link class="page-item page-link" :to="{ name: 'social.book', query: { page: page - 1 } }" rel="prev"
-        v-if="page != 1">
+      <router-link
+        class="page-item page-link"
+        :to="{ name: 'social.book', query: { page: page - 1 } }"
+        rel="prev"
+        v-if="page != 1"
+      >
         السابق
       </router-link>
       <li class="page-item page-link" :class="checkActive(page)">
-        <router-link class="page-item page-link" :to="{ name: 'social.book', query: { page: page } }">
+        <router-link
+          class="page-item page-link"
+          :to="{ name: 'social.book', query: { page: page } }"
+        >
           {{ page }}
         </router-link>
       </li>
 
-      <router-link class="page-item page-link" :to="{ name: 'social.book', query: { page: page + 1 } }" rel="next"
-        v-if="hasNextPage">
+      <router-link
+        class="page-item page-link"
+        :to="{ name: 'social.book', query: { page: page + 1 } }"
+        rel="next"
+        v-if="hasNextPage"
+      >
         التالي
       </router-link>
-
     </ul>
   </div>
-
 </template>
 <script>
-import BookCard from '../../components/book/BookCard.vue';
-import BooksFilter from '../../components/filters/booksFilter.vue';
-import bookService from '../../API/services/book.service'
-import { watchEffect } from 'vue'
+import BookCard from "../../components/book/BookCard.vue";
+import BooksFilter from "../../components/filters/booksFilter.vue";
+import bookService from "../../API/services/book.service";
+import { watchEffect } from "vue";
 
 export default {
-  name: 'Book',
+  name: "Book",
   components: { BookCard, BooksFilter },
   created() {
     watchEffect(() => {
-      this.books = null
-      this.getBooks(this.page);
-    })
+      // this.books = null;
+      if (this.search) {
+        this.searchBookByName(this.search);
+      } else if (
+        this.selectedSection > 0 &&
+        this.selectedSection < this.sections.length
+      ) {
+        this.filterBooks(this.selectedSection);
+      } else if (this.selectedSection < this.sections.length) {
+        this.getBooks(this.page);
+      }
+    });
   },
+  props: ["page"],
   data() {
     return {
-      bookInfos:
-        [
-          {
-            id: '1.jpg',
-            title: 'الاقتصاد في درس واحد',
-            text: 'هنري هازليت',
-            extraInfo: [
-              {
-                info: 'المستوى',
-                value: 'متوسط'
-              },
-              {
-                info: 'الفئة',
-                value: 'ثقافية'
-              },
-              {
-                info: 'الصفحات',
-                value: '250'
-              }
-            ],
-          },
-          {
-            id: '2.jpg',
-            title: 'إلى من ضاقت عليه نفسه',
-            text: 'يحيى اليحيى',
-            extraInfo: [
-              {
-                info: 'المستوى',
-                value: 'متوسط'
-              },
-              {
-                info: 'الفئة',
-                value: 'ثقافية'
-              },
-              {
-                info: 'الصفحات',
-                value: '250'
-              }
-            ],
-          },
-          {
-            id: '3.jpg',
-            title: 'أولادنا بين التبعية والاستقلال',
-            text: 'عبد العزيز الخضراء',
-            extraInfo: [
-              {
-                info: 'المستوى',
-                value: 'متوسط'
-              },
-              {
-                info: 'الفئة',
-                value: 'ثقافية'
-              },
-              {
-                info: 'الصفحات',
-                value: '250'
-              }
-            ],
-          },
-          {
-            id: '4.jpg',
-            title: 'كيف تفوز في مشاكل البكاء',
-            text: 'سينيتا ويثام',
-            extraInfo: [
-              {
-                info: 'المستوى',
-                value: 'متوسط'
-              },
-              {
-                info: 'الفئة',
-                value: 'ثقافية'
-              },
-              {
-                info: 'الصفحات',
-                value: '250'
-              }
-            ],
-          },
-          {
-            id: '5.jpg',
-            title: 'لماذا نكتب',
-            text: 'ميرديث ماران',
-            extraInfo: [
-              {
-                info: 'المستوى',
-                value: 'متوسط'
-              },
-              {
-                info: 'الفئة',
-                value: 'ثقافية'
-              },
-              {
-                info: 'الصفحات',
-                value: '250'
-              }
-            ],
-          },
-          {
-            id: '6.jpg',
-            title: 'اسمي أحمر',
-            text: 'اورهان باموق',
-            extraInfo: [
-              {
-                info: 'المستوى',
-                value: 'متوسط'
-              },
-              {
-                info: 'الفئة',
-                value: 'ثقافية'
-              },
-              {
-                info: 'الصفحات',
-                value: '250'
-              }
-            ],
-          },
-          {
-            id: '5.jpg',
-            title: 'لماذا نكتب',
-            text: 'ميرديث ماران',
-            extraInfo: [
-              {
-                info: 'المستوى',
-                value: 'متوسط'
-              },
-              {
-                info: 'الفئة',
-                value: 'ثقافية'
-              },
-              {
-                info: 'الصفحات',
-                value: '250'
-              }
-            ],
-          },
-        ],
+      // bookInfos:
+      //   [
+      //     {
+      //       id: '1.jpg',
+      //       title: 'الاقتصاد في درس واحد',
+      //       text: 'هنري هازليت',
+      //       extraInfo: [
+      //         {
+      //           info: 'المستوى',
+      //           value: 'متوسط'
+      //         },
+      //         {
+      //           info: 'الفئة',
+      //           value: 'ثقافية'
+      //         },
+      //         {
+      //           info: 'الصفحات',
+      //           value: '250'
+      //         }
+      //       ],
+      //     },
+      //     {
+      //       id: '2.jpg',
+      //       title: 'إلى من ضاقت عليه نفسه',
+      //       text: 'يحيى اليحيى',
+      //       extraInfo: [
+      //         {
+      //           info: 'المستوى',
+      //           value: 'متوسط'
+      //         },
+      //         {
+      //           info: 'الفئة',
+      //           value: 'ثقافية'
+      //         },
+      //         {
+      //           info: 'الصفحات',
+      //           value: '250'
+      //         }
+      //       ],
+      //     },
+      //     {
+      //       id: '3.jpg',
+      //       title: 'أولادنا بين التبعية والاستقلال',
+      //       text: 'عبد العزيز الخضراء',
+      //       extraInfo: [
+      //         {
+      //           info: 'المستوى',
+      //           value: 'متوسط'
+      //         },
+      //         {
+      //           info: 'الفئة',
+      //           value: 'ثقافية'
+      //         },
+      //         {
+      //           info: 'الصفحات',
+      //           value: '250'
+      //         }
+      //       ],
+      //     },
+      //     {
+      //       id: '4.jpg',
+      //       title: 'كيف تفوز في مشاكل البكاء',
+      //       text: 'سينيتا ويثام',
+      //       extraInfo: [
+      //         {
+      //           info: 'المستوى',
+      //           value: 'متوسط'
+      //         },
+      //         {
+      //           info: 'الفئة',
+      //           value: 'ثقافية'
+      //         },
+      //         {
+      //           info: 'الصفحات',
+      //           value: '250'
+      //         }
+      //       ],
+      //     },
+      //     {
+      //       id: '5.jpg',
+      //       title: 'لماذا نكتب',
+      //       text: 'ميرديث ماران',
+      //       extraInfo: [
+      //         {
+      //           info: 'المستوى',
+      //           value: 'متوسط'
+      //         },
+      //         {
+      //           info: 'الفئة',
+      //           value: 'ثقافية'
+      //         },
+      //         {
+      //           info: 'الصفحات',
+      //           value: '250'
+      //         }
+      //       ],
+      //     },
+      //     {
+      //       id: '6.jpg',
+      //       title: 'اسمي أحمر',
+      //       text: 'اورهان باموق',
+      //       extraInfo: [
+      //         {
+      //           info: 'المستوى',
+      //           value: 'متوسط'
+      //         },
+      //         {
+      //           info: 'الفئة',
+      //           value: 'ثقافية'
+      //         },
+      //         {
+      //           info: 'الصفحات',
+      //           value: '250'
+      //         }
+      //       ],
+      //     },
+      //     {
+      //       id: '5.jpg',
+      //       title: 'لماذا نكتب',
+      //       text: 'ميرديث ماران',
+      //       extraInfo: [
+      //         {
+      //           info: 'المستوى',
+      //           value: 'متوسط'
+      //         },
+      //         {
+      //           info: 'الفئة',
+      //           value: 'ثقافية'
+      //         },
+      //         {
+      //           info: 'الصفحات',
+      //           value: '250'
+      //         }
+      //       ],
+      //     },
+      //   ],
 
       books: [],
       totalBooks: 0,
       current: 1,
+      booksPerPage: 9,
       search: "",
       empty: "",
-
-    }
+      selectedSection: 0,
+      lastSelectedSection: 0,
+      sections: [
+        { section_id: 0, section: "الكل", active: true },
+        { section_id: 1, section: "بسيط", active: false },
+        { section_id: 2, section: "متوسط", active: false },
+        { section_id: 3, section: "عميق", active: false },
+        { section_id: 4, section: "عربي", lang: "arabic", active: false },
+        { section_id: 5, section: "إنجليري", lang: "english", active: false },
+      ],
+    };
   },
   methods: {
+    //get all books
     async getBooks(page) {
       const response = await bookService.getAll(page);
-      this.books = response.books.data;
-      this.totalBooks = response.books.total
-      this.current = page
+      this.books = response.books;
+      this.totalBooks = response.total;
+      this.current = this.page;
     },
 
-    async filteredBooks() {
-      this.empty = ''
+    //filter books based on the level or language
+    async filterBooks(index) {
+      this.toggleActiveFilter(index);
 
-      if (this.search) {
-        const response = await bookService.getBookByName(this.search);
-        if (response == 'empty') {
-          this.empty = 'لا يوجد كتاب بهذا الاسم'
+      let response = null;
+
+      if (index < this.sections.length) {
+        //reset the page parameter of the route to 1 for each level/lang to start the page from the beginning
+        if (this.lastSelectedSection != index) {
+          this.$router.push({ name: "social.book", query: { page: 1 } });
         }
-        else {
-          this.books = response.data;
-          this.totalBooks = response.total
 
+        if (Number(index) === 0) {
+          //all
+          this.getBooks(this.page);
+        } else {
+          if (index > 0 && index < 4) {
+            //simple - intermediate - advanced
+            //by level
+            response = await bookService.getBooksByLevel(
+              this.sections[index].section,
+              this.page
+            );
+          } else if (index >= 4) {
+            //arabic - english
+            //by language
+            response = await bookService.getBooksByLanguage(
+              this.sections[index].lang,
+              this.page
+            );
+          }
+        }
+
+        this.lastSelectedSection = index;
+      } else {
+        this.$router.push({ name: "social.book", query: { page: 1 } });
+
+        if (index == this.recentAddedBooks) {
+          response = await bookService.getRecentAddedBooks();
+        } else if (index == this.mostReadableBooks) {
+          response = await bookService.getMostReadableBooks();
+        } else if (index == this.randomBook) {
+          response = await bookService.getRandomBook();
         }
       }
-      else {
-        const response = await bookService.getAllBooks(this.page);
-        this.books = response.books.data;
+
+      if (response && index <= this.sections.length) {
+        this.books = response.books;
+        this.totalBooks = response.total;
+        this.current = this.page;
+      } else if (response && index > this.sections.length) {
+        this.books = response.length > 1 ? response : [response];
+        this.totalBooks = response.length;
+        this.current = this.page;
+      } else {
+        this.empty = "لا يوجد كتب!";
+        this.books = [];
       }
     },
+    //search books by their name
+    async searchBookByName(searchKey) {
+      this.empty = "";
+
+      if (searchKey) {
+        this.search = searchKey;
+        const response = await bookService.getBooksByName(
+          this.search,
+          this.page
+        );
+        if (response) {
+          this.books = response.books;
+          this.totalBooks = response.total;
+          this.current = this.page;
+        } else {
+          this.empty = "لا يوجد كتاب بهذا الاسم";
+          this.books = [];
+        }
+      } else {
+        //display all books if the search input is empty
+        this.getBooks(this.page);
+      }
+    },
+    //check which page is active
     checkActive(item) {
-      let className = ''
+      let className = "";
       if (this.current == item) {
-        className = 'active'
+        className = "active";
+      } else {
+        className = className + " done";
       }
-      else {
-        className = className + ' done'
-      }
-      return className
-    }
+      return className;
+    },
+    // async getSections() {
+    //   const response = await SectionService.getAll();
+    //   const data = [...this.sections, ...response.data];
+    //   this.sections = data.map((section) => {
+    //     if (Number(section.section_id) === 0) {
+    //       return section;
+    //     }
+    //     return { ...section, active: false };
+    //   });
+    //   console.log("sections", this.sections);
+    // },
 
+    //activate the selected option
+    toggleActiveFilter(sectionId) {
+      this.sections = this.sections.map((section) => {
+        if (Number(section.section_id) === Number(sectionId)) {
+          return { ...section, active: true };
+        }
+        return { ...section, active: false };
+      });
+      this.selectedSection = sectionId;
+    },
   },
   computed: {
     hasNextPage() {
-      var totalPages = Math.ceil(this.totalBooks / 10)
-      return this.page < totalPages
+      return this.page < this.totalPages;
     },
     totalPages() {
-      return Math.ceil(this.totalBooks / 10)
+      return Math.ceil(this.totalBooks / this.booksPerPage);
+    },
+    recentAddedBooks() {
+      return this.sections.length + 1;
+    },
+    mostReadableBooks() {
+      return this.recentAddedBooks + 1;
+    },
+    randomBook() {
+      return this.mostReadableBooks + 1;
     },
   },
-
-}
+};
 </script>
 
 <style scoped>
