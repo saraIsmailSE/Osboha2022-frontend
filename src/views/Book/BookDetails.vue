@@ -1,129 +1,217 @@
 <template>
-   <div class="row">
-      <div class="col-lg-12">
-         <div class="card card-block card-stretch card-height blog blog-detail">
-            <div class="card-body">
-               <div class="image-block text-center mt-3">
-
-                  <img src="@/assets/images/books/6.jpg" class="img-fluid rounded w-25" alt="blog-img">
-               </div>
-               <div class="blog-description mt-3 text-center">
-                  <h2 class="mb-3 pb-3 border-bottom text-center">اسمي أحمر</h2>
-                  <div class="blog-meta d-flex align-items-center mb-3 position-right-side flex-wrap ">
-                     <div class="date me-4 d-flex align-items-center"><i
-                           class="material-symbols-outlined pe-2 md-18 text-primary">calendar_month</i>تاريخ الاضافة
-                        20-20-2002</div>
-                     <div class="like me-4 d-flex align-items-center"><i
-                           class="material-symbols-outlined pe-2 md-18 text-primary">
-                           star
-                        </i>70% تقييم
-                     </div>
-                     <div class="comments me-4 d-flex align-items-center"><i
-                           class="material-symbols-outlined pe-2 md-18 text-primary">
-                           mode_comment
-                        </i>82 أطروحة
-                     </div>
-                  </div>
-                  <p class="text-center">
-                     يجب أن يكون هذا حلما. لا تقلق. هذا كله خطأ. لا أعرف ما هو ولكن عندما أقبلك ، يكون الأمر أشبه بتقبيل
-                     أخي. أعتقد أن هذا ليس له أي معنى ، أليس كذلك؟ ماذا كنت تفعل في منتصف الشارع ، طفل في مثل سنك. أمي
-                     أبي. فقط استدر ، McFly ، وابتعد. هل أنت أصم يا (ماك فلاي)؟ أغلق الباب واضربه.
-                     <a>... المزيد </a>
-                  </p>
-               </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card card-block card-stretch card-height blog blog-detail">
+        <div class="card-body">
+          <div class="image-block text-center mt-3">
+            <img
+              :src="resolve_img_url(book.book?.media?.path ?? '')"
+              class="img-fluid rounded w-25"
+              alt="blog-img"
+            />
+          </div>
+          <div class="blog-description mt-3 text-center">
+            <h2 class="mb-3 pb-3 border-bottom text-center">
+              {{ book.book?.name }}
+            </h2>
+            <div
+              class="blog-meta d-flex align-items-center mb-3 position-right-side flex-wrap"
+            >
+              <div class="date me-4 d-flex align-items-center">
+                <i class="material-symbols-outlined pe-2 md-18 text-primary"
+                  >calendar_month</i
+                >تاريخ الاضافة {{ formattedDate }}
+              </div>
+              <div class="like me-4 d-flex align-items-center">
+                <i class="material-symbols-outlined pe-2 md-18 text-primary">
+                  star
+                </i>
+                {{ book.rate }}% تقييم
+              </div>
+              <div class="comments me-4 d-flex align-items-center">
+                <i class="material-symbols-outlined pe-2 md-18 text-primary">
+                  mode_comment </i
+                >{{ book.theses_count }} أطروحة
+              </div>
+              <div class="comments me-4 d-flex align-items-center">
+                <i class="material-symbols-outlined pe-2 md-18 text-primary">
+                  mode_comment </i
+                >{{ book.comments_count }} تعليق
+              </div>
             </div>
-         </div>
+            <div class="text-center">
+              {{ shortBriefText }}
+              <a class="load-btn" v-on:click="loadMoreBriefText" v-if="isMore"
+                >...قراءة المزيد</a
+              >
+              <a class="load-btn" v-on:click="loadLessBriefText" v-if="isLess"
+                >قراءة أقل</a
+              >
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="col-lg-12">
-         <div class="card card-block card-stretch card-height blog user-comment">
-            <div class="card-header d-flex justify-content-between">
-               <div class="header-title">
-                  <h4 class="card-title"> الأطروحات</h4>
-               </div>
-            </div>
-            <div class="card-body">
-               <div class="row">
-                  <listThesis v-for="thesis in theses" :key="thesis.id" :thesis="thesis" />
-
-                  <div class="col-lg-12">
-                     <div class="card card-block card-stretch card-height blog">
-                        <button type="submit" class="btn btn-primary d-block w-100" data-bs-toggle="modal"
-                           data-bs-target="#modals">كتابة أطروحة</button>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="card card-block card-stretch card-height blog">
+        <button
+          type="submit"
+          class="btn btn-primary d-block w-100"
+          data-bs-toggle="modal"
+          data-bs-target="#modals"
+        >
+          كتابة أطروحة
+        </button>
       </div>
-   </div>
-   <modal id="modals" dialogClass="modal-fullscreen-sm-down" tabindex="-1" title="Create Post"
-      aria-labelledby="modalsLabel" aria-hidden="true">
-      <model-header>
-         <h5 class="modal-title" id="modalsLabel">اسم الكتاب || أطروحة جديدة </h5>
-         <a href="javascript:void(0);" class="lh-1" data-bs-dismiss="modal">
-            <span class="material-symbols-outlined">close</span>
-         </a>
-      </model-header>
-      <model-body>
-         <createThesis />
-      </model-body>
-   </modal>
+    </div>
+    <div class="col-lg-12">
+      <div class="card card-block card-stretch card-height blog user-comment">
+        <div class="card-header d-flex justify-content-between">
+          <div class="header-title">
+            <h4 class="card-title">الأطروحات</h4>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <Thesis
+              v-for="thesis in theses"
+              :key="thesis.id"
+              :thesis="thesis"
+            />
+
+            <!--Load more thesis-->
+            <div class="col-lg-12">
+              <div class="card card-block card-stretch card-height blog">
+                <button
+                  type="button"
+                  class="btn btn-primary d-block w-100"
+                  v-if="hasMoreTheses"
+                  @click="loadMoreTheses"
+                >
+                  تحميل المزيد
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <modal
+    id="modals"
+    dialogClass="modal-fullscreen-sm-down"
+    tabindex="-1"
+    title="Create Post"
+    aria-labelledby="modalsLabel"
+    aria-hidden="true"
+  >
+    <model-header>
+      <h5 class="modal-title" id="modalsLabel">اسم الكتاب || أطروحة جديدة</h5>
+      <a href="javascript:void(0);" class="lh-1" data-bs-dismiss="modal">
+        <span class="material-symbols-outlined">close</span>
+      </a>
+    </model-header>
+    <model-body>
+      <createThesis />
+    </model-body>
+  </modal>
 </template>
 <script>
-import listThesis from '../../components/book/theses/list.vue'
-import createThesis from '../../components/book/theses/create.vue'
+import Thesis from "../../components/book/theses/thesis.vue";
+import createThesis from "../../components/book/theses/create.vue";
+import bookService from "../../API/services/book.service";
+import thesisService from "../../API/services/thesis.service";
+import moment from "moment";
+
 export default {
-   name: 'BookDetails',
-   components: {
-      listThesis,
-      createThesis,
-   },
-   data() {
-      return {
-         theses: [
-            {
-               pages: 30,
-               body: `لوريم ايبسوم دولار سيت أميت ,كونسيكتيتور أدايبا يسكينج أليايت,سيت دو أيوسمود أنت بخير ، هل كل شيء على ما يرام؟
-أجل ، حسنًا ، ماذا عن واجبي المنزلي ، ماك فلاي؟
-أجل ، حسنًا ، ماذا عن واجبي المنزلي ، ماك فلاي؟
-أعرف ما ستقوله ، يا بني ، وأنت على حق ، أنت على حق ، لكن بيف كانت مشرفي ، وأخشى أنني لست جيدًا في المواجهات.
-نعم ، لكنني لم أختر قتالًا في حياتي كلها.
-كلنا نرتكب أخطاء في الحياة ، أطفال
-آه ، حسنًا ، حسنًا بيف ، آه ، سأنهي ذلك الليلة وسأحضره أول شيء صباح الغد.
-فلوكسايتور.`,
-               rate: 3,
-               comments: [
-                  {
-                     author: 'USER',
-                     author_image: 'avatar-02.jpg',
-                     created_at: '12-06-2019',
-                     body: `رونالد ريغان.
-توقف ، انتظر لحظة ، دكتور ، هل تخبرني أن والدتي قد حصلت على سخونة بالنسبة لي؟
-حسنًا ، يا أماه ، تحدثنا عن هذا ، لن نذهب إلى البحيرة ، فقد تحطمت السيارات.`,
-                  },
-                  {
-                     image: 'avatar-01.jpg',
-                     author: 'USER',
-                     author_image: 'avatar-06.jpg',
-                     created_at: '12-06-2019',
-                     body: `رونالد ريغان.
-توقف ، انتظر لحظة ، دكتور ، هل تخبرني أن والدتي قد حصلت على سخونة بالنسبة لي؟
-حسنًا ، يا أماه ، تحدثنا عن هذا ، لن نذهب إلى البحيرة ، فقد تحطمت السيارات.`,
-                  },
-               ]
-
-            },
-
-            {
-               pages: 7 - 19,
-               body: `رونالد ريغان.
-توقف ، انتظر لحظة ، دكتور ، هل تخبرني أن والدتي قد حصلت على سخونة بالنسبة لي؟
-حسنًا ، يا أماه ، تحدثنا عن هذا ، لن نذهب إلى البحيرة ، فقد تحطمت السيارات.`,
-               rate: 5
-            },
-
-         ]
+  name: "BookDetails",
+  components: {
+    Thesis,
+    createThesis,
+  },
+  props: ["id"],
+  async created() {
+    await this.getBook(this.id);
+    await this.getTheses(this.page);
+  },
+  data() {
+    return {
+      theses: [],
+      book: {},
+      fullBriefText: "",
+      shortBriefText: "",
+      page: 1,
+      totalTheses: 0,
+    };
+  },
+  methods: {
+    async getBook(id) {
+      const response = await bookService.getById(id);
+      //check if response is success
+      if (response.statusCode === 200) {
+        // console.log('success', response)
+        this.book = response.data;
+        this.fullBriefText = this.book.book?.brief;
+        this.shortBriefText = this.fullBriefText?.slice(0, 200);
+      } else {
+        //handle error
+        console.log("error: ", response);
       }
-   }
-}
+    },
+    loadMoreBriefText() {
+      this.shortBriefText = this.fullBriefText;
+    },
+    loadLessBriefText() {
+      this.shortBriefText = this.fullBriefText?.slice(0, 200);
+    },
+    resolve_img_url: function (path) {
+      if (path) {
+        return path;
+      }
+      let images = require.context(
+        "../../assets/images/books",
+        false,
+        /\.png$|\.jpg$/
+      );
+      return images("./1.jpg");
+    },
+    async getTheses(page) {
+      const response = await thesisService.getThesesByBookId(this.id, page);
+      if (response.statusCode === 200) {
+        this.theses.push(...response.data.theses);
+        this.totalTheses = response.data.total;
+      } else {
+        console.log("error: ", response.data);
+      }
+    },
+    async loadMoreTheses() {
+      this.page++;
+      await this.getTheses(this.page);
+    },
+  },
+  computed: {
+    formattedDate() {
+      return moment(this.book?.created_at).format("YYYY-MM-DD");
+    },
+    isMore() {
+      return this.shortBriefText?.length < this.fullBriefText?.length;
+    },
+    isLess() {
+      return (
+        this.shortBriefText?.length >= this.fullBriefText?.length &&
+        this.fullBriefText?.length > 200
+      );
+    },
+    hasMoreTheses() {
+      return this.theses.length < this.totalTheses;
+    },
+  },
+};
 </script>
+<style>
+.load-btn {
+  color: #216d2e;
+  font-weight: bold;
+  cursor: pointer;
+}
+</style>

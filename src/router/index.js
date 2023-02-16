@@ -85,7 +85,8 @@ const childRoutes = (prop, mode) => [
     path: 'book-details',
     name: prop + '.book-details',
     meta: { auth: true, name: 'BookDetails' },
-    component: () => import('../views/Book/BookDetails')
+    component: () => import('../views/Book/BookDetails'),
+    props: route => ({ id: parseInt(route.query.id)})
   },
   {
     path: 'infographic',

@@ -17,16 +17,10 @@
 
         <div class="group-info pt-3 pb-3">
           <h4>
-            <router-link :to="{ name: 'social.book' }">{{
-              cardInfo.name.slice(0, 20) +
-              (cardInfo.name.length > 20 ? "..." : "")
-            }}</router-link>
+            <router-link :to="{ name: 'social.book-details',query: { id: this.cardInfo.id }, }">{{cardInfo.name}}</router-link>
           </h4>
           <p>
-            {{
-              cardInfo.brief.slice(0, 100) +
-              (cardInfo.brief.length > 100 ? "..." : "")
-            }}
+            {{cardInfo.writer}}
           </p>
         </div>
         <div class="group-details d-inline-block pb-3">
@@ -39,16 +33,12 @@
             </li>
             <li class="pe-3 ps-3">
               <p class="mb-0">الفئة</p>
-              <h6>{{ cardInfo.section.section }}</h6>
+              <h6>{{ cardInfo.section?.section }}</h6>
             </li>
             <li class="pe-3 ps-3">
               <p class="mb-0">الصفحات</p>
               <h6>{{ cardInfo.end_page }}</h6>
             </li>
-            <!-- <li class="pe-3 ps-3" v-for="extraInfo in cardInfo.extraInfo" :key="extraInfo.info">
-                            <p class="mb-0">{{ extraInfo.info }}</p>
-                            <h6>{{ extraInfo.value }}</h6>
-                        </li> -->
           </ul>
         </div>
         <div class="row">
@@ -121,7 +111,10 @@ export default {
       return images("./1.jpg");
     },
     bookDetails() {
-      router.push({ name: "social.book-details" });
+      router.push({
+        name: "social.book-details",
+        query: { id: this.cardInfo.id },
+      });
     },
   },
   computed: {
