@@ -55,8 +55,8 @@
           <a class="load-btn" v-on:click="toggleShowReplies" v-if="hasReplies">
             {{
               showReplies
-                ? `إخفاء الردود ${totalReplies}`
-                : `عرض الردود ${totalReplies}`
+                ? `إخفاء ${totalReplies} من الردود`
+                : `عرض ${totalReplies} من الردود`
             }}
           </a>
           <Comment

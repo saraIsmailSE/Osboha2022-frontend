@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.prevent="submitAddThesisForm">
     <div class="d-flex align-items-center w-100 row">
       <!-- نوع الأطروحة -->
       <div class="row">
@@ -9,8 +9,9 @@
         <div class="form-group">
           <select
             class="form-select w-100"
-            name="choices-single-default"
-            id="choices-single-default"
+            name="type_of_thesis"
+            id="type_of_thesis"
+            v-model="v$.thesisForm.typeOfThesis.$model"
             v-on:change="
               changeTypeOfThesis(
                 $event.target.options[$event.target.options.selectedIndex].value
@@ -25,58 +26,72 @@
           </select>
         </div>
       </div>
-      <!-- <div class="form-check custom-radio  form-group col-lg-2 col-sm-6">
-                                    <input type="radio" id="customRadio6" name="customRadio-1" class="form-check-input" @change="noThesisAndScreenshots()">
-                                <label class="form-check-label" for="customRadio6"> قراءة </label>
-
-                                </div>
-                                <div class="form-check custom-radio  form-group col-lg-2 col-sm-6">
-                                    <input type="radio" id="customRadio7" name="customRadio-1" class="form-check-input"
-                                        checked @change="showAddThesis()">
-                                    <label class="form-check-label" for="customRadio7"> كتابة </label>
-                                </div>
-                                <div class="form-check custom-radio form-check-inline form-group col-lg-2 col-sm-6">
-                                    <input type="radio" id="customRadio8" name="customRadio-1" class="form-check-input"
-                                        @change="showAddScreenshots()">
-                                    <label class="form-check-label" for="customRadio8"> اقتباسات </label>
-                                </div>
-                                <div class="form-check custom-radio form-check-inline form-group col-lg-2 col-sm-6">
-                                    <input type="radio" id="customRadio8" name="customRadio-1" class="form-check-input"
-                                        @change="thesisAndScreenshots()">
-                                    <label class="form-check-label" for="customRadio8"> كتابة واقتباسات </label>
-                                </div> -->
-
       <!-- الصفحات -->
-      <div class="row mt-2">
+      <div class="row mt-2" v-if="showPages">
         <div class="form-group">
           <h5 class="form-label">الصفحات</h5>
         </div>
       </div>
-      <div class="form-group col-6">
-        <select
-          class="form-select"
-          data-trigger
-          name="choices-single-default"
-          id="choices-single-default"
-        >
-          <option value="">صفحة البداية</option>
-          <option value="Choice 1">Choice 1</option>
-          <option value="Choice 2">Choice 2</option>
-          <option value="Choice 3">Choice 3</option>
-        </select>
-      </div>
-      <div class="form-group col-6">
-        <select
-          class="form-select"
-          data-trigger
-          name="choices-single-default"
-          id="choices-single-default"
-        >
-          <option value="">صفحة النهاية</option>
-          <option value="Choice 1">Choice 1</option>
-          <option value="Choice 2">Choice 2</option>
-          <option value="Choice 3">Choice 3</option>
-        </select>
+      <div class="row" v-if="showPages">
+        <div class="form-group col-6">
+          <select
+            class="form-select"
+            data-trigger
+            name="start_page"
+            id="start_page"
+            v-model="v$.thesisForm.start_page.$model"
+          >
+            <option value="">صفحة البداية</option>
+            <option v-for="page in pages" :value="page" :key="page">
+              {{ page }}
+            </option>
+          </select>
+
+          <div class="help-block" v-if="v$.thesisForm.start_page.$error">
+            <small
+              style="color: red"
+              v-if="v$.thesisForm.start_page.required.$invalid"
+              >الرجاء اختيار صفحة البداية</small
+            >
+            <small
+              style="color: red"
+              v-if="
+                !v$.thesisForm.start_page.required.$invalid &&
+                v$.thesisForm.start_page.between.$invalid
+              "
+              >البداية يجب ان تكون اقل من النهاية</small
+            >
+          </div>
+        </div>
+        <div class="form-group col-6">
+          <select
+            class="form-select"
+            data-trigger
+            name="end_page"
+            id="end_page"
+            v-model="v$.thesisForm.end_page.$model"
+          >
+            <option value="">صفحة النهاية</option>
+            <option v-for="page in pages" :value="page" :key="page">
+              {{ page }}
+            </option>
+          </select>
+          <div class="help-block" v-if="v$.thesisForm.end_page.$error">
+            <small
+              style="color: red"
+              v-if="v$.thesisForm.end_page.required.$invalid"
+              >الرجاء اختيار صفحة النهاية</small
+            >
+            <small
+              style="color: red"
+              v-if="
+                !v$.thesisForm.end_page.required.$invalid &&
+                v$.thesisForm.end_page.between.$invalid
+              "
+              >النهاية يجب ان تكون اكبر من البداية</small
+            >
+          </div>
+        </div>
       </div>
       <div class="form-group" v-if="thesis">
         <label class="form-label" for="thesisBody">الأطروحة</label>
@@ -85,7 +100,16 @@
           placeholder="... اكتب أطروحتك"
           class="rounded form-control"
           id="thesisBody"
+          name="thesisBody"
+          v-model.trim="v$.thesisForm.body.$model"
         ></textarea>
+        <div class="help-block" v-if="v$.thesisForm.body.$error">
+          <small
+            style="color: red"
+            v-if="v$.thesisForm.body.requiredIf.$invalid"
+            >الرجاء ادخال الأطروحة</small
+          >
+        </div>
       </div>
 
       <div class="form-group" v-if="screenshots">
@@ -96,8 +120,16 @@
           id="customFile"
           multiple
           accept="image/jpeg, image/png, image/jpg, image/gif, image/svg"
+          ref="screenshots"
           @change="previewImages"
         />
+        <div class="help-block" v-if="v$.thesisForm.screenshots.$error">
+          <small
+            style="color: red"
+            v-if="v$.thesisForm.screenshots.requiredIf.$invalid"
+            >الرجاء ادخال اقتباس واحد على الاقل</small
+          >
+        </div>
         <!--preview-->
         <div class="preview-images">
           <div
@@ -105,84 +137,222 @@
             v-for="(previewUrl, index) in previewUrls"
             :key="index"
           >
-            <a href="javascript:void(0);" @click="removeImage(index)"> x </a>
+            <div class="delete-image" @click="removeImage(index)">
+              <span> x </span>
+            </div>
             <img :src="previewUrl" />
           </div>
         </div>
       </div>
       <hr />
-      <a href="javascript:void(0);" class="btn btn-primary d-block mt-3"
-        >إضافة</a
+      <!--Success and error messages-->
+
+      <small class="text-primary text-center" v-if="successMessage">
+        {{ successMessage }}
+      </small>
+      <small class="text-danger text-center" v-if="errorMessage">
+        {{ errorMessage }}
+      </small>
+      <div class="col-sm-12 text-center" v-if="loader">
+        <img
+          src="../../../assets/images/page-img/page-load-loader.gif"
+          alt="loader"
+          style="height: 100px"
+        />
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary d-block mt-3"
+        v-if="!loader"
+        :disabled="v$.thesisForm.$invalid"
       >
+        إضافة
+      </button>
     </div>
-  </div>
+  </form>
 </template>
 <script>
+import useVuelidate from "@vuelidate/core";
+import { required, requiredIf } from "@vuelidate/validators";
+import thesisService from "../../../API/services/thesis.service";
+
 export default {
   name: "CreateThesis",
-  props: ["pages", "user_book_id"],
+  props: ["start_page", "end_page", "book_id"],
+  setup() {
+    return {
+      v$: useVuelidate(),
+    };
+  },
   data() {
     return {
       newThesis: "",
-      thesis: true,
+      thesis: false,
       screenshots: false,
-      startEnd: true,
-      total: false,
-      selectedImages: [],
+      showPages: false,
       previewUrls: [],
+      loader: false,
+      type: "thesis",
+      thesisForm: {
+        typeOfThesis: "",
+        start_page: "",
+        end_page: "",
+        body: "",
+        screenshots: [],
+      },
+      successMessage: "",
+      errorMessage: "",
     };
   },
   methods: {
-    addNewthesis(thesis) {},
     showAddThesis() {
       this.thesis = true;
       this.screenshots = false;
+      this.previewUrls = [];
+      this.thesisForm.screenshots = [];
     },
     showAddScreenshots() {
       this.screenshots = true;
       this.thesis = false;
     },
-
     noThesisAndScreenshots() {
       this.thesis = false;
       this.screenshots = false;
+      this.previewUrls = [];
+      this.thesisForm.screenshots = [];
     },
-
     thesisAndScreenshots() {
       this.thesis = true;
-      this.thesis = true;
-    },
-    showStartEnd() {
-      this.startEnd = true;
-      this.total = false;
-    },
-    showTotal() {
-      this.total = true;
-      this.startEnd = false;
+      this.screenshots = true;
     },
     changeTypeOfThesis(type) {
+      this.showPages = true;
       if (type == "read") {
         this.noThesisAndScreenshots();
-      } else if (type == "readAndWrite" || type == "") {
+      } else if (type == "readAndWrite") {
         this.showAddThesis();
       } else if (type == "screenshots") {
         this.showAddScreenshots();
       } else if (type == "screenshotsAndWrite") {
         this.thesisAndScreenshots();
+      } else {
+        this.showPages = false;
+        this.noThesisAndScreenshots();
       }
     },
+    onChangeStartPage(page) {
+      this.selectedStartPage = page;
+    },
+    onChangeEndPage(page) {
+      this.selectedEndPage = page;
+    },
     previewImages(event) {
-      this.selectedFiles = event.target.files;
-      for (let i = 0; i < this.selectedFiles.length; i++) {
+      this.previewUrls = [];
+      this.thesisForm.screenshots = event.target.files;
+      for (let i = 0; i < this.thesisForm.screenshots.length; i++) {
         const reader = new FileReader();
         reader.onload = () => {
           this.previewUrls.push(reader.result);
         };
-        reader.readAsDataURL(this.selectedFiles[i]);
+        reader.readAsDataURL(this.thesisForm.screenshots[i]);
       }
     },
     removeImage(index) {
       this.previewUrls.splice(index, 1);
+      const newArray = Array.from(this.thesisForm.screenshots);
+      newArray.splice(index, 1);
+      this.thesisForm.screenshots = newArray;
+    },
+    async submitAddThesisForm() {
+      this.v$.$touch();
+      if (!this.v$.thesisForm.$invalid) {
+        this.loader = true;
+        const formData = new FormData();
+        formData.append("start_page", parseInt(this.thesisForm.start_page));
+        formData.append("end_page", parseInt(this.thesisForm.end_page));
+        if (this.thesisForm.body.length > 0)
+          formData.append("body", this.thesisForm.body);
+        formData.append("type", this.type);
+        formData.append("book_id", parseInt(this.book_id));
+        if (this.thesisForm.screenshots.length > 0) {
+          console.log("screenshots: ", this.thesisForm.screenshots.length);
+          for (let i = 0; i < this.thesisForm.screenshots.length; i++) {
+            formData.append("screenShots[]", this.thesisForm.screenshots[i]);
+          }
+        }
+        try {
+          const response = await thesisService.createThesis(formData);
+          //reset form
+          this.thesisForm = {
+            typeOfThesis: "",
+            start_page: "",
+            end_page: "",
+            body: "",
+            screenshots: [],
+          };
+
+          this.v$.thesisForm.$reset();
+          // this.changeTypeOfThesis("");
+
+          this.loader = false;
+          this.errorMessage = "";
+          this.successMessage = "تم اضافة الأطروحة بنجاح";
+
+          //timer to close the modal
+          setTimeout(() => {
+            this.successMessage = "";
+            this.$emit("closeModel");
+          }, 2000);
+        } catch (error) {
+          this.loader = false;
+          this.successMessage = "";
+          this.errorMessage = "حدث خطأ ما الرجاء المحاولة مرة اخرى!";
+        }
+      } else {
+        this.errorMessage = "الرجاء ادخال جميع البيانات المطلوبة";
+      }
+    },
+  },
+  validations() {
+    return {
+      thesisForm: {
+        typeOfThesis: {
+          required,
+        },
+        start_page: {
+          required,
+          between: (value) =>
+            parseInt(value) < parseInt(this.thesisForm.end_page),
+        },
+        end_page: {
+          required,
+          between: (value) =>
+            parseInt(value) > parseInt(this.thesisForm.start_page),
+        },
+        body: {
+          requiredIf: requiredIf(
+            () =>
+              this.thesisForm.typeOfThesis == "readAndWrite" ||
+              this.thesisForm.typeOfThesis == "screenshotsAndWrite"
+          ),
+        },
+        screenshots: {
+          requiredIf: requiredIf(
+            () =>
+              this.thesisForm.typeOfThesis == "screenshots" ||
+              this.thesisForm.typeOfThesis == "screenshotsAndWrite"
+          ),
+        },
+      },
+    };
+  },
+  computed: {
+    pages() {
+      let pages = [];
+      for (let i = this.start_page; i <= this.end_page; i++) {
+        pages.push(i);
+      }
+      return pages;
     },
   },
 };
@@ -197,24 +367,36 @@ export default {
   margin-right: 10px;
   margin-bottom: 10px;
   height: 60px;
+  width: 60px;
   position: relative;
 }
 
 .image-container img {
-  width: 100px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
-.image-container a {
+.delete-image {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: -5px;
+  right: -5px;
   z-index: 1;
+  height: 20px;
+  width: 20px;
   background: #fff;
-  border-radius: 0 0 0 10px;
-  padding: 5px 10px;
+  border-radius: 50%;
+  padding: 5px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  color: #000;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

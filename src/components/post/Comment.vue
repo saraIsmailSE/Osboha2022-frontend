@@ -6,17 +6,17 @@
           <div class="user-image mb-3">
             <img
               class="avatar-50 rounded-circle"
-              :src="resolve_img_url(comment.user.profile.profile_picture)"
+              :src="resolve_img_url(comment.user?.profile.profile_picture)"
               alt="profile picture"
               data-original-title=""
               title=""
             />
           </div>
           <div class="ms-3">
-            <h5>{{ comment.user.name }}</h5>
+            <h5>{{ comment.user?.name }}</h5>
             <span
               class="badge bg-primary rounded-pill"
-              v-for="role in comment.user.roles"
+              v-for="role in comment.user?.roles"
               :key="role"
             >
               &nbsp; {{ role }} &nbsp;</span

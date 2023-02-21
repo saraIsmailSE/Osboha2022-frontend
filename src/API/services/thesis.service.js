@@ -39,6 +39,15 @@ class ThesisService {
       return error;
     }
   }
+
+  async createThesis(data) {
+    try {
+      const thesis = await api.post(`/comment/create`, data);
+      return thesis.data;
+    } catch (error) {
+      return error;
+    }
+  }
 }
 
 export default new ThesisService();

@@ -37,12 +37,14 @@
     "smooth-scrollbar": "^8.6.3",
     "sweetalert2": "^10.0.2",
     "swiper": "^6.7.0",
+    "vee-validate": "^4.7.4",
     "vue-flatpickr-component": "^9.0.6",
     "vue-router": "^4.0.0-0",
     "vue-sweetalert2": "^5.0.2",
     "vue-template-compiler": "^2.6.14",
     "vue3-apexcharts": "^1.4.1",
     "vue3-datepicker": "^0.2.5",
+    "vuelidate": "^0.7.7",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {

@@ -99,20 +99,33 @@
   </div>
   <modal
     id="modals"
+    ref="modals"
     dialogClass="modal-fullscreen-sm-down"
     tabindex="-1"
     title="Create Post"
     aria-labelledby="modalsLabel"
-    aria-hidden="true"
+    aria-hidden="false"
   >
     <model-header>
-      <h5 class="modal-title" id="modalsLabel">اسم الكتاب || أطروحة جديدة</h5>
-      <a href="javascript:void(0);" class="lh-1" data-bs-dismiss="modal">
+      <h5 class="modal-title" id="modalsLabel">
+        {{ book.book?.name }} || أطروحة جديدة
+      </h5>
+      <a
+        href="javascript:void(0);"
+        class="lh-1"
+        data-bs-dismiss="modal"
+        ref="closeBtn"
+      >
         <span class="material-symbols-outlined">close</span>
       </a>
     </model-header>
     <model-body>
-      <createThesis />
+      <createThesis
+        :start_page="book.book?.start_page"
+        :end_page="book.book?.end_page"
+        :book_id="this.id"
+        @closeModel="closeModel"
+      />
     </model-body>
   </modal>
 </template>
@@ -188,6 +201,16 @@ export default {
       this.page++;
       await this.getTheses(this.page);
     },
+    async closeModel() {
+      this.$refs.closeBtn.click();
+      //refresh the book
+      await this.getBook(this.id);
+
+      //refresh the theses
+      this.theses = [];
+      this.page = 1;
+      await this.getTheses(this.page);
+    },
   },
   computed: {
     formattedDate() {
@@ -203,7 +226,11 @@ export default {
       );
     },
     hasMoreTheses() {
-      return this.theses.length < this.totalTheses;
+      return (
+        this.theses.length < this.totalTheses &&
+        this.totalTheses > 0 &&
+        this.theses.length > 0
+      );
     },
   },
 };
