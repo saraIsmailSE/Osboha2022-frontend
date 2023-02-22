@@ -282,6 +282,7 @@ export default {
         }
         try {
           const response = await thesisService.createThesis(formData);
+          this.$emit("addThesis", response.data);
           //reset form
           this.thesisForm = {
             typeOfThesis: "",
@@ -292,7 +293,7 @@ export default {
           };
 
           this.v$.thesisForm.$reset();
-          // this.changeTypeOfThesis("");
+          this.changeTypeOfThesis("");
 
           this.loader = false;
           this.errorMessage = "";

@@ -125,6 +125,7 @@
         :end_page="book.book?.end_page"
         :book_id="this.id"
         @closeModel="closeModel"
+        @addThesis="addThesis"
       />
     </model-body>
   </modal>
@@ -203,13 +204,14 @@ export default {
     },
     async closeModel() {
       this.$refs.closeBtn.click();
-      //refresh the book
-      await this.getBook(this.id);
+    },
 
-      //refresh the theses
-      this.theses = [];
-      this.page = 1;
-      await this.getTheses(this.page);
+    addThesis(thesis) {
+      this.theses.unshift(thesis);
+      this.book.theses_count++;
+      this.book.comments_count =
+        this.book.comments_count + thesis.comment.replies.length + 1;
+      this.totalTheses++;
     },
   },
   computed: {
