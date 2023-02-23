@@ -120,13 +120,13 @@
           id="customFile"
           multiple
           accept="image/jpeg, image/png, image/jpg, image/gif, image/svg"
-          ref="screenshots"
+          ref="screenShots"
           @change="previewImages"
         />
-        <div class="help-block" v-if="v$.thesisForm.screenshots.$error">
+        <div class="help-block" v-if="v$.thesisForm.screenShots.$error">
           <small
             style="color: red"
-            v-if="v$.thesisForm.screenshots.requiredIf.$invalid"
+            v-if="v$.thesisForm.screenShots.requiredIf.$invalid"
             >الرجاء ادخال اقتباس واحد على الاقل</small
           >
         </div>
@@ -174,7 +174,7 @@
 <script>
 import useVuelidate from "@vuelidate/core";
 import { required, requiredIf } from "@vuelidate/validators";
-import thesisService from "../../../API/services/thesis.service";
+import commentService from "../../../API/services/comment.service";
 
 export default {
   name: "CreateThesis",
@@ -192,13 +192,14 @@ export default {
       showPages: false,
       previewUrls: [],
       loader: false,
-      type: "thesis",
       thesisForm: {
         typeOfThesis: "",
         start_page: "",
         end_page: "",
         body: "",
-        screenshots: [],
+        screenShots: [],
+        type: "thesis",
+        book_id: this.book_id,
       },
       successMessage: "",
       errorMessage: "",
@@ -209,7 +210,7 @@ export default {
       this.thesis = true;
       this.screenshots = false;
       this.previewUrls = [];
-      this.thesisForm.screenshots = [];
+      this.thesisForm.screenShots = [];
     },
     showAddScreenshots() {
       this.screenshots = true;
@@ -219,7 +220,7 @@ export default {
       this.thesis = false;
       this.screenshots = false;
       this.previewUrls = [];
-      this.thesisForm.screenshots = [];
+      this.thesisForm.screenShots = [];
     },
     thesisAndScreenshots() {
       this.thesis = true;
@@ -248,48 +249,35 @@ export default {
     },
     previewImages(event) {
       this.previewUrls = [];
-      this.thesisForm.screenshots = event.target.files;
-      for (let i = 0; i < this.thesisForm.screenshots.length; i++) {
+      this.thesisForm.screenShots = event.target.files;
+      for (let i = 0; i < this.thesisForm.screenShots.length; i++) {
         const reader = new FileReader();
         reader.onload = () => {
           this.previewUrls.push(reader.result);
         };
-        reader.readAsDataURL(this.thesisForm.screenshots[i]);
+        reader.readAsDataURL(this.thesisForm.screenShots[i]);
       }
     },
     removeImage(index) {
       this.previewUrls.splice(index, 1);
-      const newArray = Array.from(this.thesisForm.screenshots);
+      const newArray = Array.from(this.thesisForm.screenShots);
       newArray.splice(index, 1);
-      this.thesisForm.screenshots = newArray;
+      this.thesisForm.screenShots = newArray;
     },
     async submitAddThesisForm() {
       this.v$.$touch();
       if (!this.v$.thesisForm.$invalid) {
         this.loader = true;
-        const formData = new FormData();
-        formData.append("start_page", parseInt(this.thesisForm.start_page));
-        formData.append("end_page", parseInt(this.thesisForm.end_page));
-        if (this.thesisForm.body.length > 0)
-          formData.append("body", this.thesisForm.body);
-        formData.append("type", this.type);
-        formData.append("book_id", parseInt(this.book_id));
-        if (this.thesisForm.screenshots.length > 0) {
-          console.log("screenshots: ", this.thesisForm.screenshots.length);
-          for (let i = 0; i < this.thesisForm.screenshots.length; i++) {
-            formData.append("screenShots[]", this.thesisForm.screenshots[i]);
-          }
-        }
         try {
-          const response = await thesisService.createThesis(formData);
+          const response = await commentService.create(this.thesisForm);
           this.$emit("addThesis", response.data);
           //reset form
           this.thesisForm = {
-            typeOfThesis: "",
+            ...this.thesisForm,
             start_page: "",
             end_page: "",
             body: "",
-            screenshots: [],
+            screenShots: [],
           };
 
           this.v$.thesisForm.$reset();
@@ -337,7 +325,7 @@ export default {
               this.thesisForm.typeOfThesis == "screenshotsAndWrite"
           ),
         },
-        screenshots: {
+        screenShots: {
           requiredIf: requiredIf(
             () =>
               this.thesisForm.typeOfThesis == "screenshots" ||

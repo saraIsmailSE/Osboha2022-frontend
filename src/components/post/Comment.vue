@@ -1,80 +1,127 @@
 <template>
-  <div class="comment">
+  <CommentUser :user="comment.user" />
+  <div class="blog-description">
+    <h6 v-if="totalThesisPages > 0">الصفحات المنجزة: {{ totalThesisPages }}</h6>
+    <h6>
+      <!-- <rate :rate="comment.rate" /> -->
+      <rate :rate="5" />
+    </h6>
+    <p v-if="comment.body">{{ comment.body }}</p>
+    <div class="image-block mt-3 mb-3">
+      <img
+        v-if="comment.media"
+        :src="comment.media.path"
+        class="img-fluid rounded w-25 comment-image"
+        alt="blog-img"
+      />
+    </div>
+    <div class="d-flex flex-wrap align-items-center comment-activity">
+      <span class="text-muted small">
+        {{ formatDate(comment.created_at) }}
+      </span>
+      &nbsp;&nbsp;
+      <a href="javascript:void();" :class="{ liked: liked }"> أعجبني </a>
+      <a href="javascript:void();" v-on:click="showReply">
+        {{ showReplyBox ? "إخفاء" : "رد" }}
+      </a>
+    </div>
+    <!--display a button to hide replies-->
+    <a class="load-btn" v-on:click="toggleShowReplies" v-if="hasReplies">
+      {{
+        showReplies
+          ? `إخفاء ${totalReplies} من الردود`
+          : `عرض ${totalReplies} من الردود`
+      }}
+    </a>
+  </div>
+  <div class="comment-list" v-if="comment.replies && showReplies">
     <ul class="post-comments list-inline p-0 m-0">
-      <li class="mb-2" v-for="comment in comments" :key="comment.id">
-        <div class="d-flex align-items-center">
-          <div class="user-image mb-3">
-            <img
-              class="avatar-50 rounded-circle"
-              :src="resolve_img_url(comment.user?.profile.profile_picture)"
-              alt="profile picture"
-              data-original-title=""
-              title=""
-            />
-          </div>
-          <div class="ms-3">
-            <h5>{{ comment.user?.name }}</h5>
-            <span
-              class="badge bg-primary rounded-pill"
-              v-for="role in comment.user?.roles"
-              :key="role"
-            >
-              &nbsp; {{ role }} &nbsp;</span
-            >
-          </div>
-        </div>
-        <div class="blog-description">
-          <p v-if="comment.body">{{ comment.body }}</p>
-          <div class="image-block mt-3 mb-3">
-            <img
-              v-if="comment.media"
-              :src="comment.media.path"
-              class="img-fluid rounded w-25 comment-image"
-              alt="blog-img"
-            />
-          </div>
-          <div class="d-flex flex-wrap align-items-center comment-activity">
-            <span class="text-muted small">
-              {{ formatDate(comment.created_at) }}
-            </span>
-            &nbsp;&nbsp;
-            <a href="javascript:void();">أعجبني</a>
-            <a href="javascript:void();">رد</a>
-          </div>
-        </div>
-        <Comment v-if="comment.replies" :comments="comment.replies" />
+      <li class="mb-2" v-for="cmnt in comment.replies" :key="cmnt.id">
+        <Comment :comment="cmnt" @addComment="addComment" />
       </li>
     </ul>
   </div>
+  <CreateComment
+    v-if="showReplyBox"
+    v-show="showReplyBox"
+    ref="commentReplyRef"
+    :comment_id="comment.id"
+    :type="'reply'"
+    @addComment="addComment"
+  />
 </template>
 <script>
-import moment from "moment";
+import rate from "../book/rate/rate.vue";
+import CreateComment from "./CreateComment.vue";
+import CommentUser from "./CommentUser.vue";
 import { formatDistanceToNow } from "date-fns";
 import ar from "date-fns/locale/ar-SA";
 export default {
   name: "Comment",
-  components: {},
+  components: {
+    CreateComment,
+    CommentUser,
+    rate,
+  },
+  emits: ["addComment"],
   props: {
-    comments: { type: Object },
+    comment: {
+      type: Object,
+      required: true,
+    },
+    totalThesisPages: {
+      type: Number,
+      required: false,
+    },
+  },
+  data() {
+    return {
+      showReplies: false,
+      showReplyBox: false,
+      liked: false,
+    };
   },
   methods: {
-    resolve_img_url: function (path) {
-      if (path) {
-        return path;
-      }
-      let images = require.context(
-        "../../assets/images/avatar",
-        false,
-        /\.png$|\.jpg$/
-      );
-      return images("./avatar-01.jpg");
-    },
     formatDate(date) {
-      // return moment(date).format("YYYY-MM-DD");
       return formatDistanceToNow(new Date(date), {
         addSuffix: true,
         locale: ar,
       });
+    },
+    toggleShowReplies() {
+      this.showReplies = !this.showReplies;
+    },
+    showReply() {
+      this.showReplyBox = !this.showReplyBox;
+      this.$nextTick(() => {
+        this.$refs.commentReplyRef.focusInput();
+      });
+    },
+    addComment(reply, comment_id) {
+      this.$emit("addComment", reply, comment_id);
+      this.showReplies = true;
+      this.showReplyBox = false;
+    },
+  },
+  computed: {
+    hasReplies() {
+      return this.comment?.replies && this.comment?.replies.length > 0;
+    },
+    totalReplies() {
+      //calculate recursively the total replies
+      const calculateReplies = (replies, total) => {
+        total = total || 0;
+        if (replies.length > 0) {
+          total += replies.length;
+          replies.forEach((reply) => {
+            if (reply.replies.length > 0) {
+              total = calculateReplies(reply.replies, total);
+            }
+          });
+        }
+        return total;
+      };
+      return calculateReplies(this.comment.replies);
     },
   },
 };
@@ -84,7 +131,7 @@ export default {
   margin-right: 30px;
 }
 
-.comment {
+.comment-list {
   margin-top: 15px;
 }
 .post-comments > li {
@@ -93,5 +140,11 @@ export default {
   border-top-right-radius: 10px;
   margin-right: 15px;
   padding-right: 15px;
+}
+
+.comment-image {
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 20px !important;
 }
 </style>

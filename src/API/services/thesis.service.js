@@ -42,7 +42,9 @@ class ThesisService {
 
   async createThesis(data) {
     try {
-      const thesis = await api.post(`/comment/create`, data);
+      const thesis = await api.post(`/comment/create`, data, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
       return thesis.data;
     } catch (error) {
       return error;

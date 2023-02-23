@@ -17,10 +17,16 @@
 
         <div class="group-info pt-3 pb-3">
           <h4>
-            <router-link :to="{ name: 'social.book-details',query: { id: this.cardInfo.id }, }">{{cardInfo.name}}</router-link>
+            <router-link
+              :to="{
+                name: 'social.book-details',
+                query: { id: this.cardInfo.id },
+              }"
+              >{{ cardInfo.name }}</router-link
+            >
           </h4>
           <p>
-            {{cardInfo.writer}}
+            {{ cardInfo.writer }}
           </p>
         </div>
         <div class="group-details d-inline-block pb-3">
@@ -100,15 +106,7 @@ export default {
   },
   methods: {
     resolve_img_url: function (path) {
-      if(path){
-        return path
-      }
-      let images = require.context(
-        "../../assets/images/books",
-        false,
-        /\.png$|\.jpg$/
-      );
-      return images("./1.jpg");
+      return path ? path : require("@/assets/images/books/1.jpg");
     },
     bookDetails() {
       router.push({

@@ -73,11 +73,24 @@
         </div>
         <div class="card-body">
           <div class="row">
-            <Thesis
-              v-for="thesis in theses"
-              :key="thesis.id"
-              :thesis="thesis"
-            />
+            <!-- display theses -->
+            <div class="col-lg-12" v-for="comment in theses" :key="comment.id">
+              <div class="card card-block card-stretch card-height blog">
+                <div class="card-body">
+                  <Comment
+                    :comment="comment"
+                    :totalThesisPages="
+                      comment.thesis
+                        ? comment.thesis.end_page -
+                          comment.thesis.start_page +
+                          1
+                        : 0
+                    "
+                    @addComment="addComment"
+                  />
+                </div>
+              </div>
+            </div>
 
             <!--Load more thesis-->
             <div class="col-lg-12">
@@ -131,7 +144,7 @@
   </modal>
 </template>
 <script>
-import Thesis from "../../components/book/theses/thesis.vue";
+import Comment from "../../components/post/Comment.vue";
 import createThesis from "../../components/book/theses/create.vue";
 import bookService from "../../API/services/book.service";
 import thesisService from "../../API/services/thesis.service";
@@ -140,7 +153,7 @@ import moment from "moment";
 export default {
   name: "BookDetails",
   components: {
-    Thesis,
+    Comment,
     createThesis,
   },
   props: ["id"],
@@ -160,17 +173,32 @@ export default {
   },
   methods: {
     async getBook(id) {
-      const response = await bookService.getById(id);
-      //check if response is success
-      if (response.statusCode === 200) {
-        // console.log('success', response)
-        this.book = response.data;
-        this.fullBriefText = this.book.book?.brief;
-        this.shortBriefText = this.fullBriefText?.slice(0, 200);
-      } else {
-        //handle error
-        console.log("error: ", response);
+      try {
+        const response = await bookService.getById(id);
+        //check if response is success
+        if (response.statusCode === 200) {
+          // console.log('success', response)
+          this.book = response.data;
+          this.fullBriefText = this.book.book?.brief;
+          this.shortBriefText = this.fullBriefText?.slice(0, 200);
+        } else {
+          //handle error
+          console.log("error: ", response.data);
+        }
+      } catch (e) {
+        console.log(e);
       }
+      // const response = await bookService.getById(id);
+      // //check if response is success
+      // if (response.statusCode === 200) {
+      //   // console.log('success', response)
+      //   this.book = response.data;
+      //   this.fullBriefText = this.book.book?.brief;
+      //   this.shortBriefText = this.fullBriefText?.slice(0, 200);
+      // } else {
+      //   //handle error
+      //   console.log("error: ", response);
+      // }
     },
     loadMoreBriefText() {
       this.shortBriefText = this.fullBriefText;
@@ -179,23 +207,19 @@ export default {
       this.shortBriefText = this.fullBriefText?.slice(0, 200);
     },
     resolve_img_url: function (path) {
-      if (path) {
-        return path;
-      }
-      let images = require.context(
-        "../../assets/images/books",
-        false,
-        /\.png$|\.jpg$/
-      );
-      return images("./1.jpg");
+      return path ? path : require("@/assets/images/books/1.jpg");
     },
     async getTheses(page) {
-      const response = await thesisService.getThesesByBookId(this.id, page);
-      if (response.statusCode === 200) {
-        this.theses.push(...response.data.theses);
-        this.totalTheses = response.data.total;
-      } else {
-        console.log("error: ", response.data);
+      try {
+        const response = await thesisService.getThesesByBookId(this.id, page);
+        if (response.statusCode === 200) {
+          this.theses.push(...response.data.theses);
+          this.totalTheses = response.data.total;
+        } else {
+          console.log("error: ", response.data);
+        }
+      } catch (e) {
+        console.log(e);
       }
     },
     async loadMoreTheses() {
@@ -210,8 +234,32 @@ export default {
       this.theses.unshift(thesis);
       this.book.theses_count++;
       this.book.comments_count =
-        this.book.comments_count + thesis.comment.replies.length + 1;
+        this.book.comments_count + thesis.replies.length + 1;
       this.totalTheses++;
+    },
+    findComment(theses, comment_id) {
+      for (let i = 0; i < theses.length; i++) {
+        if (theses[i].id === comment_id) {
+          return theses[i];
+        } else if (theses[i].replies.length > 0) {
+          const comment = this.findComment(theses[i].replies, comment_id);
+          if (comment) {
+            return comment;
+          }
+        }
+      }
+    },
+    addComment(reply, comment_id) {
+      console.log("comment_id", comment_id);
+      if (comment_id === null) {
+        this.theses.unshift(reply);
+        this.book.comments_count++;
+        return;
+      } else {
+        const comment = this.findComment(this.theses, comment_id);
+        comment.replies.push(reply);
+        this.book.comments_count++;
+      }
     },
   },
   computed: {
