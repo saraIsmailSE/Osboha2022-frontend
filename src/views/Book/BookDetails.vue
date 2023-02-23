@@ -91,7 +91,11 @@
                 </div>
               </div>
             </div>
-
+            <div class="col-lg-12">
+              <div class="card card-block card-stretch card-height blog">
+                <CreateComment :type="'comment'" @addComment="addComment" />
+              </div>
+            </div>
             <!--Load more thesis-->
             <div class="col-lg-12">
               <div class="card card-block card-stretch card-height blog">
@@ -145,6 +149,7 @@
 </template>
 <script>
 import Comment from "../../components/post/Comment.vue";
+import CreateComment from "../../components/post/CreateComment.vue";
 import createThesis from "../../components/book/theses/create.vue";
 import bookService from "../../API/services/book.service";
 import thesisService from "../../API/services/thesis.service";
@@ -155,6 +160,7 @@ export default {
   components: {
     Comment,
     createThesis,
+    CreateComment,
   },
   props: ["id"],
   async created() {
@@ -250,10 +256,10 @@ export default {
       }
     },
     addComment(reply, comment_id) {
-      console.log("comment_id", comment_id);
-      if (comment_id === null) {
-        this.theses.unshift(reply);
+      if (!comment_id) {
+        this.theses.push(reply);
         this.book.comments_count++;
+        this.totalTheses++;
         return;
       } else {
         const comment = this.findComment(this.theses, comment_id);
