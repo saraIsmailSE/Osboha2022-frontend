@@ -18,27 +18,15 @@
         </li>
         <!-- ###### Profile ###### -->
         <li class="nav-item">
-            <router-link :class="checkActive('social.profilemain') ? 'active nav-link' : 'nav-link'"
-                :to="{ name: 'social.profilemain' }">
+            <router-link :class="checkActive('user.profile') ? 'active nav-link' : 'nav-link'"
+                :to="{ name: 'user.profile' }">
                 <i class="icon material-symbols-outlined">
                     person
                 </i>
-                <span class="social.profilemain">الملف الشخصي</span>
+                <span class="user.profile">الملف الشخصي</span>
 
             </router-link>
         </li>
-
-        <!-- ###### Friend ###### -->
-        <li class="nav-item">
-            <router-link :class="checkActive('social.friendrequest') ? 'active nav-link' : 'nav-link'"
-                aria-current="page" :to="{ name: 'social.friendrequest' }">
-                <i class="icon material-symbols-outlined">
-                    people
-                </i>
-                <span class="item-name">طلبات الصداقة</span>
-            </router-link>
-        </li>
-
         <!-- ###### group ###### -->
         <li class="nav-item">
             <router-link :class="checkActive('social.group') ? 'active nav-link' : 'nav-link'" aria-current="page"

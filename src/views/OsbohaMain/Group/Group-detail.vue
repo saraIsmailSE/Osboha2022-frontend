@@ -4,7 +4,7 @@
             <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap">
                 <div class="group-info d-flex align-items-center">
                     <div class="me-3">
-                        <img class="rounded-circle img-fluid avatar-100" src="@/assets/images/page-img/gi-1.jpg" alt="">
+                        <img class="rounded-circle img-fluid avatar-100" src="@/assets/images/main/current_book.png" alt="">
                     </div>
                     <div class="info">
                         <h4>{{groupInfo.name}}</h4>
@@ -12,6 +12,95 @@
                     </div>
                 </div>
                 <listMembers :members="members"/>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">عن المجموعة</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul class="list-inline p-0 m-0">
+                        <li class="mb-3">
+                            <h3 class="mb-0">{{groupInfo.name}}</h3>
+                        </li>
+                        <li class="mb-3">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <i class="material-symbols-outlined">group</i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                <h4>رسالة المجموعة المجموعة</h4>
+                                <p class="mb-0">لكن يجب أن أشرح لك كيف ولدت كل هذه الفكرة الخاطئة المتمثلة في إدانة السرور ومدح الألم ، وسأقدم لك وصفًا كاملاً للنظام ، وأشرح التعاليم الفعلية للمستكشف العظيم للحقيقة ، الباني البارع. السعادة البشرية</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mb-3">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <i class="material-symbols-outlined">group</i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                <h4>قائد المجموعة</h4>
+                                <p class="mb-0">{{groupInfo.leader}}</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mb-3">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <i class="material-symbols-outlined">group</i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                <h4>مراقب المجموعة</h4>
+                                <p class="mb-0">{{groupInfo.supervispr}}</p>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li class="mb-3">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <i class="material-symbols-outlined">group</i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                <h4>موجه المجموعة</h4>
+                                <p class="mb-0">{{groupInfo.supervispr}}</p>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="mb-3">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i class="material-symbols-outlined">trending_up</i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h4>{{groupInfo.avg}}</h4>
+                                <p class="mb-0">معدل الأسبوع الرابع</p>
+                            </div>
+                        </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">الوصول السريع</h4>
+                    </div>
+                </div>
+                <div class="card-body row d-flex justify-content-center">
+                    <router-link to="/" class="btn btn-primary d-block mt-3 col-5 me-1">احصائيات المجموعة </router-link>
+                    <router-link to="/" class="btn btn-primary d-block mt-3 col-5 me-1">كتب يقرأوها الأعضاء  </router-link>
+                    <router-link to="/" class="btn btn-primary d-block mt-3 col-5 me-1">الاجازات</router-link>
+                    <router-link to="/" class="btn btn-primary d-block mt-3 col-5 me-1">التحديات</router-link>
+                    <router-link to="/ambassadors-reading" class="btn btn-primary d-block mt-3 col-5 me-1">انجاز السفراء </router-link>
+
+
+                </div>
             </div>
         </div>
         <div class="col-lg-8">
@@ -29,72 +118,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <div class="header-title">
-                        <h4 class="card-title">عن المجموعة</h4>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <ul class="list-inline p-0 m-0">
-                        <li class="mb-3">
-                            <p class="mb-0">{{groupInfo.name}}</p>
-                        </li>
-                        <li class="mb-3">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <i class="material-symbols-outlined">group</i>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                <h6>قائد المجموعة</h6>
-                                <p class="mb-0">{{groupInfo.leader}}</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="mb-3">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0">
-                                    <i class="material-symbols-outlined">group</i>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                <h6>مراقب المجموعة</h6>
-                                <p class="mb-0">{{groupInfo.supervispr}}</p>
-                                </div>
-                            </div>
-                        </li>
-                        
-                        <li class="mb-3">
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <i class="material-symbols-outlined">trending_up</i>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <h6>{{groupInfo.avg}}</h6>
-                                <p class="mb-0">معدل الأسبوع الرابع</p>
-                            </div>
-                        </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <div class="header-title">
-                        <h4 class="card-title">الوصول السريع</h4>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <router-link to="/" class="btn btn-primary d-block mt-3">احصائيات المجموعة </router-link>
-                    <router-link to="/" class="btn btn-primary d-block mt-3">كتب يقرأوها الأعضاء  </router-link>
-                    <router-link to="/" class="btn btn-primary d-block mt-3">الاجازات</router-link>
-                    <router-link to="/" class="btn btn-primary d-block mt-3">التحديات</router-link>
-                    <router-link to="/ambassadors-reading" class="btn btn-primary d-block mt-3">انجاز السفراء </router-link>
 
-
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 <script>
@@ -127,7 +151,7 @@ export default {
         {
           name: "مجموعة القراءة",
           members: 30,
-          type:"مجموعة المتابعة",
+          type:"فريق المتابعة",
           leader: "Leader 1",
           supervispr:"Supervisor 1", 
           avg:80.54,
@@ -184,22 +208,22 @@ export default {
     posts: [
         {
           id: 1,
-          images: ['1900-475.jpg'],
+          images: ['150x150-3.jpg'],
           author: 'USER',
-          author_image: '60x60.jpg',
+          author_image: 'avatar-02.jpg',
           created_at: '12-06-2019',
           body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
           comments: [
             {
               author: 'USER',
-              author_image: '60x60.jpg',
+              author_image: 'avatar-02.jpg',
               created_at: '12-06-2019',
               body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
             },
             {
-              image: '1900-475.jpg',
+              image: '150x150-3.jpg',
               author: 'USER',
-              author_image: '60x60.jpg',
+              author_image: 'avatar-02.jpg',
               created_at: '12-06-2019',
               body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
             },
@@ -208,33 +232,33 @@ export default {
         {
           id: 2,
           author: 'USER 2',
-          author_image: '60x60.jpg',
+          author_image: 'avatar-02.jpg',
           created_at: '12-06-2019',
           body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
           comments: [
             {
               author: 'USER',
-              author_image: '60x60.jpg',
+              author_image: 'avatar-02.jpg',
               created_at: '12-06-2019',
               body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
             },
             {
-              image: ['1900-475.jpg'],
+              image: ['150x150-3.jpg'],
               author: 'USER',
-              author_image: '60x60.jpg',
+              author_image: 'avatar-02.jpg',
               created_at: '12-06-2019',
               body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
             },
             {
               author: 'USER',
-              author_image: '60x60.jpg',
+              author_image: 'avatar-02.jpg',
               created_at: '12-06-2019',
               body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
             },
             {
               image: 'profile-bg9.jpg',
               author: 'USER',
-              author_image: '60x60.jpg',
+              author_image: 'avatar-02.jpg',
               created_at: '12-06-2019',
               body: 'Lorem ipsum dolor sit amet, aucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
             },
@@ -242,9 +266,9 @@ export default {
         },
         {
           id: 3,
-          images: ['710-950.jpg', '710-450.jpg'],
+          images: ['150x150-3.jpg', '150x150-3.jpg'],
           author: 'USER 3',
-          author_image: '60x60.jpg',
+          author_image: 'avatar-02.jpg',
           created_at: '12-06-2019',
           body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
 

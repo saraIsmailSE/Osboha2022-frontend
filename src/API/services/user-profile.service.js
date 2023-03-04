@@ -47,14 +47,25 @@ class UserProfile {
     }
   }
 
-  async getUserProfileById(id) {
+  async getUserProfileById(user_id) {
     try {
-      const profile = await api.post("/user-profile/show", { user_id: id });
-      return profile.data;
+      const profile = await api.get(`user-profile/show/${user_id}`);
+      return profile.data.data;
     } catch (error) {
       return error;
     }
   }
+
+  async getProfileStatistics(user_id) {
+    try {
+      const statistics = await api.get(`user-profile/statistics/${user_id}`);
+      return statistics.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
+
 }
 
 export default new UserProfile();
