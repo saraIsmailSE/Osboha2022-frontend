@@ -320,8 +320,8 @@
                             <li class="nav-item dropdown d-none d-lg-block">
                                 <a href="#" class="d-flex align-items-center dropdown-toggle" id="drop-down-arrow"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img src="@/assets/images/user/1.jpg" class="img-fluid rounded-circle me-3"
-                                        alt="user" loading="lazy">
+                                    <img src="@/assets/images/user/1.jpg" class="img-fluid rounded-circle me-3" alt="user"
+                                        loading="lazy">
                                     <div class="caption">
                                         <h6 class="mb-0 line-height">Bni Cyst</h6>
                                     </div>
@@ -339,7 +339,11 @@
                                                     line_style
                                                 </span>
                                                 <div class="ms-3">
-                                                    <router-link :to="{ name: 'user.profile' }" class="mb-0 h6">
+                                                    <router-link :to="{
+                                                        name: 'user.profile', params: {
+                                                            user_id: user.id
+                                                        }
+                                                    }" class="mb-0 h6">
                                                         My Profile
                                                     </router-link>
                                                 </div>
@@ -414,8 +418,11 @@
                                 </div>
                             </li>
                             <li class="nav-item d-lg-none">
-                                <router-link :to="{ name: 'user.profile' }"
-                                    class="dropdown-toggle d-flex align-items-center">
+                                <router-link :to="{
+                                    name: 'user.profile', params: {
+                                        user_id: user.id
+                                    }
+                                }" class="dropdown-toggle d-flex align-items-center">
                                     <span class="material-symbols-outlined">person</span>
                                     <span class="mobile-text  ms-3">Profile</span>
                                 </router-link>
@@ -430,8 +437,14 @@
 <script>
 import { useStore } from 'vuex'
 import { computed } from 'vue'
+import UserInfo from '@/Services/userInfoService'
+
 export default {
     name: 'DefaultHeader',
+    created() {
+        const user_data = UserInfo.getUser()
+        this.user = user_data.user
+    },
     props: {
         image: {
             type: String,
@@ -457,6 +470,12 @@ export default {
             sidebarType,
             toggleSidebar
         }
-    }
+    },
+    data() {
+        return {
+            user: null
+        }
+    },
+
 }
 </script>

@@ -18,8 +18,12 @@
         </li>
         <!-- ###### Profile ###### -->
         <li class="nav-item">
-            <router-link :class="checkActive('user.profile') ? 'active nav-link' : 'nav-link'"
-                :to="{ name: 'user.profile' }">
+
+            <router-link :class="checkActive('user.profile') ? 'active nav-link' : 'nav-link'" :to="{
+                name: 'user.profile', params: {
+                    user_id: user.id
+                }
+            }">
                 <i class="icon material-symbols-outlined">
                     person
                 </i>
@@ -85,10 +89,18 @@
     <!-- Sidebar Menu End -->
 </template>
 <script>
+import UserInfo from '@/Services/userInfoService'
+
 export default {
     name: 'DefaultSidebar',
+    created() {
+        const user_data = UserInfo.getUser()
+        this.user = user_data.user
+    },
+
     data() {
         return {
+            user: null
         }
     },
     methods: {
