@@ -266,6 +266,7 @@ export default {
     console.log(this.post);
   },
 };
+
 </script>
 
 <style>

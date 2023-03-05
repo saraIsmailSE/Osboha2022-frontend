@@ -154,12 +154,6 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="nav-item d-lg-none">
-                                <router-link :to="{ name: 'social.friendrequest' }" class="d-flex align-items-center">
-                                    <span class="material-symbols-outlined">group</span>
-                                    <span class="mobile-text  ms-3">Friend Request</span>
-                                </router-link>
-                            </li>
                             <li class="nav-item dropdown d-none d-lg-block">
                                 <a href="#" class="search-toggle dropdown-toggle d-flex align-items-center"
                                     id="notification-drop" data-bs-toggle="dropdown">
@@ -323,14 +317,6 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="nav-item d-lg-none">
-                                <router-link :to="{ name: 'social.friendlist' }"
-                                    class="dropdown-toggle d-flex align-items-center" id="mail-drop-1"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="material-symbols-outlined">mail</i>
-                                    <span class="mobile-text  ms-3">Message</span>
-                                </router-link>
-                            </li>
                             <li class="nav-item dropdown d-none d-lg-block">
                                 <a href="#" class="d-flex align-items-center dropdown-toggle" id="drop-down-arrow"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -353,18 +339,8 @@
                                                     line_style
                                                 </span>
                                                 <div class="ms-3">
-                                                    <router-link :to="{ name: 'social.profilemain' }" class="mb-0 h6">
+                                                    <router-link :to="{ name: 'user.profile' }" class="mb-0 h6">
                                                         My Profile
-                                                    </router-link>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex align-items-center iq-sub-card border-0">
-                                                <span class="material-symbols-outlined">
-                                                    edit_note
-                                                </span>
-                                                <div class="ms-3">
-                                                    <router-link :to="{ name: 'user.profile-edit' }" class="mb-0 h6">
-                                                        Edit Profile
                                                     </router-link>
                                                 </div>
                                             </div>
@@ -438,7 +414,7 @@
                                 </div>
                             </li>
                             <li class="nav-item d-lg-none">
-                                <router-link :to="{ name: 'social.profilemain' }"
+                                <router-link :to="{ name: 'user.profile' }"
                                     class="dropdown-toggle d-flex align-items-center">
                                     <span class="material-symbols-outlined">person</span>
                                     <span class="mobile-text  ms-3">Profile</span>
