@@ -111,76 +111,76 @@ export default {
         //   value: 100
         // }
       ],
+posts:null,
+      // posts: [
+      //   {
+      //     id: 1,
+      //     // images: ['1900-475.jpg'],
+      //     author: 'USER',
+      //     author_image: 'avatar-02.jpg',
+      //     created_at: '12-06-2019',
+      //     body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
+      //     comments: [
+      //       {
+      //         author: 'USER',
+      //         author_image: 'avatar-02.jpg',
+      //         created_at: '12-06-2019',
+      //         body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
+      //       },
+      //       {
+      //         // image: '1900-475.jpg',
+      //         author: 'USER',
+      //         author_image: 'avatar-02.jpg',
+      //         created_at: '12-06-2019',
+      //         body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
+      //       },
+      //     ]
+      //   },
+      //   {
+      //     id: 2,
+      //     author: 'USER 2',
+      //     author_image: 'avatar-02.jpg',
+      //     created_at: '12-06-2019',
+      //     body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
+      //     comments: [
+      //       {
+      //         author: 'USER',
+      //         author_image: 'avatar-02.jpg',
+      //         created_at: '12-06-2019',
+      //         body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
+      //       },
+      //       {
+      //         // image: ['1900-475.jpg'],
+      //         author: 'USER',
+      //         author_image: 'avatar-02.jpg',
+      //         created_at: '12-06-2019',
+      //         body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
+      //       },
+      //       {
+      //         author: 'USER',
+      //         author_image: 'avatar-02.jpg',
+      //         created_at: '12-06-2019',
+      //         body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
+      //       },
+      //       {
+      //         image: 'profile-bg9.jpg',
+      //         author: 'USER',
+      //         author_image: 'avatar-02.jpg',
+      //         created_at: '12-06-2019',
+      //         body: 'Lorem ipsum dolor sit amet, aucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
+      //       },
+      //     ]
+      //   },
+      //   {
+      //     id: 3,
+      //     // images: ['710-950.jpg', '710-450.jpg'],
+      //     author: 'USER 3',
+      //     author_image: 'avatar-02.jpg',
+      //     created_at: '12-06-2019',
+      //     body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
 
-      posts: [
-        {
-          id: 1,
-          // images: ['1900-475.jpg'],
-          author: 'USER',
-          author_image: 'avatar-02.jpg',
-          created_at: '12-06-2019',
-          body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-          comments: [
-            {
-              author: 'USER',
-              author_image: 'avatar-02.jpg',
-              created_at: '12-06-2019',
-              body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-            },
-            {
-              // image: '1900-475.jpg',
-              author: 'USER',
-              author_image: 'avatar-02.jpg',
-              created_at: '12-06-2019',
-              body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-            },
-          ]
-        },
-        {
-          id: 2,
-          author: 'USER 2',
-          author_image: 'avatar-02.jpg',
-          created_at: '12-06-2019',
-          body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-          comments: [
-            {
-              author: 'USER',
-              author_image: 'avatar-02.jpg',
-              created_at: '12-06-2019',
-              body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-            },
-            {
-              // image: ['1900-475.jpg'],
-              author: 'USER',
-              author_image: 'avatar-02.jpg',
-              created_at: '12-06-2019',
-              body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-            },
-            {
-              author: 'USER',
-              author_image: 'avatar-02.jpg',
-              created_at: '12-06-2019',
-              body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-            },
-            {
-              image: 'profile-bg9.jpg',
-              author: 'USER',
-              author_image: 'avatar-02.jpg',
-              created_at: '12-06-2019',
-              body: 'Lorem ipsum dolor sit amet, aucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-            },
-          ]
-        },
-        {
-          id: 3,
-          // images: ['710-950.jpg', '710-450.jpg'],
-          author: 'USER 3',
-          author_image: 'avatar-02.jpg',
-          created_at: '12-06-2019',
-          body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-
-        },
-      ],
+      //   },
+      // ],
       //LATER
       // certificates: [
       //   {
