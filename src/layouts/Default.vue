@@ -22,34 +22,48 @@
       </div>
     </div>
     <!-- Wrapper End-->
-    <DefaultFooter/>
-    <DefaultRightSidebar/>
-    <SettingOffcanvas/>
+    <DefaultFooter />
+    <!-- <DefaultRightSidebar/> -->
+    <CurrentReading />
+    <ReadingTeam />
+    <WorkingGroups />
+    <GroupChallenge />
+    <TeamReadingShortcut />
+    <TeamExceptionShortcut />
+
   </div>
 </template>
 <script>
 import DefaultSidebar from '../components/custom/partials/Sidebar/DefaultSidebar'
 import DefaultHeader from '../components/custom/partials/Header/DefaultHeader'
 import DefaultFooter from '../components/custom/partials/Footer/DefaultFooter'
-import SettingOffcanvas from '@/components/custom/setting/SettingOffcanvas.vue'
-import DefaultRightSidebar from '../components/custom/partials/RightSidebar/DefaultRightSidebar'
+import CurrentReading from '../components/custom/partials/Sidebar/LeftSidebar/CurrentReading'
+import ReadingTeam from '../components/custom/partials/Sidebar/LeftSidebar/ReadingTeam'
+import TeamReadingShortcut from '../components/custom/partials/Sidebar/LeftSidebar/TeamReading-shortcut'
+import TeamExceptionShortcut from '../components/custom/partials/Sidebar/LeftSidebar/TeamException-shortcut.vue'
+import GroupChallenge from '../components/custom/partials/Sidebar/LeftSidebar/GroupChallenge'
+import WorkingGroups from '../components/custom/partials/Sidebar/LeftSidebar/WorkingGroups.vue'
 import Breadcrumb from '../components/custom/Breadcrumb/Breadcrumb'
 import logo from '../assets/images/logo.png'
 const fslightbox = () => import('../plugins/fslightbox/fslightbox')
 export default {
   name: 'Default',
-  mounted () {
+  mounted() {
     fslightbox()
   },
   components: {
     DefaultSidebar,
     DefaultHeader,
     DefaultFooter,
-    DefaultRightSidebar,
-    SettingOffcanvas,
+    WorkingGroups,
+    CurrentReading,
+    ReadingTeam,
+    TeamReadingShortcut,
+    TeamExceptionShortcut,
+    GroupChallenge,
     Breadcrumb
   },
-  data () {
+  data() {
     return {
       breadcrumboptions: [
         {
@@ -61,7 +75,7 @@ export default {
           title: 'Group'
         },
         {
-          img: require('@/assets/images/page-img/profile-bg7.jpg'),
+          img: require('@/assets/images/main/book-banner.png'),
           title: 'Group detail'
         },
         {

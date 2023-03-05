@@ -24,7 +24,7 @@
 <script>
 import DefaultHeader from '../components/custom/partials/Header/DefaultHeader'
 import DefaultFooter from '../components/custom/partials/Footer/DefaultFooter'
-import DefaultRightSidebar from '../components/custom/partials/RightSidebar/DefaultRightSidebar'
+import DefaultRightSidebar from '../components/custom/partials/Sidebar/RightSidebar/DefaultRightSidebar'
 import Breadcrumb from '../components/custom/Breadcrumb/Breadcrumb'
 import logo from '../assets/images/logo.png'
 export default {

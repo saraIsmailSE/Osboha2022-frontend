@@ -14,66 +14,6 @@ const childRoutes = (prop, mode) => [
     component: () => import('../views/User/AccountSetting')
   },
   {
-    path: 'privacysetting',
-    name: prop + '.privacy-setting',
-    meta: { auth: true, name: 'Privacy Setting' },
-    component: () => import('../views/User/PrivacySetting')
-  },
-  {
-    path: 'privacypolicy',
-    name: prop + '.privacy',
-    meta: { auth: true, name: 'Privacy Policy' },
-    component: () => import('../views/Pages/PrivacyPolicy')
-  },
-  {
-    path: 'termofservice',
-    name: prop + '.termofservice',
-    meta: { auth: true, name: 'Terms Of Use' },
-    component: () => import('../views/Pages/TermsOfService')
-  },
-  {
-    path: 'profile',
-    name: prop + '.profilemain',
-    meta: { auth: true, name: 'Profile' },
-    component: () => import('../views/Profile/Profile')
-  },
-  {
-    path: 'profileimage',
-    name: prop + '.profileimage',
-    meta: { auth: true, name: 'Profile Image' },
-    component: () => import('../views/OsbohaMain/Profile/ProfileImage')
-  },
-  {
-    path: 'profilevideo',
-    name: prop + '.profilevideo',
-    meta: { auth: true, name: 'Profile Video' },
-    component: () => import('../views/OsbohaMain/Profile/ProfileVideo')
-  },
-  {
-    path: 'profileevent',
-    name: prop + '.profileevent',
-    meta: { auth: true, name: 'Profile Event' },
-    component: () => import('../views/OsbohaMain/Profile/ProfileEvent')
-  },
-  {
-    path: 'event-detail',
-    name: prop + '.event-detail',
-    meta: { auth: true, name: 'Event-Detail' },
-    component: () => import('../views/OsbohaMain/Profile/Event-Detail')
-  },
-  {
-    path: 'profilebadges',
-    name: prop + '.profilebadges',
-    meta: { auth: true, name: 'Profile Badges' },
-    component: () => import('../views/OsbohaMain/Profile/ProfileBadges')
-  },
-  {
-    path: 'profileforum',
-    name: prop + '.profileforum',
-    meta: { auth: true, name: 'Profile Forum' },
-    component: () => import('../views/OsbohaMain/Profile/ProfileForum')
-  },
-  {
     path: 'book',
     name: prop + '.book',
     meta: { auth: true, name: 'Book' },
@@ -114,39 +54,21 @@ const childRoutes = (prop, mode) => [
   },
   {
     path: '/ambassadors-reading',
-    name: prop + './ambassadors-reading',
+    name: prop + '.ambassadors-reading',
     meta: { auth: true, name: 'Ambassadors reading' },
-    component: () => import('../views/OsbohaMain/Group/Ambassadors/ambassadorsReading')
+    component: () => import('../views/OsbohaMain/Group/Ambassadors/TeamReading')
   },
   {
-    path: 'friendlist',
-    name: prop + '.friendlist',
-    meta: { auth: true, name: 'Friend List' },
-    component: () => import('../views/OsbohaMain/Friends/FriendList')
-  },
-  {
-    path: 'friendprofile',
-    name: prop + '.friendprofile',
-    meta: { auth: true, name: 'Friend profile' },
-    component: () => import('../views/OsbohaMain/Friends/FriendProfile')
+    path: '/ambassador-list-reading',
+    name: prop + '.ambassador-list-reading',
+    meta: { auth: true, name: 'Ambassadors list reading' },
+    component: () => import('../views/OsbohaMain/Group/Ambassadors/ListReading')
   },
   {
     path: 'notification',
     name: prop + '.notification',
     meta: { auth: true, name: 'Notification' },
     component: () => import('../views/OsbohaMain/Notifications/Notification')
-  },
-  {
-    path: 'file',
-    name: prop + '.file',
-    meta: { auth: true, name: 'File' },
-    component: () => import('../views/OsbohaMain/File/File')
-  },
-  {
-    path: 'friendrequest',
-    name: prop + '.friendrequest',
-    meta: { auth: true, name: 'Friend Request' },
-    component: () => import('../views/OsbohaMain/Friends/FriendRequest')
   },
 ]
 const blankchildRoutes = (prop, mode) => [
@@ -174,33 +96,6 @@ const blankchildRoutes = (prop, mode) => [
     path: 'confirmmail',
     name: prop + '.confirmmail1',
     component: () => import('../views/AuthPages/Default/ConfirmMail1')
-  }
-]
-const pagesChildRoutes = (prop, mode = false) => [
-  {
-    path: 'error/:code',
-    name: prop + '.error',
-    component: () => import('../views/Pages/ErrorPage')
-  },
-  {
-    path: 'error404',
-    name: prop + '.error404',
-    component: () => import('../views/Pages/Error404')
-  },
-  {
-    path: 'error500',
-    name: prop + '.error500',
-    component: () => import('../views/Pages/Error500')
-  },
-  {
-    path: 'coming-soon',
-    name: prop + '.coming-soon',
-    component: () => import('../views/Pages/ComingSoon')
-  },
-  {
-    path: 'maintenance',
-    name: prop + '.maintenance',
-    component: () => import('../views/Pages/Maintenance')
   }
 ]
 const blogchildRoutes = (prop, mode = false) => [
@@ -249,58 +144,8 @@ const iconChildRoute = (prop, mode = false) => [
     component: () => import('../views/Icons/IconMaterial')
   }
 ]
-const formChildRoute = (prop, mode = false) => [
-  {
-    path: 'form-layout',
-    name: prop + '.layout',
-    meta: { auth: true, name: 'Layout' },
-    component: () => import('../views/Forms/FormLayout')
-  },
-  {
-    path: 'form-validate',
-    name: prop + '.validate',
-    meta: { auth: true, name: 'Validate' },
-    component: () => import('../views/Forms/FormValidates')
-  },
-  {
-    path: 'form-switches',
-    name: prop + '.switch',
-    meta: { auth: true, name: 'Switch' },
-    component: () => import('../views/Forms/FormSwitches')
-  },
-  {
-    path: 'form-radios',
-    name: prop + '.radio',
-    meta: { auth: true, name: 'Radio' },
-    component: () => import('../views/Forms/FormRadios')
-  },
-  {
-    path: 'form-checkboxes',
-    name: prop + '.checkbox',
-    meta: { auth: true, name: 'Checkbox' },
-    component: () => import('../views/Forms/FormCheckboxes')
-  }
-]
-const formwizardChildRoute = (prop, mode = false) => [
-  {
-    path: 'simple',
-    name: prop + '.simple',
-    meta: { auth: true, name: 'Simple' },
-    component: () => import('../views/Form Wizard/Simple')
-  },
-  {
-    path: 'validate',
-    name: prop + '.validatewizard',
-    meta: { auth: true, name: 'Validate' },
-    component: () => import('../views/Form Wizard/Validate')
-  },
-  {
-    path: 'vertical',
-    name: prop + '.vertical',
-    meta: { auth: true, name: 'Vertical' },
-    component: () => import('../views/Form Wizard/Vertical')
-  }
-]
+
+
 const appChildRoute = (prop, mode = false) => [
   {
     path: 'chat',
@@ -309,53 +154,12 @@ const appChildRoute = (prop, mode = false) => [
     component: () => import('../views/Chat/Index')
   },
 ]
-const defaultlayout = (prop, mode = false) => [
-  {
-    path: 'admin',
-    name: prop + '.admin',
-    meta: { auth: true, name: 'Admin' },
-    component: () => import('../views/Pages/Admin')
-  },
-  {
-    path: 'timelines',
-    name: prop + '.timelines',
-    meta: { auth: true, name: 'Timelines' },
-    component: () => import('../views/Pages/TimeLines')
-  },
-  {
-    path: 'faq',
-    name: prop + '.faq',
-    meta: { auth: true, name: 'Faq' },
-    component: () => import('../views/Pages/FAQ')
-  }
-]
-
-const tableChildRoute = (prop, mode = false) => [
-  {
-    path: 'tables-basic',
-    name: prop + '.basic',
-    meta: { auth: true, name: 'Basic' },
-    component: () => import('../views/Tables/TablesBasic')
-  },
-  {
-    path: 'editable',
-    name: prop + '.editable',
-    meta: { auth: true, name: 'Editable' },
-    component: () => import('../views/Tables/EditableTable')
-  },
-  {
-    path: 'datatable',
-    name: prop + '.datatable',
-    meta: { auth: true, name: 'datatable' },
-    component: () => import('../views/Tables/DataTable')
-  }
-]
 const userChildRoute = (prop, mode = false) => [
   {
-    path: 'profile-edit',
-    name: prop + '.profile-edit',
-    meta: { auth: true, name: 'Edit Profile' },
-    component: () => import('../views/User/ProfileEdit')
+    path: 'profile/:user_id',
+    name: prop + '.profile',
+    meta: { auth: true, name: 'User Profile' },
+    component: () => import('../views/User/Profile')
   },
   {
     path: 'accountsetting',
@@ -397,12 +201,6 @@ const routes = [
     children: blankchildRoutes('auth')
   },
   {
-    path: '/pages',
-    name: 'pages',
-    component: () => import('../layouts/Empty'),
-    children: pagesChildRoutes('default')
-  },
-  {
     path: '/blog',
     name: 'blog',
     component: () => import('../layouts/Default'),
@@ -415,39 +213,11 @@ const routes = [
     children: iconChildRoute('icon')
   },
   {
-    path: '/form',
-    name: 'form',
-    component: () => import('../layouts/Default'),
-    meta: { auth: true },
-    children: formChildRoute('form')
-  },
-  {
-    path: '/form-wizard',
-    name: 'form-wizard',
-    component: () => import('../layouts/Default'),
-    meta: { auth: true },
-    children: formwizardChildRoute('form-wizard')
-  },
-  {
     path: '/app',
     name: 'app',
     component: () => import('../layouts/Default'),
     meta: { auth: true },
     children: appChildRoute('app')
-  },
-  {
-    path: '/extra-pages',
-    name: 'extra-pages',
-    component: () => import('../layouts/Default'),
-    meta: { auth: true },
-    children: defaultlayout('extra-pages')
-  },
-  {
-    path: '/table',
-    name: 'table',
-    component: () => import('../layouts/Default'),
-    meta: { auth: true },
-    children: tableChildRoute('table')
   },
   {
     path: '/user',
@@ -464,18 +234,18 @@ const router = createRouter({
   routes
 })
 
-// router.beforeEach((to, from, next) => {
-//   // redirect to login page if user is not logged in and trying to access a restricted page
-//   const publicPages = ['/auth/signin', '/auth/signup']
-//   const authRequired = !publicPages.includes(to.path)
-//   const loggedIn = localStorage.getItem('user')
-//   console.log(loggedIn)
-//   if (authRequired && !loggedIn) {
-//     return next('/auth/signin')
-//   }
+router.beforeEach((to, from, next) => {
+  // redirect to login page if user is not logged in and trying to access a restricted page
+  const publicPages = ['/auth/signin', '/auth/signup']
+  const authRequired = !publicPages.includes(to.path)
+  const loggedIn = localStorage.getItem('user')
+  console.log(loggedIn)
+  if (authRequired && !loggedIn) {
+    return next('/auth/signin')
+  }
 
-//   next()
-// })
+  next()
+})
 
 
 export default router
