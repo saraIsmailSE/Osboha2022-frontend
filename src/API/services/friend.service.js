@@ -1,10 +1,18 @@
 import { api } from "../Intercepter";
 
 class FriendService {
-    async getAllFriends(){
+    async getAllFriends(user_id){
         try{
-            const friends = await api.get('/friend');
-            return friends.data; 
+            const friends = await api.get(`/friend/${user_id}`);
+            return friends.data.data; 
+        }catch(error){
+            return error;
+        }
+    }
+    async getFriendsRequests(user_id){
+        try{
+            const requests = await api.get(`/friend/un-accepted/${user_id}`);
+            return requests.data.data; 
         }catch(error){
             return error;
         }

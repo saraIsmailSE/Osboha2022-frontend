@@ -91,6 +91,7 @@ export default {
     this.readingInfo[1].value = profile.reading_Info.thesis;
     this.roles = profile.roles;
     this.friends=profile.friends;
+    this.exceptions=profile.exceptions;
     this.user_about=profile.info
   },
   data() {
@@ -209,12 +210,7 @@ posts:null,
 
       user_about:null,
 
-      exceptions: [
-        {
-          title: 'freeze',
-          date: '20-09-2990'
-        }
-      ],
+      exceptions:null,
     }
   },
   methods: {

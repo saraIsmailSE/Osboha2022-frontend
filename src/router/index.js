@@ -162,6 +162,24 @@ const userChildRoute = (prop, mode = false) => [
     component: () => import('../views/User/Profile')
   },
   {
+    path: 'profile/friends/list/:user_id',
+    name: prop + '.friendsList',
+    meta: { auth: true, name: 'User Friends List' },
+    component: () => import('../views/User/Friends/List')
+  },
+  {
+    path: 'profile/friends/requests/:user_id',
+    name: prop + '.friendsRequests',
+    meta: { auth: true, name: 'User Frinds Requests' },
+    component: () => import('../views/User/Friends/Requests')
+  },
+  {
+    path: 'request-exception/:user_id',
+    name: prop + '.requestexception',
+    meta: { auth: true, name: 'User Request Exception' },
+    component: () => import('../views/User/NewException')
+  },
+  {
     path: 'accountsetting',
     name: prop + '.accountsetting',
     meta: { auth: true, name: 'Account Setting' },
@@ -239,7 +257,6 @@ router.beforeEach((to, from, next) => {
   const publicPages = ['/auth/signin', '/auth/signup']
   const authRequired = !publicPages.includes(to.path)
   const loggedIn = localStorage.getItem('user')
-  console.log(loggedIn)
   if (authRequired && !loggedIn) {
     return next('/auth/signin')
   }
