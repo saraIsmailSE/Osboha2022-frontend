@@ -12,7 +12,7 @@ class ExceptionTypeService {
     async getAllExceptionTypes(){
         try {
             const exceptionTypes = await api.get('/exception-type');
-            return exceptionTypes.data;
+            return exceptionTypes.data.data;
         }catch(error){
             return error
         }

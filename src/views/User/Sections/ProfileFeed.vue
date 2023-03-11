@@ -103,7 +103,11 @@
                             <h4 class="card-title">الأصدقاء</h4>
                         </template>
                         <template v-slot:headerAction>
-                            <p class="m-0"><a href="javacsript:void();">مشاهدة الكل</a></p>
+                            <router-link :to="{ name: 'user.friendsList', params: { user_id: user_id } }">
+                                <p class="m-0">
+                                    مشاهدة الكل
+                                </p>
+                            </router-link>
                         </template>
                         <template v-slot:body>
                             <button type="button" @click="show_friends = !show_friends"
@@ -126,7 +130,7 @@
                             <div v-show="show_friends">
                                 <ul class="profile-img-gallary p-0 m-0 list-unstyled">
                                     <li v-for="(friend, index) in friends" :key="index" class="text-center">
-                                        <router-link :to="{name: 'user.profile', params: { user_id: friend.user.id}}">
+                                        <router-link :to="{ name: 'user.profile', params: { user_id: friend.id } }">
                                             <img src="../../../assets/images/avatar/avatar-02.jpg" alt="user-image"
                                                 class="img-fluid rounded-circle w-50" />
                                         </router-link>
@@ -164,18 +168,21 @@
                                 </span>
                             </button>
                             <div v-show="show_exceptions">
-
-                                <ul id="demo" class="collapse profile-img-gallary p-0 m-0 list-unstyled" v-if="exceptions">
+                                <ul id="exceptionList" class="p-auto m-auto" v-if="exceptions">
                                     <li v-for="(exceprtion, index) in exceptions" :key="index">
-                                        <h5 class="mt-2">{{ exceprtion.title }} || {{ exceprtion.date }}</h5>
-                                        <p v-if="exceprtion.title == 'freeze'">
-                                            يحق لك التجميد بعد
-                                            {{ exceprtion.date }}
-                                        </p>
+                                        <h5 class="mt-2" style="direction: rtl !important;" v-if="exceprtion.status == 'accepted'">
+                                            {{ exceprtion.type }} || ينتهي بــ : {{ exceprtion.end_at }}
+                                        </h5>
+                                        <h5 class="mt-2" style="direction: rtl !important;" v-else>
+                                            {{ exceprtion.type }} || {{ exceprtion.status }}
+                                        </h5>
                                     </li>
                                 </ul>
                                 <h4 class="text-center" v-else> لا يوجد</h4>
-                                <button class="btn btn-primary d-block w-100 mt-3">طلب اجازة</button>
+                                <button v-if="eligibleForException" @click="requestException()"
+                                    class=" mb-3 mt-3 btn btn-primary w-100 d-flex justify-content-between">
+                                    طلب اجازة
+                                </button>
                             </div>
                         </template>
                     </iq-card>
@@ -205,14 +212,32 @@ import Post from '../../../components/post/Post.vue'
 import AddPost from '../../../components/post/AddPost'
 export default {
     name: 'ProfileFeed',
-    props: [
-        'posts',
-        'certificates',
-        'profile_media',
-        'friends',
-        'exceptions'
-
-    ],
+    props: {
+        post: {
+            type: [Object],
+            required: true,
+        },
+        //LATER
+        // certificates: {
+        //   type: [Object],
+        //   required: true,
+        // },
+        profile_media: {
+            type: [Object],
+            required: true,
+        },
+        friends: {
+            type: [Object],
+            required: true,
+        },
+        exceptions: {
+            type: [Object],
+            required: true,
+        },
+    },
+    created() {
+        console.log(this.exceptions)
+    },
     components: {
         AddPost,
         Post
@@ -222,15 +247,43 @@ export default {
             show_friends: true,
             show_exceptions: true,
             show_media: true,
-            show_certificates: true
+            show_certificates: true,
+            user_id:this.$route.params.user_id
         }
     },
     methods: {
         addPost() {
             this.socialPosts.unshift()
+        },
+        requestException(){
+            this.$router.push({ name: 'user.requestexception' , params: { user_id: this.user_id } })
         }
 
-    }
+    },
+    computed: {
+        eligibleForException() {
+            if (this.exceptions) {
+                if (this.exceptions[0].type == 'freez') {
+                    let lastException = new Date(this.exceptions[0].end_at);
+                    const nextFreez = new Date(lastException)
+                    nextFreez.setDate(lastException.getDate() + 40)
+                    const now = new Date();
+                    if (now.toLocaleDateString() >= nextFreez.toLocaleDateString()) {
+                        return true
+                    }
+                    else {
+                        return false;
+                    }
+                }
+                else {
+                    return true
+                }
+            }
+            else {
+                return true
+            }
+        }
+    },
 }
 
 
