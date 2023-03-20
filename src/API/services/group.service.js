@@ -24,12 +24,30 @@ class GroupService  {
         }
     }
 
-    async getById(id) {
+    async getById(group_id) {
         try{
-            const group =  await api.get(`/group/show`, {group_id: id});
-            return group.data;
+            const group = await api.get(`group/show/${group_id}`);
+            return group.data.data;
         }catch(error){
             return error;
+        }
+    }
+
+    async getBooks(group_id) {
+        try{
+            const books = await api.get(`group/books/${group_id}`);
+            return books.data.data;
+        }catch(error){
+            return error;
+        }
+    }
+
+    async getAllGroupExceptions(group_id) {
+        try {
+            const groupExceptions = await api.get(`group/groupExceptions/${group_id}`);
+            return groupExceptions.data.data;
+        } catch (error) {
+            return error
         }
     }
 

@@ -14,6 +14,15 @@
             </div>
           </div>
           <ul class="todo-task-lists m-0 p-0">
+            <form>
+            <div class="input-group w-100 m-auto p-2">
+              <input type="search" class="form-control rounded" placeholder="ابحث عن سفير" aria-label="Search"
+                aria-describedby="search-addon" />
+              <button type="button" class="btn btn-outline-primary"><span class="material-symbols-outlined lh-1">
+                  search
+                </span></button>
+            </div>
+          </form>
             <template v-for="(ambassador, index) in ambassadorsAchevmentList" :key="index">
               <li class="d-flex align-items-center p-3">
                 <div class="user-img img-fluid">
@@ -36,11 +45,16 @@
 
                   </div>
                   <div class="col-lg-3 col-md-3 col-sm-12 text-center">
-                    <span class="badge bg-primary ms-0 ms-md-3 my-1 my-md-0 w-75 text-center" role="button" @click="listAchevment()">عرض </span>
+                    <span class="badge bg-primary ms-0 ms-md-3 my-1 my-md-0 w-75 text-center" role="button"
+                      @click="listAchevment()">عرض </span>
                   </div>
                 </div>
               </li>
             </template>
+            <li class="d-block text-center mb-0 pb-0">
+              <a class="me-3 btn" role="button" @click="loadMore()">عرض جميع الانجازات</a>
+            </li>
+
           </ul>
         </template>
       </iq-card>
@@ -50,15 +64,6 @@
       <iq-card>
         <template v-slot:body>
           <div class="iq-todo-right">
-            <form class="position-relative">
-              <div class="form-group mb-0">
-                <input type="text" class="form-control todo-search" id="exampleInputEmail002"
-                  placeholder="ابحث عن سفير">
-                <a class="search-link" href="#"><span class="material-symbols-outlined lh-1">
-                    search
-                  </span></a>
-              </div>
-            </form>
             <div class="iq-todo-friendlist mt-3">
               <ul class="suggestions-lists m-0 p-0">
                 <li class="d-flex mb-4 align-items-center" v-for="(ambassador, index) in ambassadorsList" :key=index>
@@ -68,7 +73,7 @@
                   <div class="d-flex align-items-center justify-content-between w-100">
                     <div class="ms-3">
                       <h6>{{ ambassador.name }}</h6>
-                      <p class="mb-0">20-1-2023</p>
+                      <p class="mb-0">عدد الصفحات: 908997</p>
                     </div>
                     <div class="card-header-toolbar d-flex align-items-center">
                       <i class="material-symbols-outlined md-18 me-1 text-primary">
@@ -148,8 +153,8 @@ export default {
       }
     }
   },
-  methods:{
-    listAchevment(){
+  methods: {
+    listAchevment() {
       this.$router.push({ name: `social.ambassador-list-reading` });
 
     }
