@@ -12,19 +12,10 @@ class ExceptionService {
         }
     }
 
-    async getAllExceptionTypes() {
+    async getExceptionById(exception_id) {
         try {
-            const exceptionTypes = await api.get('/userexception');
-            return exceptionTypes.data.data;
-        } catch (error) {
-            return error
-        }
-    }
-
-    async getExceptionTypeById(id) {
-        try {
-            const exceptionType = await api.post('/userexception/show', { id });
-            return exceptionType.data;
+            const exception = await api.get(`userexception/show/${exception_id}`);
+            return exception.data.data;
         } catch (error) {
             return error;
         }

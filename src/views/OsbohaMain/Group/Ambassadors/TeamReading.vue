@@ -56,11 +56,6 @@ export default {
           name: 'User 3',
           achevment: 100,
         },
-        {
-          id: 4,
-          name: 'User 4',
-          achevment: 80,
-        },
       ],
     }
   },

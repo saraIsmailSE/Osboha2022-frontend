@@ -102,14 +102,14 @@
                         <template v-slot:headerTitle>
                             <h4 class="card-title">الأصدقاء</h4>
                         </template>
-                        <template v-slot:headerAction>
+                        <template v-slot:headerAction v-if="friends.length>0">
                             <router-link :to="{ name: 'user.friendsList', params: { user_id: user_id } }">
                                 <p class="m-0">
                                     مشاهدة الكل
                                 </p>
                             </router-link>
                         </template>
-                        <template v-slot:body>
+                        <template v-slot:body v-if="friends.length>0">
                             <button type="button" @click="show_friends = !show_friends"
                                 class="btn bg-white text-dark border-dark w-100 d-flex justify-content-between"
                                 v-if="!show_friends">
@@ -139,11 +139,17 @@
                                 </ul>
                             </div>
                         </template>
+                        <template v-slot:body v-else>
+                            <p class="m-0">
+                                لا يوجد
+                            </p>
+
+                        </template>
                     </iq-card>
                     <!-- ########## END FRIENDS ########## -->
 
                     <!-- ########## START EXCEPTIONS ########## -->
-                    <iq-card>
+                    <iq-card v-if="isAuth">
                         <template v-slot:headerTitle>
                             <h4 class="card-title" data-bs-toggle="collapse" data-bs-target="#demo"> الاجازات</h4>
                         </template>
@@ -170,7 +176,8 @@
                             <div v-show="show_exceptions">
                                 <ul id="exceptionList" class="p-auto m-auto" v-if="exceptions">
                                     <li v-for="(exceprtion, index) in exceptions" :key="index">
-                                        <h5 class="mt-2" style="direction: rtl !important;" v-if="exceprtion.status == 'accepted'">
+                                        <h5 class="mt-2" style="direction: rtl !important;"
+                                            v-if="exceprtion.status == 'accepted'">
                                             {{ exceprtion.type }} || ينتهي بــ : {{ exceprtion.end_at }}
                                         </h5>
                                         <h5 class="mt-2" style="direction: rtl !important;" v-else>
@@ -179,7 +186,7 @@
                                     </li>
                                 </ul>
                                 <h4 class="text-center" v-else> لا يوجد</h4>
-                                <button v-if="eligibleForException" @click="requestException()"
+                                <button v-if="isAuth && eligibleForException" @click="requestException()"
                                     class=" mb-3 mt-3 btn btn-primary w-100 d-flex justify-content-between">
                                     طلب اجازة
                                 </button>
@@ -208,11 +215,15 @@
 
 <script>
 
-import Post from '../../../components/post/Post.vue'
-import AddPost from '../../../components/post/AddPost'
+import Post from '@/components/post/Post.vue'
+import AddPost from '@/components/post/AddPost'
 export default {
     name: 'ProfileFeed',
     props: {
+        isAuth: {
+            type: [Boolean],
+            required: true,
+        },
         post: {
             type: [Object],
             required: true,
@@ -236,7 +247,6 @@ export default {
         },
     },
     created() {
-        console.log(this.exceptions)
     },
     components: {
         AddPost,
@@ -248,15 +258,15 @@ export default {
             show_exceptions: true,
             show_media: true,
             show_certificates: true,
-            user_id:this.$route.params.user_id
+            user_id: this.$route.params.user_id
         }
     },
     methods: {
         addPost() {
             this.socialPosts.unshift()
         },
-        requestException(){
-            this.$router.push({ name: 'user.requestexception' , params: { user_id: this.user_id } })
+        requestException() {
+            this.$router.push({ name: 'user.requestexception', params: { user_id: this.user_id } })
         }
 
     },
