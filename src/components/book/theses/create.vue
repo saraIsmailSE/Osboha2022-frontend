@@ -131,7 +131,7 @@
           >
         </div>
         <!--preview-->
-        <div class="preview-images">
+        <!-- <div class="preview-images">
           <div
             class="image-container"
             v-for="(previewUrl, index) in previewUrls"
@@ -142,7 +142,13 @@
             </div>
             <img :src="previewUrl" />
           </div>
-        </div>
+        </div> -->
+        <ImagePreviewer
+          v-if="thesisForm.screenShots.length"
+          :media="thesisForm.screenShots"
+          @remove-media="removeImage"
+          ref="imagePreviewer"
+        />
       </div>
       <hr />
       <!--Success and error messages-->
@@ -155,7 +161,7 @@
       </small>
       <div class="col-sm-12 text-center" v-if="loader">
         <img
-          src="../../../assets/images/page-img/page-load-loader.gif"
+          :src="require('@/assets/images/page-img/page-load-loader.gif')"
           alt="loader"
           style="height: 100px"
         />
@@ -175,9 +181,13 @@
 import useVuelidate from "@vuelidate/core";
 import { required, requiredIf } from "@vuelidate/validators";
 import commentService from "../../../API/services/comment.service";
+import ImagePreviewer from "../../custom/image-previewer/ImagePreviewer.vue";
 
 export default {
   name: "CreateThesis",
+  components: {
+    ImagePreviewer,
+  },
   props: ["start_page", "end_page", "book_id"],
   setup() {
     return {
@@ -209,7 +219,6 @@ export default {
     showAddThesis() {
       this.thesis = true;
       this.screenshots = false;
-      this.previewUrls = [];
       this.thesisForm.screenShots = [];
     },
     showAddScreenshots() {
@@ -219,7 +228,6 @@ export default {
     noThesisAndScreenshots() {
       this.thesis = false;
       this.screenshots = false;
-      this.previewUrls = [];
       this.thesisForm.screenShots = [];
     },
     thesisAndScreenshots() {
@@ -248,21 +256,16 @@ export default {
       this.selectedEndPage = page;
     },
     previewImages(event) {
-      this.previewUrls = [];
       this.thesisForm.screenShots = event.target.files;
-      for (let i = 0; i < this.thesisForm.screenShots.length; i++) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.previewUrls.push(reader.result);
-        };
-        reader.readAsDataURL(this.thesisForm.screenShots[i]);
-      }
     },
     removeImage(index) {
-      this.previewUrls.splice(index, 1);
-      const newArray = Array.from(this.thesisForm.screenShots);
-      newArray.splice(index, 1);
-      this.thesisForm.screenShots = newArray;
+      const files = [...this.thesisForm.screenShots];
+      files.splice(index, 1);
+      this.thesisForm.screenShots = files;
+
+      if (this.thesisForm.screenShots.length == 0) {
+        this.$refs.screenShots.value = null;
+      }
     },
     async submitAddThesisForm() {
       this.v$.$touch();
@@ -346,46 +349,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.preview-images {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-.image-container {
-  margin-right: 10px;
-  margin-bottom: 10px;
-  height: 60px;
-  width: 60px;
-  position: relative;
-}
-
-.image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-}
-
-.delete-image {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  z-index: 1;
-  height: 20px;
-  width: 20px;
-  background: #fff;
-  border-radius: 50%;
-  padding: 5px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-  color: #000;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>
