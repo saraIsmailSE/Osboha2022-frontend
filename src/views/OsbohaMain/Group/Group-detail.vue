@@ -78,7 +78,7 @@
                     <router-link :to="{ name: 'group.group-books', params: { group_id: group_id } }" class="btn btn-primary d-block mt-3 col-5 me-1">كتب يقرأوها الأعضاء </router-link>
                     <router-link :to="{ name: 'group.group-exceptions', params: { group_id: group_id } }" class="btn btn-primary d-block mt-3 col-5 me-1" v-if="authInGroup && authInGroup.user_type != 'ambassador'">الاجازات</router-link>
                     <!-- <router-link to="/" class="btn btn-primary d-block mt-3 col-5 me-1">التحديات</router-link> -->
-                    <router-link to="/ambassadors-reading" class="btn btn-primary d-block mt-3 col-5 me-1" v-if="authInGroup && authInGroup.user_type != 'ambassador'">انجاز السفراء
+                    <router-link :to="{ name: 'group.ambassadors-reading', params: { group_id: group_id } }"  class="btn btn-primary d-block mt-3 col-5 me-1" v-if="authInGroup && authInGroup.user_type != 'ambassador'">انجاز السفراء
                     </router-link>
                 </div>
             </div>

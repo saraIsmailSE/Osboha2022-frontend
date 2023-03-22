@@ -4,7 +4,8 @@
             <div class="chat d-flex other-user" v-if="message.sender.id == auth.id">
                 <div class="chat-user">
                     <a class="avatar m-0">
-                        <img :src="resolve_img_url(message.sender.image)" alt="avatar" class="avatar-35 " />
+                        <!-- <img :src="resolve_img_url(message.sender.image)" alt="avatar" class="avatar-35 " /> -->
+                        <img src="@/assets/images/avatar/avatar-04.jpg" alt="profile-img" class="avatar-130 img-fluid">
 
                     </a>
                     <span class="chat-time mt-1">{{ message.time }}</span>
@@ -18,7 +19,8 @@
             <div class="chat chat-left" :key="index" v-else>
                 <div class="chat-user">
                     <a class="avatar m-0">
-                        <img :src="resolve_img_url(message.sender.image)" alt="avatar" class="avatar-35 " />
+                        <!-- <img :src="resolve_img_url(message.sender.image)" alt="avatar" class="avatar-35 " /> -->
+                        <img src="@/assets/images/avatar/avatar-03.jpg" alt="profile-img" class="avatar-130 img-fluid">
 
                     </a>
                     <span class="chat-time mt-1">{{ message.time }}</span>

@@ -44,13 +44,42 @@ class GroupService  {
 
     async getAllGroupExceptions(group_id) {
         try {
-            const groupExceptions = await api.get(`group/groupExceptions/${group_id}`);
+            const groupExceptions = await api.get(`group/group-exceptions/${group_id}`);
             return groupExceptions.data.data;
         } catch (error) {
             return error
         }
     }
+    async BasicMarksView(group_id) {
+        try {
+            const BasicMarksView = await api.get(`group/basic-mark-view/${group_id}`);
+            return BasicMarksView.data.data;
+        } catch (error) {
+            return error
+        }
+    }
+    
+    async createLeaderRequest(request) {
+        try {
+            const response = await api.post(`/group/create-leader-request`, request, {
+                headers: { "Content-type": "multipart/form-data" },
+            });
+            return response.data.data
+        } catch (error) {
+            return error;
+        }
+    }
 
+    async lastLeaderRequest(group_id) {
+        try {
+            const response = await api.get(`group/last-leader-request/${group_id}`);
+            return response.data.data;
+        } catch (error) {
+            return error
+        }
+    }
+
+    
     async deleteById(id) {
         try{
             return await api.post(`/group/delete`, {group_id: id});

@@ -47,12 +47,6 @@ const childRoutes = (prop, mode) => [
     component: () => import('../views/OsbohaMain/Group/Group')
   },
   {
-    path: '/ambassadors-reading',
-    name: prop + '.ambassadors-reading',
-    meta: { auth: true, name: 'Ambassadors reading' },
-    component: () => import('../views/OsbohaMain/Group/Ambassadors/TeamReading')
-  },
-  {
     path: '/ambassador-list-reading',
     name: prop + '.ambassador-list-reading',
     meta: { auth: true, name: 'Ambassadors list reading' },
@@ -65,7 +59,7 @@ const childRoutes = (prop, mode) => [
     component: () => import('../views/OsbohaMain/Notifications/Notification')
   },
 ]
-const blankchildRoutes = (prop, mode) => [
+const authchildRoutes = (prop, mode) => [
   {
     path: '/auth/signin',
     name: prop + '.sign-in',
@@ -74,7 +68,7 @@ const blankchildRoutes = (prop, mode) => [
   {
     path: 'signup',
     name: prop + '.sign-up1',
-    component: () => import('../views/AuthPages/Default/SignUp1')
+    component: () => import('../views/AuthPages/Default/SignUp')
   },
   {
     path: 'recoverpassword',
@@ -194,7 +188,7 @@ const userChildRoute = (prop, mode = false) => [
 ]
 const groupChildRoute = (prop, mode = false) => [
   {
-    path: 'request-ambassadors/',
+    path: 'request-ambassadors/:group_id',
     name: prop + '.requestAmbassadors',
     meta: { auth: true, name: 'Request Ambassadors' },
     component: () => import('../views/OsbohaMain/Group/Ambassadors/Request')
@@ -222,6 +216,12 @@ const groupChildRoute = (prop, mode = false) => [
     name: prop + '.group-exceptions',
     meta: { auth: true, name: 'Group Exceptions' },
     component: () => import('../views/OsbohaMain/Exceptions/ListAll')
+  },
+  {
+    path: '/ambassadors-reading/:group_id',
+    name: prop + '.ambassadors-reading',
+    meta: { auth: true, name: 'Ambassadors reading' },
+    component: () => import('../views/OsbohaMain/Group/Ambassadors/TeamReading')
   },
 
 ]
@@ -258,7 +258,7 @@ const routes = [
     path: '/auth',
     name: 'auth',
     component: () => import('../layouts/Empty'),
-    children: blankchildRoutes('auth')
+    children: authchildRoutes('auth')
   },
   {
     path: '/blog',

@@ -29,12 +29,15 @@
 
             <div :class="`dropdown-menu dropdown-menu-right ${show ? 'show' : ''}`" aria-labelledby="dropdownMenuButton"
                 style="">
-                <a role="button" class="dropdown-item d-flex align-items-center">
-                    <span class="material-symbols-outlined me-2 md-18">
-                        diversity_1
-                    </span>
-                    طلب سفراء
-                </a>
+                <router-link :to="{ name: 'group.requestAmbassadors', params: { group_id: group_id } }">
+                    <a role="button" class="dropdown-item d-flex align-items-center">
+                        <span class="material-symbols-outlined me-2 md-18">
+                            diversity_1
+                        </span>
+                        طلب سفراء
+                    </a>
+                </router-link>
+
                 <a role="button" class="dropdown-item d-flex align-items-center">
                     <span class="material-symbols-outlined me-2 md-18">
                         person_add
@@ -80,7 +83,7 @@ export default {
     data() {
         return {
             show: false,
-            group_id:this.$route.params.group_id,
+            group_id: this.$route.params.group_id,
         }
 
     },
@@ -88,9 +91,6 @@ export default {
         resolve_img_url: function (path) {
             let images = require.context('../../assets/images/', false, /\.png$|\.jpg$/)
             return images("./" + path)
-        },
-        addMember() {
-            router.push({ name: "social.group-detail" })
         },
         onClickOutside() {
             this.show = false;
