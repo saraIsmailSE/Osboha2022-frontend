@@ -17,6 +17,7 @@ class FriendService {
             return error;
         }
     }
+  }
 
     async create(friend_id) {
         try {
@@ -25,6 +26,7 @@ class FriendService {
             return error;
         }
     }
+  }
 
     async getFriendshipById(friendship_id) {
         try {
@@ -45,6 +47,8 @@ class FriendService {
             return error;
         }
     }
+  }
+
 
     async delete(pivotData) {
         const pivot = new FormData();
@@ -57,6 +61,7 @@ class FriendService {
             return error;
         }
     }
+  }
 }
 
 export default new FriendService();

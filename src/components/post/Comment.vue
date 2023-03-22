@@ -26,7 +26,12 @@
       </a>
     </div>
     <!--display a button to hide replies-->
-    <a class="load-btn" v-on:click="toggleShowReplies" v-if="hasReplies">
+    <a
+      role="button"
+      class="load-btn"
+      v-on:click="toggleShowReplies"
+      v-if="hasReplies"
+    >
       {{
         showReplies
           ? `إخفاء ${totalReplies} من الردود`

@@ -20,7 +20,7 @@
             <router-link
               :to="{
                 name: 'social.book-details',
-                query: { id: this.cardInfo.id },
+                params: { id: this.cardInfo.id },
               }"
               >{{ cardInfo.name }}</router-link
             >
@@ -53,7 +53,7 @@
               type="submit"
               class="btn btn-primary d-block w-100"
               data-bs-toggle="modal"
-              data-bs-target="#modals"
+              :data-bs-target="`#modal-${cardInfo.id}`"
             >
               كتابة أطروحة
             </button>
@@ -72,27 +72,40 @@
     </div>
   </div>
   <modal
-    id="modals"
+    :id="`modal-${cardInfo.id}`"
     dialogClass="modal-fullscreen-sm-down"
     tabindex="-1"
-    title="Create Post"
-    aria-labelledby="modalsLabel"
-    aria-hidden="true"
+    title="Create Thesis"
+    :aria-labelledby="`modalsLabel-${cardInfo.id}`"
+    :aria-hidden="true"
   >
     <model-header>
-      <h5 class="modal-title" id="modalsLabel">اسم الكتاب || أطروحة جديدة</h5>
-      <a href="javascript:void(0);" class="lh-1" data-bs-dismiss="modal">
+      <h5 class="modal-title" :id="`modalsLabel-${cardInfo.id}`">
+        {{ cardInfo.name }} || أطروحة جديدة
+      </h5>
+      <a
+        href="javascript:void(0);"
+        class="lh-1"
+        data-bs-dismiss="modal"
+        ref="closeBtn"
+      >
         <span class="material-symbols-outlined">close</span>
       </a>
     </model-header>
     <model-body>
-      <createThesis />
+      <createThesis
+        :start_page="cardInfo.start_page"
+        :end_page="cardInfo.end_page"
+        :book_id="cardInfo.id"
+        @closeModel="closeModel"
+      />
     </model-body>
   </modal>
 </template>
 <script>
 import router from "../../router";
 import createThesis from "../../components/book/theses/create.vue";
+
 export default {
   name: "BookCard",
   components: {
@@ -111,8 +124,11 @@ export default {
     bookDetails() {
       router.push({
         name: "social.book-details",
-        query: { id: this.cardInfo.id },
+        params: { id: this.cardInfo.id },
       });
+    },
+    closeModel() {
+      this.$refs.closeBtn.click();
     },
   },
   computed: {
