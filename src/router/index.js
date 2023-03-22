@@ -14,6 +14,12 @@ const childRoutes = (prop, mode) => [
     component: () => import("../views/User/AccountSetting"),
   },
   {
+    path: 'notification',
+    name: prop + '.notification',
+    meta: { auth: true, name: 'Notification' },
+    component: () => import('../views/OsbohaMain/Notifications/Notification')
+  },
+  {
     path: "book",
     name: prop + ".book",
     meta: { auth: true, name: "Book" },
@@ -48,7 +54,9 @@ const childRoutes = (prop, mode) => [
     path: '/ambassador-list-reading',
     name: prop + '.ambassador-list-reading',
     meta: { auth: true, name: 'Ambassadors list reading' },
-    component: () => import('../views/OsbohaMain/Group/Ambassadors/ListReading')
+    component: () => import('../views/OsbohaMain/Group/Ambassadors/ListReading'),
+  },
+  {
     path: "group-detail",
     name: prop + ".group-detail",
     meta: { auth: true, name: "Group detail" },
@@ -163,7 +171,7 @@ const userChildRoute = (prop, mode = false) => [
     name: prop + ".friendsList",
     meta: { auth: true, name: "User Friends List" },
     component: () => import("../views/User/Friends/List"),
-}.
+},
 {    path: 'profile/update/:user_id',
     name: prop + '.profileUpdate',
     meta: { auth: true, name: 'User Profile Update' },
@@ -187,6 +195,7 @@ const userChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Account Setting" },
     component: () => import("../views/User/AccountSetting"),
   },
+  {
     path: 'privacysetting',
     name: prop + '.privacy-setting',
     meta: { auth: true, name: 'Privacy Setting' },
