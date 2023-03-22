@@ -1,48 +1,50 @@
 <template>
-  <BooksFilter
-    :sections="sections"
-    :toggleActiveFilter="toggleActiveFilter"
-    :searchBookByName="searchBookByName"
-    :filterBooks="filterBooks"
-  />
-  <hr />
-  <div v-if="empty" class="alert alert-danger">{{ empty }}</div>
-  <div class="d-grid gap-3 d-grid-template-1fr-19">
-    <BookCard
-      v-for="bookInfo in books"
-      :key="bookInfo.id"
-      :cardInfo="bookInfo"
+  <main>
+    <BooksFilter
+      :sections="sections"
+      :toggleActiveFilter="toggleActiveFilter"
+      :searchBookByName="searchBookByName"
+      :filterBooks="filterBooks"
     />
-  </div>
-  <div class="text-center mt-3">
-    <ul class="pagination w-100">
-      <router-link
-        class="page-item page-link"
-        :to="{ name: 'social.book', query: { page: page - 1 } }"
-        rel="prev"
-        v-if="page != 1"
-      >
-        السابق
-      </router-link>
-      <li class="page-item page-link" :class="checkActive(page)">
+    <hr />
+    <div v-if="empty" class="alert alert-danger">{{ empty }}</div>
+    <div class="d-grid gap-3 d-grid-template-1fr-19">
+      <BookCard
+        v-for="bookInfo in books"
+        :key="bookInfo.id"
+        :cardInfo="bookInfo"
+      />
+    </div>
+    <div class="text-center mt-3">
+      <ul class="pagination w-100">
         <router-link
           class="page-item page-link"
-          :to="{ name: 'social.book', query: { page: page } }"
+          :to="{ name: 'social.book', query: { page: page - 1 } }"
+          rel="prev"
+          v-if="page != 1"
         >
-          {{ page }}
+          السابق
         </router-link>
-      </li>
+        <li class="page-item page-link" :class="checkActive(page)">
+          <router-link
+            class="page-item page-link"
+            :to="{ name: 'social.book', query: { page: page } }"
+          >
+            {{ page }}
+          </router-link>
+        </li>
 
-      <router-link
-        class="page-item page-link"
-        :to="{ name: 'social.book', query: { page: page + 1 } }"
-        rel="next"
-        v-if="hasNextPage"
-      >
-        التالي
-      </router-link>
-    </ul>
-  </div>
+        <router-link
+          class="page-item page-link"
+          :to="{ name: 'social.book', query: { page: page + 1 } }"
+          rel="next"
+          v-if="hasNextPage"
+        >
+          التالي
+        </router-link>
+      </ul>
+    </div>
+  </main>
 </template>
 <script>
 import BookCard from "../../components/book/BookCard.vue";

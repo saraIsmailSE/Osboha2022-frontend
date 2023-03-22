@@ -227,7 +227,7 @@
           />
 
           <!-- <Comment v-else :no_comments="true" /> -->
-          <CreateComment />
+          <CreateComment type="comment" />
         </div>
       </div>
     </div>
@@ -263,10 +263,9 @@ export default {
     },
   },
   mounted() {
-    console.log(this.post);
+    // console.log(this.post);
   },
 };
-
 </script>
 
 <style>

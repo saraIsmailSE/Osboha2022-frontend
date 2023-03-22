@@ -140,7 +140,7 @@
       <createThesis
         :start_page="book.book?.start_page"
         :end_page="book.book?.end_page"
-        :book_id="this.id"
+        :book_id="$route.params.id"
         @closeModel="closeModel"
         @addThesis="addThesis"
       />
@@ -162,9 +162,9 @@ export default {
     createThesis,
     CreateComment,
   },
-  props: ["id"],
+  // props: ["id"],
   async created() {
-    await this.getBook(this.id);
+    await this.getBook(this.$route.params.id);
     await this.getTheses(this.page);
   },
   data() {
@@ -217,7 +217,10 @@ export default {
     },
     async getTheses(page) {
       try {
-        const response = await thesisService.getThesesByBookId(this.id, page);
+        const response = await thesisService.getThesesByBookId(
+          this.$route.params.id,
+          page
+        );
         if (response.statusCode === 200) {
           this.theses.push(...response.data.theses);
           this.totalTheses = response.data.total;
