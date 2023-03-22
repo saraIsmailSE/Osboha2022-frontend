@@ -3,106 +3,59 @@
     <template v-slot:body>
       <h2 class="text-center mb-3">الكتب</h2>
       <hr>
-      <div class="d-grid gap-3 d-grid-template-1fr-19">
-        <BookCard v-for="bookInfo in user_books" :key="bookInfo.id" :cardInfo="bookInfo.book" />
-      </div>
-      <!-- <div class="text-center mt-3">
-        <ul class="pagination w-100">
-          <router-link class="page-item page-link" :to="{ name: 'social.book', query: { page: page - 1 } }" rel="prev"
-            v-if="page != 1">
-            السابق
-          </router-link>
-          <li class="page-item page-link" :class="checkActive(page)">
-            <router-link class="page-item page-link" :to="{ name: 'social.book', query: { page: page } }">
-              {{ page }}
-            </router-link>
-          </li>
+      <h4 class="text-center mt-3 mb-3" v-if="books">العدد الكلي: {{ books.length }}</h4>
+      <div class="d-grid gap-3 d-grid-template-1fr-19" v-if="books && books.length > 0">
+        <BookCard v-for="bookInfo in booksLoaded" :key="bookInfo.id" :cardInfo="bookInfo.book" />
+        <a class="me-3 btn" role="button" @click="loadMore()" v-if="booksLoaded.length > length">عرض المزيد</a>
 
-          <router-link class="page-item page-link" :to="{ name: 'social.book', query: { page: page + 1 } }" rel="next"
-            v-if="hasNextPage">
-            التالي
-          </router-link>
-        </ul>
-      </div> -->
+      </div>
+      <div class="col-sm-12" v-else>
+        <iq-card class="iq-card">
+          <div class="iq-card-body p-0">
+            <div class="image-block text-center">
+              <img src="@/assets/images/main/current_book.png" class="img-fluid rounded w-50" alt="blog-img">
+            </div>
+            <h4 class="text-center mt-3 mb-3">لا يوجد كتب</h4>
+            <h6 class="text-center mt-3 mb-3" v-if="isAuth">ابدأ القراءة</h6>
+          </div>
+        </iq-card>
+      </div>
+
     </template>
   </iq-card>
 </template>
 <script>
 import BookCard from "@/components/book/ambassadorBookCard.vue";
-import UserBooks from '@/API/services/user-books.service'
 
 export default {
   name: "User Book",
   components: { BookCard },
-  async created() {
-    this.user_books = await UserBooks.getUserBooks(this.$route.params.user_id);
+  props: {
+    isAuth: {
+      type: [Boolean],
+      required: true,
+    },
+    books: {
+      type: [Object],
+      required: true,
+    },
   },
   data() {
     return {
-      user_books:null,
-      totalBooks: 0,
-      current: 1,
-      booksPerPage: 9,
-      page: 1,
+      length: 10,
     };
   },
   methods: {
-    //check which page is active
-    checkActive(item) {
-      let className = "";
-      if (this.current == item) {
-        className = "active";
-      } else {
-        className = className + " done";
-      }
-      return className;
+    loadMore() {
+      if (this.length > this.books.length) return;
+      this.length = this.length + 10;
     },
 
   },
   computed: {
-    hasNextPage() {
-      return this.page < this.totalPages;
-    },
-    totalPages() {
-      return Math.ceil(this.totalBooks / this.booksPerPage);
-    },
-    recentAddedBooks() {
-      return this.sections.length + 1;
-    },
-    mostReadableBooks() {
-      return this.recentAddedBooks + 1;
-    },
-    randomBook() {
-      return this.mostReadableBooks + 1;
+    booksLoaded() {
+      return this.books.slice(0, this.length);
     },
   },
 };
 </script>
-
-<style scoped>
-.events {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.pagination {
-  display: flex;
-  width: 290px;
-  padding: 0;
-}
-
-.pagination a {
-  flex: 1;
-  text-decoration: none;
-  color: #2c3e50;
-}
-
-#page-prev {
-  text-align: left;
-}
-
-#page-next {
-  text-align: right;
-}
-</style>

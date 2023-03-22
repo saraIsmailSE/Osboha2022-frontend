@@ -39,10 +39,17 @@
                         </li>
                     </ul>
                 </div>
-                <div class="row d-flex justify-content-center">
+                <div class="row d-flex justify-content-center" v-if="isAmbassador">
                     <div class="col-6">
                         <button type="submit" class="btn btn-primary d-block w-100" @click="bookDetails()">
                             عرض أطروحات السفير
+                        </button>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-center" v-else>
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-primary d-block w-100" @click="bookDetails()">
+                            صفحة الكتاب
                         </button>
                     </div>
                 </div>
@@ -54,10 +61,9 @@
 import router from "../../router";
 export default {
     name: "BookCard",
-    components: {
-    },
     props: {
         cardInfo: { type: Object },
+        isAmbassador: { type: Boolean, default: true }
     },
     data() {
         return [];
@@ -75,7 +81,10 @@ export default {
             return images("./1.jpg");
         },
         bookDetails() {
-            router.push({ name: "social.book-details" });
+            router.push({
+                name: "social.book-details",
+                query: { id: this.cardInfo.id },
+            });
         },
     },
     computed: {

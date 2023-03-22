@@ -165,6 +165,11 @@ const userChildRoute = (prop, mode = false) => [
     name: prop + ".friendsList",
     meta: { auth: true, name: "User Friends List" },
     component: () => import("../views/User/Friends/List"),
+}.
+{    path: 'profile/update/:user_id',
+    name: prop + '.profileUpdate',
+    meta: { auth: true, name: 'User Profile Update' },
+    component: () => import('../views/User/Sections/Update')
   },
   {
     path: "profile/friends/requests/:user_id",
@@ -184,14 +189,54 @@ const userChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Account Setting" },
     component: () => import("../views/User/AccountSetting"),
   },
+    path: 'privacysetting',
+    name: prop + '.privacy-setting',
+    meta: { auth: true, name: 'Privacy Setting' },
+    component: () => import('../views/User/PrivacySetting')
+  }
+]
+const groupChildRoute = (prop, mode = false) => [
   {
-    path: "privacysetting",
-    name: prop + ".privacy-setting",
-    meta: { auth: true, name: "Privacy Setting" },
-    component: () => import("../views/User/PrivacySetting"),
+    path: 'request-ambassadors/',
+    name: prop + '.requestAmbassadors',
+    meta: { auth: true, name: 'Request Ambassadors' },
+    component: () => import('../views/OsbohaMain/Group/Ambassadors/Request')
   },
-];
+  {
+    path: 'group-detail/:group_id',
+    name: prop + '.group-detail',
+    meta: { auth: true, name: 'Group Detail' },
+    component: () => import('../views/OsbohaMain/Group/Group-detail')
+  },
+  {
+    path: 'group-members/:group_id',
+    name: prop + '.group-members',
+    meta: { auth: true, name: 'Group Members' },
+    component: () => import('../views/OsbohaMain/Group/ListMembers')
+  },
+  {
+    path: 'group-books/:group_id',
+    name: prop + '.group-books',
+    meta: { auth: true, name: 'Group Books' },
+    component: () => import('../views/OsbohaMain/Group/ListBooks')
+  },
+  {
+    path: 'group-exceptions/:group_id',
+    name: prop + '.group-exceptions',
+    meta: { auth: true, name: 'Group Exceptions' },
+    component: () => import('../views/OsbohaMain/Exceptions/ListAll')
+  },
 
+]
+
+const exceptionChildRoute = (prop, mode = false) => [
+  {
+    path: 'list-exception/:exception_id/:group_id?',
+    name: prop + '.listException',
+    meta: { auth: true, name: 'List Exception' },
+    component: () => import('../views/OsbohaMain/Exceptions/ListOne')
+  },
+]
 const routes = [
   {
     path: "/",
@@ -241,9 +286,23 @@ const routes = [
     name: "user",
     component: () => import("../layouts/Default"),
     meta: { auth: true },
-    children: userChildRoute("user"),
+    children: userChildRoute('user')
   },
-];
+  {
+    path: '/group',
+    name: 'group',
+    component: () => import('../layouts/Default'),
+    meta: { auth: true },
+    children: groupChildRoute('group')
+  },
+  {
+    path: '/exceptions',
+    name: 'exceptions',
+    component: () => import('../layouts/Default'),
+    meta: { auth: true },
+    children: exceptionChildRoute('exceptions')
+  }
+]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),

@@ -1,9 +1,9 @@
 <template>
-  <div class="row">
+  <div class="row" v-if="profile">
     <div class="col-sm-12">
 
       <!-- START MAIN INFORMATION -->
-      <MainInfo :user_name="'user_name'" :roles="roles" :readingInfo="readingInfo" />
+      <MainInfo :isAuth="isAuth" :user="profile.user" :roles="profile.roles" :readingInfo="readingInfo" />
       <!-- END MAIN INFORMATION -->
 
       <!-- START PROFILE NAVIGATION -->
@@ -32,25 +32,26 @@
       <div class="tab-content">
 
         <!-- ########## START PROFILE FEED ########## -->
-        <ProfileFeed :posts="posts" :friends="friends" :exceptions="exceptions" :profile_media="profile_media" />
+        <ProfileFeed :isAuth="isAuth" :posts="posts" :friends="profile.friends" :exceptions="profile.exceptions"
+          :profile_media="profile_media" />
         <!-- ########## END PROFILE FEED ########## -->
 
         <!-- ########## START ABOUT ########## -->
         <tab-content-item :active="false" id="profile-about" aria-labelled-by="pills-about-tab">
           <iq-card>
             <template v-slot:body>
-              <About :user_about="user_about" />
+              <About :user_about="profile.info" :social_media="profile.social_media" />
             </template>
           </iq-card>
         </tab-content-item>
         <!-- ########## End ABOUT ########## -->
 
 
-        <!-- ########## START GROUPS ########## -->
+        <!-- ########## START Books ########## -->
         <tab-content-item :active="false" id="profile-books" aria-labelled-by="pills-book-tab">
-          <Books />
+          <Books :isAuth="isAuth" :books="profile.books" />
         </tab-content-item>
-        <!-- ########## END GROUPS ########## -->
+        <!-- ########## END Books ########## -->
 
         <!-- ########## START STATISTICS ########## -->
         <tab-content-item :active="false" id="profile-statistics" aria-labelled-by="pills-statistics-tab">
@@ -63,21 +64,18 @@
   </div>
 </template>
 <script>
-import { socialvue } from '@/config/pluginInit'
 import About from './Sections/About.vue'
 import Books from './Sections/Books.vue'
 import MainInfo from './Sections/MainInfo.vue'
 import ProfileFeed from './Sections/ProfileFeed.vue'
 import Statistics from './Sections/Statistics.vue'
+import UserInfo from '@/Services/userInfoService'
 
 import UserProfile from '@/API/services/user-profile.service'
 
 
 export default {
   name: 'Profile',
-  mounted() {
-    socialvue.index()
-  },
   components: {
     MainInfo,
     ProfileFeed,
@@ -86,17 +84,17 @@ export default {
     Statistics
   },
   async created() {
-    const profile = await UserProfile.getUserProfileById(this.$route.params.user_id);
-    this.readingInfo[0].value = profile.reading_Info.books;
-    this.readingInfo[1].value = profile.reading_Info.thesis;
-    this.roles = profile.roles;
-    this.friends=profile.friends;
-    this.exceptions=profile.exceptions;
-    this.user_about=profile.info
+    const user_data = await UserInfo.getUser();
+    this.auth = user_data.user;
+    this.profile = await UserProfile.getUserProfileById(this.$route.params.user_id);
+    this.readingInfo[0].value = this.profile.reading_Info.books;
+    this.readingInfo[1].value = this.profile.reading_Info.thesis;
+
   },
   data() {
     return {
-      roles: null,
+      auth:0,
+      profile: null,
       readingInfo: [
         {
           title: 'الكتب المقروءة',
@@ -112,90 +110,7 @@ export default {
         //   value: 100
         // }
       ],
-posts:null,
-      // posts: [
-      //   {
-      //     id: 1,
-      //     // images: ['1900-475.jpg'],
-      //     author: 'USER',
-      //     author_image: 'avatar-02.jpg',
-      //     created_at: '12-06-2019',
-      //     body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-      //     comments: [
-      //       {
-      //         author: 'USER',
-      //         author_image: 'avatar-02.jpg',
-      //         created_at: '12-06-2019',
-      //         body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-      //       },
-      //       {
-      //         // image: '1900-475.jpg',
-      //         author: 'USER',
-      //         author_image: 'avatar-02.jpg',
-      //         created_at: '12-06-2019',
-      //         body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-      //       },
-      //     ]
-      //   },
-      //   {
-      //     id: 2,
-      //     author: 'USER 2',
-      //     author_image: 'avatar-02.jpg',
-      //     created_at: '12-06-2019',
-      //     body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-      //     comments: [
-      //       {
-      //         author: 'USER',
-      //         author_image: 'avatar-02.jpg',
-      //         created_at: '12-06-2019',
-      //         body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-      //       },
-      //       {
-      //         // image: ['1900-475.jpg'],
-      //         author: 'USER',
-      //         author_image: 'avatar-02.jpg',
-      //         created_at: '12-06-2019',
-      //         body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-      //       },
-      //       {
-      //         author: 'USER',
-      //         author_image: 'avatar-02.jpg',
-      //         created_at: '12-06-2019',
-      //         body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-      //       },
-      //       {
-      //         image: 'profile-bg9.jpg',
-      //         author: 'USER',
-      //         author_image: 'avatar-02.jpg',
-      //         created_at: '12-06-2019',
-      //         body: 'Lorem ipsum dolor sit amet, aucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-      //       },
-      //     ]
-      //   },
-      //   {
-      //     id: 3,
-      //     // images: ['710-950.jpg', '710-450.jpg'],
-      //     author: 'USER 3',
-      //     author_image: 'avatar-02.jpg',
-      //     created_at: '12-06-2019',
-      //     body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-
-      //   },
-      // ],
-      //LATER
-      // certificates: [
-      //   {
-      //     img: require('../../assets/images/certificates/cer1.png'),
-      //     heading: 'دورة كتابة الأطروحة',
-      //   },
-      // ],
-      
-      // {
-      //     img: require('../../assets/images/150x150.jpg'),
-      //     name: 'Anna Rexia'
-      //   }
-  
-      friends: null,
+      posts: null,
       profile_media: [
         require('../../assets/images/600x600.jpg'),
         require('../../assets/images/600x600.jpg'),
@@ -207,13 +122,14 @@ posts:null,
         require('../../assets/images/600x600-2.jpg'),
         require('../../assets/images/600x600.jpg')
       ],
-
-      user_about:null,
-
-      exceptions:null,
     }
   },
   methods: {
-  }
+  },
+  computed: {
+    isAuth() {
+      return (this.auth.id == this.$route.params.user_id);
+    },
+  },
 }
 </script>

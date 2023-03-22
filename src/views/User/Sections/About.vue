@@ -36,9 +36,11 @@
                     الدولة
                     <img src="https://flagcdn.com/24x18/ae.png"
                       srcset="https://flagcdn.com/48x36/ae.png 2x, https://flagcdn.com/72x54/ae.png 3x" width="24"
-                      height="18" alt="United Arab Emirates">
+                      height="18" alt="United Arab Emirates" v-if="user_about.country">
                   </h4>
-                  <p class="mb-0 fs-6">{{ user_about.country }}</p>
+                  <p class="mb-0 fs-6" v-if="user_about.country">{{ user_about.country }}</p>
+                  <p class="mb-0 fs-6" v-else>غير محدد</p>
+
 
                 </div>
               </div>
@@ -51,9 +53,12 @@
                     :
                     مكان الاقامة
                     <img src="https://flagcdn.com/24x18/tt.png" srcset="https://flagcdn.com/48x36/tt.png 2x, 
-                    https://flagcdn.com/72x54/tt.png 3x" width="24" height="18" alt="Trinidad and Tobago">
+                      https://flagcdn.com/72x54/tt.png 3x" width="24" height="18" alt="Trinidad and Tobago"
+                      v-if="user_about.resident">
                   </h4>
-                  <p class="mb-0 fs-6">{{ user_about.resident }}</p>
+                  <p class="mb-0 fs-6" v-if="user_about.resident">{{ user_about.resident }}</p>
+                  <p class="mb-0 fs-6" v-else>غير محدد</p>
+
                 </div>
               </div>
               <!-- RESIDENT -->
@@ -62,7 +67,7 @@
               <div class="text-center">
                 <img src="@/assets/images/avatar/avatar-03.jpg" alt="profile-img" class="w-100" />
               </div>
-              <div class="row mt-2">
+              <div class="row mt-2" v-if="social_media">
                 <div class="col-4">
                   <a href="facebook.com"><img src="@/assets/images/icon/social/facebook.png" alt="facebook"
                       class="w-100" /></a>
@@ -91,8 +96,8 @@
                   تاريخ الميلاد
                   <img src="@/assets/images/icon/cake.png" alt="birthday cake" width="25" />
                 </h5>
-                <p class="mb-0 text-center">{{ user_about.birthdate }}</p>
-
+                <p class="mb-0 text-center" v-if="user_about.birthdate">{{ user_about.birthdate }}</p>
+                <p class="mb-0 fs-6" v-else>غير محدد</p>
               </div>
               <!-- BIRTHDAY -->
 
@@ -115,7 +120,9 @@
           <h4 class="mt-2">من أنا</h4>
           <hr>
           <h6 class="mb-1">نبذة</h6>
-          <p>{{ user_about.bio }}</p>
+          <p v-if="user_about.bio">{{ user_about.bio }}</p>
+          <p class="mb-0 fs-6" v-else>لا يوجد</p>
+
           <hr>
 
           <div class="row">
@@ -128,7 +135,7 @@
                   الكتاب المفضل
                   <img src="@/assets/images/icon/book.png" alt="fav book" width="25" />
                 </h4>
-                <p class="mb-0 fs-6" v-if="user_about.fav_book != ''">{{ user_about.fav_book }}</p>
+                <p class="mb-0 fs-6" v-if="user_about.fav_book">{{ user_about.fav_book }}</p>
                 <p class="mb-0 fs-6" v-else>لا يوجد</p>
               </div>
             </div>
@@ -142,7 +149,7 @@
                   الكاتب المفضل
                   <img src="@/assets/images/icon/auther.png" alt="fav auther" width="25" />
                 </h4>
-                <p class="mb-0 fs-6" v-if="user_about.fav_writer != ''">{{ user_about.fav_writer }}</p>
+                <p class="mb-0 fs-6" v-if="user_about.fav_writer">{{ user_about.fav_writer }}</p>
                 <p class="mb-0 fs-6" v-else>لا يوجد</p>
               </div>
             </div>
@@ -156,7 +163,7 @@
                   الاقتباس المفضل
                   <img src="@/assets/images/icon/quotes.png" alt="fav quotes" width="25" />
                 </h4>
-                <p class="mb-0 fs-6" v-if="user_about.fav_quote != ''">{{ user_about.fav_quote }}</p>
+                <p class="mb-0 fs-6" v-if="user_about.fav_quote">{{ user_about.fav_quote }}</p>
                 <p class="mb-0 fs-6" v-else>لا يوجد</p>
               </div>
             </div>
@@ -189,6 +196,10 @@ export default {
   },
   props: {
     user_about: {
+      type: [Object],
+      required: true,
+    },
+    social_media: {
       type: [Object],
       required: true,
     },

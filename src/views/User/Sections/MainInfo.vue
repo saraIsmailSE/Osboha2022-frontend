@@ -4,10 +4,10 @@
       <div class="profile-header">
         <div class="cover-container">
           <img src="@/assets/images/main/book-banner.png" alt="profile-bg" class="rounded img-fluid">
-          <ul class="header-nav list-inline d-flex flex-wrap justify-start p-0 m-0 mx-3" style="left: auto;">
-            <li><a href="#" class="material-symbols-outlined text-white" style="background-color: #208040;">
+          <ul class="header-nav list-inline d-flex flex-wrap justify-start p-0 m-0 mx-3" style="left: auto;" v-if="isAuth">
+            <li><a role="button" class="material-symbols-outlined text-white" style="background-color: #208040;" @click="updateProfile()">
                 edit
-              </a>
+            </a>
             </li>
             <li><a href="#" class="material-symbols-outlined text-white" style="background-color: #1D1A55;">
                 settings
@@ -20,7 +20,7 @@
             <img src="../../../assets/images/avatar/avatar-03.jpg" alt="profile-img" class="avatar-130 img-fluid" style="border: 4px solid #1D1A55;" />
           </div>
           <div class="profile-detail mt-1">
-            <h3 class="">{{user_name}}</h3>
+            <h3 class="">{{user.name}}</h3>
           </div>
         </div>
         <div class="profile-info p-3 d-flex align-items-center justify-content-between position-relative">
@@ -47,12 +47,30 @@
 <script >
 export default {
   name: 'MainInfo',
-  props: [
-  'user_name',  
-  'roles',
-  'readingInfo'
+  props: {
+    isAuth: {
+      type: [Boolean],
+      required: true,
+    },
+    user: {
+      type: [Object],
+      required: true,
+    },
+    roles: {
+      type: [Object],
+      required: true,
+    },
+    readingInfo: {
+      type: [Object],
+      required: true,
+    },
+  },
+  methods:{
+    updateProfile() {
+            this.$router.push({ name: 'user.profileUpdate', params: { user_id: this.$route.params.user_id } })
+        }
 
-  ],
+  }
 
 }
 </script>
