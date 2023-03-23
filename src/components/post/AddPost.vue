@@ -87,7 +87,7 @@
             <li class="me-2 mb-2">
               <button
                 class="btn btn-soft-primary d-flex align-items-center"
-                @click.prevent="getFriends()"
+                @click.prevent="showModal(friendsListModal)"
               >
                 <span class="material-symbols-outlined me-2">person_add</span>
                 إشارة إلى صديق
@@ -190,6 +190,7 @@ import TaggedFriends from "@/components/post/TaggedFriends.vue";
 import { Modal } from "bootstrap";
 import postService from "../../API/services/post.service";
 import friendService from "../../API/services/friend.service";
+import UserInfo from "@/Services/userInfoService";
 
 export default {
   name: "AddPost",
@@ -212,6 +213,7 @@ export default {
   emits: ["add-post"],
   data() {
     return {
+      auth: null,
       postModal: null,
       friendsListModal: null,
       friends: [],
@@ -259,6 +261,11 @@ export default {
       });
     },
   },
+  async created() {
+    const userData = await UserInfo.getUser();
+    this.auth = userData.user;
+    await this.getFriends();
+  },
   mounted() {
     this.postModal = new Modal(this.$refs.postModalRef.$el);
     this.friendsListModal = new Modal(this.$refs.friendsListModalRef.$el);
@@ -287,17 +294,15 @@ export default {
       modal.hide();
     },
     async getFriends() {
-      this.showModal(this.friendsListModal);
       try {
-        const friends = await friendService.getAllFriends();
-        if (friends.data !== "No Friends") {
-          this.friends = friends.data;
-          this.friendsTemp = friends.data;
+        const allFriends = await friendService.getAllFriends(this.auth.id);
+        if (allFriends !== "No Friends") {
+          this.friends = allFriends;
+          this.friendsTemp = allFriends;
         } else {
           this.friends = [];
         }
       } catch (error) {
-        console.log("error: ", error);
         this.friends = [];
         this.friendsTemp = [];
         return;
@@ -327,13 +332,11 @@ export default {
         id: this.pollOptions.length + 1,
         value: "",
       });
-
-      console.log(this.pollOptions);
     },
     checkSimilarPollOptions(id) {
-      const option = this.pollOptions.find((option) => option.id === id);
+      const option = this.pollOptions.find((opt) => opt.id === id);
       const similarOption = this.pollOptions.find(
-        (option) => option.value === option.value && option.id !== id
+        (opt) => opt.value === option.value && opt.id !== id
       );
       if (similarOption) {
         option.value = "";
@@ -344,13 +347,13 @@ export default {
       const index = this.pollOptions.indexOf(option);
       this.pollOptions.splice(index, 1);
     },
-    searchFriends(event) {
+    searchFriends() {
       if (this.searchQuery === "") {
         this.friends = this.friendsTemp;
         return;
       }
 
-      this.friends = this.friends.filter((friend) => {
+      this.friends = this.friendsTemp.filter((friend) => {
         return friend.name
           .toLowerCase()
           .includes(this.searchQuery.toLowerCase());
