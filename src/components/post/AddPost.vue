@@ -373,6 +373,15 @@ export default {
         const post = await postService.create(newPost);
         this.$emit("add-post", post.data);
         this.loader = false;
+        this.post = {
+          body: "",
+          media: [],
+          tags: [],
+          votes: [],
+        };
+        this.pollOptions = [];
+        this.showPoll = false;
+        this.$refs.fileRef.value = null;
         this.postModal.hide();
       } catch (err) {
         this.errorMessage = "Something went wrong, please try again later";
