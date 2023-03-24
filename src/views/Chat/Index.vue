@@ -9,7 +9,8 @@
                 <div class="chat-search pt-3 ps-3">
                   <ToggleButton toggleShow="#user-detail-popup">
                     <template v-slot:media>
-                      <img :src="auth.image" alt="chat-user" class="avatar-60 ">
+                      <!-- <img :src="auth.image" alt="chat-user" class="avatar-60 "> -->
+                      <img src="@/assets/images/avatar/avatar-03.jpg" alt="profile-img" class="avatar-130 img-fluid">
                     </template>
                     <template v-slot:body>
                       <h5 class="mb-0">{{ auth.name }}</h5>
@@ -17,7 +18,8 @@
                   </ToggleButton>
                   <ToggleContent id="user-detail-popup" body-class="text-left">
                     <template v-slot:media>
-                      <img :src="auth.image" alt="avatar">
+                      <!-- <img :src="auth.image" alt="avatar"> -->
+                      <img src="@/assets/images/avatar/avatar-03.jpg" alt="profile-img" class="avatar-130 img-fluid">
                     </template>
                     <template v-slot:title>
                       <div class="user-name mt-4">
@@ -94,7 +96,8 @@
                         <ToggleButton :mini-toggle="true" :close-button="false" toggleShow="#chat-user-detail-popup"
                           mediaClass="chat-user-profile">
                           <template v-slot:media>
-                            <img :src="checkUser(5, 'image')" alt="avatar" class="avatar-50 ">
+                            <!-- <img :src="checkUser(5, 'image')" alt="avatar" class="avatar-50 "> -->
+                            <img src="@/assets/images/avatar/avatar-03.jpg" alt="profile-img" class="avatar-130 img-fluid">
                             <span class="avatar-status"><i class="ri-checkbox-blank-circle-fill text-success" /></span>
                           </template>
                           <template v-slot:body>
@@ -152,7 +155,7 @@ export default {
       {
         id: 5,
         name: 'مستخدم أصبوحي',
-        image: require('../../assets/images/150x150.jpg')
+        
 
       },
       usersList: [
@@ -160,27 +163,27 @@ export default {
           id: 1,
           name: 'Team Discussions',
           room_id: 1,
-          image: require('../../assets/images/150x150.jpg')
+          
         },
         {
           id: 2,
           name: 'Designer',
-          image: require('../../assets/images/150x150-3.jpg')
+          image: require('@/assets/images/150x150-3.jpg')
         },
         {
           id: 3,
           name: 'Announcement',
-          image: require('../../assets/images/150x150-2.jpg')
+          image: require('@/assets/images/150x150-2.jpg')
         },
         {
           id: 4,
           name: 'Developer',
-          image: require('../../assets/images/150x150.jpg')
+          
         },
         {
           id: 5,
           name: 'Testing Team',
-          image:require('../../assets/images/150x150.jpg')
+          image:require('@/assets/images/avatar/avatar-03.jpg')
         },
       ],
       messages: [
@@ -190,13 +193,13 @@ export default {
             {
               id: 5,
               name: 'مستخدم أصبوحي',
-              image: '150x150.jpg'
+              
             }
 ,
           receiver: {
             id: 3,
             name: 'مستخدم أصبوحي',
-            image: '150x150.jpg'
+            
           },
           time: '6:45'
         },
@@ -205,12 +208,12 @@ export default {
           sender: {
             id: 3,
             name: 'مستخدم أصبوحي',
-            image: '150x150.jpg'
+            
           },
           receiver: {
             id: 5,
             name: 'مستخدم أصبوحي',
-            image: '150x150.jpg'
+            
           },
           time: '6:45'
         },
@@ -219,12 +222,12 @@ export default {
           sender: {
             id: 5,
             name: 'مستخدم أصبوحي',
-            image: '150x150.jpg'
+            
           },
           receiver: {
             id: 3,
             name: 'مستخدم أصبوحي',
-            image: '150x150.jpg'
+            
           },
           time: '6:45'
         },
@@ -233,12 +236,12 @@ export default {
           sender: {
               id: 5,
               name: 'مستخدم أصبوحي',
-              image: '150x150.jpg'
+              
             },
           receiver: {
               id: 3,
               name: 'مستخدم أصبوحي',
-              image: '150x150.jpg'
+              
             },
           time: '6:45'
         },
@@ -247,12 +250,12 @@ export default {
           sender: {
               id: 3,
               name: 'مستخدم أصبوحي',
-              image: '150x150.jpg'
+              
             },
           receiver: {
               id: 5,
               name: 'مستخدم أصبوحي',
-              image: '150x150.jpg'
+              
             },
           time: '6:45'
         },
@@ -261,12 +264,12 @@ export default {
           sender: {
               id: 5,
               name: 'مستخدم أصبوحي',
-              image: '150x150.jpg'
+              
             },
           receiver:{
               id: 3,
               name: 'مستخدم أصبوحي',
-              image: '150x150.jpg'
+              
             },
           time: '6:45'
         },

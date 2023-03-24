@@ -14,6 +14,12 @@ const childRoutes = (prop, mode) => [
     component: () => import("../views/User/AccountSetting"),
   },
   {
+    path: 'notification',
+    name: prop + '.notification',
+    meta: { auth: true, name: 'Notification' },
+    component: () => import('../views/OsbohaMain/Notifications/Notification')
+  },
+  {
     path: "book",
     name: prop + ".book",
     meta: { auth: true, name: "Book" },
@@ -45,6 +51,12 @@ const childRoutes = (prop, mode) => [
     component: () => import("../views/OsbohaMain/Group/Group"),
   },
   {
+    path: '/ambassador-list-reading',
+    name: prop + '.ambassador-list-reading',
+    meta: { auth: true, name: 'Ambassadors list reading' },
+    component: () => import('../views/OsbohaMain/Group/Ambassadors/ListReading'),
+  },
+  {
     path: "group-detail",
     name: prop + ".group-detail",
     meta: { auth: true, name: "Group detail" },
@@ -64,23 +76,17 @@ const childRoutes = (prop, mode) => [
     component: () =>
       import("../views/OsbohaMain/Group/Ambassadors/ListReading"),
   },
-  {
-    path: "notification",
-    name: prop + ".notification",
-    meta: { auth: true, name: "Notification" },
-    component: () => import("../views/OsbohaMain/Notifications/Notification"),
-  },
-];
-const blankchildRoutes = (prop, mode) => [
+]
+const authchildRoutes = (prop, mode) => [
   {
     path: "/auth/signin",
     name: prop + ".sign-in",
     component: () => import("../views/AuthPages/Default/SignIn"),
   },
   {
-    path: "signup",
-    name: prop + ".sign-up1",
-    component: () => import("../views/AuthPages/Default/SignUp1"),
+    path: 'signup',
+    name: prop + '.sign-up1',
+    component: () => import('../views/AuthPages/Default/SignUp')
   },
   {
     path: "recoverpassword",
@@ -171,7 +177,7 @@ const userChildRoute = (prop, mode = false) => [
     name: prop + ".profileUpdate",
     meta: { auth: true, name: "User Profile Update" },
     component: () => import("../views/User/Sections/Update"),
-  },
+},
   {
     path: "profile/friends/requests/:user_id",
     name: prop + ".friendsRequests",
@@ -203,6 +209,20 @@ const groupChildRoute = (prop, mode = false) => [
     name: prop + ".requestAmbassadors",
     meta: { auth: true, name: "Request Ambassadors" },
     component: () => import("../views/OsbohaMain/Group/Ambassadors/Request"),
+},
+{
+  path: 'privacysetting',
+    name: prop + '.privacy-setting',
+    meta: { auth: true, name: 'Privacy Setting' },
+    component: () => import('../views/User/PrivacySetting')
+  },
+]
+const groupChildRoute = (prop, mode = false) => [
+  {
+    path: 'request-ambassadors/:group_id',
+    name: prop + '.requestAmbassadors',
+    meta: { auth: true, name: 'Request Ambassadors' },
+    component: () => import('../views/OsbohaMain/Group/Ambassadors/Request')
   },
   {
     path: "group-detail/:group_id",
@@ -228,6 +248,13 @@ const groupChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Group Exceptions" },
     component: () => import("../views/OsbohaMain/Exceptions/ListAll"),
   },
+    {
+    path: '/ambassadors-reading/:group_id',
+    name: prop + '.ambassadors-reading',
+    meta: { auth: true, name: 'Ambassadors reading' },
+    component: () => import('../views/OsbohaMain/Group/Ambassadors/TeamReading')
+  },
+
 ];
 
 const exceptionChildRoute = (prop, mode = false) => [
@@ -258,10 +285,10 @@ const routes = [
     children: childRoutes("rightside"),
   },
   {
-    path: "/auth",
-    name: "auth",
-    component: () => import("../layouts/Empty"),
-    children: blankchildRoutes("auth"),
+    path: '/auth',
+    name: 'auth',
+    component: () => import('../layouts/Empty'),
+    children: authchildRoutes('auth')
   },
   {
     path: "/blog",

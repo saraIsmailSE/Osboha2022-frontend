@@ -5,6 +5,27 @@
                 <h2>الاجازات</h2>
             </div>
             <div class="card-body">
+                <div class="form-group">
+                            <select class="form-select" data-trigger name="choices-single-default"
+                                id="choices-single-default" >
+                                <option value="">فلترة حسب</option>
+                                <option value="reviewer">
+                                    الأقدم </option>
+                                <option value="auditor">
+                                    الأحدث
+                                </option>
+                                <option value="auditor">
+                                    تجميد فقط
+                                </option>
+                                <option value="auditor">
+                                    تجميد استثنائي فقط
+                                </option>
+                                <option value="auditor">
+                                    امتحانات فقط
+                                </option>
+                            </select>
+                        </div>
+
                 <div class="blog-description">
                     <table class="table w-100">
                         <thead>
