@@ -203,20 +203,7 @@ const userChildRoute = (prop, mode = false) => [
     component: () => import("../views/User/PrivacySetting"),
   },
 ];
-const groupChildRoute = (prop, mode = false) => [
-  {
-    path: "request-ambassadors/",
-    name: prop + ".requestAmbassadors",
-    meta: { auth: true, name: "Request Ambassadors" },
-    component: () => import("../views/OsbohaMain/Group/Ambassadors/Request"),
-},
-{
-  path: 'privacysetting',
-    name: prop + '.privacy-setting',
-    meta: { auth: true, name: 'Privacy Setting' },
-    component: () => import('../views/User/PrivacySetting')
-  },
-]
+
 const groupChildRoute = (prop, mode = false) => [
   {
     path: 'request-ambassadors/:group_id',

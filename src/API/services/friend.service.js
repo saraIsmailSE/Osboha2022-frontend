@@ -9,6 +9,7 @@ class FriendService {
       return error;
     }
   }
+
   async getFriendsRequests() {
     try {
       const requests = await api.get(`/friend/un-accepted`);
@@ -26,6 +27,7 @@ class FriendService {
     } catch (error) {
       return error;
     }
+  }
 
   async getFriendshipById(friendship_id) {
     try {
@@ -35,6 +37,8 @@ class FriendService {
       return error;
     }
   }
+
+
   async accept(pivotData) {
     const pivot = new FormData();
     pivot.append("user_id", pivotData.user_id);
@@ -45,6 +49,7 @@ class FriendService {
     } catch (error) {
       return error;
     }
+  }
 
   async delete(pivotData) {
     const pivot = new FormData();
@@ -56,6 +61,8 @@ class FriendService {
     } catch (error) {
       return error;
     }
+}
+
 }
 
 export default new FriendService();
