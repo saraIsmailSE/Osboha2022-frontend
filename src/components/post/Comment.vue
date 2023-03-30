@@ -16,8 +16,13 @@
       />
     </div>
     <div class="d-flex flex-wrap align-items-center comment-activity">
-      <span class="text-muted small">
-        {{ formatDate(comment.created_at) }}
+      <span
+        class="text-muted small"
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottomleft"
+        :title="formatFullDate(comment.created_at)"
+      >
+        {{ formatDateToWritten(comment.created_at) }}
       </span>
       &nbsp;&nbsp;
       <a href="javascript:void();" :class="{ liked: liked }"> أعجبني </a>
@@ -48,10 +53,10 @@
   </div>
   <CreateComment
     v-if="showReplyBox"
-    v-show="showReplyBox"
     ref="commentReplyRef"
     :comment_id="comment.id"
     :type="'reply'"
+    :post_id="comment.post_id"
     @addComment="addComment"
   />
 </template>
@@ -59,8 +64,7 @@
 import rate from "../book/rate/rate.vue";
 import CreateComment from "./CreateComment.vue";
 import CommentUser from "./CommentUser.vue";
-import { formatDistanceToNow } from "date-fns";
-import ar from "date-fns/locale/ar-SA";
+import helper from "@/utilities/helper";
 export default {
   name: "Comment",
   components: {
@@ -87,20 +91,19 @@ export default {
     };
   },
   methods: {
-    formatDate(date) {
-      return formatDistanceToNow(new Date(date), {
-        addSuffix: true,
-        locale: ar,
-      });
-    },
+    ...helper,
     toggleShowReplies() {
       this.showReplies = !this.showReplies;
     },
     showReply() {
       this.showReplyBox = !this.showReplyBox;
-      this.$nextTick(() => {
-        this.$refs.commentReplyRef.focusInput();
-      });
+
+      //focus the input
+      if (this.showReplyBox) {
+        this.$nextTick(() => {
+          this.$refs.commentReplyRef.focusInput();
+        });
+      }
     },
     addComment(reply, comment_id) {
       this.$emit("addComment", reply, comment_id);

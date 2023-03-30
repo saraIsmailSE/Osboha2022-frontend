@@ -31,6 +31,7 @@ class PostService {
         formData.append("votes[]", vote);
       });
     }
+
     try {
       const post = await api.post("/posts", formData, {
         headers: { "Content-type": "multipart/form-data" },
@@ -68,6 +69,26 @@ class PostService {
   async deletePostById(post_id) {
     try {
       return await api.post("/post/delete", { post_id });
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async getPostsForMainPage($page) {
+    try {
+      const posts = await api.get(`/posts/home?page=${$page}`);
+      return posts.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async postsByTimelineId(timeline_id, $page) {
+    try {
+      const posts = await api.get(
+        `/posts/timeline/${timeline_id}?page=${$page}`
+      );
+      return posts.data;
     } catch (error) {
       return error;
     }
