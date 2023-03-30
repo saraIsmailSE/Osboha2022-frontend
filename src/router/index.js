@@ -14,10 +14,10 @@ const childRoutes = (prop, mode) => [
     component: () => import("../views/User/AccountSetting"),
   },
   {
-    path: 'notification',
-    name: prop + '.notification',
-    meta: { auth: true, name: 'Notification' },
-    component: () => import('../views/OsbohaMain/Notifications/Notification')
+    path: "notification",
+    name: prop + ".notification",
+    meta: { auth: true, name: "Notification" },
+    component: () => import("../views/OsbohaMain/Notifications/Notification"),
   },
   {
     path: "book",
@@ -27,7 +27,7 @@ const childRoutes = (prop, mode) => [
     props: (route) => ({ page: parseInt(route.query.page) || 1 }),
   },
   {
-    path: "book-details/:id",
+    path: "book-details/:book_id",
     name: prop + ".book-details",
     meta: { auth: true, name: "BookDetails" },
     component: () => import("../views/Book/BookDetails"),
@@ -70,7 +70,13 @@ const childRoutes = (prop, mode) => [
     component: () =>
       import("../views/OsbohaMain/Group/Ambassadors/ListReading"),
   },
-]
+  {
+    path: "announcement",
+    name: prop + ".announcement",
+    meta: { auth: true, name: "Announcemnt" },
+    component: () => import("../views/Announcemnt/Announcemnt"),
+  },
+];
 const authchildRoutes = (prop, mode) => [
   {
     path: "/auth/signin",
@@ -78,9 +84,9 @@ const authchildRoutes = (prop, mode) => [
     component: () => import("../views/AuthPages/Default/SignIn"),
   },
   {
-    path: 'signup',
-    name: prop + '.sign-up1',
-    component: () => import('../views/AuthPages/Default/SignUp')
+    path: "signup",
+    name: prop + ".sign-up1",
+    component: () => import("../views/AuthPages/Default/SignUp"),
   },
   {
     path: "recoverpassword",
@@ -171,7 +177,7 @@ const userChildRoute = (prop, mode = false) => [
     name: prop + ".profileUpdate",
     meta: { auth: true, name: "User Profile Update" },
     component: () => import("../views/User/Sections/Update"),
-},
+  },
   {
     path: "profile/friends/requests/:user_id",
     name: prop + ".friendsRequests",
@@ -200,10 +206,10 @@ const userChildRoute = (prop, mode = false) => [
 
 const groupChildRoute = (prop, mode = false) => [
   {
-    path: 'request-ambassadors/:group_id',
-    name: prop + '.requestAmbassadors',
-    meta: { auth: true, name: 'Request Ambassadors' },
-    component: () => import('../views/OsbohaMain/Group/Ambassadors/Request')
+    path: "request-ambassadors/:group_id",
+    name: prop + ".requestAmbassadors",
+    meta: { auth: true, name: "Request Ambassadors" },
+    component: () => import("../views/OsbohaMain/Group/Ambassadors/Request"),
   },
   {
     path: "group-detail/:group_id",
@@ -284,10 +290,10 @@ const routes = [
     children: childRoutes("rightside"),
   },
   {
-    path: '/auth',
-    name: 'auth',
-    component: () => import('../layouts/Empty'),
-    children: authchildRoutes('auth')
+    path: "/auth",
+    name: "auth",
+    component: () => import("../layouts/Empty"),
+    children: authchildRoutes("auth"),
   },
   {
     path: "/blog",

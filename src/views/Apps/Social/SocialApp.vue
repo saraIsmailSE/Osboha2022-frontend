@@ -19,7 +19,8 @@
           id="profile-feed"
           aria-labelled-by="pills-feed-tab"
         >
-          <Post v-for="post in posts" :key="post.id" :post="post" />
+          <LazyLoadedPosts :isMain="true" />
+          <!-- <Post v-for="post in posts" :key="post.id" :post="post" /> -->
         </tab-content-item>
       </tab-content>
     </div>
@@ -158,21 +159,15 @@
       </iq-card>
       <!-- ##### End Videos ##### -->
     </div>
-    <div class="col-sm-12 text-center">
-      <img
-        src="../../../assets/images/page-img/page-load-loader.gif"
-        alt="loader"
-        style="height: 100px"
-      />
-    </div>
   </div>
 </template>
 <script>
-import Post from "../../../components/post/Post.vue";
-import AddPost from "../../../components/post/AddPost";
+import AddPost from "@/components/post/AddPost";
+import LazyLoadedPosts from "@/components/post/LazyLoadedPosts.vue";
+
 export default {
   name: "SocialApp",
-  components: { AddPost, Post },
+  components: { AddPost, LazyLoadedPosts },
   mounted() {
     // socialvue.index()
   },

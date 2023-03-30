@@ -18,7 +18,7 @@ class CommentService {
     if (data.image) formData.append("image", data.image);
 
     try {
-      const comment = await api.post("/comment/create", formData, {
+      const comment = await api.post("/comments", formData, {
         headers: { "Content-type": "multipart/form-data" },
       });
       return comment.data;
@@ -27,12 +27,21 @@ class CommentService {
     }
   }
 
-  async getPostComments(post_id) {
+  async getPostComments(post_id, page) {
     try {
-      const comments = await api.post("/comment/get-post-comments", {
-        post_id,
-      });
+      const comments = await api.get(
+        `/comments/post/${post_id}?post_id=${page}`
+      );
       return comments.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async getPostCommentsUsers(post_id) {
+    try {
+      const users = await api.get(`/comments/post/${post_id}/users`);
+      return users.data;
     } catch (error) {
       return error;
     }

@@ -63,14 +63,18 @@ export default {
       type: String,
       required: true,
     },
+    post_id: {
+      type: Number,
+    },
   },
   data() {
     return {
       comment: {
         body: "",
         image: null,
-        book_id: this.$route.query.id,
+        book_id: this.$route.params.book_id,
         comment_id: this.comment_id,
+        post_id: this.post_id,
         type: this.type,
       },
     };
