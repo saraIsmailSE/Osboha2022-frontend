@@ -3,21 +3,27 @@
     <div class="iq-card-body profile-page p-0">
       <div class="profile-header">
         <div class="cover-container">
-          <img src="@/assets/images/main/book-banner.png" alt="profile-bg" class="rounded img-fluid">
+          <img :src="resolve_porfile_img('1300x325', profile.cover_picture, profile.id)" alt="profile-bg" class="rounded img-fluid" v-if="profile && profile.cover_picture" />
+          <img src="@/assets/images/main/book-banner.png" alt="profile-bg" class="rounded img-fluid" v-else>
           <ul class="header-nav list-inline d-flex flex-wrap justify-start p-0 m-0 mx-3" style="left: auto;" v-if="isAuth">
             <li><a role="button" class="material-symbols-outlined text-white" style="background-color: #208040;" @click="updateProfile()">
                 edit
             </a>
             </li>
-            <li><a href="#" class="material-symbols-outlined text-white" style="background-color: #1D1A55;">
+            
+            <!-- LATER -->
+            <!-- <li><a href="#" class="material-symbols-outlined text-white" style="background-color: #1D1A55;">
                 settings
               </a>
-            </li>
+            </li> -->
           </ul>
         </div>
         <div class="user-detail text-center mb-3">
           <div class="profile-img">
-            <img src="../../../assets/images/avatar/avatar-03.jpg" alt="profile-img" class="avatar-130 img-fluid" style="border: 4px solid #1D1A55;" />
+            <img :src="resolve_porfile_img('150x150', profile.profile_picture, profile.id)"
+                        alt="profile-img" class="avatar-130 img-fluid" style="border: 4px solid #1D1A55;"
+                        v-if="profile && profile.profile_picture" />
+            <img src="@/assets/images/avatar/avatar-03.jpg" alt="profile-img" class="avatar-130 img-fluid" style="border: 4px solid #1D1A55;" v-else />
           </div>
           <div class="profile-detail mt-1">
             <h3 class="">{{user.name}}</h3>
@@ -47,10 +53,15 @@
 <script >
 export default {
   name: 'MainInfo',
+  created(){
+  },
   props: {
     isAuth: {
       type: [Boolean],
       required: true,
+    },
+    profile: {
+      type: [Object],
     },
     user: {
       type: [Object],
@@ -68,7 +79,18 @@ export default {
   methods:{
     updateProfile() {
             this.$router.push({ name: 'user.profileUpdate', params: { user_id: this.$route.params.user_id } })
-        }
+        },
+                /**
+        * get profile picture or cover.
+        *  @param  image size, image name, profile id
+        * @return image url
+        */
+        resolve_porfile_img(size, imageName, profile_id) {
+            let image = size + '_' + imageName;
+            const url = `http://127.0.0.1:8000/api/v1/profile-image?fileName=${image}&profileID=${profile_id}`
+            return url;
+        },
+
 
   }
 

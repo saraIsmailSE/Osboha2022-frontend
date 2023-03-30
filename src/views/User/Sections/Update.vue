@@ -5,27 +5,39 @@
                 <div class="iq-card-body profile-page p-0">
                     <div class="profile-header">
                         <div class="cover-container">
-                            <img src="@/assets/images/main/book-banner.png" alt="profile-bg" class="rounded img-fluid">
+                            <img :src="resolve_porfile_img('1300x325', profileInfo.cover_picture, profileInfo.id)"
+                                alt="profile-bg" class="rounded img-fluid"
+                                v-if="profileInfo && profileInfo.cover_picture" />
+
+                            <img src="@/assets/images/main/book-banner.png" alt="profile-bg" class="rounded img-fluid"
+                                v-else>
                         </div>
                     </div>
                 </div>
                 <div class="profile-img">
-                    <img src="../../../assets/images/avatar/avatar-03.jpg" alt="profile-img" class="avatar-130 img-fluid"
-                        style="border: 4px solid #1D1A55;" />
+
+                    <img :src="resolve_porfile_img('150x150', profileInfo.profile_picture, profileInfo.id)"
+                        alt="profile-img" class="avatar-130 img-fluid" style="border: 4px solid #1D1A55;"
+                        v-if="profileInfo && profileInfo.profile_picture" />
+                    <img src="@/assets/images/avatar/avatar-03.jpg" alt="profile-img" class="avatar-130 img-fluid"
+                        style="border: 4px solid #1D1A55;" v-else />
                 </div>
                 <div class="mt-3 row">
                     <div class="form-group col-6">
-                        <label class="form-label" for="customFile">
+                        <label class="form-label" for="profile_picture">
                             صورة الملف الشخصي
                         </label>
-
-                        <input class="form-control" type="file" id="customFile2" ref="file" />
+                        <input class="form-control" type="file" name="profile_picture" id="profile_picture"
+                            ref="profile_picture" accept="image/*" @change="submitProfilePic" />
                     </div>
                     <div class="form-group col-6">
-                        <label class="form-label" for="customFile">
+                        <label class="form-label" for="cover_picture">
                             صورة الغلاف
                         </label>
-                        <input class="form-control" type="file" id="customFile2" ref="file" />
+                        <input class="form-control" type="file" name="cover_picture" id="cover_picture" ref="cover_picture"
+                            accept="image/*" @change="submitProfileCover" />
+
+
                     </div>
                 </div>
             </div>
@@ -65,6 +77,11 @@
                                 قم بادخال الاسم الأخير
                             </small>
                         </div>
+                        <div class="form-group col-12">
+                                <h4>تاريخ الميلاد</h4>
+                                <input type="date" class="form-control mt-2" name="birthdate" id="birthdate"
+                                    v-model="infoForm.birthdate" placeholder="تاريخ الملاد">
+                            </div>
 
                         <div class="form-group col-12">
                             <h4>الدولة</h4>
@@ -90,7 +107,7 @@
                             <div class="form-group row">
                                 <textarea rows="3" placeholder="نبذة عني" class="rounded form-control mt-2 col-12" id="bio"
                                     v-model="v$.infoForm.bio.$model" name="bio">
-                                                                </textarea>
+                            </textarea>
                             </div>
                             <small style="color:red;" v-if="v$.infoForm.bio.$error">
                                 قم بادخال نبدة عنك لا يزيد عدد حروفها عن 300
@@ -126,8 +143,7 @@
                             <select class="form-select mt-2" data-trigger name="section" id="section"
                                 v-model="infoForm.fav_section">
                                 <option value='' selected>اختر قسمك المفضل </option>
-                                <option value='male'>اجتماعي </option>
-                                <option value='femail'>تربوي </option>
+                                <option v-for="section in sections" :key="section.id" :value=section.section>{{section.section}} </option>
                             </select>
                         </div>
                         <hr>
@@ -205,18 +221,21 @@ import SocialMedia from '@/API/services/social-media.service'
 export default {
     name: "update profile",
     async created() {
-        const profileInfo = await UserProfile.getUserProfileToUpdate(this.$route.params.user_id);
-        if (profileInfo) {
-            this.infoForm.first_name_ar = profileInfo.first_name_ar
-            this.infoForm.middle_name_ar = profileInfo.middle_name_ar
-            this.infoForm.last_name_ar = profileInfo.last_name_ar
-            this.infoForm.country = profileInfo.country
-            this.infoForm.resident = profileInfo.resident
-            this.infoForm.bio = profileInfo.bio
-            this.infoForm.fav_book = profileInfo.fav_book
-            this.infoForm.fav_quote = profileInfo.fav_quote
-            this.infoForm.fav_writer = profileInfo.fav_writer
-            this.infoForm.fav_section = profileInfo.fav_section
+        const response = await UserProfile.getUserProfileToUpdate(this.$route.params.user_id);
+        this.sections=response.sections;
+        this.profileInfo=response.profileInfo;
+        if (this.profileInfo) {
+            this.infoForm.first_name_ar = this.profileInfo.first_name_ar
+            this.infoForm.middle_name_ar = this.profileInfo.middle_name_ar
+            this.infoForm.last_name_ar = this.profileInfo.last_name_ar
+            this.infoForm.birthdate= this.profileInfo.birthdate
+            this.infoForm.country = this.profileInfo.country
+            this.infoForm.resident = this.profileInfo.resident
+            this.infoForm.bio = this.profileInfo.bio
+            this.infoForm.fav_book = this.profileInfo.fav_book
+            this.infoForm.fav_quote = this.profileInfo.fav_quote
+            this.infoForm.fav_writer = this.profileInfo.fav_writer
+            this.infoForm.fav_section = this.profileInfo.fav_section
         }
         const social_media = await SocialMedia.getByUserId(this.$route.params.user_id);
         if (social_media) {
@@ -231,6 +250,12 @@ export default {
     data() {
         return {
             loader: false,
+            profileInfo: null,
+            profilePictureForm: {
+                profile_picture: [],
+                cover_picture: [],
+            },
+            fileExtnError: null,
             countries: [
                 { code: 'SA', name: "المملكة العربية السعودية" },
                 { code: 'ET', name: "إثيوبيا" },
@@ -493,7 +518,7 @@ export default {
                 instagram: '',
                 twitter: '',
             },
-
+            sections:[],
             message: null,
             socialMediaMessage: null,
 
@@ -524,6 +549,10 @@ export default {
         };
     },
     methods: {
+        
+        /**
+        * update profile Information.
+        */
         async submitProfileInfo() {
             this.v$.$touch();
             if (!this.v$.infoForm.$invalid) {
@@ -534,13 +563,16 @@ export default {
                     this.loader = false;
                     this.message = response;
                     this.v$.infoForm.$reset()
-
                 }
                 catch (error) {
                     console.log(error);
                 }
             }
         },
+
+        /**
+        * update profile socialmedia.
+        */
         async submitSociaMedia() {
             this.socialMediaMessage = "";
             this.loader = true;
@@ -553,9 +585,48 @@ export default {
                 console.log(error);
             }
         },
+
+        /**
+        * update profile picture.
+        * @return updated profile
+        */
+        async submitProfilePic() {
+            this.profilePictureForm.profile_picture = this.$refs.profile_picture.files;
+            const response = await UserProfile.updateProfilePic(this.profilePictureForm);
+            this.profileInfo = response
+            this.$refs.profile_picture.value = null;
+        },
+
+        /**
+        * update profile cover.
+        * @return updated profile
+        */
+        async submitProfileCover() {
+            this.profilePictureForm.cover_picture = this.$refs.cover_picture.files;
+            const response = await UserProfile.updateProfileCover(this.profilePictureForm);
+            this.profileInfo = response
+            this.$refs.cover_picture.value = null;
+
+        },
+        
+        /**
+        * get profile picture or cover.
+        *  @param  image size, image name, profile id
+        * @return image url
+        */
+        resolve_porfile_img(size, imageName, profile_id) {
+            let image = size + '_' + imageName;
+            const url = `http://127.0.0.1:8000/api/v1/profile-image?fileName=${image}&profileID=${profile_id}`
+            return url;
+        },
+
+        /**
+        * redirect to user profile.
+        */
         back() {
             this.$router.push({ name: 'user.profile', params: { user_id: this.$route.params.user_id } })
         }
     },
+
 };
 </script>

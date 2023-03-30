@@ -16,6 +16,15 @@ export default {
         'data',
         'options'
     ],
+    watch: {
+  data: {
+    immediate: true, 
+        handler (newVal, oldVal) {
+            console.log( "new" + newVal)
+            console.log( "old" + oldVal)
+        }
+  }
+},
     data() {
         return {
             }

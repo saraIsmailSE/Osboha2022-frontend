@@ -16,7 +16,7 @@
                         </p>
                         <div class="d-flex justify-content-between text-center mt-5 mb-2">
                             <div>
-                                <p class="text-center mb-2 h5"><strong>100%</strong></p>
+                                <p class="text-center mb-2 h5"><strong>{{mark.out_of_100}}%</strong></p>
                                 <p class="text-center mb-0">
                                     العلامة
                                     <br>
@@ -24,7 +24,7 @@
                                 </p>
                             </div>
                             <div>
-                                <p class="text-center mb-2 h5"><strong>5</strong></p>
+                                <p class="text-center mb-2 h5"><strong>{{mark.total_thesis}}</strong></p>
                                 <p class="text-center mb-0">
                                     عدد
                                     <br>
@@ -32,7 +32,7 @@
                                 </p>
                             </div>
                             <div>
-                                <p class="text-center mb-2 h5"><strong>2</strong></p>
+                                <p class="text-center mb-2 h5"><strong>{{ mark.total_pages }}</strong></p>
                                 <p class="text-center mb-0">
                                     عدد
                                     <br>
@@ -49,9 +49,12 @@
 </template>
 <script>
 export default {
-    name: 'Achevment Card',
+    name: 'Achievement Card',
     props: {
-        card_info: { type: Object }
+        mark: {
+            type: [Object],
+            required: true,
+        }
     },
     data() {
         return {

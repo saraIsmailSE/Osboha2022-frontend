@@ -102,14 +102,14 @@
                         <template v-slot:headerTitle>
                             <h4 class="card-title">الأصدقاء</h4>
                         </template>
-                        <template v-slot:headerAction v-if="friends.length>0">
+                        <template v-slot:headerAction v-if="friends.length > 0">
                             <router-link :to="{ name: 'user.friendsList', params: { user_id: user_id } }">
                                 <p class="m-0">
                                     مشاهدة الكل
                                 </p>
                             </router-link>
                         </template>
-                        <template v-slot:body v-if="friends.length>0">
+                        <template v-slot:body v-if="friends.length > 0">
                             <button type="button" @click="show_friends = !show_friends"
                                 class="btn bg-white text-dark border-dark w-100 d-flex justify-content-between"
                                 v-if="!show_friends">
@@ -175,15 +175,18 @@
                             </button>
                             <div v-show="show_exceptions">
                                 <ul id="exceptionList" class="p-auto m-auto" v-if="exceptions">
-                                    <li v-for="(exceprtion, index) in exceptions" :key="index">
-                                        <h5 class="mt-2" style="direction: rtl !important;"
-                                            v-if="exceprtion.status == 'accepted'">
-                                            {{ exceprtion.type }} || ينتهي بــ : {{ exceprtion.end_at }}
-                                        </h5>
-                                        <h5 class="mt-2" style="direction: rtl !important;" v-else>
-                                            {{ exceprtion.type }} || {{ exceprtion.status }}
-                                        </h5>
-                                    </li>
+                                        <li v-for="(exception, index) in exceptions.slice(0,4)" :key="index" role="button" title="عرض">
+                                            <router-link
+                                        :to="{ name: 'exceptions.listException', params: { exception_id: exception.id } }">
+                                            <h6 class="mt-2" style="direction: rtl !important;"
+                                                v-if="exception.status == 'accepted'">
+                                                {{ exception.type }} || ينتهي بــ : {{ exception.end_at }}
+                                            </h6>
+                                            <h6 class="mt-2" style="direction: rtl !important;" v-else>
+                                                {{ exception.type }} || {{ exception_status[exception.status] }}
+                                            </h6>
+                                        </router-link>
+                                        </li>
                                 </ul>
                                 <h4 class="text-center" v-else> لا يوجد</h4>
                                 <button v-if="isAuth && eligibleForException" @click="requestException()"
@@ -258,7 +261,14 @@ export default {
             show_exceptions: true,
             show_media: true,
             show_certificates: true,
-            user_id: this.$route.params.user_id
+            user_id: this.$route.params.user_id,
+            exception_status:{ 
+                "pending": "قيد المراجعة",
+                "accepted": "مقبول",
+                "rejected":"مرفوض",
+                "cancelled":"ملغي",
+                "finished":"منتهي"
+            }
         }
     },
     methods: {
