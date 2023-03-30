@@ -71,6 +71,9 @@ import exceptionTypeService from '@/API/services/exception-type.service';
 import exceptionService from '@/API/services/user-exception.service';
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, maxLength } from "@vuelidate/validators";
+
+const greaterThanZero = (value) => value > 0
+
 export default {
     name: "New Exception",
     async created() {
@@ -90,7 +93,6 @@ export default {
             },
             exceptionTypes: null,
             message: null,
-
         };
     },
     validations() {
@@ -103,6 +105,8 @@ export default {
                 },
                 type_id: {
                     required,
+                    maxValue: greaterThanZero,
+                    
                 }
             }
         };

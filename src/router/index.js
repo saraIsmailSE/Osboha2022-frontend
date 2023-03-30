@@ -51,12 +51,6 @@ const childRoutes = (prop, mode) => [
     component: () => import("../views/OsbohaMain/Group/Group"),
   },
   {
-    path: '/ambassador-list-reading',
-    name: prop + '.ambassador-list-reading',
-    meta: { auth: true, name: 'Ambassadors list reading' },
-    component: () => import('../views/OsbohaMain/Group/Ambassadors/ListReading'),
-  },
-  {
     path: "group-detail",
     name: prop + ".group-detail",
     meta: { auth: true, name: "Group detail" },
@@ -233,13 +227,31 @@ const groupChildRoute = (prop, mode = false) => [
     path: "group-exceptions/:group_id",
     name: prop + ".group-exceptions",
     meta: { auth: true, name: "Group Exceptions" },
-    component: () => import("../views/OsbohaMain/Exceptions/ListAll"),
+    component: () => import("../views/OsbohaMain/Group/Exceptions/ListAll"),
   },
     {
-    path: '/ambassadors-reading/:group_id',
+    path: '/group/ambassadors-reading/:group_id',
     name: prop + '.ambassadors-reading',
     meta: { auth: true, name: 'Ambassadors reading' },
     component: () => import('../views/OsbohaMain/Group/Ambassadors/TeamReading')
+  },
+  {
+    path: '/group/list-ambassador-reading/:ambassador_id',
+    name: prop + '.listOneAmbassadorReading',
+    meta: { auth: true, name: 'Ambassadors list reading' },
+    component: () => import('../views/OsbohaMain/Group/Ambassadors/ListReading'),
+  },
+  {
+    path: '/group/all-ambassadors-achement/:group_id',
+    name: prop + '.listAllAmbassadorAchievements',
+    meta: { auth: true, name: 'All Ambassadors Achievement' },
+    component: () => import('../views/OsbohaMain/Group/Ambassadors/ListAllAchievement'),
+  },  
+  {
+    path: '/group/achievement-as-pages/:group_id',
+    name: prop + '.achievementAsPages',
+    meta: { auth: true, name: 'Achievement As Pages' },
+    component: () => import('../views/OsbohaMain/Group/Ambassadors/AchievementAsPages'),
   },
 
 ];
@@ -249,7 +261,7 @@ const exceptionChildRoute = (prop, mode = false) => [
     path: "list-exception/:exception_id/:group_id?",
     name: prop + ".listException",
     meta: { auth: true, name: "List Exception" },
-    component: () => import("../views/OsbohaMain/Exceptions/ListOne"),
+    component: () => import("../views/OsbohaMain/Group/Exceptions/ListOne"),
   },
 ];
 const routes = [

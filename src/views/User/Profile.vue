@@ -3,7 +3,7 @@
     <div class="col-sm-12">
 
       <!-- START MAIN INFORMATION -->
-      <MainInfo :isAuth="isAuth" :user="profile.user" :roles="profile.roles" :readingInfo="readingInfo" />
+      <MainInfo :isAuth="isAuth" :user="profile.user" :roles="profile.roles" :readingInfo="readingInfo" :profile="profile.info"/>
       <!-- END MAIN INFORMATION -->
 
       <!-- START PROFILE NAVIGATION -->

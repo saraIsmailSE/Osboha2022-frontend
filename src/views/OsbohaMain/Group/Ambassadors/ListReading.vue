@@ -6,7 +6,7 @@
                     <h3 class="text-center mt-3 mb-3">اسم السفير - الأسبوع الرابع من يناير</h3>
                 </div>
                 <div class="iq-card-body p-3">
-                    <AchevmentCard />
+                    <AchievementCard v-if="mark" :mark="mark"/>
                     <div class="d-flex align-items-center mt-3">
                         <Check :theses="theses" />
                     </div>
@@ -27,43 +27,39 @@
     </div>
 </template>
 <script>
-import AchevmentCard from '@/components/book/theses/achevment-card.vue'
+import AchievementCard from '@/components/book/theses/achievement-card.vue'
 import Check from '@/components/book/theses/check.vue'
+import MarkService from '@/API/services/marks.service';
 
 export default {
-    name: "ListReading",
+    name: "List Reading",
+    async created() {
+
+        try {
+            const response = await MarkService.ambassadorMark(1);
+            this.mark = response.mark;
+                this.theses = response.theses.reduce((theses, item) => {
+                const group = (theses[item.book_id] || []);
+                group.push(item);
+                theses[item.book_id] = group;
+                return theses;
+            }, {});
+            console.log(this.theses)
+        }
+        catch (error) {
+            console.log(error);
+        }
+    },
+
     components: {
         Check,
-        AchevmentCard
+        AchievementCard
     },
 
     data() {
         return {
-            theses: [
-                {
-                    start:7,
-                    end:40,
-                    body: `لوريم ايبسوم دولار سيت أميت ,كونسيكتيتور أدايبا يسكينج أليايت,سيت دو أيوسمود أنت بخير ، هل كل شيء على ما يرام؟
-أجل ، حسنًا ، ماذا عن واجبي المنزلي ، ماك فلاي؟
-أجل ، حسنًا ، ماذا عن واجبي المنزلي ، ماك فلاي؟
-أعرف ما ستقوله ، يا بني ، وأنت على حق ، أنت على حق ، لكن بيف كانت مشرفي ، وأخشى أنني لست جيدًا في المواجهات.
-نعم ، لكنني لم أختر قتالًا في حياتي كلها.
-كلنا نرتكب أخطاء في الحياة ، أطفال
-آه ، حسنًا ، حسنًا بيف ، آه ، سأنهي ذلك الليلة وسأحضره أول شيء صباح الغد.
-فلوكسايتور.`,
-                    mark:100,
-                },
-
-                {
-                    start:7,
-                    end:19,
-                    body: `رونالد ريغان.
-توقف ، انتظر لحظة ، دكتور ، هل تخبرني أن والدتي قد حصلت على سخونة بالنسبة لي؟
-حسنًا ، يا أماه ، تحدثنا عن هذا ، لن نذهب إلى البحيرة ، فقد تحطمت السيارات.`,
-mark:40,
-                },
-
-            ]
+            theses:[],
+            mark:null,
         };
     },
 };

@@ -5,7 +5,7 @@
       <div class="iq-todo-page">
         <ul class="todo-task-list p-0 m-0">
           <li v-for="(category, index1) in categoryList" :key="index1">
-            <a class="d-flex align-items-center justify-content-between" :href="category.href">
+            <a class="d-flex align-items-center justify-content-between">
               <div class="d-flex">
                 <i :class="`material-symbols-outlined`" :style="`color:${category.color}`">bolt</i>
                 <h5>{{ category.name }}</h5>
