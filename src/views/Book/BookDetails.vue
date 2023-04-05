@@ -153,11 +153,11 @@
   </main>
 </template>
 <script>
-import Comment from "../../components/post/Comment.vue";
-import CreateComment from "../../components/post/CreateComment.vue";
-import createThesis from "../../components/book/theses/create.vue";
-import bookService from "../../API/services/book.service";
-import thesisService from "../../API/services/thesis.service";
+import Comment from "@/components/comment/Comment.vue";
+import CreateComment from "@/components/comment/CreateComment.vue";
+import createThesis from "@/components/book/theses/create.vue";
+import bookService from "@/API/services/book.service";
+import thesisService from "@/API/services/thesis.service";
 import moment from "moment";
 
 export default {

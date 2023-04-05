@@ -10,10 +10,7 @@
       <template v-slot:body>
         <div class="d-flex align-items-center">
           <div class="user-img">
-            <img
-              class="avatar-60 rounded-circle"
-              src="../../assets/images/user/user-1.jpg"
-            />
+            <img class="avatar-60 rounded-circle" :src="profile_picture" />
           </div>
           <form class="post-text ml-3 w-100">
             <input
@@ -42,7 +39,9 @@
           </a>
         </model-header>
         <model-body class="post-modal-body">
-          <TaggedFriends :selectedFriends="selectedFriends" />
+          <div class="d-flex align-items-start">
+            <TaggedFriends :friends="selectedFriends" :user="auth" />
+          </div>
           <div>
             <form class="post-text ml-3 w-100">
               <textarea
@@ -110,7 +109,8 @@
         </model-body>
         <model-footer class="p-0 px-2">
           <div class="w-100 text-right" style="color: red" v-if="showPoll">
-            ملاحظة: نص المنشور مطلوب مع الاستعلام!
+            ملاحظة: نص المنشور مطلوب مع الاستعلام, والخيارات لا يمكن أن تكون أقل
+            من 2 ولا تزيد عن 10
           </div>
           <div
             class="w-100 text-center py-1"
@@ -183,14 +183,15 @@
   </div>
 </template>
 <script>
-import ImagePreviewer from "../custom/image-previewer/ImagePreviewer.vue";
-import PostPoll from "@/components/post/PostPoll.vue";
-import FriendsList from "@/components/post/FriendsList.vue";
-import TaggedFriends from "@/components/post/TaggedFriends.vue";
+import ImagePreviewer from "@/components/media/ImagePreviewer.vue";
+import PostPoll from "@/components/post/add/PostPoll.vue";
+import FriendsList from "@/components/post/add/FriendsList.vue";
+import TaggedFriends from "@/components/post/header/TaggedFriends.vue";
 import { Modal } from "bootstrap";
-import postService from "../../API/services/post.service";
-import friendService from "../../API/services/friend.service";
+import postService from "@/API/services/post.service";
+import friendService from "@/API/services/friend.service";
 import UserInfo from "@/Services/userInfoService";
+import helper from "@/utilities/helper";
 
 export default {
   name: "AddPost",
@@ -227,6 +228,10 @@ export default {
         votes: [],
       },
       showPoll: false,
+      minmaxOptions: {
+        min: 2,
+        max: 10,
+      },
       loader: false,
       errorMessage: "",
       searchQuery: "",
@@ -246,10 +251,29 @@ export default {
         allow = false;
       }
 
+      if (
+        this.pollOptions.length > 0 &&
+        this.pollOptions.length < this.minmaxOptions.min
+      ) {
+        allow = false;
+      }
+
       return allow;
     },
     postBody() {
       return this.post.body;
+    },
+    profile_picture() {
+      const femaleAvatar = require("@/assets/images/avatar/avatar-04.jpg");
+      const maleAvatar = require("@/assets/images/avatar/avatar-05.jpg");
+      // const profilePic = this.auth.user_profile.profile_picture;
+      const authGender = this.auth?.gender.toLowerCase();
+
+      //to be used after adding the profile picture
+      // return (
+      //   profilePic ?? (authGender === "female" ? femaleAvatar : maleAvatar)
+      // );
+      return authGender === "female" ? femaleAvatar : maleAvatar;
     },
   },
   watch: {
@@ -266,7 +290,8 @@ export default {
     this.auth = userData.user;
     await this.getFriends();
   },
-  mounted() {
+
+  async mounted() {
     this.postModal = new Modal(this.$refs.postModalRef.$el);
     this.friendsListModal = new Modal(this.$refs.friendsListModalRef.$el);
   },
@@ -328,6 +353,7 @@ export default {
       this.$refs.fileRef.value = null;
     },
     addPollOption() {
+      if (this.pollOptions.length >= this.minmaxOptions.max) return;
       this.pollOptions.push({
         id: this.pollOptions.length + 1,
         value: "",
@@ -371,19 +397,27 @@ export default {
       this.loader = true;
       try {
         const post = await postService.create(newPost);
+
+        if (post.statusCode !== 200) {
+          helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
+          this.loader = false;
+          return;
+        }
+
         this.$emit("add-post", post.data);
-        // this.post = {
-        //   body: "",
-        //   media: [],
-        //   tags: [],
-        //   votes: [],
-        // };
-        // this.pollOptions = [];
-        // this.showPoll = false;
-        // this.$refs.fileRef.value = null;
-        // this.postModal.hide();
+        this.post = {
+          body: "",
+          media: [],
+          tags: [],
+          votes: [],
+        };
+        this.pollOptions = [];
+        this.showPoll = false;
+        this.$refs.fileRef.value = null;
+        this.postModal.hide();
+        helper.toggleToast("تم النشر بنجاح", "success");
       } catch (err) {
-        this.errorMessage = "Something went wrong, please try again later";
+        helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
         return;
       }
 
