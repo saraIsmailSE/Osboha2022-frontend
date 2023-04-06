@@ -217,11 +217,12 @@ import useVuelidate from "@vuelidate/core";
 import { required, minLength, maxLength } from "@vuelidate/validators";
 import UserProfile from '@/API/services/user-profile.service'
 import SocialMedia from '@/API/services/social-media.service'
+import profileImagesService from '@/API/services/profile.images.service'
 
 export default {
     name: "update profile",
     async created() {
-        const response = await UserProfile.getUserProfileToUpdate(this.$route.params.user_id);
+        const response = await UserProfile.getUserProfileToUpdate();
         this.sections=response.sections;
         this.profileInfo=response.profileInfo;
         if (this.profileInfo) {
@@ -615,9 +616,7 @@ export default {
         * @return image url
         */
         resolve_porfile_img(size, imageName, profile_id) {
-            let image = size + '_' + imageName;
-            const url = `http://127.0.0.1:8000/api/v1/profile-image?fileName=${image}&profileID=${profile_id}`
-            return url;
+            return profileImagesService.resolve_porfile_img(size, imageName, profile_id);
         },
 
         /**

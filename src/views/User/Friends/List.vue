@@ -5,7 +5,8 @@
                 <h4 class="card-title"> قائمة الأصدقاء</h4>
             </template>
             <template v-slot:body>
-                <ul class="request-list list-inline m-0 p-0" v-if="friendsLoaded.length > 0">
+                <ul class="request-list list-inline m-0 p-0" v-if="friendsLoaded.length > 0"
+                    v-click-outside="onClickOutside">
                     <li class="d-flex align-items-center  justify-content-between flex-wrap"
                         v-for="(friend, index) in friendsLoaded" :key="index">
                         <div class="user-img img-fluid flex-shrink-0">
@@ -20,7 +21,7 @@
                                 more_horiz
                             </span>
                             <div :class="`dropdown-menu dropdown-menu-right ${controlList[index] ? 'show' : ''}`"
-                                aria-labelledby="dropdownMenuButton" style="">
+                                aria-labelledby="dropdownMenuButton">
                                 <router-link :to="{ name: 'user.profile', params: { user_id: friend.id } }">
                                     <a class="dropdown-item d-flex align-items-center">
                                         <span class="material-symbols-outlined me-2 md-18">
@@ -29,12 +30,12 @@
                                         الملف الشخصي
                                     </a>
                                 </router-link>
-                                <a class="dropdown-item d-flex align-items-center">
+                                <!-- <a class="dropdown-item d-flex align-items-center">
                                     <span class="material-symbols-outlined me-2 md-18">
                                         forum
                                     </span>
                                     مراسلة
-                                </a>
+                                </a> -->
                                 <a class="dropdown-item d-flex align-items-center" v-if="user_id == auth.id"
                                     @click="deleteFriendship(friend.pivot)">
                                     <span class="material-symbols-outlined me-2 md-18">
@@ -42,8 +43,15 @@
                                     </span>
                                     الغاء الصداقة
                                 </a>
-                                <a class="dropdown-item d-flex align-items-center" v-else
-                                    @click="createFriendship(friend.id)">
+                                <a class="dropdown-item d-flex align-items-center"
+                                    v-else-if="checkNotFriendsOfAuth(friend.id)" @click="createFriendship(friend.id)">
+                                    <span class="material-symbols-outlined me-2 md-18">
+                                        person_remove
+                                    </span>
+                                    الغاء طلب الصداقة
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center"
+                                    v-else-if="!checkFriendsOfAuth(friend.id)" @click="createFriendship(friend.id)">
                                     <span class="material-symbols-outlined me-2 md-18">
                                         group_add
                                     </span>
@@ -75,20 +83,28 @@
 <script>
 import UserInfo from '@/Services/userInfoService'
 import FriendServices from '@/API/services/friend.service'
+import vClickOutside from "click-outside-vue3"
 
 export default {
     name: 'FriendList',
     async created() {
         const user_data = await UserInfo.getUser();
         this.auth = user_data.user;
-        this.friends = await FriendServices.getAllFriends(this.user_id);
+        const response = await FriendServices.getAllFriends(this.user_id);
+        this.friends = response.allFriends;
+        this.friendsOfAuth = response.friendsOfAuth;
+        this.notFriendsOfAuth = response.notFriendsOfAuth;
     },
-
+    directives: {
+        clickOutside: vClickOutside.directive
+    },
     data() {
         return {
             controlList: [],
             friends: [
             ],
+            friendsOfAuth: [],
+            notFriendsOfAuth: [],
             length: 10,
             auth: null,
             user_id: this.$route.params.user_id,
@@ -98,6 +114,9 @@ export default {
         showList(index) {
             this.controlList.fill(false)
             this.controlList[index] = true;
+        },
+        onClickOutside() {
+            this.controlList.fill(false)
         },
         deleteFriendship(pivot) {
             const swalWithBootstrapButtons = this.$swal.mixin({
@@ -149,19 +168,52 @@ export default {
         },
 
         async createFriendship(friend_id) {
-            const response = await FriendServices.create(friend_id);
-        },
-        loadMore() {
-            if (this.length > this.friends.length) return;
-            this.length = this.length + 10;
-        },
-    },
-    computed: {
-        friendsLoaded() {
-            return this.friends.slice(0, this.length);
-        },
-    },
 
-}
+            try {
+                const response = await FriendServices.create(friend_id);
+                this.notFriendsOfAuth.push(friend_id)
+                const swalWithBootstrapButtons = this.$swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-primary btn-lg',
+                    },
+                    buttonsStyling: false
+                })
+                swalWithBootstrapButtons.fire({
+                    title: 'تم الارسال',
+                    text: "تم ارسال طلب الصداقة",
+                    icon: 'success',
+                    confirmButtonText: 'حسنا',
+                    showClass: {
+                        popup: 'animate__animated animate__zoomIn'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__zoomOut'
+                    }
+                })
+            }
+            catch (error) {
+                console.log(error)
+            }
+            //setTimeout(location.reload(), 30000);
+
+        },
+            loadMore() {
+                if (this.length > this.friends.length) return;
+                this.length = this.length + 10;
+            },
+            checkFriendsOfAuth(user_id) {
+                return this.friendsOfAuth.includes(user_id)
+            },
+            checkNotFriendsOfAuth(user_id) {
+                return this.notFriendsOfAuth.includes(user_id)
+            },
+        },
+        computed: {
+            friendsLoaded() {
+                return this.friends.slice(0, this.length);
+            },
+        },
+
+    }
 
 </script>

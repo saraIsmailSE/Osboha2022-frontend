@@ -53,8 +53,8 @@ export default {
     },
     data() {
         return {
-            month_achievement: null,
-            month_title:"",
+            month_achievement: [],
+            month_title:"شهر",
             monthAchievementFilter: 'current',
             line_option: {
                 responsive: true,

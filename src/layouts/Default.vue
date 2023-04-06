@@ -26,7 +26,7 @@
     <!-- <DefaultRightSidebar/> -->
     <CurrentReading />
     <ReadingTeam />
-    <WorkingGroups />
+    <Timer />
     <GroupChallenge />
     <TeamReadingShortcut />
     <TeamExceptionShortcut />
@@ -42,7 +42,7 @@ import ReadingTeam from '../components/custom/partials/Sidebar/LeftSidebar/Readi
 import TeamReadingShortcut from '../components/custom/partials/Sidebar/LeftSidebar/TeamReading-shortcut'
 import TeamExceptionShortcut from '../components/custom/partials/Sidebar/LeftSidebar/TeamException-shortcut.vue'
 import GroupChallenge from '../components/custom/partials/Sidebar/LeftSidebar/GroupChallenge'
-import WorkingGroups from '../components/custom/partials/Sidebar/LeftSidebar/WorkingGroups.vue'
+import Timer from '../components/custom/partials/Sidebar/LeftSidebar/Timer.vue'
 import Breadcrumb from '../components/custom/Breadcrumb/Breadcrumb'
 import logo from '../assets/images/logo.png'
 const fslightbox = () => import('../plugins/fslightbox/fslightbox')
@@ -55,7 +55,7 @@ export default {
     DefaultSidebar,
     DefaultHeader,
     DefaultFooter,
-    WorkingGroups,
+    Timer,
     CurrentReading,
     ReadingTeam,
     TeamReadingShortcut,

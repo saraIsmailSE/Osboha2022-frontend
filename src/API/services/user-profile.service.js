@@ -19,9 +19,9 @@ class UserProfile {
    *  @param  user_id
    * @return profile
    */
-  async getUserProfileToUpdate(user_id) {
+  async getUserProfileToUpdate() {
     try {
-      const profile = await api.get(`user-profile/showToUpdate/${user_id}`);
+      const profile = await api.get(`user-profile/show-to-update`);
       return profile.data.data;
     } catch (error) {
       return error;

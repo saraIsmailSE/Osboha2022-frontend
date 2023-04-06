@@ -1,23 +1,16 @@
 <template>
   <div class="row" v-if="group">
     <div class="col-lg-12">
-      <div
-        class="d-flex align-items-center justify-content-between mb-3 flex-wrap"
-      >
+      <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap">
         <div class="group-info d-flex align-items-center">
           <div class="me-3">
-            <img
-              class="rounded-circle img-fluid avatar-100"
-              src="@/assets/images/main/current_book.png"
-              alt=""
-            />
+            <img class="rounded-circle img-fluid avatar-100" src="@/assets/images/main/current_book.png" alt="" />
           </div>
           <div class="info">
             <h4>{{ group.name }}</h4>
-            <p class="mb-0">
-              <i class="ri-lock-fill pe-2"></i>مجموعة القراءة .
-              {{ group.user_ambassador_count }} سفير
-            </p>
+            <p class="mb-0"><i class="ri-lock-fill pe-2"></i>{{ group_type[group.type.type] }} . {{
+              group.user_ambassador_count }}
+              سفير</p>
           </div>
         </div>
         <listMembers :members="group.users" :authInGroup="authInGroup" />
@@ -48,11 +41,7 @@
                 </div>
               </div>
             </li>
-            <li
-              class="mb-3"
-              v-for="administrator in group.group_administrators"
-              :key="administrator.id"
-            >
+            <li class="mb-3" v-for="administrator in group.group_administrators" :key="administrator.id">
               <div class="d-flex">
                 <div class="flex-shrink-0">
                   <i class="material-symbols-outlined">group</i>
@@ -92,56 +81,31 @@
           </div>
         </div>
         <div class="card-body row d-flex justify-content-center">
-          <router-link
-            :to="{ name: 'group.group-books', params: { group_id: group_id } }"
-            class="btn btn-primary d-block mt-3 col-5 me-1"
-            >احصائيات المجموعة
+          <router-link :to="{ name: 'group.group-books', params: { group_id: group_id } }"
+            class="btn btn-primary d-block mt-3 col-5 me-1">احصائيات المجموعة
           </router-link>
-          <router-link
-            :to="{ name: 'group.group-books', params: { group_id: group_id } }"
-            class="btn btn-primary d-block mt-3 col-5 me-1"
-            >كتب يقرأوها الأعضاء
+          <router-link :to="{ name: 'group.group-books', params: { group_id: group_id } }"
+            class="btn btn-primary d-block mt-3 col-5 me-1">كتب يقرأوها الأعضاء
           </router-link>
-          <router-link
-            :to="{
-              name: 'group.group-exceptions',
-              params: { group_id: group_id },
-            }"
-            class="btn btn-primary d-block mt-3 col-5 me-1"
-            v-if="authInGroup && authInGroup.user_type != 'ambassador'"
-            >الاجازات</router-link
-          >
+          <router-link :to="{
+            name: 'group.group-exceptions',
+            params: { group_id: group_id },
+          }" class="btn btn-primary d-block mt-3 col-5 me-1"
+            v-if="authInGroup && authInGroup.user_type != 'ambassador'">الاجازات</router-link>
           <!-- <router-link to="/" class="btn btn-primary d-block mt-3 col-5 me-1">التحديات</router-link> -->
-          <router-link
-            :to="{
-              name: 'group.ambassadors-reading',
-              params: { group_id: group_id },
-            }"
-            class="btn btn-primary d-block mt-3 col-5 me-1"
-            v-if="authInGroup && authInGroup.user_type != 'ambassador'"
-          >
+          <router-link :to="{
+            name: 'group.ambassadors-reading',
+            params: { group_id: group_id },
+          }" class="btn btn-primary d-block mt-3 col-5 me-1"
+            v-if="authInGroup && authInGroup.user_type != 'ambassador'">
             انجاز السفراء
           </router-link>
-          <router-link
-            :to="{
-              name: 'group.ambassadors-reading',
-              params: { group_id: group_id },
-            }"
+          <router-link :to="{ name: 'group.auditMarks', params: { group_id: group_id } }"
             class="btn btn-primary d-block mt-3 col-5 me-1"
-            v-if="authInGroup && authInGroup.user_type != 'ambassador'"
-          >
-            انجاز القادة
+            v-if="(authInGroup && authInGroup.user_type != 'ambassador') && (group.type.type == 'supervising' || group.type.type == 'advising')">
+            تدقيق العلامات
           </router-link>
-          <router-link
-            :to="{
-              name: 'group.ambassadors-reading',
-              params: { group_id: group_id },
-            }"
-            class="btn btn-primary d-block mt-3 col-5 me-1"
-            v-if="authInGroup && authInGroup.user_type != 'ambassador'"
-          >
-            انجاز سفراء القادة
-          </router-link>
+
         </div>
       </div>
     </div>
@@ -194,73 +158,12 @@ export default {
       week: null,
       week_avg: 0,
       authInGroup: null,
+      group_type: {
+        'reading': 'فريق متابعة',
+        'supervising': 'فريق رقابة',
+        'advising': 'فريق توجيه'
+      },
       posts: [
-        // {
-        //   id: 1,
-        //   images: ['150x150-3.jpg'],
-        //   author: 'USER',
-        //   author_image: 'avatar-02.jpg',
-        //   created_at: '12-06-2019',
-        //   body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-        //   comments: [
-        //     {
-        //       author: 'USER',
-        //       author_image: 'avatar-02.jpg',
-        //       created_at: '12-06-2019',
-        //       body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-        //     },
-        //     {
-        //       image: '150x150-3.jpg',
-        //       author: 'USER',
-        //       author_image: 'avatar-02.jpg',
-        //       created_at: '12-06-2019',
-        //       body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-        //     },
-        //   ]
-        // },
-        // {
-        //   id: 2,
-        //   author: 'USER 2',
-        //   author_image: 'avatar-02.jpg',
-        //   created_at: '12-06-2019',
-        //   body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-        //   comments: [
-        //     {
-        //       author: 'USER',
-        //       author_image: 'avatar-02.jpg',
-        //       created_at: '12-06-2019',
-        //       body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-        //     },
-        //     {
-        //       image: ['150x150-3.jpg'],
-        //       author: 'USER',
-        //       author_image: 'avatar-02.jpg',
-        //       created_at: '12-06-2019',
-        //       body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-        //     },
-        //     {
-        //       author: 'USER',
-        //       author_image: 'avatar-02.jpg',
-        //       created_at: '12-06-2019',
-        //       body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-        //     },
-        //     {
-        //       image: 'profile-bg9.jpg',
-        //       author: 'USER',
-        //       author_image: 'avatar-02.jpg',
-        //       created_at: '12-06-2019',
-        //       body: 'Lorem ipsum dolor sit amet, aucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-        //     },
-        //   ]
-        // },
-        // {
-        //   id: 3,
-        //   images: ['150x150-3.jpg', '150x150-3.jpg'],
-        //   author: 'USER 3',
-        //   author_image: 'avatar-02.jpg',
-        //   created_at: '12-06-2019',
-        //   body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nulla dolor, ornare at commodo non, feugiat non nisi. Phasellus faucibus mollis pharetra. Proin blandit ac massa sed rhoncus',
-        // },
       ],
     };
   },

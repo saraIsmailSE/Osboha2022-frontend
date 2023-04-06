@@ -6,11 +6,28 @@
             </template>
             <template v-slot:body>
                 <ul class="request-list list-inline m-0 p-0" v-if="usersLoaded.length > 0">
-                    <li class="d-flex align-items-center  justify-content-between flex-wrap" 
+                    <!-- <form class="mb-3">
+                        <div class="input-group w-100 m-auto p-2">
+                            <input type="search" class="form-control rounded" placeholder="ابحث عن سفير" aria-label="Search"
+                                aria-describedby="search-addon" @input="searchForAmbassador()"
+                                v-model="ambassador_name" />
+                            <button type="button" class="btn btn-outline-primary"><span
+                                    class="material-symbols-outlined lh-1">
+                                    search
+                                </span></button>
+                        </div>
+                    </form> -->
+
+                    <li class="d-flex align-items-center  justify-content-between flex-wrap"
                         v-for="(user, index) in usersLoaded" :key="index">
                         <div class="user-img img-fluid flex-shrink-0">
-                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
-                                alt="story-img" class="rounded-circle avatar-40">
+                            <img v-if="user.user_profile.profile_picture"
+                                :src="resolve_porfile_img('60x60', user.user_profile.profile_picture, user.user_profile.id)"
+                                alt="profile-img" class="rounded-circle avatar-40" :title="user.name" />
+
+                            <img v-else
+                                :src="resolve_porfile_img('60x60', 'ananimous_' + user.gender + '.png', 'ananimous')"
+                                alt="profile-img" :title="user.name" class="rounded-circle avatar-40">
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <router-link :to="{ name: 'user.profile', params: { user_id: user.id } }">
@@ -22,7 +39,8 @@
                             <span role="button" @click="showList(index)" class="material-symbols-outlined">
                                 more_horiz
                             </span>
-                            <div  v-click-outside="hideList" :class="`dropdown-menu dropdown-menu-right ${controlList[index] ? 'show' : ''}`"
+                            <div v-click-outside="hideList"
+                                :class="`dropdown-menu dropdown-menu-right ${controlList[index] ? 'show' : ''}`"
                                 aria-labelledby="dropdownMenuButton">
                                 <router-link :to="{ name: 'user.profile', params: { user_id: user.id } }">
                                     <a class="dropdown-item d-flex align-items-center">
@@ -72,6 +90,8 @@ import UserInfo from '@/Services/userInfoService'
 import FriendServices from '@/API/services/friend.service'
 import UserGroup from '@/API/services/user-group.service'
 import vClickOutside from "click-outside-vue3"
+import profileImagesService from '@/API/services/profile.images.service'
+import GroupService from '@/API/services/group.service';
 
 export default {
     name: 'FriendList',
@@ -91,6 +111,7 @@ export default {
             users: [],
             length: 10,
             auth: null,
+            ambassador_name:"",
         }
     },
     methods: {
@@ -103,12 +124,29 @@ export default {
         },
         async createFriendship(friend_id) {
             const response = await FriendServices.create(friend_id);
-            console.log(response)
         },
         loadMore() {
             if (this.length > this.users.length) return;
             this.length = this.length + 10;
         },
+        /**
+        * get profile picture or cover.
+        *  @param  image size, image name, profile id
+        * @return image url
+        */
+        resolve_porfile_img(size, imageName, profile_id) {
+            return profileImagesService.resolve_porfile_img(size, imageName, profile_id);
+        },
+        /**
+         * search for ambassador
+         * @param  ambassador_name, group_id 
+         * @return ambassador
+         */
+        async searchForAmbassador() {
+            const response = await GroupService.searchForAmbassador(this.ambassador_name, this.$route.params.group_id);
+            this.users = response.users
+        }
+
     },
     computed: {
         usersLoaded() {

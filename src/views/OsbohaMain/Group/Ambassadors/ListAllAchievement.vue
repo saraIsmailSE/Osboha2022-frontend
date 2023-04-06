@@ -3,7 +3,7 @@
         <div class="col-12">
             <iq-card body-class="p-0">
                 <template v-slot:body>
-                    <GroupTitle :group_id:="group.id" :group_name="group.name" :group_users="group_users"/> 
+                    <GroupTitle :group_id:="group.id" :group_name="group.name" :group_users="group_users" />
                     <ul class="todo-task-lists m-0 p-0" v-if="achievementsLoaded && achievementsLoaded.length > 0">
                         <div class="dropdown w-100 p-3">
                             <select class="form-select" @change="listByWeek()" v-model="weekFilter">
@@ -14,7 +14,11 @@
                         <template v-for="(ambassador, index) in achievementsLoaded" :key="index">
                             <li class="d-flex align-items-center p-3">
                                 <div class="user-img img-fluid">
-                                    <img :src="require('@/assets/images/user/03.jpg')" alt="story-img"
+                                    <img v-if="ambassador.user.user_profile.profile_picture" :src="resolve_porfile_img('60x60', ambassador.user.user_profile.profile_picture, ambassador.user.user_profile.id)"
+                                        alt="profile-img" class="rounded-circle avatar-40" :title="ambassador.user.name"/>
+
+                                    <img v-else :src="resolve_porfile_img('60x60', 'ananimous_'+ambassador.user.gender+'.png', 'ananimous')"
+                                        alt="profile-img" :title="ambassador.user.name"
                                         class="rounded-circle avatar-40">
                                 </div>
                                 <div class="d-flex align-items-center w-100 row">
@@ -56,7 +60,9 @@
   
 <script>
 import GroupService from '@/API/services/group.service';
-import GroupTitle from '@/components/group/GroupTitle.vue'
+import GroupTitle from '@/components/group/GroupTitle.vue';
+import profileImagesService from '@/API/services/profile.images.service'
+
 export default {
     name: 'List All Group Ambassadors Achievement',
     async created() {
@@ -71,7 +77,7 @@ export default {
             console.log(error);
         }
     },
-    components:{
+    components: {
         GroupTitle,
     },
     data() {
@@ -94,7 +100,16 @@ export default {
             this.group_users = response.group_users
             this.ambassadorsAchievement = response.ambassadors_achievement
 
-        }
+        },
+        /**
+        * get profile picture or cover.
+        *  @param  image size, image name, profile id
+        * @return image url
+        */
+        resolve_porfile_img(size, imageName, profile_id) {
+            return profileImagesService.resolve_porfile_img(size, imageName, profile_id);
+        },
+
     },
     computed: {
         achievementsLoaded() {

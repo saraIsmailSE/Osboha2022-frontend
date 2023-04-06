@@ -83,6 +83,22 @@ class GroupService {
             return error
         }
     }
+    async searchForAmbassadorAchievement(ambassador_name,group_id,week_filter) {
+        try {
+            const response = await api.get(`group/search-for-ambassador-achievement/${ambassador_name}/${group_id}/${week_filter}`);
+            return response.data.data;
+        } catch (error) {
+            return error
+        }
+    }
+    async searchForAmbassador(ambassador_name,group_id) {
+        try {
+            const response = await api.get(`group/search-for-ambassador/${ambassador_name}/${group_id}`);
+            return response.data.data;
+        } catch (error) {
+            return error
+        }
+    }
 
     async createLeaderRequest(request) {
         try {

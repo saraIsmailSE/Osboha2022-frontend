@@ -2,10 +2,10 @@ import { data } from "jquery";
 import { api } from "../Intercepter";
 
 class ThesisService {
-  async getThesisById(id) {
+  async getThesisById(thesis_id) {
     try {
-      const thesis = await api.post(`/thesis/show`, { thesis_id: id });
-      return thesis.data;
+      const thesis = await api.get(`/thesis/show/${thesis_id}`);
+      return thesis.data.data;
     } catch (error) {
       return error;
     }
