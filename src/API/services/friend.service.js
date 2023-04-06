@@ -12,18 +12,18 @@ class FriendService {
 
   async getFriendsRequests() {
     try {
-      const requests = await api.get(`/friend/un-accepted`);
+      const requests = await api.get(`/friends/un-accepted`);
       return requests.data.data;
     } catch (error) {
       return error;
 
-        }
     }
+  }
 
 
   async create(friend_id) {
     try {
-      return await api.post("/friend/create", { friend_id });
+      return await api.post("/friends/create", { friend_id });
     } catch (error) {
       return error;
     }
@@ -31,7 +31,7 @@ class FriendService {
 
   async getFriendshipById(friendship_id) {
     try {
-      const friendship = await api.post("/friend/show", { friendship_id });
+      const friendship = await api.post("/friends/show", { friendship_id });
       return friendship.data;
     } catch (error) {
       return error;
@@ -39,30 +39,26 @@ class FriendService {
   }
 
 
-  async accept(pivotData) {
-    const pivot = new FormData();
-    pivot.append("user_id", pivotData.user_id);
-    pivot.append("friend_id", pivotData.friend_id);
+  async accept(friendship_id) {
     try {
-      const response = await api.post(`/friend/accept`, pivot);
-      return response.data;
+      const friendship = await api.get(`/friends/accept/${friendship_id}`);
+      return friendship.data;
     } catch (error) {
       return error;
     }
   }
 
-  async delete(pivotData) {
+  async delete(user_id, friend_id) {
     const pivot = new FormData();
-    pivot.append("user_id", pivotData.user_id);
-    pivot.append("friend_id", pivotData.friend_id);
+    pivot.append("user_id", user_id);
+    pivot.append("friend_id", friend_id);
     try {
-      const response = await api.post(`/friend/delete`, pivot);
+      const response = await api.post(`/friends/delete`, pivot);
       return response.data;
     } catch (error) {
       return error;
     }
-}
-
+  }
 }
 
 export default new FriendService();

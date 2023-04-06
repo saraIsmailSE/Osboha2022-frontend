@@ -8,7 +8,7 @@
                     </div>
                     <div class="info">
                         <h4>{{ group.name }}</h4>
-                        <p class="mb-0"><i class="ri-lock-fill pe-2"></i>مجموعة القراءة . {{ group.user_ambassador_count }}
+                        <p class="mb-0"><i class="ri-lock-fill pe-2"></i>{{group_type[group.type.type]}} . {{ group.user_ambassador_count }}
                             سفير</p>
                     </div>
                 </div>
@@ -81,13 +81,10 @@
                     <router-link :to="{ name: 'group.ambassadors-reading', params: { group_id: group_id } }" class="btn btn-primary d-block mt-3 col-5 me-1" v-if="authInGroup && authInGroup.user_type != 'ambassador'">
                         انجاز السفراء
                     </router-link>
-                    <router-link :to="{ name: 'group.ambassadors-reading', params: { group_id: group_id } }" class="btn btn-primary d-block mt-3 col-5 me-1" v-if="authInGroup && authInGroup.user_type != 'ambassador'">
-                        انجاز القادة
+                    <router-link :to="{ name: 'group.auditMarks', params: { group_id: group_id } }" class="btn btn-primary d-block mt-3 col-5 me-1" 
+                    v-if="(authInGroup && authInGroup.user_type != 'ambassador') && (group.type.type == 'supervising' || group.type.type == 'advising')">
+                        تدقيق العلامات
                     </router-link>
-                    <router-link :to="{ name: 'group.ambassadors-reading', params: { group_id: group_id } }" class="btn btn-primary d-block mt-3 col-5 me-1" v-if="authInGroup && authInGroup.user_type != 'ambassador'">
-                        انجاز سفراء القادة
-                    </router-link>
-
                 </div>
             </div>
         </div>
@@ -132,7 +129,6 @@ export default {
             this.week_avg = response.week_avg
             this.week = response.week
             this.authInGroup=response.authInGroup;
-
         }
         catch (error) {
             console.log(error);
@@ -146,6 +142,11 @@ export default {
             week: null,
             week_avg: 0,
             authInGroup:null,
+            group_type:{
+                'reading':'فريق متابعة',
+                'supervising':'فريق رقابة',
+                'advising':'فريق توجيه'
+            },
             posts: [
                 // {
                 //   id: 1,

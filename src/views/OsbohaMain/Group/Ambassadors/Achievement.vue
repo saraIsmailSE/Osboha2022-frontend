@@ -11,16 +11,21 @@
             <form>
               <div class="input-group w-100 m-auto p-2">
                 <input type="search" class="form-control rounded" placeholder="ابحث عن سفير" aria-label="Search"
-                  aria-describedby="search-addon" />
+                  aria-describedby="search-addon" @input="searchForAmbassadorAchievement()" v-model="ambassador_name"/>
                 <button type="button" class="btn btn-outline-primary"><span class="material-symbols-outlined lh-1">
                     search
                   </span></button>
               </div>
             </form>
-            <template v-for="(ambassador, index) in ambassadorsAchievementList" :key="index">
+            <template v-for="(ambassador, index) in achievementList" :key="index">
               <li class="d-flex align-items-center p-3">
                 <div class="user-img img-fluid">
-                  <img :src="require('@/assets/images/user/03.jpg')" alt="story-img" class="rounded-circle avatar-40">
+                  <img v-if="ambassador.user.user_profile.profile_picture"
+                    :src="resolve_porfile_img('60x60', ambassador.user.user_profile.profile_picture, ambassador.user.user_profile.id)"
+                    alt="profile-img" class="rounded-circle avatar-40" :title="ambassador.user.name" />
+
+                  <img v-else :src="resolve_porfile_img('60x60', 'ananimous_' + ambassador.user.gender + '.png', 'ananimous')"
+                    alt="profile-img" :title="ambassador.user.name" class="rounded-circle avatar-40">
                 </div>
                 <div class="d-flex align-items-center w-100 row">
                   <div class="col-lg-3 col-md-3 col-sm-12 ms-3">
@@ -65,6 +70,8 @@
 import GroupTitle from '@/components/group/GroupTitle.vue'
 import MostRead from './MostRead'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js'
+import profileImagesService from '@/API/services/profile.images.service'
+import GroupService from '@/API/services/group.service';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement)
 
@@ -73,6 +80,9 @@ export default {
   components: {
     GroupTitle,
     MostRead
+  },
+  created(){
+    this.achievementList= this.ambassadorsAchievementList
   },
   props: {
     ambassadorsAchievementList: {
@@ -102,11 +112,30 @@ export default {
   },
   data() {
     return {
-      search: '',
+      achievementList:[],
+      ambassador_name: '',
       show: false,
     }
   },
   methods: {
+        /**
+        * get profile picture or cover.
+        *  @param  image size, image name, profile id
+        * @return image url
+        */
+        resolve_porfile_img(size, imageName, profile_id) {
+            return profileImagesService.resolve_porfile_img(size, imageName, profile_id);
+        },
+
+    /**
+     * ambassador achievment in a week
+     * @param ambassador_name, group _id , week filter [current - previous ]
+     * @return ambassador achievment
+     */
+      async searchForAmbassadorAchievement(){
+          const response = await GroupService.searchForAmbassadorAchievement(this.ambassador_name,this.$route.params.group_id,'current');
+          this.achievementList=response.ambassador_achievement
+        }
   }
 }
 </script>

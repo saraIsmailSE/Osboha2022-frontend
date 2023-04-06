@@ -8,11 +8,11 @@
                             <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
                                 class="rounded-circle img-fluid" style="width: 100px;" />
                         </div>
-                        <h4 class="mb-2 text-center">Julie L. Arsenault</h4>
-                        <p class="text-center mb-4">
+                        <h4 class="mb-2 text-center">{{mark.user.name}}</h4>
+                        <p class="text-center mb-4" style=" direction: rtl;">
                             فريق المتابعة
                             <span class="mx-2">|</span>
-                            <a href="#!">A123</a>
+                            <a href="#!">{{group.name}}</a>
                         </p>
                         <div class="d-flex justify-content-between text-center mt-5 mb-2">
                             <div>
@@ -48,10 +48,15 @@
     </div>
 </template>
 <script>
+
 export default {
     name: 'Achievement Card',
     props: {
         mark: {
+            type: [Object],
+            required: true,
+        },
+        group: {
             type: [Object],
             required: true,
         }

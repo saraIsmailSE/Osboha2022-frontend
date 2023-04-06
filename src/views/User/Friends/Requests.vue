@@ -12,14 +12,15 @@
                             <div class="user-img img-fluid flex-shrink-0">
                                 <img src="@/assets/images/user/12.jpg" alt="story-img" class="rounded-circle avatar-40">
                             </div>
+                            {{ request }}
                             <div class="flex-grow-1 ms-3">
-                                <router-link :to="{ name: 'user.profile', params: { user_id: request.id } }">
-                                    <h6>{{ request.name }}</h6>
+                                <router-link :to="{ name: 'user.profile', params: { user_id: request.user.id } }">
+                                    <h6>{{ request.user.name }}</h6>
                                 </router-link>
                             </div>
                             <div class="d-flex align-items-center mt-2 mt-md-0">
                                 <div class="confirm-click-btn">
-                                    <a role="button" class="me-3 btn btn-primary rounde d-flex align-items-center" @click="acceptrequest(request.pivot)">
+                                    <a role="button" class="me-3 btn btn-primary rounde d-flex align-items-center" @click="acceptrequest(request.id)">
                                         <span class="material-symbols-outlined md-18 me-1">
                                             person_add
                                         </span>
@@ -29,7 +30,7 @@
                                         style="display: none;"></a>
                                 </div>
                                 <a role="button" class="btn btn-secondary rounded" data-extra-toggle="delete"
-                                    data-closest-elem=".item" @click="deleterequest(request.pivot)">حذف</a>
+                                    data-closest-elem=".item" @click="deleterequest(request.user_id,request.friend_id)">حذف</a>
                             </div>
                         </li>
                         <li class="d-block text-center mb-0 pb-0" v-if="friendRequest.length > length">
@@ -70,7 +71,7 @@ export default {
         }
     },
     methods: {
-        acceptrequest(pivot) {
+        acceptrequest(id) {
             const swalWithBootstrapButtons = this.$swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-primary btn-lg',
@@ -95,7 +96,7 @@ export default {
             })
                 .then((willDelete) => {
                     if (willDelete.isConfirmed) {
-                        FriendServices.accept(pivot)
+                        FriendServices.accept(id)
                             .then(response => {
                                 swalWithBootstrapButtons.fire({
                                     title: 'تم القبول',
@@ -118,7 +119,7 @@ export default {
                     }
                 })
         },
-        deleterequest(pivot) {
+        deleterequest(user_id,friend_id) {
             const swalWithBootstrapButtons = this.$swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-primary btn-lg',
@@ -143,7 +144,7 @@ export default {
             })
                 .then((willDelete) => {
                     if (willDelete.isConfirmed) {
-                        FriendServices.delete(pivot)
+                        FriendServices.delete(user_id,friend_id)
                             .then(response => {
                                 swalWithBootstrapButtons.fire({
                                     title: 'تم الحذف',

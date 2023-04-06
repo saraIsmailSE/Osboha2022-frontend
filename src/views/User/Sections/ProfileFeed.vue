@@ -174,7 +174,7 @@
                                 </span>
                             </button>
                             <div v-show="show_exceptions">
-                                <ul id="exceptionList" class="p-auto m-auto" v-if="exceptions">
+                                <ul id="exceptionList" class="p-auto m-auto" v-if="exceptions.length>0">
                                         <li v-for="(exception, index) in exceptions.slice(0,4)" :key="index" role="button" title="عرض">
                                             <router-link
                                         :to="{ name: 'exceptions.listException', params: { exception_id: exception.id } }">
@@ -282,7 +282,7 @@ export default {
     },
     computed: {
         eligibleForException() {
-            if (this.exceptions) {
+            if (this.exceptions.length>0) {
                 if (this.exceptions[0].type == 'freez') {
                     let lastException = new Date(this.exceptions[0].end_at);
                     const nextFreez = new Date(lastException)

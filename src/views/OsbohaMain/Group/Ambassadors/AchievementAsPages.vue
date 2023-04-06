@@ -17,8 +17,12 @@
                                 <li class="d-flex mb-4 align-items-center" v-for="(record, index) in achievementsLoaded"
                                     :key=index>
                                     <div class="user-img img-fluid">
-                                        <img :src="require('@/assets/images/user/03.jpg')" alt="story-img"
-                                            class="rounded-circle avatar-40">
+                                    <img v-if="record.user.user_profile.profile_picture" :src="resolve_porfile_img('60x60', record.user.user_profile.profile_picture, record.user.user_profile.id)"
+                                        alt="profile-img" class="rounded-circle avatar-40" :title="record.user.name"/>
+
+                                    <img v-else :src="resolve_porfile_img('60x60', 'ananimous_'+record.user.gender+'.png', 'ananimous')"
+                                        alt="profile-img" :title="record.user.name"
+                                        class="rounded-circle avatar-40">
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between w-100">
                                         <div class="ms-3">
@@ -52,6 +56,7 @@
 <script>
 import GroupService from '@/API/services/group.service';
 import GroupTitle from '@/components/group/GroupTitle.vue'
+import profileImagesService from '@/API/services/profile.images.service'
 
 export default {
     name: 'Achievement As Pages',
@@ -91,7 +96,16 @@ export default {
             this.group_users = response.group_users
             this.ambassadorsAchievement = response.ambassadors_achievement
 
-        }
+        },
+        /**
+        * get profile picture or cover.
+        *  @param  image size, image name, profile id
+        * @return image url
+        */
+        resolve_porfile_img(size, imageName, profile_id) {
+            return profileImagesService.resolve_porfile_img(size, imageName, profile_id);
+        },
+
     },
     computed: {
         achievementsLoaded() {

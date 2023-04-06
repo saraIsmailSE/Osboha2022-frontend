@@ -1,79 +1,83 @@
 <template>
-    <div class="col-lg-12">
+    <div class="col-12">
         <div class="card card-block card-stretch card-height blog">
             <div class="card-header">
                 <h2>الانجاز</h2>
             </div>
             <div class="card-body">
-                <div class="blog-description" v-for="thesis in theses" :key="thesis.id">
-                    <h4 style="background-color: #F1F9F5; width: fit-content;"> اسم الكتاب {{ 1 }}</h4>
-
+                <div class="blog-description" v-for="(book, index) in theses" :key="index">
+                    <h5 class="book-title">{{ book.title }}</h5>
                     <table class="table w-100">
                         <thead>
                             <tr>
-                                <th scope="col">عدد الصفحات</th>
-                                <th scope="col">نوع الانجاز</th>
-                                <th scope="col">وقت الانجاز</th>
-                                <th scope="col">علامة الانجاز</th>
+                                <th scope="col">الصفحات</th>
+                                <th scope="col">نوعه</th>
+                                <th scope="col">وقته</th>
+                                <th scope="col">حالته</th>
 
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>{{ thesis.end - thesis.start }}</td>
-                                <td> أطروحة</td>
-                                <td> 20-20-2020</td>
-                                <td> 100%</td>
+                            <tr v-for="(thesis, index) in book" :key="index">
+                                <td>{{ thesis.end_page - thesis.start_page }}</td>
+
+                                <!-- نوع الانجاز [قراءة فقط -  اطروحة -  اطروحة واقتباسات] -->
+                                <td v-if="thesis.max_length > 0 && thesis.total_screenshots > 0"> أطروحة واقتباسات</td>
+                                <td v-else-if="thesis.max_length > 0"> أطروحة </td>
+                                <td v-else-if="thesis.total_screenshots > 0"> اقتباسات</td>
+                                <td v-else> قراءة فقط</td>
+                                <td> {{ format_date(thesis.updated_at) }}</td>
+                                <td v-if="thesis.is_acceptable && thesis.is_acceptable == 'accepted'"> <span
+                                        class="rounded-pill badge bg-primary">مقبول </span></td>
+                                <td v-else-if="thesis.is_acceptable && thesis.is_acceptable == 'rejected'"> <span
+                                        class="rounded-pill badge bg-danger">مرفوض </span></td>
+                                <td v-else> <span class="rounded-pill badge bg-warning"> بحاجة لمراجعة </span></td>
                                 <td>
-                                    <i role="button" class="material-symbols-outlined md-18 me-1 text-primary" data-bs-toggle=" modal"
-                                        data-bs-target="#thesisModal">
-                                        visibility
-                                    </i>
+                                    <router-link :to="{ name: 'group.listOneAmbassadorThesis', params: { thesis_id: thesis.id } }">
+                                        <i role="button" class="material-symbols-outlined md-18 me-1 text-primary">
+                                            visibility
+                                        </i>
+                                    </router-link>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                     <hr>
-                    <!-- Modal -->
-                    <div class="modal fade" id="thesisModal" tabindex="-1" aria-labelledby="thesisModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-scrollable">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="thesisModalLabel">اسم الكتاب</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>{{ thesis.body }}</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">اعتماد</button>
-                                    <select class="form-select btn btn-danger w-50">
-                                        <option class="bg-white text-dark" value="" selected>تعديل</option>
-                                        <option class="bg-white text-dark">خصم العلامة كاملة</option>
-                                        <option class="bg-white text-dark">حساب علامة أطروحة واحدة</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
+import moment from 'moment'
 export default {
     name: 'CheckThesis',
+
+    created() {
+        console.log(this.theses)
+
+    },
     props: {
         theses: { type: Object }
     },
     data() {
         return {
         }
-
     },
+    methods: {
+        format_date(value) {
+            if (value) {
+                return moment(String(value)).format('MM/DD/YYYY hh:mm')
+            }
+        },
+    },
+
 }
 </script>
+<style scoped>
+.book-title {
+    background-color: #F1F9F5;
+    width: fit-content;
+    direction: rtl;
+}
+</style>

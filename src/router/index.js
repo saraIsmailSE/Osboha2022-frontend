@@ -244,8 +244,14 @@ const groupChildRoute = (prop, mode = false) => [
   {
     path: '/group/list-ambassador-reading/:ambassador_id',
     name: prop + '.listOneAmbassadorReading',
-    meta: { auth: true, name: 'Ambassadors list reading' },
+    meta: { auth: true, name: 'Ambassador list reading' },
     component: () => import('../views/OsbohaMain/Group/Ambassadors/ListReading'),
+  },
+  {
+    path: '/group/list-ambassador-reading/thesis/:thesis_id',
+    name: prop + '.listOneAmbassadorThesis',
+    meta: { auth: true, name: 'Ambassador -  one thesis' },
+    component: () => import('../views/OsbohaMain/Group/Ambassadors/ListThesis'),
   },
   {
     path: '/group/all-ambassadors-achement/:group_id',
@@ -259,7 +265,12 @@ const groupChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: 'Achievement As Pages' },
     component: () => import('../views/OsbohaMain/Group/Ambassadors/AchievementAsPages'),
   },
-
+  {
+    path: '/audit-marks/:group_id',
+    name: prop + '.auditMarks',
+    meta: { auth: true, name: 'Audit Marks' },
+    component: () => import('../views/OsbohaMain/Group/AuditMarks'),
+  },
 ];
 
 const exceptionChildRoute = (prop, mode = false) => [
@@ -270,6 +281,16 @@ const exceptionChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMain/Group/Exceptions/ListOne"),
   },
 ];
+
+const timerChildRoute = (prop, mode = false) => [
+  {
+    path: "timer-list",
+    name: prop + ".timerList",
+    meta: { auth: true, name: "List timer" },
+    component: () => import("../views/OsbohaMain/Timer/Timer.vue"),
+  },
+];
+
 const routes = [
   {
     path: "/",
@@ -334,6 +355,13 @@ const routes = [
     component: () => import("../layouts/Default"),
     meta: { auth: true },
     children: exceptionChildRoute("exceptions"),
+  },
+  {
+    path: "/timer",
+    name: "timer",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: timerChildRoute("timer"),
   },
 ];
 
