@@ -47,9 +47,9 @@
   </main>
 </template>
 <script>
-import BookCard from "../../components/book/BookCard.vue";
-import BooksFilter from "../../components/filters/booksFilter.vue";
-import bookService from "../../API/services/book.service";
+import BookCard from "@/components/book/BookCard.vue";
+import BooksFilter from "@/components/filters/booksFilter.vue";
+import bookService from "@/API/services/book.service";
 import { watchEffect } from "vue";
 
 export default {

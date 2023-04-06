@@ -11,12 +11,22 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import "leaflet/dist/leaflet.css";
 
 import fontawsome from "./utilities/fontawsome";
+import Vue3Toasity from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 const app = createApp(App);
 app.use(VueSweetalert2);
 app.use(BootstrapVue3);
 app.use(VueApexCharts);
 app.use(fontawsome);
+app.use(Vue3Toasity, {
+  autoClose: 3000,
+  limit: 3,
+  position: "bottom-center",
+  theme: "colored",
+  rtl: true,
+});
+
 app.use(store).use(router).mount("#app");
 app.mixin({
   data() {
