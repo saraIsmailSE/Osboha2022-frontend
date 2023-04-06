@@ -18,9 +18,17 @@ class TokenService {
   getUser() {
     return JSON.parse(localStorage.getItem("user"));
   }
-  
-  getRole() {
-    return JSON.parse(localStorage.getItem("user")).role;
+
+  getRoles() {
+    return JSON.parse(localStorage.getItem("user")).user.roles;
+  }
+
+  getPermissions() {
+    return JSON.parse(localStorage.getItem("user")).user.permissions;
+  }
+
+  getUserProfile() {
+    return JSON.parse(localStorage.getItem("user")).user.user_profile;
   }
 
   setUser(user) {
@@ -31,7 +39,6 @@ class TokenService {
   removeUser() {
     localStorage.removeItem("user");
   }
-
 }
 
 export default new TokenService();

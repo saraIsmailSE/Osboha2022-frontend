@@ -1,7 +1,7 @@
 <template>
-  <alert variant="info" v-if="!friends.length" className="text-center">
+  <div v-if="!friends.length" class="text-center text-primary">
     لا يوجد أصدقاء لعرضهم
-  </alert>
+  </div>
   <div class="p-3 friends-list" v-if="friends.length">
     <div
       v-for="friend in friends"

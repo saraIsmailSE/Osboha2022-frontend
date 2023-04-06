@@ -1,21 +1,28 @@
 <template>
-    <div :class="`progress-bar ${className}`" :role="role" :aria-valuemin="ariavaluemin" :aria-valuenow="ariavaluenow" :aria-valuemax="ariavaluemax">
-      {{innerText}}
-      <slot/>
-    </div>
+  <div
+    :class="`progress-bar ${className}`"
+    :role="role"
+    :aria-valuemin="ariavaluemin"
+    :aria-valuenow="ariavaluenow"
+    :aria-valuemax="ariavaluemax"
+  >
+    {{ innerText }}
+    <slot />
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'progressbar',
+  name: "progressbar",
   props: {
     ariavaluemin: { type: Number, default: 0 },
     ariavaluenow: { type: Number },
     ariavaluemax: { type: Number },
-    color: { type: String, default: 'primary' },
+    color: { type: String, default: "primary" },
     verticle: { type: Boolean, default: false },
-    role: { type: String, default: 'progressbar' },
-    innerText: { type: String }
-  }
-}
+    role: { type: String, default: "progressbar" },
+    innerText: { type: String },
+    className: { type: String },
+  },
+};
 </script>

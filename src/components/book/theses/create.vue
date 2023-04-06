@@ -180,8 +180,8 @@
 <script>
 import useVuelidate from "@vuelidate/core";
 import { required, requiredIf } from "@vuelidate/validators";
-import commentService from "../../../API/services/comment.service";
-import ImagePreviewer from "../../custom/image-previewer/ImagePreviewer.vue";
+import commentService from "@/API/services/comment.service";
+import ImagePreviewer from "@/components/media/ImagePreviewer.vue";
 
 export default {
   name: "CreateThesis",

@@ -9,7 +9,11 @@
             aria-labelled-by="pills-feed-tab"
           >
             <!-- ##### <AddPost> ##### -->
-            <AddPost @add-post="addPost" :type="'normal'" :timeline_id="1" />
+            <AddPost
+              @add-post="addPost"
+              type="normal"
+              :timeline_id="timeline_id"
+            />
           </tab-content-item>
         </tab-content>
       </div>
@@ -19,8 +23,7 @@
           id="profile-feed"
           aria-labelled-by="pills-feed-tab"
         >
-          <LazyLoadedPosts :isMain="true" />
-          <!-- <Post v-for="post in posts" :key="post.id" :post="post" /> -->
+          <LazyLoadedPosts :isMain="true" ref="lazyLoadedPostsRef" />
         </tab-content-item>
       </tab-content>
     </div>
@@ -61,7 +64,7 @@
 
       <!-- ##### Articles ##### -->
 
-      <iq-card>
+      <!-- <iq-card>
         <template v-slot:headerTitle>
           <h4 class="card-title">أخر المقالات</h4>
         </template>
@@ -87,12 +90,12 @@
             </li>
           </ul>
         </template>
-      </iq-card>
+      </iq-card> -->
       <!-- ##### End Articles ##### -->
 
       <!-- ##### Infographic ##### -->
 
-      <iq-card>
+      <!-- <iq-card>
         <template v-slot:headerTitle>
           <h4 class="card-title">أخر الانفوجرافيك المضافة</h4>
         </template>
@@ -122,11 +125,11 @@
             </li>
           </ul>
         </template>
-      </iq-card>
+      </iq-card> -->
       <!-- ##### End Infographic ##### -->
       <!-- ##### Videos ##### -->
 
-      <iq-card>
+      <!-- <iq-card>
         <template v-slot:headerTitle>
           <h4 class="card-title">أخر الفيديوهات المضافة</h4>
         </template>
@@ -156,23 +159,22 @@
             </li>
           </ul>
         </template>
-      </iq-card>
+      </iq-card> -->
       <!-- ##### End Videos ##### -->
     </div>
   </div>
 </template>
 <script>
-import AddPost from "@/components/post/AddPost";
+import AddPost from "@/components/post/add/AddPost";
 import LazyLoadedPosts from "@/components/post/LazyLoadedPosts.vue";
+import userInfoService from "@/Services/userInfoService";
 
 export default {
   name: "SocialApp",
   components: { AddPost, LazyLoadedPosts },
-  mounted() {
-    // socialvue.index()
-  },
   data() {
     return {
+      timeline_id: null,
       books: [
         {
           title: "كتاب 1 ",
@@ -637,9 +639,12 @@ export default {
       ],
     };
   },
+  async created() {
+    this.timeline_id = await userInfoService.getUserProfile().timeline_id;
+  },
   methods: {
     addPost(post) {
-      this.posts.unshift(post);
+      this.$refs.lazyLoadedPostsRef.addNewPost(post);
     },
   },
 };

@@ -43,6 +43,15 @@ class PostService {
     }
   }
 
+  async delete(post_id) {
+    try {
+      const post = await api.delete(`/posts/${post_id}`);
+      return post.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
   async getPostById(post_id) {
     try {
       const post = await api.post("/post/show", { post_id });
@@ -66,29 +75,48 @@ class PostService {
     }
   }
 
-  async deletePostById(post_id) {
+  async getPostsForMainPage(page) {
     try {
-      return await api.post("/post/delete", { post_id });
-    } catch (error) {
-      return error;
-    }
-  }
-
-  async getPostsForMainPage($page) {
-    try {
-      const posts = await api.get(`/posts/home?page=${$page}`);
+      const posts = await api.get(`/posts/home?page=${page}`);
       return posts.data;
     } catch (error) {
       return error;
     }
   }
 
-  async postsByTimelineId(timeline_id, $page) {
+  async postsByTimelineId(timeline_id, page) {
     try {
       const posts = await api.get(
-        `/posts/timeline/${timeline_id}?page=${$page}`
+        `/posts/timeline/${timeline_id}?page=${page}`
       );
       return posts.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async getAnnouncements(page) {
+    try {
+      const posts = await api.get(`/posts/announcements?page=${page}`);
+      return posts.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async contolComments(post_id) {
+    try {
+      const response = await api.patch(`/posts/${post_id}/control-comments`);
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async pinPost(post_id) {
+    try {
+      const response = await api.patch(`/posts/pin/${post_id}`);
+      return response.data;
     } catch (error) {
       return error;
     }
