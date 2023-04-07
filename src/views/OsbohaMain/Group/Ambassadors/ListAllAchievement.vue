@@ -4,22 +4,23 @@
             <iq-card body-class="p-0">
                 <template v-slot:body>
                     <GroupTitle :group_id:="group.id" :group_name="group.name" :group_users="group_users" />
+                    <div class="dropdown w-100 p-3">
+                        <select class="form-select" @change="listByWeek()" v-model="weekFilter">
+                            <option class="dropdown-item" value="current" selected>هذا الأسبوع</option>
+                            <option class="dropdown-item" value="previous">الاسبوع السابق</option>
+                        </select>
+                    </div>
                     <ul class="todo-task-lists m-0 p-0" v-if="achievementsLoaded && achievementsLoaded.length > 0">
-                        <div class="dropdown w-100 p-3">
-                            <select class="form-select" @change="listByWeek()" v-model="weekFilter">
-                                <option class="dropdown-item" value="current" selected>هذا الأسبوع</option>
-                                <option class="dropdown-item" value="previous">الاسبوع السابق</option>
-                            </select>
-                        </div>
                         <template v-for="(ambassador, index) in achievementsLoaded" :key="index">
                             <li class="d-flex align-items-center p-3">
                                 <div class="user-img img-fluid">
-                                    <img v-if="ambassador.user.user_profile.profile_picture" :src="resolve_porfile_img('60x60', ambassador.user.user_profile.profile_picture, ambassador.user.user_profile.id)"
-                                        alt="profile-img" class="rounded-circle avatar-40" :title="ambassador.user.name"/>
+                                    <img v-if="ambassador.user.user_profile.profile_picture"
+                                        :src="resolve_porfile_img('60x60', ambassador.user.user_profile.profile_picture, ambassador.user.user_profile.id)"
+                                        alt="profile-img" class="rounded-circle avatar-40" :title="ambassador.user.name" />
 
-                                    <img v-else :src="resolve_porfile_img('60x60', 'ananimous_'+ambassador.user.gender+'.png', 'ananimous')"
-                                        alt="profile-img" :title="ambassador.user.name"
-                                        class="rounded-circle avatar-40">
+                                    <img v-else
+                                        :src="resolve_porfile_img('60x60', 'ananimous_' + ambassador.user.gender + '.png', 'ananimous')"
+                                        alt="profile-img" :title="ambassador.user.name" class="rounded-circle avatar-40">
                                 </div>
                                 <div class="d-flex align-items-center w-100 row">
                                     <div class="col-lg-3 col-md-3 col-sm-12 ms-3">
@@ -52,6 +53,15 @@
                         </li>
 
                     </ul>
+                    <iq-card class="iq-card" v-else>
+                        <div class="iq-card-body p-0">
+                            <div class="image-block text-center">
+                                <img src="@/assets/images/main/reader.png" class="img-fluid rounded w-75 mt-3" alt="no-amb">
+                            </div>
+                            <h4 class="text-center mt-3 mb-3">لا يوجد انجاز لهذا الاسبوع</h4>
+                        </div>
+                    </iq-card>
+
                 </template>
             </iq-card>
         </div>

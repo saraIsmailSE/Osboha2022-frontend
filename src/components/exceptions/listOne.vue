@@ -3,7 +3,7 @@
         <iq-card class="iq-card">
             <div class="iq-card-header-toolbar d-flex align-items-center mx-auto">
                 <h3 class="text-center mt-3 mb-3">
-                    طلب: {{ exception.type }}
+                    طلب: {{ exception.type.type.type }}
                 </h3>
             </div>
             <div class="iq-card-body ">
@@ -75,7 +75,7 @@
                         الاجراء المناسب
                     </h3>
                     <div v-if="exception.status == 'pending'">
-                        <div class="d-flex align-items-center mt-3" v-if="exception.type != 'تجميد استثنائي'">
+                        <div class="d-flex align-items-center mt-3" v-if="exception.type.type != 'تجميد استثنائي'">
                             <form @submit.prevent="submitDecision" class="post-text m-auto w-100 row">
                                 <div class="form-group col-12">
                                     <select class="form-select" v-model="v$.decideForm.decision.$model" :disabled="message">
@@ -114,7 +114,7 @@
                             </form>
                         </div>
                         <div class="d-flex align-items-center mt-3"
-                            v-else-if="exception.type == 'تجميد استثنائي' && (authInGroup && (authInGroup.user_type == 'admin' || authInGroup.user_type == 'advisor'))">
+                            v-else-if="exception.type.type == 'تجميد استثنائي' && (authInGroup && (authInGroup.user_type == 'admin' || authInGroup.user_type == 'advisor'))">
                             <form @submit.prevent="submitDecision" class="post-text m-auto w-100 row">
                                 <div class="form-group col-12">
                                     <select class="form-select" v-model="v$.decideForm.decision.$model" :disabled="message">

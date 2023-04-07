@@ -44,7 +44,7 @@ export default {
     async created() {
 
         try {
-            const response = await MarkService.ambassadorMark(1);
+            const response = await MarkService.ambassadorMark(this.$route.params.ambassador_id);
             this.mark = response.mark;
             this.theses = response.theses.reduce((groupByBook, item) => {
                 const group = (groupByBook[item.book.name] || []);
@@ -55,12 +55,6 @@ export default {
             }, {});
             this.group = response.group
             this.week = response.currentWeek
-
-
-            console.log(this.theses);
-
-
-
         }
         catch (error) {
             console.log(error);

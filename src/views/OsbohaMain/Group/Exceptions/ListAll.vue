@@ -7,7 +7,7 @@
                 </div>
                 <div class="iq-card-body p-3">
                     <div class="d-flex align-items-center mt-3">
-                        <div class="col-lg-12">
+                        <div class="col-12">
                             <div class="card card-block card-stretch card-height blog">
                                 <div class="card-header">
                                     <h2>الاجازات</h2>
@@ -61,9 +61,10 @@
                                             <tbody v-if="exceptions && exceptions.length>0">
                                                 <tr v-for="exception in exceptions" :key="exception.id">
                                                     <td>{{ exception.user.name }}</td>
-                                                    <td> {{ exception.type }}</td>
+                                                    <td> {{ exception.type.type }}</td>
                                                     <td> {{ exception_status[exception.status] }}</td>
-                                                    <td> {{ exception.end_at }}</td>
+                                                    <td v-if="exception.end_at"> {{ exception.end_at }}</td>
+                                                    <td v-else>------</td>
                                                     <router-link
                                                         :to="{ name: 'exceptions.listException', params: { exception_id: exception.id } }">
                                                         <td>

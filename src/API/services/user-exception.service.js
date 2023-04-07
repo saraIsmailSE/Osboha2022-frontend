@@ -35,7 +35,7 @@ class ExceptionService {
         try {
             const response = api.patch(`userexception/update-status/${exception_id}`, {
                 decision: decision.decision,
-                note: decision.decision
+                note: decision.note
             })
             return response.data.data;
         } catch (error) {

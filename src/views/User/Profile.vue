@@ -40,7 +40,7 @@
         <tab-content-item :active="false" id="profile-about" aria-labelled-by="pills-about-tab">
           <iq-card>
             <template v-slot:body>
-              <About :user_about="profile.info" :social_media="profile.social_media" />
+              <About :user_about="profile.info" :user="profile.user" :social_media="profile.social_media" />
             </template>
           </iq-card>
         </tab-content-item>
@@ -87,6 +87,7 @@ export default {
     const user_data = await UserInfo.getUser();
     this.auth = user_data.user;
     this.profile = await UserProfile.getUserProfileById(this.$route.params.user_id);
+    console.log(this.profile)
     this.readingInfo[0].value = this.profile.reading_Info.books;
     this.readingInfo[1].value = this.profile.reading_Info.thesis;
 
