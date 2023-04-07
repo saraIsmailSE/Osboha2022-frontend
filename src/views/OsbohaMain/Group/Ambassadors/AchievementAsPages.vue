@@ -6,23 +6,23 @@
                     <GroupTitle :group_id:="group.id" :group_name="group.name" :group_users="group_users" />
                     <div class="iq-todo-right">
                         <div class="iq-todo-friendlist mt-3">
+                            <div class="dropdown w-100 p-3">
+                                <select class="form-select" @change="listByWeek()" v-model="weekFilter">
+                                    <option class="dropdown-item" value="current" selected>هذا الأسبوع</option>
+                                    <option class="dropdown-item" value="previous">الاسبوع السابق</option>
+                                </select>
+                            </div>
                             <ul class="todo-task-lists m-0 p-0" v-if="achievementsLoaded && achievementsLoaded.length > 0">
-                                <div class="dropdown w-100 p-3">
-                                    <select class="form-select" @change="listByWeek()" v-model="weekFilter">
-                                        <option class="dropdown-item" value="current" selected>هذا الأسبوع</option>
-                                        <option class="dropdown-item" value="previous">الاسبوع السابق</option>
-                                    </select>
-                                </div>
-
                                 <li class="d-flex mb-4 align-items-center" v-for="(record, index) in achievementsLoaded"
                                     :key=index>
                                     <div class="user-img img-fluid">
-                                    <img v-if="record.user.user_profile.profile_picture" :src="resolve_porfile_img('60x60', record.user.user_profile.profile_picture, record.user.user_profile.id)"
-                                        alt="profile-img" class="rounded-circle avatar-40" :title="record.user.name"/>
+                                        <img v-if="record.user.user_profile.profile_picture"
+                                            :src="resolve_porfile_img('60x60', record.user.user_profile.profile_picture, record.user.user_profile.id)"
+                                            alt="profile-img" class="rounded-circle avatar-40" :title="record.user.name" />
 
-                                    <img v-else :src="resolve_porfile_img('60x60', 'ananimous_'+record.user.gender+'.png', 'ananimous')"
-                                        alt="profile-img" :title="record.user.name"
-                                        class="rounded-circle avatar-40">
+                                        <img v-else
+                                            :src="resolve_porfile_img('60x60', 'ananimous_' + record.user.gender + '.png', 'ananimous')"
+                                            alt="profile-img" :title="record.user.name" class="rounded-circle avatar-40">
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between w-100">
                                         <div class="ms-3">
@@ -43,6 +43,16 @@
                                     <a class="me-3 btn" role="button" @click="loadMore()">عرض المزيد</a>
                                 </li>
                             </ul>
+                            <iq-card class="iq-card" v-else>
+                                <div class="iq-card-body p-0">
+                                    <div class="image-block text-center">
+                                        <img src="@/assets/images/main/reader.png" class="img-fluid rounded w-75 mt-3"
+                                            alt="no-amb">
+                                    </div>
+                                    <h4 class="text-center mt-3 mb-3">لا يوجد انجاز لهذا الاسبوع</h4>
+                                </div>
+                            </iq-card>
+
                         </div>
                     </div>
                 </template>

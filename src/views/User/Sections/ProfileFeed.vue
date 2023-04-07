@@ -327,7 +327,7 @@ export default {
   },
   computed: {
     eligibleForException() {
-      if (this.exceptions) {
+      if (this.exceptions.length > 0) {
         if (this.exceptions[0].type == "freez") {
           let lastException = new Date(this.exceptions[0].end_at);
           const nextFreez = new Date(lastException);

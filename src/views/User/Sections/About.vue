@@ -23,7 +23,8 @@
                     البريد الالكتروني
                     <img src="@/assets/images/icon/mail.gif" alt="animated email" width="25" />
                   </h4>
-                  <p class="mb-0 fs-6">{{ user_about.user.email }}</p>
+                  <p class="mb-0 fs-6" v-if="user.email">{{ user.email }}</p>
+                  <p class="mb-0 fs-6" v-else>غير محدد</p>
 
                 </div>
               </div>
@@ -108,7 +109,7 @@
                   الجنس
                   <img src="@/assets/images/icon/female.png" alt="user gender" width="25" />
                 </h5>
-                <p class="mb-0 text-center">{{ gender[user_about.user.gender] }}</p>
+                <p class="mb-0 text-center">{{ gender[user.gender] }}</p>
               </div>
               <!-- GENDER -->
 
@@ -201,8 +202,12 @@ export default {
     },
     social_media: {
       type: [Object],
+    },
+    user: {
+      type: [Object],
       required: true,
     },
+
   },
   data() {
     return {

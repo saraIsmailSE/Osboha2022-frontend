@@ -1,6 +1,6 @@
 <template>
     <div class="group-member d-flex align-items-center mt-md-0 mt-3 w-100">
-        <div class="iq-media-group me-3 col-6" v-if="members">
+        <div class="iq-media-group me-3 col-6" v-if="members.lenght>0">
             <router-link class="iq-media" :to="{ name: 'group.group-members', params: { group_id: group_id } }">
                 <img src="@/assets/images/avatar/avatar-more.jpg" class="img-fluid avatar-40 rounded-circle"
                     :title="`عرض الكل`">

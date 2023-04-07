@@ -2,6 +2,11 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const childRoutes = (prop, mode) => [
   {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('../views/Errors/404'),
+  },
+  {
     path: "",
     name: prop + ".list",
     meta: { auth: true, name: "Social App" },
@@ -49,26 +54,6 @@ const childRoutes = (prop, mode) => [
     name: prop + ".group",
     meta: { auth: true, name: "Group" },
     component: () => import("../views/OsbohaMain/Group/Group"),
-  },
-  {
-    path: "group-detail",
-    name: prop + ".group-detail",
-    meta: { auth: true, name: "Group detail" },
-    component: () => import("../views/OsbohaMain/Group/Group-detail"),
-  },
-  {
-    path: "/ambassadors-reading",
-    name: prop + ".ambassadors-reading",
-    meta: { auth: true, name: "Ambassadors reading" },
-    component: () =>
-      import("../views/OsbohaMain/Group/Ambassadors/TeamReading"),
-  },
-  {
-    path: "/ambassador-list-reading",
-    name: prop + ".ambassador-list-reading",
-    meta: { auth: true, name: "Ambassadors list reading" },
-    component: () =>
-      import("../views/OsbohaMain/Group/Ambassadors/ListReading"),
   },
   {
     path: "announcement",
@@ -235,7 +220,7 @@ const groupChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Group Exceptions" },
     component: () => import("../views/OsbohaMain/Group/Exceptions/ListAll"),
   },
-    {
+  {
     path: '/group/ambassadors-reading/:group_id',
     name: prop + '.ambassadors-reading',
     meta: { auth: true, name: 'Ambassadors reading' },
@@ -258,7 +243,7 @@ const groupChildRoute = (prop, mode = false) => [
     name: prop + '.listAllAmbassadorAchievements',
     meta: { auth: true, name: 'All Ambassadors Achievement' },
     component: () => import('../views/OsbohaMain/Group/Ambassadors/ListAllAchievement'),
-  },  
+  },
   {
     path: '/group/achievement-as-pages/:group_id',
     name: prop + '.achievementAsPages',
@@ -369,6 +354,11 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   base: process.env.BASE_URL,
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    // always scroll to top
+    return { top: 0 }
+  },
+
 });
 
 router.beforeEach((to, from, next) => {

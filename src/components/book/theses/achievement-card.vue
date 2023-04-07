@@ -8,15 +8,15 @@
                             <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
                                 class="rounded-circle img-fluid" style="width: 100px;" />
                         </div>
-                        <h4 class="mb-2 text-center">{{mark.user.name}}</h4>
+                        <h4 class="mb-2 text-center">{{ mark.user.name }}</h4>
                         <p class="text-center mb-4" style=" direction: rtl;">
                             فريق المتابعة
                             <span class="mx-2">|</span>
-                            <a href="#!">{{group.name}}</a>
+                            <a href="#!">{{ group.name }}</a>
                         </p>
                         <div class="d-flex justify-content-between text-center mt-5 mb-2">
                             <div>
-                                <p class="text-center mb-2 h5"><strong>{{mark.out_of_100}}%</strong></p>
+                                <p class="text-center mb-2 h5"><strong>{{ mark.out_of_100 }}%</strong></p>
                                 <p class="text-center mb-0">
                                     العلامة
                                     <br>
@@ -24,7 +24,7 @@
                                 </p>
                             </div>
                             <div>
-                                <p class="text-center mb-2 h5"><strong>{{mark.total_thesis}}</strong></p>
+                                <p class="text-center mb-2 h5"><strong>{{ mark.total_thesis }}</strong></p>
                                 <p class="text-center mb-0">
                                     عدد
                                     <br>
@@ -51,6 +51,9 @@
 
 export default {
     name: 'Achievement Card',
+    created() {
+    },
+
     props: {
         mark: {
             type: [Object],
