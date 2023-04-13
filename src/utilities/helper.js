@@ -48,6 +48,7 @@ export default {
       toastStyle: {
         "background-color": `${backgroundColor}`,
       },
+      autoClose: type === "success" ? 1000 : 3000,
     });
   },
 };

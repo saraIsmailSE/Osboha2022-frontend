@@ -3,7 +3,7 @@
     <div
       class="image-container"
       v-for="(previewUrl, index) in previewUrls"
-      :key="index"
+      :key="previewUrl.url"
     >
       <div class="delete-image" @click="removeMedia(index)">
         <span> x </span>

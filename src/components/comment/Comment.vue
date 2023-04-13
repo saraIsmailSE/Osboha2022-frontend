@@ -1,11 +1,18 @@
 <template>
-  <CommentUser :user="comment.user" />
+  <CommentHeader :comment="comment" />
   <div class="blog-description">
-    <h6 v-if="totalThesisPages > 0">الصفحات المنجزة: {{ totalThesisPages }}</h6>
-    <h6>
-      <!-- <rate :rate="comment.rate" /> -->
-      <rate :rate="5" />
+    <h6 v-if="totalThesisPages > 0">
+      الصفحات المنجزة: {{ totalThesisPages }}
+      <span
+        class="text-muted text-sm ms-1"
+        style="font-size: 0.7rem"
+        v-if="!comment.body && !comment.media"
+        >قراءة فقط</span
+      >
     </h6>
+    <!-- <h6>     
+      <rate :rate="5" />
+    </h6> -->
     <p v-if="comment.body">{{ comment.body }}</p>
     <div class="image-block mt-3 mb-3">
       <img
@@ -63,14 +70,15 @@
 <script>
 import rate from "@/components/book/rate/rate.vue";
 import CreateComment from "@/components/comment/CreateComment.vue";
-import CommentUser from "@/components/comment/CommentUser.vue";
+import CommentHeader from "@/components/comment/CommentHeader.vue";
 import helper from "@/utilities/helper";
+
 export default {
   name: "Comment",
   components: {
     CreateComment,
-    CommentUser,
-    rate,
+    CommentHeader,
+    // rate,
   },
   emits: ["addComment"],
   props: {
@@ -89,27 +97,6 @@ export default {
       showReplyBox: false,
       liked: false,
     };
-  },
-  methods: {
-    ...helper,
-    toggleShowReplies() {
-      this.showReplies = !this.showReplies;
-    },
-    showReply() {
-      this.showReplyBox = !this.showReplyBox;
-
-      //focus the input
-      if (this.showReplyBox) {
-        this.$nextTick(() => {
-          this.$refs.commentReplyRef.focusInput();
-        });
-      }
-    },
-    addComment(reply, comment_id) {
-      this.$emit("addComment", reply, comment_id);
-      this.showReplies = true;
-      this.showReplyBox = false;
-    },
   },
   computed: {
     hasReplies() {
@@ -130,6 +117,27 @@ export default {
         return total;
       };
       return calculateReplies(this.comment.replies);
+    },
+  },
+  methods: {
+    ...helper,
+    toggleShowReplies() {
+      this.showReplies = !this.showReplies;
+    },
+    showReply() {
+      this.showReplyBox = !this.showReplyBox;
+
+      //focus the input
+      if (this.showReplyBox) {
+        this.$nextTick(() => {
+          this.$refs.commentReplyRef.focusInput();
+        });
+      }
+    },
+    addComment(reply, comment_id) {
+      this.$emit("addComment", reply, comment_id);
+      this.showReplies = true;
+      this.showReplyBox = false;
     },
   },
 };

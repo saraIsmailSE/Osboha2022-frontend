@@ -18,6 +18,7 @@
       :post="post"
       :byAuth="auth_id === post.user.id"
       :showPin="showPin"
+      :is_announcement="true"
     />
     <Post
       v-for="post in posts"
@@ -68,6 +69,7 @@ export default {
   provide() {
     return {
       incrementCommentsCount: this.incrementCommentsCount,
+      decrementCommentsCount: this.decrementCommentsCount,
       postDelete: this.deletePost,
       voteOnPost: this.voteOnPost,
       closePostComments: this.closePostComments,
@@ -166,10 +168,10 @@ export default {
           "حدث خطأ أثناء تحميل المنشورات, حاول مرة أخرى",
           "error"
         );
+      } finally {
+        this.loading = false;
+        this.pendingRequest = false;
       }
-
-      this.loading = false;
-      this.pendingRequest = false;
     },
     /**
      * Check if the user has scrolled to the bottom of the page
@@ -192,7 +194,7 @@ export default {
 
     /**
      * Increment the comments count of a post
-     * @param post_id
+     * @param {int} post_id
      */
     incrementCommentsCount(post_id) {
       let post;
@@ -200,16 +202,28 @@ export default {
       if (!post) post = this.announcements.find((post) => post.id == post_id);
       post.comments_count++;
     },
+
+    /**
+     * Decrement the comments count of a post
+     * @param {int} post_id
+     */
+    decrementCommentsCount(post_id) {
+      let post;
+      post = this.posts.find((post) => post.id == post_id);
+      if (!post) post = this.announcements.find((post) => post.id == post_id);
+      post.comments_count--;
+    },
+
     /**
      * Add a new post to the posts array
-     * @param {Object} post
+     * @param {object} post
      */
     addNewPost(post) {
       this.posts.unshift(post);
     },
     /**
      * Delete a post from the posts array
-     * @param {Integer} post_id
+     * @param {int} post_id
      */
     deletePost(post_id) {
       this.posts = this.posts.filter((post) => post.id != post_id);
@@ -219,7 +233,7 @@ export default {
     },
     /**
      * Vote on a post
-     * @param {Object} data
+     * @param {object} data
      */
     voteOnPost(data) {
       const { option_id, post_id, old_option_id, status } = data;
@@ -246,7 +260,7 @@ export default {
     },
     /**
      * Close the comments creation form
-     * @param {Integer} post_id
+     * @param {int} post_id
      */
     closePostComments(post_id) {
       const post = this.posts.find((item) => item.id === post_id);
@@ -256,8 +270,8 @@ export default {
      * Allow the user to pin a post to the top of the page
      * Only one post can be pinned at a time
      * Only in the timelines ['announcement', 'group', 'profile'] a post can be pinned
-     * @param {Integer} post_id
-     * @param {Boolean} is_pinned
+     * @param {int} post_id
+     * @param {boolean} is_pinned
      */
     pinPost(post_id, is_pinned) {
       let post;

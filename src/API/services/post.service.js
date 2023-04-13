@@ -1,4 +1,5 @@
 import { api } from "../Intercepter";
+import { handleError } from "vue";
 
 class PostService {
   async getAllPosts() {
@@ -39,7 +40,7 @@ class PostService {
       // console.log("post", post);
       return post.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
@@ -48,7 +49,7 @@ class PostService {
       const post = await api.delete(`/posts/${post_id}`);
       return post.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
@@ -80,7 +81,7 @@ class PostService {
       const posts = await api.get(`/posts/home?page=${page}`);
       return posts.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
@@ -91,7 +92,7 @@ class PostService {
       );
       return posts.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
@@ -100,7 +101,7 @@ class PostService {
       const posts = await api.get(`/posts/announcements?page=${page}`);
       return posts.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
@@ -109,7 +110,7 @@ class PostService {
       const response = await api.patch(`/posts/${post_id}/control-comments`);
       return response.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
@@ -118,7 +119,7 @@ class PostService {
       const response = await api.patch(`/posts/pin/${post_id}`);
       return response.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 }

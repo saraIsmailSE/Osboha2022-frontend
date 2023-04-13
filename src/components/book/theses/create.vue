@@ -29,69 +29,87 @@
       <!-- الصفحات -->
       <div class="row mt-2" v-if="showPages">
         <div class="form-group">
-          <h5 class="form-label">الصفحات</h5>
+          <h5
+            class="form-label"
+            :class="{ 'text-primary': pages.length === 0 && !startOver }"
+          >
+            {{
+              pages.length === 0 && !startOver ? "لقد أنهيت الكتاب" : "الصفحات"
+            }}
+          </h5>
         </div>
       </div>
       <div class="row" v-if="showPages">
-        <div class="form-group col-6">
-          <select
-            class="form-select"
-            data-trigger
-            name="start_page"
-            id="start_page"
-            v-model="v$.thesisForm.start_page.$model"
-          >
-            <option value="">صفحة البداية</option>
-            <option v-for="page in pages" :value="page" :key="page">
-              {{ page }}
-            </option>
-          </select>
+        <button
+          class="btn btn-primary me-2 d-flex align-content-center justify-content-center"
+          @click.prevent="startBookOver"
+          v-if="pages.length === 0 && !startOver"
+        >
+          <span class="material-symbols-outlined md-18"> refresh </span>
+          إعادة قراءة الكتاب
+        </button>
 
-          <div class="help-block" v-if="v$.thesisForm.start_page.$error">
-            <small
-              style="color: red"
-              v-if="v$.thesisForm.start_page.required.$invalid"
-              >الرجاء اختيار صفحة البداية</small
+        <template v-else>
+          <div class="form-group col-6">
+            <select
+              class="form-select"
+              data-trigger
+              name="start_page"
+              id="start_page"
+              v-model="v$.thesisForm.start_page.$model"
             >
-            <small
-              style="color: red"
-              v-if="
-                !v$.thesisForm.start_page.required.$invalid &&
-                v$.thesisForm.start_page.between.$invalid
-              "
-              >البداية يجب ان تكون اقل من النهاية</small
-            >
+              <option value="">صفحة البداية</option>
+              <option v-for="page in pages" :value="page" :key="page">
+                {{ page }}
+              </option>
+            </select>
+
+            <div class="help-block" v-if="v$.thesisForm.start_page.$error">
+              <small
+                style="color: red"
+                v-if="v$.thesisForm.start_page.required.$invalid"
+                >الرجاء اختيار صفحة البداية</small
+              >
+              <small
+                style="color: red"
+                v-if="
+                  !v$.thesisForm.start_page.required.$invalid &&
+                  v$.thesisForm.start_page.between.$invalid
+                "
+                >البداية يجب ان تكون اقل من النهاية</small
+              >
+            </div>
           </div>
-        </div>
-        <div class="form-group col-6">
-          <select
-            class="form-select"
-            data-trigger
-            name="end_page"
-            id="end_page"
-            v-model="v$.thesisForm.end_page.$model"
-          >
-            <option value="">صفحة النهاية</option>
-            <option v-for="page in pages" :value="page" :key="page">
-              {{ page }}
-            </option>
-          </select>
-          <div class="help-block" v-if="v$.thesisForm.end_page.$error">
-            <small
-              style="color: red"
-              v-if="v$.thesisForm.end_page.required.$invalid"
-              >الرجاء اختيار صفحة النهاية</small
+          <div class="form-group col-6">
+            <select
+              class="form-select"
+              data-trigger
+              name="end_page"
+              id="end_page"
+              v-model="v$.thesisForm.end_page.$model"
             >
-            <small
-              style="color: red"
-              v-if="
-                !v$.thesisForm.end_page.required.$invalid &&
-                v$.thesisForm.end_page.between.$invalid
-              "
-              >النهاية يجب ان تكون اكبر من البداية</small
-            >
+              <option value="">صفحة النهاية</option>
+              <option v-for="page in pages" :value="page" :key="page">
+                {{ page }}
+              </option>
+            </select>
+            <div class="help-block" v-if="v$.thesisForm.end_page.$error">
+              <small
+                style="color: red"
+                v-if="v$.thesisForm.end_page.required.$invalid"
+                >الرجاء اختيار صفحة النهاية</small
+              >
+              <small
+                style="color: red"
+                v-if="
+                  !v$.thesisForm.end_page.required.$invalid &&
+                  v$.thesisForm.end_page.between.$invalid
+                "
+                >النهاية يجب ان تكون اكبر من البداية</small
+              >
+            </div>
           </div>
-        </div>
+        </template>
       </div>
       <div class="form-group" v-if="thesis">
         <label class="form-label" for="thesisBody">الأطروحة</label>
@@ -103,6 +121,23 @@
           name="thesisBody"
           v-model.trim="v$.thesisForm.body.$model"
         ></textarea>
+        <p style="direction: rtl">
+          <span> {{ v$.thesisForm.body.$model.length }}/400 حرف</span>
+          <span> - </span>
+          <span
+            style="color: red"
+            class="text-center"
+            v-if="v$.thesisForm.body.$model.length < 400"
+            >أطروحة غير شاملة
+            <span class="material-symbols-outlined font-small">error</span>
+          </span>
+          <span style="color: green" v-else
+            >أطروحة شاملة
+            <span class="material-symbols-outlined font-small"
+              >check_circle</span
+            >
+          </span>
+        </p>
         <div class="help-block" v-if="v$.thesisForm.body.$error">
           <small
             style="color: red"
@@ -130,19 +165,6 @@
             >الرجاء ادخال اقتباس واحد على الاقل</small
           >
         </div>
-        <!--preview-->
-        <!-- <div class="preview-images">
-          <div
-            class="image-container"
-            v-for="(previewUrl, index) in previewUrls"
-            :key="index"
-          >
-            <div class="delete-image" @click="removeImage(index)">
-              <span> x </span>
-            </div>
-            <img :src="previewUrl" />
-          </div>
-        </div> -->
         <ImagePreviewer
           v-if="thesisForm.screenShots.length"
           :media="thesisForm.screenShots"
@@ -158,6 +180,12 @@
       </small>
       <small class="text-danger text-center" v-if="errorMessage">
         {{ errorMessage }}
+      </small>
+      <small
+        class="text-danger text-center"
+        v-if="mediaNoteText && thesisToEdit"
+      >
+        {{ mediaNoteText }}
       </small>
       <div class="col-sm-12 text-center" v-if="loader">
         <img
@@ -188,7 +216,20 @@ export default {
   components: {
     ImagePreviewer,
   },
-  props: ["start_page", "end_page", "book_id"],
+  props: {
+    book: {
+      type: Object,
+      default: null,
+    },
+    lastThesis: {
+      type: Object,
+      default: null,
+    },
+    thesisToEdit: {
+      type: Object,
+      default: null,
+    },
+  },
   setup() {
     return {
       v$: useVuelidate(),
@@ -196,12 +237,11 @@ export default {
   },
   data() {
     return {
-      newThesis: "",
       thesis: false,
       screenshots: false,
       showPages: false,
-      previewUrls: [],
       loader: false,
+      startOver: false,
       thesisForm: {
         typeOfThesis: "",
         start_page: "",
@@ -209,17 +249,103 @@ export default {
         body: "",
         screenShots: [],
         type: "thesis",
-        book_id: this.book_id,
+        book_id: null,
+        comment_id: null,
       },
+      mediaNoteText: "",
       successMessage: "",
       errorMessage: "",
     };
+  },
+  computed: {
+    pages() {
+      let allPages = [];
+      let start = null;
+
+      //if user has a book in progress, start pages from the last thesis end page and add 1 to it
+      if (
+        this.book.userBooks.length &&
+        this.book.userBooks[0].status === "in progress"
+      ) {
+        start = this.lastThesis?.end_page + 1;
+      }
+      //if user has no book, so this is the first thesis, start pages from the book start page
+      else if (!this.book.userBooks.length && !this.lastThesis) {
+        start = this.book.start_page;
+      }
+
+      //if user is editting the thesis, start pages from the book start page
+      if (this.thesisToEdit) {
+        start = this.book.start_page;
+      }
+
+      //if start null, it means the user has finished the book
+
+      //if start over button is not clicked, return empty array
+      if (start === null && !this.startOver) {
+        return [];
+      }
+
+      //if start over button is clicked, start pages from the book start page
+      if (start === null && this.startOver) {
+        start = this.book.start_page;
+      }
+
+      //add all pages to the array from the start page to the book end page
+      for (let i = start; i <= this.book.end_page; i++) {
+        allPages.push(i);
+      }
+      return allPages;
+    },
+  },
+  created() {
+    this.thesisForm.book_id = this.book?.id;
+
+    if (this.thesisToEdit) {
+      this.thesisForm.comment_id = parseInt(this.thesisToEdit.id);
+      this.thesisForm.body = this.thesisToEdit.body;
+      this.thesisForm.start_page = this.thesisToEdit.thesis.start_page;
+      this.thesisForm.end_page = this.thesisToEdit.thesis.end_page;
+      this.thesisForm.screenShots.old = this.thesisToEdit.media ?? [];
+      this.showPages = true;
+
+      if (
+        !this.thesisToEdit.body &&
+        this.checkThesisHasMedia(this.thesisToEdit) === 0
+      ) {
+        this.thesisForm.typeOfThesis = "read";
+      } else if (
+        this.thesisToEdit.body &&
+        this.checkThesisHasMedia(this.thesisToEdit) === 0
+      ) {
+        this.thesisForm.typeOfThesis = "readAndWrite";
+      } else if (
+        this.thesisToEdit.body &&
+        this.checkThesisHasMedia(this.thesisToEdit) > 0
+      ) {
+        this.thesisForm.typeOfThesis = "screenshotsAndWrite";
+      } else if (
+        !this.thesisToEdit.body &&
+        this.checkThesisHasMedia(this.thesisToEdit) > 0
+      ) {
+        this.thesisForm.typeOfThesis = "screenshots";
+      }
+
+      this.changeTypeOfThesis(this.thesisForm.typeOfThesis);
+
+      const mediaCount = this.checkThesisHasMedia(this.thesisToEdit);
+      this.mediaNoteText =
+        mediaCount > 0
+          ? `ملاحظة: سيتم حذف الصور الموجودين بعد تعديل الأطروحة وعددهم: ${mediaCount}`
+          : "";
+
+      console.log("[this.thesisForm]", this.thesisForm);
+    }
   },
   methods: {
     showAddThesis() {
       this.thesis = true;
       this.screenshots = false;
-      this.thesisForm.screenShots = [];
     },
     showAddScreenshots() {
       this.screenshots = true;
@@ -228,7 +354,6 @@ export default {
     noThesisAndScreenshots() {
       this.thesis = false;
       this.screenshots = false;
-      this.thesisForm.screenShots = [];
     },
     thesisAndScreenshots() {
       this.thesis = true;
@@ -249,12 +374,6 @@ export default {
         this.noThesisAndScreenshots();
       }
     },
-    onChangeStartPage(page) {
-      this.selectedStartPage = page;
-    },
-    onChangeEndPage(page) {
-      this.selectedEndPage = page;
-    },
     previewImages(event) {
       this.thesisForm.screenShots = event.target.files;
     },
@@ -272,11 +391,21 @@ export default {
       if (!this.v$.thesisForm.$invalid) {
         this.loader = true;
         try {
-          const response = await commentService.create(this.thesisForm);
-          this.$emit("addThesis", response.data);
+          this.updateThesisForm();
+
+          let response;
+
+          if (this.thesisToEdit) {
+            response = commentService.update(this.thesisForm);
+            console.log("[update thesis]", response.data);
+          } else {
+            response = await commentService.create(this.thesisForm);
+            this.$emit("addThesis", response.data);
+          }
           //reset form
           this.thesisForm = {
             ...this.thesisForm,
+            typeOfThesis: "",
             start_page: "",
             end_page: "",
             body: "",
@@ -286,7 +415,6 @@ export default {
           this.v$.thesisForm.$reset();
           this.changeTypeOfThesis("");
 
-          this.loader = false;
           this.errorMessage = "";
           this.successMessage = "تم اضافة الأطروحة بنجاح";
 
@@ -296,13 +424,45 @@ export default {
             this.$emit("closeModel");
           }, 2000);
         } catch (error) {
-          this.loader = false;
           this.successMessage = "";
           this.errorMessage = "حدث خطأ ما الرجاء المحاولة مرة اخرى!";
+          console.log(error);
+        } finally {
+          this.loader = false;
         }
       } else {
         this.errorMessage = "الرجاء ادخال جميع البيانات المطلوبة";
       }
+    },
+    updateThesisForm() {
+      if (this.thesisForm.typeOfThesis == "read") {
+        this.thesisForm.body = null;
+        this.thesisForm.screenShots = [];
+      } else if (this.thesisForm.typeOfThesis == "readAndWrite") {
+        this.thesisForm.screenShots = [];
+      } else if (this.thesisForm.typeOfThesis == "screenshots") {
+        this.thesisForm.body = null;
+      }
+    },
+    startBookOver() {
+      this.startOver = true;
+    },
+    checkThesisHasMedia(thesis) {
+      let media = 0;
+
+      if (thesis.media) {
+        media++;
+      }
+
+      if (thesis.replies?.length) {
+        thesis.replies.forEach((item) => {
+          if (item.type === "screenshot" && item.media) {
+            media++;
+          }
+        });
+      }
+
+      return media;
     },
   },
   validations() {
@@ -338,14 +498,13 @@ export default {
       },
     };
   },
-  computed: {
-    pages() {
-      let pages = [];
-      for (let i = this.start_page; i <= this.end_page; i++) {
-        pages.push(i);
-      }
-      return pages;
-    },
-  },
 };
 </script>
+<style scoped>
+.font-small {
+  font-size: 0.8rem;
+}
+.text-danger {
+  color: #c50714 !important;
+}
+</style>

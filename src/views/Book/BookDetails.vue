@@ -31,6 +31,13 @@
                 </div>
                 <div class="comments me-4 d-flex align-items-center">
                   <i class="material-symbols-outlined pe-2 md-18 text-primary">
+                    book
+                  </i>
+                  عدد الصفحات:
+                  {{ book.book?.end_page }}
+                </div>
+                <div class="comments me-4 d-flex align-items-center">
+                  <i class="material-symbols-outlined pe-2 md-18 text-primary">
                     mode_comment </i
                   >{{ book.theses_count }} أطروحة
                 </div>
@@ -73,7 +80,17 @@
             </div>
           </div>
           <div class="card-body">
-            <div class="row">
+            <div
+              class="col-sm-12 text-center"
+              v-if="loading && theses.length <= 0"
+            >
+              <img
+                :src="require('@/assets/images/page-img/page-load-loader.gif')"
+                alt="loader"
+                style="height: 100px"
+              />
+            </div>
+            <div class="row" v-else>
               <!-- display theses -->
               <div
                 class="col-lg-12"
@@ -95,12 +112,40 @@
                     />
                   </div>
                 </div>
+
+                <modal
+                  :id="`editThesis-${comment.id}`"
+                  ref="editThesisRef"
+                  dialogClass="modal-dialog-centered modal-dialog-scrollable"
+                  tabindex="-1"
+                  aria-labelledby="editThesis"
+                  :aria-hidden="false"
+                >
+                  <model-header>
+                    <h5 class="modal-title" id="modalsLabel">تعديل الأطروحة</h5>
+                    <a
+                      href="javascript:void(0);"
+                      class="lh-1"
+                      data-bs-dismiss="modal"
+                      ref="editCloseBtn"
+                    >
+                      <span class="material-symbols-outlined">close</span>
+                    </a>
+                  </model-header>
+                  <model-body>
+                    <createThesis
+                      :book="book.book"
+                      :thesisToEdit="comment"
+                      @closeModel="$refs.editCloseBtn.click()"
+                    />
+                  </model-body>
+                </modal>
               </div>
-              <div class="col-lg-12">
+              <!-- <div class="col-lg-12">
                 <div class="card card-block card-stretch card-height blog">
                   <CreateComment :type="'comment'" @addComment="addComment" />
                 </div>
-              </div>
+              </div> -->
               <!--Load more thesis-->
               <div class="col-lg-12">
                 <div class="card card-block card-stretch card-height blog">
@@ -109,6 +154,7 @@
                     class="btn btn-primary d-block w-100"
                     v-if="hasMoreTheses"
                     @click="loadMoreTheses"
+                    :disabled="loading"
                   >
                     تحميل المزيد
                   </button>
@@ -122,9 +168,8 @@
     <modal
       id="modals"
       ref="modals"
-      dialogClass="modal-fullscreen-sm-down"
+      dialogClass="modal-dialog-centered modal-dialog-scrollable"
       tabindex="-1"
-      title="Create Post"
       aria-labelledby="modalsLabel"
       :aria-hidden="false"
     >
@@ -143,8 +188,8 @@
       </model-header>
       <model-body>
         <createThesis
-          :start_page="book.book?.start_page"
-          :end_page="book.book?.end_page"
+          :book="book.book"
+          :lastThesis="book.last_thesis"
           @closeModel="closeModel"
           @addThesis="addThesis"
         />
@@ -159,13 +204,20 @@ import createThesis from "@/components/book/theses/create.vue";
 import bookService from "@/API/services/book.service";
 import thesisService from "@/API/services/thesis.service";
 import moment from "moment";
+import helper from "@/utilities/helper";
 
 export default {
   name: "BookDetails",
   components: {
     Comment,
     createThesis,
-    CreateComment,
+    // CreateComment,
+  },
+  provide() {
+    return {
+      deleteComment: this.deleteComment,
+      editThesis: this.editThesis,
+    };
   },
   // props: ["id"],
   async created() {
@@ -180,6 +232,7 @@ export default {
       shortBriefText: "",
       page: 1,
       totalTheses: 0,
+      loading: false,
     };
   },
   methods: {
@@ -221,6 +274,9 @@ export default {
       return path ? path : require("@/assets/images/books/1.jpg");
     },
     async getTheses(page) {
+      if (this.loading) return;
+
+      this.loading = true;
       try {
         const response = await thesisService.getThesesByBookId(
           this.$route.params.book_id,
@@ -230,10 +286,18 @@ export default {
           this.theses.push(...response.data.theses);
           this.totalTheses = response.data.total;
         } else {
-          console.log("error: ", response.data);
+          helper.toggleToast(
+            "حدث خطأ أثناء تحميل البيانات, الرجاء المحاولة مرة أخرى",
+            "error"
+          );
         }
       } catch (e) {
-        console.log(e);
+        helper.toggleToast(
+          "حدث خطأ أثناء تحميل البيانات, الرجاء المحاولة مرة أخرى",
+          "error"
+        );
+      } finally {
+        this.loading = false;
       }
     },
     async loadMoreTheses() {
@@ -250,6 +314,15 @@ export default {
       this.book.comments_count =
         this.book.comments_count + thesis.replies.length + 1;
       this.totalTheses++;
+      this.book.book.userBooks = thesis.user.userBooks;
+      this.book.last_thesis = thesis.thesis;
+
+      if (
+        this.book.book.userBooks.length > 0 &&
+        this.book.book.userBooks[0].status === "finished"
+      ) {
+        helper.toggleToast("تهانينا, لقد أنهيت الكتاب", "success");
+      }
     },
     findComment(theses, comment_id) {
       for (let i = 0; i < theses.length; i++) {
@@ -274,6 +347,27 @@ export default {
         comment.replies.push(reply);
         this.book.comments_count++;
       }
+    },
+    deleteComment(comment_id) {
+      for (let i = 0; i < this.theses.length; i++) {
+        if (this.theses[i].id === comment_id) {
+          this.theses.splice(i, 1);
+          this.book.comments_count--;
+          this.totalTheses--;
+          return;
+        } else if (this.theses[i].replies.length > 0) {
+          for (let j = 0; j < this.theses[i].replies.length; j++) {
+            if (this.theses[i].replies[j].id === comment_id) {
+              this.theses[i].replies.splice(j, 1);
+              this.book.comments_count--;
+              return;
+            }
+          }
+        }
+      }
+    },
+    async editThesis() {
+      console.log("[book details] edit thesis");
     },
   },
   computed: {

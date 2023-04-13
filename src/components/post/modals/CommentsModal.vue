@@ -101,7 +101,12 @@ export default {
     CreateComment,
     Comment,
   },
-  inject: ["incrementCommentsCount"],
+  provide() {
+    return {
+      deleteComment: this.deleteComment,
+    };
+  },
+  inject: ["incrementCommentsCount", "decrementCommentsCount"],
   props: {
     post: {
       type: Object,
@@ -181,7 +186,6 @@ export default {
 
         if (response.statusCode !== 200) {
           helper.toggleToast(response.message, "error");
-          this.commentsLoading = false;
           return;
         }
 
@@ -196,8 +200,9 @@ export default {
         }
       } catch (error) {
         helper.toggleToast("حدث خطأ ما، حاول مرة أخرى", "error");
+      } finally {
+        this.commentsLoading = false;
       }
-      this.commentsLoading = false;
     },
     /**
      * @description: find the comment by the comment_id among the comments and replies recursively
@@ -218,7 +223,7 @@ export default {
       }
     },
     /**
-     * @description: add the comment to the comments array
+     * @description add the comment to the comments array
      * if the comment_id is not provided, add the comment to the comments array
      * otherwise, add the comment to the replies array of the comment
      * emit the incrementCommentsCount event to increment the comments count of the post
@@ -239,6 +244,31 @@ export default {
         const modalBody = commentModal.querySelector(".modal-body");
         modalBody.scrollTop = modalBody.scrollHeight;
       });
+    },
+
+    /**
+     * @description delete the comment from the comments array
+     *
+     * @param {int} comment_id: the id of the comment
+     * @returns {void}
+     *
+     */
+    deleteComment(comment_id) {
+      for (let i = 0; i < this.comments.length; i++) {
+        if (this.comments[i].id === comment_id) {
+          this.comments.splice(i, 1);
+          this.decrementCommentsCount(this.post.id);
+          return;
+        } else if (this.comments[i].replies.length > 0) {
+          for (let j = 0; j < this.comments[i].replies.length; j++) {
+            if (this.comments[i].replies[j].id === comment_id) {
+              this.comments[i].replies.splice(j, 1);
+              this.decrementCommentsCount(this.post.id);
+              return;
+            }
+          }
+        }
+      }
     },
   },
 };

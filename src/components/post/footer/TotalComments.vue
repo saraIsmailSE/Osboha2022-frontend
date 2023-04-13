@@ -99,7 +99,6 @@ export default {
         return;
       }
 
-      this.commentsUsersLoading = true;
       try {
         const response = await commentService.getPostCommentsUsers(
           this.post.id
@@ -107,16 +106,15 @@ export default {
 
         if (response.statusCode !== 200) {
           helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
-          return;
         }
 
         this.commentsUsers = response.data.users;
         this.totalCommentsUsers = response.data.count;
       } catch (error) {
         helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
+      } finally {
+        this.commentsUsersLoading = false;
       }
-
-      this.commentsUsersLoading = false;
     },
   },
 };
