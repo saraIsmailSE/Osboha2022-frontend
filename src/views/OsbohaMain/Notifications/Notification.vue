@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-sm-12">
-      <h4 class="card-title">Notification</h4>
+      <h4 class="card-title">الاشعارات</h4>
     </div>
     <div class="col-sm-12" v-for="(data,index) in notificationData" :key="index">
       <iq-card>
@@ -14,22 +14,6 @@
                         <div class=" ms-3">
                           <h6>{{data.heading}}</h6>
                           <p class="mb-0">{{data.time}}</p>
-                        </div>
-                        <div class="d-flex align-items-center">
-                          <a href="javascript:void();" :class="data.iconbg"><i :class="data.iconclass">{{data.iconname}}</i></a>
-                          <div class="card-header-toolbar d-flex align-items-center">
-                              <div class="dropdown">
-                                <span class="dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="material-symbols-outlined md-18">
-                                    more_horiz
-                                    </i>
-                                </span>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item d-flex align-items-center" href="#" v-for="(data,index) in action" :key="index">
-                                      <i :class="data.iconclass">{{data.iconname}}</i>{{data.title}}</a>
-                                </div>
-                              </div>
-                          </div>
                         </div>
                     </div>
                   </div>

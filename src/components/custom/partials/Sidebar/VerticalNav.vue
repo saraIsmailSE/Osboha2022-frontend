@@ -73,6 +73,35 @@
         <span class="item-name">الإعلانات</span>
       </router-link>
     </li>
+    <!-- ###### Groups Audit ###### -->
+    <li class="nav-item">
+      <router-link
+        :class="
+          checkActive('group.groupsAudit') ? 'active nav-link' : 'nav-link'
+        "
+        aria-current="page"
+        :to="{ name: 'group.groupsAudit' }"
+      >
+        <i class="icon material-symbols-outlined"> rule </i>
+        <span class="item-name">تدقيق المجموعات</span>
+      </router-link>
+    </li>
+
+        <!-- ###### Advisor Audit ###### -->
+        <li class="nav-item">
+      <router-link
+        :class="
+          checkActive('group.AdvisorAudit') ? 'active nav-link' : 'nav-link'
+        "
+        aria-current="page"
+        :to="{ name: 'group.AdvisorAudit' }"
+      >
+        <i class="icon material-symbols-outlined"> rule </i>
+        <span class="item-name">تدقيق المراقبين</span>
+      </router-link>
+    </li>
+
+
     <li class="nav-item static-item">
       <a class="nav-link static-item disabled" href="#" tabindex="-1">
         <span class="default-icon">Latest</span>

@@ -1,19 +1,20 @@
-import {api} from "../Intercepter";
+import { api } from "../Intercepter";
 import UserInfo from "../../Services/userInfoService";
 
 class AuthService {
-  async login({username, password}) {
+  async login({ username, password }) {
     try {
-      const response= api.post("/auth/signin", {
+      const response = api.post("/auth/signin", {
         username,
-        password});
+        password
+      });
 
-        if(response.data.accessToken){
-          UserInfo.setUser(response.date)
-        }
-        return response.data;
-    }catch(error){
-      console.log(error)  
+      if (response.data.accessToken) {
+        UserInfo.setUser(response.date)
+      }
+      return response.data;
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -31,6 +32,44 @@ class AuthService {
       user_type,
     });
   }
+
+  async sendEmail() {
+    let error = null;
+    const res = await api
+      .post("email/verification-notification")
+      .catch((error) => {
+        error = error.response.data.message;
+        (error)
+      });
+    return { data: res.data, error }
+  }
+
+  async resetPassword(password, email, token) {
+    let resetData = new FormData();
+    resetData.append("password", password);
+    resetData.append("email", email);
+    resetData.append("token", token);
+    try {
+      const response = await api.post("password/reset", resetData)
+      return response.data
+    }
+    catch (error) {
+      return error.response;
+    }
+
+  }
+  async forgetPassword(email) {
+    try {
+      const response = await api.post("password/forgot-password", {
+        email: email
+      })
+      return response.data
+
+    } catch (error) {
+      return error.response;
+    }
+  }
+
 }
 
 export default new AuthService();

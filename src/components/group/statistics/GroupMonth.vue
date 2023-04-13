@@ -30,7 +30,7 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,
 
 
 export default {
-    name: 'User Month Statistics',
+    name: 'Group Month Statistics',
     created() {
 
         // month Achievement
@@ -91,10 +91,15 @@ export default {
                 }]
             }
 
-            //Line Chart for month Achievement
-            data.labels = Object.keys(this.month_achievement)
-            data.datasets[0].data = Object.values(this.month_achievement)
-            data.datasets[0].label = this.formated_month_title
+            // //Line Chart for month Achievement
+            // data.labels = Object.keys(this.month_achievement)
+            // data.datasets[0].data = Object.values(this.month_achievement)
+            // data.datasets[0].label = this.formated_month_title
+            // data.labels.unshift('')
+            // data.datasets[0].data.unshift(50);
+            data.labels = ['m1', 'm2','m3','m4','m5']
+            data.datasets[0].data = [100,70,98,60,79]
+            data.datasets[0].label = 'this.formated_month_title'
             data.labels.unshift('')
             data.datasets[0].data.unshift(50);
             return data;

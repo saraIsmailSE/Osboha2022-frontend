@@ -12,7 +12,7 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_USER_DATA(state, userData) {
-      state.user = userData;
+      state.user = userData.user;
       localStorage.setItem("user", JSON.stringify(userData));
       axios.defaults.headers.common[
         "Authorization"

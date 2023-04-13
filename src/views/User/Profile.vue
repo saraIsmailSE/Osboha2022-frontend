@@ -3,7 +3,7 @@
     <div class="col-sm-12">
 
       <!-- START MAIN INFORMATION -->
-      <MainInfo :isAuth="isAuth" :user="profile.user" :roles="profile.roles" :readingInfo="readingInfo" :profile="profile.info"/>
+      <MainInfo :auth="auth" :friendWithAuth="friendWithAuth" :user="profile.user" :roles="profile.roles" :readingInfo="readingInfo" :profile="profile.info"/>
       <!-- END MAIN INFORMATION -->
 
       <!-- START PROFILE NAVIGATION -->
@@ -87,15 +87,16 @@ export default {
     const user_data = await UserInfo.getUser();
     this.auth = user_data.user;
     this.profile = await UserProfile.getUserProfileById(this.$route.params.user_id);
-    console.log(this.profile)
     this.readingInfo[0].value = this.profile.reading_Info.books;
     this.readingInfo[1].value = this.profile.reading_Info.thesis;
+    this.friendWithAuth=this.profile.friendWithAuth
 
   },
   data() {
     return {
       auth:0,
       profile: null,
+      friendWithAuth:false,
       readingInfo: [
         {
           title: 'الكتب المقروءة',
@@ -126,11 +127,6 @@ export default {
     }
   },
   methods: {
-  },
-  computed: {
-    isAuth() {
-      return (this.auth.id == this.$route.params.user_id);
-    },
   },
 }
 </script>

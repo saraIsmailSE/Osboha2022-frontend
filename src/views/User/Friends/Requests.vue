@@ -10,9 +10,13 @@
                         <li class="d-flex align-items-center  justify-content-between flex-wrap"
                             v-for="(request, index1) in requestsLoaded" :key="index1">
                             <div class="user-img img-fluid flex-shrink-0">
-                                <img src="@/assets/images/user/12.jpg" alt="story-img" class="rounded-circle avatar-40">
+                                <img v-if="request.user.user_profile.profile_picture"
+                                :src="resolve_porfile_img('60x60', request.user.user_profile.profile_picture, request.user.user_profile.id)"
+                                alt="profile-img" class="rounded-circle avatar-40" :title="request.name" />
+                            <img v-else
+                                :src="resolve_porfile_img('60x60', 'ananimous_' + request.user.gender + '.png', 'ananimous')"
+                                alt="profile-img" :title="request.name" class="rounded-circle avatar-40">
                             </div>
-                            {{ request }}
                             <div class="flex-grow-1 ms-3">
                                 <router-link :to="{ name: 'user.profile', params: { user_id: request.user.id } }">
                                     <h6>{{ request.user.name }}</h6>
@@ -57,6 +61,7 @@
 
 <script>
 import FriendServices from '@/API/services/friend.service'
+import profileImagesService from '@/API/services/profile.images.service'
 
 export default {
     name: 'FriendRequest',
@@ -71,6 +76,19 @@ export default {
         }
     },
     methods: {
+        /**
+        * get profile picture or cover.
+        *  @param  image size, image name, profile id
+        * @return image url
+        */
+        resolve_porfile_img(size, imageName, profile_id) {
+            return profileImagesService.resolve_porfile_img(size, imageName, profile_id);
+        },
+
+        /**
+        * acceot friend request.
+        *  @param  request id
+        */
         acceptrequest(id) {
             const swalWithBootstrapButtons = this.$swal.mixin({
                 customClass: {
@@ -119,6 +137,10 @@ export default {
                     }
                 })
         },
+        /**
+        * delete friend request.
+        *  @param  user id, friend id
+        */
         deleterequest(user_id,friend_id) {
             const swalWithBootstrapButtons = this.$swal.mixin({
                 customClass: {
@@ -167,6 +189,10 @@ export default {
                     }
                 })
         },
+        
+        /**
+        * load more request.
+        */
         loadMore() {
             if (this.length > this.friendRequest.length) return;
             this.length = this.length + 10;

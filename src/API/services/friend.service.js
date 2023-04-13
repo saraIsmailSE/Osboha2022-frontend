@@ -1,6 +1,12 @@
 import { api } from "../Intercepter";
 
 class FriendService {
+
+  /**
+  * list all friends for specific user.
+  * @param user id
+  */
+
   async getAllFriends(user_id) {
     try {
       const friends = await api.get(`friends/user/${user_id}`);
@@ -9,6 +15,10 @@ class FriendService {
       return error;
     }
   }
+
+  /**
+  * get all friend requests for auth user.
+  */
 
   async getFriendsRequests() {
     try {
@@ -20,6 +30,10 @@ class FriendService {
     }
   }
 
+  /**
+  * create Friendship between auth and another user.
+  *  @param friend id
+  */
 
   async create(friend_id) {
     try {
@@ -38,6 +52,10 @@ class FriendService {
     }
   }
 
+  /**
+  * accept Friendship.
+  *  @param  Friendship id
+  */
 
   async accept(friendship_id) {
     try {
@@ -47,6 +65,11 @@ class FriendService {
       return error;
     }
   }
+
+  /**
+  * delete Friendship between 2 users.
+  *  @param  user id, friend id
+  */
 
   async delete(user_id, friend_id) {
     const pivot = new FormData();
