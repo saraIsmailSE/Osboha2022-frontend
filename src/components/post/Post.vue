@@ -3,7 +3,12 @@
     <div class="card card-block card-stretch card-height">
       <div class="card-body">
         <!--Post header-->
-        <PostHeader :post="post" :byAuth="byAuth" :showPin="showPin" />
+        <PostHeader
+          :post="post"
+          :byAuth="byAuth"
+          :showPin="showPin"
+          :is_announcement="is_announcement"
+        />
 
         <!--Post Body-->
         <PostBody :post="post" />
@@ -58,22 +63,42 @@
   <!--Delete post confirmation modal-->
   <ConfirmationModal
     title="تأكيد الحذف"
-    :post_id="post.id"
+    :id="post.id"
     text="هل أنت متأكد من حذف هذا المنشور؟"
     ref="deletePostRef"
-  />
+  >
+    <template #actionBtn>
+      <button
+        class="btn"
+        @click.prevent="deletePost"
+        :disabled="deleteLoading"
+        style="background-color: #b90808; color: #fff"
+      >
+        <img
+          v-if="deleteLoading"
+          :src="require('@/assets/images/page-img/page-load-loader.gif')"
+          alt="loader"
+          style="height: 25px"
+        />
+
+        <span v-else>نعم</span>
+      </button>
+    </template>
+  </ConfirmationModal>
 </template>
 
 <script>
 import PostHeader from "@/components/post/header/PostHeader.vue";
 import PostBody from "@/components/post/body/PostBody.vue";
 import PostMedia from "@/components/post/body/PostMedia.vue";
-import ConfirmationModal from "@/components/post/modals/ConfirmationModal.vue";
+import ConfirmationModal from "@/components/modals/ConfirmationModal.vue";
 import CommentsModal from "@/components/post/modals/CommentsModal.vue";
 import PostMediaModal from "@/components/post/modals/PostMediaModal.vue";
 import TotalComments from "@/components/post/footer/TotalComments.vue";
 import TotalLikes from "@/components/post/footer/TotalLikes.vue";
 import ActionButtons from "@/components/post/footer/ActionButtons.vue";
+import postService from "@/API/services/post.service";
+import helper from "@/utilities/helper";
 
 export default {
   name: "Post",
@@ -88,6 +113,7 @@ export default {
     ActionButtons,
     TotalLikes,
   },
+  inject: ["postDelete"],
   props: {
     post: { type: Object },
     byAuth: {
@@ -98,13 +124,17 @@ export default {
       type: Boolean,
       default: false,
     },
+    is_announcement: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       userRole: "",
       isLiked: false,
       errorMessage: "",
-      deletePostLoading: false,
+      deleteLoading: false,
     };
   },
   computed: {
@@ -137,6 +167,21 @@ export default {
      */
     showPostMedia(index) {
       this.$refs.postMediaModal.showPostMedia(index);
+    },
+
+    async deletePost() {
+      if (this.deleteLoading) return;
+      this.deleteLoading = true;
+      try {
+        await postService.delete(this.post.id);
+        this.postDelete(this.post.id);
+        this.$refs.deletePostRef.closeModal();
+        helper.toggleToast("تم حذف المنشور بنجاح", "success");
+      } catch (error) {
+        helper.toggleToast("حدث خطأ أثناء حذف المنشور, حاول مرة أخرى", "error");
+      } finally {
+        this.deleteLoading = false;
+      }
     },
   },
 };

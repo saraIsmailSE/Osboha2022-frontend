@@ -1,53 +1,40 @@
-import { data } from "jquery";
 import { api } from "../Intercepter";
+import { handleError } from "vue";
 
 class ThesisService {
   async getThesisById(thesis_id) {
     try {
-      const thesis = await api.get(`/thesis/show/${thesis_id}`);
+      const thesis = await api.get(`/theses/${thesis_id}`);
       return thesis.data.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
   async getThesesByBookId(id, page) {
     try {
-      const theses = await api.post(`/thesis/listBookThesis?page=${page}`, {
-        book_id: id,
-      });
+      const theses = await api.get(`/theses/book/${id}?page=${page}`);
       return theses.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
   async getThesisByUser(id) {
     try {
-      const thesis = await api.post(`/thesis/listUserThesis`, { user_id: id });
+      const thesis = await api.get(`/theses/user/${id}`);
       return thesis.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
   async getThesisByWeek(id) {
     try {
-      const thesis = await api.post(`/thesis/listWeekThesis`, { week_id: id });
+      const thesis = await api.get(`/theses/week/${id}`);
       return thesis.data;
     } catch (error) {
-      return error;
-    }
-  }
-
-  async createThesis(data) {
-    try {
-      const thesis = await api.post(`/comment/create`, data, {
-        headers: { "Content-type": "multipart/form-data" },
-      });
-      return thesis.data;
-    } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 }
