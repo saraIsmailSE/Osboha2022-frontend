@@ -10,8 +10,12 @@
                     <li class="d-flex align-items-center  justify-content-between flex-wrap"
                         v-for="(friend, index) in friendsLoaded" :key="index">
                         <div class="user-img img-fluid flex-shrink-0">
-                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp"
-                                alt="story-img" class="rounded-circle avatar-40">
+                            <img v-if="friend.profile.profile_picture"
+                                :src="resolve_porfile_img('60x60', friend.profile.profile_picture, friend.profile.id)"
+                                alt="profile-img" class="rounded-circle avatar-40" :title="friend.name" />
+                            <img v-else
+                                :src="resolve_porfile_img('60x60', 'ananimous_' + friend.gender + '.png', 'ananimous')"
+                                alt="profile-img" :title="friend.name" class="rounded-circle avatar-40">
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h5>{{ friend.name }}</h5>
@@ -37,7 +41,7 @@
                                     مراسلة
                                 </a> -->
                                 <a class="dropdown-item d-flex align-items-center" v-if="user_id == auth.id"
-                                    @click="deleteFriendship(friend.pivot)">
+                                    @click="deleteFriendship(auth.id, friend.id)">
                                     <span class="material-symbols-outlined me-2 md-18">
                                         person_remove
                                     </span>
@@ -84,6 +88,7 @@
 import UserInfo from '@/Services/userInfoService'
 import FriendServices from '@/API/services/friend.service'
 import vClickOutside from "click-outside-vue3"
+import profileImagesService from '@/API/services/profile.images.service'
 
 export default {
     name: 'FriendList',
@@ -111,14 +116,36 @@ export default {
         }
     },
     methods: {
+        /**
+        * get profile picture or cover.
+        *  @param  image size, image name, profile id
+        * @return image url
+        */
+        resolve_porfile_img(size, imageName, profile_id) {
+            return profileImagesService.resolve_porfile_img(size, imageName, profile_id);
+        },
+
+        /**
+        * show specific control list.
+        *  @param  index
+        */
         showList(index) {
             this.controlList.fill(false)
             this.controlList[index] = true;
         },
+
+        /**
+        * hide all control lists.
+        */
         onClickOutside() {
             this.controlList.fill(false)
         },
-        deleteFriendship(pivot) {
+
+        /**
+        * delete Friendship between 2 users.
+        *  @param  user id, friend id
+        */
+        deleteFriendship(user_id, friend_id) {
             const swalWithBootstrapButtons = this.$swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-primary btn-lg',
@@ -143,7 +170,7 @@ export default {
             })
                 .then((willDelete) => {
                     if (willDelete.isConfirmed) {
-                        FriendServices.delete(pivot)
+                        FriendServices.delete(user_id, friend_id)
                             .then(response => {
                                 swalWithBootstrapButtons.fire({
                                     title: 'تم الحذف',
@@ -167,6 +194,10 @@ export default {
                 })
         },
 
+        /**
+        * create Friendship between auth and another user.
+        *  @param friend id
+        */
         async createFriendship(friend_id) {
 
             try {
@@ -197,23 +228,37 @@ export default {
             //setTimeout(location.reload(), 30000);
 
         },
-            loadMore() {
-                if (this.length > this.friends.length) return;
-                this.length = this.length + 10;
-            },
-            checkFriendsOfAuth(user_id) {
-                return this.friendsOfAuth.includes(user_id)
-            },
-            checkNotFriendsOfAuth(user_id) {
-                return this.notFriendsOfAuth.includes(user_id)
-            },
-        },
-        computed: {
-            friendsLoaded() {
-                return this.friends.slice(0, this.length);
-            },
+
+        /**
+        * load more friends.
+        */
+        loadMore() {
+            if (this.length > this.friends.length) return;
+            this.length = this.length + 10;
         },
 
-    }
+        /**
+        * check if user is friend with auth or not.
+        *  @param user id
+        */
+        checkFriendsOfAuth(user_id) {
+            return this.friendsOfAuth.includes(user_id)
+        },
+
+        /**
+        * check if user is NOT friend with auth or not.
+        *  @param user id
+        */
+        checkNotFriendsOfAuth(user_id) {
+            return this.notFriendsOfAuth.includes(user_id)
+        },
+    },
+    computed: {
+        friendsLoaded() {
+            return this.friends.slice(0, this.length);
+        },
+    },
+
+}
 
 </script>

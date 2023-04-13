@@ -1,14 +1,8 @@
 <template>
     <div class="d-grid gap-3 d-grid-template-1fr-19">
         <div class="card mb-0">
-            <div class="top-bg-image">
-                <!-- <img :src="require(`@/assets/images/${cardInfo.backgroundImg}`)"/> -->
-                <img :src="resolve_img_url(cardInfo.backgroundImg)" class="img-fluid w-100" alt="group-bg" />
-
-
-            </div>
             <div class="card-body text-center">
-                <div class="group-icon">
+                <div class="">
                     <img :src="resolve_img_url(cardInfo.groupImg)" alt="profile-img"
                         class="rounded-circle img-fluid avatar-120" />
 
@@ -28,16 +22,20 @@
                         </li>
                     </ul>
                 </div>
-                <button type="submit" class="btn btn-primary d-block w-100" @click="groupDetails()">Join</button>
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-primary d-block w-100">
+                            عرض تدقيق المراقب
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 </template>
 <script>
-import router from '../../router'
 export default {
-    name: 'card',
+    name: 'Advisor Audit Card',
     props: {
         cardInfo: { type: Object },
     },
@@ -47,7 +45,7 @@ export default {
     },
     methods: {
         resolve_img_url: function (path) {
-            let images = require.context('../../assets/images/', false, /\.png$|\.jpg$/)
+            let images = require.context('@/assets/images/', false, /\.png$|\.jpg$/)
             return images("./" + path)
         },
         // groupDetails() {
@@ -55,7 +53,5 @@ export default {
         // }
 
     }
-
-
 }
 </script>

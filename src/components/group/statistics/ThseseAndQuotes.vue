@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import PieChart from '../Charts/PieChart.vue'
+import PieChart from '../../Charts/PieChart.vue'
 import Marks from '@/API/services/marks.service'
 
 export default {
-    name: 'User Week Statistics',
+    name: 'Thsese And Quotes Statistics',
     created() {
         //week mark
         this.week_mark = this.weekMark
@@ -80,8 +80,10 @@ export default {
                 ]
             }
             //Pie Chart [for theses and qoutes]
-            data.datasets[0].data[0] = this.week_mark.total_thesis
-            data.datasets[0].data[1] = this.week_mark.total_screenshot
+            // data.datasets[0].data[0] = this.week_mark.total_thesis
+            // data.datasets[0].data[1] = this.week_mark.total_screenshot
+            data.datasets[0].data[0] = 100
+            data.datasets[0].data[1] = 150
 
             return data;
         },

@@ -11,7 +11,7 @@
             <form>
               <div class="input-group w-100 m-auto p-2">
                 <input type="search" class="form-control rounded" placeholder="ابحث عن سفير" aria-label="Search"
-                  aria-describedby="search-addon" @input="searchForAmbassadorAchievement()" v-model="ambassador_name"/>
+                  aria-describedby="search-addon" @input="searchForAmbassadorAchievement()" v-model="ambassador_name" />
                 <button type="button" class="btn btn-outline-primary"><span class="material-symbols-outlined lh-1">
                     search
                   </span></button>
@@ -24,7 +24,8 @@
                     :src="resolve_porfile_img('60x60', ambassador.user.user_profile.profile_picture, ambassador.user.user_profile.id)"
                     alt="profile-img" class="rounded-circle avatar-40" :title="ambassador.user.name" />
 
-                  <img v-else :src="resolve_porfile_img('60x60', 'ananimous_' + ambassador.user.gender + '.png', 'ananimous')"
+                  <img v-else
+                    :src="resolve_porfile_img('60x60', 'ananimous_' + ambassador.user.gender + '.png', 'ananimous')"
                     alt="profile-img" :title="ambassador.user.name" class="rounded-circle avatar-40">
                 </div>
                 <div class="d-flex align-items-center w-100 row">
@@ -36,8 +37,12 @@
                   <div class="col-lg-5 col-md-5 col-sm-12 form-check mt-2">
                     <div class="d-block w-100">
                       <div class="progress">
-                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" aria-valuenow="90"
-                          aria-valuemin="0" aria-valuemax="100" :style="`width: ${ambassador.out_of_100}%;`"></div>
+                        <div
+                          :class="`${markClass(ambassador.reading_mark + ambassador.writing_mark + ambassador.support)}`"
+                          class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="90"
+                          aria-valuemin="0" aria-valuemax="100"
+                          :style="`width: ${ambassador.reading_mark + ambassador.writing_mark + ambassador.support}%;`">
+                        </div>
                       </div>
                     </div>
 
@@ -81,8 +86,8 @@ export default {
     GroupTitle,
     MostRead
   },
-  created(){
-    this.achievementList= this.ambassadorsAchievementList
+  created() {
+    this.achievementList = this.ambassadorsAchievementList
   },
   props: {
     ambassadorsAchievementList: {
@@ -112,30 +117,65 @@ export default {
   },
   data() {
     return {
-      achievementList:[],
+      achievementList: [],
       ambassador_name: '',
       show: false,
     }
   },
   methods: {
-        /**
-        * get profile picture or cover.
-        *  @param  image size, image name, profile id
-        * @return image url
-        */
-        resolve_porfile_img(size, imageName, profile_id) {
-            return profileImagesService.resolve_porfile_img(size, imageName, profile_id);
-        },
+    /**
+    * return mark color class.
+    *  @param  mark
+    * @return class
+    */
+    markClass(mark) {
+      switch (mark) {
+        case 100:
+          return 'full-mark'
+
+        case 0:
+          return 'zero-mark'
+
+        default:
+          return 'incomplete'
+      }
+    },
+    /**
+    * get profile picture or cover.
+    *  @param  image size, image name, profile id
+    * @return image url
+    */
+    resolve_porfile_img(size, imageName, profile_id) {
+      return profileImagesService.resolve_porfile_img(size, imageName, profile_id);
+    },
 
     /**
      * ambassador achievment in a week
      * @param ambassador_name, group _id , week filter [current - previous ]
      * @return ambassador achievment
      */
-      async searchForAmbassadorAchievement(){
-          const response = await GroupService.searchForAmbassadorAchievement(this.ambassador_name,this.$route.params.group_id,'current');
-          this.achievementList=response.ambassador_achievement
-        }
+    async searchForAmbassadorAchievement() {
+      const response = await GroupService.searchForAmbassadorAchievement(this.ambassador_name, this.$route.params.group_id, 'current');
+      this.achievementList = response.ambassador_achievement
+    }
   }
 }
 </script>
+
+
+<style scoped>
+.full-mark {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.zero-mark {
+  width: 100% !important;
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-danger-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.incomplete {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-warning-rgb), var(--bs-bg-opacity)) !important;
+}</style>

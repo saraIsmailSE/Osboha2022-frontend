@@ -5,14 +5,8 @@
                 <!-- <img :src="require(`@/assets/images/${cardInfo.backgroundImg}`)"/> -->
                 <img :src="resolve_img_url(cardInfo.backgroundImg)" class="img-fluid w-100" alt="group-bg" />
 
-
             </div>
             <div class="card-body text-center">
-                <div class="group-icon">
-                    <img :src="resolve_img_url(cardInfo.groupImg)" alt="profile-img"
-                        class="rounded-circle img-fluid avatar-120" />
-
-                </div>
                 <div class="group-info pt-3 pb-3">
                     <h4>
                         <!-- <router-link :to="{ name: 'social.group-detail' }">{{ cardInfo.title }}</router-link> -->
@@ -28,16 +22,25 @@
                         </li>
                     </ul>
                 </div>
-                <button type="submit" class="btn btn-primary d-block w-100" @click="groupDetails()">Join</button>
+                <div class="row">
+                    <div class="col-6">
+                        <button class="btn btn-primary d-block w-100">
+                            عرض التدقيق
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-primary d-block w-100">
+                            عرض الفريق
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 </template>
 <script>
-import router from '../../router'
 export default {
-    name: 'card',
+    name: 'Audit Card',
     props: {
         cardInfo: { type: Object },
     },
@@ -47,7 +50,7 @@ export default {
     },
     methods: {
         resolve_img_url: function (path) {
-            let images = require.context('../../assets/images/', false, /\.png$|\.jpg$/)
+            let images = require.context('@/assets/images/', false, /\.png$|\.jpg$/)
             return images("./" + path)
         },
         // groupDetails() {

@@ -23,7 +23,7 @@
               placeholder="أدخل الرمز السري هنا" v-model="v$.form.password.$model">
             <p style="color:red" v-if="v$.form.password.$error">الرجاء قم بادخال كلمة السر</p>
           </div>
-          <!-- <router-link :to="{ name: 'auth1.forgot-password' }" class="float-end">هل نسيت كلمة السر؟</router-link> -->
+          <router-link :to="{ name: 'auth.forgot-password' }" class="float-end">هل نسيت كلمة السر؟</router-link>
           <div class="d-inline-block w-100 text-center">
             <div class="d-inline-block w-100 text-center">
               <div class="col-sm-12 text-center" v-if="loader">
@@ -35,7 +35,9 @@
 
           </div>
           <div class="sign-info">
-            <span class="dark-color d-inline-block line-height-2">لا تملك حساب؟<router-link to="/auth/signup"> سجل الأن
+            <span class="dark-color d-inline-block line-height-2">لا تملك حساب؟
+              <router-link :to="{ name: 'auth.sign-up' }">
+                سجل الأن
               </router-link></span>
           </div>
         </form>

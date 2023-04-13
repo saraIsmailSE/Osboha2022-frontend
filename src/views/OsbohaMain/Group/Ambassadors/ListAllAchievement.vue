@@ -31,9 +31,11 @@
                                     <div class="col-lg-5 col-md-5 col-sm-12 form-check mt-2">
                                         <div class="d-block w-100">
                                             <div class="progress">
-                                                <div class="progress-bar progress-bar-striped bg-primary" role="progressbar"
+                                                <div :class="`${markClass(ambassador.reading_mark + ambassador.writing_mark + ambassador.support)}`"
+                                                    class="progress-bar progress-bar-striped" role="progressbar"
                                                     aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"
-                                                    :style="`width: ${ambassador.out_of_100}%;`"></div>
+                                                    :style="`width: ${ambassador.reading_mark + ambassador.writing_mark + ambassador.support}%;`">
+                                                </div>
                                             </div>
                                         </div>
 
@@ -101,10 +103,32 @@ export default {
         }
     },
     methods: {
+        /**
+        * return mark color class.
+        *  @param  mark
+        * @return class
+        */
+        markClass(mark) {
+            switch (mark) {
+                case 100:
+                    return 'full-mark'
+
+                case 0:
+                    return 'zero-mark'
+
+                default:
+                    return 'incomplete'
+            }
+        },
+
         loadMore() {
             if (this.length > this.ambassadorsAchievement.length) return;
             this.length = this.length + 10;
         },
+        /**
+        * Filter ambassadorsAchievement by week.
+        * @return Filtered ambassadorsAchievement
+        */
         async listByWeek() {
             const response = await GroupService.AllAchievements(this.group_id, this.weekFilter)
             this.group_users = response.group_users
@@ -129,3 +153,20 @@ export default {
 
 }
 </script>
+
+<style scoped>
+.full-mark {
+    --bs-bg-opacity:1;
+    background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important;
+}
+.zero-mark {
+    width: 100% !important;
+    --bs-bg-opacity:1;
+    background-color: rgba(var(--bs-danger-rgb), var(--bs-bg-opacity)) !important;
+}
+.incomplete {
+    --bs-bg-opacity:1;
+    background-color: rgba(var(--bs-warning-rgb), var(--bs-bg-opacity)) !important;
+}
+
+</style>

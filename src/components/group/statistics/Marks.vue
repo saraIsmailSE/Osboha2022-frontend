@@ -11,31 +11,31 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mt-2 text-dark">
-                            <h6>العلامة الكلية</h6>
-                            <small>{{ week_mark.reading_mark + week_mark.writing_mark }}%</small>
+                            <h6>المعدل العام</h6>
+                            <small>100%</small>
                         </div>
                         <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
-                            <progressbar className="bg-primary" :style="{ width: (week_mark.reading_mark + week_mark.writing_mark + week_mark.support) + '%' }"
+                            <progressbar className="bg-primary" :style="{ width: 100 + '%' }"
                                 aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></progressbar>
                         </b-progress>
                     </div>
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mt-2 text-dark">
                             <h6>إنجاز القراءة</h6>
-                            <small>{{week_mark.reading_mark}}  / 50</small>
+                            <small> 45 / 50</small>
                         </div>
                         <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
-                            <progressbar className="bg-primary" :style="{ width: ((week_mark.reading_mark / 50) * 100) + '%' }"
+                            <progressbar className="bg-primary" :style="{ width: ((45 / 50) * 100) + '%' }"
                                 aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></progressbar>
                         </b-progress>
                     </div>
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mt-2 text-dark">
                             <h6>إنجاز الكتابة</h6>
-                            <small> {{week_mark.writing_mark}} / 40</small>
+                            <small> {{20}} / 40</small>
                         </div>
                         <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
-                            <progressbar className="bg-primary" :style="{ width: ((week_mark.writing_mark / 40 ) * 100) + '%' }"
+                            <progressbar className="bg-primary" :style="{ width: ((20 / 40 ) * 100) + '%' }"
                                 aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></progressbar>
                         </b-progress>
                     </div>
@@ -48,19 +48,19 @@
                                         auto_stories
                                     </span>
                                 </h6>
-                                <h2>{{ week_mark.total_pages }}</h2>
+                                <h2>{{ 22222 }}</h2>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="m-auto text-dark">
                                 <h6 class="d-inline-flex">
-                                    معدل الفريق
+                                    عدد الأطروحات
                                     <span class="material-symbols-outlined me-2">
-                                        bar_chart
+                                        draw
                                     </span>
 
                                 </h6>
-                                <h2>{{ group_week_avg }} %</h2>
+                                <h2>{{ 97 }} %</h2>
                             </div>
                         </div>
                     </div>
@@ -79,9 +79,9 @@ export default {
     name: 'Marks',
     created() {
         //week mark
-        this.week_mark = this.statistics.week_mark;
+        //this.week_mark = this.statistics.week_mark;
         // group AVG        
-        this.group_week_avg = (Math.round(this.statistics.group_week_avg * 100) / 100).toFixed(2);
+        // this.group_week_avg = (Math.round(this.statistics.group_week_avg * 100) / 100).toFixed(2);
     },
     props: {
         statistics: {
@@ -98,7 +98,8 @@ export default {
     },
     computed: {
         week_title() {
-            return this.statistics.week.title
+           return 'TEST'
+            // return this.statistics.week.title
         },
     }
 }
