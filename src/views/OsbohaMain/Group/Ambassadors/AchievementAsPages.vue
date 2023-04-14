@@ -15,29 +15,7 @@
                             <ul class="todo-task-lists m-0 p-0" v-if="achievementsLoaded && achievementsLoaded.length > 0">
                                 <li class="d-flex mb-4 align-items-center" v-for="(record, index) in achievementsLoaded"
                                     :key=index>
-                                    <div class="user-img img-fluid">
-                                        <img v-if="record.user.user_profile.profile_picture"
-                                            :src="resolve_porfile_img('60x60', record.user.user_profile.profile_picture, record.user.user_profile.id)"
-                                            alt="profile-img" class="rounded-circle avatar-40" :title="record.user.name" />
-
-                                        <img v-else
-                                            :src="resolve_porfile_img('60x60', 'ananimous_' + record.user.gender + '.png', 'ananimous')"
-                                            alt="profile-img" :title="record.user.name" class="rounded-circle avatar-40">
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between w-100">
-                                        <div class="ms-3">
-                                            <h6>{{ record.user.name }}</h6>
-                                            <p class="mb-0">عدد الصفحات: {{ record.total_pages }}</p>
-                                        </div>
-                                        <div class="card-header-toolbar d-flex align-items-center">
-                                            <router-link
-                                                :to="{ name: 'group.listOneAmbassadorReading', params: { ambassador_id: record.user_id } }">
-                                                <i class="material-symbols-outlined md-18 me-1 text-primary">
-                                                    visibility
-                                                </i>
-                                            </router-link>
-                                        </div>
-                                    </div>
+                                    <AchievementPages :record="record" />
                                 </li>
                                 <li class="d-block text-center mb-0 pb-0" v-if="ambassadorsAchievement.length > length">
                                     <a class="me-3 btn" role="button" @click="loadMore()">عرض المزيد</a>
@@ -66,12 +44,13 @@
 <script>
 import GroupService from '@/API/services/group.service';
 import GroupTitle from '@/components/group/GroupTitle.vue'
-import profileImagesService from '@/API/services/profile.images.service'
+import AchievementPages from '@/components/group/AchievementPages.vue'
 
 export default {
     name: 'Achievement As Pages',
     components: {
-        GroupTitle
+        GroupTitle,
+        AchievementPages
     },
     async created() {
 
@@ -106,14 +85,6 @@ export default {
             this.group_users = response.group_users
             this.ambassadorsAchievement = response.ambassadors_achievement
 
-        },
-        /**
-        * get profile picture or cover.
-        *  @param  image size, image name, profile id
-        * @return image url
-        */
-        resolve_porfile_img(size, imageName, profile_id) {
-            return profileImagesService.resolve_porfile_img(size, imageName, profile_id);
         },
 
     },

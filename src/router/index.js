@@ -9,8 +9,8 @@ const childRoutes = (prop, mode) => [
   {
     path: "",
     name: prop + ".list",
-    meta: { auth: true, name: "Social App" },
-    component: () => import("../views/Apps/Social/SocialApp"),
+    meta: { auth: true, name: "osboha App" },
+    component: () => import("../views/Apps/Osboha/OsbohaApp"),
   },
   {
     path: "accountsetting",
@@ -262,6 +262,12 @@ const groupChildRoute = (prop, mode = false) => [
     component: () => import('../views/OsbohaMain/Group/AuditMarks/GroupsAudit'),
   },
   {
+    path: '/group/audit/mark/:mark_id',
+    name: prop + '.markAudit',
+    meta: { auth: true, name: 'Mark' },
+    component: () => import('../views/OsbohaMain/Group/AuditMarks/Mark'),
+  },
+  {
     path: '/group/audit-marks/:group_id',
     name: prop + '.auditMarks',
     meta: { auth: true, name: 'Audit Marks' },
@@ -302,9 +308,9 @@ const timerChildRoute = (prop, mode = false) => [
 const routes = [
   {
     path: "/",
-    name: "social",
+    name: "osboha",
     component: () => import("../layouts/Default"),
-    children: childRoutes("social"),
+    children: childRoutes("osboha"),
   },
   {
     path: "/without-leftside",

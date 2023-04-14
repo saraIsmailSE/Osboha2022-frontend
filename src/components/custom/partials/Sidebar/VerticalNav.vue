@@ -15,9 +15,9 @@
     </li>
     <li class="nav-item">
       <router-link
-        :class="checkActive('social.list') ? 'active nav-link' : 'nav-link'"
+        :class="checkActive('osboha.list') ? 'active nav-link' : 'nav-link'"
         aria-current="page"
-        :to="{ name: 'social.list' }"
+        :to="{ name: 'osboha.list' }"
       >
         <i class="icon material-symbols-outlined"> newspaper </i>
         <span class="item-name">الرئيسية</span>
@@ -41,9 +41,9 @@
     <!-- ###### group ###### -->
     <li class="nav-item">
       <router-link
-        :class="checkActive('social.group') ? 'active nav-link' : 'nav-link'"
+        :class="checkActive('osboha.group') ? 'active nav-link' : 'nav-link'"
         aria-current="page"
-        :to="{ name: 'social.group' }"
+        :to="{ name: 'osboha.group' }"
       >
         <i class="icon material-symbols-outlined"> groups </i>
         <span class="item-name">المجموعات </span>
@@ -52,9 +52,9 @@
     <!-- ###### Books ###### -->
     <li class="nav-item">
       <router-link
-        :class="checkActive('social.book') ? 'active nav-link' : 'nav-link'"
+        :class="checkActive('osboha.book') ? 'active nav-link' : 'nav-link'"
         aria-current="page"
-        :to="{ name: 'social.book' }"
+        :to="{ name: 'osboha.book' }"
       >
         <i class="icon material-symbols-outlined"> book </i>
         <span class="item-name">الكتب</span>
@@ -64,10 +64,10 @@
     <li class="nav-item">
       <router-link
         :class="
-          checkActive('social.announcement') ? 'active nav-link' : 'nav-link'
+          checkActive('osboha.announcement') ? 'active nav-link' : 'nav-link'
         "
         aria-current="page"
-        :to="{ name: 'social.announcement' }"
+        :to="{ name: 'osboha.announcement' }"
       >
         <i class="icon material-symbols-outlined"> announcement </i>
         <span class="item-name">الإعلانات</span>
@@ -127,10 +127,10 @@
     <li class="nav-item">
       <router-link
         :class="
-          checkActive('social.infographic') ? 'active nav-link' : 'nav-link'
+          checkActive('osboha.infographic') ? 'active nav-link' : 'nav-link'
         "
         aria-current="page"
-        :to="{ name: 'social.infographic' }"
+        :to="{ name: 'osboha.infographic' }"
       >
         <i class="icon material-symbols-outlined"> extension </i>
         <span class="item-name">انفوجرافيك</span>
@@ -139,9 +139,9 @@
 
     <li class="nav-item">
       <router-link
-        :class="checkActive('social.articles') ? 'active nav-link' : 'nav-link'"
+        :class="checkActive('osboha.articles') ? 'active nav-link' : 'nav-link'"
         aria-current="page"
-        :to="{ name: 'social.articles' }"
+        :to="{ name: 'osboha.articles' }"
       >
         <i class="icon material-symbols-outlined"> article </i>
         <span class="item-name">مقالات</span>

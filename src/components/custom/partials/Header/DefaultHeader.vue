@@ -3,7 +3,7 @@
         <nav class="nav navbar navbar-expand-lg navbar-light iq-navbar p-lg-0">
             <div class="container-fluid navbar-inner">
                 <div class="d-flex align-items-center gap-3">
-                    <router-link :to="{ name: 'social.list' }"
+                    <router-link :to="{ name: 'osboha.list' }"
                         class="d-flex align-items-center gap-2 iq-header-logo d-none d-md-flex">
                         <!-- logo -->
                     </router-link>
@@ -16,7 +16,7 @@
                     </router-link>
                 </div>
                 <div class="d-block d-md-none">
-                    <router-link :to="{ name: 'social.list' }" class="d-flex align-items-center gap-2 iq-header-logo">
+                    <router-link :to="{ name: 'osboha.list' }" class="d-flex align-items-center gap-2 iq-header-logo">
                         <!-- logo -->
                         <h3 class="logo-title d-none d-sm-block" data-setting="app_name">أصبوحة 180 </h3>
                     </router-link>
@@ -44,7 +44,7 @@
                     <div class="offcanvas-body pt-0">
                         <ul class="navbar-nav  ms-auto navbar-list">
                             <li class="nav-item">
-                                <router-link :to="{ name: 'social.list' }" class="d-flex align-items-center">
+                                <router-link :to="{ name: 'osboha.list' }" class="d-flex align-items-center">
                                     <i class="material-symbols-outlined">home</i>
                                     <span class="mobile-text d-lg-none ms-3">Home</span>
                                 </router-link>
@@ -225,7 +225,7 @@
                                 </div>
                             </li>
                             <li class="nav-item d-lg-none">
-                                <router-link :to="{ name: 'social.notification' }" class="d-flex align-items-center">
+                                <router-link :to="{ name: 'osboha.notification' }" class="d-flex align-items-center">
                                     <i class="material-symbols-outlined">notifications</i>
                                     <span class="mobile-text  ms-3">Notifications</span>
                                 </router-link>
