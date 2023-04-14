@@ -63,7 +63,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .preview-images {
   display: flex;
   flex-wrap: wrap;

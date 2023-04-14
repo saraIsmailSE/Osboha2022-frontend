@@ -1,5 +1,5 @@
 <template>
-  <CommentHeader :comment="comment" />
+  <CommentHeader :comment="comment" @triggerEditBox="triggerEditBox" />
   <div class="blog-description">
     <h6 v-if="totalThesisPages > 0">
       الصفحات المنجزة: {{ totalThesisPages }}
@@ -13,57 +13,70 @@
     <!-- <h6>     
       <rate :rate="5" />
     </h6> -->
-    <p v-if="comment.body">{{ comment.body }}</p>
-    <div class="image-block mt-3 mb-3">
-      <img
-        v-if="comment.media"
-        :src="comment.media.path"
-        class="img-fluid rounded w-25 comment-image"
-        alt="blog-img"
-      />
-    </div>
-    <div class="d-flex flex-wrap align-items-center comment-activity">
-      <tooltip
-        tag="span"
-        class="text-muted small"
-        tooltipPlacement="bottom"
-        data-bs-toggle="tooltip"
-        :title="formatFullDate(comment.created_at)"
-        >{{ formatDateToWritten(comment.created_at) }}</tooltip
+    <CreateComment
+      v-if="showEditBox"
+      :isEdit="true"
+      ref="commentEditRef"
+      :comment="comment"
+      @editComment="editComment"
+      @cancelEdit="cancelEdit"
+    />
+    <template v-else>
+      <p v-if="comment.body">{{ comment.body }}</p>
+      <div class="image-block mt-3 mb-3">
+        <img
+          v-if="comment.media"
+          :src="comment.media.path"
+          class="img-fluid rounded w-25 comment-image"
+          alt="blog-img"
+        />
+      </div>
+      <div class="d-flex flex-wrap align-items-center comment-activity">
+        <tooltip
+          tag="span"
+          class="text-muted small"
+          tooltipPlacement="bottom"
+          data-bs-toggle="tooltip"
+          :title="formatFullDate(comment.created_at)"
+          >{{ formatDateToWritten(comment.created_at) }}</tooltip
+        >
+        &nbsp;&nbsp;
+        <a href="javascript:void();" :class="{ liked: liked }"> أعجبني </a>
+        <a href="javascript:void();" v-on:click="showReply">
+          {{ showReplyBox ? "إخفاء" : "رد" }}
+        </a>
+      </div>
+      <!--display a button to hide replies-->
+      <a
+        role="button"
+        class="load-btn"
+        v-on:click="toggleShowReplies"
+        v-if="hasReplies"
       >
-      &nbsp;&nbsp;
-      <a href="javascript:void();" :class="{ liked: liked }"> أعجبني </a>
-      <a href="javascript:void();" v-on:click="showReply">
-        {{ showReplyBox ? "إخفاء" : "رد" }}
+        {{
+          showReplies
+            ? `إخفاء ${totalReplies} من الردود`
+            : `عرض ${totalReplies} من الردود`
+        }}
       </a>
-    </div>
-    <!--display a button to hide replies-->
-    <a
-      role="button"
-      class="load-btn"
-      v-on:click="toggleShowReplies"
-      v-if="hasReplies"
-    >
-      {{
-        showReplies
-          ? `إخفاء ${totalReplies} من الردود`
-          : `عرض ${totalReplies} من الردود`
-      }}
-    </a>
+    </template>
   </div>
   <div class="comment-list" v-if="comment.replies && showReplies">
     <ul class="post-comments list-inline p-0 m-0">
       <li class="mb-2" v-for="cmnt in comment.replies" :key="cmnt.id">
-        <Comment :comment="cmnt" @addComment="addComment" />
+        <Comment
+          :comment="cmnt"
+          @addComment="addComment"
+          @editComment="editComment"
+        />
       </li>
     </ul>
   </div>
   <CreateComment
     v-if="showReplyBox"
     ref="commentReplyRef"
-    :comment_id="comment.id"
+    :comment="comment"
     :type="'reply'"
-    :post_id="comment.post_id"
     @addComment="addComment"
   />
 </template>
@@ -80,7 +93,7 @@ export default {
     CommentHeader,
     // rate,
   },
-  emits: ["addComment"],
+  emits: ["addComment", "editComment"],
   props: {
     comment: {
       type: Object,
@@ -96,6 +109,7 @@ export default {
       showReplies: false,
       showReplyBox: false,
       liked: false,
+      showEditBox: false,
     };
   },
   computed: {
@@ -116,7 +130,7 @@ export default {
         }
         return total;
       };
-      return calculateReplies(this.comment.replies);
+      return calculateReplies(this.comment?.replies);
     },
   },
   methods: {
@@ -138,6 +152,22 @@ export default {
       this.$emit("addComment", reply, comment_id);
       this.showReplies = true;
       this.showReplyBox = false;
+    },
+    triggerEditBox() {
+      if (!this.showEditBox) {
+        this.showEditBox = true;
+
+        this.$nextTick(() => {
+          this.$refs.commentEditRef.focusInput();
+        });
+      }
+    },
+    async editComment(comment) {
+      this.$emit("editComment", comment);
+      this.showEditBox = false;
+    },
+    cancelEdit() {
+      this.showEditBox = false;
     },
   },
 };
