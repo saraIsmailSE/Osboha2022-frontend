@@ -7,28 +7,7 @@
                         <ul class="suggestions-lists m-0 p-0">
                             <li class="d-flex mb-4 align-items-center" v-for="(record, index) in most_read.slice(0, 2)"
                                 :key=index>
-                                <div class="user-img img-fluid">
-                                    <img v-if="record.user.user_profile.profile_picture" :src="resolve_porfile_img('60x60', record.user.user_profile.profile_picture, record.user.user_profile.id)"
-                                        alt="profile-img" class="rounded-circle avatar-40" :title="record.user.name"/>
-
-                                    <img v-else :src="resolve_porfile_img('60x60', 'ananimous_'+record.user.gender+'.png', 'ananimous')"
-                                        alt="profile-img" :title="record.user.name"
-                                        class="rounded-circle avatar-40">
-                                </div>
-                                <div class="d-flex align-items-center justify-content-between w-100">
-                                    <div class="ms-3">
-                                        <h6>{{ record.user.name }}</h6>
-                                        <p class="mb-0">عدد الصفحات: {{ record.total_pages }}</p>
-                                    </div>
-                                    <div class="card-header-toolbar d-flex align-items-center">
-                                        <router-link
-                                            :to="{ name: 'group.listOneAmbassadorReading', params: { ambassador_id: record.user_id } }">
-                                            <i class="material-symbols-outlined md-18 me-1 text-primary">
-                                                visibility
-                                            </i>
-                                        </router-link>
-                                    </div>
-                                </div>
+                                <AchievementPages :record="record" />
                             </li>
                         </ul>
                         <div class="container mt-3 mb-3 d-flex  align-items-center justify-content-center" hight="200px">
@@ -52,7 +31,7 @@
 <script>
 import { Bar } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js'
-import profileImagesService from '@/API/services/profile.images.service'
+import AchievementPages from '@/components/group/AchievementPages.vue'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement)
 
@@ -60,6 +39,7 @@ export default {
     name: 'Most Read',
     components: {
         Bar,
+        AchievementPages,
     },
     created(){
             if (this.most_read) {
@@ -95,17 +75,6 @@ export default {
                 responsive: true,
             }
         }
-    },
-    methods:{
-                /**
-        * get profile picture or cover.
-        *  @param  image size, image name, profile id
-        * @return image url
-        */
-        resolve_porfile_img(size, imageName, profile_id) {
-            return profileImagesService.resolve_porfile_img(size, imageName, profile_id);
-        },
-
     },
 }
 </script>

@@ -162,7 +162,7 @@ export default {
                         })
 
                     this.loader = false;
-                    this.$router.push({ name: 'social.book' })
+                    this.$router.push({ name: 'osboha.book' })
                 }
                 catch (error) {
                     this.loader = false;

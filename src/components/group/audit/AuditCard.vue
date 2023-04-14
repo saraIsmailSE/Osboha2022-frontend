@@ -9,7 +9,7 @@
             <div class="card-body text-center">
                 <div class="group-info pt-3 pb-3">
                     <h4>
-                        <!-- <router-link :to="{ name: 'social.group-detail' }">{{ cardInfo.title }}</router-link> -->
+                        <!-- <router-link :to="{ name: 'osboha.group-detail' }">{{ cardInfo.title }}</router-link> -->
                         {{ cardInfo.title }}
                     </h4>
                     <p>{{ cardInfo.text }}</p>
@@ -54,7 +54,7 @@ export default {
             return images("./" + path)
         },
         // groupDetails() {
-        //     router.push({ name: "social.group-detail" })
+        //     router.push({ name: "osboha.group-detail" })
         // }
 
     }

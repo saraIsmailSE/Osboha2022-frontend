@@ -11,7 +11,7 @@
 
                 <div class="group-info pt-3 pb-3">
                     <h4>
-                        <router-link :to="{ name: 'social.book' }">{{
+                        <router-link :to="{ name: 'osboha.book' }">{{
                             cardInfo.name.slice(0, 20) +
                             (cardInfo.name.length > 20 ? "..." : "")
                         }}</router-link>
@@ -82,7 +82,7 @@ export default {
         },
         bookDetails() {
             router.push({
-                name: "social.book-details",
+                name: "osboha.book-details",
                 query: { id: this.cardInfo.id },
             });
         },

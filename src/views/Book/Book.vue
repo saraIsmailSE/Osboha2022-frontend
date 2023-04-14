@@ -29,7 +29,7 @@
         <ul class="pagination w-100">
           <router-link
             class="page-item page-link"
-            :to="{ name: 'social.book', query: { page: page - 1 } }"
+            :to="{ name: 'osboha.book', query: { page: page - 1 } }"
             rel="prev"
             v-if="page != 1"
           >
@@ -38,7 +38,7 @@
           <li class="page-item page-link" :class="checkActive(page)">
             <router-link
               class="page-item page-link"
-              :to="{ name: 'social.book', query: { page: page } }"
+              :to="{ name: 'osboha.book', query: { page: page } }"
             >
               {{ page }}
             </router-link>
@@ -46,7 +46,7 @@
 
           <router-link
             class="page-item page-link"
-            :to="{ name: 'social.book', query: { page: page + 1 } }"
+            :to="{ name: 'osboha.book', query: { page: page + 1 } }"
             rel="next"
             v-if="hasNextPage"
           >
@@ -129,7 +129,7 @@ export default {
       if (index < this.sections.length) {
         //reset the page parameter of the route to 1 for each level/lang to start the page from the beginning
         if (this.lastSelectedSection != index) {
-          this.$router.push({ name: "social.book", query: { page: 1 } });
+          this.$router.push({ name: "osboha.book", query: { page: 1 } });
         }
 
         if (Number(index) === 0) {
@@ -155,7 +155,7 @@ export default {
 
         this.lastSelectedSection = index;
       } else {
-        this.$router.push({ name: "social.book", query: { page: 1 } });
+        this.$router.push({ name: "osboha.book", query: { page: 1 } });
 
         if (index == this.recentAddedBooks) {
           response = await bookService.getRecentAddedBooks();

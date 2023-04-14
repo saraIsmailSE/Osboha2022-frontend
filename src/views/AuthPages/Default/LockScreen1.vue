@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.$router.push({ name: 'social.list' })
+      this.$router.push({ name: 'osboha.list' })
     }
   }
 }
