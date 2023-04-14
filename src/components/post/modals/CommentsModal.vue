@@ -50,7 +50,11 @@
           <div class="cols" v-for="comment in comments" :key="comment.id">
             <div class="card card-block card-stretch card-height blog">
               <div class="card-body">
-                <Comment :comment="comment" @addComment="addComment" />
+                <Comment
+                  :comment="comment"
+                  @addComment="addComment"
+                  @editComment="editComment"
+                />
               </div>
             </div>
           </div>
@@ -234,16 +238,17 @@ export default {
     addComment(comment, comment_id) {
       if (!comment_id) {
         this.comments.push(comment);
+        this.$nextTick(() => {
+          const commentModal = this.$refs.commentModalRef.$el;
+          const modalBody = commentModal.querySelector(".modal-body");
+          modalBody.scrollTop = modalBody.scrollHeight;
+        });
       } else {
-        const comment = this.findComment(this.comments, comment_id);
-        comment.replies.push(comment);
+        let commentToUpdate = this.findComment(this.comments, comment_id);
+        commentToUpdate.replies.push(comment);
+        console.log("[added comment at post]", comment);
       }
       this.incrementCommentsCount(this.post.id);
-      this.$nextTick(() => {
-        const commentModal = this.$refs.commentModalRef.$el;
-        const modalBody = commentModal.querySelector(".modal-body");
-        modalBody.scrollTop = modalBody.scrollHeight;
-      });
     },
 
     /**
@@ -269,6 +274,17 @@ export default {
           }
         }
       }
+    },
+
+    /**
+     * @description edit the comment
+     * @param {Object} comment: the comment object
+     * @returns {void}
+     */
+    editComment(comment) {
+      let commentToEdit = this.findComment(this.comments, comment.id);
+      commentToEdit.body = comment.body;
+      commentToEdit.media = comment.media;
     },
   },
 };

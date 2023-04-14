@@ -17,7 +17,10 @@ class CommentService {
     if (data.start_page) formData.append("start_page", data.start_page);
     if (data.end_page) formData.append("end_page", data.end_page);
     if (data.image) formData.append("image", data.image);
-
+    //print formdata values
+    for (const pair of formData.entries()) {
+      console.log(`${pair[0]}, ${pair[1]}`);
+    }
     try {
       const comment = await api.post("/comments", formData, {
         headers: { "Content-type": "multipart/form-data" },
@@ -50,7 +53,7 @@ class CommentService {
 
   async update(data) {
     const formData = new FormData();
-    formData.append("comment_id", data.comment_id);
+    formData.append("u_comment_id", data.u_comment_id);
     if (data.body) formData.append("body", data.body);
     if (data.screenShots && data.screenShots.length > 0) {
       for (let i = 0; i < data.screenShots.length; i++) {
@@ -61,9 +64,14 @@ class CommentService {
     if (data.end_page) formData.append("end_page", data.end_page);
     if (data.image) formData.append("image", data.image);
 
+    //print formdata values
+    for (const pair of formData.entries()) {
+      console.log(`${pair[0]}, ${pair[1]}`);
+    }
+
     try {
-      const comment = await api.put("/comments", formData, {
-        headers: { "Content-type": "multipart/form-data" },
+      const comment = await api.post("/comments/update", formData, {
+        "Content-type": "multipart/form-data",
       });
       return comment.data;
     } catch (error) {

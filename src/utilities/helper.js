@@ -1,6 +1,7 @@
 import { formatDistanceToNow } from "date-fns";
 import ar from "date-fns/locale/ar-SA";
 import { toast } from "vue3-toastify";
+import Swal from "sweetalert2";
 
 export default {
   formatDateToWritten(dateToConvert) {
@@ -49,6 +50,26 @@ export default {
         "background-color": `${backgroundColor}`,
       },
       autoClose: type === "success" ? 1000 : 3000,
+    });
+  },
+
+  handleErrorSwal(title) {
+    return Swal.fire({
+      position: "top-end",
+      title: title,
+      icon: "error",
+      showConfirmButton: true,
+      confirmButtonText: "حسناً",
+    });
+  },
+
+  handleSuccessSwal(title, timer = 1500) {
+    return Swal.fire({
+      position: "top-end",
+      title: title,
+      icon: "success",
+      showConfirmButton: false,
+      timer,
     });
   },
 };
