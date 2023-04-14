@@ -175,9 +175,6 @@
       <hr />
       <!--Success and error messages-->
 
-      <small class="text-primary text-center" v-if="successMessage">
-        {{ successMessage }}
-      </small>
       <small class="text-danger text-center" v-if="errorMessage">
         {{ errorMessage }}
       </small>
@@ -210,6 +207,7 @@ import useVuelidate from "@vuelidate/core";
 import { required, requiredIf } from "@vuelidate/validators";
 import commentService from "@/API/services/comment.service";
 import ImagePreviewer from "@/components/media/ImagePreviewer.vue";
+import helper from "@/utilities/helper";
 
 export default {
   name: "CreateThesis",
@@ -250,10 +248,9 @@ export default {
         screenShots: [],
         type: "thesis",
         book_id: null,
-        comment_id: null,
+        u_comment_id: null,
       },
       mediaNoteText: "",
-      successMessage: "",
       errorMessage: "",
     };
   },
@@ -262,73 +259,86 @@ export default {
       let allPages = [];
       let start = null;
 
+      console.log("[last thesis]", this.lastThesis);
+
       //if user has a book in progress, start pages from the last thesis end page and add 1 to it
       if (
         this.book.userBooks.length &&
         this.book.userBooks[0].status === "in progress"
       ) {
-        start = this.lastThesis?.end_page + 1;
+        start = this.lastThesis
+          ? this.lastThesis?.end_page + 1
+          : this.book.start_page;
+        console.log("[in progress]", start);
       }
       //if user has no book, so this is the first thesis, start pages from the book start page
       else if (!this.book.userBooks.length && !this.lastThesis) {
         start = this.book.start_page;
+        console.log("[first thesis]", start);
       }
 
       //if user is editting the thesis, start pages from the book start page
       if (this.thesisToEdit) {
         start = this.book.start_page;
+        console.log("[editting]", start);
       }
 
       //if start null, it means the user has finished the book
 
       //if start over button is not clicked, return empty array
       if (start === null && !this.startOver) {
+        console.log("[finished]", start);
         return [];
       }
 
       //if start over button is clicked, start pages from the book start page
       if (start === null && this.startOver) {
         start = this.book.start_page;
+        console.log("[start over]", start);
       }
-
       //add all pages to the array from the start page to the book end page
       for (let i = start; i <= this.book.end_page; i++) {
         allPages.push(i);
       }
       return allPages;
     },
+    successMessage() {
+      return this.thesisToEdit
+        ? "تم تعديل الأطروحة بنجاح"
+        : "تم إضافة الأطروحة بنجاح";
+    },
+  },
+  watch: {
+    book() {
+      this.thesisForm.book_id = this.book.id;
+      console.log("[watch book id]", this.thesisForm.book_id);
+    },
   },
   created() {
-    this.thesisForm.book_id = this.book?.id;
-
     if (this.thesisToEdit) {
-      this.thesisForm.comment_id = parseInt(this.thesisToEdit.id);
-      this.thesisForm.body = this.thesisToEdit.body;
+      this.thesisForm.u_comment_id = parseInt(this.thesisToEdit.id);
+      this.thesisForm.body = this.thesisToEdit.body
+        ? this.thesisToEdit.body
+        : "";
       this.thesisForm.start_page = this.thesisToEdit.thesis.start_page;
       this.thesisForm.end_page = this.thesisToEdit.thesis.end_page;
       this.thesisForm.screenShots.old = this.thesisToEdit.media ?? [];
       this.showPages = true;
 
       if (
-        !this.thesisToEdit.body &&
-        this.checkThesisHasMedia(this.thesisToEdit) === 0
+        (!this.thesisToEdit.body &&
+          this.checkThesisHasMedia(this.thesisToEdit) === 0) ||
+        (!this.thesisToEdit.body &&
+          this.checkThesisHasMedia(this.thesisToEdit) > 0)
       ) {
         this.thesisForm.typeOfThesis = "read";
       } else if (
-        this.thesisToEdit.body &&
-        this.checkThesisHasMedia(this.thesisToEdit) === 0
+        (this.thesisToEdit.body &&
+          this.checkThesisHasMedia(this.thesisToEdit) === 0) ||
+        (this.thesisToEdit.body &&
+          this.checkThesisHasMedia(this.thesisToEdit) > 0)
       ) {
         this.thesisForm.typeOfThesis = "readAndWrite";
-      } else if (
-        this.thesisToEdit.body &&
-        this.checkThesisHasMedia(this.thesisToEdit) > 0
-      ) {
-        this.thesisForm.typeOfThesis = "screenshotsAndWrite";
-      } else if (
-        !this.thesisToEdit.body &&
-        this.checkThesisHasMedia(this.thesisToEdit) > 0
-      ) {
-        this.thesisForm.typeOfThesis = "screenshots";
       }
 
       this.changeTypeOfThesis(this.thesisForm.typeOfThesis);
@@ -338,8 +348,10 @@ export default {
         mediaCount > 0
           ? `ملاحظة: سيتم حذف الصور الموجودين بعد تعديل الأطروحة وعددهم: ${mediaCount}`
           : "";
-
-      console.log("[this.thesisForm]", this.thesisForm);
+    } else {
+      this.thesisForm.book_id = this.book?.id;
+      console.log("[book]", this.book);
+      console.log("[thesisForm created]", this.thesisForm);
     }
   },
   methods: {
@@ -396,36 +408,43 @@ export default {
           let response;
 
           if (this.thesisToEdit) {
-            response = commentService.update(this.thesisForm);
-            console.log("[update thesis]", response.data);
+            response = await commentService.update(this.thesisForm);
           } else {
             response = await commentService.create(this.thesisForm);
-            this.$emit("addThesis", response.data);
           }
-          //reset form
-          this.thesisForm = {
-            ...this.thesisForm,
-            typeOfThesis: "",
-            start_page: "",
-            end_page: "",
-            body: "",
-            screenShots: [],
-          };
 
-          this.v$.thesisForm.$reset();
-          this.changeTypeOfThesis("");
+          if (response.statusCode !== 200) {
+            throw response.data;
+          }
 
-          this.errorMessage = "";
-          this.successMessage = "تم اضافة الأطروحة بنجاح";
+          helper.handleSuccessSwal(this.successMessage);
 
-          //timer to close the modal
-          setTimeout(() => {
-            this.successMessage = "";
-            this.$emit("closeModel");
-          }, 2000);
+          if (!this.thesisToEdit) {
+            this.$emit("addThesis", response.data);
+            //reset form
+            this.thesisForm = {
+              ...this.thesisForm,
+              typeOfThesis: "",
+              start_page: "",
+              end_page: "",
+              body: "",
+              screenShots: [],
+            };
+
+            this.v$.thesisForm.$reset();
+            this.changeTypeOfThesis("");
+
+            //timer to close the modal
+            setTimeout(() => {
+              this.$emit("closeModel");
+            }, 2000);
+          } else {
+            setTimeout(() => {
+              location.reload();
+            }, 1800);
+          }
         } catch (error) {
-          this.successMessage = "";
-          this.errorMessage = "حدث خطأ ما الرجاء المحاولة مرة اخرى!";
+          helper.handleErrorSwal("حدث خطأ ما, يرجى المحاولة مرة أخرى!");
           console.log(error);
         } finally {
           this.loader = false;

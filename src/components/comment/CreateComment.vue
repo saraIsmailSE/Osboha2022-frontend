@@ -1,45 +1,73 @@
 <template>
-  <form
-    class="comment-text d-flex align-items-center mt-3"
-    @submit.prevent="addComment"
-  >
-    <input
-      type="text"
-      class="form-control rounded"
-      placeholder="أضف تعليق"
-      ref="commentInput"
-      v-model.trim="v$.comment.body.$model"
-    />
-    <div class="comment-attagement right d-flex">
-      <button
-        type="submit"
-        class="material-symbols-outlined ms-2 border-0 bg-transparent"
-        :class="{
-          'text-primary': !v$.comment.$invalid,
-          disabled: v$.comment.$invalid,
+  <div class="d-flex flex-column">
+    <form
+      class="comment-text d-flex align-items-center mt-3"
+      @submit.prevent="addComment"
+    >
+      <input
+        type="text"
+        class="form-control rounded"
+        placeholder="أضف تعليق"
+        ref="commentInput"
+        v-model.trim="v$.commentData.body.$model"
+        :style="{
+          'padding-right': isEdit ? '1rem !important' : '3rem !important',
         }"
-        :disabled="v$.comment.$invalid"
+      />
+      <div class="comment-attagement right d-flex" v-if="!isEdit">
+        <button
+          type="submit"
+          class="material-symbols-outlined ms-2 border-0 bg-transparent"
+          :class="{
+            'text-primary': !v$.commentData.$invalid,
+            disabled: v$.commentData.$invalid,
+          }"
+          :disabled="v$.commentData.$invalid || loading"
+        >
+          Send
+        </button>
+      </div>
+      <div class="comment-attagement d-flex">
+        <input
+          type="file"
+          ref="imageInput"
+          class="d-none"
+          @change="uploadImage"
+          accept="image/*"
+        />
+        <a
+          href="javascript:void(0);"
+          class="material-symbols-outlined me-3"
+          @click="chooseImage"
+        >
+          photo_camera
+        </a>
+      </div>
+    </form>
+    <div class="preview-images" v-if="fileSrc">
+      <div class="image-container">
+        <div class="delete-image" @click="removeMedia">
+          <span> x </span>
+        </div>
+        <img :src="fileSrc" />
+      </div>
+    </div>
+    <div class="mt-2" v-if="isEdit">
+      <button
+        class="btn btn-primary btn-sm me-2"
+        @click.prevent="editComment"
+        :disabled="loading"
       >
-        Send
+        تعديل
+      </button>
+      <button
+        class="btn btn-danger btn-sm"
+        @click.prevent="$emit('cancelEdit')"
+      >
+        إلغاء
       </button>
     </div>
-    <div class="comment-attagement d-flex">
-      <input
-        type="file"
-        ref="imageInput"
-        class="d-none"
-        @change="uploadImage"
-        accept="image/*"
-      />
-      <a
-        href="javascript:void(0);"
-        class="material-symbols-outlined me-3"
-        @click="chooseImage"
-      >
-        photo_camera
-      </a>
-    </div>
-  </form>
+  </div>
 </template>
 <script>
 import useVuelidate from "@vuelidate/core";
@@ -55,28 +83,35 @@ export default {
       v$,
     };
   },
-  emits: ["addComment"],
+  emits: ["addComment", "editComment", "cancelEdit"],
   props: {
-    comment_id: {
-      type: Number,
-      required: false,
+    comment: {
+      type: Object,
+      default: () => ({}),
     },
     type: {
       type: String,
-      required: true,
+      default: "",
     },
     post_id: {
       type: Number,
+      default: null,
+    },
+    isEdit: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
     return {
-      comment: {
-        body: "",
+      fileSrc: this.isEdit ? this.comment?.media?.path ?? "" : "",
+      loading: false,
+      commentData: {
+        body: this.isEdit ? this.comment?.body ?? "" : "",
         image: null,
         book_id: this.$route.params.book_id,
-        comment_id: this.comment_id,
-        post_id: this.post_id,
+        comment_id: this.comment.id,
+        post_id: this.comment.post_id ?? this.post_id,
         type: this.type,
       },
     };
@@ -90,36 +125,97 @@ export default {
     },
     uploadImage(e) {
       const file = e.target.files[0];
-      this.comment.image = file;
+      this.commentData.image = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.fileSrc = reader.result;
+      };
+      reader.readAsDataURL(file);
+    },
+    removeMedia() {
+      this.fileSrc = "";
+      this.$refs.imageInput.value = null;
     },
     async addComment() {
-      const response = await commentService.create(this.comment);
+      if (this.loading) return;
 
-      if (response.statusCode !== 200) {
-        helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
-        return;
+      this.v$.$touch();
+      if (!this.v$.commentData.$invalid) {
+        this.loading = true;
+
+        try {
+          const response = await commentService.create(this.commentData);
+
+          if (response.statusCode !== 200) {
+            helper.handleErrorSwal("حدث خطأ ما, حاول مرة أخرى");
+            return;
+          }
+
+          console.log("[add comment response]", response.data, this.comment.id);
+          this.$emit("addComment", response.data, this.comment?.id);
+
+          // reset form
+          this.commentData.body = "";
+          this.commentData.image = null;
+          this.$refs.imageInput.value = "";
+          this.fileSrc = "";
+
+          this.v$.$reset();
+
+          helper.toggleToast("تم إضافة التعليق ", "success");
+        } catch (error) {
+          helper.handleErrorSwal("حدث خطأ ما, حاول مرة أخرى");
+        } finally {
+          this.loading = false;
+        }
+      } else {
+        helper.toggleToast("يرجى إدخال البيانات", "error");
       }
+    },
 
-      this.$emit("addComment", response.data, this.comment_id);
+    async editComment() {
+      if (this.loading) return;
 
-      // reset form
-      this.comment.body = "";
-      this.comment.image = null;
-      this.$refs.imageInput.value = "";
+      this.v$.$touch();
+      if (!this.v$.commentData.$invalid) {
+        this.loading = true;
 
-      this.v$.$reset();
+        try {
+          const dataToUpdate = {
+            body: this.commentData.body,
+            u_comment_id: this.comment.id,
+            image: this.commentData.image,
+          };
 
-      helper.toggleToast("تم إضافة التعليق ", "success");
+          const response = await commentService.update(dataToUpdate);
+
+          if (response.statusCode !== 200) {
+            helper.handleErrorSwal("حدث خطأ ما, حاول مرة أخرى");
+            return;
+          }
+
+          this.$emit("editComment", response.data);
+        } catch (error) {
+          helper.handleErrorSwal("حدث خطأ ما, حاول مرة أخرى");
+        } finally {
+          this.loading = false;
+        }
+
+        helper.toggleToast("تم تعديل التعليق ", "success");
+      } else {
+        helper.toggleToast("يرجى إدخال البيانات", "error");
+      }
     },
   },
   validations() {
     return {
-      comment: {
+      commentData: {
         body: {
-          required: requiredIf(() => !this.comment.image),
+          required: requiredIf(() => !this.commentData.image),
         },
         image: {
-          required: requiredIf(() => !this.comment.body),
+          required: requiredIf(() => !this.commentData.body),
         },
       },
     };
@@ -130,10 +226,6 @@ export default {
 .right {
   left: auto !important;
   right: 0 !important;
-}
-
-.form-control {
-  padding-right: 3rem !important;
 }
 
 .disabled {

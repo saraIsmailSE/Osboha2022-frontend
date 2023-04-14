@@ -33,28 +33,29 @@
           :class="{ show: showDropdown }"
           x-placement="bottom-end"
         >
-          <a
-            class="dropdown-item d-flex align-items-center"
-            href="#"
-            data-bs-toggle="modal"
-            :data-bs-target="`#editThesis-${
-              comment.type === 'screenshot' ? comment.comment_id : comment.id
-            }`"
-            v-if="
-              canEdit &&
-              (comment.type === 'thesis' || comment.type === 'screenshot')
-            "
-            ><span class="material-symbols-outlined me-2 md-18"> edit </span
-            >تعديل</a
-          >
-          <a
-            v-else
-            class="dropdown-item d-flex align-items-center"
-            href="#"
-            @click.prevent="editCmnt"
-            ><span class="material-symbols-outlined me-2 md-18"> edit </span
-            >تعديل</a
-          >
+          <template v-if="canEdit">
+            <a
+              class="dropdown-item d-flex align-items-center"
+              href="#"
+              data-bs-toggle="modal"
+              :data-bs-target="`#editThesis-${
+                comment.type.trim() === 'screenshot'
+                  ? comment.comment_id
+                  : comment.id
+              }`"
+              v-if="comment.type === 'thesis' || comment.type === 'screenshot'"
+              ><span class="material-symbols-outlined me-2 md-18"> edit </span
+              >تعديل</a
+            >
+            <a
+              v-else
+              class="dropdown-item d-flex align-items-center"
+              href="#"
+              @click.prevent="editCmnt"
+              ><span class="material-symbols-outlined me-2 md-18"> edit </span
+              >تعديل</a
+            >
+          </template>
           <a
             class="dropdown-item d-flex align-items-center"
             href="#"
@@ -86,11 +87,13 @@ export default {
       required: true,
     },
   },
+  emits: ["triggerEditBox"],
   data() {
     return {
       showDropdown: false,
       deleteLoading: false,
-      confirmationText: "هل أنت متأكد من حذف هذا التعليق؟",
+      confirmationText: "",
+      successText: "",
     };
   },
   computed: {
@@ -111,8 +114,13 @@ export default {
   created() {
     this.confirmationText =
       this.comment.type === "thesis" || this.comment.type === "screenshot"
-        ? "هل أنت متأكد من حذف هذا التعليق؟ سيتم خصم علامة الأطروحة بعد الحذف!"
-        : "هل أنت متأكد من حذف هذا التعليق؟";
+        ? "سيتم حذف الأطروحة نهائياً, وخصم علامتها!"
+        : "سيتم حذف التعليق نهائياً!";
+
+    this.successText =
+      this.comment.type === "thesis" || this.comment.type === "screenshot"
+        ? "تم حذف الأطروحة نهائياً, وخصم علامتها!"
+        : "تم حذف التعليق!";
   },
   methods: {
     resolve_img_url(path) {
@@ -125,24 +133,24 @@ export default {
       this.showDropdown = false;
     },
     async deleteCmnt() {
+      const swalWithBootstrapButtons = this.$swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-primary btn-lg",
+          cancelButton: "btn btn-outline-danger btn-lg ms-2",
+        },
+        buttonsStyling: false,
+      });
+
       if (this.canDelete) {
         if (this.deleteLoading) return;
-
-        const swalWithBootstrapButtons = this.$swal.mixin({
-          customClass: {
-            confirmButton: "btn btn-primary btn-lg ",
-            cancelButton: "btn btn-outline-primary btn-lg ms-2",
-          },
-          buttonsStyling: false,
-        });
 
         swalWithBootstrapButtons
           .fire({
             title: "هل أنت متأكد؟",
-            text: "سيتم حذف التعليق نهائياً!",
+            text: this.confirmationText,
             icon: "warning",
             showCancelButton: true,
-            confirmButtonText: "نعم, احذفه!",
+            confirmButtonText: "نعم, احذف!",
             cancelButtonText: "تراجع",
             showClass: {
               popup: "animate__animated animate__zoomIn",
@@ -157,12 +165,17 @@ export default {
               try {
                 await CommentService.delete(this.comment.id);
                 this.deleteComment(this.comment.id);
-                // this.$refs.deleteCommentRef.closeModal();
-                helper.toggleToast("تم حذف التعليق", "success");
+
+                helper.handleSuccessSwal(this.successText);
+                if (
+                  this.comment.type === "thesis" ||
+                  this.comment.type === "screenshot"
+                ) {
+                  setTimeout(() => location.reload(), 1800);
+                }
               } catch (error) {
-                helper.toggleToast(
-                  "حدث خطأ أثناء حذف التعليق, حاول مرة أخرى",
-                  "error"
+                helper.handleErrorSwal(
+                  "حدث خطأ أثناء الحذف, يرجى المحاولة مرة أخرى!"
                 );
               } finally {
                 this.deleteLoading = false;
@@ -175,8 +188,27 @@ export default {
       }
     },
     async editCmnt() {
-      console.log("[edit comment] ", this.comment.id);
+      this.showDropdown = false;
+      this.$emit("triggerEditBox");
     },
   },
 };
 </script>
+
+<style>
+.swal2-confirm {
+  background-color: #1f662b !important;
+}
+
+.swal2-cancel {
+  color: #b80606 !important;
+  border-color: #b80606 !important;
+}
+
+.swal2-cancel:hover {
+  color: #fff !important;
+  border-color: #b80606 !important;
+  background-color: #b80606 !important;
+}
+</style>
+>

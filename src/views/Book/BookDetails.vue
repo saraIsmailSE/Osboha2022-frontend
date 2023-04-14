@@ -109,6 +109,7 @@
                           : 0
                       "
                       @addComment="addComment"
+                      @editComment="editComment"
                     />
                   </div>
                 </div>
@@ -133,11 +134,7 @@
                     </a>
                   </model-header>
                   <model-body>
-                    <createThesis
-                      :book="book.book"
-                      :thesisToEdit="comment"
-                      @closeModel="$refs.editCloseBtn.click()"
-                    />
+                    <createThesis :book="book.book" :thesisToEdit="comment" />
                   </model-body>
                 </modal>
               </div>
@@ -216,7 +213,6 @@ export default {
   provide() {
     return {
       deleteComment: this.deleteComment,
-      editThesis: this.editThesis,
     };
   },
   // props: ["id"],
@@ -346,6 +342,7 @@ export default {
         const comment = this.findComment(this.theses, comment_id);
         comment.replies.push(reply);
         this.book.comments_count++;
+        console.log("[added comment at book]", comment);
       }
     },
     deleteComment(comment_id) {
@@ -366,8 +363,10 @@ export default {
         }
       }
     },
-    async editThesis() {
-      console.log("[book details] edit thesis");
+    editComment(comment) {
+      let commentToEdit = this.findComment(this.theses, comment.id);
+      commentToEdit.body = comment.body;
+      commentToEdit.media = comment.media;
     },
   },
   computed: {
