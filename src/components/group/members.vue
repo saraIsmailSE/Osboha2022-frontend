@@ -18,7 +18,7 @@
 
 
         <!-- DISPLAY FOR ADVISOR -->
-        <div class="d-flex align-items-center mt-3 col-6" v-if="authInGroup && authInGroup.user_type != 'ambassador'"
+        <div class="d-flex align-items-center mt-3 col-6" 
             v-click-outside="onClickOutside">
             <div class="d-inline-block w-100 text-center" @click="show = !show" role="button">
                 <span class="align-middle material-symbols-outlined">
@@ -44,14 +44,14 @@
                     </span>
                     اضافة سفير
                 </a>
-                <a role="button" class="dropdown-item d-flex align-items-center">
+                <router-link :to="{path : `/group/change-leader/${group_id}`}"  role="button" class="dropdown-item d-flex align-items-center">
                     <span class="material-symbols-outlined me-2 md-18">
                         groups
                     </span>
                     تبديل القائد
-                </a>
+                </router-link>
                 <a role="button" class="dropdown-item d-flex align-items-center">
-                    <span class="material-symbols-outlined me-2 md-18">
+                   <span class="material-symbols-outlined me-2 md-18">
                         supervisor_account
                     </span>
                     تبديل المراقب
@@ -102,3 +102,4 @@ export default {
 
 }
 </script>
+//  v-if="!authInGroup && authInGroup.user_type != 'ambassador'  
