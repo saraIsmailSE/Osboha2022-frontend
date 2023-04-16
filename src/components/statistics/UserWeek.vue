@@ -60,6 +60,8 @@ export default {
         async userWeekAchievement() {
             const response = await Marks.userWeekAchievement(this.$route.params.user_id, this.weekAchievementFilter)
             this.week_mark = response.week_mark
+            console.log(this.week_mark);
+
         },
 
     },

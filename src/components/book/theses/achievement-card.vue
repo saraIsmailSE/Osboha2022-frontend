@@ -16,7 +16,7 @@
                         </p>
                         <div class="d-flex justify-content-between text-center mt-5 mb-2">
                             <div>
-                                <p class="text-center mb-2 h5"><strong>{{ mark.out_of_100 }}%</strong></p>
+                                <p class="text-center mb-2 h5"><strong>{{ mark.reading_mark + mark.writing_mark + mark.support }}%</strong></p>
                                 <p class="text-center mb-0">
                                     العلامة
                                     <br>

@@ -36,7 +36,6 @@ export default {
         // month Achievement
         this.month_achievement = this.monthAchievement
         this.month_title=this.monthTitle
-
     },
     props: {
         monthAchievement: {
@@ -96,8 +95,8 @@ export default {
             data.labels = Object.keys(this.month_achievement)
             data.datasets[0].data = Object.values(this.month_achievement)
             data.datasets[0].label = this.formated_month_title
-            data.datasets[0].data[data.datasets[0].data.length - 1] = 50
-
+            data.labels.unshift('')
+            data.datasets[0].data.unshift(50);
             return data;
         },
     }

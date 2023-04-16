@@ -19,7 +19,7 @@
           <h4>
             <router-link
               :to="{
-                name: 'social.book-details',
+                name: 'osboha.book-details',
                 params: { book_id: this.cardInfo.id },
               }"
               >{{ cardInfo.name }}</router-link
@@ -123,7 +123,7 @@ export default {
     },
     bookDetails() {
       router.push({
-        name: "social.book-details",
+        name: "osboha.book-details",
         params: { book_id: this.cardInfo.id },
       });
     },

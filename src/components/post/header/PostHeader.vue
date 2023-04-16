@@ -4,16 +4,24 @@
       <!--Post user name and date of post-->
       <TaggedFriends :user="post.user">
         <template #date>
-          <tooltip
-            tag="p"
-            class="mb-0 text-primary"
-            tooltipPlacement="bottom"
-            data-bs-toggle="tooltip"
-            :title="formatFullDate(post.created_at)"
-            style="width: fit-content"
-            >{{ formatDateToWritten(post.created_at) }}</tooltip
-          ></template
-        >
+          <div class="d-flex align-items-center">
+            <tooltip
+              tag="p"
+              class="mb-0 text-primary"
+              tooltipPlacement="bottom"
+              data-bs-toggle="tooltip"
+              :title="formatFullDate(post.created_at)"
+              style="width: fit-content"
+              >{{ formatDateToWritten(post.created_at) }}</tooltip
+            >
+
+            <span class="material-symbols-outlined ms-1" v-if="post.is_pinned">
+              push_pin
+            </span>
+
+            <span v-if="is_announcement" class="ms-1 text-danger">إعلان</span>
+          </div>
+        </template>
       </TaggedFriends>
 
       <!--Post actions dropdown (edit - delete - pin)-->
@@ -100,6 +108,10 @@ export default {
       default: false,
     },
     showPin: {
+      type: Boolean,
+      default: false,
+    },
+    is_announcement: {
       type: Boolean,
       default: false,
     },

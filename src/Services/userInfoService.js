@@ -23,6 +23,42 @@ class TokenService {
     return JSON.parse(localStorage.getItem("user")).user.roles;
   }
 
+  //asmaa
+  hasRole(role_name) {
+    let roles = this.getRoles();
+    let found = false;
+    roles.forEach((role) => {
+      if (role.name === role_name) {
+        found = true;
+      }
+    });
+
+    return found;
+  }
+
+  //asmaa
+  getRolePermissions(role_name) {
+    return this.getRoles().find((role) => role.name === role_name).permissions;
+  }
+
+  //asmaa
+  hasPermission(permission_name) {
+    //search among all roles
+    let roles = this.getRoles();
+    let found = false;
+    roles.forEach((role) => {
+      if (
+        role.permissions.find(
+          (permission) => permission.name === permission_name
+        )
+      ) {
+        found = true;
+      }
+    });
+
+    return found;
+  }
+
   getPermissions() {
     return JSON.parse(localStorage.getItem("user")).user.permissions;
   }

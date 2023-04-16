@@ -57,7 +57,7 @@
                 type="file"
                 @change="previewMedia($event)"
                 multiple
-                accept="image/*|video/*"
+                accept="image/*"
                 class="d-none"
                 ref="fileRef"
               />
@@ -139,7 +139,6 @@
       <modal
         ref="friendsListModalRef"
         id="friendsListModal"
-        title="choose friend"
         tabindex="-1"
         aria-labelledby="friendsModalLabel"
         :aria-hidden="true"
@@ -397,10 +396,10 @@ export default {
       this.loader = true;
       try {
         const post = await postService.create(newPost);
+        console.log("[post]", post);
 
         if (post.statusCode !== 200) {
           helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
-          this.loader = false;
           return;
         }
 
@@ -417,11 +416,11 @@ export default {
         this.postModal.hide();
         helper.toggleToast("تم النشر بنجاح", "success");
       } catch (err) {
+        console.log("[err]", err);
         helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
-        return;
+      } finally {
+        this.loader = false;
       }
-
-      this.loader = false;
     },
   },
 };

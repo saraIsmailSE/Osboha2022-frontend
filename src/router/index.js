@@ -9,8 +9,8 @@ const childRoutes = (prop, mode) => [
   {
     path: "",
     name: prop + ".list",
-    meta: { auth: true, name: "Social App" },
-    component: () => import("../views/Apps/Social/SocialApp"),
+    meta: { auth: true, name: "osboha App" },
+    component: () => import("../views/Apps/Osboha/OsbohaApp"),
   },
   {
     path: "accountsetting",
@@ -82,13 +82,18 @@ const authchildRoutes = (prop, mode) => [
   },
   {
     path: "signup",
-    name: prop + ".sign-up1",
+    name: prop + ".sign-up",
     component: () => import("../views/AuthPages/Default/SignUp"),
   },
   {
-    path: "recoverpassword",
-    name: prop + ".recoverpassword1",
-    component: () => import("../views/AuthPages/Default/RecoverPassword1"),
+    path: 'forgot-password',
+    name: prop + '.forgot-password',
+    component: () => import('../views/AuthPages/Default/ForgotPassword.vue')
+  },
+  {
+    path: 'reset-password/:token',
+    name: prop + '.reset-password',
+    component: () => import('../views/AuthPages/Default/ResetPassword')
   },
   {
     path: "lockscreen",
@@ -96,9 +101,9 @@ const authchildRoutes = (prop, mode) => [
     component: () => import("../views/AuthPages/Default/LockScreen1"),
   },
   {
-    path: "confirmmail",
-    name: prop + ".confirmmail1",
-    component: () => import("../views/AuthPages/Default/ConfirmMail1"),
+    path: "confirm-mail",
+    name: prop + ".confirmmail",
+    component: () => import("../views/AuthPages/Default/ConfirmMail"),
   },
 ];
 const blogchildRoutes = (prop, mode = false) => [
@@ -269,10 +274,34 @@ const groupChildRoute = (prop, mode = false) => [
     component: () => import('../views/OsbohaMain/Group/Ambassadors/AchievementAsPages'),
   },
   {
-    path: '/audit-marks/:group_id',
+    path: '/group/groups-audit',
+    name: prop + '.groupsAudit',
+    meta: { auth: true, name: 'Audit Marks' },
+    component: () => import('../views/OsbohaMain/Group/AuditMarks/GroupsAudit'),
+  },
+  {
+    path: '/group/audit/mark/:mark_id',
+    name: prop + '.markAudit',
+    meta: { auth: true, name: 'Mark' },
+    component: () => import('../views/OsbohaMain/Group/AuditMarks/Mark'),
+  },
+  {
+    path: '/group/audit-marks/:group_id',
     name: prop + '.auditMarks',
     meta: { auth: true, name: 'Audit Marks' },
-    component: () => import('../views/OsbohaMain/Group/AuditMarks'),
+    component: () => import('../views/OsbohaMain/Group/AuditMarks/AuditMarks'),
+  },
+  {
+    path: '/group/advisor-audit-marks/',
+    name: prop + '.AdvisorAudit',
+    meta: { auth: true, name: 'Advisor Audit Marks' },
+    component: () => import('../views/OsbohaMain/Group/AuditMarks/AdvisorAudit'),
+  },
+  {
+    path: '/group/statistics/:group_id',
+    name: prop + '.Statistics',
+    meta: { auth: true, name: 'Group Statistics' },
+    component: () => import('../views/OsbohaMain/Group/Statistics'),
   },
 ];
 
@@ -297,9 +326,9 @@ const timerChildRoute = (prop, mode = false) => [
 const routes = [
   {
     path: "/",
-    name: "social",
+    name: "osboha",
     component: () => import("../layouts/Default"),
-    children: childRoutes("social"),
+    children: childRoutes("osboha"),
   },
   {
     path: "/without-leftside",
@@ -381,10 +410,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if user is not logged in and trying to access a restricted page
-  const publicPages = ["/auth/signin", "/auth/signup"];
+  const publicPages = ['/auth/signin','/auth/signup','/auth/admin/signup','/auth/forgot-password','reset-password'];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem("user");
-  if (authRequired && !loggedIn) {
+  const resetRoute = to.path.split('/')
+  const resetPassword = !publicPages.includes(resetRoute[2])
+
+  if (authRequired && !loggedIn && resetPassword) {
     return next("/auth/signin");
   }
 

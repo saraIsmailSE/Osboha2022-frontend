@@ -12,30 +12,30 @@
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mt-2 text-dark">
                             <h6>العلامة الكلية</h6>
-                            <small>{{ week_mark.out_of_100 }}%</small>
+                            <small>{{ week_mark.reading_mark + week_mark.writing_mark }}%</small>
                         </div>
                         <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
-                            <progressbar className="bg-primary" :style="{ width: week_mark.out_of_100 + '%' }"
+                            <progressbar className="bg-primary" :style="{ width: (week_mark.reading_mark + week_mark.writing_mark + week_mark.support) + '%' }"
                                 aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></progressbar>
                         </b-progress>
                     </div>
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mt-2 text-dark">
                             <h6>إنجاز القراءة</h6>
-                            <small>تـــام</small>
+                            <small>{{week_mark.reading_mark}}  / 50</small>
                         </div>
                         <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
-                            <progressbar className="bg-primary" :style="{ width: week_mark.out_of_100 + '%' }"
+                            <progressbar className="bg-primary" :style="{ width: ((week_mark.reading_mark / 50) * 100) + '%' }"
                                 aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></progressbar>
                         </b-progress>
                     </div>
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mt-2 text-dark">
                             <h6>إنجاز الكتابة</h6>
-                            <small>تـــام</small>
+                            <small> {{week_mark.writing_mark}} / 40</small>
                         </div>
                         <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
-                            <progressbar className="bg-primary" :style="{ width: week_mark.out_of_100 + '%' }"
+                            <progressbar className="bg-primary" :style="{ width: ((week_mark.writing_mark / 40 ) * 100) + '%' }"
                                 aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></progressbar>
                         </b-progress>
                     </div>
@@ -79,7 +79,7 @@ export default {
     name: 'Marks',
     created() {
         //week mark
-        this.week_mark = this.statistics.week_mark
+        this.week_mark = this.statistics.week_mark;
         // group AVG        
         this.group_week_avg = (Math.round(this.statistics.group_week_avg * 100) / 100).toFixed(2);
     },

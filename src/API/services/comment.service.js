@@ -1,3 +1,4 @@
+import { handleError } from "vue";
 import { api } from "../Intercepter";
 
 class CommentService {
@@ -16,14 +17,17 @@ class CommentService {
     if (data.start_page) formData.append("start_page", data.start_page);
     if (data.end_page) formData.append("end_page", data.end_page);
     if (data.image) formData.append("image", data.image);
-
+    //print formdata values
+    for (const pair of formData.entries()) {
+      console.log(`${pair[0]}, ${pair[1]}`);
+    }
     try {
       const comment = await api.post("/comments", formData, {
         headers: { "Content-type": "multipart/form-data" },
       });
       return comment.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
@@ -34,7 +38,7 @@ class CommentService {
       );
       return comments.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
@@ -43,37 +47,43 @@ class CommentService {
       const users = await api.get(`/comments/post/${post_id}/users`);
       return users.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
-  async updateCommentById(body, comment_id, image, screenShots, total_pages) {
+  async update(data) {
     const formData = new FormData();
-    formData.append("comment_id", comment_id);
-    formData.append("total_pages", total_pages);
-    if (image) {
-      formData.append("image", image);
+    formData.append("u_comment_id", data.u_comment_id);
+    if (data.body) formData.append("body", data.body);
+    if (data.screenShots && data.screenShots.length > 0) {
+      for (let i = 0; i < data.screenShots.length; i++) {
+        formData.append("screenShots[]", data.screenShots[i]);
+      }
     }
-    if (screenShots) {
-      formData.append("screenShots", screenShots);
+    if (data.start_page) formData.append("start_page", data.start_page);
+    if (data.end_page) formData.append("end_page", data.end_page);
+    if (data.image) formData.append("image", data.image);
+
+    //print formdata values
+    for (const pair of formData.entries()) {
+      console.log(`${pair[0]}, ${pair[1]}`);
     }
-    if (body) {
-      formData.append("body", body);
-    }
+
     try {
-      return await api.post("/comment/update", formData, {
-        headers: { "Content-type": "multipart/form-data" },
+      const comment = await api.post("/comments/update", formData, {
+        "Content-type": "multipart/form-data",
       });
+      return comment.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
-  async deleteById(comment_id) {
+  async delete(id) {
     try {
-      return await api.post("/comment/delete", { comment_id });
+      return await api.delete(`/comments/${id}`);
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 }

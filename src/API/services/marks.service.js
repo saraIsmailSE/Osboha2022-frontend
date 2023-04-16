@@ -40,6 +40,19 @@ class UserProfile {
         return error;
       }
     }
+    /**
+     * get mark with theses by mark id => list only for group administrators
+   *  @param  mark_id
+   * @return mark with Achievement
+   */
+    async show(mark_id) {
+      try {
+        const response = await api.get(`marks/${mark_id}`);
+        return response.data.data;
+      } catch (error) {
+        return error;
+      }
+    }
 }
 
 export default new UserProfile();

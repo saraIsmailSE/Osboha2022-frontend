@@ -15,7 +15,8 @@
                 </div>
                 <div class="group-info pt-3 pb-3">
                     <h4>
-                        <router-link :to="{ name: 'social.group-detail' }">{{ cardInfo.title }}</router-link>
+                        <!-- <router-link :to="{ name: 'osboha.group-detail' }">{{ cardInfo.title }}</router-link> -->
+                        {{ cardInfo.title }}
                     </h4>
                     <p>{{ cardInfo.text }}</p>
                 </div>
@@ -49,9 +50,9 @@ export default {
             let images = require.context('../../assets/images/', false, /\.png$|\.jpg$/)
             return images("./" + path)
         },
-        groupDetails() {
-            router.push({ name: "social.group-detail" })
-        }
+        // groupDetails() {
+        //     router.push({ name: "osboha.group-detail" })
+        // }
 
     }
 

@@ -88,9 +88,9 @@
                         <div class="sign-info">
                             <span class="dark-color d-inline-block line-height-2">
                                 تملك حساب؟
-                                <!-- <router-link :to="{ name: 'auth.sign-in1' }"> -->
+                                <router-link :to="{ name: 'auth.sign-in' }">
                                     تسجيل الدخول
-                                <!-- </router-link> -->
+                                </router-link>
                             </span>
                         </div>
                     </form>
@@ -162,7 +162,7 @@ export default {
                         })
 
                     this.loader = false;
-                    this.$router.push({ name: 'social.book' })
+                    this.$router.push({ name: 'osboha.book' })
                 }
                 catch (error) {
                     this.loader = false;
