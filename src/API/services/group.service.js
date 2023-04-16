@@ -4,12 +4,12 @@ class GroupService {
         let formData = new FormData();
         formData.append('name', name);
         formData.append('description', description);
-        formData.append('typeId', typeId);
-        formData.append('image', image);
+        formData.append('type_id', typeId);
+        // formData.append('image', image);
         try {
             const response = await api.post('/group/create', formData, {
                 headers: { "Content-type": "multipart/form-data" },
-            })
+            }) 
             return response.data
         } catch (error) {
             return error;

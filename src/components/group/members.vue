@@ -28,7 +28,7 @@
     <div class="iq-media-group me-3 col-6" v-else>
       <p>لا يوجد أعضاء</p>
     </div>
-
+ 
     <!-- DISPLAY FOR ADVISOR -->
     <div
       class="d-flex align-items-center mt-3 col-6"
@@ -43,6 +43,7 @@
         <span class="align-middle material-symbols-outlined"> settings </span>
         <span>اعدادت المجموعة</span>
       </div>
+ 
 
       <div
         :class="`dropdown-menu dropdown-menu-right ${show ? 'show' : ''}`"
@@ -62,7 +63,7 @@
             طلب سفراء
           </a>
         </router-link>
-
+ 
         <a role="button" class="dropdown-item d-flex align-items-center">
           <span class="material-symbols-outlined me-2 md-18"> person_add </span>
           اضافة سفير
@@ -78,6 +79,7 @@
           تبديل المراقب
         </a>
       </div>
+ 
     </div>
     <!-- DISPLAY FOR ADVISOR -->
   </div>
@@ -125,3 +127,4 @@ export default {
   },
 };
 </script>
+//  v-if="!authInGroup && authInGroup.user_type != 'ambassador'  
