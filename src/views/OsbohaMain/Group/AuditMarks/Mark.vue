@@ -7,6 +7,12 @@
                         الأسبوع {{ week.title }}
                     </h3>
                 </div>
+                <div class="text-center">
+                    <span v-if="mark_for_audit"
+                        :class="`ms-2 rounded badge text-white ${statusClass(mark_for_audit.status)}`">{{
+                            audit_status[mark_for_audit.status] }}</span>
+                </div>
+
                 <div class="iq-card-body p-3">
                     <AchievementCard v-if="mark" :mark="mark" :group="group" />
                     <div class="d-flex align-items-center mt-3">
@@ -14,12 +20,13 @@
                     </div>
 
                     <div class="d-flex align-items-center mt-3 row">
-                        <div class="alert alert-danger text-center" role="alert">
-                            لا يمكنك الاعتماد لأن التدقيق انتهى
+                        <div class="text-center mb-3" v-if="!expired">
+                            <button class="btn btn-primary ms-1 me-1" @click="updateStatus('acceptable')">مقبول</button>
+                            <button class="btn btn-danger ms-1 me-1" @click="updateStatus('unacceptable')">مرفوض</button>
                         </div>
+                        <count-down v-if="week" :week="week" :timer_type="'audit_timer'" />
 
-                        <button> مقبول </button>
-                        <button> مرفوض </button>
+                        <Note />
                         <div class="d-flex align-items-center mt-3 row">
                             <div class="d-inline-block w-100 text-center col-12">
                                 <a role="button" @click="$router.go(-1)" class=" d-block mt-3 mb-3 w-75 mx-auto">
@@ -40,15 +47,18 @@
 <script>
 import AchievementCard from '@/components/book/theses/achievement-card.vue'
 import Check from '@/components/book/theses/check.vue'
+import CountDown from '@/components/timer/Countdown.vue'
+import Note from '@/components/group/audit/Note.vue'
 import MarkService from '@/API/services/marks.service';
 
 export default {
-    name: "List Reading",
+    name: "Audit Mark",
     async created() {
 
         try {
-            const response = await MarkService.show(this.$route.params.mark_id);
-            this.mark = response.mark;
+            const response = await MarkService.markForAudit(this.$route.params.mark_for_audit);
+            this.mark_for_audit = response.mark_for_audit;
+            this.mark = response.mark_for_audit.mark;
             this.theses = response.theses.reduce((groupByBook, item) => {
                 const group = (groupByBook[item.book.name] || []);
                 group['title'] = item.book.name;
@@ -57,7 +67,10 @@ export default {
                 return groupByBook;
             }, {});
             this.group = response.group
-            this.week = response.currentWeek
+            this.week = response.week
+            this.expired = (((new Date(this.week.audit_timer)) - (new Date())) < 0)
+
+
         }
         catch (error) {
             console.log(error);
@@ -66,7 +79,9 @@ export default {
 
     components: {
         Check,
-        AchievementCard
+        AchievementCard,
+        CountDown,
+        Note
     },
 
     data() {
@@ -74,8 +89,43 @@ export default {
             theses: [],
             group: null,
             week: null,
+            expired: true,
             mark: null,
+            mark_for_audit: null,
+            audit_status: {
+                'acceptable': "مقبول",
+                'unacceptable': "مرفوض",
+                'not_audited': "لم يتم تدقيقه",
+            }
+
         };
     },
+    methods: {
+
+        /**
+        * return status bg-color class.
+        *  @param  status
+        * @return class
+        */
+        statusClass(status) {
+            switch (status) {
+                case 'acceptable':
+                    return 'bg-primary'
+
+                case 'unacceptable':
+                    return 'bg-danger'
+
+                default:
+                    return 'bg-dark'
+            }
+        },
+        /**
+        * update status of mark for audit.
+        *  @param  status
+        */
+        updateStatus(status){
+            
+        },
+    }
 };
 </script>
