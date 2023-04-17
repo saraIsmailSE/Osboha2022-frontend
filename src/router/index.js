@@ -262,7 +262,7 @@ const groupChildRoute = (prop, mode = false) => [
     component: () => import('../views/OsbohaMain/Group/AuditMarks/GroupsAudit'),
   },
   {
-    path: '/group/audit/mark/:mark_id',
+    path: '/group/audit/mark/:mark_for_audit',
     name: prop + '.markAudit',
     meta: { auth: true, name: 'Mark' },
     component: () => import('../views/OsbohaMain/Group/AuditMarks/Mark'),

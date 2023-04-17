@@ -1,58 +1,106 @@
 <template>
     <div class="card">
         <div class="card-header rounded-0 p-1" style="background-color: #1D1A55;">
-            <h5 class="text-center text-light mt-0">
-                <span role="button" class="material-symbols-outlined" v-if="!expand" @click="expand = !expand">
+            <h5 class="text-center text-light mt-0" style="direction: rtl !important;"> 
+                <span role="button" class="material-symbols-outlined" v-if="!expand" @click="setExpand()">
                     expand_more
                 </span>
-                <span role="button" class="material-symbols-outlined" v-else @click="expand = !expand">
+                <span role="button" class="material-symbols-outlined" v-else @click="setExpand()">
                     expand_less
                 </span>
-                الأسبوع الخامس من ديسمبر
+                الأسبوع {{ week.title }}
             </h5>
 
         </div>
-        <div class="card-body row d-flex justify-content-center" style="box-shadow: none;" v-if="expand">
+        <div class="card-body row  d-flex justify-content-center m-auto" style="box-shadow: none;" v-if="expand">
+            <vue-countdown v-if="!expired" :time="time" v-slot="{ days, hours, minutes, seconds }" @end="onCountdownEnd">
+                <table class="text-center" style="direction: rtl !important;">
+                    <thead>
+                        <tr class=" font-weight-bold display-3 border-bottom">
+                            <th>{{ seconds }}</th>
+                            <th>{{ minutes }}</th>
+                            <th>{{ hours }}</th>
+                            <th>{{ days }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="w-25">ثانية</td>
+                            <td class="w-25">دقيقة</td>
+                            <td class="w-25">ساعة</td>
+                            <td class="w-25">يوم</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <img v-if="timer_type == 'main_timer'" class=" mt-3 w-100" src="@/assets/images/main/main_timer.gif">
+                                <img v-if="timer_type == 'audit_timer'" class=" mt-3 w-75" src="@/assets/images/main/audit_timer.gif">
+                                <img v-if="timer_type == 'modify_timer'" class=" mt-3 w-100" src="@/assets/images/main/modify_timer.gif">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </vue-countdown>
 
-            <div class="card col-3 border border-2 me-1 ms-1">
-                <div class="card-header text-center m-auto">
-                    يوم
-                </div>
-                <div class="card-body">
-                    <h1 class="card-text text-center">30</h1>
-                </div>
+            <div v-else class="alert alert-danger text-center" role="alert">
+                انتهى الوقت
             </div>
-            <div class="card col-3 border border-2 me-1 ms-1">
-                <div class="card-header text-center m-auto">
-                    ساعة
-                </div>
-                <div class="card-body">
-                    <h1 class="card-text text-center">30</h1>
-                </div>
-            </div>
-
-            <div class="card col-3 border border-2 me-1 ms-1">
-                <div class="card-header text-center m-auto">
-                    دقيقة
-                </div>
-                <div class="card-body">
-                    <h1 class="card-text text-center">30</h1>
-                </div>
-            </div>
-
 
         </div>
     </div>
 </template>
 <script>
+import VueCountdown from '@chenfengyuan/vue-countdown';
+
 export default {
     name: 'Countdown',
+    created() {
+        this.now = new Date()
+        if (this.timer_type == 'main_timer') {
+            this.date = new Date(this.week.main_timer);
+        } else if (this.timer_type == 'audit_timer') {
+            this.date = new Date(this.week.audit_timer);
+        }
+        else if (this.timer_type == 'modify_timer') {
+            this.date = new Date(this.week.modify_timer);
+        }
+        this.expired = (this.time < 0)
+    },
+    components: {
+        VueCountdown
+    },
+    props: {
+        week: {
+            type: [Object],
+            required: true,
+        },
+        timer_type: {
+            type: [String],
+        },
+    },
+
     data() {
         return {
             expand: true,
+            date: null,
+            now: null,
+            expired: true,
         }
-
     },
+    methods: {
+        setExpand() {
+            this.expand = !this.expand
+            this.now = new Date()
 
+        },
+        onCountdownEnd: function () {
+            this.expired = true;
+        },
+    },
+    computed: {
+        time() {
+            return this.date - this.now
+        },
+
+    }
 }
 </script>
