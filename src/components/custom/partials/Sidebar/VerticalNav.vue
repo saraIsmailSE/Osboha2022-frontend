@@ -80,7 +80,11 @@
           checkActive('group.groupsAudit') ? 'active nav-link' : 'nav-link'
         "
         aria-current="page"
-        :to="{ name: 'group.groupsAudit' }"
+        :to="{ name: 'group.groupsAudit',
+        params: {
+            supervisor_id: user.id,
+          },
+        }"
       >
         <i class="icon material-symbols-outlined"> rule </i>
         <span class="item-name">تدقيق المجموعات</span>

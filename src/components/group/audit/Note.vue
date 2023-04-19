@@ -70,9 +70,9 @@
                                     </div>
 
                                     <!-- Typing area -->
-                                    <form action="#" class="bg-sender mt-2">
+                                    <form action="#" class="mt-2">
                                         <div class="input-group">
-                                            <div class="input-group-append">
+                                            <div class="input-group-append m-auto">
                                                 <button id="button-addon2" type="submit" class="btn btn-link">
                                                     <span class="display-5 text-dark material-symbols-outlined">
                                                         send
@@ -81,7 +81,8 @@
                                                 </button>
                                             </div>
                                             <input type="text" placeholder="اكتب ملاحظة" aria-describedby="button-addon2"
-                                                class="border-bottom form-control rounded-0 border-0 py-4 bg-sender">
+                                                class="border-bottom form-control rounded-0 border-0 py-4"
+                                                v-model="v$.noteForm.body.$model">
                                         </div>
                                     </form>
 
@@ -95,13 +96,66 @@
     </iq-card>
 </template>
 <script>
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+import AuditMarkService from '@/API/services/audit-marks.service';
+
+
 export default {
     name: "Audit Notes",
-
+    setup() {
+        return { v$: useVuelidate() };
+    },
+    props: {
+        notes: {
+            type: [Object],
+            required: true,
+        },
+        to: {
+            type: [Number],
+            required: true,
+        },
+    },
     data() {
         return {
+            noteForm: {
+                body: '',
+                mark_for_audit_id:0,
+            }
         };
     },
+    validations() {
+        return {
+            noteForm: {
+                body: {
+                    required
+                },
+            }
+        };
+    },
+    methods: {
+        
+        /**
+        * Add Note.
+        */
+        async submitNote() {
+            this.v$.$touch();
+            if (!this.v$.noteForm.$invalid) {
+                this.message = "";
+                this.loader = true;
+                try {
+                    const response = await AuditMarkService.addNote(this.noteForm);
+                    this.loader = false;
+                    this.message = response;
+                    this.v$.noteForm.$reset()
+                }
+                catch (error) {
+                    console.log(error);
+                }
+            }
+        },
+
+    }
 };
 </script>
 
