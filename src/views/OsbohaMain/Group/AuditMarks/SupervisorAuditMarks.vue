@@ -147,7 +147,7 @@
 
 
 <script>
-import MarkService from '@/API/services/marks.service';
+import AuditMarkService from '@/API/services/audit-marks.service';
 import profileImagesService from '@/API/services/profile.images.service';
 import AchievementProgress from '@/components/group/audit/AchievementProgress.vue';
 import Exceptions from '@/components/group/audit/Exceptions.vue';
@@ -157,7 +157,8 @@ export default {
     name: 'List All Group Ambassadors Achievement',
     async created() {
         try {
-            const response = await MarkService.groupAuditMarks(this.group_id);
+            const response = await AuditMarkService.groupAuditMarks(this.group_id);
+            console.log(response);
             this.audit = response.audit_mark
             this.week = response.week
             this.group = response.group

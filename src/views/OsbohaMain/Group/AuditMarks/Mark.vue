@@ -23,10 +23,12 @@
                         <div class="text-center mb-3" v-if="!expired">
                             <button class="btn btn-primary ms-1 me-1" @click="updateStatus('acceptable')">مقبول</button>
                             <button class="btn btn-danger ms-1 me-1" @click="updateStatus('unacceptable')">مرفوض</button>
+                            <div v-if="msg" class="alert alert-primary mt-2">{{ msg }}</div>
                         </div>
+
                         <count-down v-if="week" :week="week" :timer_type="'audit_timer'" />
 
-                        <Note />
+                        <Note v-if="mark_for_audit" :notes="mark_for_audit.audit_notes" :to="mark_for_audit.mark.user.parent_id"/>
                         <div class="d-flex align-items-center mt-3 row">
                             <div class="d-inline-block w-100 text-center col-12">
                                 <a role="button" @click="$router.go(-1)" class=" d-block mt-3 mb-3 w-75 mx-auto">
@@ -49,14 +51,14 @@ import AchievementCard from '@/components/book/theses/achievement-card.vue'
 import Check from '@/components/book/theses/check.vue'
 import CountDown from '@/components/timer/Countdown.vue'
 import Note from '@/components/group/audit/Note.vue'
-import MarkService from '@/API/services/marks.service';
+import AuditMarkService from '@/API/services/audit-marks.service';
 
 export default {
     name: "Audit Mark",
     async created() {
 
         try {
-            const response = await MarkService.markForAudit(this.$route.params.mark_for_audit);
+            const response = await AuditMarkService.markForAudit(this.$route.params.mark_for_audit);
             this.mark_for_audit = response.mark_for_audit;
             this.mark = response.mark_for_audit.mark;
             this.theses = response.theses.reduce((groupByBook, item) => {
@@ -96,7 +98,8 @@ export default {
                 'acceptable': "مقبول",
                 'unacceptable': "مرفوض",
                 'not_audited': "لم يتم تدقيقه",
-            }
+            },
+            msg:'',
 
         };
     },
@@ -123,8 +126,10 @@ export default {
         * update status of mark for audit.
         *  @param  status
         */
-        updateStatus(status){
-            
+        async updateStatus(status){
+            const response = await AuditMarkService.updateMarkForAuditStatus(status,this.$route.params.mark_for_audit);
+            this.mark_for_audit.status=status
+            this.msg='تم التدقيق'
         },
     }
 };
