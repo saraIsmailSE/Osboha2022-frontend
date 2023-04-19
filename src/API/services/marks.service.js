@@ -41,13 +41,26 @@ class UserProfile {
       }
     }
     /**
-     * get mark with theses by mark id => list only for group administrators
-   *  @param  mark_id
+     * get audit marks with group exceptions => list only for group administrators
+   *  @param  group_id
    * @return mark with Achievement
    */
-    async show(mark_id) {
+    async groupAuditMarks(group_id) {
       try {
-        const response = await api.get(`marks/${mark_id}`);
+        const response = await api.get(`marks/group-audit-marks/${group_id}`);
+        return response.data.data;
+      } catch (error) {
+        return error;
+      }
+    }
+    /**
+     * get mark with theses by mark id => list only for group administrators
+   *  @param  mark_for_audit_id
+   * @return mark with Achievement
+   */
+    async markForAudit(mark_for_audit_id) {
+      try {
+        const response = await api.get(`marks/mark-for-audit/${mark_for_audit_id}`);
         return response.data.data;
       } catch (error) {
         return error;

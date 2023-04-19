@@ -77,7 +77,7 @@ export default {
         this.$store.dispatch('login', {
           email: this.form.email,
           password: this.form.password
-        }).then(this.$router.push({ name: 'social' }))
+        }).then(this.$router.push({ name: 'osboha' }))
       }
     }
   },
