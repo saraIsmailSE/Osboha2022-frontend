@@ -2,7 +2,7 @@
   <div class="user-post-data">
     <div class="d-flex justify-content-between">
       <!--Post user name and date of post-->
-      <TaggedFriends :user="post.user">
+      <TaggedFriends :user="post.user" :friends="post.taggedUsers">
         <template #date>
           <div class="d-flex align-items-center">
             <tooltip
@@ -54,12 +54,12 @@
             </span>
             {{ post.is_pinned ? "فك التثبيت" : "تثبيت" }}
           </a>
-          <a
+          <!-- <a
             class="dropdown-item d-flex align-items-center text-primary"
             href="#"
             ><span class="material-symbols-outlined me-2 md-18"> edit </span
             >تعديل</a
-          >
+          > -->
           <a
             class="dropdown-item d-flex align-items-center text-primary"
             href="#"
@@ -72,8 +72,9 @@
           <a
             class="dropdown-item d-flex align-items-center"
             href="#"
-            data-bs-toggle="modal"
-            :data-bs-target="`#confirmationModal-${post.id}`"
+            role="button"
+            :aria-disabled="deleteLoading"
+            @click.prevent="deletePost"
             ><span class="material-symbols-outlined me-2 md-18"> delete </span
             >حذف</a
           >
@@ -97,7 +98,7 @@ import PostService from "@/API/services/post.service";
 
 export default {
   name: "PostHeader",
-  inject: ["closePostComments", "pinPost"],
+  inject: ["closePostComments", "pinPost", "postDelete"],
   props: {
     post: {
       type: Object,
@@ -152,6 +153,49 @@ export default {
       } catch (error) {
         this.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
       }
+    },
+    async deletePost() {
+      if (this.deleteLoading) return;
+
+      const alert = this.$swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-primary btn-lg",
+          cancelButton: "btn btn-outline-danger btn-lg ms-2",
+        },
+        buttonsStyling: false,
+      });
+
+      alert
+        .fire({
+          title: "هل أنت متأكد؟",
+          text: "سيتم حذف هذا المنشور نهائياً!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "نعم, احذف!",
+          cancelButtonText: "تراجع",
+          showClass: {
+            popup: "animate__animated animate__zoomIn",
+          },
+          hideClass: {
+            popup: "animate__animated animate__zoomOut",
+          },
+        })
+        .then(async (result) => {
+          if (result.isConfirmed) {
+            this.deleteLoading = true;
+            try {
+              await PostService.delete(this.post.id);
+              this.postDelete(this.post.id);
+              helper.handleSuccessSwal("تم حذف المنشور بنجاح");
+            } catch (error) {
+              helper.handleErrorSwal(
+                "حدث خطأ أثناء الحذف, يرجى المحاولة مرة أخرى!"
+              );
+            } finally {
+              this.deleteLoading = false;
+            }
+          }
+        });
     },
   },
   components: { TaggedFriends },

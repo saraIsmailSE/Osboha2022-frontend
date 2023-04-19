@@ -248,11 +248,18 @@
         <div class="col-lg-8">
           <div id="post-modal-data" class="iq-card">
             <!-- ##### <AddPost /> ##### -->
-            <AddPost @addPost="addPost"></AddPost>
+            <AddPost
+              @addPost="addPost"
+              type="normal"
+              :timeline_id="timeline_id"
+            ></AddPost>
             <!-- ##### <AddPost /> ##### -->
 
             <!-- ##### LIST POSTS ##### -->
-            <Post v-for="post in posts" :key="post.id" :post="post" />
+            <LazyLoadedPosts
+              :timeline_id="timeline_id"
+              ref="lazyLoadedPostsRef"
+            />
             <!-- ##### END LIST POSTS ##### -->
           </div>
         </div>
@@ -262,17 +269,19 @@
 </template>
 
 <script>
-import Post from "@/components/post/Post.vue";
+import LazyLoadedPosts from "@/components/post/LazyLoadedPosts.vue";
 import AddPost from "@/components/post/add/AddPost";
+import UserInfoService from "@/Services/userInfoService";
+
 export default {
   name: "ProfileFeed",
+  components: {
+    AddPost,
+    LazyLoadedPosts,
+  },
   props: {
     isAuth: {
       type: [Boolean],
-      required: true,
-    },
-    post: {
-      type: [Object],
       required: true,
     },
     //LATER
@@ -293,11 +302,6 @@ export default {
       required: true,
     },
   },
-  created() {},
-  components: {
-    AddPost,
-    Post,
-  },
   data() {
     return {
       show_friends: true,
@@ -312,18 +316,8 @@ export default {
         cancelled: "ملغي",
         finished: "منتهي",
       },
+      timeline_id: null,
     };
-  },
-  methods: {
-    addPost() {
-      this.socialPosts.unshift();
-    },
-    requestException() {
-      this.$router.push({
-        name: "user.requestexception",
-        params: { user_id: this.user_id },
-      });
-    },
   },
   computed: {
     eligibleForException() {
@@ -344,6 +338,21 @@ export default {
       } else {
         return true;
       }
+    },
+  },
+  created() {
+    const userProfile = UserInfoService.getUserProfile();
+    this.timeline_id = userProfile.timeline_id;
+  },
+  methods: {
+    addPost(post) {
+      this.$refs.lazyLoadedPostsRef.addNewPost(post);
+    },
+    requestException() {
+      this.$router.push({
+        name: "user.requestexception",
+        params: { user_id: this.user_id },
+      });
     },
   },
 };

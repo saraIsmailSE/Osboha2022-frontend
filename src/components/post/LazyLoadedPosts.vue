@@ -1,17 +1,14 @@
 <template>
   <div ref="listContainer">
-    <!-- <alert
-      v-if="errorMessage"
-      variant="danger"
-      className="d-flex align-items-center justify-content-center"
+    <div
+      class="d-flex align-items-center justify-content-center"
+      v-if="emptyMessage"
     >
-      <template v-slot>
-        <div class="me-2">
-          <font-awesome-icon :icon="['fas', 'circle-exclamation']" size="xl" />
-        </div>
-        <div>{{ errorMessage }}</div>
-      </template>
-    </alert> -->
+      <div class="me-2">
+        <font-awesome-icon :icon="['fas', 'circle-exclamation']" size="xl" />
+      </div>
+      <div>{{ emptyMessage }}</div>
+    </div>
     <Post
       v-for="post in announcements"
       :key="post.id"
@@ -86,7 +83,7 @@ export default {
       totalPages: 1,
       loading: false,
       pendingRequest: false,
-      errorMessage: "",
+      emptyMessage: "",
     };
   },
   computed: {
@@ -151,7 +148,7 @@ export default {
         }
 
         if (response.statusCode === 200 && !response.data) {
-          helper.toggleToast("لا يوجد منشورات", "info");
+          this.emptyMessage = "لا يوجد منشورات";
           return;
         }
 
