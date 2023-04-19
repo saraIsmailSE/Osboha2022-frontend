@@ -181,7 +181,6 @@ export default {
       this.week_avg = (Math.round(response.week_avg * 100) / 100).toFixed(2);
       this.week = response.week;
       this.authInGroup = response.authInGroup;
-
     } catch (error) {
       console.log(error);
     }
@@ -199,6 +198,7 @@ export default {
         supervising: "فريق رقابة",
         advising: "فريق توجيه",
       },
+      reasons: [],
     };
   },
   methods: {

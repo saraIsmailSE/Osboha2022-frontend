@@ -59,6 +59,16 @@ class TokenService {
     return found;
   }
 
+  hasPermissions(permissions) {
+    let hasPermissions = false;
+    permissions.forEach((permission) => {
+      if (this.hasPermission(permission)) {
+        hasPermissions = true;
+      }
+    });
+    return hasPermissions;
+  }
+
   getPermissions() {
     return JSON.parse(localStorage.getItem("user")).user.permissions;
   }

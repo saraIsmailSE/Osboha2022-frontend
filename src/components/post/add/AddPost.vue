@@ -320,9 +320,9 @@ export default {
     async getFriends() {
       try {
         const allFriends = await friendService.getAllFriends(this.auth.id);
-        if (allFriends !== "No Friends") {
-          this.friends = allFriends;
-          this.friendsTemp = allFriends;
+        if (allFriends !== null) {
+          this.friends = allFriends.allFriends;
+          this.friendsTemp = allFriends.allFriends;
         } else {
           this.friends = [];
         }
@@ -337,7 +337,10 @@ export default {
       const friend = this.friends.find((friend) => friend.id === parseInt(id));
       if (checked) {
         this.post.tags.push(parseInt(id));
-        this.selectedFriends.push(friend);
+        this.selectedFriends.push({
+          id: this.selectedFriends.length + 1,
+          user: friend,
+        });
       } else {
         this.post.tags = this.post.tags.filter((tag) => tag !== parseInt(id));
         this.selectedFriends = this.selectedFriends.filter(
@@ -402,17 +405,8 @@ export default {
           helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
           return;
         }
-
         this.$emit("add-post", post.data);
-        this.post = {
-          body: "",
-          media: [],
-          tags: [],
-          votes: [],
-        };
-        this.pollOptions = [];
-        this.showPoll = false;
-        this.$refs.fileRef.value = null;
+        this.resetPostForm();
         this.postModal.hide();
         helper.toggleToast("تم النشر بنجاح", "success");
       } catch (err) {
@@ -421,6 +415,29 @@ export default {
       } finally {
         this.loader = false;
       }
+    },
+    resetPostForm() {
+      this.post = {
+        body: "",
+        media: [],
+        tags: [],
+        votes: [],
+      };
+      this.pollOptions = [];
+      this.showPoll = false;
+      this.selectedFriends = [];
+      this.searchQuery = "";
+      this.friends = this.friendsTemp;
+      //unchecked all checkboxes
+      this.$nextTick(() => {
+        const checkboxes = document.querySelectorAll(
+          ".friends-list input[type=checkbox]"
+        );
+        checkboxes.forEach((checkbox) => {
+          checkbox.checked = false;
+        });
+      });
+      this.$refs.fileRef.value = null;
     },
   },
 };

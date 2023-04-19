@@ -104,8 +104,12 @@
                       :totalThesisPages="
                         comment.thesis
                           ? comment.thesis.end_page -
-                            comment.thesis.start_page +
-                            1
+                              comment.thesis.start_page >
+                            0
+                            ? comment.thesis.end_page -
+                              comment.thesis.start_page +
+                              1
+                            : 0
                           : 0
                       "
                       @addComment="addComment"
