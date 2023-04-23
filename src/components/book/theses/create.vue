@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submitAddThesisForm">
+  <form @submit.prevent="submit">
     <div class="d-flex align-items-center w-100 row">
       <!-- نوع الأطروحة -->
       <div class="row">
@@ -398,7 +398,7 @@ export default {
         this.$refs.screenShots.value = null;
       }
     },
-    async submitAddThesisForm() {
+    async submit() {
       this.v$.$touch();
       if (!this.v$.thesisForm.$invalid) {
         this.loader = true;

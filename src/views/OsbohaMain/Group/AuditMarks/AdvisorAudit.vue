@@ -1,37 +1,30 @@
 <template>
     <div class="d-grid gap-3 d-grid-template-1fr-19">
-        <AdvisorAuditCard :cardInfo="groupInfo" />
+        <AdvisorAuditCard v-for="supervisor in supervisors" :supervisor="supervisor" :key="supervisor.id" />
     </div>
 </template>
 <script>
 import AdvisorAuditCard from '@/components/group/audit/AdvisorAuditCard.vue'
+import AuditMarkService from '@/API/services/audit-marks.service';
+
 export default {
     components: { AdvisorAuditCard },
-    name: 'Groups Audit',
-    data() {
-        return {
-            groupInfo:
-            {
-                backgroundImg: 'profile-bg9.jpg',
-                groupImg: 'gi-9.jpg',
-                title: 'اسم المراقب',
-                text: 'Lorem Ipsum',
-                extraInfo: [
-                    {
-                        info: 'عدد القادة',
-                        value: '1200'
-                    },
-                    {
-                        info: 'المعدل العام',
-                        value: '100%'
-                    }
-                ],
-            }
+    name: 'Advisor Audit',
+    async created() {
+        try {
+            const response = await AuditMarkService.supervisorsAudit();
+            this.supervisors = response;
+        }
+        catch (error) {
+            console.log(error);
         }
     },
-    mounted() {
-        console.log(this.groupInfo)
+    data() {
+        return {
+            supervisors:[],
+        }
     },
+
 }
 </script>
   

@@ -3,8 +3,13 @@ import { createRouter, createWebHistory } from "vue-router";
 const childRoutes = (prop, mode) => [
   {
     path: '/:pathMatch(.*)*',
-    name: 'NotFound',
+    name:'NotFound',
     component: () => import('../views/Errors/404'),
+  },
+  {
+    path: '/notauthorized',
+    name:'NotAuthorized',
+    component: () => import('../views/Errors/403'),
   },
   {
     path: "",
@@ -274,7 +279,7 @@ const groupChildRoute = (prop, mode = false) => [
     component: () => import('../views/OsbohaMain/Group/Ambassadors/AchievementAsPages'),
   },
   {
-    path: '/group/groups-audit',
+    path: '/group/groups-audit/:supervisor_id',
     name: prop + '.groupsAudit',
     meta: { auth: true, name: 'Audit Marks' },
     component: () => import('../views/OsbohaMain/Group/AuditMarks/GroupsAudit'),
@@ -289,7 +294,7 @@ const groupChildRoute = (prop, mode = false) => [
     path: '/group/audit-marks/:group_id',
     name: prop + '.auditMarks',
     meta: { auth: true, name: 'Audit Marks' },
-    component: () => import('../views/OsbohaMain/Group/AuditMarks/AuditMarks'),
+    component: () => import('../views/OsbohaMain/Group/AuditMarks/SupervisorAuditMarks'),
   },
   {
     path: '/group/advisor-audit-marks/',

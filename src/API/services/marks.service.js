@@ -1,6 +1,6 @@
 import { api } from "../Intercepter";
 
-class UserProfile {
+class Marks {
   /**
    * get user month Achievement.
    *  @param  user_id , filter
@@ -40,32 +40,6 @@ class UserProfile {
         return error;
       }
     }
-    /**
-     * get audit marks with group exceptions => list only for group administrators
-   *  @param  group_id
-   * @return mark with Achievement
-   */
-    async groupAuditMarks(group_id) {
-      try {
-        const response = await api.get(`marks/group-audit-marks/${group_id}`);
-        return response.data.data;
-      } catch (error) {
-        return error;
-      }
-    }
-    /**
-     * get mark with theses by mark id => list only for group administrators
-   *  @param  mark_for_audit_id
-   * @return mark with Achievement
-   */
-    async markForAudit(mark_for_audit_id) {
-      try {
-        const response = await api.get(`marks/mark-for-audit/${mark_for_audit_id}`);
-        return response.data.data;
-      } catch (error) {
-        return error;
-      }
-    }
 }
 
-export default new UserProfile();
+export default new Marks();

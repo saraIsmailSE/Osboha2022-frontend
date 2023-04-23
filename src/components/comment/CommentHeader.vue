@@ -105,9 +105,9 @@ export default {
     },
     canDelete() {
       return (
-        this.comment?.user?.id === UserInfoService.getUser().user.id ||
-        UserInfoService.hasRole("admin") ||
-        UserInfoService.hasPermission("delete comment")
+        (this.comment?.user?.id === UserInfoService.getUser().user.id &&
+          UserInfoService.hasPermission("delete comment")) ||
+        UserInfoService.hasRole("admin")
       );
     },
   },
@@ -195,20 +195,4 @@ export default {
 };
 </script>
 
-<style>
-.swal2-confirm {
-  background-color: #1f662b !important;
-}
-
-.swal2-cancel {
-  color: #b80606 !important;
-  border-color: #b80606 !important;
-}
-
-.swal2-cancel:hover {
-  color: #fff !important;
-  border-color: #b80606 !important;
-  background-color: #b80606 !important;
-}
-</style>
 >

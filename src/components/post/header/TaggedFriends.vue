@@ -11,9 +11,17 @@
       <span class="author-name">{{ user?.name }}</span>
       <span v-if="friends.length" class="mx-1"> مع </span>
       <span v-for="(friend, index) in slicedTaggedFriends" :key="friend.id">
-        <span class="author-name hover-undelined" role="button">{{
-          friend.name
-        }}</span>
+        <span
+          class="author-name hover-undelined"
+          role="button"
+          @click.prevent="
+            $router.push({
+              name: 'user.profile',
+              params: { user_id: friend.user.id },
+            })
+          "
+          >{{ friend.user?.name ?? "" }}</span
+        >
         <span
           class="mx-1"
           v-if="
