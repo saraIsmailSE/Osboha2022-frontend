@@ -71,14 +71,7 @@ const childRoutes = (prop, mode) => [
     name: prop + ".group-list",
     meta: { auth: true, name: "Group" },
     component: () => import("../views/OsbohaMain/Group/GroupList"),
-  },
-  { 
-    path: "addgroup",
-    name: prop + ".addgroup",
-    meta: { auth: true, name: "Group" },
-    component: () => import("../views/OsbohaMain/Group/AddGroup"),
-  },
-  
+  },  
   {
     path: "announcement",
     name: prop + ".announcement",
@@ -326,6 +319,12 @@ const groupChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: 'Group Statistics' },
     component: () => import('../views/OsbohaMain/Group/Statistics'),
   },
+  { 
+    path: "add-group",
+    name: prop + ".addGroup",
+    meta: { auth: true, name: "Group" },
+    component: () => import("../views/OsbohaMain/Group/AddGroup"),
+  },
 ];
 
 const exceptionChildRoute = (prop, mode = false) => [
@@ -357,8 +356,8 @@ const routes = [
   {
     path: "/assign-role",
     name: "AssignRole",
-    component: () => import("../views/AuthPages/Default/AssignRole"),
-    children: childRoutes("osboha"),
+    component: () => import("../layouts/Default"),
+    children: childRoutes("AssignRole"),
   },
   
   
