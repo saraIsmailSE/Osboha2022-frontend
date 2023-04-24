@@ -54,12 +54,25 @@ const childRoutes = (prop, mode) => [
     meta: { auth: true, name: "articles" },
     component: () => import("../views/Articles/list"),
   },
-  {
+  { 
     path: "group",
     name: prop + ".group",
     meta: { auth: true, name: "Group" },
     component: () => import("../views/OsbohaMain/Group/Group"),
   },
+  { 
+    path: "group-list",
+    name: prop + ".group-list",
+    meta: { auth: true, name: "Group" },
+    component: () => import("../views/OsbohaMain/Group/GroupList"),
+  },
+  { 
+    path: "addgroup",
+    name: prop + ".addgroup",
+    meta: { auth: true, name: "Group" },
+    component: () => import("../views/OsbohaMain/Group/AddGroup"),
+  },
+  
   {
     path: "announcement",
     name: prop + ".announcement",
@@ -203,7 +216,7 @@ const groupChildRoute = (prop, mode = false) => [
   {
     path: "request-ambassadors/:group_id",
     name: prop + ".requestAmbassadors",
-    meta: { auth: true, name: "Request Ambassadors" },
+    meta: { auth: true, name: "Request AmbFgrassadors" },
     component: () => import("../views/OsbohaMain/Group/Ambassadors/Request"),
   },
   {
@@ -212,11 +225,23 @@ const groupChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Group Detail" },
     component: () => import("../views/OsbohaMain/Group/Group-detail"),
   },
+  { 
+    path: "change-leader/:group_id",
+    name: prop + ".change-leader",
+    meta: { auth: true, name: "Group" },
+    component: () => import("../views/OsbohaMain/Group/ChangeLeader"),
+  },
   {
     path: "group-members/:group_id",
     name: prop + ".group-members",
     meta: { auth: true, name: "Group Members" },
     component: () => import("../views/OsbohaMain/Group/ListMembers"),
+  },
+  { 
+    path: "add-member/:group_id",
+    name: prop + ".addmemeber",
+    meta: { auth: true, name: "Group" },
+    component: () => import("../views/OsbohaMain/Group/AddMember"),
   },
   {
     path: "group-books/:group_id",
@@ -317,6 +342,15 @@ const routes = [
     component: () => import("../layouts/Default"),
     children: childRoutes("osboha"),
   },
+
+  {
+    path: "/assign-role",
+    name: "AssignRole",
+    component: () => import("../views/AuthPages/Default/AssignRole"),
+    children: childRoutes("osboha"),
+  },
+  
+  
   {
     path: "/without-leftside",
     name: "without-leftside",
