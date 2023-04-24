@@ -335,6 +335,15 @@ const routes = [
     component: () => import("../layouts/Default"),
     children: childRoutes("osboha"),
   },
+
+  {
+    path: "/assign-role",
+    name: "AssignRole",
+    component: () => import("../views/AuthPages/Default/AssignRole"),
+    children: childRoutes("osboha"),
+  },
+  
+  
   {
     path: "/without-leftside",
     name: "without-leftside",

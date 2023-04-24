@@ -34,7 +34,7 @@ export default new Vuex.Store({
   },
   actions: {
     register({ commit }, credentials) {
-      return api.post("register", credentials).then(({ data }) => {
+      return api.post("/register", credentials).then(({ data }) => {
         commit("SET_USER_DATA", data.data);
 
         //get all reactions
