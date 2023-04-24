@@ -28,6 +28,31 @@
                                 id="exampleInputEmail2" placeholder="ادخال الايميل هنا" />
                             <small style="color: red" v-if="v$.form.email.$error">الرجاء قم بادخال بريدك الاكتروني</small>
                         </div>
+                           <div class="form-group">
+                            <label for="exampleInputEmail2">رقم الهاتف</label>
+                            <input v-model="v$.form.phone.$model" type="phone" class="form-control mb-0"
+                                id="exampleInputEmail2" placeholder="ادخال رقم الهاتف هنا" />
+                            <small style="color: red" v-if="v$.form.phone.$error">الرجاء قم بادخال رقم الهاتف</small>
+                        </div>
+
+                              <div class="form-group col-6">
+                               <label for="exampleInputEmail2">الجنس</label>
+                                <select v-model="v$.form.gender.$model" class="form-select" data-trigger
+                                  name="choices-single-default" id="choices-single-default">
+                                  <option value="">اختر الجنس   </option>
+                                  <option>
+                               ذكر
+                                  </option>
+                                      <option>
+                               انثى
+                                  </option>
+                                      <option>
+                               غير ذلك
+                                  </option>
+                                </select>
+                            
+                              </div>
+                           
                         <div class="form-group">
                             <label for="exampleInputPassword1">كلمة المرور</label>
                             <input v-model="v$.form.password.$model" type="password" class="form-control mb-0"
@@ -35,43 +60,8 @@
                             <small style="color: red" v-if="v$.form.password.$error">يجب ادخال كلمة مرور صالحة لا تقل عن 8
                                 أحرف</small>
                         </div>
-
-                        <div class="form-group">
-                            <select class="form-select" data-trigger name="choices-single-default"
-                                id="choices-single-default" v-model="v$.form.role.$model">
-                                <option value="">التسجيل كـ</option>
-                                <option value="reviewer">
-                                    سفير </option>
-                                <option value="auditor">
-                                    قائد
-                                </option>
-                                <option value="auditor">
-                                    مراقب
-                                </option>
-                                <option value="auditor">
-                                    موجه
-                                </option>
-                            </select>
-                            <small style="color:red;" v-if="v$.form.role.$error">الرجاء قم بادخال دورك</small>
-                        </div>
-                        <div class="form-group">
-                            <select class="form-select" data-trigger name="choices-single-default"
-                                id="choices-single-default" v-model="v$.form.role.$model">
-                                <option value="">اختر فريقك</option>
-                                <option value="reviewer">
-                                    A </option>
-                                <option value="auditor">
-                                    B
-                                </option>
-                                <option value="auditor">
-                                    C
-                                </option>
-                                <option value="auditor">
-                                    D
-                                </option>
-                            </select>
-                            <small style="color:red;" v-if="v$.form.role.$error">الرجاء قم بادخال دورك</small>
-                        </div>
+ 
+                   
                         <div class="form-group" v-if="regError">
                             <small style="color: red">
                                 {{ regError }}
@@ -137,14 +127,15 @@ export default {
                 name: "",
                 password: "",
                 email: "",
-                role: "",
-                fb_name: ''
+                phone:'',
+                gender:''
+          
             },
             regError: '',
         };
     },
     methods: {
-
+        
         async onSubmit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
@@ -153,12 +144,13 @@ export default {
                 try {
                     await this.$store
 
-                        .dispatch("registerAdmin", {
+                        .dispatch("register", {
                             email: this.form.email,
                             password: this.form.password,
                             name: this.form.name,
-                            role: this.form.role,
-                            fb_name: this.form.fb_name
+                            gender:this.form.gender,
+                            phone:this.form.phone
+                          
                         })
 
                     this.loader = false;
@@ -187,9 +179,11 @@ export default {
                 },
                 name: {
                     required,
-                }, fb_name: {
-                    required,
-                }, role: {
+                },
+                gender:{
+                    required
+                },
+                phone:{
                     required
                 }
 

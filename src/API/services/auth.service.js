@@ -18,6 +18,18 @@ class AuthService {
     }
   }
 
+  async assignRole(body) {
+   
+    try {
+      const response = await api.post("assign-role", body)
+      console.log(response)
+      return response.data
+    }
+    catch (error) {
+      return error.response;
+    }
+  }
+
   logout() {
     UserInfo.removeUser();
   }
