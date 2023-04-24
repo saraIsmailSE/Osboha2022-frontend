@@ -12,7 +12,7 @@ class GroupService {
             }) 
             return response.data
         } catch (error) {
-            return error;
+            return error; 
         }
     }
     async getAll() {
@@ -140,6 +140,15 @@ class GroupService {
     async getGroupByType(typeId) {
         try {
             const groups = await api.post('/group/GroupByType', { type_id: typeId });
+            return groups.data
+        } catch (error) {
+            return error
+        }
+    }
+
+    async addMember(body){
+        try {
+            const groups = await api.post('/group/add-member', body);
             return groups.data
         } catch (error) {
             return error

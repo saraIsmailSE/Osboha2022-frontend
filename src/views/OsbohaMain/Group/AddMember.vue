@@ -35,29 +35,7 @@
          
           
       
-            <div class="form-group">
-              <label for="exampleInputEmail2">نوع المجموعة</label>
-              <select
-                v-model="v$.form.type.$model"
-                class="form-select"
-                data-trigger
-                name="choices-single-default"
-                id="choices-single-default"
-              >
-                <option value="">اختر نوع المجموعة</option>
-                <option
-                  v-for="(i, index) in types"
-                  :key="index"
-                  :value="i"
-                >
-                  {{ i.type }}
-                </option>
-              </select>
-              <small style="color: red" v-if="v$.form.type.$error"
-                >يجب ادخال مستوئ المجموعة</small
-              >
-            </div>
-       
+         
 
           
 
@@ -66,12 +44,7 @@
                 {{ regError }}
               </small>
             </div>
-            <div class="form-group">
-              <label for="exampleInputEmail1">وصف</label>
-              <textarea type="text" v-model="v$.form.description.$model" class="form-control mb-0" id="exampleInputEmail1"
-                placeholder="ادخال الوصف هنا" />
-              <small style="color: red" v-if="v$.form.description.$error">الرجاء قم بادخال الوصف</small>
-            </div>
+     
             <div class="d-inline-block w-100">
               <button type="submit" class="btn btn-primary float-end">
                 اضافة المجموعة
@@ -101,6 +74,7 @@ export default {
   data() {
     return {
       loader: false,
+      group_id:this.$route.params.group_id,
      types:[],
       options: {
         centeredSlides: false,
@@ -124,21 +98,13 @@ export default {
         },
       },
       form: {
-        name: "",
-    
-        type:{},
-        description:'',
-  
+        email:''
       },
       regError: "",
     };
   },
   methods: {
-     async getGroup() {
-      const type = await api.get("group-type");
-      this.types = type.data.data;
-      console.log(type)
-    },
+    
 
     async onSubmit() {
       this.v$.$touch();
@@ -147,9 +113,9 @@ export default {
        
         try {
         
-        const group = await GroupService.createGroup(this.form.name,this.form.description,this.form.type.id)
-          window.location.reload();
- console.log(group)
+        const group = await GroupService.addMember({email:this.form.email,group_id:this.group_id})
+       
+          console.log(group)
           this.loader = false;
         } catch (error) {
           this.loader = false;
@@ -162,17 +128,10 @@ export default {
   validations() {
     return {
       form: {
-          name: {
+          email: {
           required,
         },
       
-        type:{
-          required
-        }, 
-        description:{
-          required
-        
-        }
       
       },
     };

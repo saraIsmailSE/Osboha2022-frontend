@@ -64,20 +64,20 @@
           </a>
         </router-link>
  
-        <a role="button" class="dropdown-item d-flex align-items-center">
-          <span class="material-symbols-outlined me-2 md-18"> person_add </span>
-          اضافة سفير
-        </a>
-        <a role="button" class="dropdown-item d-flex align-items-center">
-          <span class="material-symbols-outlined me-2 md-18"> groups </span>
-          تبديل القائد
-        </a>
-        <a role="button" class="dropdown-item d-flex align-items-center">
-          <span class="material-symbols-outlined me-2 md-18">
-            supervisor_account
-          </span>
-          تبديل المراقب
-        </a>
+         <router-link
+          :to="{
+            path : '/group/add-member',
+            params: { group_id: group_id },
+          }"
+        >
+          <a role="button" class="dropdown-item d-flex align-items-center">
+            <span class="material-symbols-outlined me-2 md-18">
+              diversity_1
+            </span>
+            اضافه عضو
+          </a>
+        </router-link>
+   
       </div>
  
     </div>

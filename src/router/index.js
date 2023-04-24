@@ -72,6 +72,7 @@ const childRoutes = (prop, mode) => [
     meta: { auth: true, name: "Group" },
     component: () => import("../views/OsbohaMain/Group/AddGroup"),
   },
+  
   {
     path: "announcement",
     name: prop + ".announcement",
@@ -235,6 +236,12 @@ const groupChildRoute = (prop, mode = false) => [
     name: prop + ".group-members",
     meta: { auth: true, name: "Group Members" },
     component: () => import("../views/OsbohaMain/Group/ListMembers"),
+  },
+  { 
+    path: "add-member/:id",
+    name: prop + ".addmemeber",
+    meta: { auth: true, name: "Group" },
+    component: () => import("../views/OsbohaMain/Group/AddMember"),
   },
   {
     path: "group-books/:group_id",
