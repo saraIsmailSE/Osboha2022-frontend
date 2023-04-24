@@ -41,8 +41,29 @@
           >{{ formatDateToWritten(comment.created_at) }}</tooltip
         >
         &nbsp;&nbsp;
-        <a href="javascript:void();" :class="{ liked: liked }"> أعجبني </a>
-        <a href="javascript:void();" v-on:click="showReply">
+        <a href="javascript:void();">
+          <span class="me-1" v-if="comment.reactions_count > 0">
+            {{ comment.reactions_count }}
+          </span>
+          <span
+            :style="{
+              color:
+                selectedReaction.type === 'like'
+                  ? comment.reacted_by_user
+                    ? selectedReaction.text_color
+                    : '#555770'
+                  : selectedReaction.text_color,
+            }"
+            @click.prevent="reactOnComment(selectedReaction.id)"
+          >
+            {{ selectedReaction.title }}
+          </span>
+        </a>
+        <a
+          href="javascript:void();"
+          v-on:click="showReply"
+          style="color: #555770"
+        >
           {{ showReplyBox ? "إخفاء" : "رد" }}
         </a>
       </div>
@@ -68,6 +89,7 @@
           :comment="cmnt"
           @addComment="addComment"
           @editComment="editComment"
+          @reactToComment="reactToComment"
         />
       </li>
     </ul>
@@ -85,6 +107,7 @@ import rate from "@/components/book/rate/rate.vue";
 import CreateComment from "@/components/comment/CreateComment.vue";
 import CommentHeader from "@/components/comment/CommentHeader.vue";
 import helper from "@/utilities/helper";
+import ReactionService from "@/API/services/reaction.service";
 
 export default {
   name: "Comment",
@@ -93,7 +116,7 @@ export default {
     CommentHeader,
     // rate,
   },
-  emits: ["addComment", "editComment"],
+  emits: ["addComment", "editComment", "reactToComment"],
   props: {
     comment: {
       type: Object,
@@ -108,8 +131,14 @@ export default {
     return {
       showReplies: false,
       showReplyBox: false,
-      liked: false,
       showEditBox: false,
+      selectedReaction: {
+        id: 1,
+        title: "إعجاب",
+        type: "like",
+        text_color: "#278036",
+      },
+      pendingRequest: false,
     };
   },
   computed: {
@@ -168,6 +197,32 @@ export default {
     },
     cancelEdit() {
       this.showEditBox = false;
+    },
+    reactToComment(comment_id, status) {
+      this.$emit("reactToComment", comment_id, status);
+    },
+    async reactOnComment(reactionId) {
+      if (this.pendingRequest) return;
+
+      this.pendingRequest = true;
+      try {
+        const response = await ReactionService.reactOnComment(
+          this.comment.id,
+          reactionId
+        );
+
+        if (response.statusCode !== 200) {
+          helper.toggleToast("حدث خطأ ما, يرجى المحاولة لاحقاً", "error");
+          return;
+        }
+
+        this.$emit("reactToComment", this.comment.id, response.data);
+      } catch (e) {
+        console.log("[reaction]", e.response);
+        helper.toggleToast("حدث خطأ ما, يرجى المحاولة لاحقاً", "error");
+      } finally {
+        this.pendingRequest = false;
+      }
     },
   },
 };

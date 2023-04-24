@@ -43,12 +43,7 @@
           </div>
           <hr />
           <!--Post Action buttons (like - comment - share)-->
-          <ActionButtons
-            :isLiked="isLiked"
-            @likePost="isLiked = true"
-            @unlikePost="isLiked = false"
-            @showCommentModel="showCommentModel"
-          />
+          <ActionButtons :post="post" @showCommentModel="showCommentModel" />
         </div>
       </div>
     </div>

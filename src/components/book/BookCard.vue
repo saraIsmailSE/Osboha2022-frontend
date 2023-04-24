@@ -94,10 +94,10 @@
     </model-header>
     <model-body>
       <createThesis
-        :start_page="cardInfo.start_page"
-        :end_page="cardInfo.end_page"
-        :book_id="cardInfo.id"
+        :book="cardInfo"
+        :lastThesis="cardInfo.last_thesis"
         @closeModel="closeModel"
+        @addThesis="addThesis"
       />
     </model-body>
   </modal>
@@ -117,6 +117,9 @@ export default {
   data() {
     return [];
   },
+  created() {
+    console.log("[bookCard- cardInfo]", this.cardInfo);
+  },
   methods: {
     resolve_img_url: function (path) {
       return path ? path : require("@/assets/images/books/1.jpg");
@@ -129,6 +132,13 @@ export default {
     },
     closeModel() {
       this.$refs.closeBtn.click();
+    },
+    addThesis(thesis) {
+      setTimeout(() => {
+        // this.$router.go(0);
+        this.closeModel();
+        this.bookDetails();
+      }, 1800);
     },
   },
   computed: {

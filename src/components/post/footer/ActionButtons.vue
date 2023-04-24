@@ -4,15 +4,16 @@
     <button
       type="button"
       class="btn flex-grow-1"
-      :class="isLiked ? 'text-primary' : 'text-gray-600'"
+      :class="post.reacted_by_user ? 'text-primary' : 'text-gray-600'"
       data-bs-toggle="tooltip"
       data-bs-placement="top"
       title="إعجاب"
-      @click.prevent="isLiked ? $emit('unlikePost') : $emit('likePost')"
+      @click.prevent="reactOnPost(selectedReaction.id)"
+      :disabled="pendingRequest"
     >
       <span class="me-1 bold-600"> إعجاب </span>
       <font-awesome-icon
-        :icon="[`${isLiked ? 'fas' : 'far'}`, 'thumbs-up']"
+        :icon="[`${post.reacted_by_user ? 'fas' : 'far'}`, 'thumbs-up']"
         size="xl"
       />
       <!-- <div class="like-data flex-grow-1">
@@ -135,16 +136,18 @@
 
 <script>
 import ReactionService from "@/API/services/reaction.service";
+import helper from "@/utilities/helper";
 
 export default {
   name: "ActionButtons",
+  inject: ["reactToPost"],
   props: {
-    isLiked: {
-      type: Boolean,
-      default: false,
+    post: {
+      type: Object,
+      required: true,
     },
   },
-  emits: ["showCommentModel", "likePost", "unlikePost"],
+  emits: ["showCommentModel"],
   data() {
     return {
       reactions: [],
@@ -152,8 +155,9 @@ export default {
         id: 1,
         title: "إعجاب",
         type: "like",
-        text_color: "#555770",
+        text_color: "#278036",
       },
+      pendingRequest: false,
     };
   },
   computed: {},
@@ -165,6 +169,30 @@ export default {
     selectReaction(reaction) {
       this.selectedReaction = reaction;
       console.log(this.selectedReaction);
+    },
+
+    async reactOnPost(reactionId) {
+      if (this.pendingRequest) return;
+
+      this.pendingRequest = true;
+      try {
+        const response = await ReactionService.reactOnPost(
+          this.post.id,
+          reactionId
+        );
+
+        if (response.statusCode !== 200) {
+          helper.toggleToast("حدث خطأ ما, يرجى المحاولة لاحقاً", "error");
+          return;
+        }
+
+        this.reactToPost(this.post.id, response.data);
+      } catch (e) {
+        console.log("[reaction]", e.response);
+        helper.toggleToast("حدث خطأ ما, يرجى المحاولة لاحقاً", "error");
+      } finally {
+        this.pendingRequest = false;
+      }
     },
   },
 };

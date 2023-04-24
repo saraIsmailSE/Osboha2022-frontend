@@ -54,6 +54,7 @@
                   :comment="comment"
                   @addComment="addComment"
                   @editComment="editComment"
+                  @reactToComment="reactToComment"
                 />
               </div>
             </div>
@@ -285,6 +286,16 @@ export default {
       let commentToEdit = this.findComment(this.comments, comment.id);
       commentToEdit.body = comment.body;
       commentToEdit.media = comment.media;
+    },
+    reactToComment(comment_id, status) {
+      let comment = this.findComment(this.comments, comment_id);
+      if (status) {
+        comment.reactions_count++;
+        comment.reacted_by_user = true;
+      } else {
+        comment.reactions_count--;
+        comment.reacted_by_user = false;
+      }
     },
   },
 };

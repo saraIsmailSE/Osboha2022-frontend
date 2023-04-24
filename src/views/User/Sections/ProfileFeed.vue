@@ -301,6 +301,10 @@ export default {
       type: [Object],
       required: true,
     },
+    timeline_id: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
@@ -316,7 +320,6 @@ export default {
         cancelled: "ملغي",
         finished: "منتهي",
       },
-      timeline_id: null,
     };
   },
   computed: {
@@ -339,10 +342,6 @@ export default {
         return true;
       }
     },
-  },
-  created() {
-    const userProfile = UserInfoService.getUserProfile();
-    this.timeline_id = userProfile.timeline_id;
   },
   methods: {
     addPost(post) {
