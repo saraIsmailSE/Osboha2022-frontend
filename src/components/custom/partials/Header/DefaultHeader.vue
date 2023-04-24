@@ -157,7 +157,7 @@
                                             <div class="header-title bg-primary">
                                                 <h5 class="mb-0 text-white">All Notifications</h5>
                                             </div>
-                                            <small class="badge  bg-light text-dark">4</small>
+                                            <small class="badge  bg-light text-dark">{{notifications.length}}</small>
                                         </div>
                                         <div class="card-body p-0">
                                             <a href="#" class="iq-sub-card">
@@ -253,10 +253,10 @@
                                                 </span>
                                                 <div class="ms-3">
                                                     <router-link :to="{
-                                                        name: 'user.profile', params: {
-                                                            user_id: user.id
-                                                        }
-                                                    }" class="mb-0 h6">
+                                                            name: 'user.profile', params: {
+                                                                user_id: user.id
+                                                            }
+                                                        }" class="mb-0 h6">
                                                         My Profile
                                                     </router-link>
                                                 </div>
@@ -332,10 +332,10 @@
                             </li>
                             <li class="nav-item d-lg-none">
                                 <router-link :to="{
-                                    name: 'user.profile', params: {
-                                        user_id: user.id
-                                    }
-                                }" class="dropdown-toggle d-flex align-items-center">
+                                        name: 'user.profile', params: {
+                                            user_id: user.id
+                                        }
+                                    }" class="dropdown-toggle d-flex align-items-center">
                                     <span class="material-symbols-outlined">person</span>
                                     <span class="mobile-text  ms-3">Profile</span>
                                 </router-link>
@@ -351,6 +351,9 @@
 import { useStore } from 'vuex'
 import { computed } from 'vue'
 import UserInfo from '@/Services/userInfoService'
+import Pusher from 'pusher-js';
+import notificationsServices from "@/API/services/notifications.service";
+import helper from "@/utilities/helper";
 
 export default {
     name: 'DefaultHeader',
@@ -386,9 +389,34 @@ export default {
     },
     data() {
         return {
-            user: null
+            user: null,
+            notifications:[],
         }
     },
+    mounted() {
+        Pusher.logToConsole = true;
+
+        const pusher = new Pusher('0098112dc7c6ed8e4777', {
+            cluster: 'ap2'
+        });
+
+        const channel = pusher.subscribe('notifications-channel');
+        channel.bind('new-notification', async function (data) {
+            if (data) {
+                this.notifications= await notificationsServices.listUnreadNotification();
+                console.log(Object.keys(this.notifications).length)
+                console.log(typeof this.notifications);
+                helper.toggleToast(
+                    data.message,
+                    "success"
+                );
+
+
+            }
+        });
+
+
+    }
 
 }
 </script>

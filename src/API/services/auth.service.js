@@ -81,6 +81,15 @@ class AuthService {
       return error.response;
     }
   }
+  async sessionData() {
+    try {
+      const response = await api.get("session-data")
+      return response.data.data
+
+    } catch (error) {
+      return error.response;
+    }
+  }
 
 }
 

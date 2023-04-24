@@ -5,33 +5,44 @@
                 <div class="card-body p-0">
                     <div class="media-height p-2" data-scrollbar="init">
                         <div class="card d-flex align-items-center mb-4">
-                            <img src="@/assets/images/main/team_work.png" class="card-img-top" alt="current reading">
-                            <div class="card-body row d-flex justify-content-center card-shadow">
+                            <img src="@/assets/images/main/left-timer.png" class="card-img-top" alt="current reading">
+                            <div class="card-body row d-flex justify-content-center card-shadow"
+                                v-if="timer && !timer.is_vacation">
+                                <h4 class="card-title" style="direction: rtl;">
+                                    الأسبوع:
+                                    {{ timer.title }}
+                                </h4>
 
-                                <div class="card border-primary mb-3 col-6 card-shadow" >
-                                    <div class="card-header">يوم</div>
-                                    <div class="card-body text-primary">
-                                        <h5 class="card-title">01</h5>
-                                    </div>
-                                </div>
-                                <div class="card border-primary mb-3 col-6 card-shadow">
-                                    <div class="card-header">ساعة</div>
-                                    <div class="card-body text-primary">
-                                        <h5 class="card-title">01</h5>
-                                    </div>
-                                </div>
-                                <div class="card border-primary mb-3 col-6 card-shadow" >
-                                    <div class="card-header">دقيقة</div>
-                                    <div class="card-body text-primary">
-                                        <h5 class="card-title">01</h5>
-                                    </div>
-                                </div>
-                                <div class="card border-primary mb-3 col-6 card-shadow" >
-                                    <div class="card-header">ثانية</div>
-                                    <div class="card-body text-primary">
-                                        <h5 class="card-title">01</h5>
-                                    </div>
-                                </div>
+                                <vue-countdown :time="time" v-slot="{ days, hours, minutes, seconds }"
+                                    @end="onCountdownEnd">
+
+                                    <table class="text-center w-100" style="direction: rtl !important;">
+                                        <thead>
+                                            <tr class=" font-weight-bold display-6 border-bottom">
+                                                <th>{{ seconds }}</th>
+                                                <th>{{ minutes }}</th>
+                                                <th>{{ hours }}</th>
+                                                <th>{{ days }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="w-25">ثانية</td>
+                                                <td class="w-25">دقيقة</td>
+                                                <td class="w-25">ساعة</td>
+                                                <td class="w-25">يوم</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </vue-countdown>
+                            </div>
+
+                            <div class="card-body row d-flex justify-content-center card-shadow" v-else>
+                                <h4 class="card-title" style="direction: rtl;">
+                                    الأسبوع:
+                                    {{ timer.title }}
+                                </h4>
+                                <p> اجازة</p>
                             </div>
 
                         </div>
@@ -48,14 +59,27 @@
     </div>
 </template>
 <script>
+import VueCountdown from '@chenfengyuan/vue-countdown';
 
 export default {
     name: 'Timer Sidebar',
     created() {
+        this.now = new Date()
+        this.date = new Date(this.timer.main_timer);
+    },
+    components: {
+        VueCountdown
+    },
+    props: {
+        timer: {
+            type: [Object],
+            required: true,
+        },
     },
     data() {
         return {
             miniClass: 'right-sidebar',
+            rightSideBarMini: true,
         }
     },
     methods: {
@@ -72,8 +96,19 @@ export default {
                 this.miniClass = ''
                 body.classList.remove('right-sidebar-close')
             }
-        }
+        },
+        onCountdownEnd: function () {
+            // re-read week info [to start new week]
+        },
+
+    },
+    computed: {
+        time() {
+            return this.date - this.now
+        },
+
     }
+
 }
 </script>
 <style scoped>

@@ -185,7 +185,7 @@ export default {
   },
   computed: {
     isAuth() {
-      return this.auth.id === this.$route.params.user_id;
+      return this.auth.id === parseInt(this.$route.params.user_id);
     },
   },
   methods: {},

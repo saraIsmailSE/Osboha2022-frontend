@@ -9,10 +9,10 @@ class GroupService {
         try {
             const response = await api.post('/group/create', formData, {
                 headers: { "Content-type": "multipart/form-data" },
-            }) 
+            })
             return response.data
         } catch (error) {
-            return error; 
+            return error;
         }
     }
     async getAll() {
@@ -67,7 +67,7 @@ class GroupService {
             return error
         }
     }
-    async AllAchievements(group_id,week_filter) {
+    async AllAchievements(group_id, week_filter) {
         try {
             const response = await api.get(`group/all-achievements/${group_id}/${week_filter}`);
             return response.data.data;
@@ -75,7 +75,7 @@ class GroupService {
             return error
         }
     }
-    async AchievementAsPages(group_id,week_filter) {
+    async AchievementAsPages(group_id, week_filter) {
         try {
             const response = await api.get(`group/achievement-as-pages/${group_id}/${week_filter}`);
             return response.data.data;
@@ -83,7 +83,7 @@ class GroupService {
             return error
         }
     }
-    async searchForAmbassadorAchievement(ambassador_name,group_id,week_filter) {
+    async searchForAmbassadorAchievement(ambassador_name, group_id, week_filter) {
         try {
             const response = await api.get(`group/search-for-ambassador-achievement/${ambassador_name}/${group_id}/${week_filter}`);
             return response.data.data;
@@ -91,7 +91,7 @@ class GroupService {
             return error
         }
     }
-    async searchForAmbassador(ambassador_name,group_id) {
+    async searchForAmbassador(ambassador_name, group_id) {
         try {
             const response = await api.get(`group/search-for-ambassador/${ambassador_name}/${group_id}`);
             return response.data.data;
@@ -145,10 +145,17 @@ class GroupService {
             return error
         }
     }
-
-    async addMember(body){
+    async userGroups() {
         try {
-          
+            const groups = await api.get('/group/user-groups');
+            return groups.data.data
+        } catch (error) {
+            return error
+        }
+    }
+    async addMember(body) {
+        try {
+
             const groups = await api.post('/user-group/', body);
             return groups.data
         } catch (error) {

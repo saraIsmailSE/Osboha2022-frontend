@@ -6,9 +6,19 @@
                     <div class="media-height p-2" data-scrollbar="init">
                         <div class="card d-flex align-items-center mb-4">
                             <img src="@/assets/images/main/team.png" class="card-img-top" alt="current reading">
-                            <div class="card-body w-100">
-                                <h4 class="card-title">فريق المتابعة</h4>
-                                <a href="#" class="btn btn-primary w-100">مشاهدة</a>
+                            <div class="card-body w-100" v-if="reading_team">
+                                <h4 class="card-title" style="direction: rtl;">
+                                    فريق المتابعة:
+                                    {{ reading_team.group.name }}
+                                </h4>
+                                <router-link class="btn btn-primary w-100" :to="{
+                                    name: 'group.group-detail',
+                                    params: { group_id: reading_team.group.id },
+                                }">مشاهدة
+                                </router-link>
+                            </div>
+                            <div class="card-body w-100" v-else>
+                                <h4 class="card-title">لست في أي فريق</h4>
                             </div>
                         </div>
 
@@ -26,9 +36,18 @@
 <script>
 export default {
     name: 'ReadingTeam',
+    created(){
+    },
+    props: {
+        reading_team: {
+            type: [Object],
+            required: true,
+        },
+    },
     data() {
         return {
             miniClass: 'right-sidebar',
+            rightSideBarMini: true,
         }
     },
     methods: {
@@ -50,10 +69,11 @@ export default {
 }
 </script>
 <style scoped>
-.right-sidebar-team{
-  top: 7.5rem !important;
+.right-sidebar-team {
+    top: 7.5rem !important;
 }
-.toggel-btn{
+
+.toggel-btn {
     background-color: #192e35;
 }
 </style>

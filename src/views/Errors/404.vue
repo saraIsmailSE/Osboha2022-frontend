@@ -3,11 +3,17 @@
         <div class="row no-gutters">
             <div class="col-sm-12 text-center">
                 <div class="iq-error position-relative mt-5">
-                    <img :src="image404" class="img-fluid iq-error-img" alt="404">
-                    <h2 class="mb-0">Oops! This Page is Not Found.</h2>
-                    <p>The requested page dose not exist.</p>
-                    <a href="javascript:void(0);" @click="$router.go(-1)" class="btn btn-primary mt-3"><i class="ri-home-4-line"></i>Back
-                        </a>
+                    <img src="@/assets/images/main/404.png" class="img-fluid iq-error-img" alt="404">
+                    <div>
+                    
+                    <h2 class="mb-0 text-center">الصفحة المطلوبة غير موجودة</h2>
+                    <p class="text-center">لم يتم العثور على الصفحة التي طلبتها، قد يكون الرابط خاطئ أو تم حذف الصفحة</p>
+
+                    <router-link class="btn btn-primary w-100" :to="{
+                        name: 'osboha',
+                    }">عودة للصفحة الرئيسية
+                    </router-link>
+                    </div>
                 </div>
             </div>
         </div>
@@ -19,7 +25,6 @@ export default {
     name: 'Error404',
     data() {
         return {
-            image404: require('../../assets/images/error/400.png')
         }
     }
 }

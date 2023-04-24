@@ -12,7 +12,7 @@ export default {
     name: 'Advisor Audit',
     async created() {
         try {
-            const response = await AuditMarkService.supervisorsAudit();
+            const response = await AuditMarkService.supervisorsAudit(this.$route.params.advisor_id);
             this.supervisors = response;
         }
         catch (error) {
@@ -27,4 +27,3 @@ export default {
 
 }
 </script>
-  

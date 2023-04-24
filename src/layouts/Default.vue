@@ -24,30 +24,39 @@
     <!-- Wrapper End-->
     <DefaultFooter />
     <!-- <DefaultRightSidebar/> -->
-    <CurrentReading />
-    <ReadingTeam />
-    <Timer />
-    <GroupChallenge />
-    <TeamReadingShortcut />
-    <TeamExceptionShortcut />
 
-  </div>
+    <div v-if="sessionData">
+      <CurrentReading :book_in_progress="sessionData.book_in_progress" :progress="sessionData.progress" />
+      <ReadingTeam :reading_team="sessionData.reading_team"/>
+      <Timer :timer="sessionData.timer" />
+    </div>
+
+</div>
 </template>
 <script>
 import DefaultSidebar from '../components/custom/partials/Sidebar/DefaultSidebar'
 import DefaultHeader from '../components/custom/partials/Header/DefaultHeader'
 import DefaultFooter from '../components/custom/partials/Footer/DefaultFooter'
-import CurrentReading from '../components/custom/partials/Sidebar/LeftSidebar/CurrentReading'
-import ReadingTeam from '../components/custom/partials/Sidebar/LeftSidebar/ReadingTeam'
-import TeamReadingShortcut from '../components/custom/partials/Sidebar/LeftSidebar/TeamReading-shortcut'
-import TeamExceptionShortcut from '../components/custom/partials/Sidebar/LeftSidebar/TeamException-shortcut.vue'
-import GroupChallenge from '../components/custom/partials/Sidebar/LeftSidebar/GroupChallenge'
+import CurrentReading from '@/components/custom/partials/Sidebar/LeftSidebar/CurrentReading'
+import ReadingTeam from '@/components/custom/partials/Sidebar/LeftSidebar/ReadingTeam'
 import Timer from '../components/custom/partials/Sidebar/LeftSidebar/Timer.vue'
 import Breadcrumb from '../components/custom/Breadcrumb/Breadcrumb'
 import logo from '../assets/images/logo.png'
+import authService from "@/API/services/auth.service";
+
+
 const fslightbox = () => import('../plugins/fslightbox/fslightbox')
 export default {
   name: 'Default',
+  async created() {
+    if (sessionStorage.getItem("AuthSessionData")) {
+      this.sessionData = JSON.parse(sessionStorage.getItem("AuthSessionData"));
+    } else {
+      const response = await authService.sessionData();
+      sessionStorage.setItem("AuthSessionData", JSON.stringify(response));
+      this.sessionData = response
+    }
+  },
   mounted() {
     fslightbox()
   },
@@ -58,20 +67,18 @@ export default {
     Timer,
     CurrentReading,
     ReadingTeam,
-    TeamReadingShortcut,
-    TeamExceptionShortcut,
-    GroupChallenge,
     Breadcrumb
   },
   data() {
     return {
+      sessionData: null,
       breadcrumboptions: [
         {
           img: require('@/assets/images/page-img/profile-bg2.jpg'),
           title: 'Weather'
         },
         {
-          img: require('@/assets/images/page-img/profile-bg7.jpg'),
+          img: require('@/assets/images/main/book-banner-2.png'),
           title: 'Group'
         },
         {
