@@ -238,7 +238,7 @@ const groupChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMain/Group/ListMembers"),
   },
   { 
-    path: "add-member/:id",
+    path: "add-member/:group_id",
     name: prop + ".addmemeber",
     meta: { auth: true, name: "Group" },
     component: () => import("../views/OsbohaMain/Group/AddMember"),

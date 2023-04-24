@@ -148,10 +148,11 @@ class GroupService {
 
     async addMember(body){
         try {
-            const groups = await api.post('/group/add-member', body);
+          
+            const groups = await api.post('/user-group/', body);
             return groups.data
         } catch (error) {
-            return error
+            return error.response.data.data
         }
     }
 }

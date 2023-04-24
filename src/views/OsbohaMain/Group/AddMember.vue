@@ -4,7 +4,7 @@
       <div
         class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto"
       >
-        <h1 class="text-center mt-3 mb-3">مجموعة جديد</h1>
+        <h1 class="text-center mt-3 mb-3">عضو جديد</h1>
       </div>
       <div class="iq-card-body p-4">
         <div class="image-block text-center">
@@ -17,26 +17,32 @@
       </div>
       <div class="col-12 bg-white pt-2">
         <div class="sign-in-from">
-          <h1 class="mb-0">اضافة مجموعة</h1>
+          <h1 class="mb-0">اضافة عضو</h1>
           <form class="mt-2" @submit.prevent="onSubmit()">
             <div class="form-group">
-              <label for="exampleInputEmail1">الاسم</label>
+              <label for="exampleInputEmail1">الايميل</label>
               <input
                 type="text"
-                v-model="v$.form.name.$model"
+                v-model="v$.form.email.$model"
                 class="form-control mb-0"
                 id="exampleInputEmail1"
-                placeholder="ادخال اسم المجموعة هنا"
+                placeholder="ادخال الايميل هنا"
               />
-              <small style="color: red" v-if="v$.form.name.$error"
-                >الرجاء قم بادخال المجموعة</small
+              <small style="color: red" v-if="v$.form.email.$error"
+                >الرجاء قم بادخال الايميل</small
               >
             </div>
          
           
-      
-         
-
+      <div class="form-group">
+             <select v-model="v$.form.role.$model" class="form-select" data-trigger name="choices-single-default"
+                id="choices-single-default">
+                <option value="">اختر الصلاحية </option>
+                <option v-for="(role,index) in roles" :key="index">{{role.name}}</option>
+               
+              </select>
+</div>
+       
           
 
             <div class="form-group" v-if="regError">
@@ -47,7 +53,7 @@
      
             <div class="d-inline-block w-100">
               <button type="submit" class="btn btn-primary float-end">
-                اضافة المجموعة
+                اضافة عضو
               </button>
             </div>
           </form>
@@ -68,7 +74,7 @@ export default {
   },
 
   async created() {
-      await this.getGroup();
+    await this.getRoles();
   },
 
   data() {
@@ -98,25 +104,37 @@ export default {
         },
       },
       form: {
-        email:''
+        email:'',
+        role:''
       },
+      roles:[],
       regError: "",
     };
   },
   methods: {
-    
+      async  getRoles(){
+      
+           const roles = await api.get(`get-roles/1`);
+           this.roles = roles.data.data;
+      },
 
     async onSubmit() {
       this.v$.$touch();
       if (!this.v$.form.$invalid) {
         this.loader = true;
        
-        try {
-        
-        const group = await GroupService.addMember({email:this.form.email,group_id:this.group_id})
+        try { 
        
-          console.log(group)
-          this.loader = false;
+        const group = await GroupService.addMember({email:this.form.email,group_id:this.group_id,user_type:this.form.role})
+          if(group == 'email not found'){
+            this.regError = 'الايميل غير موجود'
+          }else if (group == 'User does not have the required role'){
+            this.regError =  `السفير لايمتلك الصلاحية ${this.form.user_type}`
+          }
+         else{
+            this.loader = false;
+          window.location.reload();
+         }
         } catch (error) {
           this.loader = false;
 
@@ -130,7 +148,7 @@ export default {
       form: {
           email: {
           required,
-        },
+        },    role: { required },
       
       
       },
