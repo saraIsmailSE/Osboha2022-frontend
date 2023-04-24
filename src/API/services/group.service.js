@@ -145,6 +145,14 @@ class GroupService {
             return error
         }
     }
+    async userGroups() {
+        try {
+            const groups = await api.get('/group/user-groups');
+            return groups.data.data
+        } catch (error) {
+            return error
+        }
+    }
 }
 
 export default new GroupService()

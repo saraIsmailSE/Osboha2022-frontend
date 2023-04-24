@@ -145,6 +145,16 @@ class BookService {
       return "";
     }
   }
+
+  async latestBooks() {
+    try {
+      const book = await api.get(`/books/latest`);
+      return book.data.data;
+    } catch (error) {
+      console.log(error);
+      return "";
+    }
+  }
 }
 
 export default new BookService();

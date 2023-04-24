@@ -2,9 +2,9 @@ import { api, handelErrors } from "../Intercepter";
 
 class AuditMarks {
 
-  constructor(){
+  constructor() {
     this.prefix = 'audit-marks'
-}
+  }
 
   /**
    * get audit marks with group exceptions => list only for group administrators
@@ -131,9 +131,9 @@ class AuditMarks {
   * get all groups audit for supervisor.
   * @return response
   */
-  async supervisorsAudit() {
+  async supervisorsAudit(advisor_id) {
     try {
-      const response = await api.get(`/${this.prefix}/supervisors-audit`)
+      const response = await api.get(`/${this.prefix}/supervisors-audit/${advisor_id}`)
         .catch((error) => { // error is handled in catch block
           if (error.response) {
             handelErrors(error.response.status)

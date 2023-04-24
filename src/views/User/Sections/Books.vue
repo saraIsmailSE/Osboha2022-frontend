@@ -3,7 +3,23 @@
     <template v-slot:body>
       <h2 class="text-center mb-3">الكتب</h2>
       <hr>
-      <h4 class="text-center mt-3 mb-3" v-if="books">العدد الكلي: {{ books.length }}</h4>
+      <div class="mb-3 d-flex justify-content-between">
+        <h4 class="text-center mt-3 mb-3" v-if="books">العدد الكلي: {{ books.length }}</h4>
+        <router-link :to="{
+            name: 'osboha.later-books',
+            params: {
+              user_id: this.$route.params.user_id,
+            },
+          }">
+
+          <h4 class="text-center mt-3 mb-3">
+            للقراءة لاحقاً
+            <span class="align-middle material-symbols-outlined text-danger">
+              favorite
+            </span>
+          </h4>
+        </router-link>
+      </div>
       <div class="d-grid gap-3 d-grid-template-1fr-19" v-if="books && books.length > 0">
         <BookCard v-for="bookInfo in booksLoaded" :key="bookInfo.id" :cardInfo="bookInfo.book" />
         <a class="me-3 btn" role="button" @click="loadMore()" v-if="booksLoaded.length > length">عرض المزيد</a>
@@ -16,7 +32,9 @@
               <img src="@/assets/images/main/current_book.png" class="img-fluid rounded w-50" alt="blog-img">
             </div>
             <h4 class="text-center mt-3 mb-3">لا يوجد كتب</h4>
-            <h6 class="text-center mt-3 mb-3" v-if="isAuth">ابدأ القراءة</h6>
+            <router-link v-if="isAuth" class="btn btn-primary w-100" aria-current="page" :to="{ name: 'osboha.book' }">
+              ابدأ القراءة
+            </router-link>
           </div>
         </iq-card>
       </div>

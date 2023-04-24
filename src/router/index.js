@@ -43,6 +43,12 @@ const childRoutes = (prop, mode) => [
     component: () => import("../views/Book/BookDetails"),
   },
   {
+    path: "later-books/:user_id",
+    name: prop + ".later-books",
+    meta: { auth: true, name: "UserBooks" },
+    component: () => import("../views/Book/LaterBooks"),
+  },
+  {
     path: "infographic",
     name: prop + ".infographic",
     meta: { auth: true, name: "Infographic" },
@@ -87,6 +93,11 @@ const authchildRoutes = (prop, mode) => [
     path: 'reset-password/:token',
     name: prop + '.reset-password',
     component: () => import('../views/AuthPages/Default/ResetPassword')
+  },
+  {
+    path: 'not-ambassador-in-any-group/',
+    name: prop + '.NotAmbassadorInAnyGroup',
+    component: () => import('../views/AuthPages/Default/NotAmbassadorInAnyGroup')
   },
   {
     path: "lockscreen",
@@ -279,7 +290,7 @@ const groupChildRoute = (prop, mode = false) => [
     component: () => import('../views/OsbohaMain/Group/AuditMarks/SupervisorAuditMarks'),
   },
   {
-    path: '/group/advisor-audit-marks/',
+    path: '/group/advisor-audit-marks/:advisor_id',
     name: prop + '.AdvisorAudit',
     meta: { auth: true, name: 'Advisor Audit Marks' },
     component: () => import('../views/OsbohaMain/Group/AuditMarks/AdvisorAudit'),

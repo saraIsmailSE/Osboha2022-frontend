@@ -222,7 +222,7 @@
                         style="direction: rtl !important"
                         v-if="exception.status == 'accepted'"
                       >
-                        {{ exception.type }} || ينتهي بــ :
+                        {{ exception.type.type }} || ينتهي بــ :
                         {{ exception.end_at }}
                       </h6>
                       <h6 class="mt-2" style="direction: rtl !important" v-else>
