@@ -36,6 +36,16 @@ class TokenService {
     return found;
   }
 
+  hasRoles(roles) {
+    let hasRoles = false;
+    roles.forEach((role) => {
+      if (this.hasRole(role)) {
+        hasRoles = true;
+      }
+    });
+    return hasRoles;
+  }
+
   //asmaa
   getRolePermissions(role_name) {
     return this.getRoles().find((role) => role.name === role_name).permissions;

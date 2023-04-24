@@ -259,7 +259,8 @@ export default {
       let allPages = [];
       let start = null;
 
-      console.log("[last thesis]", this.lastThesis);
+      console.log("[computed last thesis]", this.lastThesis);
+      console.log("[computed book]", this.book);
 
       //if user has a book in progress, start pages from the last thesis end page and add 1 to it
       if (
@@ -269,32 +270,32 @@ export default {
         start = this.lastThesis
           ? this.lastThesis?.end_page + 1
           : this.book.start_page;
-        console.log("[in progress]", start);
+        console.log("[computed in progress]", start);
       }
       //if user has no book, so this is the first thesis, start pages from the book start page
       else if (!this.book.userBooks.length && !this.lastThesis) {
         start = this.book.start_page;
-        console.log("[first thesis]", start);
+        console.log("[computed first thesis]", start);
       }
 
       //if user is editting the thesis, start pages from the book start page
       if (this.thesisToEdit) {
         start = this.book.start_page;
-        console.log("[editting]", start);
+        console.log("[computed editting]", start);
       }
 
       //if start null, it means the user has finished the book
 
       //if start over button is not clicked, return empty array
       if (start === null && !this.startOver) {
-        console.log("[finished]", start);
+        console.log("[computed finished]", start);
         return [];
       }
 
       //if start over button is clicked, start pages from the book start page
       if (start === null && this.startOver) {
         start = this.book.start_page;
-        console.log("[start over]", start);
+        console.log("[computed start over]", start);
       }
       //add all pages to the array from the start page to the book end page
       for (let i = start; i <= this.book.end_page; i++) {

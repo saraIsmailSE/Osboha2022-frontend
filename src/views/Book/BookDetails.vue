@@ -114,6 +114,7 @@
                       "
                       @addComment="addComment"
                       @editComment="editComment"
+                      @reactToComment="reactToComment"
                     />
                   </div>
                 </div>
@@ -223,6 +224,8 @@ export default {
   async created() {
     await this.getBook(this.$route.params.book_id);
     await this.getTheses(this.page);
+
+    console.log("bookDetails - book", this.book);
   },
   data() {
     return {
@@ -371,6 +374,16 @@ export default {
       let commentToEdit = this.findComment(this.theses, comment.id);
       commentToEdit.body = comment.body;
       commentToEdit.media = comment.media;
+    },
+    reactToComment(comment_id, status) {
+      let comment = this.findComment(this.theses, comment_id);
+      if (status) {
+        comment.reactions_count++;
+        comment.reacted_by_user = true;
+      } else {
+        comment.reactions_count--;
+        comment.reacted_by_user = false;
+      }
     },
   },
   computed: {

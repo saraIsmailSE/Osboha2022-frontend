@@ -76,6 +76,7 @@
           :friends="profile.friends"
           :exceptions="profile.exceptions"
           :profile_media="profile_media"
+          :timeline_id="profile.user.user_profile.timeline_id"
         />
         <!-- ########## END PROFILE FEED ########## -->
 
