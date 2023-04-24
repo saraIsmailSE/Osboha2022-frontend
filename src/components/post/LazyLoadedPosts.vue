@@ -71,6 +71,7 @@ export default {
       voteOnPost: this.voteOnPost,
       closePostComments: this.closePostComments,
       pinPost: this.pinPost,
+      reactToPost: this.reactToPost,
     };
   },
   emits: {},
@@ -83,12 +84,13 @@ export default {
       totalPages: 1,
       loading: false,
       pendingRequest: false,
+      hasMore: true,
       emptyMessage: "",
     };
   },
   computed: {
     hasMoreToLoad() {
-      return this.page <= this.totalPages;
+      return this.page <= this.totalPages && this.hasMore;
     },
   },
   async created() {},
@@ -148,7 +150,8 @@ export default {
         }
 
         if (response.statusCode === 200 && !response.data) {
-          this.emptyMessage = "لا يوجد منشورات";
+          // this.emptyMessage = "لا يوجد منشورات";
+          this.hasMore = false;
           return;
         }
 
@@ -292,6 +295,25 @@ export default {
         this.posts.splice(this.posts.indexOf(post), 1);
       }
       post.is_pinned = is_pinned;
+    },
+
+    /**
+     * React to a post either by creating a new reaction or updating an existing one
+     * @param {int} post_id
+     * @param {boolean} status
+     */
+    reactToPost(post_id, status) {
+      let post;
+      post = this.posts.find((post) => post.id == post_id);
+      if (!post) post = this.announcements.find((post) => post.id == post_id);
+
+      if (status) {
+        post.reactions_count++;
+        post.reacted_by_user = true;
+      } else {
+        post.reactions_count--;
+        post.reacted_by_user = false;
+      }
     },
   },
 };

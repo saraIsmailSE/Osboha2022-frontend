@@ -405,10 +405,16 @@ export default {
           helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
           return;
         }
-        this.$emit("add-post", post.data);
+
+        if (post.data.is_approved !== null) {
+          this.$emit("add-post", post.data);
+        }
         this.resetPostForm();
         this.postModal.hide();
-        helper.toggleToast("تم النشر بنجاح", "success");
+        helper.toggleToast(
+          post.message ? post.message : "تم النشر بنجاح",
+          "success"
+        );
       } catch (err) {
         console.log("[err]", err);
         helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");

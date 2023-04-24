@@ -201,7 +201,7 @@ export default {
     this.week = response.mark?.week;
     this.expired = new Date(this.week?.main_timer) < new Date();
 
-    this.authUserAllowed = await userInfoService.hasPermissions([
+    this.authUserAllowed = await userInfoService.hasRoles([
       "leader",
       "supervisor",
       "advisor",

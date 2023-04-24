@@ -3,16 +3,22 @@
     <!--Users dropdown images that interacted with this post-->
     <div class="like-data">
       <div class="dropdown">
-        <span
-          class="dropdown-toggle"
+        <!-- <span
+          class="dropdown-toggle text-primary"
           data-bs-toggle="dropdown"
           aria-haspopup="true"
           aria-expanded="false"
           role="button"
+        > -->
+        <span
+          class="text-primary"
+          aria-haspopup="true"
+          aria-expanded="false"
+          role="button"
         >
-          <img src="@/assets/images/icon/01.png" class="img-fluid" alt="" />
+          <font-awesome-icon :icon="['fas', 'thumbs-up']" size="lg" />
         </span>
-        <div class="dropdown-menu py-2">
+        <!-- <div class="dropdown-menu py-2">
           <a
             class="ms-2 me-2"
             href="#"
@@ -69,31 +75,33 @@
             title="Lovely"
             ><img src="@/assets/images/icon/07.png" class="img-fluid" alt=""
           /></a>
-        </div>
+        </div> -->
       </div>
     </div>
 
     <!--total likes block-->
     <div class="total-like-block ms-2 me-3">
       <div class="dropdown">
-        <span
+        <!-- <span
           class="dropdown-toggle"
           data-bs-toggle="dropdown"
           aria-haspopup="true"
           aria-expanded="false"
           role="button"
-        >
-          140 Likes
+        > -->
+
+        <span aria-haspopup="true" aria-expanded="false" role="button">
+          {{ post.reactions_count }}
         </span>
-        <div class="dropdown-menu">
+        <!-- <div class="dropdown-menu">
           <a class="dropdown-item" href="#">Max Emum</a>
           <a class="dropdown-item" href="#">Bill Yerds</a>
           <a class="dropdown-item" href="#">Hap E. Birthday</a>
           <a class="dropdown-item" href="#">Tara Misu</a>
           <a class="dropdown-item" href="#">Midge Itz</a>
           <a class="dropdown-item" href="#">Sal Vidge</a>
-          <a class="dropdown-item" href="#">Other</a>
-        </div>
+          <a class="dropdown-item" href="#">Other</a> 
+        </div>-->
       </div>
     </div>
   </div>
@@ -104,6 +112,11 @@ export default {
   name: "TotalLikes",
   props: {
     post: { type: Object, required: true },
+  },
+  data() {
+    return {
+      reactions: [],
+    };
   },
 };
 </script>
