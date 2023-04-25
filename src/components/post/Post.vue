@@ -5,7 +5,6 @@
         <!--Post header-->
         <PostHeader
           :post="post"
-          :byAuth="byAuth"
           :showPin="showPin"
           :is_announcement="is_announcement"
         />
@@ -80,10 +79,6 @@ export default {
   },
   props: {
     post: { type: Object },
-    byAuth: {
-      type: Boolean,
-      default: false,
-    },
     showPin: {
       type: Boolean,
       default: false,

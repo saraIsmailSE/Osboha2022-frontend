@@ -14,6 +14,9 @@
             alt="blog-img"
           />
         </div>
+        <p class="text-center my-2" style="color: red" v-if="errorMessage">
+          {{ errorMessage }}
+        </p>
         <form class="mt-4 w-75 mx-auto" @submit.prevent="submit">
           <div class="form-group">
             <label class="form-label text-right" for="exampleInputEmail1"
@@ -27,7 +30,12 @@
               v-model="v$.form.email.$model"
             />
             <p style="color: red" v-if="v$.form.email.$error">
-              الرجاء قم بادخال البريد الالكتروني
+              <span v-if="v$.form.email.required.$invalid">
+                رجاء قم بادخال البريد الإلكتروني
+              </span>
+              <span v-if="v$.form.email.email.$invalid">
+                رجاء قم بادخال البريد الإلكتروني بشكل صحيح
+              </span>
             </p>
           </div>
           <div class="form-group">
@@ -42,24 +50,30 @@
               v-model="v$.form.password.$model"
             />
             <p style="color: red" v-if="v$.form.password.$error">
-              الرجاء قم بادخال كلمة السر
+              <span v-if="v$.form.password.required.$invalid">
+                رجاء قم بادخال كلمة السر
+              </span>
+              <span v-if="v$.form.password.min.$invalid">
+                كلمة السر يجب ان تكون اكثر من 8 احرف
+              </span>
             </p>
           </div>
           <router-link :to="{ name: 'auth.forgot-password' }" class="float-end"
             >هل نسيت كلمة السر؟</router-link
           >
           <div class="d-inline-block w-100 text-center">
-            <div class="d-inline-block w-100 text-center">
-              <div class="col-sm-12 text-center" v-if="loader">
-                <img
-                  src="../../../assets/images/page-img/page-load-loader.gif"
-                  alt="loader"
-                  style="height: 100px"
-                />
-              </div>
+            <div class="col-sm-12 text-center" v-if="loading">
+              <img
+                :src="require('@/assets/images/page-img/page-load-loader.gif')"
+                alt="loader"
+                style="height: 80px"
+              />
             </div>
-            <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
-            <div v-if="error" class="alert alert-danger">{{ error }}</div>
+
+            <button type="submit" class="btn btn-primary text-center" v-else>
+              تسجيل الدخول
+            </button>
+            <!-- <div v-if="error" class="alert alert-danger">{{ error }}</div> -->
           </div>
           <div class="sign-info">
             <span class="dark-color d-inline-block line-height-2"
@@ -90,23 +104,63 @@ export default {
         email: "",
         password: "",
       },
-      error: "",
+      errorMessage: "",
       submitStatus: null,
+      loading: false,
     };
   },
-
   methods: {
     async submit() {
       this.v$.$touch();
       if (this.v$.form.$invalid) {
-        this.submitStatus;
-      } else {
-        this.$store
-          .dispatch("login", {
-            email: this.form.email,
-            password: this.form.password,
-          })
-          .then(this.$router.push({ name: "osboha" }));
+        this.errorMessage = "رجاءً قم بادخال البيانات بشكل صحيح";
+        return;
+      }
+
+      if (this.loading) return;
+      this.loading = true;
+
+      try {
+        await this.$store.dispatch("login", {
+          email: this.form.email,
+          password: this.form.password,
+        });
+
+        localStorage.setItem("osboha__token", this.$store.state.token);
+        localStorage.setItem(
+          "osboha__user",
+          JSON.stringify(this.$store.state.user)
+        );
+
+        this.errorMessage = "";
+        this.$router.push({ name: "osboha.list" });
+      } catch (error) {
+        const response = error.response.data;
+
+        if (response.statusCode === 500) {
+          //validation errors
+          const data = response.data;
+          if (data.email) {
+            const err = data.email[0];
+            if (err.includes("required")) {
+              this.errorMessage = "رجاءً قم بادخال البريد الالكتروني";
+            } else if (err.includes("valid")) {
+              this.errorMessage = "رجاءً قم بادخال البريد الالكتروني بشكل صحيح";
+            }
+          } else if (data.password) {
+            const err = data.password[0];
+            console.log(err);
+            if (err.includes("required")) {
+              this.errorMessage = "رجاءً قم بادخال كلمة السر";
+            } else if (err.includes("least")) {
+              this.errorMessage = "كلمة السر يجب ان تكون اكثر من 8 احرف";
+            }
+          }
+        } else {
+          this.errorMessage = response.message;
+        }
+      } finally {
+        this.loading = false;
       }
     },
   },
@@ -123,6 +177,16 @@ export default {
         },
       },
     };
+  },
+  beforeRouteEnter(to, from, next) {
+    if (
+      localStorage.getItem("osboha__token") &&
+      localStorage.getItem("osboha__user")
+    ) {
+      next({ name: "osboha.list" });
+    } else {
+      next();
+    }
   },
 };
 </script>

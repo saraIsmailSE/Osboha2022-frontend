@@ -47,46 +47,48 @@
     </div>
 </template>
 <script>
-import { useStore } from 'vuex'
-import { computed } from 'vue'
-import UserInfo from '@/Services/userInfoService'
-import Pusher from 'pusher-js';
+import { useStore } from "vuex";
+import { computed } from "vue";
+import UserInfo from "@/Services/userInfoService";
+import Pusher from "pusher-js";
 import notificationsServices from "@/API/services/notifications.service";
 import helper from "@/utilities/helper";
 
 export default {
-    name: 'DefaultHeader',
+    name: "DefaultHeader",
     props: {
         image: {
             type: String,
-            default: require('@/assets/images/logo.png')
-        }
+            default: require("@/assets/images/logo.png"),
+        },
     },
     setup() {
-        const store = useStore()
-        const sidebarType = computed(() => store.getters['setting/sidebar_type'])
+        const store = useStore();
+        const sidebarType = computed(() => store.getters["setting/sidebar_type"]);
         const toggleSidebar = () => {
             // Code Here
-            if (sidebarType.value.includes('sidebar-mini')) {
+            if (sidebarType.value.includes("sidebar-mini")) {
                 store.dispatch(
-                    'setting/sidebar_type',
-                    sidebarType.value.filter((item) => item !== 'sidebar-mini')
-                )
+                    "setting/sidebar_type",
+                    sidebarType.value.filter((item) => item !== "sidebar-mini")
+                );
             } else {
-                store.dispatch('setting/sidebar_type', [...sidebarType.value, 'sidebar-mini'])
+                store.dispatch("setting/sidebar_type", [
+                    ...sidebarType.value,
+                    "sidebar-mini",
+                ]);
             }
-        }
+        };
         return {
             store,
             sidebarType,
-            toggleSidebar
-        }
+            toggleSidebar,
+        };
     },
     data() {
         return {
-            user: null,
             notifications: [],
-        }
+        };
     },
     computed: {
         user() {
@@ -96,26 +98,22 @@ export default {
     mounted() {
         Pusher.logToConsole = true;
 
-        const pusher = new Pusher('0098112dc7c6ed8e4777', {
-            cluster: 'ap2'
+        const pusher = new Pusher("0098112dc7c6ed8e4777", {
+            cluster: "ap2",
         });
 
-        const channel = pusher.subscribe('notifications-channel');
-        channel.bind('new-notification', async function (data) {
+        const channel = pusher.subscribe("notifications-channel");
+        channel.bind("new-notification", async function (data) {
             if (data) {
-                this.notifications = await notificationsServices.listUnreadNotification();
-                console.log(Object.keys(this.notifications).length)
+                this.notifications =
+                    await notificationsServices.listUnreadNotification();
+                console.log(Object.keys(this.notifications).length);
                 console.log(typeof this.notifications);
-                helper.toggleToast(
-                    data.message,
-                    "success"
-                );
-
-
+                helper.toggleToast(data.message, "success");
             }
         });
-    }
-}
+    },
+};
 </script>
 <style>
 .iq-top-navbar {
