@@ -200,16 +200,9 @@ export default {
     this.thesis = response;
     this.week = response.mark?.week;
     this.expired = new Date(this.week?.main_timer) < new Date();
-
-    this.authUserAllowed = await userInfoService.hasRoles([
-      "leader",
-      "supervisor",
-      "advisor",
-    ]);
   },
   data() {
     return {
-      authUserAllowed: false,
       thesis: null,
       reasons: [],
       loader: false,
@@ -220,6 +213,13 @@ export default {
     };
   },
   computed: {
+    authUserAllowed() {
+      return userInfoService.hasRoles(this.$store.getters.getUser, [
+        "leader",
+        "supervisor",
+        "advisor",
+      ]);
+    },
     thesisStatus() {
       let status = "";
       let className = "bg-primary";

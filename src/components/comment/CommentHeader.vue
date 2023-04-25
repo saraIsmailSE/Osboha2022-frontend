@@ -101,13 +101,14 @@ export default {
       return this.canEdit || this.canDelete;
     },
     canEdit() {
-      return this.comment?.user?.id == UserInfoService.getUser().user.id;
+      return this.comment?.user?.id == this.$store.getters.getUser.id;
     },
     canDelete() {
+      const user = this.$store.getters.getUser;
       return (
-        (this.comment?.user?.id === UserInfoService.getUser().user.id &&
-          UserInfoService.hasPermission("delete comment")) ||
-        UserInfoService.hasRole("admin")
+        (this.comment?.user?.id === user.id &&
+          UserInfoService.hasPermission(user, "delete comment")) ||
+        UserInfoService.hasRole(user, "admin")
       );
     },
   },

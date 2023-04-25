@@ -4,7 +4,15 @@
 <script>
 export default {
   name: "App",
-  mounted() {},
+  created() {
+    const token = localStorage.getItem("osboha__token");
+    const user = localStorage.getItem("osboha__user");
+
+    if (token && user) {
+      this.$store.commit("SET_TOKEN", token);
+      this.$store.commit("SET_USER_DATA", JSON.parse(user));
+    }
+  },
 };
 </script>
 

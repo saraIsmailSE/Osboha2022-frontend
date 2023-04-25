@@ -1,16 +1,19 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+//check if user is logged in
+const loggedIn = () =>
+  localStorage.getItem("osboha__user") && localStorage.getItem("osboha__token");
+
+//redirect to home if logged in
+const authGuard = (to, from, next) => {
+  if (loggedIn()) {
+    next("/");
+  } else {
+    next();
+  }
+};
+
 const childRoutes = (prop, mode) => [
-  {
-    path: '/:pathMatch(.*)*',
-    name:'NotFound',
-    component: () => import('../views/Errors/404'),
-  },
-  {
-    path: '/notauthorized',
-    name:'NotAuthorized',
-    component: () => import('../views/Errors/403'),
-  },
   {
     path: "",
     name: prop + ".list",
@@ -60,18 +63,18 @@ const childRoutes = (prop, mode) => [
     meta: { auth: true, name: "articles" },
     component: () => import("../views/Articles/list"),
   },
-  { 
+  {
     path: "group",
     name: prop + ".group",
     meta: { auth: true, name: "Group" },
     component: () => import("../views/OsbohaMain/Group/Group"),
   },
-  { 
+  {
     path: "group-list",
     name: prop + ".group-list",
     meta: { auth: true, name: "Group" },
     component: () => import("../views/OsbohaMain/Group/GroupList"),
-  },  
+  },
   {
     path: "announcement",
     name: prop + ".announcement",
@@ -79,11 +82,13 @@ const childRoutes = (prop, mode) => [
     component: () => import("../views/Announcemnt/Announcemnt"),
   },
 ];
+
 const authchildRoutes = (prop, mode) => [
   {
     path: "/auth/signin",
     name: prop + ".sign-in",
     component: () => import("../views/AuthPages/Default/SignIn"),
+    beforeEnter: authGuard,
   },
   {
     path: "signup",
@@ -91,19 +96,20 @@ const authchildRoutes = (prop, mode) => [
     component: () => import("../views/AuthPages/Default/SignUp"),
   },
   {
-    path: 'forgot-password',
-    name: prop + '.forgot-password',
-    component: () => import('../views/AuthPages/Default/ForgotPassword.vue')
+    path: "forgot-password",
+    name: prop + ".forgot-password",
+    component: () => import("../views/AuthPages/Default/ForgotPassword.vue"),
   },
   {
-    path: 'reset-password/:token',
-    name: prop + '.reset-password',
-    component: () => import('../views/AuthPages/Default/ResetPassword')
+    path: "reset-password/:token",
+    name: prop + ".reset-password",
+    component: () => import("../views/AuthPages/Default/ResetPassword"),
   },
   {
-    path: 'not-ambassador-in-any-group/',
-    name: prop + '.NotAmbassadorInAnyGroup',
-    component: () => import('../views/AuthPages/Default/NotAmbassadorInAnyGroup')
+    path: "not-ambassador-in-any-group/",
+    name: prop + ".NotAmbassadorInAnyGroup",
+    component: () =>
+      import("../views/AuthPages/Default/NotAmbassadorInAnyGroup"),
   },
   {
     path: "lockscreen",
@@ -229,7 +235,7 @@ const groupChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Group Detail" },
     component: () => import("../views/OsbohaMain/Group/Group-detail"),
   },
-  { 
+  {
     path: "change-leader/:group_id",
     name: prop + ".change-leader",
     meta: { auth: true, name: "Group" },
@@ -241,7 +247,7 @@ const groupChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Group Members" },
     component: () => import("../views/OsbohaMain/Group/ListMembers"),
   },
-  { 
+  {
     path: "add-member/:group_id",
     name: prop + ".addmemeber",
     meta: { auth: true, name: "Group" },
@@ -260,66 +266,72 @@ const groupChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMain/Group/Exceptions/ListAll"),
   },
   {
-    path: '/group/ambassadors-reading/:group_id',
-    name: prop + '.ambassadors-reading',
-    meta: { auth: true, name: 'Ambassadors reading' },
-    component: () => import('../views/OsbohaMain/Group/Ambassadors/TeamReading')
+    path: "/group/ambassadors-reading/:group_id",
+    name: prop + ".ambassadors-reading",
+    meta: { auth: true, name: "Ambassadors reading" },
+    component: () =>
+      import("../views/OsbohaMain/Group/Ambassadors/TeamReading"),
   },
   {
-    path: '/group/list-ambassador-reading/:ambassador_id',
-    name: prop + '.listOneAmbassadorReading',
-    meta: { auth: true, name: 'Ambassador list reading' },
-    component: () => import('../views/OsbohaMain/Group/Ambassadors/ListReading'),
+    path: "/group/list-ambassador-reading/:ambassador_id",
+    name: prop + ".listOneAmbassadorReading",
+    meta: { auth: true, name: "Ambassador list reading" },
+    component: () =>
+      import("../views/OsbohaMain/Group/Ambassadors/ListReading"),
   },
   {
-    path: '/group/list-ambassador-reading/thesis/:thesis_id',
-    name: prop + '.listOneAmbassadorThesis',
-    meta: { auth: true, name: 'Ambassador -  one thesis' },
-    component: () => import('../views/OsbohaMain/Group/Ambassadors/ListThesis'),
+    path: "/group/list-ambassador-reading/thesis/:thesis_id",
+    name: prop + ".listOneAmbassadorThesis",
+    meta: { auth: true, name: "Ambassador -  one thesis" },
+    component: () => import("../views/OsbohaMain/Group/Ambassadors/ListThesis"),
   },
   {
-    path: '/group/all-ambassadors-achement/:group_id',
-    name: prop + '.listAllAmbassadorAchievements',
-    meta: { auth: true, name: 'All Ambassadors Achievement' },
-    component: () => import('../views/OsbohaMain/Group/Ambassadors/ListAllAchievement'),
+    path: "/group/all-ambassadors-achement/:group_id",
+    name: prop + ".listAllAmbassadorAchievements",
+    meta: { auth: true, name: "All Ambassadors Achievement" },
+    component: () =>
+      import("../views/OsbohaMain/Group/Ambassadors/ListAllAchievement"),
   },
   {
-    path: '/group/achievement-as-pages/:group_id',
-    name: prop + '.achievementAsPages',
-    meta: { auth: true, name: 'Achievement As Pages' },
-    component: () => import('../views/OsbohaMain/Group/Ambassadors/AchievementAsPages'),
+    path: "/group/achievement-as-pages/:group_id",
+    name: prop + ".achievementAsPages",
+    meta: { auth: true, name: "Achievement As Pages" },
+    component: () =>
+      import("../views/OsbohaMain/Group/Ambassadors/AchievementAsPages"),
   },
   {
-    path: '/group/groups-audit/:supervisor_id',
-    name: prop + '.groupsAudit',
-    meta: { auth: true, name: 'Audit Marks' },
-    component: () => import('../views/OsbohaMain/Group/AuditMarks/GroupsAudit'),
+    path: "/group/groups-audit/:supervisor_id",
+    name: prop + ".groupsAudit",
+    meta: { auth: true, name: "Audit Marks" },
+    component: () => import("../views/OsbohaMain/Group/AuditMarks/GroupsAudit"),
   },
   {
-    path: '/group/audit/mark/:mark_for_audit',
-    name: prop + '.markAudit',
-    meta: { auth: true, name: 'Mark' },
-    component: () => import('../views/OsbohaMain/Group/AuditMarks/Mark'),
+    path: "/group/audit/mark/:mark_for_audit",
+    name: prop + ".markAudit",
+    meta: { auth: true, name: "Mark" },
+    component: () => import("../views/OsbohaMain/Group/AuditMarks/Mark"),
   },
   {
-    path: '/group/audit-marks/:group_id',
-    name: prop + '.auditMarks',
-    meta: { auth: true, name: 'Audit Marks' },
-    component: () => import('../views/OsbohaMain/Group/AuditMarks/SupervisorAuditMarks'),
+    path: "/group/audit-marks/:group_id",
+    name: prop + ".auditMarks",
+    meta: { auth: true, name: "Audit Marks" },
+    component: () =>
+      import("../views/OsbohaMain/Group/AuditMarks/SupervisorAuditMarks"),
   },
   {
-    path: '/group/advisor-audit-marks/:advisor_id',
-    name: prop + '.AdvisorAudit',
-    meta: { auth: true, name: 'Advisor Audit Marks' },
-    component: () => import('../views/OsbohaMain/Group/AuditMarks/AdvisorAudit'),
+    path: "/group/advisor-audit-marks/:advisor_id",
+    name: prop + ".AdvisorAudit",
+    meta: { auth: true, name: "Advisor Audit Marks" },
+    component: () =>
+      import("../views/OsbohaMain/Group/AuditMarks/AdvisorAudit"),
   },
   {
-    path: '/group/statistics/:group_id',
-    name: prop + '.Statistics',
-    meta: { auth: true, name: 'Group Statistics' },
-    component: () => import('../views/OsbohaMain/Group/Statistics'),
+    path: "/group/statistics/:group_id",
+    name: prop + ".Statistics",
+    meta: { auth: true, name: "Group Statistics" },
+    component: () => import("../views/OsbohaMain/Group/Statistics"),
   },
-  { 
+  {
     path: "add-group",
     name: prop + ".addGroup",
     meta: { auth: true, name: "Group" },
@@ -347,6 +359,16 @@ const timerChildRoute = (prop, mode = false) => [
 
 const routes = [
   {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    component: () => import("../views/Errors/404"),
+  },
+  {
+    path: "/notauthorized",
+    name: "NotAuthorized",
+    component: () => import("../views/Errors/403"),
+  },
+  {
     path: "/",
     name: "osboha",
     component: () => import("../layouts/Default"),
@@ -359,8 +381,7 @@ const routes = [
     component: () => import("../layouts/Default"),
     children: childRoutes("AssignRole"),
   },
-  
-  
+
   {
     path: "/without-leftside",
     name: "without-leftside",
@@ -434,24 +455,34 @@ const router = createRouter({
   routes,
   scrollBehavior(to, from, savedPosition) {
     // always scroll to top
-    return { top: 0 }
+    return { top: 0 };
   },
-
 });
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if user is not logged in and trying to access a restricted page
-  const publicPages = ['/auth/signin','/auth/signup','/auth/admin/signup','/auth/forgot-password','reset-password'];
-  const authRequired = !publicPages.includes(to.path);
-  const loggedIn = localStorage.getItem("user");
-  const resetRoute = to.path.split('/')
-  const resetPassword = !publicPages.includes(resetRoute[2])
+  // const publicPages = [
+  //   "/auth/signin",
+  //   "/auth/signup",
+  //   "/auth/admin/signup",
+  //   "/auth/forgot-password",
+  //   "reset-password",
+  // ];
+  // const authRequired = !publicPages.includes(to.path);
+  // const resetRoute = to.path.split("/");
+  // console.log("resetRoute", resetRoute);
+  // const resetPassword = !publicPages.includes(resetRoute[2]);
+  // console.log("resetPassword", resetPassword);
 
-  if (authRequired && !loggedIn && resetPassword) {
+  // if (authRequired && !loggedIn() && resetPassword) {
+  //   return next("/auth/signin");
+  // }
+
+  if (to.meta.auth && !loggedIn()) {
     return next("/auth/signin");
+  } else {
+    next();
   }
-
-  next();
 });
 
 export default router;

@@ -213,7 +213,6 @@ export default {
   emits: ["add-post"],
   data() {
     return {
-      auth: null,
       postModal: null,
       friendsListModal: null,
       friends: [],
@@ -237,6 +236,10 @@ export default {
     };
   },
   computed: {
+    auth() {
+      return this.$store.getters.getUser;
+    },
+
     allowAddingMedia() {
       return this.showPoll ? false : true;
     },
@@ -285,8 +288,6 @@ export default {
     },
   },
   async created() {
-    const userData = await UserInfo.getUser();
-    this.auth = userData.user;
     await this.getFriends();
   },
 
