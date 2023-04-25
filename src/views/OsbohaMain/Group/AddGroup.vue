@@ -2,45 +2,38 @@
   <div class="col-sm-12 mt-3">
     <iq-card class="iq-card">
       <div class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto">
-        <h1 class="text-center mt-3 mb-3">مجموعة جديد</h1>
+        <h1 class="text-center mt-3 mb-3">اضافة مجموعة</h1>
       </div>
       <div class="iq-card-body p-4">
         <div class="image-block text-center">
-          <img class="img-fluid rounded w-25" alt="blog-img" />
+          <img class="img-fluid rounded w-50" src="@/assets/images/main/request_amb.png" alt="blog-img" />
         </div>
       </div>
       <div class="col-12 bg-white pt-2">
         <div class="sign-in-from">
-          <h1 class="mb-0">اضافة مجموعة</h1>
           <form class="mt-2" @submit.prevent="onSubmit()">
             <div class="form-group">
               <label for="groupName">اسم المجموعة</label>
-              <input type="text" v-model="v$.form.name.$model" class="form-control mb-0" id="groupName"
+              <input type="text" v-model="v$.groupForm.name.$model" class="form-control mb-0" id="groupName"
                 placeholder=" اسم المجموعة" />
-              <small style="color: red" v-if="v$.form.name.$error"> اسم المجموعة مطلوب</small>
+              <small style="color: red" v-if="v$.groupForm.name.$error"> اسم المجموعة مطلوب</small>
             </div>
             <div class="form-group">
               <label for="groupType">نوع المجموعة</label>
-              <select v-model="v$.form.type.$model" class="form-select" data-trigger name="choices-single-default"
+              <select v-model="v$.groupForm.type_id.$model" class="form-select" data-trigger name="choices-single-default"
                 id="choices-single-default">
-                <option value="">اختر نوع المجموعة</option>
-                <option v-for="(i, index) in types" :key="index" :value="i">
-                  {{ i.type }}
+                <option value=0 selected>اختر نوع المجموعة</option>
+                <option v-for="(type, index) in types" :key="index" :value="type.id">
+                  {{ group_type[type.type] }}
                 </option>
               </select>
-              <small style="color: red" v-if="v$.form.type.$error">نوع المجموعة مطلوب</small>
-            </div>
-
-            <div class="form-group" v-if="regError">
-              <small style="color: red">
-                {{ regError }}
-              </small>
+              <small style="color: red" v-if="v$.groupForm.type_id.$error">نوع المجموعة مطلوب</small>
             </div>
             <div class="form-group">
               <label for="groupDescription">وصف المجموعة</label>
-              <textarea type="text" v-model="v$.form.description.$model" class="form-control mb-0" id="groupDescription"
-                placeholder="وصف المجموعة " />
-              <small style="color: red" v-if="v$.form.description.$error">وصف المجموعة مطلوب</small>
+              <textarea type="text" v-model="v$.groupForm.description.$model" class="form-control mb-0"
+                id="groupDescription" placeholder="وصف المجموعة " />
+              <small style="color: red" v-if="v$.groupForm.description.$error">وصف المجموعة مطلوب</small>
             </div>
             <div class="d-inline-block w-100">
               <button type="submit" class="btn btn-primary float-end">
@@ -55,9 +48,12 @@
 </template>
 <script>
 import useVuelidate from "@vuelidate/core";
-import { required, numeric } from "@vuelidate/validators";
+import { required, minLength, maxLength } from "@vuelidate/validators";
 import GroupService from "@/API/services/group.service";
-import { api } from '@/API/Intercepter.js'
+import groupType from '@/API/services/group-type.service'
+
+const greaterThanZero = (value) => value > 0
+
 export default {
   name: "Add Group",
   setup() {
@@ -65,60 +61,37 @@ export default {
   },
 
   async created() {
-    await this.getGroup();
+    this.types = await groupType.getAllGroupTypes();
   },
 
   data() {
     return {
       loader: false,
       types: [],
-      options: {
-        centeredSlides: false,
-        loop: false,
-        slidesPerView: 1,
-        autoplay: {
-          delay: 3000,
-        },
-        spaceBetween: 15,
-        pagination: {
-          el: ".swiper-pagination",
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-
-        // And if we need scrollbar
-        scrollbar: {
-          el: ".swiper-scrollbar",
-        },
+      group_type: {
+        followup: "فريق متابعة",
+        supervising: "فريق رقابة",
+        advising: "فريق توجيه",
+        consultation: 'فريق الاستشارة',
+        Administration: 'الإدارة العليا'
       },
-      form: {
+      groupForm: {
         name: "",
-
-        type: {},
+        type_id: 0,
         description: '',
 
       },
-      regError: "",
     };
   },
   methods: {
-    async getGroup() {
-      const type = await api.get("group-type");
-      this.types = type.data.data;
-    },
-
     async onSubmit() {
       this.v$.$touch();
-      if (!this.v$.form.$invalid) {
-        this.loader = true;
-
+      if (!this.v$.groupForm.$invalid) {
         try {
+          this.loader = true;
+          const group = await GroupService.createGroup(this.groupForm)
+          console.log(group);
 
-          const group = await GroupService.createGroup(this.form.name, this.form.description, this.form.type.id)
-          window.location.reload();
-          this.loader = false;
         } catch (error) {
           this.loader = false;
 
@@ -129,13 +102,13 @@ export default {
   },
   validations() {
     return {
-      form: {
+      groupForm: {
         name: {
           required,
         },
-
-        type: {
-          required
+        type_id: {
+          required,
+          maxValue: greaterThanZero,
         },
         description: {
           required
@@ -147,21 +120,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-h1,
-h4,
-p,
-title,
-form {
-  direction: rtl;
-}
-
-.form-check {
-  float: left;
-}
-
-a.float-end {
-  margin-top: 10px;
-}
-</style>

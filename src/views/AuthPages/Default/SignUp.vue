@@ -16,60 +16,57 @@
                     <h1 class="mb-0">انشاء حساب</h1>
                     <form class="mt-2" @submit.prevent="onSubmit()">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">الاسم</label>
-                            <input type="text" v-model="v$.form.name.$model" class="form-control mb-0"
-                                id="exampleInputEmail1" placeholder="ادخال الاسم هنا" />
-                            <small style="color: red" v-if="v$.form.name.$error">الرجاء قم بادخال اسمك كما هو في المستند
-                                الرسمي</small>
+                            <label for="name">الاسم</label>
+                            <input type="text" v-model="v$.form.name.$model" class="form-control mb-0" id="name"
+                                placeholder="ادخل الاسم هنا" />
+                            <small style="color: red" v-if="v$.form.name.$error">
+                                الاسم مطلوب
+                            </small>
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputEmail2">الايميل</label>
-                            <input v-model="v$.form.email.$model" type="email" class="form-control mb-0"
-                                id="exampleInputEmail2" placeholder="ادخال الايميل هنا" />
-                            <small style="color: red" v-if="v$.form.email.$error">الرجاء قم بادخال بريدك الاكتروني</small>
-                        </div>
-                           <div class="form-group">
-                            <label for="exampleInputEmail2">رقم الهاتف</label>
-                            <input v-model="v$.form.phone.$model" type="phone" class="form-control mb-0"
-                                id="exampleInputEmail2" placeholder="ادخال رقم الهاتف هنا" />
-                            <small style="color: red" v-if="v$.form.phone.$error">الرجاء قم بادخال رقم الهاتف</small>
+                            <label for="email">الايميل</label>
+                            <input v-model="v$.form.email.$model" type="email" class="form-control mb-0" id="email"
+                                placeholder="ادخل الايميل هنا" />
+                            <small style="color: red" v-if="v$.form.email.$error">البريد الالكتروني غير صحيح</small>
                         </div>
 
-                              <div class="form-group col-6">
-                               <label for="exampleInputEmail2">الجنس</label>
-                                <select v-model="v$.form.gender.$model" class="form-select" data-trigger
-                                  name="choices-single-default" id="choices-single-default">
-                                  <option value="">اختر الجنس   </option>
-                                  <option>
-                               ذكر
-                                  </option>
-                                      <option>
-                               انثى
-                                  </option>
-                                      <option>
-                               غير ذلك
-                                  </option>
-                                </select>
-                            
-                              </div>
-                           
                         <div class="form-group">
-                            <label for="exampleInputPassword1">كلمة المرور</label>
-                            <input v-model="v$.form.password.$model" type="password" class="form-control mb-0"
-                                id="exampleInputPassword1" placeholder="ادخال ارمز السري هنا" />
-                            <small style="color: red" v-if="v$.form.password.$error">يجب ادخال كلمة مرور صالحة لا تقل عن 8
+                            <label for="gender">الجنس</label>
+                            <select v-model="v$.form.gender.$model" class="form-select" data-trigger name="gender"
+                                id="gender">
+                                <option value='' selected>اختر الجنس </option>
+                                <option value="male">
+                                    ذكر
+                                </option>
+                                <option value="female">
+                                    انثى
+                                </option>
+                            </select>
+                            <small style="color: red" v-if="v$.form.gender.$error">اختر جنسك</small>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">كلمة المرور</label>
+                            <input v-model="v$.form.password.$model" type="password" class="form-control mb-0" id="password"
+                                placeholder="ادخل الرمز السري هنا" />
+                            <small style="color: red" v-if="v$.form.password.$error">يجب ادخل كلمة مرور صالحة لا تقل عن 8
                                 أحرف</small>
                         </div>
- 
-                   
+
+
                         <div class="form-group" v-if="regError">
                             <small style="color: red">
                                 {{ regError }}
                             </small>
                         </div>
+                        <div class="col-sm-12 text-center" v-if="loader">
+                            <p class="text-center">يتم تجهيز حسابك</p>
+                            <img src="@/assets/images/page-img/page-load-loader.gif" alt="loader" style="height: 100px;" />
+                        </div>
 
                         <div class="d-inline-block w-100">
-                            <button type="submit" class="btn btn-primary float-end">
+                            <button type="submit" class="btn btn-primary float-end" :disabled="loader">
                                 انشاء حساب
                             </button>
                         </div>
@@ -102,65 +99,43 @@ export default {
     data() {
         return {
             loader: false,
-            options: {
-                centeredSlides: false,
-                loop: false,
-                slidesPerView: 1,
-                autoplay: {
-                    delay: 3000,
-                },
-                spaceBetween: 15,
-                pagination: {
-                    el: ".swiper-pagination",
-                },
-                navigation: {
-                    nextEl: ".swiper-button-next",
-                    prevEl: ".swiper-button-prev",
-                },
-
-                // And if we need scrollbar
-                scrollbar: {
-                    el: ".swiper-scrollbar",
-                },
-            },
             form: {
                 name: "",
                 password: "",
                 email: "",
-                phone:'',
-                gender:''
-          
+                gender: ''
+
             },
             regError: '',
         };
     },
     methods: {
-        
+
         async onSubmit() {
             this.v$.$touch();
             if (!this.v$.form.$invalid) {
-
-                this.loader = true;
                 try {
-                    await this.$store
 
+                    this.loader = true;
+                    this.regError='';
+                    await this.$store
                         .dispatch("register", {
                             email: this.form.email,
                             password: this.form.password,
                             name: this.form.name,
-                            gender:this.form.gender,
-                            phone:this.form.phone
-                          
+                            gender: this.form.gender,
                         })
 
                     this.loader = false;
-                    this.$router.push({ name: 'osboha.book' })
+                    this.$router.push({ name: 'osboha' })
                 }
                 catch (error) {
                     this.loader = false;
-
-                    if (error.response.data.data == 'User already exist') {
+                    if (error.response.data.data.email && (error.response.data.data.email == 'The email has already been taken.')) {
                         this.regError = ' البريد الالكتروني موجود مسبقاً، قم بتسجيل الدخول';
+                    }
+                    else {
+                        console.log(error)
                     }
                 }
             }
@@ -180,34 +155,12 @@ export default {
                 name: {
                     required,
                 },
-                gender:{
+                gender: {
                     required
                 },
-                phone:{
-                    required
-                }
-
             },
         };
     },
 };
 </script>
-    
-<style lang="scss" scoped>
-h1,
-h4,
-p,
-title,
-form {
-    direction: rtl;
-}
-
-.form-check {
-    float: left;
-}
-
-a.float-end {
-    margin-top: 10px;
-}
-</style>
     
