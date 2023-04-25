@@ -27,8 +27,8 @@
                             class="d-flex align-items-center justify-content-center ms-2 me-2 position-relative">
                             <i class="material-symbols-outlined">notifications</i>
 
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
-                                99+
+                            <span v-if="un_read_notifications > 0"  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                                {{un_read_notifications}}
                                 <span class="visually-hidden">unread messages</span>
                             </span>
 
@@ -85,6 +85,10 @@ export default {
             toggleSidebar,
         };
     },
+    async created(){
+        this.notifications = await notificationsServices.listUnreadNotification();
+
+    },
     data() {
         return {
             notifications: [],
@@ -94,6 +98,9 @@ export default {
         user() {
             return this.$store.getters.getUser;
         },
+        un_read_notifications(){
+            return Object.keys(this.notifications).length
+        }
     },
     mounted() {
         Pusher.logToConsole = true;
@@ -107,8 +114,7 @@ export default {
             if (data) {
                 this.notifications =
                     await notificationsServices.listUnreadNotification();
-                console.log(Object.keys(this.notifications).length);
-                console.log(typeof this.notifications);
+                    console.log(this.notifications)
                 helper.toggleToast(data.message, "success");
             }
         });
