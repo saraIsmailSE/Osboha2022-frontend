@@ -48,9 +48,11 @@ export default {
     data() {
         return {
             group_type: {
-                reading: "فريق متابعة",
+                followup: "فريق متابعة",
                 supervising: "فريق رقابة",
                 advising: "فريق توجيه",
+                consultation: 'فريق الاستشارة',
+                Administration: 'الإدارة العليا'
             },
 
         }

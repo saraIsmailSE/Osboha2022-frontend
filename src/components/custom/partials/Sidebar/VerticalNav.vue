@@ -98,10 +98,13 @@ export default {
     const user_data = UserInfo.getUser();
     this.user = user_data.user;
   },
+  mounted(){
+
+  },
 
   data() {
     return {
-      user: null,
+      user: [],
     };
   },
   methods: {

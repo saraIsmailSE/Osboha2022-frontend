@@ -1,16 +1,12 @@
 import { api } from '../Intercepter'
 class GroupService {
-    async createGroup(name, description, typeId, image) {
-        let formData = new FormData();
-        formData.append('name', name);
-        formData.append('description', description);
-        formData.append('type_id', typeId);
-        // formData.append('image', image);
+    async createGroup(groupForm) {
+        console.log(groupForm)
         try {
-            const response = await api.post('/group/create', formData, {
+            const response = await api.post(`/group/create`, groupForm, {
                 headers: { "Content-type": "multipart/form-data" },
-            })
-            return response.data
+            });
+            return response.data.data
         } catch (error) {
             return error;
         }

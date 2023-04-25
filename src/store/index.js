@@ -34,14 +34,22 @@ export default new Vuex.Store({
   },
   actions: {
     register({ commit }, credentials) {
-      return api.post("/register", credentials).then(({ data }) => {
-        commit("SET_USER_DATA", data.data);
+      let formData = new FormData();
+      formData.append("name", credentials.name);
+      formData.append("email", credentials.email);
+      formData.append("password", credentials.password);
+      formData.append("gender", credentials.gender);
+      return api
+        .post('register', formData)
+        .then((response) => {
+          console.log(response)
+          commit('SET_USER_DATA', response.data)
+        })
 
-        //get all reactions
-        api.get("reactions/types").then((reactions) => {
-          commit("SET_REACTIONS", reactions.data.data);
-        });
-      });
+      // // //get all reactions
+      // // api.get("reactions/types").then((reactions) => {
+      // //   commit("SET_REACTIONS", reactions.data.data);
+      // });
     },
     login({ commit }, credentials) {
       return api.post("login", credentials).then(({ data }) => {

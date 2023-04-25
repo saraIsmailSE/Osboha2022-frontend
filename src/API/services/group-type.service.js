@@ -4,7 +4,7 @@ class GroupTypeService {
     async getAllGroupTypes() {
         try{
             const groupTypes = await api.get('/group-type');
-            return groupTypes.data;
+            return groupTypes.data.data;
         }catch(error){
             return error;
         }
