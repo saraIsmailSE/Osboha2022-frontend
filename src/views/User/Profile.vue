@@ -3,7 +3,6 @@
     <div class="col-sm-12">
       <!-- START MAIN INFORMATION -->
       <MainInfo
-        :auth="auth"
         :friendWithAuth="friendWithAuth"
         :user="profile.user"
         :roles="profile.roles"
@@ -72,7 +71,6 @@
       <div class="tab-content">
         <!-- ########## START PROFILE FEED ########## -->
         <ProfileFeed
-          :isAuth="isAuth"
           :friends="profile.friends"
           :exceptions="profile.exceptions"
           :profile_media="profile_media"
@@ -104,7 +102,7 @@
           id="profile-books"
           aria-labelled-by="pills-book-tab"
         >
-          <Books :isAuth="isAuth" :books="profile.books" />
+          <Books :books="profile.books" />
         </tab-content-item>
         <!-- ########## END Books ########## -->
 
@@ -127,7 +125,6 @@ import Books from "./Sections/Books.vue";
 import MainInfo from "./Sections/MainInfo.vue";
 import ProfileFeed from "./Sections/ProfileFeed.vue";
 import Statistics from "./Sections/Statistics.vue";
-import UserInfo from "@/Services/userInfoService";
 
 import UserProfile from "@/API/services/user-profile.service";
 
@@ -141,8 +138,6 @@ export default {
     Statistics,
   },
   async created() {
-    const user_data = await UserInfo.getUser();
-    this.auth = user_data.user;
     this.profile = await UserProfile.getUserProfileById(
       this.$route.params.user_id
     );
@@ -152,7 +147,6 @@ export default {
   },
   data() {
     return {
-      auth: null,
       profile: null,
       friendWithAuth: false,
       readingInfo: [
@@ -182,11 +176,6 @@ export default {
         require("../../assets/images/600x600.jpg"),
       ],
     };
-  },
-  computed: {
-    isAuth() {
-      return this.auth.id === parseInt(this.$route.params.user_id);
-    },
   },
   methods: {},
 };

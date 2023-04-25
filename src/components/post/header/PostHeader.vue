@@ -104,10 +104,6 @@ export default {
       type: Object,
       required: true,
     },
-    byAuth: {
-      type: Boolean,
-      default: false,
-    },
     showPin: {
       type: Boolean,
       default: false,
@@ -121,6 +117,11 @@ export default {
     return {
       show: false,
     };
+  },
+  computed: {
+    byAuth() {
+      return this.post.user.id === this.$store.getters.getUser.id;
+    },
   },
   methods: {
     ...helper,

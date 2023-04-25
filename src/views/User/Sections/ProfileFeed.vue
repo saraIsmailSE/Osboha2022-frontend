@@ -271,7 +271,6 @@
 <script>
 import LazyLoadedPosts from "@/components/post/LazyLoadedPosts.vue";
 import AddPost from "@/components/post/add/AddPost";
-import UserInfoService from "@/Services/userInfoService";
 
 export default {
   name: "ProfileFeed",
@@ -280,10 +279,6 @@ export default {
     LazyLoadedPosts,
   },
   props: {
-    isAuth: {
-      type: [Boolean],
-      required: true,
-    },
     //LATER
     // certificates: {
     //   type: [Object],
@@ -341,6 +336,9 @@ export default {
       } else {
         return true;
       }
+    },
+    isAuth() {
+      return this.$store.getters.getUser.id == this.user_id;
     },
   },
   methods: {

@@ -13,7 +13,6 @@
       v-for="post in announcements"
       :key="post.id"
       :post="post"
-      :byAuth="auth_id === post.user.id"
       :showPin="showPin"
       :is_announcement="true"
     />
@@ -21,7 +20,6 @@
       v-for="post in posts"
       :key="post.id"
       :post="post"
-      :byAuth="auth_id === post.user.id"
       :showPin="showPin"
     />
     <div class="col-sm-12 text-center" v-if="loading">
@@ -77,7 +75,6 @@ export default {
   emits: {},
   data() {
     return {
-      auth_id: null,
       posts: [],
       announcements: [],
       page: 1,
@@ -97,9 +94,6 @@ export default {
   async mounted() {
     this.loadPosts();
     window.addEventListener("scroll", this.handleScroll);
-
-    const userInfo = await userInfoService.getUser();
-    this.auth_id = userInfo.user.id;
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.handleScroll);

@@ -3,37 +3,85 @@
     <div class="iq-card-body profile-page p-0">
       <div class="profile-header">
         <div class="cover-container">
-          <img :src="resolve_porfile_img('1300x325', profile.cover_picture, profile.id)" alt="profile-bg"
-            class="rounded img-fluid" v-if="profile && profile.cover_picture" />
-          <img src="@/assets/images/main/book-banner.png" alt="profile-bg" class="rounded img-fluid" v-else>
+          <img
+            :src="
+              resolve_porfile_img('1300x325', profile.cover_picture, profile.id)
+            "
+            alt="profile-bg"
+            class="rounded img-fluid"
+            v-if="profile && profile.cover_picture"
+          />
+          <img
+            src="@/assets/images/main/book-banner.png"
+            alt="profile-bg"
+            class="rounded img-fluid"
+            v-else
+          />
         </div>
         <div class="user-detail text-center mb-3">
           <div class="profile-img">
-            <img :src="resolve_porfile_img('150x150', profile.profile_picture, profile.id)" alt="profile-img"
-              class="avatar-130 img-fluid" style="border: 4px solid #1D1A55;" v-if="profile && profile.profile_picture" />
+            <img
+              :src="
+                resolve_porfile_img(
+                  '150x150',
+                  profile.profile_picture,
+                  profile.id
+                )
+              "
+              alt="profile-img"
+              class="avatar-130 img-fluid"
+              style="border: 4px solid #1d1a55"
+              v-if="profile && profile.profile_picture"
+            />
 
-            <img v-else :src="resolve_porfile_img('150x150', 'ananimous_' + user.gender + '.png', 'ananimous')"
-              alt="profile-img" class="avatar-130 img-fluid" style="border: 4px solid #1D1A55;" :title="user.name">
+            <img
+              v-else
+              :src="
+                resolve_porfile_img(
+                  '150x150',
+                  'ananimous_' + user.gender + '.png',
+                  'ananimous'
+                )
+              "
+              alt="profile-img"
+              class="avatar-130 img-fluid"
+              style="border: 4px solid #1d1a55"
+              :title="user.name"
+            />
           </div>
           <div class="profile-detail mt-1">
             <h3 class="">{{ user.name }}</h3>
             <div class="social-links">
-              <ul class="social-data-block d-flex align-items-center justify-content-center list-inline p-0 m-0">
-                <li v-for="(role, index) in roles" :key="index" class="text-center pe-2">
+              <ul
+                class="social-data-block d-flex align-items-center justify-content-center list-inline p-0 m-0"
+              >
+                <li
+                  v-for="(role, index) in roles"
+                  :key="index"
+                  class="text-center pe-2"
+                >
                   <span class="rounded-pill badge bg-primary">{{ role }}</span>
                 </li>
               </ul>
             </div>
           </div>
         </div>
-        <div class="profile-info p-3 d-flex align-items-center justify-content-between position-relative">
+        <div
+          class="profile-info p-3 d-flex align-items-center justify-content-between position-relative"
+        >
           <div class="social-links">
-            <ul style="list-style-type: none;" class="d-flex justify-content-center" v-if="isAuth">
+            <ul
+              style="list-style-type: none"
+              class="d-flex justify-content-center"
+              v-if="isAuth"
+            >
               <li>
-                <a role="button" class="bg-success text-white rounded-circle  d-flex p-2" @click="updateProfile()">
-                  <span class="material-symbols-outlined">
-                    edit
-                  </span>
+                <a
+                  role="button"
+                  class="bg-success text-white rounded-circle d-flex p-2"
+                  @click="updateProfile()"
+                >
+                  <span class="material-symbols-outlined"> edit </span>
                 </a>
               </li>
 
@@ -43,31 +91,42 @@
               </a>
             </li> -->
             </ul>
-            <ul style="list-style-type: none;" class="d-flex justify-content-center" v-else>
+            <ul
+              style="list-style-type: none"
+              class="d-flex justify-content-center"
+              v-else
+            >
               <li v-if="!friendWithAuth">
-                <a role="button" class="bg-primary text-white rounded-circle d-flex p-2"
-                  @click="createFriendship(user.id)">
-                  <span class="material-symbols-outlined">
-                    person_add
-                  </span>
+                <a
+                  role="button"
+                  class="bg-primary text-white rounded-circle d-flex p-2"
+                  @click="createFriendship(user.id)"
+                >
+                  <span class="material-symbols-outlined"> person_add </span>
                 </a>
               </li>
 
               <li v-else>
-                <a role="button" class="bg-danger text-white rounded-circle d-flex  p-2"
-                  @click="deleteFriendship(auth.id,user.id)">
-                  <span class="material-symbols-outlined">
-                    person_remove
-                  </span>
+                <a
+                  role="button"
+                  class="bg-danger text-white rounded-circle d-flex p-2"
+                  @click="deleteFriendship(auth.id, user.id)"
+                >
+                  <span class="material-symbols-outlined"> person_remove </span>
                 </a>
-
               </li>
             </ul>
           </div>
 
           <div class="social-info">
-            <ul class="social-data-block d-flex align-items-center justify-content-center list-inline p-0 m-0">
-              <li v-for="(i, index) in readingInfo" :key="index" class="text-center ps-2 pe-2">
+            <ul
+              class="social-data-block d-flex align-items-center justify-content-center list-inline p-0 m-0"
+            >
+              <li
+                v-for="(i, index) in readingInfo"
+                :key="index"
+                class="text-center ps-2 pe-2"
+              >
                 <h4 class="text-center">{{ i.value }}</h4>
                 <p class="mb-0">{{ i.title }}</p>
               </li>
@@ -76,24 +135,17 @@
         </div>
       </div>
     </div>
-    <div class="row mt-3 mb-3">
-
-    </div>
+    <div class="row mt-3 mb-3"></div>
   </iq-card>
 </template>
-<script >
-import profileImagesService from '@/API/services/profile.images.service';
-import FriendServices from '@/API/services/friend.service';
+<script>
+import profileImagesService from "@/API/services/profile.images.service";
+import FriendServices from "@/API/services/friend.service";
 
 export default {
-  name: 'MainInfo',
-  created() {
-  },
+  name: "MainInfo",
+  created() {},
   props: {
-    auth: {
-      type: [Object],
-      required: true,
-    },
     friendWithAuth: {
       type: [Boolean],
     },
@@ -115,65 +167,73 @@ export default {
   },
   methods: {
     updateProfile() {
-      this.$router.push({ name: 'user.profileUpdate', params: { user_id: this.$route.params.user_id } })
+      this.$router.push({
+        name: "user.profileUpdate",
+        params: { user_id: this.$route.params.user_id },
+      });
     },
     /**
-    * get profile picture or cover.
-    *  @param  image size, image name, profile id
-    * @return image url
-    */
+     * get profile picture or cover.
+     *  @param  image size, image name, profile id
+     * @return image url
+     */
 
     resolve_porfile_img(size, imageName, profile_id) {
-      return profileImagesService.resolve_porfile_img(size, imageName, profile_id);
+      return profileImagesService.resolve_porfile_img(
+        size,
+        imageName,
+        profile_id
+      );
     },
 
-    deleteFriendship(user_id,friend_id) {
+    deleteFriendship(user_id, friend_id) {
       const swalWithBootstrapButtons = this.$swal.mixin({
         customClass: {
-          confirmButton: 'btn btn-primary btn-lg',
-          cancelButton: 'btn btn-outline-primary btn-lg ms-2'
+          confirmButton: "btn btn-primary btn-lg",
+          cancelButton: "btn btn-outline-primary btn-lg ms-2",
         },
-        buttonsStyling: false
-      })
+        buttonsStyling: false,
+      });
 
-      swalWithBootstrapButtons.fire({
-        title: 'هل أنت متأكد؟',
-        text: "لا يمكنك التراجع عن هذا الاجراء",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'نعم، قم بالحذف',
-        cancelButtonText: 'تراجع  ',
-        showClass: {
-          popup: 'animate__animated animate__zoomIn'
-        },
-        hideClass: {
-          popup: 'animate__animated animate__zoomOut'
-        }
-      })
+      swalWithBootstrapButtons
+        .fire({
+          title: "هل أنت متأكد؟",
+          text: "لا يمكنك التراجع عن هذا الاجراء",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "نعم، قم بالحذف",
+          cancelButtonText: "تراجع  ",
+          showClass: {
+            popup: "animate__animated animate__zoomIn",
+          },
+          hideClass: {
+            popup: "animate__animated animate__zoomOut",
+          },
+        })
         .then((willDelete) => {
           if (willDelete.isConfirmed) {
-            FriendServices.delete(user_id,friend_id)
-              .then(response => {
+            FriendServices.delete(user_id, friend_id)
+              .then((response) => {
                 swalWithBootstrapButtons.fire({
-                  title: 'تم الحذف',
-                  text: 'تم حذف طلب الصداقة',
-                  icon: 'success',
+                  title: "تم الحذف",
+                  text: "تم حذف طلب الصداقة",
+                  icon: "success",
                   showClass: {
-                    popup: 'animate__animated animate__zoomIn'
+                    popup: "animate__animated animate__zoomIn",
                   },
                   hideClass: {
-                    popup: 'animate__animated animate__zoomOut'
-                  }
-                })
+                    popup: "animate__animated animate__zoomOut",
+                  },
+                });
                 setTimeout(function () {
                   location.reload(true);
                 }, 2000);
               })
-              .catch(error => {
-                console.log(error)
-              })
+              .catch((error) => {
+                console.log(error);
+              });
           }
-        })
+        });
     },
 
     async createFriendship(friend_id) {
@@ -181,37 +241,35 @@ export default {
         const response = await FriendServices.create(friend_id);
         const swalWithBootstrapButtons = this.$swal.mixin({
           customClass: {
-            confirmButton: 'btn btn-primary btn-lg',
+            confirmButton: "btn btn-primary btn-lg",
           },
-          buttonsStyling: false
-        })
+          buttonsStyling: false,
+        });
         swalWithBootstrapButtons.fire({
-          title: 'تم الارسال',
+          title: "تم الارسال",
           text: "تم ارسال طلب الصداقة",
-          icon: 'success',
-          confirmButtonText: 'حسنا',
+          icon: "success",
+          confirmButtonText: "حسنا",
           showClass: {
-            popup: 'animate__animated animate__zoomIn'
+            popup: "animate__animated animate__zoomIn",
           },
           hideClass: {
-            popup: 'animate__animated animate__zoomOut'
-          }
-        })
-      }
-      catch (error) {
-        console.log(error)
+            popup: "animate__animated animate__zoomOut",
+          },
+        });
+      } catch (error) {
+        console.log(error);
       }
       //setTimeout(location.reload(), 30000);
-
     },
-
   },
   computed: {
+    auth() {
+      return this.$store.getters.getUser;
+    },
     isAuth() {
-      return (this.auth.id == this.$route.params.user_id);
+      return this.auth.id == this.$route.params.user_id;
     },
   },
-
-
-}
+};
 </script>

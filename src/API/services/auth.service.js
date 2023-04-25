@@ -1,31 +1,30 @@
 import { api } from "../Intercepter";
 import UserInfo from "../../Services/userInfoService";
+import { handleError } from "vue";
 
 class AuthService {
   async login({ username, password }) {
     try {
       const response = api.post("/auth/signin", {
         username,
-        password
+        password,
       });
 
       if (response.data.accessToken) {
-        UserInfo.setUser(response.date)
+        UserInfo.setUser(response.date);
       }
       return response.data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
   async assignRole(body) {
-   
     try {
-      const response = await api.post("assign-role", body)
-      console.log(response)
-      return response.data
-    }
-    catch (error) {
+      const response = await api.post("assign-role", body);
+      console.log(response);
+      return response.data;
+    } catch (error) {
       return error.response;
     }
   }
@@ -51,9 +50,9 @@ class AuthService {
       .post("email/verification-notification")
       .catch((error) => {
         error = error.response.data.message;
-        (error)
+        error;
       });
-    return { data: res.data, error }
+    return { data: res.data, error };
   }
 
   async resetPassword(password, email, token) {
@@ -62,35 +61,39 @@ class AuthService {
     resetData.append("email", email);
     resetData.append("token", token);
     try {
-      const response = await api.post("password/reset", resetData)
-      return response.data
-    }
-    catch (error) {
+      const response = await api.post("password/reset", resetData);
+      return response.data;
+    } catch (error) {
       return error.response;
     }
-
   }
   async forgetPassword(email) {
     try {
       const response = await api.post("password/forgot-password", {
-        email: email
-      })
-      return response.data
-
+        email: email,
+      });
+      return response.data;
     } catch (error) {
       return error.response;
     }
   }
   async sessionData() {
     try {
-      const response = await api.get("session-data")
-      return response.data.data
-
+      const response = await api.get("session-data");
+      return response.data.data;
     } catch (error) {
       return error.response;
     }
   }
 
+  async refreshToken() {
+    try {
+      const response = await api.post("/refresh");
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 }
 
 export default new AuthService();

@@ -1,30 +1,30 @@
 class TokenService {
   getLocalRefreshToken() {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("osboha__user"));
     return user?.refreshToken;
   }
 
   getLocalAccessToken() {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("osboha__user"));
     return user?.token;
   }
 
   updateLocalAccessToken(token) {
-    let user = JSON.parse(localStorage.getItem("user"));
+    let user = JSON.parse(localStorage.getItem("osboha__user"));
     user.accessToken = token;
-    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("osboha__user", JSON.stringify(user));
   }
 
   getUser() {
-    return JSON.parse(localStorage.getItem("user"));
+    return JSON.parse(localStorage.getItem("osboha__user"));
   }
 
   setUser(user) {
-    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("osboha__user", JSON.stringify(user));
   }
 
   removeUser() {
-    localStorage.removeItem("user");
+    localStorage.removeItem("osboha__user");
   }
 }
 
