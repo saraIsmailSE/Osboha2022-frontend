@@ -49,9 +49,13 @@ import helper from "@/utilities/helper";
 
 export default {
   name: "PostBody",
-  inject: ["voteOnPost"],
-  props: {
-    post: { type: Object },
+  inject: {
+    voteOnPost: {
+      default: () => {},
+    },
+    post: {
+      required: true,
+    },
   },
   data() {
     return {
@@ -107,8 +111,11 @@ export default {
       if (all_votes_count === 0) {
         return "0%";
       }
+      const percentage = Math.round(
+        (option_votes_count / all_votes_count) * 100
+      );
 
-      return `${(option_votes_count / all_votes_count) * 100}%`;
+      return `${percentage}%`;
     },
 
     getSelectedOptionId() {

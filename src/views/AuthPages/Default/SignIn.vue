@@ -98,12 +98,6 @@ export default {
           password: this.form.password,
         });
 
-        localStorage.setItem("osboha__token", this.$store.state.token);
-        localStorage.setItem(
-          "osboha__user",
-          JSON.stringify(this.$store.state.user)
-        );
-
         this.errorMessage = "";
         this.$router.push({ name: "osboha.list" });
       } catch (error) {

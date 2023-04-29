@@ -14,7 +14,6 @@
       :key="post.id"
       :post="post"
       :showPin="showPin"
-      :is_announcement="true"
     />
     <Post
       v-for="post in posts"
@@ -129,7 +128,9 @@ export default {
         } else {
           if (this.type === "announcement")
             response = await PostService.getAnnouncements(this.page);
-          else
+          else if (this.type === "support") {
+            response = await PostService.getSupportPosts(this.page);
+          } else
             response = await PostService.postsByTimelineId(
               this.timeline_id,
               this.page

@@ -2,7 +2,7 @@
   <div class="user-post-data">
     <div class="d-flex justify-content-between">
       <!--Post user name and date of post-->
-      <TaggedFriends :user="post.user" :friends="post.taggedUsers">
+      <PostUser :post="post">
         <template #date>
           <div class="d-flex align-items-center">
             <tooltip
@@ -12,6 +12,12 @@
               data-bs-toggle="tooltip"
               :title="formatFullDate(post.created_at)"
               style="width: fit-content"
+              @click="
+                $router.push({
+                  name: 'osboha.post',
+                  params: { post_id: post.id },
+                })
+              "
               >{{ formatDateToWritten(post.created_at) }}</tooltip
             >
 
@@ -19,10 +25,14 @@
               push_pin
             </span>
 
-            <span v-if="is_announcement" class="ms-1 text-danger">إعلان</span>
+            <span
+              v-if="post.type.toLowerCase() === 'announcement'"
+              class="ms-1 text-danger"
+              >إعلان</span
+            >
           </div>
         </template>
-      </TaggedFriends>
+      </PostUser>
 
       <!--Post actions dropdown (edit - delete - pin)-->
       <div class="card-post-toolbar" v-if="byAuth">
@@ -93,22 +103,28 @@
 
 <script>
 import helper from "@/utilities/helper";
-import TaggedFriends from "./TaggedFriends.vue";
+import PostUser from "@/components/post/header/PostUser.vue";
 import PostService from "@/API/services/post.service";
 
 export default {
   name: "PostHeader",
-  inject: ["closePostComments", "pinPost", "postDelete"],
-  props: {
+  inject: {
+    closePostComments: {
+      default: () => {},
+    },
+    pinPost: {
+      default: () => {},
+    },
+    postDelete: {
+      default: () => {},
+    },
     post: {
-      type: Object,
       required: true,
     },
+  },
+  components: { PostUser },
+  props: {
     showPin: {
-      type: Boolean,
-      default: false,
-    },
-    is_announcement: {
       type: Boolean,
       default: false,
     },
@@ -116,6 +132,7 @@ export default {
   data() {
     return {
       show: false,
+      deleteLoading: false,
     };
   },
   computed: {
@@ -199,6 +216,5 @@ export default {
         });
     },
   },
-  components: { TaggedFriends },
 };
 </script>

@@ -1,8 +1,9 @@
 <template>
-  <div class="total-comment-block">
+  <!--total likes block-->
+  <div class="total-comment-block ms-3" v-if="post.pollOptions.length > 0">
     <div
       :class="{
-        dropdown: post.comments_count > 0,
+        dropdown: post.votes_count > 0,
       }"
     >
       <span
@@ -10,11 +11,10 @@
         data-bs-toggle="dropdown"
         aria-haspopup="true"
         aria-expanded="false"
-        role="button"
         @mouseover="getUsers"
-        @click.prevent="showCommentModel"
+        role="button"
       >
-        {{ commentsCount }}
+        {{ votesCountText }}
       </span>
       <div class="dropdown-menu">
         <div class="dropdown-item text-center" v-if="loading">
@@ -45,12 +45,14 @@
 </template>
 
 <script>
-import commentService from "@/API/services/comment.service";
+import VoteService from "@/API/services/vote.service";
 import helper from "@/utilities/helper";
-
 export default {
-  name: "TotalComments",
-  inject: ["post", "showCommentModel"],
+  name: "TotalVotes",
+  inject: ["post"],
+  props: {
+    // post: { type: Object, required: true },
+  },
   data() {
     return {
       users: [],
@@ -60,21 +62,7 @@ export default {
   },
   computed: {
     /**
-     * @description returns the comments count with the correct plural form
-     * @returns {string}
-     */
-    commentsCount() {
-      return this.post.comments_count == 0
-        ? "لا يوجد تعليقات"
-        : this.post.comments_count +
-            " " +
-            (this.post.comments_count <= 10 && this.post.comments_count > 2
-              ? "تعليقات"
-              : "تعليق");
-    },
-
-    /**
-     * @description returns the rest comments users count text
+     * @description returns the rest votes users count text
      * @returns {string}
      */
     moreUsersText() {
@@ -82,26 +70,32 @@ export default {
       const moreText = remainder === 1 ? "آخر" : "آخرين";
       return remainder > 0 ? `و +${remainder} ${moreText}` : "";
     },
+    votesCountText() {
+      return this.post.votes_count == 0
+        ? "لا يوجد تصويتات"
+        : this.post.votes_count +
+            " " +
+            (this.post.votes_count <= 10 && this.post.votes_count > 2
+              ? "تصويتات"
+              : "تصويت");
+    },
   },
   methods: {
     /**
-     * @description: get comments users to display them in the comment dropdown
+     * @description: get votes users to display them in the vote dropdown
      * @returns {void}
      */
     async getUsers() {
-      if (this.post.comments_count <= 0 || this.loading) {
+      if (this.post.votes_count <= 0 || this.loading) {
         return;
       }
 
       this.loading = true;
       try {
-        const response = await commentService.getPostCommentsUsers(
-          this.post.id
+        const response = await VoteService.getPostVotesUsers(
+          this.post.id,
+          this.$route.params.user_id ?? ""
         );
-
-        if (response.statusCode !== 200) {
-          helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
-        }
 
         this.users = response.data.users;
         this.totalUsers = response.data.count;

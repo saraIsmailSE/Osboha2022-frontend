@@ -36,12 +36,7 @@
 <script>
 export default {
   name: "PostMedia",
-  props: {
-    post: {
-      type: Object,
-      required: true,
-    },
-  },
+  inject: ["post"],
   emits: ["showPostMedia"],
   computed: {
     col() {

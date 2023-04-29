@@ -37,9 +37,14 @@ export default new Vuex.Store({
       formData.append("password", credentials.password);
       formData.append("gender", credentials.gender);
       return api.post("register", formData).then((response) => {
-        console.log(response);
-        commit("SET_USER_DATA", response.data.user);
-        commit("SET_TOKEN", response.data.token);
+        console.log(response.data);
+        localStorage.setItem("osboha__token", response.data.data.token);
+        localStorage.setItem(
+          "osboha__user",
+          JSON.stringify(response.data.data.user)
+        );
+        commit("SET_USER_DATA", response.data.data.user);
+        commit("SET_TOKEN", response.data.data.token);
       });
 
       // // //get all reactions
@@ -51,6 +56,8 @@ export default new Vuex.Store({
       return api
         .post("login", credentials)
         .then(({ data }) => {
+          localStorage.setItem("osboha__token", data.data.token);
+          localStorage.setItem("osboha__user", JSON.stringify(data.data.user));
           commit("SET_USER_DATA", data.data.user);
           commit("SET_TOKEN", data.data.token);
 
