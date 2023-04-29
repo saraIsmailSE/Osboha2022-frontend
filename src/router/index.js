@@ -70,10 +70,10 @@ const childRoutes = (prop, mode) => [
     component: () => import("../views/OsbohaMain/Group/Group"),
   },
   {
-    path: "group-list",
-    name: prop + ".group-list",
+    path: "groups-list",
+    name: prop + ".groupsList",
     meta: { auth: true, name: "Group" },
-    component: () => import("../views/OsbohaMain/Group/GroupList"),
+    component: () => import("../views/OsbohaMain/Group/GroupsList"),
   },
   {
     path: "announcement",
@@ -122,61 +122,7 @@ const authchildRoutes = (prop, mode) => [
     component: () => import("../views/AuthPages/Default/ConfirmMail"),
   },
 ];
-const blogchildRoutes = (prop, mode = false) => [
-  {
-    path: "blog-grid",
-    name: prop + ".blog-grid",
-    meta: { auth: true, name: "blog-grid" },
-    component: () => import("../views/OsbohaMain/Blog/BlogGrid"),
-  },
-  {
-    path: "blog-list",
-    name: prop + ".blog-list",
-    meta: { auth: true, name: "blog-list" },
-    component: () => import("../views/OsbohaMain/Blog/BlogList"),
-  },
-  {
-    path: "blog-detail",
-    name: prop + ".blog-detail",
-    meta: { auth: true, name: "blog-detail" },
-    component: () => import("../views/OsbohaMain/Blog/BlogDetail"),
-  },
-];
-const iconChildRoute = (prop, mode = false) => [
-  {
-    path: "fontawesome-5",
-    name: prop + ".fontawesome-5",
-    meta: { auth: true, name: "Font Awsome" },
-    component: () => import("../views/Icons/IconFontawesome5"),
-  },
-  {
-    path: "lineawesome",
-    name: prop + ".lineawesome",
-    meta: { auth: true, name: "Line Awsome" },
-    component: () => import("../views/Icons/IconLineAwesome"),
-  },
-  {
-    path: "remixicon",
-    name: prop + ".remixicon",
-    meta: { auth: true, name: "Remixicon" },
-    component: () => import("../views/Icons/IconRemixicon"),
-  },
-  {
-    path: "material",
-    name: prop + ".material",
-    meta: { auth: true, name: "Material" },
-    component: () => import("../views/Icons/IconMaterial"),
-  },
-];
 
-const appChildRoute = (prop, mode = false) => [
-  {
-    path: "chat",
-    name: prop + ".chat",
-    meta: { auth: true, name: "Chat" },
-    component: () => import("../views/Chat/Index"),
-  },
-];
 const userChildRoute = (prop, mode = false) => [
   {
     path: "profile/:user_id",
@@ -220,6 +166,14 @@ const userChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Privacy Setting" },
     component: () => import("../views/User/PrivacySetting"),
   },
+  {
+    path: "/assign-role",
+    name: prop + ".assignRole",
+    meta: { auth: true, name: "Assign Role" },
+    component: () =>
+      import("../views/AuthPages/Default/AssignRole"),
+  },
+
 ];
 
 const groupChildRoute = (prop, mode = false) => [
@@ -249,7 +203,7 @@ const groupChildRoute = (prop, mode = false) => [
   },
   {
     path: "add-member/:group_id",
-    name: prop + ".addmemeber",
+    name: prop + ".addMemeber",
     meta: { auth: true, name: "Group" },
     component: () => import("../views/OsbohaMain/Group/AddMember"),
   },
@@ -374,14 +328,6 @@ const routes = [
     component: () => import("../layouts/Default"),
     children: childRoutes("osboha"),
   },
-
-  {
-    path: "/assign-role",
-    name: "AssignRole",
-    component: () => import("../layouts/Default"),
-    children: childRoutes("AssignRole"),
-  },
-
   {
     path: "/without-leftside",
     name: "without-leftside",
@@ -399,25 +345,6 @@ const routes = [
     name: "auth",
     component: () => import("../layouts/Empty"),
     children: authchildRoutes("auth"),
-  },
-  {
-    path: "/blog",
-    name: "blog",
-    component: () => import("../layouts/Default"),
-    children: blogchildRoutes("blog"),
-  },
-  {
-    path: "/icon",
-    name: "icon",
-    component: () => import("../layouts/Default"),
-    children: iconChildRoute("icon"),
-  },
-  {
-    path: "/app",
-    name: "app",
-    component: () => import("../layouts/Default"),
-    meta: { auth: true },
-    children: appChildRoute("app"),
   },
   {
     path: "/user",

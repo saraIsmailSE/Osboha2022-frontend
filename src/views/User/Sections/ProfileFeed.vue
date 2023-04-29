@@ -226,7 +226,7 @@
                         {{ exception.end_at }}
                       </h6>
                       <h6 class="mt-2" style="direction: rtl !important" v-else>
-                        {{ exception.type }} ||
+                        {{ exception.type.type }} ||
                         {{ exception_status[exception.status] }}
                       </h6>
                     </router-link>

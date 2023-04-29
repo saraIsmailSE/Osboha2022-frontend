@@ -1,7 +1,6 @@
 import { api } from '../Intercepter'
 class GroupService {
     async createGroup(groupForm) {
-        console.log(groupForm)
         try {
             const response = await api.post(`/group/create`, groupForm, {
                 headers: { "Content-type": "multipart/form-data" },
@@ -117,9 +116,9 @@ class GroupService {
     }
 
 
-    async deleteById(id) {
+    async deleteById(group_id) {
         try {
-            return await api.post(`/group/delete`, { group_id: id });
+            return await api.delete(`/group/delete/${group_id}`);
         } catch (error) {
             return error;
         }
@@ -149,15 +148,18 @@ class GroupService {
             return error
         }
     }
+
+    /*
+    **** Need to discuss ****
     async addMember(body) {
         try {
-
             const groups = await api.post('/user-group/', body);
             return groups.data
         } catch (error) {
             return error.response.data.data
         }
     }
+    */
 }
 
 export default new GroupService()
