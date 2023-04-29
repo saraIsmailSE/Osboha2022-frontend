@@ -162,6 +162,20 @@ export default {
       return calculateReplies(this.comment?.replies);
     },
   },
+  watch: {
+    //watch reactions_count and reacted_by_user to force update the component
+    //when the user react on a comment
+    "comment.reactions_count": {
+      handler() {
+        this.$forceUpdate();
+      },
+    },
+    "comment.reacted_by_user": {
+      handler() {
+        this.$forceUpdate();
+      },
+    },
+  },
   methods: {
     ...helper,
     toggleShowReplies() {

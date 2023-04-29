@@ -3,14 +3,10 @@
     <div class="col-lg-8 row m-0 p-0">
       <!-- ##### <AddPost> ##### -->
       <div class="col-sm-12" v-if="isAuthorized">
-        <AddPost @add-post="addPost" type="announcement" :timeline_id="1" />
+        <AddPost @add-post="addPost" type="support" :timeline_id="1" />
       </div>
       <!-- ##### Display Posts ##### -->
-      <LazyLoadedPosts
-        ref="lazyLoadedPostsRef"
-        type="announcement"
-        :showPin="true"
-      />
+      <LazyLoadedPosts ref="lazyLoadedPostsRef" type="support" />
     </div>
   </div>
 </template>
@@ -18,30 +14,18 @@
 <script>
 import AddPost from "@/components/post/add/AddPost.vue";
 import LazyLoadedPosts from "@/components/post/LazyLoadedPosts.vue";
-import userInfoService from "@/Services/userInfoService";
-
+import UserInfoService from "@/Services/userInfoService";
 export default {
-  name: "Announcemnt",
+  name: "Support",
   components: {
     AddPost,
     LazyLoadedPosts,
   },
-  data() {
-    return {
-      roles: [],
-    };
-  },
   computed: {
     isAuthorized() {
-      return (
-        this.roles.includes("admin") ||
-        this.roles.includes("advisor") ||
-        this.roles.includes("supervisor")
-      );
+      const user = this.$store.getters.getUser;
+      return UserInfoService.hasRoles(user, ["admin", "consultant"]);
     },
-  },
-  async mounted() {
-    this.roles = await userInfoService.getRoles().map((role) => role.name);
   },
   methods: {
     addPost(post) {
@@ -51,4 +35,4 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped></style>

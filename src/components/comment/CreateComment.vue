@@ -165,6 +165,7 @@ export default {
 
           helper.toggleToast("تم إضافة التعليق ", "success");
         } catch (error) {
+          console.log("[add comment error]", error);
           helper.handleErrorSwal("حدث خطأ ما, حاول مرة أخرى");
         } finally {
           this.loading = false;

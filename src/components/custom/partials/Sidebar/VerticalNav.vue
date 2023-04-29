@@ -73,6 +73,17 @@
         <span class="item-name">الإعلانات</span>
       </router-link>
     </li>
+    <!-- ###### Support ###### -->
+    <li class="nav-item">
+      <router-link
+        :class="checkActive('osboha.support') ? 'active nav-link' : 'nav-link'"
+        aria-current="page"
+        :to="{ name: 'osboha.support' }"
+      >
+        <i class="icon material-symbols-outlined"> heart_plus </i>
+        <span class="item-name">الدعم</span>
+      </router-link>
+    </li>
 
     <li class="nav-item static-item">
       <a class="nav-link static-item disabled" tabindex="-1">

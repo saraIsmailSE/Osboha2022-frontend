@@ -3,67 +3,39 @@
     <div class="card card-block card-stretch card-height">
       <div class="card-body">
         <!--Post header-->
-        <PostHeader
-          :post="post"
-          :showPin="showPin"
-          :is_announcement="is_announcement"
-        />
+        <PostHeader :showPin="showPin" />
 
         <!--Post Body-->
-        <PostBody :post="post" />
+        <PostBody />
 
         <!--Post Media section-->
-        <PostMedia :post="post" @showPostMedia="showPostMedia" />
+        <PostMedia @showPostMedia="showPostMedia" />
+
+        <!--Support Checkbox-->
+        <SupportSection />
 
         <!--Post Footer-->
-        <div class="comment-area mt-3">
-          <div
-            class="d-flex justify-content-between align-items-center flex-wrap"
-          >
-            <div class="like-block position-relative d-flex align-items-center">
-              <!--Likes-->
-              <TotalLikes :post="post" />
-
-              <!--Total comments with dropdown of users who commented on this post-->
-              <TotalComments
-                :post="post"
-                @showCommentModel="showCommentModel"
-              />
-
-              <div
-                class="total-votes-block ms-3"
-                v-if="post.pollOptions.length > 0"
-              >
-                <span role="button">
-                  {{ votesCountText }}
-                </span>
-              </div>
-            </div>
-          </div>
-          <hr />
-          <!--Post Action buttons (like - comment - share)-->
-          <ActionButtons :post="post" @showCommentModel="showCommentModel" />
-        </div>
+        <PostFooter />
       </div>
     </div>
   </div>
 
   <!--Post media modal-->
-  <PostMediaModal :post="post" ref="postMediaModal" />
+  <PostMediaModal ref="postMediaModal" />
 
   <!--Comments modal-->
-  <CommentsModal :post="post" ref="commentModal" />
+  <CommentsModal ref="commentModal" v-if="!focusComment" />
 </template>
 
 <script>
 import PostHeader from "@/components/post/header/PostHeader.vue";
 import PostBody from "@/components/post/body/PostBody.vue";
+import PostFooter from "@/components/post/footer/PostFooter.vue";
 import PostMedia from "@/components/post/body/PostMedia.vue";
+import SupportSection from "@/components/post/body/SupportSection.vue";
 import CommentsModal from "@/components/post/modals/CommentsModal.vue";
 import PostMediaModal from "@/components/post/modals/PostMediaModal.vue";
-import TotalComments from "@/components/post/footer/TotalComments.vue";
-import TotalLikes from "@/components/post/footer/TotalLikes.vue";
-import ActionButtons from "@/components/post/footer/ActionButtons.vue";
+import helper from "@/utilities/helper";
 
 export default {
   name: "Post",
@@ -73,37 +45,25 @@ export default {
     CommentsModal,
     PostMediaModal,
     PostMedia,
-    TotalComments,
-    ActionButtons,
-    TotalLikes,
+    PostFooter,
+    SupportSection,
+  },
+  provide() {
+    return {
+      post: this.post,
+      showCommentModel: this.showCommentModel,
+    };
+  },
+  inject: {
+    focusComment: {
+      default: () => {},
+    },
   },
   props: {
-    post: { type: Object },
+    post: { type: Object, required: true },
     showPin: {
       type: Boolean,
       default: false,
-    },
-    is_announcement: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  data() {
-    return {
-      userRole: "",
-      isLiked: false,
-      errorMessage: "",
-    };
-  },
-  computed: {
-    votesCountText() {
-      return this.post.votes_count == 0
-        ? "لا يوجد تصويتات"
-        : this.post.votes_count +
-            " " +
-            (this.post.votes_count <= 10 && this.post.votes_count > 2
-              ? "تصويتات"
-              : "تصويت");
     },
   },
   methods: {
@@ -116,7 +76,26 @@ export default {
       return images("./" + path);
     },
     showCommentModel() {
-      this.$refs.commentModal.showCommentModel();
+      if (this.post.type.toLowerCase() === "support") {
+        const pledge = JSON.parse(localStorage.getItem("pledges"));
+        const supported = pledge
+          ? pledge[this.post.id] === this.$store.getters.getUser.id
+            ? true
+            : false
+          : false;
+        if (!supported) {
+          helper.toggleToast(
+            "يجب أن تتعهد بأنك قرأت المنشور كاملاً",
+            "warning"
+          );
+          return;
+        }
+      }
+      if (!this.focusComment) {
+        this.$refs.commentModal.showCommentModel();
+      } else {
+        this.focusComment();
+      }
     },
     /**
      * @description: show the gallery modal

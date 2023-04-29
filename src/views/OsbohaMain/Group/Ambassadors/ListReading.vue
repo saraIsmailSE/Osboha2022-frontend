@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="col-sm-12 mt-3">
+      <count-down v-if="week" :week="week" :timer_type="'main_timer'" />
       <iq-card class="iq-card">
-        <div class="iq-card-header-toolbar d-flex align-items-center mx-auto">
+        <!-- <div class="iq-card-header-toolbar d-flex align-items-center mx-auto">
           <h3
             class="text-center mt-3 mb-3"
             style="direction: rtl"
@@ -10,14 +11,19 @@
           >
             {{ mark.user.name }} - الأسبوع {{ week.title }}
           </h3>
-        </div>
+        </div> -->
         <div class="iq-card-body p-3">
           <AchievementCard v-if="mark" :mark="mark" :group="group" />
           <div class="d-flex align-items-center mt-3">
             <Check :theses="theses" />
           </div>
 
-          <count-down v-if="week" :week="week" :timer_type="'main_timer'" />
+          <!--Support-->
+          <Support
+            :support="support"
+            :supportMark="mark?.support"
+            @updateSupportMark="updateSupportMark"
+          />
 
           <div class="d-flex align-items-center mt-3 row">
             <!-- <div class="alert alert-danger text-center" role="alert">
@@ -48,14 +54,33 @@ import AchievementCard from "@/components/book/theses/achievement-card.vue";
 import Check from "@/components/book/theses/check.vue";
 import MarkService from "@/API/services/marks.service";
 import CountDown from "@/components/timer/Countdown.vue";
+import Support from "@/components/book/support/Support.vue";
+import helper from "@/utilities/helper";
 
 export default {
   name: "List Reading",
+  components: {
+    Check,
+    AchievementCard,
+    CountDown,
+    Support,
+  },
+  data() {
+    return {
+      theses: [],
+      support: null,
+      group: null,
+      week: null,
+      mark: null,
+    };
+  },
   async created() {
     try {
       const response = await MarkService.ambassadorMark(
         this.$route.params.ambassador_id
       );
+
+      console.log("[mark response]", response);
       this.mark = response.mark;
       this.theses = response.theses.reduce((groupByBook, item) => {
         const group = groupByBook[item.book.name] || [];
@@ -66,24 +91,22 @@ export default {
       }, {});
       this.group = response.group;
       this.week = response.currentWeek;
+      this.support = response.support;
     } catch (error) {
-      console.log(error);
+      const res = error.response.data;
+      if (res.statusCode === 403) {
+        this.$router.push({ name: "NotAuthorized" });
+      } else if (res.statusCode === 404) {
+        this.$router.push({ name: "NotFound" });
+      } else {
+        helper.toggleToast("حدث خطأ ما", "error");
+      }
     }
   },
-
-  components: {
-    Check,
-    AchievementCard,
-    CountDown,
-  },
-
-  data() {
-    return {
-      theses: [],
-      group: null,
-      week: null,
-      mark: null,
-    };
+  methods: {
+    updateSupportMark(mark) {
+      this.mark.support = mark;
+    },
   },
 };
 </script>

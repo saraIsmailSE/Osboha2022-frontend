@@ -80,7 +80,11 @@ export default {
   components: {
     UserAvatar,
   },
-  inject: ["deleteComment"],
+  inject: {
+    deleteComment: {
+      default: () => {},
+    },
+  },
   props: {
     comment: {
       type: Object,

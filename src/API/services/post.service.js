@@ -2,15 +2,6 @@ import { api } from "../Intercepter";
 import { handleError } from "vue";
 
 class PostService {
-  async getAllPosts() {
-    try {
-      const posts = await api.get("/posts");
-      return posts.data;
-    } catch (error) {
-      return error;
-    }
-  }
-
   async create(post) {
     const formData = new FormData();
     formData.append("body", post.body);
@@ -55,10 +46,10 @@ class PostService {
 
   async getPostById(post_id) {
     try {
-      const post = await api.post("/post/show", { post_id });
+      const post = await api.get(`/posts/${post_id}`);
       return post.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
@@ -99,6 +90,15 @@ class PostService {
   async getAnnouncements(page) {
     try {
       const posts = await api.get(`/posts/announcements?page=${page}`);
+      return posts.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async getSupportPosts(page) {
+    try {
+      const posts = await api.get(`/posts/support?page=${page}`);
       return posts.data;
     } catch (error) {
       handleError(error);

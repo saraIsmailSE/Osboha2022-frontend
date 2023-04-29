@@ -80,12 +80,7 @@
 import { Modal } from "bootstrap";
 export default {
   name: "PostMediaModal",
-  props: {
-    post: {
-      type: Object,
-      required: true,
-    },
-  },
+  inject: ["post"],
   data() {
     return {
       galleryModal: null,

@@ -79,7 +79,19 @@ const childRoutes = (prop, mode) => [
     path: "announcement",
     name: prop + ".announcement",
     meta: { auth: true, name: "Announcemnt" },
-    component: () => import("../views/Announcemnt/Announcemnt"),
+    component: () => import("../views/OsbohaMain/Announcemnt/Announcemnt"),
+  },
+  {
+    path: "support",
+    name: prop + ".support",
+    meta: { auth: true, name: "Support" },
+    component: () => import("../views/OsbohaMain/Support/SupportView"),
+  },
+  {
+    path: "post/:post_id/:user_id?",
+    name: prop + ".post",
+    meta: { auth: true, name: "post" },
+    component: () => import("../views/OsbohaMain/Post/PostView"),
   },
 ];
 
@@ -367,6 +379,11 @@ const routes = [
     path: "/notauthorized",
     name: "NotAuthorized",
     component: () => import("../views/Errors/403"),
+  },
+  {
+    path: "/server-error",
+    name: "ServerError",
+    component: () => import("../views/Errors/500"),
   },
   {
     path: "/",

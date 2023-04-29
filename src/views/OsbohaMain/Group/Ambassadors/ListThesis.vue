@@ -57,30 +57,34 @@
               </div>
 
               <!--Thesis media-->
-              <div
-                class="col-12 row justify-content-center"
+              <ExpandedCard
+                title="الاقتباسات"
+                :defaultExpanding="media.length <= 3"
                 v-if="media.length > 0"
               >
-                <div
-                  class="col-lg-4 col-md-6 col-sm-12 mb-2"
-                  v-for="(mediaFile, index) in media"
-                  :key="index"
-                >
-                  <a :href="mediaFile.path" target="_blank">
-                    <img
-                      class="img-fluid rounded"
-                      :src="mediaFile.path"
-                      alt="thesis screenshot"
-                    />
-                  </a>
+                <div class="col-12 row justify-content-center">
+                  <div
+                    class="col-lg-3 col-md-6 col-sm-12 mb-2"
+                    v-for="(mediaFile, index) in media"
+                    :key="index"
+                  >
+                    <a :href="mediaFile.path" target="_blank">
+                      <img
+                        class="img-fluid rounded w-100 h-100"
+                        :src="mediaFile.path"
+                        alt="thesis screenshot"
+                        style="object-fit: cover"
+                      />
+                    </a>
+                  </div>
                 </div>
-              </div>
+              </ExpandedCard>
             </div>
             <hr />
 
             <div
               class="form-group row w-75 m-auto"
-              v-if="!expired && pending && authUserAllowed"
+              v-if="!expired && pending && authUserAllowed && !readOnly"
             >
               <div class="col-12 col-md-6">
                 <select
@@ -106,6 +110,7 @@
                 <select
                   class="form-select btn btn-info w-100 mt-2"
                   v-model="reason"
+                  :disabled="status === 'accepted'"
                 >
                   <option class="bg-white text-dark" value="" selected>
                     السبب
@@ -160,6 +165,7 @@
                 />
               </div>
               <div v-if="expired">لقد انتهت فترة التدقيق</div>
+              <div v-else-if="readOnly">الأطروحة لا تحتاج إلى تدقيق</div>
               <div v-else-if="!pending">لقد تمت المراجعة من قبل</div>
               <div v-else-if="!authUserAllowed">غير مسموح لك بالتدقيق</div>
             </div>
@@ -189,9 +195,13 @@ import ReasonService from "@/API/services/reason.service";
 import ModifiedThesisService from "@/API/services/modified-thesis.service";
 import helper from "@/utilities/helper";
 import userInfoService from "@/Services/userInfoService";
+import ExpandedCard from "@/components/card/ExpandedCard.vue";
 
 export default {
   name: "List One Thesis",
+  components: {
+    ExpandedCard,
+  },
   async created() {
     const response = await ThesisService.getThesisById(
       this.$route.params.thesis_id
@@ -210,6 +220,7 @@ export default {
       reason: "",
       week: null,
       expired: false,
+      expand: false,
     };
   },
   computed: {
@@ -218,6 +229,7 @@ export default {
         "leader",
         "supervisor",
         "advisor",
+        "admin",
       ]);
     },
     thesisStatus() {
@@ -247,6 +259,13 @@ export default {
         this.thesis.status === "pending" ||
         this.thesis.status === null ||
         this.thesis.status === ""
+      );
+    },
+    readOnly() {
+      return (
+        this.thesis.status === "accepted" &&
+        this.thesis.max_length == 0 &&
+        this.thesis.total_screenshots == 0
       );
     },
     message() {
