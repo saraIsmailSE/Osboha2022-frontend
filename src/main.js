@@ -13,6 +13,11 @@ import "leaflet/dist/leaflet.css";
 import fontawsome from "./utilities/fontawsome";
 import Vue3Toasity from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+
+import setupInterceptors from '@/Services/setupInterceptors';
+setupInterceptors(store)
+
+
 // Vuetify
 //import 'vuetify/styles'
 import { createVuetify } from 'vuetify'

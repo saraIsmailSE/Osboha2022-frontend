@@ -6,9 +6,16 @@
                     <img src="@/assets/images/main/no-team.png" class="img-fluid iq-error-img" alt="403">
                     <div>
 
-                        <h2 class="mb-2 text-center">عذرًا ليس لديك مجموعة</h2>
-                        <!-- <p class="text-center">لم يتم العثور على الصفحة التي طلبتها، قد يكون الرابط خاطئ أو تم حذف الصفحة</p> -->
+                        <h2 class="mb-2 text-center">حتى اللحظة لم يتم توزيعك لفريق</h2>
+                        <h5 class="text-center m-auto w-75">
+                            خلال ترتيب دخولك، يتوجب تواجدك في مجموعة متابعة خاصة (كـ سفير)
+                            ستتم مراسلتك على الايميل حالما يتم التوزيع
+                            <br>
+                            ❤️
+                            لن نتأخر ... كن بالقرب 
+                            
 
+                        </h5>
                         <a href="javascript:void(0);" class="d-flex align-items-center m-3" @click="logout">
                             <i class="material-symbols-outlined">logout</i>
                             <span class="mobile-text d-lg-none ms-3">تسجيل خروج</span>
@@ -30,7 +37,7 @@ export default {
     methods: {
         logout() {
             this.$store.dispatch('logout');
-            this.$router.push({ name: 'social' })
+            this.$router.push({ name: 'osboha' })
         }
     }
 }

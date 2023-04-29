@@ -70,7 +70,7 @@ export default {
                 this.loader = true;
                 const response = await Auth.resetPassword(this.form.password, this.form.email, this.$route.params.token)
                 if (response.success) {
-                    this.$router.push({ name: 'social' })
+                    this.$router.push({ name: 'osboha' })
                 }
                 else {
                     this.message = " حدث خطأ"

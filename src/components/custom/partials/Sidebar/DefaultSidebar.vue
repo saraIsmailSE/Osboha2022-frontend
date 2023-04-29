@@ -16,6 +16,9 @@ import Scrollbar from 'smooth-scrollbar'
 export default {
   name: 'DefaultSidebar',
   components: { VerticalNav },
+ created(){
+  this.toggleSidebar()
+ },
   setup () {
     const store = useStore()
     const sidebarType = computed(() => store.getters['setting/sidebar_type'])

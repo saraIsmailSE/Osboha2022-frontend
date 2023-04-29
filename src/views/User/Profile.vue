@@ -2,64 +2,24 @@
   <div class="row" v-if="profile">
     <div class="col-sm-12">
       <!-- START MAIN INFORMATION -->
-      <MainInfo
-        :friendWithAuth="friendWithAuth"
-        :user="profile.user"
-        :roles="profile.roles"
-        :readingInfo="readingInfo"
-        :profile="profile.info"
-      />
+      <MainInfo :friendWithAuth="friendWithAuth" :user="profile.user" :roles="profile.roles" :readingInfo="readingInfo"
+        :profile="profile.info" />
       <!-- END MAIN INFORMATION -->
 
       <!-- START PROFILE NAVIGATION -->
       <iq-card class="iq-card">
         <div class="iq-card-body p-0">
           <div class="user-tabing">
-            <tab-nav
-              :pills="true"
-              id="pills-tab"
-              class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0"
-            >
-              <tab-nav-items
-                class="col-sm-3 p-0"
-                :active="true"
-                id="pills-feed-tab"
-                href="#profile-feed"
-                ariaControls="pills-home"
-                role="tab"
-                :ariaSelected="true"
-                title="الرئيسية"
-              />
-              <tab-nav-items
-                class="col-sm-3 p-0"
-                :active="false"
-                id="pills-bout-tab"
-                href="#profile-about"
-                ariaControls="pills-profile"
-                role="tab"
-                :ariaSelected="false"
-                title="معلومات المستخدم"
-              />
-              <tab-nav-items
-                class="col-sm-3 p-0"
-                :active="false"
-                id="pills-books-tab"
-                href="#profile-books"
-                ariaControls="pills-contact"
-                role="tab"
-                :ariaSelected="false"
-                title="الكتب"
-              />
-              <tab-nav-items
-                class="col-sm-3 p-0"
-                :active="false"
-                id="pills-statistics-tab"
-                href="#profile-statistics"
-                ariaControls="pills-contact"
-                role="tab"
-                :ariaSelected="false"
-                title="احصائيات"
-              />
+            <tab-nav :pills="true" id="pills-tab"
+              class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
+              <tab-nav-items class="col-sm-3 p-0" :active="true" id="pills-feed-tab" href="#profile-feed"
+                ariaControls="pills-home" role="tab" :ariaSelected="true" title="الرئيسية" />
+              <tab-nav-items class="col-sm-3 p-0" :active="false" id="pills-bout-tab" href="#profile-about"
+                ariaControls="pills-profile" role="tab" :ariaSelected="false" title="معلومات المستخدم" />
+              <tab-nav-items class="col-sm-3 p-0" :active="false" id="pills-books-tab" href="#profile-books"
+                ariaControls="pills-contact" role="tab" :ariaSelected="false" title="الكتب" />
+              <tab-nav-items class="col-sm-3 p-0" :active="false" id="pills-statistics-tab" href="#profile-statistics"
+                ariaControls="pills-contact" role="tab" :ariaSelected="false" title="احصائيات" />
             </tab-nav>
           </div>
         </div>
@@ -70,48 +30,28 @@
     <div class="col-sm-12">
       <div class="tab-content">
         <!-- ########## START PROFILE FEED ########## -->
-        <ProfileFeed
-          :friends="profile.friends"
-          :exceptions="profile.exceptions"
-          :profile_media="profile_media"
-          :timeline_id="profile.user.user_profile.timeline_id"
-        />
+        <ProfileFeed :friends="profile.friends" :exceptions="profile.exceptions" :profile_media="profile_media"
+          :timeline_id="profile.user.user_profile.timeline_id" />
         <!-- ########## END PROFILE FEED ########## -->
 
         <!-- ########## START ABOUT ########## -->
-        <tab-content-item
-          :active="false"
-          id="profile-about"
-          aria-labelled-by="pills-about-tab"
-        >
+        <tab-content-item :active="false" id="profile-about" aria-labelled-by="pills-about-tab">
           <iq-card>
             <template v-slot:body>
-              <About
-                :user_about="profile.info"
-                :user="profile.user"
-                :social_media="profile.social_media"
-              />
+              <About :user_about="profile.info" :user="profile.user" :social_media="profile.social_media" />
             </template>
           </iq-card>
         </tab-content-item>
         <!-- ########## End ABOUT ########## -->
 
         <!-- ########## START Books ########## -->
-        <tab-content-item
-          :active="false"
-          id="profile-books"
-          aria-labelled-by="pills-book-tab"
-        >
+        <tab-content-item :active="false" id="profile-books" aria-labelled-by="pills-book-tab">
           <Books :books="profile.books" />
         </tab-content-item>
         <!-- ########## END Books ########## -->
 
         <!-- ########## START STATISTICS ########## -->
-        <tab-content-item
-          :active="false"
-          id="profile-statistics"
-          aria-labelled-by="pills-statistics-tab"
-        >
+        <tab-content-item :active="false" id="profile-statistics" aria-labelled-by="pills-statistics-tab">
           <Statistics />
         </tab-content-item>
         <!-- ########## END STATISTICS ########## -->
@@ -127,6 +67,7 @@ import ProfileFeed from "./Sections/ProfileFeed.vue";
 import Statistics from "./Sections/Statistics.vue";
 
 import UserProfile from "@/API/services/user-profile.service";
+import { watchEffect } from 'vue'
 
 export default {
   name: "Profile",
@@ -137,13 +78,17 @@ export default {
     Books,
     Statistics,
   },
-  async created() {
-    this.profile = await UserProfile.getUserProfileById(
-      this.$route.params.user_id
-    );
-    this.readingInfo[0].value = this.profile.reading_Info.books;
-    this.readingInfo[1].value = this.profile.reading_Info.thesis;
-    this.friendWithAuth = this.profile.friendWithAuth;
+  created() {
+    watchEffect(async () => {
+      this.profile = null
+      this.profile = await UserProfile.getUserProfileById(
+        this.$route.params.user_id
+      );
+      this.readingInfo[0].value = this.profile.reading_Info.books;
+      this.readingInfo[1].value = this.profile.reading_Info.thesis;
+      this.friendWithAuth = this.profile.friendWithAuth;
+    })
+
   },
   data() {
     return {

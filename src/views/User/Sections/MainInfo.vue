@@ -53,7 +53,8 @@
             <h3 class="">{{ user.name }}</h3>
             <div class="social-links">
               <ul
-                class="social-data-block d-flex align-items-center justify-content-center list-inline p-0 m-0"
+                class="social-data-block align-items-center justify-content-center list-inline p-0 m-0" 
+                style="display: flex !important;"
               >
                 <li
                   v-for="(role, index) in roles"

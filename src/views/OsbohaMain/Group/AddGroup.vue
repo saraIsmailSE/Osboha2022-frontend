@@ -6,7 +6,7 @@
       </div>
       <div class="iq-card-body p-4">
         <div class="image-block text-center">
-          <img class="img-fluid rounded w-50" src="@/assets/images/main/request_amb.png" alt="blog-img" />
+          <img class="img-fluid rounded w-75" src="@/assets/images/main/request_amb.png" alt="add-group" />
         </div>
       </div>
       <div class="col-12 bg-white pt-2">
@@ -35,9 +35,29 @@
                 id="groupDescription" placeholder="وصف المجموعة " />
               <small style="color: red" v-if="v$.groupForm.description.$error">وصف المجموعة مطلوب</small>
             </div>
+            <div class="col-sm-12 text-center" v-if="loader">
+              <p class="text-center">جاري الاضافة</p>
+              <img src="@/assets/images/page-img/page-load-loader.gif" alt="loader" style="height: 100px;" />
+            </div>
+            <div class="col-sm-12 text-center" v-if="loading">
+              <img :src="require('@/assets/images/page-img/page-load-loader.gif')" alt="loader" style="height: 80px" />
+            </div>
+
+            <p class="text-center my-2" style="color: red" v-if="message">
+              {{ message }}
+            </p>
+            <router-link class="mb-3 text-center d-block w-100" v-if="group_id"
+              :to="{ name: 'group.group-detail', params: { group_id: group_id } }">
+              عرض المجموعة
+              <span class="align-middle material-symbols-outlined">
+                keyboard_return
+              </span>
+
+            </router-link>
+
             <div class="d-inline-block w-100">
-              <button type="submit" class="btn btn-primary float-end">
-                اضافة المجموعة
+              <button type="submit" class="btn btn-primary float-end" :disabled="loader">
+                اضافة
               </button>
             </div>
           </form>
@@ -79,8 +99,10 @@ export default {
         name: "",
         type_id: 0,
         description: '',
-
       },
+      message: '',
+      group_id: null,
+      loading: false,
     };
   },
   methods: {
@@ -88,13 +110,16 @@ export default {
       this.v$.$touch();
       if (!this.v$.groupForm.$invalid) {
         try {
-          this.loader = true;
+          this.loading = true;
           const group = await GroupService.createGroup(this.groupForm)
+          this.loading = false;
+          this.message = "تمت الاضافة"
+          this.group_id = group.id
           console.log(group);
 
         } catch (error) {
-          this.loader = false;
-
+          this.loading = false;
+          this.message = "حصل خطأ - لم تتم الاضافة!"
           console.log(error.data);
         }
       }
@@ -112,7 +137,6 @@ export default {
         },
         description: {
           required
-
         }
 
       },

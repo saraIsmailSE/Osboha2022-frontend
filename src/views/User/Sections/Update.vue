@@ -544,7 +544,7 @@ export default {
                     maxLength: maxLength(100)
                 },
                 fav_quote: {
-                    maxLength: maxLength(100)
+                    maxLength: maxLength(300)
                 },
             }
         };
