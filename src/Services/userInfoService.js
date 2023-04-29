@@ -3,11 +3,6 @@ class UserInfoService {
     const user = JSON.parse(localStorage.getItem("osboha__user"));
     return user?.refreshToken;
   }
-  getLocalAccessToken() {
-    const user = JSON.parse(localStorage.getItem("osboha__user"));
-    return user?.token;
-  }
-
   updateLocalAccessToken(token) {
     localStorage.setItem("osboha__token", token);
   }
