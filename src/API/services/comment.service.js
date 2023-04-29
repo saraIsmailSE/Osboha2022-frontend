@@ -31,10 +31,10 @@ class CommentService {
     }
   }
 
-  async getPostComments(post_id, page) {
+  async getPostComments(post_id, page, user_id = "") {
     try {
       const comments = await api.get(
-        `/comments/post/${post_id}?post_id=${page}`
+        `/comments/post/${post_id}/${user_id}?page=${page}`
       );
       return comments.data;
     } catch (error) {

@@ -317,6 +317,7 @@ export default {
   },
   created() {
     if (this.thesisToEdit) {
+      console.log("[created thesisToEdit]", this.thesisToEdit);
       this.thesisForm.u_comment_id = parseInt(this.thesisToEdit.id);
       this.thesisForm.body = this.thesisToEdit.body
         ? this.thesisToEdit.body

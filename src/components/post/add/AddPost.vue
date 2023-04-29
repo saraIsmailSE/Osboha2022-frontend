@@ -40,7 +40,12 @@
         </model-header>
         <model-body class="post-modal-body">
           <div class="d-flex align-items-start">
-            <TaggedFriends :friends="selectedFriends" :user="auth" />
+            <PostUser
+              :post="{
+                user: auth,
+                taggedFriends: selectedFriends,
+              }"
+            />
           </div>
           <div>
             <form class="post-text ml-3 w-100">
@@ -185,7 +190,7 @@
 import ImagePreviewer from "@/components/media/ImagePreviewer.vue";
 import PostPoll from "@/components/post/add/PostPoll.vue";
 import FriendsList from "@/components/post/add/FriendsList.vue";
-import TaggedFriends from "@/components/post/header/TaggedFriends.vue";
+import PostUser from "@/components/post/header/PostUser.vue";
 import { Modal } from "bootstrap";
 import postService from "@/API/services/post.service";
 import friendService from "@/API/services/friend.service";
@@ -198,7 +203,7 @@ export default {
     ImagePreviewer,
     PostPoll,
     FriendsList,
-    TaggedFriends,
+    PostUser,
   },
   props: {
     type: {

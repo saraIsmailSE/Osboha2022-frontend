@@ -36,6 +36,17 @@ class ReactionService {
       handleError(error);
     }
   }
+
+  async getPostReactionsUsers(post_id, user_id = "") {
+    try {
+      const response = await api.get(
+        `/reactions/posts/${post_id}/users/${user_id}`
+      );
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 }
 
 export default new ReactionService();

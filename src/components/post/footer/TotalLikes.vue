@@ -81,42 +81,101 @@
 
     <!--total likes block-->
     <div class="total-like-block ms-2 me-3">
-      <div class="dropdown">
-        <!-- <span
+      <div
+        :class="{
+          dropdown: post.reactions_count > 0,
+        }"
+      >
+        <span
           class="dropdown-toggle"
           data-bs-toggle="dropdown"
           aria-haspopup="true"
           aria-expanded="false"
+          @mouseover="getUsers"
           role="button"
-        > -->
-
-        <span aria-haspopup="true" aria-expanded="false" role="button">
+        >
+          <!-- <span aria-haspopup="true" aria-expanded="false" role="button"> -->
           {{ post.reactions_count }}
         </span>
-        <!-- <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">Max Emum</a>
-          <a class="dropdown-item" href="#">Bill Yerds</a>
-          <a class="dropdown-item" href="#">Hap E. Birthday</a>
-          <a class="dropdown-item" href="#">Tara Misu</a>
-          <a class="dropdown-item" href="#">Midge Itz</a>
-          <a class="dropdown-item" href="#">Sal Vidge</a>
-          <a class="dropdown-item" href="#">Other</a> 
-        </div>-->
+        <div class="dropdown-menu">
+          <div class="dropdown-item text-center" v-if="loading">
+            <img
+              :src="require('@/assets/images/page-img/page-load-loader.gif')"
+              alt="loader"
+              style="height: 50px"
+            />
+          </div>
+          <router-link
+            v-for="user in users"
+            :key="user.id"
+            class="dropdown-item"
+            :to="{
+              name: 'user.profile',
+              params: {
+                user_id: user.id,
+              },
+            }"
+            >{{ user.name }}</router-link
+          >
+          <p class="dropdown-item p-0 m-0 ms-2 mb-2" v-if="moreUsersText">
+            {{ moreUsersText }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import ReactionService from "@/API/services/reaction.service";
+import helper from "@/utilities/helper";
 export default {
   name: "TotalLikes",
-  props: {
-    post: { type: Object, required: true },
-  },
+  inject: ["post"],
   data() {
     return {
       reactions: [],
+      users: [],
+      totalUsers: 0,
+      loading: false,
     };
+  },
+  computed: {
+    /**
+     * @description returns the rest comments users count text
+     * @returns {string}
+     */
+    moreUsersText() {
+      const remainder = this.totalUsers - this.users.length;
+      const moreText = remainder === 1 ? "آخر" : "آخرين";
+      return remainder > 0 ? `و +${remainder} ${moreText}` : "";
+    },
+  },
+  methods: {
+    /**
+     * @description: get comments users to display them in the comment dropdown
+     * @returns {void}
+     */
+    async getUsers() {
+      if (this.post.reactions_count <= 0 || this.loading) {
+        return;
+      }
+
+      this.loading = true;
+      try {
+        const response = await ReactionService.getPostReactionsUsers(
+          this.post.id,
+          this.$route.params.user_id ?? ""
+        );
+
+        this.users = response.data.users;
+        this.totalUsers = response.data.count;
+      } catch (error) {
+        helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
+      } finally {
+        this.loading = false;
+      }
+    },
   },
 };
 </script>

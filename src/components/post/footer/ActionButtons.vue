@@ -114,7 +114,7 @@
       title="تعليق"
       data-bs-toggle="tooltip"
       data-bs-placement="bottom"
-      @click.prevent="$emit('showCommentModel')"
+      @click.prevent="showCommentModel"
     >
       <span class="me-1 bold-600"> تعليق </span>
       <font-awesome-icon :icon="['far', 'comment']" size="xl" />
@@ -140,14 +140,17 @@ import helper from "@/utilities/helper";
 
 export default {
   name: "ActionButtons",
-  inject: ["reactToPost"],
-  props: {
+  inject: {
+    reactToPost: {
+      default: () => {},
+    },
+    showCommentModel: {
+      required: true,
+    },
     post: {
-      type: Object,
       required: true,
     },
   },
-  emits: ["showCommentModel"],
   data() {
     return {
       reactions: [],
