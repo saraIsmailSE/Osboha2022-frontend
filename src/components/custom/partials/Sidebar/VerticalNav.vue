@@ -1,6 +1,7 @@
 <template>
   <!-- Sidebar Menu Start -->
-  <ul class="navbar-nav iq-main-menu " id="sidebar-menu">
+  <ul class="navbar-nav iq-main-menu " id="sidebar-menu" 
+  @click="toggleSidebar">
     <li class="nav-item static-item">
       <a class="nav-link static-item disabled" tabindex="-1">
         <span class="default-icon">القائمة الرئيسية</span>
@@ -137,7 +138,8 @@
   <!-- Sidebar Menu End -->
 </template>
 <script>
-import UserInfo from "@/Services/userInfoService";
+import { useStore } from "vuex";
+import { computed } from "vue"; 
 
 export default {
   name: "DefaultSidebar",
@@ -145,6 +147,29 @@ export default {
     user() {
       return this.$store.getters.getUser;
     },
+  },
+  setup() {
+    const store = useStore();
+    const sidebarType = computed(() => store.getters["setting/sidebar_type"]);
+    const toggleSidebar = () => {
+      // Code Here
+      if (sidebarType.value.includes("sidebar-mini")) {
+        store.dispatch(
+          "setting/sidebar_type",
+          sidebarType.value.filter((item) => item !== "sidebar-mini")
+        );
+      } else {
+        store.dispatch("setting/sidebar_type", [
+          ...sidebarType.value,
+          "sidebar-mini",
+        ]);
+      }
+    };
+    return {
+      store,
+      sidebarType,
+      toggleSidebar,
+    };
   },
   methods: {
     checkActive(route) {

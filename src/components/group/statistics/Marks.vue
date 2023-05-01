@@ -12,30 +12,30 @@
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mt-2 text-dark">
                             <h6>المعدل العام</h6>
-                            <small>100%</small>
+                            <small>{{(Math.round(statistics.team_out_of_100 * 100) / 100).toFixed(2)}}%</small>
                         </div>
                         <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
-                            <progressbar className="bg-primary" :style="{ width: 100 + '%' }"
+                            <progressbar className="bg-primary" :style="{ width: (Math.round(statistics.team_out_of_100 * 100) / 100).toFixed(2) + '%' }"
                                 aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></progressbar>
                         </b-progress>
                     </div>
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mt-2 text-dark">
                             <h6>إنجاز القراءة</h6>
-                            <small> 45 / 50</small>
+                            <small> {{(Math.round(statistics.team_reading_mark * 100) / 100).toFixed(2)}} / 50</small>
                         </div>
                         <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
-                            <progressbar className="bg-primary" :style="{ width: ((45 / 50) * 100) + '%' }"
+                            <progressbar className="bg-primary" :style="{ width: (( (Math.round(statistics.team_reading_mark * 100) / 100).toFixed(2)/ 50) * 100) + '%' }"
                                 aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></progressbar>
                         </b-progress>
                     </div>
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mt-2 text-dark">
                             <h6>إنجاز الكتابة</h6>
-                            <small> {{20}} / 40</small>
+                            <small> {{(Math.round(statistics.team_writing_mark * 100) / 100).toFixed(2)}} / 40</small>
                         </div>
                         <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
-                            <progressbar className="bg-primary" :style="{ width: ((20 / 40 ) * 100) + '%' }"
+                            <progressbar className="bg-primary" :style="{ width: (((Math.round(statistics.team_writing_mark * 100) / 100).toFixed(2) / 40 ) * 100) + '%' }"
                                 aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></progressbar>
                         </b-progress>
                     </div>
@@ -48,7 +48,7 @@
                                         auto_stories
                                     </span>
                                 </h6>
-                                <h2>{{ 22222 }}</h2>
+                                <h2>{{ statistics.total_pages }}</h2>
                             </div>
                         </div>
                         <div class="col-6">
@@ -60,7 +60,7 @@
                                     </span>
 
                                 </h6>
-                                <h2>{{ 97 }} %</h2>
+                                <h2>{{ statistics.total_thesis }} </h2>
                             </div>
                         </div>
                     </div>
@@ -73,35 +73,19 @@
 </template>
 
 <script>
-import Marks from '@/API/services/marks.service'
 
 export default {
     name: 'Marks',
-    created() {
-        //week mark
-        //this.week_mark = this.statistics.week_mark;
-        // group AVG        
-        // this.group_week_avg = (Math.round(this.statistics.group_week_avg * 100) / 100).toFixed(2);
-    },
     props: {
         statistics: {
             type: [Object],
             required: true,
         },
-    },
-    data() {
-        return {
-            week_mark: null,
-            month_achievement: null,
-            group_week_avg: null,
+        week_title:{
+            type: [String],
+            required: true,
         }
     },
-    computed: {
-        week_title() {
-           return 'TEST'
-            // return this.statistics.week.title
-        },
-    }
 }
 
 </script>

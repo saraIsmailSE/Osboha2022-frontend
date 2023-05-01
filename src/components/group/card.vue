@@ -6,7 +6,7 @@
 
 
             </div>
-            <div class="card-body text-center">
+            <div class="card-body text-center" v-if="group.group">
                 <div class="group-icon">
                     <img src="@/assets/images/main/200x200-book.png" alt="profile-img"
                         class="rounded-circle img-fluid avatar-120" />
@@ -43,7 +43,10 @@
 export default {
     name: 'card',
     props: {
-        group: { type: Object },
+        group: {
+            type: [Object],
+            required: true,
+        },
     },
     data() {
         return {
