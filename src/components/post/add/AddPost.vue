@@ -9,9 +9,16 @@
       </template>
       <template v-slot:body>
         <div class="d-flex align-items-center">
-          <div class="user-img">
+          <UserAvatar
+            :profileImg="auth?.user_profile?.profile_picture"
+            :profile_id="auth?.user_profile?.id"
+            :title="auth?.name"
+            :gender="auth?.gender"
+            avatarClass="avatar-60 rounded-circle"
+          />
+          <!-- <div class="user-img">
             <img class="avatar-60 rounded-circle" :src="profile_picture" />
-          </div>
+          </div> -->
           <form class="post-text ml-3 w-100">
             <input
               type="text"
@@ -188,6 +195,7 @@
 </template>
 <script>
 import ImagePreviewer from "@/components/media/ImagePreviewer.vue";
+import UserAvatar from "@/components/user/UserAvatar.vue";
 import PostPoll from "@/components/post/add/PostPoll.vue";
 import FriendsList from "@/components/post/add/FriendsList.vue";
 import PostUser from "@/components/post/header/PostUser.vue";
@@ -204,6 +212,7 @@ export default {
     PostPoll,
     FriendsList,
     PostUser,
+    UserAvatar,
   },
   props: {
     type: {

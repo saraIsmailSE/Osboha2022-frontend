@@ -2,6 +2,7 @@ import setting from "./setting/index";
 import Vuex from "vuex";
 import { api } from "../API/Intercepter";
 import { handleError } from "vue";
+import router from "../router";
 
 export default new Vuex.Store({
   modules: {
@@ -75,7 +76,7 @@ export default new Vuex.Store({
       localStorage.removeItem("osboha__token");
       commit("SET_USER_DATA", null);
       commit("SET_TOKEN", null);
-      location.reload();
+      router.push({ name: "auth.sign-in" });
     },
     isNewUser({ commit }, isNewUser) {
       commit("IS_NEW_USER", isNewUser);

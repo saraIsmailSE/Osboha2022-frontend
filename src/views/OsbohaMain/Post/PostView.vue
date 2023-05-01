@@ -39,6 +39,7 @@
                       ? parseInt($route.params.user_id)
                       : null
                   "
+                  :loadOnCreate="true"
                   ref="lazyLoadedCommentsRef"
                 />
                 <CreateComment
@@ -92,7 +93,6 @@ export default {
   async created() {
     await this.getPost();
   },
-  mounted() {},
   methods: {
     async getPost() {
       if (this.loading) return;
@@ -114,10 +114,13 @@ export default {
       }
     },
     focusComment() {
-      //scroll to bottom of commentsSectionBody
-      this.$refs.commentsSectionBody.scrollTop =
-        this.$refs.commentsSectionBody.scrollHeight;
-      this.$refs.SinglePostCreateComment.focusInput();
+      if (this.post.allow_comments) {
+        this.$refs.commentsSectionBody.scrollTop =
+          this.$refs.commentsSectionBody.scrollHeight;
+        this.$refs.SinglePostCreateComment.focusInput();
+      } else {
+        helper.toggleToast("لا يمكنك التعليق على هذا المنشور الآن", "error");
+      }
     },
     addComment(comment, comment_id) {
       this.$refs.lazyLoadedCommentsRef.addComment(comment, comment_id);

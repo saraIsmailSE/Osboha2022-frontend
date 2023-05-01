@@ -1,11 +1,18 @@
 <template>
-  <div class="user-img">
+  <UserAvatar
+    :profileImg="userProfile?.profile_picture"
+    :profile_id="userProfile?.id"
+    :title="post.user?.name"
+    :gender="post.user?.gender"
+    avatarClass="avatar-50 rounded-circle"
+  />
+  <!-- <div class="user-img">
     <img
       class="avatar-50 rounded-circle"
       :src="profile_picture"
       alt="user profile"
     />
-  </div>
+  </div> -->
   <div class="mx-2 flex-grow-1">
     <div class="author-friends p-0 m-0">
       <span
@@ -80,8 +87,12 @@
 </template>
 
 <script>
+import UserAvatar from "@/components/user/UserAvatar.vue";
 export default {
   name: "PostUser",
+  components: {
+    UserAvatar,
+  },
   props: {
     post: {
       type: Object,
@@ -106,6 +117,9 @@ export default {
     },
     authUser() {
       return this.$store.getters.getUser;
+    },
+    userProfile() {
+      return this.post?.user?.profile ?? this.post?.user?.user_profile;
     },
   },
   methods: {

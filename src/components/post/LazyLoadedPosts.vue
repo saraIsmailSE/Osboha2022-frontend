@@ -36,6 +36,7 @@ import Post from "@/components/post/Post.vue";
 import PostService from "@/API/services/post.service";
 import userInfoService from "@/Services/userInfoService";
 import helper from "@/utilities/helper";
+import axios from "axios";
 
 export default {
   name: "LazyLoadedPosts",
@@ -69,6 +70,7 @@ export default {
       closePostComments: this.closePostComments,
       pinPost: this.pinPost,
       reactToPost: this.reactToPost,
+      cancelToken: this.cancelToken,
     };
   },
   emits: {},
@@ -82,6 +84,7 @@ export default {
       pendingRequest: false,
       hasMore: true,
       emptyMessage: "",
+      cancelToken: axios.CancelToken.source(),
     };
   },
   computed: {
@@ -96,6 +99,7 @@ export default {
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.handleScroll);
+    this.cancelToken.cancel();
   },
   methods: {
     /**
@@ -124,7 +128,10 @@ export default {
       try {
         let response;
         if (this.isMain) {
-          response = await PostService.getPostsForMainPage(this.page);
+          response = await PostService.getPostsForMainPage(
+            this.page,
+            this.cancelToken
+          );
         } else {
           if (this.type === "announcement")
             response = await PostService.getAnnouncements(this.page);
@@ -158,7 +165,7 @@ export default {
         this.totalPages = response.data?.last_page ?? 1;
         this.page++;
       } catch (error) {
-        console.log(error);
+        console.log(["loaded posts error", error]);
         helper.toggleToast(
           "حدث خطأ أثناء تحميل المنشورات, حاول مرة أخرى",
           "error"

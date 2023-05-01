@@ -23,6 +23,7 @@
           v-for="bookInfo in books"
           :key="bookInfo.id"
           :cardInfo="bookInfo"
+          @updateUserBook="updateUserBook"
         />
       </div>
       <div class="text-center mt-3">
@@ -233,6 +234,19 @@ export default {
         return { ...section, active: false };
       });
       this.selectedSection = sectionId;
+    },
+    updateUserBook(book_id, data) {
+      console.log("user book data", data);
+      this.books = this.books.map((book) => {
+        if (Number(book.id) === Number(book_id)) {
+          return {
+            ...book,
+            userBooks: !data ? [] : [data],
+          };
+        }
+        return book;
+      });
+      console.log("books", this.books);
     },
   },
   computed: {

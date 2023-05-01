@@ -50,9 +50,6 @@ import helper from "@/utilities/helper";
 export default {
   name: "TotalVotes",
   inject: ["post"],
-  props: {
-    // post: { type: Object, required: true },
-  },
   data() {
     return {
       users: [],

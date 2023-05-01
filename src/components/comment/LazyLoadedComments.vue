@@ -24,6 +24,7 @@
       <div class="card card-block card-stretch card-height blog">
         <div class="card-body">
           <Comment
+            :allowComment="post.allow_comments"
             :comment="comment"
             @addComment="addComment"
             @editComment="editComment"
@@ -80,6 +81,10 @@ export default {
       type: Number,
       default: null,
     },
+    loadOnCreate: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -106,7 +111,8 @@ export default {
     this.comments = [];
     this.emptyMessage = "";
     this.errorMessage = "";
-    this.loadComments();
+
+    if (this.loadOnCreate) this.loadComments();
   },
   methods: {
     /**

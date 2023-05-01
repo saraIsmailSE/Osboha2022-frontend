@@ -7,11 +7,21 @@
       >
         <h6 class="text-white">{{ bookTypeLanguage }}</h6>
       </div>
+      <div
+        class="position-absolute top-0 start-0 p-2 rounded-3"
+        @click.prevent="markBookForLater"
+      >
+        <font-awesome-icon
+          :icon="[isSaved ? 'fas' : 'far', 'heart']"
+          size="2xl"
+          color="#f75c78"
+        />
+      </div>
 
       <div class="card-body text-center">
         <img
           :src="resolve_img_url(cardInfo.media?.path ?? '')"
-          class="img-fluid rounded w-75 mt-3"
+          class="img-fluid rounded w-75 mt-4"
           alt="blog-img"
         />
 
@@ -19,14 +29,22 @@
           <h4>
             <router-link
               :to="{
-                name: 'osboha.book-details',
+                name: 'book.book-details',
                 params: { book_id: this.cardInfo.id },
               }"
-              >{{ cardInfo.name }}</router-link
+              >{{
+                cardInfo.name.length > 20
+                  ? cardInfo.name.substring(0, 20) + "..."
+                  : cardInfo.name
+              }}</router-link
             >
           </h4>
           <p>
-            {{ cardInfo.writer }}
+            {{
+              cardInfo.writer.length > 20
+                ? cardInfo.writer.substring(0, 20) + "..."
+                : cardInfo.writer
+            }}
           </p>
         </div>
         <div class="group-details d-inline-block pb-3">
@@ -54,6 +72,7 @@
               class="btn btn-primary d-block w-100"
               data-bs-toggle="modal"
               :data-bs-target="`#modal-${cardInfo.id}`"
+              :disabled="!cardInfo.allow_comments"
             >
               كتابة أطروحة
             </button>
@@ -103,8 +122,9 @@
   </modal>
 </template>
 <script>
-import router from "../../router";
-import createThesis from "../../components/book/theses/create.vue";
+import createThesis from "@/components/book/theses/create.vue";
+import userBooksService from "@/API/services/user-books.service";
+import helper from "@/utilities/helper";
 
 export default {
   name: "BookCard",
@@ -114,19 +134,17 @@ export default {
   props: {
     cardInfo: { type: Object },
   },
-  data() {
-    return [];
-  },
+  emits: ["updateUserBook"],
   created() {
     console.log("[bookCard- cardInfo]", this.cardInfo);
   },
   methods: {
     resolve_img_url: function (path) {
-      return path ? path : require("@/assets/images/books/1.jpg");
+      return path ? path : require("@/assets/images/main/200x200-book.png");
     },
     bookDetails() {
-      router.push({
-        name: "osboha.book-details",
+      this.$router.push({
+        name: "book.book-details",
         params: { book_id: this.cardInfo.id },
       });
     },
@@ -139,6 +157,32 @@ export default {
         this.closeModel();
         this.bookDetails();
       }, 1800);
+    },
+    async markBookForLater() {
+      try {
+        const response = await userBooksService.saveBookForLater(
+          this.cardInfo.id
+        );
+        helper.handleSuccessSwal(response.message, 1800);
+
+        this.$emit(
+          "updateUserBook",
+          this.cardInfo.id,
+          response.data
+            ? {
+                id: response.data.id,
+                status: response.data.status,
+                counter: response.data.counter,
+              }
+            : null
+        );
+      } catch (error) {
+        console.log("[save book error]", error);
+        helper.toggleToast(
+          "حدث خطأ ما أثناء حفظ الكتاب, يرجى المحاولة مرة أخرى",
+          "error"
+        );
+      }
     },
   },
   computed: {
@@ -166,6 +210,11 @@ export default {
         result += "إنجليزي";
       }
       return result;
+    },
+    isSaved() {
+      return this.cardInfo.userBooks
+        ? this.cardInfo.userBooks[0]?.status === "later"
+        : false;
     },
   },
 };
