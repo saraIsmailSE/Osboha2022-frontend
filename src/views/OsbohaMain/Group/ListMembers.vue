@@ -7,7 +7,7 @@
       <template v-slot:body>
         <ul
           class="request-list list-inline m-0 p-0"
-          v-if="usersLoaded.length > 0"
+          v-if="usersLoaded?.length > 0"
         >
           <!-- <form class="mb-3">
                         <div class="input-group w-100 m-auto p-2">
@@ -110,7 +110,7 @@
           </li>
           <li
             class="d-block text-center mb-0 pb-0"
-            v-if="users.length > length"
+            v-if="users?.length > length"
           >
             <a class="me-3 btn" role="button" @click="loadMore()">عرض المزيد</a>
           </li>
@@ -172,7 +172,7 @@ export default {
       const response = await FriendServices.create(friend_id);
     },
     loadMore() {
-      if (this.length > this.users.length) return;
+      if (this.length > this.users?.length) return;
       this.length = this.length + 10;
     },
     /**
@@ -202,7 +202,7 @@ export default {
   },
   computed: {
     usersLoaded() {
-      return this.users.slice(0, this.length);
+      return this.users?.slice(0, this.length);
     },
   },
 };

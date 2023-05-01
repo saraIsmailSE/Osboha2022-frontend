@@ -14,7 +14,7 @@ class Marks {
       );
       return response.data.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
   /**
@@ -29,7 +29,7 @@ class Marks {
       );
       return response.data.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
   /**

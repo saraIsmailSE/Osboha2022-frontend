@@ -8,11 +8,14 @@ import {
   faBookmark,
   faPen,
   faCircleExclamation,
+  faBookOpen,
+  faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faThumbsUp as farThumbsUp,
   faComment as farComment,
   faBookmark as farBookmark,
+  faHeart as farHeart,
 } from "@fortawesome/free-regular-svg-icons";
 
 export default {
@@ -25,7 +28,10 @@ export default {
       farBookmark,
       faBookmark,
       faPen,
-      faCircleExclamation
+      faCircleExclamation,
+      faBookOpen,
+      faHeart,
+      farHeart
     );
     app.component("font-awesome-icon", FontAwesomeIcon);
   },

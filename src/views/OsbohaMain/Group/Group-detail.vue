@@ -39,7 +39,7 @@
             <li class="mb-3">
               <div class="d-flex">
                 <div class="flex-shrink-0">
-                  <i class="material-symbols-outlined">group</i>
+                  <i class="material-symbols-outlined"> sticky_note_2 </i>
                 </div>
                 <div class="flex-grow-1 ms-3">
                   <h4>رسالة المجموعة المجموعة</h4>
@@ -51,12 +51,12 @@
             </li>
             <li
               class="mb-3"
-              v-for="administrator in group.group_administrators"
+              v-for="administrator in groupAdministrators"
               :key="administrator.id"
             >
               <div class="d-flex">
                 <div class="flex-shrink-0">
-                  <i class="material-symbols-outlined">group</i>
+                  <i class="material-symbols-outlined"> supervisor_account </i>
                 </div>
                 <div class="flex-grow-1 ms-3">
                   <h4 v-if="administrator.pivot.user_type == 'leader'">
@@ -68,7 +68,9 @@
                   <h4 v-if="administrator.pivot.user_type == 'advisor'">
                     موجه المجموعة
                   </h4>
-                  <p class="mb-0">{{ administrator.name }}</p>
+                  <p class="mb-0">
+                    {{ administrator.name }}
+                  </p>
                 </div>
               </div>
             </li>
@@ -94,7 +96,10 @@
         </div>
         <div class="card-body row d-flex justify-content-center">
           <router-link
-            :to="{ name: 'group.group-books', params: { group_id: group_id } }"
+            :to="{
+              name: 'group.group-statistics',
+              params: { group_id: group_id },
+            }"
             class="btn btn-primary d-block mt-3 col-5 me-1"
             >احصائيات المجموعة
           </router-link>
@@ -197,11 +202,18 @@ export default {
         followup: "فريق متابعة",
         supervising: "فريق رقابة",
         advising: "فريق توجيه",
-        consultation :'فريق الاستشارة',
-        Administration :'الإدارة العليا'
+        consultation: "فريق الاستشارة",
+        Administration: "الإدارة العليا",
       },
       reasons: [],
     };
+  },
+  computed: {
+    groupAdministrators() {
+      return this.group.group_administrators.filter(
+        (administrator) => administrator.pivot.user_type != "admin"
+      );
+    },
   },
   methods: {
     back() {

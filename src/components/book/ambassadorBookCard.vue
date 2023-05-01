@@ -98,8 +98,11 @@ export default {
     },
     bookDetails() {
       router.push({
-        name: "osboha.book-details",
-        params: { book_id: this.cardInfo.id },
+        name: "book.user-theses",
+        params: {
+          book_id: this.cardInfo.id,
+          user_id: this.$route.params.user_id,
+        },
       });
     },
   },

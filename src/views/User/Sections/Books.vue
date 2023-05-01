@@ -9,7 +9,7 @@
         </h4>
         <router-link
           :to="{
-            name: 'osboha.later-books',
+            name: 'book.later-books',
             params: {
               user_id: this.$route.params.user_id,
             },

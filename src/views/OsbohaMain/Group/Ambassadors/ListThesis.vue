@@ -363,7 +363,7 @@ export default {
               });
 
               if (response.statusCode === 200) {
-                helper.handleSuccessSwal("تم تدقيق الأطروحة بنجاح");
+                helper.handleSuccessSwal(response.data);
 
                 setTimeout(() => {
                   this.$router.push({
@@ -373,7 +373,11 @@ export default {
                 }, 1800);
               }
             } catch (e) {
-              helper.handleErrorSwal("حدث خطأ ما، حاول مرة أخرى");
+              if (e.response.data.statusCode === 406) {
+                helper.handleErrorSwal(e.response.data.data);
+              } else {
+                helper.handleErrorSwal("حدث خطأ ما، حاول مرة أخرى");
+              }
               console.log("Modify thesis error: ", e);
             } finally {
               this.loader = false;
