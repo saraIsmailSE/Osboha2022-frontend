@@ -38,7 +38,7 @@
                 </div>
                 <div class="comments me-4 d-flex align-items-center">
                   <i class="material-symbols-outlined pe-2 md-18 text-primary">
-                    mode_comment </i
+                    comment </i
                   >{{ book.theses_count }} أطروحة
                 </div>
                 <div class="comments me-4 d-flex align-items-center">
@@ -60,7 +60,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-12">
+      <div class="col-lg-12" v-if="book.allow_comments">
         <div class="card card-block card-stretch card-height blog">
           <button
             type="submit"
@@ -80,17 +80,7 @@
             </div>
           </div>
           <div class="card-body">
-            <div
-              class="col-sm-12 text-center"
-              v-if="loading && theses.length <= 0"
-            >
-              <img
-                :src="require('@/assets/images/page-img/page-load-loader.gif')"
-                alt="loader"
-                style="height: 100px"
-              />
-            </div>
-            <div class="row" v-else>
+            <div class="row" v-if="theses.length">
               <!-- display theses -->
               <div
                 class="col-lg-12"
@@ -100,6 +90,7 @@
                 <div class="card card-block card-stretch card-height blog">
                   <div class="card-body">
                     <Comment
+                      :allowComment="book.allow_comments"
                       :comment="comment"
                       :totalThesisPages="
                         comment.thesis
@@ -143,6 +134,17 @@
                   </model-body>
                 </modal>
               </div>
+
+              <div class="col-sm-12 text-center" v-if="loading">
+                <img
+                  :src="
+                    require('@/assets/images/page-img/page-load-loader.gif')
+                  "
+                  alt="loader"
+                  style="height: 100px"
+                />
+              </div>
+
               <!-- <div class="col-lg-12">
                 <div class="card card-block card-stretch card-height blog">
                   <CreateComment :type="'comment'" @addComment="addComment" />
@@ -160,6 +162,22 @@
                   >
                     تحميل المزيد
                   </button>
+                </div>
+              </div>
+            </div>
+            <div class="row" v-else>
+              <div class="col-lg-12">
+                <div class="text-center d-flex align-items-center">
+                  <span class="material-symbols-outlined">
+                    comments_disabled
+                  </span>
+                  <h5 class="ms-2" v-if="$route.params.thesis_id">
+                    لم يتم العثور على هذه الأطروحة
+                  </h5>
+                  <h5 class="ms-2" v-else>
+                    لا يوجد أطروحات
+                    <span v-if="$route.params.user_id">لهذا السفير</span>
+                  </h5>
                 </div>
               </div>
             </div>
@@ -274,17 +292,27 @@ export default {
       this.shortBriefText = this.fullBriefText?.slice(0, 200);
     },
     resolve_img_url: function (path) {
-      return path ? path : require("@/assets/images/books/1.jpg");
+      return path ? path : require("@/assets/images/main/200x200-book.png");
     },
     async getTheses(page) {
       if (this.loading) return;
 
       this.loading = true;
       try {
-        const response = await thesisService.getThesesByBookId(
-          this.$route.params.book_id,
-          page
-        );
+        let response;
+        if (this.$route.params.thesis_id) {
+          response = await thesisService.getBookThesis(
+            this.$route.params.book_id,
+            this.$route.params.thesis_id
+          );
+        } else {
+          response = await thesisService.getThesesByBookId(
+            this.$route.params.book_id,
+            page,
+            this.$route.params.user_id ?? ""
+          );
+        }
+
         if (response.statusCode === 200) {
           this.theses.push(...response.data.theses);
           this.totalTheses = response.data.total;

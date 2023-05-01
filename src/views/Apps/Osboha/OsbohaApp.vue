@@ -49,7 +49,7 @@
               <div class="stories-data ms-3">
                 <router-link
                   :to="{
-                    name: 'osboha.book-details',
+                    name: 'book.book-details',
                     params: { book_id: book.id },
                   }"
                 >

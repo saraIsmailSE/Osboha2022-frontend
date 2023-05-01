@@ -63,6 +63,7 @@
           href="javascript:void();"
           v-on:click="showReply"
           style="color: #555770"
+          v-if="allowComment"
         >
           {{ showReplyBox ? "إخفاء" : "رد" }}
         </a>
@@ -86,6 +87,7 @@
     <ul class="post-comments list-inline p-0 m-0">
       <li class="mb-2" v-for="cmnt in comment.replies" :key="cmnt.id">
         <Comment
+          :allowComment="allowComment"
           :comment="cmnt"
           @addComment="addComment"
           @editComment="editComment"
@@ -126,6 +128,10 @@ export default {
       type: Number,
       required: false,
     },
+    allowComment: {
+      type: [Boolean, Number],
+      default: true,
+    },
   },
   data() {
     return {
@@ -160,20 +166,6 @@ export default {
         return total;
       };
       return calculateReplies(this.comment?.replies);
-    },
-  },
-  watch: {
-    //watch reactions_count and reacted_by_user to force update the component
-    //when the user react on a comment
-    "comment.reactions_count": {
-      handler() {
-        this.$forceUpdate();
-      },
-    },
-    "comment.reacted_by_user": {
-      handler() {
-        this.$forceUpdate();
-      },
     },
   },
   methods: {

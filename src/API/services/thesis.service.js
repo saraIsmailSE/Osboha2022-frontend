@@ -11,19 +11,32 @@ class ThesisService {
     }
   }
 
-  async getThesesByBookId(id, page) {
+  async getBookThesis(book_id, thesis_id) {
     try {
-      const theses = await api.get(`/theses/book/${id}?page=${page}`);
+      const thesis = await api.get(
+        `/theses/book/${book_id}/thesis/${thesis_id}`
+      );
+      return thesis.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async getThesesByBookId(id, page, user_id = "") {
+    try {
+      const theses = await api.get(
+        `/theses/book/${id}/user/${user_id}?page=${page}`
+      );
       return theses.data;
     } catch (error) {
       handleError(error);
     }
   }
 
-  async getThesisByUser(id) {
+  async getThesisByUser(id, page) {
     try {
-      const thesis = await api.get(`/theses/user/${id}`);
-      return thesis.data;
+      const theses = await api.get(`/theses/user/${id}?page=${page}`);
+      return theses.data;
     } catch (error) {
       handleError(error);
     }

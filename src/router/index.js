@@ -40,18 +40,6 @@ const childRoutes = (prop, mode) => [
     props: (route) => ({ page: parseInt(route.query.page) || 1 }),
   },
   {
-    path: "book-details/:book_id",
-    name: prop + ".book-details",
-    meta: { auth: true, name: "BookDetails" },
-    component: () => import("../views/Book/BookDetails"),
-  },
-  {
-    path: "later-books/:user_id",
-    name: prop + ".later-books",
-    meta: { auth: true, name: "UserBooks" },
-    component: () => import("../views/Book/LaterBooks"),
-  },
-  {
     path: "infographic",
     name: prop + ".infographic",
     meta: { auth: true, name: "Infographic" },
@@ -182,10 +170,8 @@ const userChildRoute = (prop, mode = false) => [
     path: "/assign-role",
     name: prop + ".assignRole",
     meta: { auth: true, name: "Assign Role" },
-    component: () =>
-      import("../views/AuthPages/Default/AssignRole"),
+    component: () => import("../views/AuthPages/Default/AssignRole"),
   },
-
 ];
 
 const groupChildRoute = (prop, mode = false) => [
@@ -293,7 +279,7 @@ const groupChildRoute = (prop, mode = false) => [
   },
   {
     path: "/group/statistics/:group_id",
-    name: prop + ".Statistics",
+    name: prop + ".group-statistics",
     meta: { auth: true, name: "Group Statistics" },
     component: () => import("../views/OsbohaMain/Group/Statistics"),
   },
@@ -320,6 +306,33 @@ const timerChildRoute = (prop, mode = false) => [
     name: prop + ".timerList",
     meta: { auth: true, name: "List timer" },
     component: () => import("../views/OsbohaMain/Timer/Timer.vue"),
+  },
+];
+
+const bookChildRoute = (prop, mode = false) => [
+  {
+    path: "book-details/:book_id",
+    name: prop + ".book-details",
+    meta: { auth: true, name: "BookDetails" },
+    component: () => import("../views/Book/BookDetails"),
+  },
+  {
+    path: "later-books/:user_id",
+    name: prop + ".later-books",
+    meta: { auth: true, name: "UserBooks" },
+    component: () => import("../views/Book/LaterBooks"),
+  },
+  {
+    path: "user-theses/:book_id/:user_id",
+    name: prop + ".user-theses",
+    meta: { auth: true, name: "UserTheses" },
+    component: () => import("../views/Book/BookDetails"),
+  },
+  {
+    path: "user-single-thesis/:book_id/:thesis_id",
+    name: prop + ".user-single-thesis",
+    meta: { auth: true, name: "UserSingleThesis" },
+    component: () => import("../views/Book/BookDetails"),
   },
 ];
 
@@ -390,6 +403,13 @@ const routes = [
     component: () => import("../layouts/Default"),
     meta: { auth: true },
     children: timerChildRoute("timer"),
+  },
+  {
+    path: "/book",
+    name: "book",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: bookChildRoute("book"),
   },
 ];
 

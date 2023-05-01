@@ -20,7 +20,7 @@
           >
             <router-link
               :to="{
-                name: 'osboha.book-details',
+                name: 'book.book-details',
                 params: { book_id: book.book.id },
               }"
             >

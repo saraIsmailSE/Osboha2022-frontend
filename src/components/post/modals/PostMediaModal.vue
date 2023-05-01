@@ -8,7 +8,7 @@
     :aria-hidden="true"
   >
     <model-header>
-      <h4>Gallery {{ post.id }}</h4>
+      <!-- <h4>Gallery {{ post.id }}</h4> -->
       <a
         href="javascript:void(0);"
         class="lh-1"
@@ -18,11 +18,11 @@
         <span class="material-symbols-outlined">close</span>
       </a>
     </model-header>
-    <model-body style="background-color: black">
+    <model-body style="background-color: #eee">
       <div class="col-12">
         <div
           :id="`gallery-${post.id}`"
-          class="carousel slide"
+          class="carousel slide carousel-dark"
           data-bs-ride="carousel"
           style="height: 60vh"
         >
@@ -45,11 +45,15 @@
               :key="media.id"
               :class="{ active: index === currentMediaIndex }"
             >
-              <img
-                :src="media.path"
-                class="d-block h-100 img-fluid"
-                :alt="`Post Image ${index + 1}`"
-              />
+              <div
+                class="d-flex justify-content-center align-items-center h-100"
+              >
+                <img
+                  :src="media.path"
+                  class="d-block h-100 img-fluid"
+                  :alt="`Post Image ${index + 1}`"
+                />
+              </div>
             </div>
           </div>
           <button

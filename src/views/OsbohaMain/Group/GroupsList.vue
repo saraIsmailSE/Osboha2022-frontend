@@ -1,7 +1,6 @@
 <template>
   <div>
     <div class="row">
-
       <div class="col-sm-12" v-if="groups && groups.length > 0">
         <iq-card>
           <template v-slot:headerTitle>
@@ -9,18 +8,19 @@
           </template>
 
           <template v-slot:body>
-            <router-link class="btn btn-primary float-end" :to="{
-              name: 'group.addGroup',
-            }">
-
+            <router-link
+              class="btn btn-primary float-end"
+              :to="{
+                name: 'group.addGroup',
+              }"
+            >
               اضافة مجموعة
             </router-link>
             <div class="table-responsive">
-
               <table id="datatable" class="table table-striped table-bordered">
                 <thead>
                   <tr>
-                    <th>اسم المجموعات</th>
+                    <th>اسم المجموعة</th>
                     <th>نوع المجموعة</th>
                     <th>عدد الاعضاء</th>
                   </tr>
@@ -28,8 +28,13 @@
                 <tbody>
                   <tr v-for="(group, index) in groups" :key="index">
                     <td>
-                      <router-link class="text-center"
-                        :to="{ name: 'group.group-detail', params: { group_id: group.id } }">
+                      <router-link
+                        class="text-center"
+                        :to="{
+                          name: 'group.group-detail',
+                          params: { group_id: group.id },
+                        }"
+                      >
                         {{ group.name }}
                       </router-link>
                     </td>
@@ -44,11 +49,12 @@
                       <!-- <span class="btn btn-primary text-white material-symbols-outlined ms-1 me-1">
                         edit
                       </span> -->
-                      <span @click="deleteGroup(group.id)"
-                        class="btn btn-danger text-white material-symbols-outlined ms-1 me-1">
+                      <span
+                        @click="deleteGroup(group.id)"
+                        class="btn btn-danger text-white material-symbols-outlined ms-1 me-1"
+                      >
                         delete
                       </span>
-
                     </td>
                   </tr>
                 </tbody>
@@ -64,7 +70,6 @@
 import GroupService from "@/API/services/group.service";
 import helper from "@/utilities/helper";
 
-
 export default {
   name: "Groups List",
   async created() {
@@ -79,8 +84,8 @@ export default {
         followup: "فريق متابعة",
         supervising: "فريق رقابة",
         advising: "فريق توجيه",
-        consultation: 'فريق الاستشارة',
-        Administration: 'الإدارة العليا'
+        consultation: "فريق الاستشارة",
+        Administration: "الإدارة العليا",
       },
     };
   },
@@ -93,8 +98,7 @@ export default {
         this.groups = groups.data;
         helper.toggleToast("تم الحذف", "success");
 
-        console.log(response)
-
+        console.log(response);
       } catch (error) {
         helper.toggleToast("حصل خطأ - لم يتم الحذف!", "danger");
         console.log(error);

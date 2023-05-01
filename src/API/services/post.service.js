@@ -122,6 +122,15 @@ class PostService {
       handleError(error);
     }
   }
+
+  async getLastSupportPost() {
+    try {
+      const response = await api.get(`/posts/support/latest`);
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 }
 
 export default new PostService();
