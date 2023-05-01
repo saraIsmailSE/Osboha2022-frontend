@@ -9,8 +9,8 @@
                 <h3 class="font-weight-bold text-center">البحث عن الكتب</h3>
               </div>
               <hr />
-              <div class="container row d-flex justify-content-center m-auto">
-                <div
+              <div class="container row d-inline text-center m-auto">
+                <span
                   class="col-lg-1 col-md-1 col-sm-2 text-center"
                   v-for="section in sections"
                   :key="section.section_id"
@@ -21,27 +21,7 @@
                     :class="checkActive(section.active)"
                     >{{ section.section }}</span
                   >
-                </div>
-
-                <!-- <div class="col-lg-1 col-md-1 col-sm-2 text-center" >
-                  <span class="btn button-60 mr-2 mt-1">الكل</span>
-                </div>
-                <div class="col-lg-1 col-md-1 col-sm-2 text-center">
-                  <span class="btn button-60 mr-2 mt-1">بسيط</span>
-                </div>
-                <div class="col-lg-1 col-md-1 col-sm-2 text-center">
-                  <span class="btn button-60 mr-2 mt-1">وسط</span>
-                </div>
-                <div class="col-lg-1 col-md-1 col-sm-2 text-center">
-                  <span class="btn button-60 mr-2 mt-1 active"> متقدم</span>
-                </div>
-
-                <div class="col-lg-1 col-md-1 col-sm-2 text-center">
-                  <span class="btn button-60 mr-2 mt-1"> عربي </span>
-                </div>
-                <div class="col-lg-1 col-md-1 col-sm-2 text-center">
-                  <span class="btn button-60 mr-2 mt-1"> انجليزي </span>
-                </div> -->
+                </span>
               </div>
 
               <div class="mt-3 inputs">

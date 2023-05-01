@@ -3,26 +3,7 @@
         <!-- ########## START WEEK STATISTICS ########## -->
         <div class="col-lg-12 col-md-12">
             <div class="card">
-                <div class="card-header">
-                    <div class="header-title">
-                        <h4 class="card-title">انجاز الأسبوع || {{ week_title }}</h4>
-                    </div>
-                </div>
                 <div class="card-body">
-                    <ul class="0">
-                        <li v-for="(category, index1) in categoryList" :key="index1">
-                            <a class="d-flex align-items-center justify-content-between">
-                                <div class="d-flex">
-                                    <i :class="`material-symbols-outlined`" :style="`color:${category.color}`">bolt</i>
-                                    <h5>{{ category.name }}</h5>
-                                </div>
-                                <div class="d-inline p-2 text-light float-end rounded"
-                                    :style="`background-color:${category.color}`">
-                                    {{ category.number }}
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
                     <div class="container mt-3 d-flex  align-items-center justify-content-center">
                         <Doughnut id="my-chart-id" :options="chartOptions" :data="chartData" />
                     </div>
@@ -42,16 +23,17 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,
 export default {
     name: 'Marks',
     created() {
-        //week mark
-        //this.week_mark = this.statistics.week_mark;
-        // group AVG        
-        // this.group_week_avg = (Math.round(this.statistics.group_week_avg * 100) / 100).toFixed(2);
+        this.chartData.datasets[0].data[0] = this.total.out_of_100
+        this.chartData.datasets[0].data[1] = this.total.out_of_90
+        this.chartData.datasets[0].data[2] = this.total.zero
+        this.chartData.datasets[0].data[3] = this.total.freezed
+        this.chartData.datasets[0].data[4] = this.total.others
     },
     components: {
         Doughnut
     },
     props: {
-        statistics: {
+        total: {
             type: [Object],
             required: true,
         },
@@ -64,11 +46,11 @@ export default {
                     '90',
                     'صفر',
                     'تجميد',
-                    'امتحانات'
+                    'غير ذلك'
                 ],
                 datasets: [{
-                    label: 'معدل الأسبوع',
-                    data: [20, 7, 3, 2, 9],
+                    label: 'عدد السفراء',
+                    data: [],
                     backgroundColor: [
                         '#22803f',
                         '#192f36',

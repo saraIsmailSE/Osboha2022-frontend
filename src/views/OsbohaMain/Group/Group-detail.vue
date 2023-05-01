@@ -96,10 +96,7 @@
         </div>
         <div class="card-body row d-flex justify-content-center">
           <router-link
-            :to="{
-              name: 'group.group-statistics',
-              params: { group_id: group_id },
-            }"
+            :to="{ name: 'group.Statistics', params: { group_id: group_id } }"
             class="btn btn-primary d-block mt-3 col-5 me-1"
             >احصائيات المجموعة
           </router-link>

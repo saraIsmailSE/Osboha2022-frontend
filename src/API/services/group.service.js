@@ -160,6 +160,53 @@ class GroupService {
         }
     }
     */
+    /**
+     * get group week statistics
+     * 
+     * @param  $group_id
+     * @return statistics;
+     */
+
+    async statistics(group_id) {
+        try {
+            const response = await api.get(`group/statistics/${group_id}`);
+            return response.data.data
+        } catch (error) {
+            return error
+        }
+    }
+    /**
+     * get screenshots and screens by week
+     * 
+     * @param  $group_id,$filter
+     * @return number of theses and screenshots;
+     */
+    async thesesAndScreensByWeek(group_id, filter) {
+        try {
+            const response = await api.get(
+                `group/theses-and-screens-by-week/${group_id}/${filter}`
+            );
+            return response.data.data;
+        } catch (error) {
+            return error;
+        }
+    }
+    /**
+     * get avg in a month
+     * 
+     * @param  $group_id,$filter
+     * @return month achievement;
+     */
+    async monthAchievement(group_id, filter) {
+        try {
+            const response = await api.get(
+                `group/month-achievement/${group_id}/${filter}`
+            );
+            return response.data.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export default new GroupService()
