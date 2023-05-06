@@ -6,7 +6,11 @@
         <AddPost @add-post="addPost" type="support" :timeline_id="1" />
       </div>
       <!-- ##### Display Posts ##### -->
-      <LazyLoadedPosts ref="lazyLoadedPostsRef" type="support" />
+      <LazyLoadedPosts
+        ref="lazyLoadedPostsRef"
+        type="support"
+        :displayEmpty="true"
+      />
     </div>
   </div>
 </template>

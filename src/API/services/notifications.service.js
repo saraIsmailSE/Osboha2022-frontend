@@ -1,10 +1,10 @@
+import { handleError } from "vue";
 import { api } from "../Intercepter";
 
 class Notifications {
-  
-  constructor(){
-    this.prefix = 'notifications'
-}
+  constructor() {
+    this.prefix = "notifications";
+  }
 
   /**
    * list all Unread Notifications.
@@ -15,7 +15,7 @@ class Notifications {
       const response = await api.get(`${this.prefix}/un-read`);
       return response.data.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
   /**
@@ -27,7 +27,7 @@ class Notifications {
       const response = await api.get(`${this.prefix}/list-all?page=${page}`);
       return response.data.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
   /**
@@ -36,7 +36,9 @@ class Notifications {
    */
   async markAsRead(notification_id) {
     try {
-      const response = await api.get(`${this.prefix}/mark-as-read/${notification_id}`);
+      const response = await api.get(
+        `${this.prefix}/mark-as-read/${notification_id}`
+      );
       return response.data.data;
     } catch (error) {
       return error;
@@ -55,7 +57,6 @@ class Notifications {
       return error;
     }
   }
-
 }
 
 export default new Notifications();

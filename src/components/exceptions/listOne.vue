@@ -230,7 +230,7 @@
         <div
           class="d-inline-flex justify-content-center w-100"
           v-if="
-            authInGroup.user_id == auth.id &&
+            authInGroup?.user_id == auth.id &&
             (exception.status == 'accepted' || exception.status == 'pending')
           "
         >
@@ -287,6 +287,7 @@ export default {
         decision: -1,
       },
       message: null,
+      loader: false,
     };
   },
   computed: {
@@ -377,6 +378,9 @@ export default {
           }
         });
     },
+  },
+  created() {
+    console.log("[authInGroup]", this.authInGroup);
   },
 };
 </script>

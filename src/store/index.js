@@ -13,6 +13,7 @@ export default new Vuex.Store({
     token: null,
     isNewUser: true,
     reactions: [],
+    unreadNotifications: 0,
   },
   mutations: {
     SET_USER_DATA(state, userData) {
@@ -28,6 +29,9 @@ export default new Vuex.Store({
     SET_TOKEN(state, token) {
       state.token = token;
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    },
+    SET_UNREAD_NOTIFICATIONS(state, count) {
+      state.unreadNotifications = count;
     },
   },
   actions: {
@@ -80,6 +84,15 @@ export default new Vuex.Store({
     },
     isNewUser({ commit }, isNewUser) {
       commit("IS_NEW_USER", isNewUser);
+    },
+    listUnreadNotifications({ commit }) {
+      return api
+        .get(`notifications/un-read`)
+        .then(({ data }) => {
+          console.log("[store notifications]", data.data.length);
+          commit("SET_UNREAD_NOTIFICATIONS", data.data.length);
+        })
+        .then((error) => handleError(error));
     },
   },
   getters: {

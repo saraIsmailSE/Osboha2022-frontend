@@ -6,14 +6,14 @@
           <div class="card-body">
             <div class="image-block text-center mt-3">
               <img
-                :src="resolve_img_url(book.book?.media?.path ?? '')"
+                :src="resolve_img_url(book?.book?.media?.path ?? '')"
                 class="img-fluid rounded w-25"
                 alt="blog-img"
               />
             </div>
             <div class="blog-description mt-3 text-center">
               <h2 class="mb-3 pb-3 border-bottom text-center">
-                {{ book.book?.name }}
+                {{ book?.book?.name }}
               </h2>
               <div
                 class="blog-meta d-flex align-items-center mb-3 position-right-side flex-wrap"
@@ -27,24 +27,24 @@
                   <i class="material-symbols-outlined pe-2 md-18 text-primary">
                     star
                   </i>
-                  {{ book.rate }}% تقييم
+                  {{ book?.rate }}% تقييم
                 </div>
                 <div class="comments me-4 d-flex align-items-center">
                   <i class="material-symbols-outlined pe-2 md-18 text-primary">
                     book
                   </i>
                   عدد الصفحات:
-                  {{ book.book?.end_page }}
+                  {{ book?.book?.end_page }}
                 </div>
                 <div class="comments me-4 d-flex align-items-center">
                   <i class="material-symbols-outlined pe-2 md-18 text-primary">
                     comment </i
-                  >{{ book.theses_count }} أطروحة
+                  >{{ book?.theses_count }} أطروحة
                 </div>
                 <div class="comments me-4 d-flex align-items-center">
                   <i class="material-symbols-outlined pe-2 md-18 text-primary">
                     mode_comment </i
-                  >{{ book.comments_count }} تعليق
+                  >{{ book?.comments_count }} تعليق
                 </div>
               </div>
               <div class="text-center">
@@ -60,7 +60,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-12" v-if="book.allow_comments">
+      <div class="col-lg-12" v-if="book?.book?.allow_comments">
         <div class="card card-block card-stretch card-height blog">
           <button
             type="submit"
@@ -90,7 +90,7 @@
                 <div class="card card-block card-stretch card-height blog">
                   <div class="card-body">
                     <Comment
-                      :allowComment="book.allow_comments"
+                      :allowComment="book?.book?.allow_comments"
                       :comment="comment"
                       :totalThesisPages="
                         comment.thesis
@@ -130,7 +130,7 @@
                     </a>
                   </model-header>
                   <model-body>
-                    <createThesis :book="book.book" :thesisToEdit="comment" />
+                    <createThesis :book="book?.book" :thesisToEdit="comment" />
                   </model-body>
                 </modal>
               </div>
@@ -195,7 +195,7 @@
     >
       <model-header>
         <h5 class="modal-title" id="modalsLabel">
-          {{ book.book?.name }} || أطروحة جديدة
+          {{ book?.book?.name }} || أطروحة جديدة
         </h5>
         <a
           href="javascript:void(0);"
@@ -208,8 +208,8 @@
       </model-header>
       <model-body>
         <createThesis
-          :book="book.book"
-          :lastThesis="book.last_thesis"
+          :book="book?.book"
+          :lastThesis="book?.last_thesis"
           @closeModel="closeModel"
           @addThesis="addThesis"
         />
@@ -242,13 +242,11 @@ export default {
   async created() {
     await this.getBook(this.$route.params.book_id);
     await this.getTheses(this.page);
-
-    console.log("bookDetails - book", this.book);
   },
   data() {
     return {
       theses: [],
-      book: {},
+      book: null,
       fullBriefText: "",
       shortBriefText: "",
       page: 1,
@@ -258,32 +256,10 @@ export default {
   },
   methods: {
     async getBook(id) {
-      try {
-        const response = await bookService.getById(id);
-        //check if response is success
-        if (response.statusCode === 200) {
-          // console.log('success', response)
-          this.book = response.data;
-          this.fullBriefText = this.book.book?.brief;
-          this.shortBriefText = this.fullBriefText?.slice(0, 200);
-        } else {
-          //handle error
-          console.log("error: ", response.data);
-        }
-      } catch (e) {
-        console.log(e);
-      }
-      // const response = await bookService.getById(id);
-      // //check if response is success
-      // if (response.statusCode === 200) {
-      //   // console.log('success', response)
-      //   this.book = response.data;
-      //   this.fullBriefText = this.book.book?.brief;
-      //   this.shortBriefText = this.fullBriefText?.slice(0, 200);
-      // } else {
-      //   //handle error
-      //   console.log("error: ", response);
-      // }
+      const response = await bookService.getById(id);
+      this.book = response.data;
+      this.fullBriefText = this.book.book?.brief;
+      this.shortBriefText = this.fullBriefText?.slice(0, 200);
     },
     loadMoreBriefText() {
       this.shortBriefText = this.fullBriefText;
@@ -295,7 +271,7 @@ export default {
       return path ? path : require("@/assets/images/main/200x200-book.png");
     },
     async getTheses(page) {
-      if (this.loading) return;
+      if (this.loading || !this.book) return;
 
       this.loading = true;
       try {

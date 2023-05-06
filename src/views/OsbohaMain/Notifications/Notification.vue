@@ -2,8 +2,13 @@
   <div class="row" ref="listContainer">
     <div class="col-sm-12">
       <h4 class="card-title">الاشعارات</h4>
-      <span role="button" class="btn btn-primary mb-3" v-if="unRead" style="direction: rtl !important;"
-        @click="markAllAsRead()">
+      <span
+        role="button"
+        class="btn btn-primary mb-3"
+        v-if="unreadCount > 0"
+        style="direction: rtl !important"
+        @click="markAllAsRead()"
+      >
         <i role="button" class="material-symbols-outlined align-middle">
           done
         </i>
@@ -11,43 +16,57 @@
         تحديد قراءة الكل
       </span>
     </div>
-    <div class="col-sm-12" v-for="(notification, index) in notifications" :key="index">
+    <div
+      class="col-sm-12"
+      v-for="(notification, index) in notifications"
+      :key="index"
+    >
       <iq-card :class="seenClass(notification.read_at)">
         <template v-slot:body>
           <div class="notification-list m-0 p-0">
             <div class="d-flex align-items-center justify-content-between">
-              <div class="user-img img-fluid">
-                <img v-if="notification.data.sender.user_profile.profile_picture"
-                  :src="resolve_porfile_img('60x60', notification.data.sender.user_profile.profile_picture, notification.data.sender.user_profile.id)"
-                  alt="profile-img" class="rounded-circle avatar-40" :title="notification.data.sender.name" />
-
-                <img v-else
-                  :src="resolve_porfile_img('60x60', 'ananimous_' + notification.data.sender.gender + '.png', 'ananimous')"
-                  alt="profile-img" :title="notification.data.sender.name" class="rounded-circle avatar-40">
-
-              </div>
+              <UserAvatar
+                :profileImg="
+                  notification.data.sender.user_profile.profile_picture
+                "
+                :profile_id="notification.data.sender.user_profile.id"
+                :title="notification.data.sender.name"
+                :gender="notification.data.sender.gender"
+                avatarClass="rounded-circle avatar-40"
+              />
               <div class="w-100">
                 <div class="d-flex justify-content-between">
-                  <div class=" ms-3">
+                  <div class="ms-3">
                     <h6>{{ notification.data.message }}</h6>
-                    <tooltip tag="span" class="text-muted small" tooltipPlacement="bottom" data-bs-toggle="tooltip"
-                      :title="formatFullDate(notification.created_at)">{{ formatDateToWritten(notification.created_at) }}
+                    <tooltip
+                      tag="span"
+                      class="text-muted small"
+                      tooltipPlacement="bottom"
+                      data-bs-toggle="tooltip"
+                      :title="formatFullDate(notification.created_at)"
+                      >{{ formatDateToWritten(notification.created_at) }}
                     </tooltip>
                   </div>
 
                   <div class="d-flex align-items-center">
-                    <router-link class="me-1"
-                    :to="{ name: notification_route[notification.data.type], params: { user_id: 1 } }">
-
+                    <span
+                      role="button"
+                      class="me-1"
+                      @click.prevent="
+                        sendToPage(notification.data.path, notification.id)
+                      "
+                    >
                       عرض
-                    </router-link>
-                    <i role="button" class="material-symbols-outlined md-18 me-3" v-if="!notification.read_at"
-                      @click="markAsRead(notification.id)">
+                    </span>
+                    <i
+                      role="button"
+                      class="material-symbols-outlined md-18 me-3"
+                      v-if="!notification.read_at"
+                      @click="markAsRead(notification.id)"
+                    >
                       done
                     </i>
-
                   </div>
-
                 </div>
               </div>
             </div>
@@ -60,13 +79,15 @@
 <script>
 import helper from "@/utilities/helper";
 import notificationsServices from "@/API/services/notifications.service";
-import profileImagesService from '@/API/services/profile.images.service'
+import UserAvatar from "@/components/user/UserAvatar.vue";
 
 export default {
-  name: 'Notification',
+  name: "Notification",
+  components: {
+    UserAvatar,
+  },
   created() {
     this.loadNotifications();
-
   },
   async mounted() {
     window.addEventListener("scroll", this.handleScroll);
@@ -77,38 +98,29 @@ export default {
   data() {
     return {
       notifications: [],
-      notifications_route: [
+      notifications_route: [],
+      notification_route: {
+        friends_requests: "user.friendsRequests",
+      },
 
-      ],
-      notification_route: 
-        {
-          friends_requests: "user.friendsRequests",
-        },       
-      
       page: 1,
       totalPages: 1,
       loading: false,
       pendingRequest: false,
       hasMore: true,
       unRead: false,
-
-    }
+    };
   },
   computed: {
     hasMoreToLoad() {
       return this.page <= this.totalPages && this.hasMore;
     },
+    unreadCount() {
+      return this.$store.state.unreadNotifications;
+    },
   },
   methods: {
     ...helper,
-    /**
-* get profile picture or cover.
-*  @param  image size, image name, profile id
-* @return image url
-*/
-    resolve_porfile_img(size, imageName, profile_id) {
-      return profileImagesService.resolve_porfile_img(size, imageName, profile_id);
-    },
     async loadNotifications() {
       if (this.pendingRequest) {
         return;
@@ -117,12 +129,13 @@ export default {
       this.pendingRequest = true;
       this.loading = true;
       try {
-
-        let response = await notificationsServices.listAllNotification(this.page);
+        let response = await notificationsServices.listAllNotification(
+          this.page
+        );
         this.notifications = response.data;
-        console.log(this.notifications)
+        console.log(this.notifications);
 
-        this.checkUnread()
+        this.checkUnread();
 
         this.totalPages = response.data?.last_page ?? 1;
         this.page++;
@@ -131,11 +144,10 @@ export default {
           this.hasMore = false;
           return;
         }
-
       } catch (error) {
         console.log(error);
         helper.toggleToast(
-          "حدث خطأ أثناء تحميل المنشورات, حاول مرة أخرى",
+          "حدث خطأ أثناء تحميل الإشعارات, حاول مرة أخرى",
           "error"
         );
       } finally {
@@ -163,49 +175,58 @@ export default {
     },
 
     /**
-    * return bg color class.
-    *  @param  read_at
-    * @return class
-    */
+     * return bg color class.
+     *  @param  read_at
+     * @return class
+     */
     seenClass(read_at) {
       if (read_at) {
-        return 'seen'
-      }
-      else {
-        return 'un-seen'
+        return "seen";
+      } else {
+        return "un-seen";
       }
     },
     /**
-    * mark one notification as read.
-    *  @param  notification_id
-    */
+     * mark one notification as read.
+     *  @param  notification_id
+     */
     async markAsRead(notification_id) {
       const response = await notificationsServices.markAsRead(notification_id);
       this.notifications = response.data;
-      this.checkUnread()
+      this.checkUnread();
+      if (this.unreadCount > 0) {
+        this.$store.commit("SET_UNREAD_NOTIFICATIONS", this.unreadCount - 1);
+      }
     },
 
     /**
-    * mark ALL notification as read.
-   */
+     * mark ALL notification as read.
+     */
     async markAllAsRead() {
-      console.log('tet')
+      console.log("tet");
       const response = await notificationsServices.markAllAsRead();
       this.notifications = response.data;
-      this.checkUnread()
+      this.checkUnread();
+      this.$store.commit("SET_UNREAD_NOTIFICATIONS", 0);
     },
     checkUnread() {
       function there_is_unread(notification) {
-        return (notification.read_at === null);
+        return notification.read_at === null;
       }
       // check unread
       if (this.notifications.find(there_is_unread)) {
         this.unRead = true;
       }
+    },
 
+    sendToPage(path, id) {
+      if (path) {
+        this.$router.push({ path });
+      }
+      this.markAsRead(id);
     },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -219,4 +240,3 @@ export default {
   background-color: #e2e2e2;
 }
 </style>
-  

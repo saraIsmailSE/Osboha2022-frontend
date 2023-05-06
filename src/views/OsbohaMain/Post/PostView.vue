@@ -33,6 +33,7 @@
               <div class="row">
                 <!-- display comments -->
                 <LazyLoadedComments
+                  v-if="post"
                   :post="post"
                   :userId="
                     $route.params.user_id
@@ -44,7 +45,7 @@
                 />
                 <CreateComment
                   ref="SinglePostCreateComment"
-                  v-if="post.allow_comments"
+                  v-if="post?.allow_comments"
                   type="comment"
                   class="flex-grow-1"
                   :post_id="post.id"
@@ -104,8 +105,7 @@ export default {
         );
         this.post = response.data;
       } catch (error) {
-        console.log(error);
-        helper.handleError(
+        helper.toggleToast(
           "حدث خطأ أثناء تحميل المنشور, الرجاء المحاولة مرة أخرى",
           "error"
         );

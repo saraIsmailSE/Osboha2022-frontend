@@ -1,5 +1,6 @@
 import { api } from "../Intercepter";
 import { handleError } from "vue";
+import { customHandleError } from "../../utilities/errors";
 
 class PostService {
   async create(post) {
@@ -49,7 +50,7 @@ class PostService {
       const post = await api.get(`/posts/${post_id}`);
       return post.data;
     } catch (error) {
-      handleError(error);
+      customHandleError(error, "PostService.getPostById");
     }
   }
 

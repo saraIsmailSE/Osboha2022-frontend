@@ -66,14 +66,11 @@ ChartJS.register(
 );
 
 export default {
-  name: "User Month Statistics",
+  name: "UserMonthStatistics",
   created() {
     // month Achievement
     this.month_achievement = this.monthAchievement;
     this.month_title = this.monthTitle;
-
-    console.log("[UserMonth.vue] month_achievement: ", this.month_achievement);
-    console.log("[UserMonth.vue] month_title: ", this.month_title);
   },
   props: {
     monthAchievement: {

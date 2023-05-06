@@ -19,42 +19,21 @@
           />
         </div>
         <div class="user-detail text-center mb-3">
-          <div class="profile-img">
-            <img
-              :src="
-                resolve_porfile_img(
-                  '150x150',
-                  profile.profile_picture,
-                  profile.id
-                )
-              "
-              alt="profile-img"
-              class="avatar-130 img-fluid"
-              style="border: 4px solid #1d1a55"
-              v-if="profile && profile.profile_picture"
-            />
-
-            <img
-              v-else
-              :src="
-                resolve_porfile_img(
-                  '150x150',
-                  'ananimous_' + user.gender + '.png',
-                  'ananimous'
-                )
-              "
-              alt="profile-img"
-              class="avatar-130 img-fluid"
-              style="border: 4px solid #1d1a55"
-              :title="user.name"
-            />
-          </div>
+          <UserAvatar
+            :profileImg="profile.profile_picture"
+            :profile_id="profile.id"
+            :title="user.gender"
+            :gender="user.gender"
+            avatarClass="avatar-130 img-fluid"
+            containerClass="profile-img"
+            :imageStyle="{ border: '4px solid #1d1a55' }"
+          />
           <div class="profile-detail mt-1">
             <h3 class="">{{ user.name }}</h3>
             <div class="social-links">
               <ul
-                class="social-data-block align-items-center justify-content-center list-inline p-0 m-0" 
-                style="display: flex !important;"
+                class="social-data-block align-items-center justify-content-center list-inline p-0 m-0"
+                style="display: flex !important"
               >
                 <li
                   v-for="(role, index) in roles"
@@ -97,23 +76,40 @@
               class="d-flex justify-content-center"
               v-else
             >
-              <li v-if="!friendWithAuth">
+              <li v-if="authFriendship.friendRequestByAuth">
                 <a
                   role="button"
-                  class="bg-primary text-white rounded-circle d-flex p-2"
-                  @click="createFriendship(user.id)"
+                  class="bg-danger text-white rounded-circle d-flex p-2"
+                  @click="deleteFriendship(auth.id, user.id)"
                 >
-                  <span class="material-symbols-outlined"> person_add </span>
+                  <span class="material-symbols-outlined"> close </span>
                 </a>
               </li>
-
-              <li v-else>
+              <li v-else-if="authFriendship.friendRequestByFriend">
+                <a
+                  role="button"
+                  class="bg-success text-white rounded-circle d-flex p-2"
+                  @click="acceptFriendship(authFriendship.friendship_id)"
+                >
+                  <span class="material-symbols-outlined"> check </span>
+                </a>
+              </li>
+              <li v-else-if="authFriendship.friendWithAuth">
                 <a
                   role="button"
                   class="bg-danger text-white rounded-circle d-flex p-2"
                   @click="deleteFriendship(auth.id, user.id)"
                 >
                   <span class="material-symbols-outlined"> person_remove </span>
+                </a>
+              </li>
+              <li v-else>
+                <a
+                  role="button"
+                  class="bg-success text-white rounded-circle d-flex p-2"
+                  @click="createFriendship(user.id)"
+                >
+                  <span class="material-symbols-outlined"> person_add </span>
                 </a>
               </li>
             </ul>
@@ -142,13 +138,20 @@
 <script>
 import profileImagesService from "@/API/services/profile.images.service";
 import FriendServices from "@/API/services/friend.service";
+import UserAvatar from "@/components/user/UserAvatar.vue";
+import helper from "@/utilities/helper";
 
 export default {
   name: "MainInfo",
+  components: {
+    UserAvatar,
+  },
+  emits: ["editAuthFriendship"],
   created() {},
   props: {
-    friendWithAuth: {
-      type: [Boolean],
+    authFriendship: {
+      type: Object,
+      default: () => {},
     },
     profile: {
       type: [Object],
@@ -215,23 +218,14 @@ export default {
           if (willDelete.isConfirmed) {
             FriendServices.delete(user_id, friend_id)
               .then((response) => {
-                swalWithBootstrapButtons.fire({
-                  title: "تم الحذف",
-                  text: "تم حذف طلب الصداقة",
-                  icon: "success",
-                  showClass: {
-                    popup: "animate__animated animate__zoomIn",
-                  },
-                  hideClass: {
-                    popup: "animate__animated animate__zoomOut",
-                  },
+                helper.handleSuccessSwal("تم حذف طلب الصداقة");
+                this.$emit("editAuthFriendship", {
+                  friendRequestByAuth: false,
+                  friendWithAuth: false,
                 });
-                setTimeout(function () {
-                  location.reload(true);
-                }, 2000);
               })
               .catch((error) => {
-                console.log(error);
+                helper.handleErrorSwal();
               });
           }
         });
@@ -258,10 +252,53 @@ export default {
             popup: "animate__animated animate__zoomOut",
           },
         });
+        this.$emit("editAuthFriendship", {
+          friendRequestByAuth: true,
+        });
       } catch (error) {
-        console.log(error);
+        helper.handleErrorSwal();
       }
-      //setTimeout(location.reload(), 30000);
+    },
+
+    acceptFriendship(id) {
+      const swalWithBootstrapButtons = this.$swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-primary btn-lg",
+          cancelButton: "btn btn-outline-primary btn-lg ms-2",
+        },
+        buttonsStyling: false,
+      });
+
+      swalWithBootstrapButtons
+        .fire({
+          title: "هل أنت متأكد؟",
+          text: "لا يمكنك التراجع عن هذا الاجراء",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "نعم، قم بالقبول",
+          cancelButtonText: "تراجع  ",
+          showClass: {
+            popup: "animate__animated animate__zoomIn",
+          },
+          hideClass: {
+            popup: "animate__animated animate__zoomOut",
+          },
+        })
+        .then(async (willDelete) => {
+          if (willDelete.isConfirmed) {
+            await FriendServices.accept(id)
+              .then((response) => {
+                helper.handleSuccessSwal("تم قبول طلب الصداقة");
+                this.$emit("editAuthFriendship", {
+                  friendWithAuth: true,
+                  friendRequestByFriend: false,
+                });
+              })
+              .catch((error) => {
+                helper.handleErrorSwal();
+              });
+          }
+        });
     },
   },
   computed: {

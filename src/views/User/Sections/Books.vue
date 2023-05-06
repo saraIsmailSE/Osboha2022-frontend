@@ -30,7 +30,8 @@
         <BookCard
           v-for="bookInfo in booksLoaded"
           :key="bookInfo.id"
-          :cardInfo="bookInfo.book"
+          :cardInfo="bookInfo"
+          :isProfile="true"
         />
         <a
           class="me-3 btn"
@@ -66,7 +67,7 @@
   </iq-card>
 </template>
 <script>
-import BookCard from "@/components/book/ambassadorBookCard.vue";
+import BookCard from "@/components/book/BookCard.vue";
 
 export default {
   name: "User Book",

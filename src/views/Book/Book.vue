@@ -97,9 +97,14 @@ export default {
       loading: false,
       sections: [
         { section_id: 0, section: "الكل", active: true },
-        { section_id: 1, section: "بسيط", active: false },
-        { section_id: 2, section: "متوسط", active: false },
-        { section_id: 3, section: "عميق", active: false },
+        { section_id: 1, section: "بسيط", level: "simple", active: false },
+        {
+          section_id: 2,
+          section: "متوسط",
+          level: "intermediate",
+          active: false,
+        },
+        { section_id: 3, section: "عميق", level: "advanced", active: false },
         { section_id: 4, section: "عربي", lang: "arabic", active: false },
         { section_id: 5, section: "إنجليري", lang: "english", active: false },
       ],
@@ -141,7 +146,7 @@ export default {
             //simple - intermediate - advanced
             //by level
             response = await bookService.getBooksByLevel(
-              this.sections[index].section,
+              this.sections[index].level,
               this.page
             );
           } else if (index >= 4) {
