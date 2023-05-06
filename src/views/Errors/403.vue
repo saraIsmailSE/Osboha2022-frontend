@@ -15,7 +15,7 @@
             <!-- <p class="text-center">لم يتم العثور على الصفحة التي طلبتها، قد يكون الرابط خاطئ أو تم حذف الصفحة</p> -->
 
             <router-link
-              class="btn btn-primary w-100"
+              class="btn btn-primary w-75"
               :to="{
                 name: 'osboha.list',
               }"

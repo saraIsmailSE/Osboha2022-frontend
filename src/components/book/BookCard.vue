@@ -10,6 +10,7 @@
       <div
         class="position-absolute top-0 start-0 p-2 rounded-3"
         @click.prevent="markBookForLater"
+        v-if="!isProfile"
       >
         <font-awesome-icon
           :icon="[isSaved ? 'fas' : 'far', 'heart']"
@@ -53,7 +54,7 @@
           >
             <li class="pe-3 ps-3">
               <p class="mb-0">المستوى</p>
-              <h6>{{ cardInfo.level }}</h6>
+              <h6>{{ cardInfo.level.arabic_level }}</h6>
             </li>
             <li class="pe-3 ps-3">
               <p class="mb-0">الفئة</p>
@@ -65,7 +66,33 @@
             </li>
           </ul>
         </div>
-        <div class="row">
+        <div class="row" v-if="isProfile">
+          <div class="row d-flex justify-content-center" v-if="isAmbassador">
+            <div class="col-12">
+              <button
+                type="submit"
+                class="btn btn-primary d-block w-100"
+                @click="thesesDetails()"
+              >
+                عرض
+                <span v-if="myProfile"> أطروحاتي </span>
+                <span v-else> أطروحات السفير </span>
+              </button>
+            </div>
+          </div>
+          <div class="row d-flex justify-content-center" v-else>
+            <div class="col-12">
+              <button
+                type="submit"
+                class="btn btn-primary d-block w-100"
+                @click="bookDetails()"
+              >
+                صفحة الكتاب
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="row" v-else>
           <div class="col-6">
             <button
               type="submit"
@@ -133,11 +160,10 @@ export default {
   },
   props: {
     cardInfo: { type: Object },
+    isProfile: { type: Boolean, default: false },
+    isAmbassador: { type: Boolean, default: true },
   },
   emits: ["updateUserBook"],
-  created() {
-    console.log("[bookCard- cardInfo]", this.cardInfo);
-  },
   methods: {
     resolve_img_url: function (path) {
       return path ? path : require("@/assets/images/main/200x200-book.png");
@@ -146,6 +172,15 @@ export default {
       this.$router.push({
         name: "book.book-details",
         params: { book_id: this.cardInfo.id },
+      });
+    },
+    thesesDetails() {
+      this.$router.push({
+        name: "book.user-theses",
+        params: {
+          book_id: this.cardInfo.id,
+          user_id: this.$route.params.user_id,
+        },
       });
     },
     closeModel() {
@@ -215,6 +250,14 @@ export default {
       return this.cardInfo.userBooks
         ? this.cardInfo.userBooks[0]?.status === "later"
         : false;
+    },
+    myProfile() {
+      return (
+        this.isProfile &&
+        this.isAmbassador &&
+        parseInt(this.$store.getters.getUser.id) ===
+          parseInt(this.$route.params.user_id)
+      );
     },
   },
 };

@@ -4,6 +4,11 @@ import { toast } from "vue3-toastify";
 import Swal from "sweetalert2";
 
 export default {
+  /**
+   * Transforms a date to a written format (ex: 5 minutes ago) in Arabic
+   * @param {Date} dateToConvert
+   * @returns {String} written date
+   */
   formatDateToWritten(dateToConvert) {
     if (dateToConvert === null || dateToConvert === "") return null;
     return formatDistanceToNow(new Date(dateToConvert), {
@@ -12,8 +17,12 @@ export default {
     });
   },
 
+  /**
+   * Transforms a date to a full date format (ex: Saturday, March 25, 2017 at 10:30 PM) in Arabic
+   * @param {Date} dateToConvert
+   * @returns {String} full date
+   */
   formatFullDate(dateToConvert) {
-    //Saturday, March 25, 2017 at 10:30 PM
     return new Date(dateToConvert).toLocaleString("ar", {
       weekday: "long",
       year: "numeric",
@@ -25,6 +34,11 @@ export default {
     });
   },
 
+  /**
+   * Toggle a toast message with a specific type
+   * @param {String} message
+   * @param {String} type
+   */
   toggleToast(message, type) {
     let backgroundColor;
     switch (type) {
@@ -53,7 +67,12 @@ export default {
     });
   },
 
-  handleErrorSwal(title) {
+  /**
+   * Toggle Swal alert (error type)
+   * @param {String} title
+   * @returns Swal.fire
+   */
+  handleErrorSwal(title = "حدث خطأ ما, يرجى المحاولة لاحقاً") {
     return Swal.fire({
       position: "top-end",
       title: title,
@@ -63,6 +82,13 @@ export default {
     });
   },
 
+  /**
+   * Toggle Swal alert (success type)
+   * @param {String} title
+   * @param {Number} timer
+   * @returns Swal.fire
+   * @default timer = 1500
+   */
   handleSuccessSwal(title, timer = 1500) {
     return Swal.fire({
       position: "top-end",
@@ -71,5 +97,15 @@ export default {
       showConfirmButton: false,
       timer,
     });
+  },
+
+  /**
+   * format a number to have a comma every 3 digits
+   * @param {Number} number
+   * @returns {String} formatted number
+   */
+  formatNumber(number) {
+    if (!number) return "0";
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   },
 };

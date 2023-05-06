@@ -2,7 +2,7 @@
   <div ref="listContainer">
     <div
       class="d-flex align-items-center justify-content-center"
-      v-if="emptyMessage"
+      v-if="emptyMessage && displayEmpty"
     >
       <div class="me-2">
         <font-awesome-icon :icon="['fas', 'circle-exclamation']" size="xl" />
@@ -57,6 +57,10 @@ export default {
       default: null,
     },
     showPin: {
+      type: Boolean,
+      default: false,
+    },
+    displayEmpty: {
       type: Boolean,
       default: false,
     },
@@ -152,7 +156,7 @@ export default {
         }
 
         if (response.statusCode === 200 && !response.data) {
-          // this.emptyMessage = "لا يوجد منشورات";
+          this.emptyMessage = "لا يوجد منشورات";
           this.hasMore = false;
           return;
         }

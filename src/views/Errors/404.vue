@@ -16,7 +16,7 @@
             </p>
 
             <router-link
-              class="btn btn-primary w-100"
+              class="btn btn-primary w-75"
               :to="{
                 name: 'osboha.list',
               }"

@@ -10,6 +10,7 @@
         ref="lazyLoadedPostsRef"
         type="announcement"
         :showPin="true"
+        :displayEmpty="true"
       />
     </div>
   </div>

@@ -65,6 +65,7 @@ class UserInfoService {
     permissions.forEach((permission) => {
       if (this.hasPermission(user, permission)) {
         hasPermissions = true;
+        return;
       }
     });
     return hasPermissions;

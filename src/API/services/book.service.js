@@ -1,5 +1,6 @@
 import { api } from "../Intercepter";
 import { handleError } from "vue";
+import { customHandleError } from "../../utilities/errors";
 
 class BookService {
   async create(
@@ -51,7 +52,7 @@ class BookService {
       const book = await api.get(`/books/${id}`);
       return book.data;
     } catch (error) {
-      handleError(error);
+      customHandleError(error, "BookService.getById");
     }
   }
 
@@ -74,12 +75,10 @@ class BookService {
 
   async getBooksByLevel(level, page) {
     try {
-      const books = await api.post(`/books/level?page=${page}`, {
-        level,
-      });
+      const books = await api.get(`/books/level/${level}?page=${page}`);
       return books.data.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 
@@ -90,20 +89,16 @@ class BookService {
       });
       return books.data.data;
     } catch (error) {
-      console.log(error);
-      return "";
+      handleError(error);
     }
   }
 
   async getBooksByLanguage(language, page) {
     try {
-      const books = await api.post(`/books/language?page=${page}`, {
-        language,
-      });
+      const books = await api.get(`/books/language/${language}?page=${page}`);
       return books.data.data;
     } catch (error) {
-      console.log(error);
-      return "";
+      handleError(error);
     }
   }
 

@@ -7,6 +7,7 @@
       class="rounded-circle"
       :class="avatarClass"
       :title="title"
+      :style="imageStyle"
     />
 
     <img
@@ -22,6 +23,7 @@
       :title="title"
       class="rounded-circle"
       :class="avatarClass"
+      :style="imageStyle"
     />
   </div>
 </template>
@@ -59,11 +61,17 @@ export default {
       type: String,
       default: "male",
     },
+    imageStyle: {
+      type: Object,
+      default: null,
+    },
   },
   methods: {
     /**
      * get profile picture or cover.
-     *  @param  image size, image name, profile id
+     * @param  {String} size,
+     * @param {String} name
+     * @param {Int, String} profile_id
      * @return image url
      */
     resolve_porfile_img(size, imageName, profile_id) {

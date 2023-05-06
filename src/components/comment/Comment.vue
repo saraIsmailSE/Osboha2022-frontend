@@ -22,7 +22,16 @@
       @cancelEdit="cancelEdit"
     />
     <template v-else>
-      <p v-if="comment.body">{{ comment.body }}</p>
+      <p v-if="comment.body">
+        {{ briefBody }}
+        <a
+          class="load-btn"
+          href="#"
+          v-if="comment.body.length > briefBody.length"
+          @click.prevent="briefBody = comment.body"
+          >عرض المزيد</a
+        >
+      </p>
       <div class="image-block mt-3 mb-3">
         <img
           v-if="comment.media"
@@ -145,6 +154,7 @@ export default {
         text_color: "#278036",
       },
       pendingRequest: false,
+      briefBody: "",
     };
   },
   computed: {
@@ -167,6 +177,13 @@ export default {
       };
       return calculateReplies(this.comment?.replies);
     },
+  },
+  created() {
+    this.briefBody = this.comment.body
+      ? this.comment.body.length > 200
+        ? this.comment.body.substring(0, 200) + "..."
+        : this.comment.body
+      : "";
   },
   methods: {
     ...helper,
