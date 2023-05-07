@@ -9,7 +9,7 @@
         <PostBody />
 
         <!--Post Media section-->
-        <PostMedia @showPostMedia="showPostMedia" />
+        <PostMedia />
 
         <!--Support Checkbox-->
         <SupportSection />
@@ -19,9 +19,6 @@
       </div>
     </div>
   </div>
-
-  <!--Post media modal-->
-  <PostMediaModal ref="postMediaModal" />
 
   <!--Comments modal-->
   <CommentsModal ref="commentModal" v-if="!focusComment" />
@@ -34,7 +31,6 @@ import PostFooter from "@/components/post/footer/PostFooter.vue";
 import PostMedia from "@/components/post/body/PostMedia.vue";
 import SupportSection from "@/components/post/body/SupportSection.vue";
 import CommentsModal from "@/components/post/modals/CommentsModal.vue";
-import PostMediaModal from "@/components/post/modals/PostMediaModal.vue";
 import helper from "@/utilities/helper";
 
 export default {
@@ -43,7 +39,6 @@ export default {
     PostHeader,
     PostBody,
     CommentsModal,
-    PostMediaModal,
     PostMedia,
     PostFooter,
     SupportSection,
@@ -96,14 +91,6 @@ export default {
       } else {
         this.focusComment();
       }
-    },
-    /**
-     * @description: show the gallery modal
-     * @param index: the index of the media to show
-     * @returns {void}
-     */
-    showPostMedia(index) {
-      this.$refs.postMediaModal.showPostMedia(index);
     },
   },
 };

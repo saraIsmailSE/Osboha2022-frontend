@@ -81,6 +81,12 @@ const childRoutes = (prop, mode) => [
     meta: { auth: true, name: "post" },
     component: () => import("../views/OsbohaMain/Post/PostView"),
   },
+  {
+    path: "posts/pending/:timeline_id/:post_id?",
+    name: prop + ".pendingPosts",
+    meta: { auth: true, name: "PendingPosts" },
+    component: () => import("../views/OsbohaMain/Post/PendingPostsView"),
+  },
 ];
 
 const authchildRoutes = (prop, mode) => [

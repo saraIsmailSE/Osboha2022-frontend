@@ -12,12 +12,7 @@
               data-bs-toggle="tooltip"
               :title="formatFullDate(post.created_at)"
               style="width: fit-content"
-              @click="
-                $router.push({
-                  name: 'osboha.post',
-                  params: { post_id: post.id },
-                })
-              "
+              @click="sendToPostPage"
               >{{ formatDateToWritten(post.created_at) }}</tooltip
             >
 
@@ -214,6 +209,20 @@ export default {
             }
           }
         });
+    },
+
+    sendToPostPage() {
+      if (this.post.is_approved) {
+        this.$router.push({
+          name: "osboha.post",
+          params: { post_id: this.post.id },
+        });
+      } else {
+        this.$router.push({
+          name: "osboha.pendingPosts",
+          params: { timeline_id: this.post.timeline.id, post_id: this.post.id },
+        });
+      }
     },
   },
 };

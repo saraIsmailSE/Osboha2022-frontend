@@ -97,8 +97,15 @@ export default {
           status: data,
         });
       } catch (error) {
-        helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
-        return;
+        console.log("[vote error]", error);
+        this.choosedOption = "";
+        if (error.response?.data?.message) {
+          helper.toggleToast(error.response.data.message, "error");
+          return;
+        } else {
+          helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
+          return;
+        }
       }
     },
 

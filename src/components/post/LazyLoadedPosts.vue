@@ -169,11 +169,11 @@ export default {
         this.totalPages = response.data?.last_page ?? 1;
         this.page++;
       } catch (error) {
-        console.log(["loaded posts error", error]);
-        helper.toggleToast(
-          "حدث خطأ أثناء تحميل المنشورات, حاول مرة أخرى",
-          "error"
-        );
+        if (error.response.status !== 400 && error.response.status !== 403)
+          helper.toggleToast(
+            "حدث خطأ أثناء تحميل المنشورات, حاول مرة أخرى",
+            "error"
+          );
       } finally {
         this.loading = false;
         this.pendingRequest = false;

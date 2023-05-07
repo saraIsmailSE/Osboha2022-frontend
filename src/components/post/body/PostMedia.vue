@@ -6,7 +6,7 @@
         :class="col"
         v-for="(image, index) in slicedMedia"
         :key="image.path"
-        @click.prevent="$emit('showPostMedia', index)"
+        @click.prevent="showPostMedia(index)"
       >
         <img
           :src="image.path"
@@ -31,13 +31,20 @@
       </div>
     </div>
   </div>
+
+  <!--Post media modal-->
+  <PostMediaModal ref="postMediaModal" />
 </template>
 
 <script>
+import PostMediaModal from "@/components/post/modals/PostMediaModal.vue";
 export default {
   name: "PostMedia",
+  components: {
+    PostMediaModal,
+  },
   inject: ["post"],
-  emits: ["showPostMedia"],
+  // emits: ["showPostMedia"],
   computed: {
     col() {
       return this.post.media.length > 1 ? "col-6" : "col-12";
@@ -48,6 +55,16 @@ export default {
      */
     slicedMedia() {
       return this.post.media ? this.post.media.slice(0, 4) : [];
+    },
+  },
+  methods: {
+    /**
+     * @description: show the gallery modal
+     * @param index: the index of the media to show
+     * @returns {void}
+     */
+    showPostMedia(index) {
+      this.$refs.postMediaModal.showPostMedia(index);
     },
   },
 };
