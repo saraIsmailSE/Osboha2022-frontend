@@ -9,8 +9,8 @@
       <div class="iq-card-body p-4">
         <div class="image-block text-center">
           <img
-            src="@/assets/images/main/reader.png"
-            class="img-fluid rounded w-25"
+            src="@/assets/images/main/signup.png"
+            class="img-fluid rounded w-50"
             alt="blog-img"
           />
         </div>

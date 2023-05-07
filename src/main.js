@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import "./registerServiceWorker";
+// import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 import "./plugins";
@@ -20,14 +20,14 @@ setupInterceptors(store)
 
 // Vuetify
 //import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
+//import { createVuetify } from 'vuetify'
+// import * as components from 'vuetify/components'
+//import * as directives from 'vuetify/directives'
 
-const vuetify = createVuetify({
-  components,
-  directives,
-})
+//const vuetify = createVuetify({
+  // components,
+  //directives,
+//})
 
 
 const app = createApp(App);
@@ -42,7 +42,7 @@ app.use(Vue3Toasity, {
   theme: "colored",
   rtl: true,
 });
-app.use(vuetify);
+//app.use(vuetify);
 app.use(store).use(router).mount("#app");
 app.mixin({
   data() {

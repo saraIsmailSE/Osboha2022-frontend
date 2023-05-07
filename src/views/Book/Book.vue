@@ -113,6 +113,7 @@ export default {
   methods: {
     //get all books
     async getBooks(page) {
+      this.empty = "";
       this.loading = true;
       try {
         const response = await bookService.getAll(page);
@@ -128,6 +129,7 @@ export default {
 
     //filter books based on the level or language
     async filterBooks(index) {
+      this.empty = "";
       this.toggleActiveFilter(index);
 
       let response = null;

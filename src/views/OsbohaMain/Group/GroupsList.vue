@@ -49,12 +49,12 @@
                       <!-- <span class="btn btn-primary text-white material-symbols-outlined ms-1 me-1">
                         edit
                       </span> -->
-                      <span
+                      <!-- <span
                         @click="deleteGroup(group.id)"
                         class="btn btn-danger text-white material-symbols-outlined ms-1 me-1"
                       >
                         delete
-                      </span>
+                      </span> -->
                     </td>
                   </tr>
                 </tbody>

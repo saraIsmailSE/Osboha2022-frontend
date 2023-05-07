@@ -6,7 +6,7 @@
       </div>
       <div class="iq-card-body p-4">
         <div class="image-block text-center">
-          <img src="@/assets/images/main/login.png" class="img-fluid rounded w-25" alt="blog-img" />
+          <img src="@/assets/images/main/login.png" class="img-fluid rounded w-50" alt="blog-img" />
         </div>
         <form class="mt-4 w-75 mx-auto" @submit.prevent="submit">
           <div class="form-group">

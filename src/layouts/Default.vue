@@ -54,6 +54,7 @@ const fslightbox = () => import("../plugins/fslightbox/fslightbox");
 export default {
   name: "Default",
   async created() {
+
     const session = JSON.parse(sessionStorage.getItem("AuthSessionData"));
     if (session && session.status >= 200 && session.status < 400) {
       this.sessionData = session;
