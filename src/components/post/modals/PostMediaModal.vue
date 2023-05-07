@@ -48,11 +48,13 @@
               <div
                 class="d-flex justify-content-center align-items-center h-100"
               >
-                <img
-                  :src="media.path"
-                  class="d-block h-100 img-fluid"
-                  :alt="`Post Image ${index + 1}`"
-                />
+                <a :href="media.path" target="_blank">
+                  <img
+                    :src="media.path"
+                    class="d-block h-100 img-fluid"
+                    :alt="`Post Image ${index + 1}`"
+                  />
+                </a>
               </div>
             </div>
           </div>

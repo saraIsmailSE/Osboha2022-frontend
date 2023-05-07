@@ -41,6 +41,36 @@
                 يرجى اختيار نوع الاجازة</small
               >
             </div>
+
+            <div
+              class="form-group col-12"
+              v-if="isAdmin && v$.exceptionForm.type_id.$model == 5"
+            >
+              <h4>تاريخ انتهاء الاجازة</h4>
+              <input
+                :disabled="message"
+                type="date"
+                class="form-control mt-2"
+                id="exceptionEndDate"
+                v-model="v$.exceptionForm.end_date.$model"
+                name="end_date"
+              />
+              <template v-if="v$.exceptionForm.end_date.$error">
+                <small
+                  style="color: red"
+                  v-if="v$.exceptionForm.end_date.required.$invalid"
+                >
+                  يرجى اختيار تاريخ انتهاء الاجازة
+                </small>
+                <small
+                  style="color: red"
+                  v-if="v$.exceptionForm.end_date.date_format.$invalid"
+                >
+                  يرجى اختيار تاريخ انتهاء الاجازة بتاريخ لا يقل عن اليوم
+                </small>
+              </template>
+            </div>
+
             <div class="form-group">
               <h4>السبب</h4>
               <div class="form-group row">
@@ -54,9 +84,17 @@
                   name="reason"
                 >
                 </textarea>
+                <p>
+                  <span
+                    :class="{ 'text-danger': v$.exceptionForm.reason.$error }"
+                  >
+                    {{ v$.exceptionForm.reason.$model.length }}
+                  </span>
+                  /250
+                </p>
               </div>
               <small style="color: red" v-if="v$.exceptionForm.reason.$error">
-                قم بادخال سبب لا يزيد عدد حروفه عن 250
+                قم بادخال سبب لا ينقص عن 10 حروف ولا يزيد عن 250 حرف
               </small>
             </div>
             <hr />
@@ -103,6 +141,7 @@ import exceptionTypeService from "@/API/services/exception-type.service";
 import exceptionService from "@/API/services/user-exception.service";
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, maxLength } from "@vuelidate/validators";
+import UserInfoService from "@/Services/userInfoService";
 
 const greaterThanZero = (value) => value > 0;
 
@@ -121,10 +160,16 @@ export default {
       exceptionForm: {
         reason: "",
         type_id: 0,
+        end_date: new Date().toISOString().slice(0, 10),
       },
       exceptionTypes: null,
       message: null,
     };
+  },
+  computed: {
+    isAdmin() {
+      return UserInfoService.hasRole(this.$store.getters.getUser, "admin");
+    },
   },
   validations() {
     return {
@@ -137,6 +182,16 @@ export default {
         type_id: {
           required,
           maxValue: greaterThanZero,
+        },
+        //after yesterday
+        end_date: {
+          required,
+          date_format: (value) => {
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            return new Date(value) > yesterday;
+          },
         },
       },
     };

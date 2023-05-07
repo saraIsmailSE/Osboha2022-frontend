@@ -96,7 +96,10 @@
         </div>
         <div class="card-body row d-flex justify-content-center">
           <router-link
-            :to="{ name: 'group.group-statistics', params: { group_id: group_id } }"
+            :to="{
+              name: 'group.group-statistics',
+              params: { group_id: group_id },
+            }"
             class="btn btn-primary d-block mt-3 col-5 me-1"
             >احصائيات المجموعة
           </router-link>
@@ -136,6 +139,16 @@
             "
           >
             تدقيق العلامات
+          </router-link>
+          <router-link
+            :to="{
+              name: 'osboha.pendingPosts',
+              params: { timeline_id: group.timeline_id },
+            }"
+            class="btn btn-primary d-block mt-3 col-5 me-1"
+            v-if="authInGroup && authInGroup.user_type != 'ambassador'"
+          >
+            المنشورات المعلقة
           </router-link>
         </div>
       </div>
@@ -183,6 +196,7 @@ export default {
       this.week_avg = (Math.round(response.week_avg * 100) / 100).toFixed(2);
       this.week = response.week;
       this.authInGroup = response.authInGroup;
+      console.log("[Group-detail] created", response);
     } catch (error) {
       console.log(error);
     }

@@ -132,6 +132,35 @@ class PostService {
       handleError(error);
     }
   }
+
+  async getPendingPosts(timeline_id, post_id = "") {
+    try {
+      const response = await api.get(
+        `/posts/pending/timeline/${timeline_id}/${post_id}`
+      );
+      return response.data;
+    } catch (error) {
+      customHandleError(error, "PostService.getPendingPosts");
+    }
+  }
+
+  async acceptPost(post_id) {
+    try {
+      const response = await api.patch(`/posts/accept/${post_id}`);
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async declinePost(post_id) {
+    try {
+      const response = await api.patch(`/posts/decline/${post_id}`);
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 }
 
 export default new PostService();
