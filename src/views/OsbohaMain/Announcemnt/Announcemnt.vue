@@ -30,7 +30,7 @@ export default {
   computed: {
     isAuthorized() {
       const user = this.$store.getters.getUser;
-      return UserInfoService.hasRoles(user, ["admin", "advisor", "supervisor"]);
+      return UserInfoService.hasRoles(user, ["admin", "advisor", "consultant"]);
     },
   },
   methods: {
