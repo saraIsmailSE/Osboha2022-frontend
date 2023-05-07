@@ -2,8 +2,10 @@
   <div class="row">
 
     <!-- story starts -->
-    <div :style="`background-image: url(${knowAboutOsboha});`" class="story">
-    </div>
+    <router-link :to="{ name: 'osboha.support' }">
+      <div :style="`background-image: url(${knowAboutOsboha});`" class="story">
+      </div>
+    </router-link>
     <!-- story ends -->
 
     <!-- story starts -->

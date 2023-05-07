@@ -44,7 +44,7 @@
                   <div class="d-flex align-items-center">
                     <span role="button" class="me-1" @click.prevent="
                       sendToPage(notification.data.path, notification.id)
-                      ">
+                      " v-if="notification.data.path">
                       عرض
                     </span>
                     <i role="button" class="material-symbols-outlined md-18 me-3" v-if="!notification.read_at"

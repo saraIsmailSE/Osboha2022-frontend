@@ -58,7 +58,7 @@
               <li>
                 <a
                   role="button"
-                  class="bg-success text-white rounded-circle d-flex p-2"
+                  class="bg-info text-white rounded-circle d-flex p-2"
                   @click="updateProfile()"
                 >
                   <span class="material-symbols-outlined"> edit </span>

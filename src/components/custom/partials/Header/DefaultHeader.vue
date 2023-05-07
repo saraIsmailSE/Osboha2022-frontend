@@ -54,7 +54,7 @@
               <i class="material-symbols-outlined">notifications</i>
               <span
                 v-if="unread > 0"
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success"
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info"
               >
                 {{ unread }}
                 <span class="visually-hidden">unread messages</span>
