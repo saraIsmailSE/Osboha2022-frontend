@@ -60,7 +60,7 @@
           <!-- ########## END Certificates  ########## -->
 
           <!-- ########## START MEDIA ########## -->
-          <iq-card>
+          <!-- <iq-card>
             <template v-slot:headerTitle>
               <h4 class="card-title">صور</h4>
             </template>
@@ -105,7 +105,7 @@
                 <h4 class="text-center" v-else>لا يوجد</h4>
               </div>
             </template>
-          </iq-card>
+          </iq-card> -->
           <!-- ########## END MEDIA ########## -->
 
           <!-- ########## START FRIENDS ########## -->

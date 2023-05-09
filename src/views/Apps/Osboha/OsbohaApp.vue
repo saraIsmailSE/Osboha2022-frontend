@@ -2,14 +2,16 @@
   <div class="row">
 
     <!-- story starts -->
-    <router-link :to="{ name: 'osboha.support' }">
-      <div :style="`background-image: url(${knowAboutOsboha});`" class="story">
-      </div>
+
+    <router-link :to="{ name: 'osboha.support' }" :style="`background-image: url(${knowAboutOsboha});`" class="story">
     </router-link>
     <!-- story ends -->
 
     <!-- story starts -->
-    <div :style="`background-image: url(${latestBook});`" class="story" v-if="latest_book">
+    <router-link :to="{
+      name: 'book.book-details',
+      params: { book_id: latest_book.id },
+    }" :style="`background-image: url(${latestBook});`" class="story" v-if="latest_book">
       <h5>
         {{ latest_book.name }}
 
@@ -17,7 +19,7 @@
         <small class="h6 badge bg-info">{{ latest_book.section.section }}</small>
 
       </h5>
-    </div>
+    </router-link>
     <!-- story ends -->
 
     <div class="col-12 row m-0 p-0 mt-2">

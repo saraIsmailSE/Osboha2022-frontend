@@ -20,12 +20,12 @@
           <Doughnut id="my-chart-id" :options="chartOptions" :data="chartData" />
         </div>
 
-        <router-link :to="{ name: 'group.Statistics', params: { group_id: this.$route.params.group_id } }"
+        <router-link :to="{ name: 'group-statistics', params: { group_id: this.$route.params.group_id } }"
           class="btn d-flex align-items-center mt-3 text-white" style=" background-color:#2e328b; ">
           <i class="material-symbols-outlined md-18 me-1">insights</i>
           احصائيات الأسبوع
         </router-link>
-
+        
       </div>
     </template>
   </iq-card>
