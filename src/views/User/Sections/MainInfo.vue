@@ -40,7 +40,7 @@
                   :key="index"
                   class="text-center pe-2"
                 >
-                  <span class="rounded-pill badge bg-primary">{{ role }}</span>
+                  <span class="rounded-pill badge bg-primary">{{ user_role[role] }}</span>
                 </li>
               </ul>
             </div>
@@ -106,7 +106,7 @@
               <li v-else>
                 <a
                   role="button"
-                  class="bg-success text-white rounded-circle d-flex p-2"
+                  class="bg-primary text-white rounded-circle d-flex p-2"
                   @click="createFriendship(user.id)"
                 >
                   <span class="material-symbols-outlined"> person_add </span>
@@ -168,6 +168,18 @@ export default {
       type: [Object],
       required: true,
     },
+  },
+  data(){
+    return{
+      user_role: {
+        ambassador: "سفير",
+        leader: "قائد",
+        supervisor: "مراقب",
+        advisor: "موجه",
+        consultant: "مستشار",
+        admin: "ادارة",
+      },
+    }
   },
   methods: {
     updateProfile() {

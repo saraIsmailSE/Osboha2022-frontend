@@ -1,5 +1,5 @@
 <template>
-    <div :class="`right-sidebar-mini ${miniClass} data-scrollbar right-sidebar-team`">
+    <div :class="`right-sidebar-mini ${miniClass} data-scrollbar right-sidebar-team`"  v-click-outside="onClickOutside">
         <div class="right-sidebar-panel p-0">
             <div class="card shadow-none">
                 <div class="card-body p-0">
@@ -34,9 +34,14 @@
     </div>
 </template>
 <script>
+import vClickOutside from "click-outside-vue3";
+
 export default {
     name: 'ReadingTeam',
-    created(){
+    directives: {
+        clickOutside: vClickOutside.directive,
+    },
+    created() {
     },
     props: {
         reading_team: {
@@ -64,7 +69,14 @@ export default {
                 this.miniClass = ''
                 body.classList.remove('right-sidebar-close')
             }
-        }
+        },
+        onClickOutside() {
+            this.rightSideBarMini = true;
+            const body = document.querySelector("body");
+            this.miniClass = "right-sidebar";
+            body.classList.add("right-sidebar-close");
+        },
+
     }
 }
 </script>

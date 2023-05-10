@@ -1,6 +1,6 @@
 <template>
   <div class="mt-3">
-    <p>{{ post.body }}</p>
+    <p style="white-space: pre-wrap; direction: rtl;" v-html="urlifyFn(post.body)"></p>
   </div>
 
   <!--Polls-->
@@ -132,6 +132,14 @@ export default {
 
       return optionSelectedByUser ? optionSelectedByUser.id : "";
     },
+    urlifyFn(text) {
+    let urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.replace(urlRegex, function(url) {
+      console.log(url)
+        return '<a href="' + url + '"  target="_blank" direction: rtl;">' + url + '</a>';
+    })
+  },
+
   },
 };
 </script>

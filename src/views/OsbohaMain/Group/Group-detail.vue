@@ -43,7 +43,7 @@
                 </div>
                 <div class="flex-grow-1 ms-3">
                   <h4>رسالة المجموعة المجموعة</h4>
-                  <p class="mb-0">
+                  <p class="mb-0" style="white-space: pre-wrap; direction: rtl;"> 
                     {{ group.description }}
                   </p>
                 </div>
@@ -67,6 +67,9 @@
                   </h4>
                   <h4 v-if="administrator.pivot.user_type == 'advisor'">
                     موجه المجموعة
+                  </h4>
+                  <h4 v-if="administrator.pivot.user_type == 'consultant'">
+                    مستشار المجموعة
                   </h4>
                   <p class="mb-0">
                     {{ administrator.name }}

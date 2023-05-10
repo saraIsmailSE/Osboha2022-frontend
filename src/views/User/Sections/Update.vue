@@ -19,7 +19,8 @@
                     <img :src="resolve_porfile_img('150x150', profileInfo.profile_picture, profileInfo.id)"
                         alt="profile-img" class="avatar-130 img-fluid" style="border: 4px solid #1D1A55;"
                         v-if="profileInfo && profileInfo.profile_picture" />
-                    <img src="@/assets/images/avatar/avatar-03.jpg" alt="profile-img" class="avatar-130 img-fluid"
+                        
+                    <img src="@/assets/images/main/reader.png" alt="profile-img" class="avatar-130 img-fluid"
                         style="border: 4px solid #1D1A55;" v-else />
                 </div>
                 <div class="mt-3 row">
@@ -282,7 +283,7 @@ export default {
                 { code: 'DZ', name: "الجزائر" },
                 { code: 'DK', name: "الدانمارك" },
                 { code: 'CV', name: "الرأس الأخضر" },
-                { code: 'PS', name: "السلطة الفلسطينية" },
+                { code: 'PS', name: "فلسطين" },
                 { code: 'SV', name: "السلفادور" },
                 { code: 'SN', name: "السنغال" },
                 { code: 'SD', name: "السودان" },

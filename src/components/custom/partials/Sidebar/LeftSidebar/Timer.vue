@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`right-sidebar-mini ${miniClass} data-scrollbar right-sidebar-team`"
+    :class="`right-sidebar-mini ${miniClass} data-scrollbar right-sidebar-team`"  v-click-outside="onClickOutside"
   >
     <div class="right-sidebar-panel p-0">
       <div class="card shadow-none">
@@ -75,12 +75,16 @@
 </template>
 <script>
 import VueCountdown from "@chenfengyuan/vue-countdown";
+import vClickOutside from "click-outside-vue3";
 
 export default {
   name: "Timer Sidebar",
   created() {
     this.now = new Date();
     this.date = new Date(this.timer.main_timer);
+  },
+  directives: {
+    clickOutside: vClickOutside.directive,
   },
   components: {
     VueCountdown,
@@ -115,6 +119,13 @@ export default {
     onCountdownEnd: function () {
       // re-read week info [to start new week]
     },
+    onClickOutside() {
+      this.rightSideBarMini = true;
+      const body = document.querySelector("body");
+      this.miniClass = "right-sidebar";
+        body.classList.add("right-sidebar-close");
+    },
+
   },
   computed: {
     time() {

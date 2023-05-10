@@ -22,7 +22,7 @@
       @cancelEdit="cancelEdit"
     />
     <template v-else>
-      <p v-if="comment.body">
+      <p v-if="comment.body" style="white-space: pre-wrap; direction: rtl;">
         {{ briefBody }}
         <a
           class="load-btn"

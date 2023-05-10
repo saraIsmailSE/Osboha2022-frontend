@@ -131,7 +131,7 @@
           <h4 class="mt-2">من أنا</h4>
           <hr>
           <h6 class="mb-1">نبذة</h6>
-          <p v-if="user_about.bio">{{ user_about.bio }}</p>
+          <p v-if="user_about.bio" style="white-space: pre-wrap; direction: rtl;">{{ user_about.bio }}</p>
           <p class="mb-0 fs-6" v-else>لا يوجد</p>
 
           <hr>
@@ -249,7 +249,7 @@ export default {
         'DZ': "الجزائر",
         'DK': "الدانمارك",
         'CV': "الرأس الأخضر",
-        'PS': "السلطة الفلسطينية",
+        'PS': "فلسطين",
         'SV': "السلفادور",
         'SN': "السنغال",
         'SD': "السودان",
