@@ -81,7 +81,7 @@ class AuthService {
       const response = await api.get("session-data");
       return response.data.data;
     } catch (error) {
-      return error.response;
+      handleError(error);
     }
   }
 

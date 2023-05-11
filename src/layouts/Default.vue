@@ -54,15 +54,7 @@ const fslightbox = () => import("../plugins/fslightbox/fslightbox");
 export default {
   name: "Default",
   async created() {
-
-    const session = JSON.parse(sessionStorage.getItem("AuthSessionData"));
-    if (session && session.status >= 200 && session.status < 400) {
-      this.sessionData = session;
-    } else {
-      const response = await authService.sessionData();
-      sessionStorage.setItem("AuthSessionData", JSON.stringify(response));
-      this.sessionData = response;
-    }
+    this.getSessionData();
   },
   mounted() {
     fslightbox();
@@ -147,6 +139,32 @@ export default {
       ],
       logoimage: logo,
     };
+  },
+  watch: {
+    $route(to, from) {
+      console.log("session data called");
+      this.getSessionData();
+    },
+  },
+  methods: {
+    async getSessionData() {
+      const session = JSON.parse(sessionStorage.getItem("AuthSessionData"));
+      const sessionExpiry = sessionStorage.getItem("AuthSessionExpiry");
+      if (session && sessionExpiry && sessionExpiry > Date.now()) {
+        this.sessionData = session;
+      } else {
+        try {
+          const response = await authService.sessionData();
+          //set expiry to 2 hours
+          const expiry = Date.now() + 2 * 60 * 60 * 1000;
+          sessionStorage.setItem("AuthSessionData", JSON.stringify(response));
+          sessionStorage.setItem("AuthSessionExpiry", expiry);
+          this.sessionData = response;
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    },
   },
 };
 </script>

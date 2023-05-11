@@ -1,5 +1,8 @@
 <template>
-  <div :class="`right-sidebar-mini  ${miniClass} data-scrollbar`"  v-click-outside="onClickOutside">
+  <div
+    :class="`right-sidebar-mini  ${miniClass} data-scrollbar`"
+    v-click-outside="onClickOutside"
+  >
     <div class="right-sidebar-panel p-0">
       <div class="card shadow-none">
         <div class="card-body p-0">
@@ -70,11 +73,11 @@ export default {
   props: {
     book_in_progress: {
       type: [Object],
-      required: true,
+      default: () => {},
     },
     progress: {
       type: [Number],
-      required: true,
+      default: null,
     },
   },
   data() {
@@ -102,7 +105,7 @@ export default {
       this.rightSideBarMini = true;
       const body = document.querySelector("body");
       this.miniClass = "right-sidebar";
-        body.classList.add("right-sidebar-close");
+      body.classList.add("right-sidebar-close");
     },
   },
 };

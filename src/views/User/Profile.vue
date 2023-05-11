@@ -139,22 +139,6 @@ export default {
     Books,
     Statistics,
   },
-  created() {
-    watchEffect(async () => {
-      this.profile = null;
-      this.profile = await UserProfile.getUserProfileById(
-        this.$route.params.user_id
-      );
-      this.readingInfo[0].value = this.profile.reading_Info.books;
-      this.readingInfo[1].value = this.profile.reading_Info.thesis;
-      this.authFriendship = {
-        friendWithAuth: this.profile.friendWithAuth,
-        friendRequestByAuth: this.profile.friendRequestByAuth,
-        friendRequestByFriend: this.profile.friendRequestByFriend,
-        friendship_id: this.profile.friendship_id,
-      };
-    });
-  },
   data() {
     return {
       profile: null,
@@ -187,6 +171,17 @@ export default {
       ],
     };
   },
+  created() {
+    this.getProfile();
+  },
+  watch: {
+    $route(to, from) {
+      if (to.name === "user.profile") {
+        console.log("profile route changed");
+        this.getProfile();
+      }
+    },
+  },
   methods: {
     editAuthFriendship(edittedKey) {
       this.authFriendship = {
@@ -194,6 +189,25 @@ export default {
         ...edittedKey,
       };
     },
+
+    async getProfile() {
+      this.profile = null;
+      this.profile = await UserProfile.getUserProfileById(
+        this.$route.params.user_id
+      );
+      this.readingInfo[0].value = this.profile.reading_Info.books;
+      this.readingInfo[1].value = this.profile.reading_Info.thesis;
+      this.authFriendship = {
+        friendWithAuth: this.profile.friendWithAuth,
+        friendRequestByAuth: this.profile.friendRequestByAuth,
+        friendRequestByFriend: this.profile.friendRequestByFriend,
+        friendship_id: this.profile.friendship_id,
+      };
+    },
+  },
+  beforeRouteLeave(to, from, next) {
+    this.profile = null;
+    next();
   },
 };
 </script>
