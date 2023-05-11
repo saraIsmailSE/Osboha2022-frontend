@@ -222,6 +222,9 @@ import UserInfoService from "@/Services/userInfoService";
 
 export default {
   name: "DefaultSidebar",
+  created() {
+    console.log("[user profile]", this.user);
+  },
   computed: {
     user() {
       return this.$store.getters.getUser;

@@ -10,13 +10,15 @@
 
     <div class="ms-3 flex-grow-1">
       <h5>{{ comment.user?.name }}</h5>
-      <span
-        class="badge bg-primary rounded-pill"
-        v-for="role in comment.user?.roles"
-        :key="role"
-      >
-        &nbsp; {{ role }} &nbsp;</span
-      >
+      <div class="mt-1" v-if="comment.user?.roles?.length > 0">
+        <span
+          class="badge bg-primary rounded-pill ms-1 px-2"
+          v-for="role in comment.user?.roles"
+          :key="role"
+        >
+          {{ ARABIC_ROLES[role] }}</span
+        >
+      </div>
     </div>
     <div class="card-post-toolbar d-flex align-items-center" v-if="authorized">
       <div class="dropdown">
@@ -74,6 +76,7 @@ import UserAvatar from "@/components/user/UserAvatar.vue";
 import UserInfoService from "@/Services/userInfoService";
 import helper from "@/utilities/helper";
 import CommentService from "@/API/services/comment.service";
+import { ARABIC_ROLES } from "@/utilities/constants";
 
 export default {
   name: "CommentUser",
@@ -98,6 +101,7 @@ export default {
       deleteLoading: false,
       confirmationText: "",
       successText: "",
+      ARABIC_ROLES,
     };
   },
   computed: {

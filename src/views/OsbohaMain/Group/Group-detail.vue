@@ -43,7 +43,7 @@
                 </div>
                 <div class="flex-grow-1 ms-3">
                   <h4>رسالة المجموعة المجموعة</h4>
-                  <p class="mb-0" style="white-space: pre-wrap; direction: rtl;"> 
+                  <p class="mb-0" style="white-space: pre-wrap; direction: rtl">
                     {{ group.description }}
                   </p>
                 </div>
@@ -220,13 +220,25 @@ export default {
         Administration: "الإدارة العليا",
       },
       reasons: [],
+      roles: {
+        admin: 0,
+        consultant: 1,
+        advisor: 2,
+        supervisor: 3,
+        leader: 4,
+        ambassador: 5,
+      },
     };
   },
   computed: {
     groupAdministrators() {
-      return this.group.group_administrators.filter(
+      let admins = this.group.group_administrators.filter(
         (administrator) => administrator.pivot.user_type != "admin"
       );
+
+      return admins.sort((a, b) => {
+        return this.roles[a.pivot.user_type] - this.roles[b.pivot.user_type];
+      });
     },
   },
   methods: {

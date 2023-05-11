@@ -124,27 +124,18 @@
               <button
                 type="button"
                 @click="show_friends = !show_friends"
-                class="btn bg-white text-dark border-dark w-100 d-flex justify-content-between"
-                v-if="!show_friends"
-              >
-                عرض
-                <span class="material-symbols-outlined"> visibility </span>
-              </button>
-              <button
-                type="button"
-                @click="show_friends = !show_friends"
                 class="mb-3 btn bg-white text-dark border-dark w-100 d-flex justify-content-between"
-                v-if="show_friends"
               >
-                اخفاء
-                <span class="material-symbols-outlined"> visibility_off </span>
+                {{ show_friends ? "اخفاء" : "عرض" }}
+                <span class="material-symbols-outlined">
+                  {{ show_friends ? "visibility_off" : "visibility" }}
+                </span>
               </button>
-
               <div v-show="show_friends">
                 <ul class="profile-img-gallary p-0 m-0 list-unstyled">
                   <li
-                    v-for="(friend, index) in friends"
-                    :key="index"
+                    v-for="friend in friends"
+                    :key="friend.id"
                     class="text-center"
                   >
                     <router-link
@@ -153,11 +144,18 @@
                         params: { user_id: friend.id },
                       }"
                     >
-                      <img
+                      <UserAvatar
+                        :profileImg="friend?.profile.profile_picture"
+                        :profile_id="friend?.profile.id"
+                        :title="friend?.name"
+                        :gender="friend?.gender"
+                        avatarClass="avatar-50"
+                      />
+                      <!-- <img
                         src="../../../assets/images/avatar/avatar-02.jpg"
                         alt="user-image"
                         class="img-fluid rounded-circle w-50"
-                      />
+                      /> -->
                     </router-link>
                     <h6 class="mt-2 text-center">{{ friend.name }}</h6>
                   </li>
@@ -271,12 +269,14 @@
 <script>
 import LazyLoadedPosts from "@/components/post/LazyLoadedPosts.vue";
 import AddPost from "@/components/post/add/AddPost";
+import UserAvatar from "@/components/user/UserAvatar.vue";
 
 export default {
   name: "ProfileFeed",
   components: {
     AddPost,
     LazyLoadedPosts,
+    UserAvatar,
   },
   props: {
     //LATER

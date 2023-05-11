@@ -33,6 +33,10 @@ export default new Vuex.Store({
     SET_UNREAD_NOTIFICATIONS(state, count) {
       state.unreadNotifications = count;
     },
+    SET_PROFILE_PICTURE(state, profilePicture) {
+      state.user.user_profile.profile_picture = profilePicture;
+      localStorage.setItem("osboha__user", JSON.stringify(state.user));
+    },
   },
   actions: {
     register({ commit }, credentials) {

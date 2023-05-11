@@ -26,46 +26,25 @@
             v-for="(user, index) in usersLoaded"
             :key="index"
           >
-            <div class="user-img img-fluid flex-shrink-0">
-              <img
-                v-if="user.user_profile.profile_picture"
-                :src="
-                  resolve_porfile_img(
-                    '60x60',
-                    user.user_profile.profile_picture,
-                    user.user_profile.id
-                  )
-                "
-                alt="profile-img"
-                class="rounded-circle avatar-40"
-                :title="user.name"
-              />
-
-              <img
-                v-else
-                :src="
-                  resolve_porfile_img(
-                    '60x60',
-                    'ananimous_' + user.gender + '.png',
-                    'ananimous'
-                  )
-                "
-                alt="profile-img"
-                :title="user.name"
-                class="rounded-circle avatar-40"
-              />
-            </div>
+            <UserAvatar
+              :profileImg="user.user_profile.profile_picture"
+              :profile_id="user.user_profile.id"
+              :title="user?.name"
+              :gender="user?.gender"
+              avatarClass="rounded-circle avatar-40"
+              containerClass="flex-shrink-0"
+            />
             <div class="flex-grow-1 ms-3">
               <router-link
                 :to="{ name: 'user.profile', params: { user_id: user.id } }"
               >
                 <h5>{{ user.name }}</h5>
               </router-link>
-              <span class="rounded-pill badge lh-1 bg-primary">{{
-                user.pivot.user_type
+              <span class="rounded-pill badge lh-1 bg-primary px-2">{{
+                ARABIC_ROLES[user.pivot.user_type]
               }}</span>
             </div>
-            <div class="d-flex justify-content-end flex-grow-1 ms-3">
+            <!-- <div class="d-flex justify-content-end flex-grow-1 ms-3">
               <span
                 role="button"
                 @click="showList(index)"
@@ -90,12 +69,6 @@
                     الملف الشخصي
                   </a>
                 </router-link>
-                <a class="dropdown-item d-flex align-items-center">
-                  <span class="material-symbols-outlined me-2 md-18">
-                    forum
-                  </span>
-                  مراسلة
-                </a>
                 <a
                   class="dropdown-item d-flex align-items-center"
                   @click="createFriendship(user.id)"
@@ -106,7 +79,7 @@
                   اضافة
                 </a>
               </div>
-            </div>
+            </div> -->
           </li>
           <li
             class="d-block text-center mb-0 pb-0"
@@ -139,9 +112,14 @@ import UserGroup from "@/API/services/user-group.service";
 import vClickOutside from "click-outside-vue3";
 import profileImagesService from "@/API/services/profile.images.service";
 import GroupService from "@/API/services/group.service";
+import UserAvatar from "@/components/user/UserAvatar.vue";
+import { ARABIC_ROLES } from "@/utilities/constants";
 
 export default {
-  name: "FriendList",
+  name: "GroupMembers",
+  components: {
+    UserAvatar,
+  },
   directives: {
     clickOutside: vClickOutside.directive,
   },
@@ -151,13 +129,13 @@ export default {
     );
     this.users = response.users;
   },
-
   data() {
     return {
       controlList: [],
       users: [],
       length: 10,
       ambassador_name: "",
+      ARABIC_ROLES,
     };
   },
   methods: {

@@ -301,9 +301,7 @@ export default {
       });
     },
   },
-  async created() {
-    await this.getFriends();
-  },
+  async created() {},
 
   async mounted() {
     this.postModal = new Modal(this.$refs.postModalRef.$el);
@@ -327,6 +325,9 @@ export default {
       }
     },
     showModal(modal) {
+      if (modal === this.postModal) {
+        this.getFriends();
+      }
       modal.show();
     },
     hideModal(modal) {

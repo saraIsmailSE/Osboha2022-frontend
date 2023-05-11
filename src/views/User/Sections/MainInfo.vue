@@ -40,7 +40,9 @@
                   :key="index"
                   class="text-center pe-2"
                 >
-                  <span class="rounded-pill badge bg-primary">{{ user_role[role] }}</span>
+                  <span class="rounded-pill badge bg-primary px-2">{{
+                    ARABIC_ROLES[role]
+                  }}</span>
                 </li>
               </ul>
             </div>
@@ -140,6 +142,7 @@ import profileImagesService from "@/API/services/profile.images.service";
 import FriendServices from "@/API/services/friend.service";
 import UserAvatar from "@/components/user/UserAvatar.vue";
 import helper from "@/utilities/helper";
+import { ARABIC_ROLES } from "@/utilities/constants";
 
 export default {
   name: "MainInfo",
@@ -147,7 +150,9 @@ export default {
     UserAvatar,
   },
   emits: ["editAuthFriendship"],
-  created() {},
+  created() {
+    console.log("[ARABIC_ROLES]", ARABIC_ROLES["ambassador"]);
+  },
   props: {
     authFriendship: {
       type: Object,
@@ -169,17 +174,10 @@ export default {
       required: true,
     },
   },
-  data(){
-    return{
-      user_role: {
-        ambassador: "سفير",
-        leader: "قائد",
-        supervisor: "مراقب",
-        advisor: "موجه",
-        consultant: "مستشار",
-        admin: "ادارة",
-      },
-    }
+  data() {
+    return {
+      ARABIC_ROLES,
+    };
   },
   methods: {
     updateProfile() {

@@ -94,7 +94,7 @@ export default {
       return this.books.slice(0, this.length);
     },
     isAuth() {
-      return this.$store.getters.getUser.id == this.user_id;
+      return this.$store.getters.getUser.id == this.$route.params.user_id;
     },
   },
 };

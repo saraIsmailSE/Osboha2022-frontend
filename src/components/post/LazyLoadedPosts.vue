@@ -169,7 +169,11 @@ export default {
         this.totalPages = response.data?.last_page ?? 1;
         this.page++;
       } catch (error) {
-        if (error.response.status !== 400 && error.response.status !== 403)
+        if (
+          error.response.status !== 400 &&
+          error.response.status !== 403 &&
+          error.response.status !== 401
+        )
           helper.toggleToast(
             "حدث خطأ أثناء تحميل المنشورات, حاول مرة أخرى",
             "error"
