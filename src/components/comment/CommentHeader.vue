@@ -1,11 +1,11 @@
 <template>
   <div class="d-flex align-items-center justify-content-center mb-3">
-    <UserAvatar
+    <BaseAvatar
       :profileImg="comment.user?.profile.profile_picture"
       :profile_id="comment.user?.profile.id"
       :title="comment.user?.name"
       :gender="comment.user?.gender"
-      avatarClass="avatar-50"
+      avatarClass="rounded-circle avatar-50"
     />
 
     <div class="ms-3 flex-grow-1">
@@ -72,7 +72,6 @@
   </div>
 </template>
 <script>
-import UserAvatar from "@/components/user/UserAvatar.vue";
 import UserInfoService from "@/Services/userInfoService";
 import helper from "@/utilities/helper";
 import CommentService from "@/API/services/comment.service";
@@ -80,9 +79,6 @@ import { ARABIC_ROLES } from "@/utilities/constants";
 
 export default {
   name: "CommentUser",
-  components: {
-    UserAvatar,
-  },
   inject: {
     deleteComment: {
       default: () => {},

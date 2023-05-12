@@ -7,20 +7,23 @@
       >
         <h6 class="text-white">{{ bookTypeLanguage }}</h6>
       </div>
-      <div
-        class="position-absolute start-0 "
-      >
-      <font-awesome-icon role="button" class="me-3"
+      <div class="position-absolute start-0">
+        <font-awesome-icon
+          role="button"
+          class="me-3"
           :icon="[isSaved ? 'fas' : 'far', 'heart']"
           size="2xl"
           color="#f75c78"
           @click.prevent="markBookForLater"
-        v-if="!isProfile"
-
+          v-if="!isProfile"
         />
-      <span role="button" @click="download(cardInfo.link)" class="material-symbols-outlined align-middle display-4 me-3">
-        download
-      </span>
+        <span
+          role="button"
+          @click="download(cardInfo.link)"
+          class="material-symbols-outlined align-middle display-5 me-3"
+        >
+          download
+        </span>
       </div>
 
       <div class="card-body text-center">
@@ -37,19 +40,16 @@
                 name: 'book.book-details',
                 params: { book_id: this.cardInfo.id },
               }"
-              >{{
-                cardInfo.name.length > 20
-                  ? cardInfo.name.substring(0, 20) + "..."
-                  : cardInfo.name
-              }}</router-link
+              data-toggle="tooltip"
+              data-placement="top"
+              :title="cardInfo.name"
+              class="truncated"
+              :class="directionClass"
+              >{{ cardInfo.name }}</router-link
             >
           </h4>
-          <p>
-            {{
-              cardInfo.writer.length > 20
-                ? cardInfo.writer.substring(0, 20) + "..."
-                : cardInfo.writer
-            }}
+          <p class="truncated" :class="directionClass">
+            {{ cardInfo.writer }}
           </p>
         </div>
         <div class="group-details d-inline-block pb-3">
@@ -223,7 +223,7 @@ export default {
         );
       }
     },
-    download(link){
+    download(link) {
       const swalWithBootstrapButtons = this.$swal.mixin({
         customClass: {
           confirmButton: "btn btn-primary btn-lg",
@@ -236,7 +236,9 @@ export default {
           title: "ملاحظة هامة",
           text: "في مشروعنا لن لا نقوم أبدًا بتصوير الكتب المطبوعة ولا نقوم بنسب هذه الكتب للمشروع أو محاولة إخفاء أسماء دور النشر وحقوقها . إنما كل ما نقوم به هو عملية البحث عن هذه الكتب في مواقع الانترنت و إحضار روابط الحصول عليها للاستفادة منها . علمًا أننا لا نقوم بعملية بيع للكتب أو الاستفادة المادية منها مطلقًا ولكننا نؤمن أن من حق دور النشر إيجاد وسائل لمنع تصوير كتبها ووضعها على مواقع الانترنت ولكن أن يتواجد الكتاب على الانترنت مجانًا سواء عن طريق موقع لديه أذن بالنشر ، أو عن طريق كاتب الكتاب أو غيرهم ، ثم لا نقوم بقراءة هذه الكتب ونمنع أنفسنا من العلم فهذا الأمر لن يساهم في عملية ايقاف الكتب الالكترونية إنما سوف يساهم فقط بمنع أنفسنا عن علم مطروح وتقييد أنفسنا بظروف تدفعنا للجهل والتوقف عن التعلم . علمًا أن المشروع يتعهد دومًا بحذف أي كتاب من المنهج إذا لم يناسب وجوده كاتب الكتب أو دار النشر الخاصة بالكتاب ، فبإمكان كل شخص إما قراءة الكتاب مطبوعًا أو الاستفادة من النسخ التي نجمعها من مواقع الكتب المنتشرة مع إخلاء مسؤوليتنا حول إن كانت هذه المواقع لديها أذن بالنشر والتوزيع من عدمه فنترك هذا الأمر لدور النشر . هذا ونسأل الله أن يصلح نوايانا ويجعلها خالصة لوجهه الكريم وتطبيقًا لأمره لنا بالقراءة لأجل التعلم والتفكر . والله أعلم .",
           icon: "warning",
+          showCancelButton: true,
           confirmButtonText: "تحميل",
+          cancelButtonText: "إلغاء",
           showClass: {
             popup: "animate__animated animate__zoomIn",
           },
@@ -244,13 +246,12 @@ export default {
             popup: "animate__animated animate__zoomOut",
           },
         })
-        .then((willDelete) => {
-          if (willDelete.isConfirmed) {
-            window.open(link, '_blank');
+        .then((result) => {
+          if (result.isConfirmed) {
+            window.open(link, "_blank");
           }
         });
-
-    }
+    },
   },
   computed: {
     bookTypeLanguage() {
@@ -291,6 +292,27 @@ export default {
           parseInt(this.$route.params.user_id)
       );
     },
+    directionClass() {
+      return this.cardInfo.language.language.toLowerCase() == "arabic"
+        ? "right-direction"
+        : "left-direction";
+    },
   },
 };
 </script>
+<style scoped>
+.truncated {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.right-direction {
+  direction: rtl;
+}
+
+.left-direction {
+  direction: ltr;
+}
+</style>

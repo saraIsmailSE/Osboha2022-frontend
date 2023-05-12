@@ -15,34 +15,14 @@
             v-for="(friend, index) in friendsLoaded"
             :key="index"
           >
-            <div class="user-img img-fluid flex-shrink-0">
-              <img
-                v-if="friend.profile.profile_picture"
-                :src="
-                  resolve_porfile_img(
-                    '60x60',
-                    friend.profile.profile_picture,
-                    friend.profile.id
-                  )
-                "
-                alt="profile-img"
-                class="rounded-circle avatar-40"
-                :title="friend.name"
-              />
-              <img
-                v-else
-                :src="
-                  resolve_porfile_img(
-                    '60x60',
-                    'ananimous_' + friend.gender + '.png',
-                    'ananimous'
-                  )
-                "
-                alt="profile-img"
-                :title="friend.name"
-                class="rounded-circle avatar-40"
-              />
-            </div>
+            <BaseAvatar
+              :profileImg="friend.profile.profile_picture"
+              :profile_id="friend.profile.id"
+              :title="friend.name"
+              :gender="friend.gender"
+              avatarClass="rounded-circle avatar-40"
+              containerClass="flex-shrink-0"
+            />
             <div class="flex-grow-1 ms-3">
               <h5>{{ friend.name }}</h5>
             </div>
@@ -137,7 +117,6 @@
 <script>
 import FriendServices from "@/API/services/friend.service";
 import vClickOutside from "click-outside-vue3";
-import profileImagesService from "@/API/services/profile.images.service";
 
 export default {
   name: "FriendList",
@@ -161,19 +140,6 @@ export default {
     };
   },
   methods: {
-    /**
-     * get profile picture or cover.
-     *  @param  image size, image name, profile id
-     * @return image url
-     */
-    resolve_porfile_img(size, imageName, profile_id) {
-      return profileImagesService.resolve_porfile_img(
-        size,
-        imageName,
-        profile_id
-      );
-    },
-
     /**
      * show specific control list.
      *  @param  index

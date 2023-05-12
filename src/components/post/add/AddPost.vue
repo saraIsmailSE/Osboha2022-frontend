@@ -9,7 +9,7 @@
       </template>
       <template v-slot:body>
         <div class="d-flex align-items-center">
-          <UserAvatar
+          <BaseAvatar
             :profileImg="auth?.user_profile?.profile_picture"
             :profile_id="auth?.user_profile?.id"
             :title="auth?.name"
@@ -30,172 +30,172 @@
           </form>
         </div>
       </template>
-      <modal
-        ref="postModalRef"
-        id="postModal"
-        dialogClass="modal-fullscreen-sm-down"
-        tabindex="-1"
-        title="Create Post"
-        aria-labelledby="modalsLabel"
-        :aria-hidden="true"
-      >
-        <model-header>
-          <h5 class="modal-title" id="modalsLabel">منشور جديد</h5>
-          <a href="#" class="lh-1" @click.prevent="hideModal(postModal)">
-            <span class="material-symbols-outlined">close</span>
-          </a>
-        </model-header>
-        <model-body class="post-modal-body">
-          <div class="d-flex align-items-start">
-            <PostUser
-              :post="{
-                user: auth,
-                taggedFriends: selectedFriends,
-              }"
-            />
-          </div>
-          <div>
-            <form class="post-text ml-3 w-100">
-              <textarea
-                placeholder="ماذا تريد أن تكتب..."
-                class="rounded form-control"
-                style="border: none"
-                v-model.trim="post.body"
-                ref="bodyRef"
-              >
-              </textarea>
-
-              <input
-                type="file"
-                @change="previewMedia($event)"
-                multiple
-                accept="image/*"
-                class="d-none"
-                ref="fileRef"
-              />
-            </form>
-          </div>
-          <PostPoll
-            :showPoll="showPoll"
-            :pollOptions="pollOptions"
-            @closePoll="showPoll = false"
-            @addPollOption="addPollOption"
-            @removePollOption="removePollOption"
-            @checkSimilarPollOptions="checkSimilarPollOptions"
-          />
-          <hr />
-          <ul class="post-opt-block d-flex list-inline m-0 p-0 flex-wrap">
-            <li class="me-2 mb-2">
-              <button
-                class="btn btn-soft-primary d-flex align-items-center"
-                @click="openFilePicker"
-                :disabled="!allowAddingMedia"
-              >
-                <span class="material-symbols-outlined me-2">photo_camera</span>
-                صورة/فيديو
-              </button>
-            </li>
-            <li class="me-2 mb-2">
-              <button
-                class="btn btn-soft-primary d-flex align-items-center"
-                @click.prevent="showModal(friendsListModal)"
-              >
-                <span class="material-symbols-outlined me-2">person_add</span>
-                إشارة إلى صديق
-              </button>
-            </li>
-            <li class="me-2 mb-2">
-              <button
-                class="btn btn-soft-primary d-flex align-items-center"
-                @click.prevent="openPoll"
-              >
-                <span class="material-symbols-outlined me-2">poll</span>
-                إضافة استعلام
-              </button>
-            </li>
-          </ul>
-          <template v-if="post.media.length > 0">
-            <hr />
-            <ImagePreviewer :media="post.media" @remove-media="removeMedia" />
-          </template>
-        </model-body>
-        <model-footer class="p-0 px-2">
-          <div class="w-100 text-right" style="color: red" v-if="showPoll">
-            ملاحظة: نص المنشور مطلوب مع الاستعلام, والخيارات لا يمكن أن تكون أقل
-            من 2 ولا تزيد عن 10
-          </div>
-          <div
-            class="w-100 text-center py-1"
-            style="color: red"
-            v-if="errorMessage"
-          >
-            {{ errorMessage }}
-          </div>
-          <div class="col-sm-12 text-center" v-if="loader">
-            <img
-              :src="require('@/assets/images/page-img/page-load-loader.gif')"
-              alt="loader"
-              style="height: 100px"
-            />
-          </div>
-          <button
-            v-else
-            class="btn btn-primary btn-block my-3 w-100 flex-grow-1"
-            @click="addNewPost()"
-            :disabled="!allowPosting"
-          >
-            نشـــر
-          </button>
-        </model-footer>
-      </modal>
-      <modal
-        ref="friendsListModalRef"
-        id="friendsListModal"
-        tabindex="-1"
-        aria-labelledby="friendsModalLabel"
-        :aria-hidden="true"
-      >
-        <model-header>
-          <h5 class="modal-title" id="friendsModalLabel">إشارة إلى صديق</h5>
-          <a href="#" class="lh-1" @click.prevent="hideModal(friendsListModal)">
-            <span class="material-symbols-outlined"> arrow_back_ios_new </span>
-          </a>
-        </model-header>
-        <model-body>
-          <div class="iq-search-bar device-search w-main my-2 d-flex">
-            <form action="#" class="searchbox" style="width: 100% !important">
-              <a class="search-link" href="#">
-                <span class="material-symbols-outlined">search</span>
-              </a>
-              <input
-                type="text"
-                class="text search-input form-control bg-soft-primary"
-                placeholder="ابحث هنا..."
-                v-model.trim="searchQuery"
-                @keyup="searchFriends"
-              />
-            </form>
-            <a
-              href="#"
-              class="btn btn-primary ms-2"
-              @click.prevent="hideModal(friendsListModal)"
-            >
-              اعتماد
-            </a>
-          </div>
-          <hr />
-          <FriendsList
-            :friends="friends"
-            :handleCheckboxChange="handleCheckboxChange"
-          />
-        </model-body>
-      </modal>
     </iq-card>
+    <modal
+      ref="postModalRef"
+      id="postModal"
+      dialogClass="modal-lg modal-dialog-centered modal-dialog-scrollable"
+      tabindex="-1"
+      title="Create Post"
+      aria-labelledby="modalsLabel"
+      :aria-hidden="true"
+    >
+      <model-header>
+        <h5 class="modal-title" id="modalsLabel">منشور جديد</h5>
+        <a href="#" class="lh-1" @click.prevent="hideModal(postModal)">
+          <span class="material-symbols-outlined">close</span>
+        </a>
+      </model-header>
+      <model-body class="post-modal-body">
+        <div class="d-flex align-items-start">
+          <PostUser
+            :post="{
+              user: auth,
+              taggedFriends: selectedFriends,
+            }"
+          />
+        </div>
+        <div>
+          <form class="post-text ml-3 w-100">
+            <textarea
+              placeholder="ماذا تريد أن تكتب..."
+              class="rounded form-control"
+              style="border: none"
+              v-model.trim="post.body"
+              ref="bodyRef"
+            >
+            </textarea>
+
+            <input
+              type="file"
+              @change="previewMedia($event)"
+              multiple
+              accept="image/*"
+              class="d-none"
+              ref="fileRef"
+            />
+          </form>
+        </div>
+        <PostPoll
+          :showPoll="showPoll"
+          :pollOptions="pollOptions"
+          @closePoll="showPoll = false"
+          @addPollOption="addPollOption"
+          @removePollOption="removePollOption"
+          @checkSimilarPollOptions="checkSimilarPollOptions"
+        />
+        <hr />
+        <ul class="post-opt-block d-flex list-inline m-0 p-0 flex-wrap">
+          <li class="me-2 mb-2">
+            <button
+              class="btn btn-soft-primary d-flex align-items-center"
+              @click="openFilePicker"
+              :disabled="!allowAddingMedia"
+            >
+              <span class="material-symbols-outlined me-2">photo_camera</span>
+              صورة/فيديو
+            </button>
+          </li>
+          <li class="me-2 mb-2">
+            <button
+              class="btn btn-soft-primary d-flex align-items-center"
+              @click.prevent="showModal(friendsListModal)"
+            >
+              <span class="material-symbols-outlined me-2">person_add</span>
+              إشارة إلى صديق
+            </button>
+          </li>
+          <li class="me-2 mb-2">
+            <button
+              class="btn btn-soft-primary d-flex align-items-center"
+              @click.prevent="openPoll"
+            >
+              <span class="material-symbols-outlined me-2">poll</span>
+              إضافة استعلام
+            </button>
+          </li>
+        </ul>
+        <template v-if="post.media.length > 0">
+          <hr />
+          <ImagePreviewer :media="post.media" @remove-media="removeMedia" />
+        </template>
+      </model-body>
+      <model-footer class="p-0 px-2">
+        <div class="w-100 text-right" style="color: red" v-if="showPoll">
+          ملاحظة: نص المنشور مطلوب مع الاستعلام, والخيارات لا يمكن أن تكون أقل
+          من 2 ولا تزيد عن 10
+        </div>
+        <div
+          class="w-100 text-center py-1"
+          style="color: red"
+          v-if="errorMessage"
+        >
+          {{ errorMessage }}
+        </div>
+        <div class="col-sm-12 text-center" v-if="loader">
+          <img
+            :src="require('@/assets/images/page-img/page-load-loader.gif')"
+            alt="loader"
+            style="height: 100px"
+          />
+        </div>
+        <button
+          v-else
+          class="btn btn-primary btn-block my-3 w-100 flex-grow-1"
+          @click="addNewPost()"
+          :disabled="!allowPosting"
+        >
+          نشـــر
+        </button>
+      </model-footer>
+    </modal>
+    <modal
+      ref="friendsListModalRef"
+      id="friendsListModal"
+      tabindex="-1"
+      aria-labelledby="friendsModalLabel"
+      :aria-hidden="true"
+      dialogClass="modal-lg modal-dialog-centered"
+    >
+      <model-header>
+        <h5 class="modal-title" id="friendsModalLabel">إشارة إلى صديق</h5>
+        <a href="#" class="lh-1" @click.prevent="hideModal(friendsListModal)">
+          <span class="material-symbols-outlined"> arrow_back_ios_new </span>
+        </a>
+      </model-header>
+      <model-body>
+        <div class="iq-search-bar device-search w-main my-2 d-flex">
+          <form action="#" class="searchbox" style="width: 100% !important">
+            <a class="search-link" href="#">
+              <span class="material-symbols-outlined">search</span>
+            </a>
+            <input
+              type="text"
+              class="text search-input form-control bg-soft-primary"
+              placeholder="ابحث هنا..."
+              v-model.trim="searchQuery"
+              @keyup="searchFriends"
+            />
+          </form>
+          <a
+            href="#"
+            class="btn btn-primary ms-2"
+            @click.prevent="hideModal(friendsListModal)"
+          >
+            اعتماد
+          </a>
+        </div>
+        <hr />
+        <FriendsList
+          :friends="friends"
+          :handleCheckboxChange="handleCheckboxChange"
+        />
+      </model-body>
+    </modal>
   </div>
 </template>
 <script>
 import ImagePreviewer from "@/components/media/ImagePreviewer.vue";
-import UserAvatar from "@/components/user/UserAvatar.vue";
 import PostPoll from "@/components/post/add/PostPoll.vue";
 import FriendsList from "@/components/post/add/FriendsList.vue";
 import PostUser from "@/components/post/header/PostUser.vue";
@@ -212,7 +212,6 @@ export default {
     PostPoll,
     FriendsList,
     PostUser,
-    UserAvatar,
   },
   props: {
     type: {
@@ -415,7 +414,6 @@ export default {
       this.loader = true;
       try {
         const post = await postService.create(newPost);
-        console.log("[post]", post);
 
         if (post.statusCode !== 200) {
           helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
@@ -432,7 +430,7 @@ export default {
           "success"
         );
       } catch (err) {
-        console.log("[err]", err);
+        console.log("[AddPost error]", err);
         helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
       } finally {
         this.loader = false;
@@ -465,7 +463,7 @@ export default {
 };
 </script>
 <style scoped>
-.post-modal-body {
+/* .post-modal-body {
   max-height: 60vh;
   overflow-y: auto;
 }
@@ -475,5 +473,5 @@ export default {
     height: auto;
     max-height: initial;
   }
-}
+} */
 </style>

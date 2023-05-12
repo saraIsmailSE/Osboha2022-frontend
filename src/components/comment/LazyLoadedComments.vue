@@ -194,7 +194,6 @@ export default {
      * @param comment_id: the id of the comment
      */
     addComment(comment, comment_id) {
-      console.log("[lazy loaded comments] addComment", comment);
       if (!comment_id) {
         this.comments.push(comment);
         this.$nextTick(() => {
@@ -205,7 +204,6 @@ export default {
       } else {
         let commentToUpdate = this.findComment(this.comments, comment_id);
         commentToUpdate.replies.push(comment);
-        console.log("[added comment at post]", comment);
       }
       this.incrementCommentsCount(this.post.id);
     },
@@ -246,7 +244,6 @@ export default {
       commentToEdit.media = comment.media;
     },
     reactToComment(comment_id, status) {
-      console.log("[lazy loaded comments] reactToComment", comment_id, status);
       let comment = this.findComment(this.comments, comment_id);
       if (status) {
         comment.reactions_count++;

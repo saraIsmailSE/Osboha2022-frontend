@@ -182,9 +182,6 @@ export default {
       return this.noComments ? 3 : this.support?.comments?.length + 2;
     },
   },
-  created() {
-    console.log("[created - supportMark]", this.supportMark);
-  },
   methods: {
     async handleSupport(status = true) {
       if (this.loading) return;

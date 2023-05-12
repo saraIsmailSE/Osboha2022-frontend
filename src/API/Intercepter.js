@@ -1,8 +1,8 @@
 import axios from "axios";
 import router from "@/router";
 
-//const baseURL = "https://www.platform.osboha180.com/api/api/v1";
-const baseURL = "http://127.0.0.1:8000/api/v1";
+//read baseURL from .env file based on NODE_ENV
+const baseURL = process.env.VUE_APP_BASE_URL;
 
 const api = axios.create({
   baseURL: baseURL,

@@ -11,7 +11,7 @@
         <div class="card-body">
           <div class="row d-flex justify-content-center mb-2">
             <div class="col-6 m-auto d-flex justify-content-end">
-              <UserAvatar
+              <BaseAvatar
                 :profileImg="most_read.user.user_profile.profile_picture"
                 :profile_id="most_read.user.user_profile.id"
                 :title="most_read.user.name"
@@ -42,14 +42,10 @@
 </template>
 
 <script>
-import UserAvatar from "@/components/user/UserAvatar.vue";
 import helper from "@/utilities/helper.js";
 
 export default {
   name: "MostRead",
-  components: {
-    UserAvatar,
-  },
   props: {
     most_read: {
       type: [Object],

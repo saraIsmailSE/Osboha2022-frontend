@@ -142,7 +142,6 @@ export default {
   },
   watch: {
     $route(to, from) {
-      console.log("session data called");
       this.getSessionData();
     },
   },

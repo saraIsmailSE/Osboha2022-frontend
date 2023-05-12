@@ -80,7 +80,6 @@ export default {
         this.$route.params.ambassador_id
       );
 
-      console.log("[mark response]", response);
       this.mark = response.mark;
       this.theses = response.theses.reduce((groupByBook, item) => {
         const group = groupByBook[item.book.name] || [];

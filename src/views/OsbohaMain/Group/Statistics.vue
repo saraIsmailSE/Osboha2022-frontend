@@ -40,7 +40,6 @@ export default {
     this.statistics = await GroupService.statistics(
       this.$route.params.group_id
     );
-    console.log("[GroupStatistics] statistics", this.statistics);
   },
 
   data() {

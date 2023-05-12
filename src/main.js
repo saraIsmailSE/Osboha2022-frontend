@@ -4,6 +4,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "./plugins";
+
 import VueSweetalert2 from "vue-sweetalert2";
 import VueApexCharts from "vue3-apexcharts";
 import BootstrapVue3 from "bootstrap-vue-3";
@@ -14,9 +15,14 @@ import fontawsome from "./utilities/fontawsome";
 import Vue3Toasity from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
-import setupInterceptors from '@/Services/setupInterceptors';
-setupInterceptors(store)
+import GlobalComponent from "./utilities/_globals";
+import progressBar from "./utilities/progress-bar";
+import "nprogress/nprogress.css";
 
+import setupInterceptors from "@/Services/setupInterceptors";
+setupInterceptors(store);
+
+progressBar(router);
 
 // Vuetify
 //import 'vuetify/styles'
@@ -25,16 +31,16 @@ setupInterceptors(store)
 //import * as directives from 'vuetify/directives'
 
 //const vuetify = createVuetify({
-  // components,
-  //directives,
+// components,
+//directives,
 //})
-
 
 const app = createApp(App);
 app.use(VueSweetalert2);
 app.use(BootstrapVue3);
 app.use(VueApexCharts);
 app.use(fontawsome);
+app.use(GlobalComponent);
 app.use(Vue3Toasity, {
   autoClose: 3000,
   limit: 3,

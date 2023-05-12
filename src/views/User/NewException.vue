@@ -208,7 +208,7 @@ export default {
           this.message = response;
           this.v$.exceptionForm.$reset();
         } catch (error) {
-          console.log("Exception request error: ", error);
+          console.log("[Exception request error]", error);
         } finally {
           this.loader = false;
         }
