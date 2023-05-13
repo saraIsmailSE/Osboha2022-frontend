@@ -19,14 +19,15 @@
           />
         </div>
         <div class="user-detail text-center mb-3">
-          <UserAvatar
+          <BaseAvatar
             :profileImg="profile.profile_picture"
             :profile_id="profile.id"
             :title="user.gender"
             :gender="user.gender"
-            avatarClass="avatar-130 img-fluid"
+            avatarClass="avatar-130 img-fluid rounded-circle"
             containerClass="profile-img"
             :imageStyle="{ border: '4px solid #1d1a55' }"
+            dimensions="150x150"
           />
           <div class="profile-detail mt-1">
             <h3 class="">{{ user.name }}</h3>
@@ -140,19 +141,12 @@
 <script>
 import profileImagesService from "@/API/services/profile.images.service";
 import FriendServices from "@/API/services/friend.service";
-import UserAvatar from "@/components/user/UserAvatar.vue";
 import helper from "@/utilities/helper";
 import { ARABIC_ROLES } from "@/utilities/constants";
 
 export default {
   name: "MainInfo",
-  components: {
-    UserAvatar,
-  },
   emits: ["editAuthFriendship"],
-  created() {
-    console.log("[ARABIC_ROLES]", ARABIC_ROLES["ambassador"]);
-  },
   props: {
     authFriendship: {
       type: Object,

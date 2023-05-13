@@ -144,12 +144,12 @@
                         params: { user_id: friend.id },
                       }"
                     >
-                      <UserAvatar
+                      <BaseAvatar
                         :profileImg="friend?.profile.profile_picture"
                         :profile_id="friend?.profile.id"
                         :title="friend?.name"
                         :gender="friend?.gender"
-                        avatarClass="avatar-50"
+                        avatarClass="avatar-50 rounded-circle"
                       />
                       <!-- <img
                         src="../../../assets/images/avatar/avatar-02.jpg"
@@ -269,14 +269,12 @@
 <script>
 import LazyLoadedPosts from "@/components/post/LazyLoadedPosts.vue";
 import AddPost from "@/components/post/add/AddPost";
-import UserAvatar from "@/components/user/UserAvatar.vue";
 
 export default {
   name: "ProfileFeed",
   components: {
     AddPost,
     LazyLoadedPosts,
-    UserAvatar,
   },
   props: {
     //LATER

@@ -8,11 +8,7 @@
       </div>
       <div class="iq-card-body p-4">
         <div class="image-block text-center">
-          <img
-          
-            class="img-fluid rounded w-25"
-            alt="blog-img"
-          />
+          <img class="img-fluid rounded w-25" alt="blog-img" />
         </div>
       </div>
       <div class="col-12 bg-white pt-2">
@@ -32,16 +28,16 @@
                 >الرجاء قم بادخال الايميل</small
               >
             </div>
-       
+
             <div class="form-group" v-if="regError">
               <small style="color: red">
                 {{ regError }}
               </small>
             </div>
-      
+
             <div class="d-inline-block w-100">
               <button type="submit" class="btn btn-primary float-end">
-                 تبديل
+                تبديل
               </button>
             </div>
           </form>
@@ -54,7 +50,7 @@
 import useVuelidate from "@vuelidate/core";
 import { required, numeric } from "@vuelidate/validators";
 import GroupService from "@/API/services/group.service";
-import {api} from '@/API/Intercepter.js'
+import { api } from "@/API/Intercepter.js";
 export default {
   name: "ChangeLeader",
   setup() {
@@ -62,13 +58,13 @@ export default {
   },
 
   async created() {
-      await this.getGroup();
+    await this.getGroup();
   },
 
   data() {
     return {
       loader: false,
-     types:[],
+      types: [],
       options: {
         centeredSlides: false,
         loop: false,
@@ -91,33 +87,34 @@ export default {
         },
       },
       form: {
-        email: ""
+        email: "",
       },
       regError: "",
     };
   },
   methods: {
-     async getGroup() {
+    async getGroup() {
       const type = await api.get("group-type");
       this.types = type.data.data;
-      console.log(type)
+      console.log(type);
     },
 
     async onSubmit() {
       this.v$.$touch();
       if (!this.v$.form.$invalid) {
         this.loader = true;
-       
-        try {
-        
-        const group = await GroupService.createGroup(this.form.name,this.form.description,this.form.type.id)
-          window.location.reload();
- console.log(group)
-          this.loader = false;
-        } catch (error) {
-          this.loader = false;
 
-          console.log(error.data);
+        try {
+          const group = await GroupService.createGroup(
+            this.form.name,
+            this.form.description,
+            this.form.type.id
+          );
+          window.location.reload();
+        } catch (error) {
+          console.log(error);
+        } finally {
+          this.loader = false;
         }
       }
     },
@@ -125,10 +122,9 @@ export default {
   validations() {
     return {
       form: {
-          email: {
+        email: {
           required,
-        }
-      
+        },
       },
     };
   },

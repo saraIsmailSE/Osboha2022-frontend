@@ -97,31 +97,14 @@
             </div>
             <div class="col-3 m-auto">
               <div class="text-center">
-                <img
-                  :src="
-                    resolve_porfile_img(
-                      '512x512',
-                      user.profile.profile_picture,
-                      user.profile.id
-                    )
-                  "
-                  alt="profile-img"
-                  class="rounded img-fluid"
-                  v-if="user.profile && user.profile.profile_picture"
-                />
-
-                <img
-                  v-else
-                  :src="
-                    resolve_porfile_img(
-                      '512x512',
-                      'ananimous_' + user.gender + '.png',
-                      'ananimous'
-                    )
-                  "
-                  alt="profile-img"
-                  class="rounded img-fluid"
+                <BaseAvatar
+                  :profileImg="user.user_profile.profile_picture"
+                  :profile_id="user.user_profile.id"
                   :title="user.name"
+                  :gender="user.gender"
+                  avatarClass="rounded img-fluid"
+                  dimensions="512x512"
+                  :noMainClass="true"
                 />
               </div>
               <div class="row mt-2" v-if="social_media">
@@ -288,8 +271,6 @@
   </div>
 </template>
 <script>
-import profileImagesService from "@/API/services/profile.images.service";
-
 export default {
   name: "About",
   components: {},
@@ -554,21 +535,6 @@ export default {
         WF: "واليس وفوتونا",
       },
     };
-  },
-  methods: {
-    /**
-     * get profile picture or cover.
-     *  @param  image size, image name, profile id
-     * @return image url
-     */
-
-    resolve_porfile_img(size, imageName, profile_id) {
-      return profileImagesService.resolve_porfile_img(
-        size,
-        imageName,
-        profile_id
-      );
-    },
   },
 };
 </script>

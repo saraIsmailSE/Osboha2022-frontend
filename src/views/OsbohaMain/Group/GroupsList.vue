@@ -97,8 +97,6 @@ export default {
         const groups = await GroupService.getAll();
         this.groups = groups.data;
         helper.toggleToast("تم الحذف", "success");
-
-        console.log(response);
       } catch (error) {
         helper.toggleToast("حصل خطأ - لم يتم الحذف!", "danger");
         console.log(error);

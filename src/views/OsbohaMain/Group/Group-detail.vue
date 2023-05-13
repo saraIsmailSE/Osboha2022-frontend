@@ -199,7 +199,6 @@ export default {
       this.week_avg = (Math.round(response.week_avg * 100) / 100).toFixed(2);
       this.week = response.week;
       this.authInGroup = response.authInGroup;
-      console.log("[Group-detail] created", response);
     } catch (error) {
       console.log(error);
     }

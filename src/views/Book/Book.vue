@@ -243,7 +243,6 @@ export default {
       this.selectedSection = sectionId;
     },
     updateUserBook(book_id, data) {
-      console.log("user book data", data);
       this.books = this.books.map((book) => {
         if (Number(book.id) === Number(book_id)) {
           return {
@@ -253,7 +252,6 @@ export default {
         }
         return book;
       });
-      console.log("books", this.books);
     },
   },
   computed: {

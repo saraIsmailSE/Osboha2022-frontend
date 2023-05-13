@@ -64,8 +64,6 @@ export default {
       //   this.totalPages = response.data.last_page;
       //   this.page++;
       this.loading = false;
-
-      console.log("[pending posts]", this.posts);
     },
 
     postAction(post_id) {

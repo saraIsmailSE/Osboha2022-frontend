@@ -11,9 +11,8 @@ export default {
     if (token && user) {
       this.$store.commit("SET_TOKEN", token);
       this.$store.commit("SET_USER_DATA", JSON.parse(user));
+      this.$store.dispatch("listUnreadNotifications");
     }
-
-    this.$store.dispatch("listUnreadNotifications");
   },
 };
 </script>

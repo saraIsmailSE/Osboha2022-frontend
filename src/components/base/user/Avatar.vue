@@ -1,10 +1,9 @@
 <template>
-  <div class="user-img img-fluid" :class="containerClass">
+  <div :class="{ containerClass, 'user-img img-fluid': !noMainClass }">
     <img
       v-if="profileImg"
       :src="resolve_porfile_img(dimensions, profileImg, profile_id)"
       alt="profile-img"
-      class="rounded-circle"
       :class="avatarClass"
       :title="title"
       :style="imageStyle"
@@ -13,25 +12,21 @@
     <img
       v-else
       :src="
-        resolve_porfile_img(
-          dimensions,
-          'ananimous_' + gender + '.png',
-          'ananimous'
-        )
+        resolve_porfile_img(dimensions, `ananimous_${gender}.png`, 'ananimous')
       "
       alt="profile-img"
       :title="title"
-      class="rounded-circle"
       :class="avatarClass"
       :style="imageStyle"
     />
+    <slot />
   </div>
 </template>
 
 <script>
 import profileImagesService from "@/API/services/profile.images.service";
 export default {
-  name: "UserAvatar",
+  name: "BaseAvatar",
   props: {
     profileImg: {
       type: String,
@@ -64,6 +59,10 @@ export default {
     imageStyle: {
       type: Object,
       default: null,
+    },
+    noMainClass: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {

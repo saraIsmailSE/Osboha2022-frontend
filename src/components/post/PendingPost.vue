@@ -44,9 +44,6 @@ export default {
       required: true,
     },
   },
-  created() {
-    console.log("[pending post]", this.post);
-  },
 };
 </script>
 

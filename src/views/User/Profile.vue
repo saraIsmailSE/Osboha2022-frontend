@@ -177,7 +177,6 @@ export default {
   watch: {
     $route(to, from) {
       if (to.name === "user.profile") {
-        console.log("profile route changed");
         this.getProfile();
       }
     },

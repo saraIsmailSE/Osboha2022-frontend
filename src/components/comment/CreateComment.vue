@@ -1,20 +1,21 @@
 <template>
   <div class="d-flex flex-column">
     <form
-      class="comment-text d-flex align-items-center mt-3"
+      class="comment-text d-flex align-items-end mt-3"
       @submit.prevent="addComment"
     >
-      <input
-        type="text"
+      <textarea
+        v-model.trim="v$.commentData.body.$model"
         class="form-control rounded"
         placeholder="أضف تعليق"
-        ref="commentInput"
-        v-model.trim="v$.commentData.body.$model"
         :style="{
           'padding-right': isEdit ? '1rem !important' : '3rem !important',
         }"
-      />
-      <div class="comment-attagement right d-flex" v-if="!isEdit">
+        style="max-height: 120px; resize: none; overflow: auto"
+        :rows="isEdit ? 4 : 1"
+        ref="bodyRef"
+      ></textarea>
+      <div class="comment-attagement right d-flex mb-1" v-if="!isEdit">
         <button
           type="submit"
           class="material-symbols-outlined ms-2 border-0 bg-transparent"
@@ -27,7 +28,7 @@
           Send
         </button>
       </div>
-      <div class="comment-attagement d-flex">
+      <div class="comment-attagement d-flex mb-1">
         <input
           type="file"
           ref="imageInput"
@@ -116,6 +117,20 @@ export default {
       },
     };
   },
+  computed: {
+    commentBody() {
+      return this.commentData.body;
+    },
+  },
+  watch: {
+    commentBody() {
+      this.$refs.bodyRef.style.height = "auto";
+      this.$nextTick(() => {
+        this.$refs.bodyRef.style.height =
+          this.$refs.bodyRef.scrollHeight + "px";
+      });
+    },
+  },
   methods: {
     focusInput() {
       this.$refs.commentInput.focus();
@@ -152,7 +167,6 @@ export default {
             return;
           }
 
-          console.log("[add comment response]", response.data, this.comment.id);
           this.$emit("addComment", response.data, this.comment?.id);
 
           // reset form

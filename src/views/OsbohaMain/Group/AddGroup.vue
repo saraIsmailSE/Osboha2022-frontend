@@ -150,7 +150,6 @@ export default {
         this.loading = true;
         try {
           const group = await GroupService.createGroup(this.groupForm);
-          console.log(group);
           this.message = "تمت الاضافة";
           this.group_id = group.id;
 

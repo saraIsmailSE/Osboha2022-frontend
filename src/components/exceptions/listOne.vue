@@ -379,8 +379,5 @@ export default {
         });
     },
   },
-  created() {
-    console.log("[authInGroup]", this.authInGroup);
-  },
 };
 </script>

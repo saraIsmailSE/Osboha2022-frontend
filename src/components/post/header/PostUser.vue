@@ -1,5 +1,5 @@
 <template>
-  <UserAvatar
+  <BaseAvatar
     :profileImg="userProfile?.profile_picture"
     :profile_id="userProfile?.id"
     :title="post.user?.name"
@@ -87,12 +87,8 @@
 </template>
 
 <script>
-import UserAvatar from "@/components/user/UserAvatar.vue";
 export default {
   name: "PostUser",
-  components: {
-    UserAvatar,
-  },
   props: {
     post: {
       type: Object,

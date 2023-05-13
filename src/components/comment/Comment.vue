@@ -22,7 +22,7 @@
       @cancelEdit="cancelEdit"
     />
     <template v-else>
-      <p v-if="comment.body" style="white-space: pre-wrap; direction: rtl;">
+      <p v-if="comment.body" style="white-space: pre-wrap; direction: rtl">
         {{ briefBody }}
         <a
           class="load-btn"
@@ -241,7 +241,7 @@ export default {
 
         this.$emit("reactToComment", this.comment.id, response.data);
       } catch (e) {
-        console.log("[reaction]", e.response);
+        console.log("[comment reaction error]", e.response);
         helper.toggleToast("حدث خطأ ما, يرجى المحاولة لاحقاً", "error");
       } finally {
         this.pendingRequest = false;

@@ -26,7 +26,7 @@
             v-for="(user, index) in usersLoaded"
             :key="index"
           >
-            <UserAvatar
+            <BaseAvatar
               :profileImg="user.user_profile.profile_picture"
               :profile_id="user.user_profile.id"
               :title="user?.name"
@@ -110,16 +110,11 @@
 import FriendServices from "@/API/services/friend.service";
 import UserGroup from "@/API/services/user-group.service";
 import vClickOutside from "click-outside-vue3";
-import profileImagesService from "@/API/services/profile.images.service";
 import GroupService from "@/API/services/group.service";
-import UserAvatar from "@/components/user/UserAvatar.vue";
 import { ARABIC_ROLES } from "@/utilities/constants";
 
 export default {
   name: "GroupMembers",
-  components: {
-    UserAvatar,
-  },
   directives: {
     clickOutside: vClickOutside.directive,
   },
@@ -152,18 +147,6 @@ export default {
     loadMore() {
       if (this.length > this.users?.length) return;
       this.length = this.length + 10;
-    },
-    /**
-     * get profile picture or cover.
-     *  @param  image size, image name, profile id
-     * @return image url
-     */
-    resolve_porfile_img(size, imageName, profile_id) {
-      return profileImagesService.resolve_porfile_img(
-        size,
-        imageName,
-        profile_id
-      );
     },
     /**
      * search for ambassador

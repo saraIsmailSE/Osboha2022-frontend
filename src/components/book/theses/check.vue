@@ -84,10 +84,6 @@
 import moment from "moment";
 export default {
   name: "CheckThesis",
-
-  created() {
-    console.log(this.theses);
-  },
   props: {
     theses: { type: Object },
   },

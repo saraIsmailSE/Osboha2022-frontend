@@ -171,7 +171,6 @@ export default {
   methods: {
     selectReaction(reaction) {
       this.selectedReaction = reaction;
-      console.log(this.selectedReaction);
     },
 
     async reactOnPost(reactionId) {
@@ -191,7 +190,7 @@ export default {
 
         this.reactToPost(this.post.id, response.data);
       } catch (e) {
-        console.log("[reaction]", e.response);
+        console.log("[post reaction error]", e.response);
         helper.toggleToast("حدث خطأ ما, يرجى المحاولة لاحقاً", "error");
       } finally {
         this.pendingRequest = false;

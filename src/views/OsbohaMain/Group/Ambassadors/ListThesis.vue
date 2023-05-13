@@ -378,7 +378,7 @@ export default {
               } else {
                 helper.handleErrorSwal("حدث خطأ ما، حاول مرة أخرى");
               }
-              console.log("Modify thesis error: ", e);
+              console.log("[Modify thesis error]", e);
             } finally {
               this.loader = false;
             }

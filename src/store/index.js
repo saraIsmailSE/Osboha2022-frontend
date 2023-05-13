@@ -82,8 +82,8 @@ export default new Vuex.Store({
     logout({ commit }) {
       localStorage.removeItem("osboha__user");
       localStorage.removeItem("osboha__token");
-      commit("SET_USER_DATA", null);
       commit("SET_TOKEN", null);
+      commit("SET_USER_DATA", null);
       router.push({ name: "auth.sign-in" });
     },
     isNewUser({ commit }, isNewUser) {
@@ -93,7 +93,6 @@ export default new Vuex.Store({
       return api
         .get(`notifications/un-read`)
         .then(({ data }) => {
-          console.log("[store notifications]", data.data.length);
           commit("SET_UNREAD_NOTIFICATIONS", data.data.length);
         })
         .then((error) => handleError(error));

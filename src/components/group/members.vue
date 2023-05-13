@@ -1,6 +1,9 @@
 <template>
   <div class="group-member d-flex align-items-center mt-md-0 mt-3 w-100">
-    <div class="iq-media-group me-3 col-6" v-if="members.length > 0">
+    <div
+      class="iq-media-group me-3 col-6 d-flex align-items-center"
+      v-if="members.length > 0"
+    >
       <router-link
         class="iq-media"
         :to="{ name: 'group.group-members', params: { group_id: group_id } }"
@@ -18,32 +21,12 @@
         :key="member.id"
         :to="{ name: 'user.profile', params: { user_id: member.id } }"
       >
-        <img
-          v-if="member.user_profile.profile_picture"
-          :src="
-            resolve_porfile_img(
-              '60x60',
-              member.user_profile.profile_picture,
-              member.user_profile.id
-            )
-          "
-          alt="profile-img"
-          class="img-fluid avatar-40 rounded-circle"
+        <BaseAvatar
+          :profileImg="member.user_profile.profile_picture"
+          :profile_id="member.user_profile.id"
           :title="member.name"
-        />
-
-        <img
-          v-else
-          :src="
-            resolve_porfile_img(
-              '60x60',
-              'ananimous_' + member.gender + '.png',
-              'ananimous'
-            )
-          "
-          alt="profile-img"
-          :title="member.name"
-          class="img-fluid avatar-40 rounded-circle"
+          :gender="member.gender"
+          avatarClass="rounded-circle avatar-40 img-fluid"
         />
       </router-link>
     </div>
@@ -129,19 +112,6 @@ export default {
     };
   },
   methods: {
-    /**
-     * get profile picture or cover.
-     *  @param  image size, image name, profile id
-     * @return image url
-     */
-    resolve_porfile_img(size, imageName, profile_id) {
-      return profileImagesService.resolve_porfile_img(
-        size,
-        imageName,
-        profile_id
-      );
-    },
-
     onClickOutside() {
       this.show = false;
     },
