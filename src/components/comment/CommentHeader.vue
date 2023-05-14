@@ -9,7 +9,12 @@
     />
 
     <div class="ms-3 flex-grow-1">
-      <h5>{{ comment.user?.name }}</h5>
+      <h5
+        class="author-name hover-undelined"
+        @click.prevent="sendToProfile(comment.user.id)"
+      >
+        {{ comment.user?.name }}
+      </h5>
       <div class="mt-1" v-if="comment.user?.roles?.length > 0">
         <span
           class="badge bg-primary rounded-pill ms-1 px-2"
@@ -196,8 +201,21 @@ export default {
       this.showDropdown = false;
       this.$emit("triggerEditBox");
     },
+    sendToProfile(user_id) {
+      this.$router.push({
+        name: "user.profile",
+        params: { user_id },
+      });
+    },
   },
 };
 </script>
-
->
+<style scoped>
+.author-name {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.hover-undelined:hover {
+  text-decoration: underline;
+}
+</style>
