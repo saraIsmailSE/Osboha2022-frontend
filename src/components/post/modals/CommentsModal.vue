@@ -53,6 +53,11 @@ export default {
       commentModal: null,
     };
   },
+  watch: {
+    $route(to, from) {
+      this.commentModal.hide();
+    },
+  },
   mounted() {
     this.commentModal = new Modal(this.$refs.commentModalRef.$el);
   },
