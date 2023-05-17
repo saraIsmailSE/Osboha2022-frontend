@@ -10,6 +10,7 @@
 
     <div class="ms-3 flex-grow-1">
       <h5
+        role="button"
         class="author-name hover-undelined"
         @click.prevent="sendToProfile(comment.user.id)"
       >

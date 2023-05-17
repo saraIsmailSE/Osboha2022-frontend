@@ -109,7 +109,7 @@
           <router-link
             :to="{ name: 'group.group-books', params: { group_id: group_id } }"
             class="btn btn-primary d-block mt-3 col-5 me-1"
-            >كتب يقرأوها الأعضاء
+            >كتب يقرؤها الأعضاء
           </router-link>
           <router-link
             :to="{
