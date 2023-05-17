@@ -106,7 +106,7 @@ export default {
         },
         { section_id: 3, section: "عميق", level: "advanced", active: false },
         { section_id: 4, section: "عربي", lang: "arabic", active: false },
-        { section_id: 5, section: "إنجليري", lang: "english", active: false },
+        { section_id: 5, section: "إنجليزي", lang: "english", active: false },
       ],
     };
   },

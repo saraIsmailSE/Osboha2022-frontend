@@ -1,7 +1,7 @@
 <template>
   <iq-card>
     <template v-slot:body>
-      <h2 class="text-center mb-3">كتب يقرأوها الأعضاء</h2>
+      <h2 class="text-center mb-3">كتب يقرؤها الأعضاء</h2>
       <hr />
       <h4 class="text-center mt-3 mb-3" v-if="books">
         العدد الكلي: {{ books.length }}
