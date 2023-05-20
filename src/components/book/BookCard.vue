@@ -1,61 +1,35 @@
 <template>
   <div class="d-grid gap-3 d-grid-template-1fr-19">
     <div class="card mb-0">
-      <div
-        class="position-absolute top-0 end-0 p-2 rounded-start"
-        style="background-color: #278036; opacity: 50%"
-      >
+      <div class="position-absolute top-0 end-0 p-2 rounded-start" style="background-color: #278036; opacity: 50%">
         <h6 class="text-white">{{ bookTypeLanguage }}</h6>
       </div>
       <div class="position-absolute start-0">
-        <font-awesome-icon
-          role="button"
-          class="me-3"
-          :icon="[isSaved ? 'fas' : 'far', 'heart']"
-          size="2xl"
-          color="#f75c78"
-          @click.prevent="markBookForLater"
-          v-if="!isProfile"
-        />
-        <span
-          role="button"
-          @click="download(cardInfo.link)"
-          class="material-symbols-outlined align-middle display-5 me-3"
-        >
+        <font-awesome-icon role="button" class="me-3" :icon="[isSaved ? 'fas' : 'far', 'heart']" size="2xl"
+          color="#f75c78" @click.prevent="markBookForLater" v-if="!isProfile" />
+        <span role="button" @click="download(cardInfo.link)"
+          class="material-symbols-outlined align-middle display-5 me-3">
           download
         </span>
       </div>
 
       <div class="card-body text-center">
-        <img
-          :src="resolve_img_url(cardInfo.media?.path ?? '')"
-          class="img-fluid rounded w-75 mt-4"
-          alt="blog-img"
-        />
+        <img :src="resolve_img_url(cardInfo.media?.path ?? '')" class="img-fluid rounded w-75 mt-4" alt="blog-img" />
 
         <div class="group-info pt-3 pb-3">
           <h4>
-            <router-link
-              :to="{
-                name: 'book.book-details',
-                params: { book_id: this.cardInfo.id },
-              }"
-              data-toggle="tooltip"
-              data-placement="top"
-              :title="cardInfo.name"
-              class="truncated"
-              :class="directionClass"
-              >{{ cardInfo.name }}</router-link
-            >
+            <router-link :to="{
+              name: 'book.book-details',
+              params: { book_id: this.cardInfo.id },
+            }" data-toggle="tooltip" data-placement="top" :title="cardInfo.name" class="truncated"
+              :class="directionClass">{{ cardInfo.name }}</router-link>
           </h4>
           <p class="truncated" :class="directionClass">
             {{ cardInfo.writer }}
           </p>
         </div>
         <div class="group-details d-inline-block pb-3">
-          <ul
-            class="d-flex align-items-center justify-content-between list-inline m-0 p-0"
-          >
+          <ul class="d-flex align-items-center justify-content-between list-inline m-0 p-0">
             <li class="pe-3 ps-3">
               <p class="mb-0">المستوى</p>
               <h6>{{ cardInfo.level.arabic_level }}</h6>
@@ -73,11 +47,7 @@
         <div class="row" v-if="isProfile">
           <div class="row d-flex justify-content-center" v-if="isAmbassador">
             <div class="col-12">
-              <button
-                type="submit"
-                class="btn btn-primary d-block w-100"
-                @click="thesesDetails()"
-              >
+              <button type="submit" class="btn btn-primary d-block w-100" @click="thesesDetails()">
                 عرض
                 <span v-if="myProfile"> أطروحاتي </span>
                 <span v-else> أطروحات السفير </span>
@@ -86,11 +56,7 @@
           </div>
           <div class="row d-flex justify-content-center" v-else>
             <div class="col-12">
-              <button
-                type="submit"
-                class="btn btn-primary d-block w-100"
-                @click="bookDetails()"
-              >
+              <button type="submit" class="btn btn-primary d-block w-100" @click="bookDetails()">
                 صفحة الكتاب
               </button>
             </div>
@@ -98,22 +64,13 @@
         </div>
         <div class="row" v-else>
           <div class="col-6">
-            <button
-              type="submit"
-              class="btn btn-primary d-block w-100"
-              data-bs-toggle="modal"
-              :data-bs-target="`#modal-${cardInfo.id}`"
-              :disabled="!cardInfo.allow_comments"
-            >
+            <button type="submit" class="btn btn-primary d-block w-100" data-bs-toggle="modal"
+              :data-bs-target="`#modal-${cardInfo.id}`" :disabled="!cardInfo.allow_comments">
               كتابة أطروحة
             </button>
           </div>
           <div class="col-6">
-            <button
-              type="submit"
-              class="btn btn-primary d-block w-100"
-              @click="bookDetails()"
-            >
+            <button type="submit" class="btn btn-primary d-block w-100" @click="bookDetails()">
               عرض الأطروحات
             </button>
           </div>
@@ -121,34 +78,18 @@
       </div>
     </div>
   </div>
-  <modal
-    :id="`modal-${cardInfo.id}`"
-    dialogClass="modal-fullscreen-sm-down"
-    tabindex="-1"
-    title="Create Thesis"
-    :aria-labelledby="`modalsLabel-${cardInfo.id}`"
-    :aria-hidden="true"
-  >
+  <modal class="modal fade" :id="`modal-${cardInfo.id}`" dialogClass="modal-fullscreen-sm-down" tabindex="-1"
+    title="Create Thesis" :aria-labelledby="`modalsLabel-${cardInfo.id}`" :aria-hidden="true">
     <model-header>
       <h5 class="modal-title" :id="`modalsLabel-${cardInfo.id}`">
         {{ cardInfo.name }} || أطروحة جديدة
       </h5>
-      <a
-        href="javascript:void(0);"
-        class="lh-1"
-        data-bs-dismiss="modal"
-        ref="closeBtn"
-      >
+      <a href="javascript:void(0);" class="lh-1" data-bs-dismiss="modal" ref="closeBtn">
         <span class="material-symbols-outlined">close</span>
       </a>
     </model-header>
     <model-body>
-      <createThesis
-        :book="cardInfo"
-        :lastThesis="cardInfo.last_thesis"
-        @closeModel="closeModel"
-        @addThesis="addThesis"
-      />
+      <createThesis :book="cardInfo" :lastThesis="cardInfo.last_thesis" @closeModel="closeModel" @addThesis="addThesis" />
     </model-body>
   </modal>
 </template>
@@ -167,8 +108,27 @@ export default {
     isProfile: { type: Boolean, default: false },
     isAmbassador: { type: Boolean, default: true },
   },
+  created() {
+    window.addEventListener('popstate', this.popstateEventAction);
+  },
   emits: ["updateUserBook"],
   methods: {
+    popstateEventAction() {
+      const body = document.querySelector('body');
+      body.removeAttribute("data-bs-overflow")
+      body.removeAttribute("data-bs-padding-right");
+      body.removeAttribute("style");
+      body.classList.remove("modal-open");
+      const element = document.getElementsByClassName("modal-backdrop");
+      for(let i=0; i < element.length ; i++){
+        element[i].remove();
+      }
+      this.removePopstateEventAction();
+    },
+    removePopstateEventAction() {
+      window.removeEventListener('popstate', this.popstateEventAction);
+    },
+
     resolve_img_url: function (path) {
       return path ? path : require("@/assets/images/main/200x200-book.png");
     },
@@ -209,10 +169,10 @@ export default {
           this.cardInfo.id,
           response.data
             ? {
-                id: response.data.id,
-                status: response.data.status,
-                counter: response.data.counter,
-              }
+              id: response.data.id,
+              status: response.data.status,
+              counter: response.data.counter,
+            }
             : null
         );
       } catch (error) {
@@ -289,7 +249,7 @@ export default {
         this.isProfile &&
         this.isAmbassador &&
         parseInt(this.$store.getters.getUser.id) ===
-          parseInt(this.$route.params.user_id)
+        parseInt(this.$route.params.user_id)
       );
     },
     directionClass() {

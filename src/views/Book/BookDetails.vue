@@ -252,6 +252,7 @@ export default {
   async created() {
     await this.getBook(this.$route.params.book_id);
     await this.getTheses(this.page);
+    window.addEventListener('popstate', this.popstateEventAction);
   },
   data() {
     return {
@@ -265,6 +266,21 @@ export default {
     };
   },
   methods: {
+    popstateEventAction() {
+      const body = document.querySelector('body');
+      body.removeAttribute("data-bs-overflow")
+      body.removeAttribute("data-bs-padding-right");
+      body.removeAttribute("style");
+      body.classList.remove("modal-open");
+      const element = document.getElementsByClassName("modal-backdrop");
+      for(let i=0; i < element.length ; i++){
+        element[i].remove();
+      }
+      this.removePopstateEventAction();
+    },
+    removePopstateEventAction() {
+      window.removeEventListener('popstate', this.popstateEventAction);
+    },
     async getBook(id) {
       const response = await bookService.getById(id);
       this.book = response.data;
