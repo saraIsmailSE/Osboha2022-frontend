@@ -77,7 +77,8 @@ import VueCountdown from "@chenfengyuan/vue-countdown";
 export default {
   name: "Countdown",
   created() {
-    this.now = new Date();
+    const riyadh = new Date().toLocaleString("en-US", { timeZone: "Asia/Riyadh" });
+    this.now = new Date(riyadh);
     if (this.timer_type == "main_timer") {
       this.date = new Date(this.week.main_timer);
     } else if (this.timer_type == "audit_timer") {

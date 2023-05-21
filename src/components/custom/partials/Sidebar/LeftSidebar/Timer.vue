@@ -80,7 +80,8 @@ import vClickOutside from "click-outside-vue3";
 export default {
   name: "Timer Sidebar",
   created() {
-    this.now = new Date();
+    const riyadh = new Date().toLocaleString("en-US", { timeZone: "Asia/Riyadh" });
+    this.now = new Date(riyadh);
     this.date = new Date(this.timer.main_timer);
   },
   directives: {
