@@ -93,7 +93,7 @@ export default {
       this.support = response.support;
     } catch (error) {
       const res = error.response.data;
-      if (res.statusCode === 403) {
+      if (res.statusCode === 401) {
         this.$router.push({ name: "NotAuthorized" });
       } else if (res.statusCode === 404) {
         this.$router.push({ name: "NotFound" });

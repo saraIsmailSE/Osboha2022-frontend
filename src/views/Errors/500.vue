@@ -4,7 +4,7 @@
       <div class="col-sm-12 text-center">
         <div class="iq-error position-relative mt-5">
           <img
-            src="@/assets/images/main/404.png"
+            src="@/assets/images/main/500.png"
             class="img-fluid iq-error-img"
             alt="500"
           />
@@ -15,7 +15,7 @@
             </p>
 
             <router-link
-              class="btn btn-primary w-100"
+              class="btn btn-primary w-75"
               :to="{
                 name: 'osboha.list',
               }"

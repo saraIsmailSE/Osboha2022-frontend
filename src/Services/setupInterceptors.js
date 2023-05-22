@@ -25,8 +25,17 @@ const setup = (store) => {
 
       if (originalConfig.url !== "/auth/signin" && err.response) {
         // Access Token was expired
-        if (err.response.status === 401 && !originalConfig._retry) {
+        if (
+          err.response.status === 401 &&
+          !originalConfig._retry &&
+          err.response.data.message &&
+          err.response.data.message === "Unauthenticated."
+        ) {
           store.dispatch("logout");
+        }
+        // if has no permission
+        else if (err.response.status === 401) {
+          router.push({ name: "NotAuthorized" });
         } else if (err.response.status === 403) {
           router.push({ path: `/auth/confirm-mail` });
         } else if (
