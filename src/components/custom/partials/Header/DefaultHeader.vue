@@ -36,16 +36,24 @@
             >
               logout
             </i>
+
             <router-link
               :to="{
-                name: 'user.profile',
+                name: 'user.friendsRequests',
                 params: {
                   user_id: user.id,
                 },
               }"
-              class="d-flex align-items-center justify-content-center ms-2 me-2"
+              class="d-flex align-items-center justify-content-center ms-2 me-2 position-relative"
             >
-              <i class="material-symbols-outlined">person</i>
+              <i class="material-symbols-outlined">group</i>
+              <span
+                v-if="friendRequest.length > 0"
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info"
+              >
+                {{ friendRequest.length }}
+              </span>
+
             </router-link>
             <router-link
               :to="{ name: 'osboha.notification' }"
@@ -78,6 +86,7 @@ import { computed } from "vue";
 import Pusher from "pusher-js";
 import notificationsServices from "@/API/services/notifications.service";
 import helper from "@/utilities/helper";
+import FriendServices from "@/API/services/friend.service";
 
 export default {
   name: "DefaultHeader",
@@ -111,15 +120,14 @@ export default {
     };
   },
   async created() {
-    // this.$store.dispatch("listUnreadNotifications");
-    // this.notifications = await notificationsServices.listUnreadNotification();
-    // console.log("notifications header: ", this.notifications);
-    // this.un_read_notifications = Object.keys(this.notifications).length;
+    this.friendRequest = await FriendServices.getFriendsRequests();
   },
   data() {
     return {
       notifications: [],
       un_read_notifications: 0,
+      friendRequest: [],
+      
     };
   },
   computed: {
