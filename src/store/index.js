@@ -82,6 +82,10 @@ export default new Vuex.Store({
     logout({ commit }) {
       localStorage.removeItem("osboha__user");
       localStorage.removeItem("osboha__token");
+
+      sessionStorage.removeItem("AuthSessionData");
+      sessionStorage.removeItem("AuthSessionExpiry");
+
       commit("SET_TOKEN", null);
       commit("SET_USER_DATA", null);
       router.push({ name: "auth.sign-in" });

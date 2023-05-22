@@ -358,7 +358,7 @@ const routes = [
   {
     path: "/notauthorized",
     name: "NotAuthorized",
-    component: () => import("../views/Errors/403"),
+    component: () => import("../views/Errors/401"),
   },
   {
     path: "/server-error",
