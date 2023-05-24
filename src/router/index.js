@@ -158,8 +158,15 @@ const userChildRoute = (prop, mode = false) => [
     path: "request-exception/:user_id",
     name: prop + ".requestexception",
     meta: { auth: true, name: "User Request Exception" },
-    component: () => import("../views/User/NewException"),
+    component: () => import("../views/User/Exceptions/NewException"),
   },
+  {
+    path: "list-exception/:user_id",
+    name: prop + ".listException",
+    meta: { auth: true, name: "List User Exception" },
+    component: () => import("../views/User/Exceptions/ListExceptions"),
+  },
+
   {
     path: "accountsetting",
     name: prop + ".accountsetting",

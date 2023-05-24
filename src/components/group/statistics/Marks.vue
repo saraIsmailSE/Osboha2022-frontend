@@ -68,6 +68,21 @@
               ></progressbar>
             </b-progress>
           </div>
+          <div class="mb-3">
+            <div class="d-flex justify-content-between mt-2 text-dark">
+              <h6>اعرف مشروعك</h6>
+              <small>{{ getAverage(statistics.team_support_mark) }} / 10</small>
+            </div>
+            <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
+              <progressbar
+                className="bg-primary"
+                :style="{ width: (getAverage(statistics.team_support_mark) / 10) * 100 +  '%' }"
+                aria-valuenow="30"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></progressbar>
+            </b-progress>
+          </div>
           <div class="row">
             <div class="col-6">
               <div class="text-dark d-flex flex-column align-items-center">
@@ -114,7 +129,7 @@ export default {
   methods: {
     ...helper,
     getAverage(number) {
-      return (Math.round(number ?? 0 * 100) / 100).toFixed(2);
+      return (Math.round(number).toFixed(2));
     },
   },
 };

@@ -180,7 +180,16 @@
               </h4>
             </template>
             <template v-slot:headerAction>
-              <p class="m-0"><a href="javacsript:void();">مشاهدة الكل</a></p>
+              <router-link
+                      :to="{
+                        name: 'user.listException',
+                        params: { user_id: user_id },
+                      }"
+                    >
+              <p class="m-0">
+                مشاهدة الكامل
+              </p>
+              </router-link>
             </template>
             <template v-slot:body>
               <button

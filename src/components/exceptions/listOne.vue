@@ -9,11 +9,14 @@
       <div class="iq-card-body">
         <div class="image-block text-center">
           <div class="profile-img">
-            <img
-              src="@/assets/images/avatar/avatar-03.jpg"
-              alt="profile-img"
-              class="avatar-130 img-fluid"
-              style="border: 4px solid #1d1a55"
+            <BaseAvatar
+              :profileImg="exception.user.user_profile.profile_picture"
+              :profile_id="exception.user.user_profile.id"
+              :dimensions="'512x512'"
+              :title="exception.user?.name"
+              :gender="exception.user?.gender"
+              avatarClass="avatar-130 img-fluid"
+              containerClass="flex-shrink-0"
             />
             <h4 class="text-center mt-3 mb-3">
               {{ exception.user.name }}
@@ -41,11 +44,21 @@
           <p class="m-auto" v-if="exception.status == 'cancelled'">
             <span class="badge bg-danger">ملغي</span>
           </p>
-
-          <div
-            class="alert alert-danger mt-2"
-            v-if="last_freez || last_exam || last_exceptional_freez"
-          >
+          <table class="table w-100" v-if="exception.reviewer">
+            <thead>
+              <tr>
+                <th scope="col">المسؤول</th>
+                <th scope="col" colspan="3">ملاحظاته</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ exception.reviewer.name }}</td>
+                <td> {{ exception.note }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="alert alert-danger mt-2" v-if="last_freez || last_exam || last_exceptional_freez">
             <h4>أخر الاجازات</h4>
             <ul>
               <li v-if="last_freez">
@@ -72,20 +85,10 @@
         <div v-if="authInGroup && authInGroup.user_type != 'ambassador'">
           <h3 class="text-center mt-3 mb-3">الاجراء المناسب</h3>
           <div v-if="exception.status == 'pending'">
-            <div
-              class="d-flex align-items-center mt-3"
-              v-if="exception.type.type != 'تجميد استثنائي'"
-            >
-              <form
-                @submit.prevent="submitDecision"
-                class="post-text m-auto w-100 row"
-              >
+            <div class="d-flex align-items-center mt-3" v-if="exception.type.type != 'تجميد استثنائي'">
+              <form @submit.prevent="submitDecision" class="post-text m-auto w-100 row">
                 <div class="form-group col-12">
-                  <select
-                    class="form-select"
-                    v-model="v$.decideForm.decision.$model"
-                    :disabled="message"
-                  >
+                  <select class="form-select" v-model="v$.decideForm.decision.$model" :disabled="message">
                     <option value="-1" selected>اختر الاجراء المناسب</option>
                     <option value="1">اعفاء الأسبوع الحالي</option>
                     <option value="2">اعفاء الأسبوع القادم</option>
@@ -94,69 +97,41 @@
                     </option>
                     <option value="0">رفض</option>
                   </select>
-                  <small
-                    style="color: red"
-                    v-if="v$.decideForm.decision.$error"
-                  >
+                  <small style="color: red" v-if="v$.decideForm.decision.$error">
                     هذا الخيار مطلوب
                   </small>
                 </div>
                 <div class="form-group col-12">
                   <label class="form-label" for="note">ملاحظاتك</label>
-                  <textarea
-                    v-model="v$.decideForm.note.$model"
-                    rows="5"
-                    placeholder="... اكتب ملاحظة"
-                    class="rounded form-control"
-                    id="note"
-                    :disabled="message"
-                  ></textarea>
+                  <textarea v-model="v$.decideForm.note.$model" rows="5" placeholder="... اكتب ملاحظة"
+                    class="rounded form-control" id="note" :disabled="message"></textarea>
                   <small style="color: red" v-if="v$.decideForm.note.$error">
                     * ملاحظاتك مطلوبة
                   </small>
                 </div>
 
                 <div class="form-group">
-                  <button
-                    type="submit"
-                    :disabled="message"
-                    class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto"
-                  >
+                  <button type="submit" :disabled="message" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
                     اعتماد
                   </button>
                 </div>
 
                 <div class="col-sm-12 text-center" v-if="loader">
-                  <img
-                    src="@/assets/images/page-img/page-load-loader.gif"
-                    alt="loader"
-                    style="height: 100px"
-                  />
+                  <img src="@/assets/images/page-img/page-load-loader.gif" alt="loader" style="height: 100px" />
                 </div>
                 <h4 class="text-center mt-3 mb-3" v-if="message">
                   {{ message }}
                 </h4>
               </form>
             </div>
-            <div
-              class="d-flex align-items-center mt-3"
-              v-else-if="
-                exception.type.type == 'تجميد استثنائي' &&
-                authInGroup &&
-                (authInGroup.user_type == 'admin' ||
-                  authInGroup.user_type == 'advisor')
-              "
-            >
-              <form
-                @submit.prevent="submitDecision"
-                class="post-text m-auto w-100 row"
-              >
+            <div class="d-flex align-items-center mt-3" v-else-if="exception.type.type == 'تجميد استثنائي' &&
+              authInGroup &&
+              (authInGroup.user_type == 'admin' ||
+                authInGroup.user_type == 'advisor')
+              ">
+              <form @submit.prevent="submitDecision" class="post-text m-auto w-100 row">
                 <div class="form-group col-12">
-                  <select
-                    class="form-select"
-                    v-model="v$.decideForm.decision.$model"
-                    :disabled="message"
-                  >
+                  <select class="form-select" v-model="v$.decideForm.decision.$model" :disabled="message">
                     <option value="-1" selected>اختر الاجراء المناسب</option>
                     <option value="1">اعفاء الأسبوع الحالي</option>
                     <option value="2">اعفاء الأسبوع القادم</option>
@@ -168,87 +143,54 @@
                     </option>
                     <option value="0">رفض</option>
                   </select>
-                  <small
-                    style="color: red"
-                    v-if="v$.decideForm.decision.$error"
-                  >
+                  <small style="color: red" v-if="v$.decideForm.decision.$error">
                     هذا الخيار مطلوب
                   </small>
                 </div>
                 <div class="form-group col-12">
                   <label class="form-label" for="note">ملاحظاتك</label>
-                  <textarea
-                    v-model="v$.decideForm.note.$model"
-                    rows="5"
-                    placeholder="... اكتب ملاحظة"
-                    class="rounded form-control"
-                    id="note"
-                    :disabled="message"
-                  ></textarea>
+                  <textarea v-model="v$.decideForm.note.$model" rows="5" placeholder="... اكتب ملاحظة"
+                    class="rounded form-control" id="note" :disabled="message"></textarea>
                   <small style="color: red" v-if="v$.decideForm.note.$error">
                     * ملاحظاتك مطلوبة
                   </small>
                 </div>
 
                 <div class="form-group">
-                  <button
-                    type="submit"
-                    :disabled="message"
-                    class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto"
-                  >
+                  <button type="submit" :disabled="message" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
                     اعتماد
                   </button>
                 </div>
 
                 <div class="col-sm-12 text-center" v-if="loader">
-                  <img
-                    src="@/assets/images/page-img/page-load-loader.gif"
-                    alt="loader"
-                    style="height: 100px"
-                  />
+                  <img src="@/assets/images/page-img/page-load-loader.gif" alt="loader" style="height: 100px" />
                 </div>
                 <h4 class="text-center mt-3 mb-3" v-if="message">
                   {{ message }}
                 </h4>
               </form>
             </div>
-            <div
-              class="d-inline-flex justify-content-center alert alert-success mt-2 w-75"
-              v-else
-            >
+            <div class="d-inline-flex justify-content-center alert alert-success mt-2 w-75" v-else>
               <h5>يتطلب هذا الاجراء موافقة موجه المجموعة</h5>
             </div>
           </div>
 
-          <div
-            class="d-inline-flex justify-content-center alert alert-success mt-2 w-75"
-            v-else
-          >
+          <div class="d-inline-flex justify-content-center alert alert-success mt-2 w-100" v-else>
             <h5>تم اتخاذ الاجراء مسبقًا</h5>
+            <hr>
           </div>
         </div>
-        <div
-          class="d-inline-flex justify-content-center w-100"
-          v-if="
-            authInGroup?.user_id == auth.id &&
-            (exception.status == 'accepted' || exception.status == 'pending')
-          "
-        >
-          <button
-            @click="cancelException(exception.id)"
-            class="btn btn-danger d-block w-75"
-          >
+        <div class="d-inline-flex justify-content-center w-100" v-if="exception.user.id == auth.id &&
+          (exception.status == 'accepted' || exception.status == 'pending')
+          ">
+          <button @click="cancelException(exception.id)" class="btn btn-danger d-block w-75">
             الغاء
           </button>
         </div>
 
         <div class="d-flex align-items-center mt-3 row">
           <div class="d-inline-block w-100 text-center col-12">
-            <a
-              role="button"
-              @click="$router.go(-1)"
-              class="d-block mt-3 mb-3 w-75 mx-auto"
-            >
+            <a role="button" @click="$router.go(-1)" class="d-block mt-3 mb-3 w-75 mx-auto">
               <span>عودة</span>
               <span class="align-middle material-symbols-outlined">
                 keyboard_return

@@ -66,6 +66,27 @@ class ExceptionService {
       return error;
     }
   }
+
+  async getAllUserExceptions(user_id) {
+    try {
+      const userExceptions = await api.get(
+        `userexception/user-exceptions/${user_id}`
+      );
+      return userExceptions.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+  async exceptionsFilter(filter, user_id) {
+    try {
+      const exceptions = await api.get(
+        `userexception/exceptions-filter/${filter}/${user_id}`
+      );
+      return exceptions.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
 }
 
 export default new ExceptionService();

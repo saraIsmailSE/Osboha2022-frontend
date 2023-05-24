@@ -40,6 +40,8 @@
               >
                 <h5>{{ user.name }}</h5>
               </router-link>
+              <small>{{ formatDateToWritten(user.pivot.updated_at) }}</small>
+              <br>
               <span class="rounded-pill badge lh-1 bg-primary px-2">{{
                 ARABIC_ROLES[user.pivot.user_type]
               }}</span>
@@ -112,6 +114,8 @@ import UserGroup from "@/API/services/user-group.service";
 import vClickOutside from "click-outside-vue3";
 import GroupService from "@/API/services/group.service";
 import { ARABIC_ROLES } from "@/utilities/constants";
+import helper from "@/utilities/helper";
+
 
 export default {
   name: "GroupMembers",
@@ -134,6 +138,8 @@ export default {
     };
   },
   methods: {
+    ...helper,
+
     showList(index) {
       this.controlList.fill(false);
       this.controlList[index] = true;
