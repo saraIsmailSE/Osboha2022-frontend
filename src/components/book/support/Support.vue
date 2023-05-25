@@ -2,7 +2,7 @@
   <div class="col-12">
     <div class="card card-block card-stretch card-height blog">
       <div class="card-header">
-        <h2>الدعم</h2>
+        <h2>اعرف مشروعك</h2>
       </div>
       <div class="card-body">
         <div class="blog-description">
@@ -187,8 +187,8 @@ export default {
       if (this.loading) return;
 
       const alertText = status
-        ? "سيتم قبول الدعم وإضافة العلامة للسفير"
-        : "سيتم رفض الدعم وخصم العلامة من السفير";
+        ? "سيتم قبول انجاز اعرف مشروعك وإضافة العلامة للسفير"
+        : "سيتم رفض انجاز اعرف مشروعك وخصم العلامة من السفير";
       const swalAlert = this.$swal.mixin({
         customClass: {
           confirmButton: "btn btn-primary btn-lg",
@@ -225,7 +225,7 @@ export default {
 
               if (response.statusCode === 200) {
                 const statusText = status ? "قبول" : "رفض";
-                helper.toggleToast(`تم ${statusText} الدعم بنجاح`, "success");
+                helper.toggleToast(`تم ${statusText} انجاز اعرف مشروعك بنجاح`, "success");
                 this.$emit("updateSupportMark", status ? 10 : 0);
               }
             } catch (error) {

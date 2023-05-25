@@ -39,13 +39,14 @@ class ExceptionService {
 
   async updateStatus(exception_id, decision) {
     try {
-      const response = api.patch(
+      const response = await api.patch(
         `userexception/update-status/${exception_id}`,
         {
           decision: decision.decision,
           note: decision.note,
         }
       );
+
       return response.data.data;
     } catch (error) {
       return error;

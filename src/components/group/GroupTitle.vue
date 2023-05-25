@@ -13,10 +13,6 @@
 export default {
     name: 'Group Title',
     props: {
-        group_id: {
-            type: [Number],
-            required: true,
-        },
         group_name: {
             type: [String],
             required: true,
