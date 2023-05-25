@@ -135,7 +135,6 @@ export default {
     urlifyFn(text) {
     let urlRegex = /(https?:\/\/[^\s]+)/g;
     return text.replace(urlRegex, function(url) {
-      console.log(url)
         return '<a href="' + url + '"  target="_blank" direction: rtl;">' + url + '</a>';
     })
   },

@@ -3,7 +3,7 @@
     <iq-card class="iq-card">
       <div class="iq-card-header-toolbar d-flex align-items-center mx-auto">
         <h3 class="text-center mt-3 mb-3">
-          طلب: {{ exception.type.type.type }}
+          طلب: {{ exception.type.type }}
         </h3>
       </div>
       <div class="iq-card-body">
