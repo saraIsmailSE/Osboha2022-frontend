@@ -44,6 +44,12 @@ const setup = (store) => {
         ) {
           router.push({ path: `/auth/not-ambassador-in-any-group` });
         }
+        else if (
+          err.response.status === 400 &&
+          err.response.data.data == "excluded ambassador"
+        ) {
+          router.push({ path: `/auth/excluded_ambassador` });
+        }
       }
 
       return Promise.reject(err);

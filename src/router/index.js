@@ -118,6 +118,12 @@ const authchildRoutes = (prop, mode) => [
       import("../views/AuthPages/Default/NotAmbassadorInAnyGroup"),
   },
   {
+    path: "excluded_ambassador/",
+    name: prop + ".ExcludedAmbassador",
+    component: () =>
+      import("../views/AuthPages/Default/ExcludedAmbassador"),
+  },
+  {
     path: "lockscreen",
     name: prop + ".lockscreen1",
     component: () => import("../views/AuthPages/Default/LockScreen1"),
