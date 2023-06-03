@@ -75,6 +75,24 @@ class Marks {
       handleError(error);
     }
   }
+
+    /**
+   * Set support mark for all active users
+   * @param  form contain reason
+   * @throws {object} error
+   */
+
+  async setSupportMarkForAll(reason) {
+    try {
+      const response = await api.post(`/marks/set-support-for-all`, reason, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
 }
 
 export default new Marks();

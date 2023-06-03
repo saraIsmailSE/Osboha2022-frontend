@@ -23,7 +23,7 @@
             </div>
           </a>
         </div>
-        <router-link :to="{ name: 'osboha' }" class="navbar-brand p-0">
+        <router-link :to="{ name: 'osboha.list' }" class="navbar-brand p-0">
           <img src="@/assets/images/main/osboha-logo.png" alt="logo" class="" />
         </router-link>
         <div class="social-media">
