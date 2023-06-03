@@ -93,6 +93,18 @@ class AuthService {
       handleError(error);
     }
   }
+
+  
+  async returnToTeam() {
+    try {
+      const response = await api.get("/return-to-team");
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  
 }
 
 export default new AuthService();

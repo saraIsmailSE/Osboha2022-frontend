@@ -54,7 +54,7 @@
               <div class="w-100">
                 <div class="d-flex justify-content-between">
                   <div class="ms-3">
-                    <h6>{{ notification.data.message }}</h6>
+                    <h6 style="direction: rtl;">{{ notification.data.message }}</h6>
                     <tooltip
                       tag="span"
                       class="text-muted small"
