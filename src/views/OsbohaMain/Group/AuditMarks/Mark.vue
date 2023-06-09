@@ -16,19 +16,23 @@
                 <div class="iq-card-body p-3">
                     <AchievementCard v-if="mark" :mark="mark" :group="group" />
                     <div class="d-flex align-items-center mt-3">
-                        <Check :theses="theses" />
+                        <Check v-if="theses.length > 0" :theses="theses" />
+                        <div v-else class="alert alert-secondary w-100 text-center" role="alert">
+                            لا يوجد انجاز
+                        </div>
+
                     </div>
 
                     <div class="d-flex align-items-center mt-3 row">
-                        <div class="text-center mb-3" v-if="!expired">
+                        <div class="text-center mb-3" v-if="!expired && authorized">
                             <button class="btn btn-primary ms-1 me-1" @click="updateStatus('acceptable')">مقبول</button>
                             <button class="btn btn-danger ms-1 me-1" @click="updateStatus('unacceptable')">مرفوض</button>
                             <div v-if="msg" class="alert alert-primary mt-2">{{ msg }}</div>
                         </div>
 
-                        <count-down v-if="week" :week="week" :timer_type="'audit_timer'" />
+                        <count-down v-if="week && authorized" :week="week" :timer_type="'audit_timer'" />
 
-                        <Note v-if="mark_for_audit" :notes="mark_for_audit.audit_notes" :to="mark_for_audit.mark.user.parent_id"/>
+                        <Note v-if="mark_for_audit" />
                         <div class="d-flex align-items-center mt-3 row">
                             <div class="d-inline-block w-100 text-center col-12">
                                 <a role="button" @click="$router.go(-1)" class=" d-block mt-3 mb-3 w-75 mx-auto">
@@ -59,6 +63,7 @@ export default {
 
         try {
             const response = await AuditMarkService.markForAudit(this.$route.params.mark_for_audit);
+            console.log("🚀 ~ file: Mark.vue:62 ~ created ~ response:", response)
             this.mark_for_audit = response.mark_for_audit;
             this.mark = response.mark_for_audit.mark;
             this.theses = response.theses.reduce((groupByBook, item) => {
@@ -71,7 +76,7 @@ export default {
             this.group = response.group
             this.week = response.week
             this.expired = (((new Date(this.week.audit_timer)) - (new Date())) < 0)
-
+            this.authorized = response.authorized
 
         }
         catch (error) {
@@ -93,13 +98,14 @@ export default {
             week: null,
             expired: true,
             mark: null,
+            authorized: false,
             mark_for_audit: null,
             audit_status: {
                 'acceptable': "مقبول",
                 'unacceptable': "مرفوض",
                 'not_audited': "لم يتم تدقيقه",
             },
-            msg:'',
+            msg: '',
 
         };
     },
@@ -126,10 +132,10 @@ export default {
         * update status of mark for audit.
         *  @param  status
         */
-        async updateStatus(status){
-            const response = await AuditMarkService.updateMarkForAuditStatus(status,this.$route.params.mark_for_audit);
-            this.mark_for_audit.status=status
-            this.msg='تم التدقيق'
+        async updateStatus(status) {
+            const response = await AuditMarkService.updateMarkForAuditStatus(status, this.$route.params.mark_for_audit);
+            this.mark_for_audit.status = status
+            this.msg = 'تم التدقيق'
         },
     }
 };

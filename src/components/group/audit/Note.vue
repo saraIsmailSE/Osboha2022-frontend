@@ -11,66 +11,42 @@
                     <div class="card-content">
                         <div class="card-body">
                             <div class="row rounded-lg overflow-hidden shadow">
-                                <!-- Chat Box-->
+                                <!-- NOtes Box-->
                                 <div class="col-12 px-0">
-                                    <div class="px-4 py-5 chat-box bg-white">
-
-                                        <!-- Sender Message-->
-                                        <!-- Reciever Message-->
-
-                                        <div class="media w-auto mb-3" dir='ltr'>
-                                            <img src="https://bootstrapious.com/i/snippets/sn-chat/avatar.svg" alt="user"
-                                                width="50" class="rounded-circle">
+                                    <div class="px-4 py-5 chat-box bg-white" v-if="notes" id="notes_container">
+                                        <div v-for="note in notes" :key="note.id" class="media w-auto mb-3"
+                                            :class="[note.from_id == user.id ? 'ml-auto' : 'ltrDirection']">
+                                            <base-avatar v-if="note.from_id != user.id" :profileImg="note.from.user_profile.profile_picture
+                                                " :profile_id="note.from.user_profile.id" :title="note.from.name"
+                                                :gender="note.from.gender" avatarClass="rounded-circle avatar-40"
+                                                width="50" />
                                             <div class="media-body ml-3">
-                                                <div class="bg-recipient rounded py-2 px-3 mb-2">
-                                                    <p class="text-small mb-0 text-muted">Test which is a new
-                                                        approach
-                                                        all solutions</p>
+
+                                                <div class="rounded py-2 px-3 mb-2"
+                                                    :class="[note.from_id == user.id ? 'bg-sender' : 'bg-recipient']">
+                                                    <small v-if="note.from_id != user.id" class="font-weight-bold">
+                                                        {{ note.from.name }}
+                                                    </small>
+
+                                                    <p class="text-small mb-0 text-muted">
+                                                        {{ note.body }}
+                                                    </p>
                                                 </div>
-                                                <p class="small text-muted">12:00 PM | Aug 13</p>
+                                                <p class="small text-muted">
+                                                    {{ formatFullDate(note.created_at) }}
+                                                </p>
                                             </div>
                                         </div>
 
-                                        <!-- Sender Message-->
-                                        <div class="media w-auto ml-auto mb-3">
-                                            <div class="media-body">
-                                                <div class="bg-sender rounded py-2 px-3 mb-2">
-                                                    <p class="text-small mb-0 text-muted">Apollo University, Delhi,
-                                                        India Test</p>
-                                                </div>
-                                                <p class="small text-muted">12:00 PM | Aug 13</p>
-                                            </div>
-                                        </div>
-                                        <!-- Reciever Message-->
 
-                                        <div class="media w-auto mb-3" dir='ltr'>
-                                            <img src="https://bootstrapious.com/i/snippets/sn-chat/avatar.svg" alt="user"
-                                                width="50" class="rounded-circle">
-                                            <div class="media-body ml-3">
-                                                <div class="bg-recipient rounded py-2 px-3 mb-2">
-                                                    <p class="text-small mb-0 text-muted">Test which is a new
-                                                        approach
-                                                        all solutions</p>
-                                                </div>
-                                                <p class="small text-muted">12:00 PM | Aug 13</p>
-                                            </div>
-                                        </div>
-
-                                        <!-- Sender Message-->
-                                        <div class="media w-auto ml-auto mb-3">
-                                            <div class="media-body">
-                                                <div class="bg-sender rounded py-2 px-3 mb-2">
-                                                    <p class="text-small mb-0 text-muted">Apollo University, Delhi,
-                                                        India Test</p>
-                                                </div>
-                                                <p class="small text-muted">12:00 PM | Aug 13</p>
-                                            </div>
-                                        </div>
-
+                                    </div>
+                                    <div class="col-sm-12 text-center" v-if="loader">
+                                        <img src="@/assets/images/page-img/page-load-loader.gif" alt="loader"
+                                            style="height: 100px" />
                                     </div>
 
                                     <!-- Typing area -->
-                                    <form action="#" class="mt-2">
+                                    <form @submit.prevent="submitNote()" class="mt-2">
                                         <div class="input-group">
                                             <div class="input-group-append m-auto">
                                                 <button id="button-addon2" type="submit" class="btn btn-link">
@@ -83,6 +59,9 @@
                                             <input type="text" placeholder="اكتب ملاحظة" aria-describedby="button-addon2"
                                                 class="border-bottom form-control rounded-0 border-0 py-4"
                                                 v-model="v$.noteForm.body.$model">
+                                            <small style="color: red" v-if="v$.noteForm.body.$invalid">
+                                                الملاحظة مطلوبة
+                                            </small>
                                         </div>
                                     </form>
 
@@ -99,6 +78,7 @@
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import AuditMarkService from '@/API/services/audit-marks.service';
+import helper from "@/utilities/helper";
 
 
 export default {
@@ -106,21 +86,16 @@ export default {
     setup() {
         return { v$: useVuelidate() };
     },
-    props: {
-        notes: {
-            type: [Object],
-            required: true,
-        },
-        to: {
-            type: [Number],
-            required: true,
-        },
+    async created() {
+        this.notes = await AuditMarkService.getNotes(this.noteForm.mark_for_audit_id);
     },
     data() {
         return {
+            notes: null,
+            loader: false,
             noteForm: {
                 body: '',
-                mark_for_audit_id:0,
+                mark_for_audit_id: this.$route.params.mark_for_audit,
             }
         };
     },
@@ -134,19 +109,20 @@ export default {
         };
     },
     methods: {
-        
+        ...helper,
         /**
         * Add Note.
         */
         async submitNote() {
             this.v$.$touch();
             if (!this.v$.noteForm.$invalid) {
-                this.message = "";
                 this.loader = true;
                 try {
                     const response = await AuditMarkService.addNote(this.noteForm);
                     this.loader = false;
-                    this.message = response;
+                    this.notes.push(response);
+                    this.scrollToEnd();
+                    this.noteForm.body = '';
                     this.v$.noteForm.$reset()
                 }
                 catch (error) {
@@ -154,7 +130,19 @@ export default {
                 }
             }
         },
+        scrollToEnd: function () {
+            var container = this.$el.querySelector("#notes_container");
+            console.log("🚀 ~ file: Note.vue:137 ~ container:", container)
 
+            container.scrollTop = container.scrollHeight;
+        },
+
+
+    },
+    computed: {
+        user() {
+            return this.$store.getters.getUser;
+        },
     }
 };
 </script>
@@ -190,6 +178,10 @@ export default {
     overflow-y: scroll;
 }
 
+.ltrDirection {
+    direction: ltr;
+}
+
 .rounded-lg {
     border-radius: 0.5rem;
 }
@@ -205,5 +197,8 @@ input::placeholder {
 
 .bg-recipient {
     background-color: #cae0cd
+}
+.font-weight-bold{
+    font-weight: bold;
 }
 </style>
