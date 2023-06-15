@@ -120,8 +120,7 @@ const authchildRoutes = (prop, mode) => [
   {
     path: "excluded_ambassador/",
     name: prop + ".ExcludedAmbassador",
-    component: () =>
-      import("../views/AuthPages/Default/ExcludedAmbassador"),
+    component: () => import("../views/AuthPages/Default/ExcludedAmbassador"),
   },
   {
     path: "lockscreen",
@@ -429,6 +428,12 @@ const routes = [
     component: () => import("../layouts/Default"),
     meta: { auth: true },
     children: bookChildRoute("book"),
+  },
+  {
+    path: "/test-query",
+    name: "testQuery",
+    component: () => import("../views/testQuery"),
+    meta: { auth: true },
   },
 ];
 
