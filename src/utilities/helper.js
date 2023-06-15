@@ -63,8 +63,12 @@ export default {
       toastStyle: {
         "background-color": `${backgroundColor}`,
       },
-      autoClose: type === "success" ? 1000 : 3000,
+      autoClose: type === "success" ? 1000 : 2000,
     });
+  },
+
+  toggleErrorToast(message = "حدث خطأ ما, يرجى المحاولة لاحقاً") {
+    return this.toggleToast(message, "error");
   },
 
   /**
