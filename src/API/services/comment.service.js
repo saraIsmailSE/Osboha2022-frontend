@@ -17,10 +17,7 @@ class CommentService {
     if (data.start_page) formData.append("start_page", data.start_page);
     if (data.end_page) formData.append("end_page", data.end_page);
     if (data.image) formData.append("image", data.image);
-    //print formdata values
-    for (const pair of formData.entries()) {
-      console.log(`${pair[0]}, ${pair[1]}`);
-    }
+
     try {
       const comment = await api.post("/comments", formData, {
         headers: { "Content-type": "multipart/form-data" },

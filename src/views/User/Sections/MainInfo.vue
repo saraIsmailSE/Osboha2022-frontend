@@ -222,14 +222,13 @@ export default {
           if (willDelete.isConfirmed) {
             FriendServices.delete(user_id, friend_id)
               .then((response) => {
-                helper.handleSuccessSwal("تم حذف طلب الصداقة");
                 this.$emit("editAuthFriendship", {
                   friendRequestByAuth: false,
                   friendWithAuth: false,
                 });
               })
               .catch((error) => {
-                helper.handleErrorSwal();
+                helper.toggleErrorToast();
               });
           }
         });
@@ -238,29 +237,11 @@ export default {
     async createFriendship(friend_id) {
       try {
         const response = await FriendServices.create(friend_id);
-        const swalWithBootstrapButtons = this.$swal.mixin({
-          customClass: {
-            confirmButton: "btn btn-primary btn-lg",
-          },
-          buttonsStyling: false,
-        });
-        swalWithBootstrapButtons.fire({
-          title: "تم الارسال",
-          text: "تم ارسال طلب الصداقة",
-          icon: "success",
-          confirmButtonText: "حسنا",
-          showClass: {
-            popup: "animate__animated animate__zoomIn",
-          },
-          hideClass: {
-            popup: "animate__animated animate__zoomOut",
-          },
-        });
         this.$emit("editAuthFriendship", {
           friendRequestByAuth: true,
         });
       } catch (error) {
-        helper.handleErrorSwal();
+        helper.toggleErrorToast();
       }
     },
 
@@ -292,14 +273,13 @@ export default {
           if (willDelete.isConfirmed) {
             await FriendServices.accept(id)
               .then((response) => {
-                helper.handleSuccessSwal("تم قبول طلب الصداقة");
                 this.$emit("editAuthFriendship", {
                   friendWithAuth: true,
                   friendRequestByFriend: false,
                 });
               })
               .catch((error) => {
-                helper.handleErrorSwal();
+                helper.toggleErrorToast();
               });
           }
         });

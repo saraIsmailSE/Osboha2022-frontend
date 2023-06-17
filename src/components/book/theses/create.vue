@@ -89,7 +89,7 @@
               v-model="v$.thesisForm.end_page.$model"
             >
               <option value="">صفحة النهاية</option>
-              <option v-for="page in pages" :value="page" :key="page">
+              <option v-for="page in bookPagesEnd" :value="page" :key="page">
                 {{ page }}
               </option>
             </select>
@@ -255,12 +255,14 @@ export default {
     };
   },
   computed: {
+    successMessage() {
+      return this.thesisToEdit
+        ? "تم تعديل الأطروحة بنجاح"
+        : "تم إضافة الأطروحة بنجاح";
+    },
     pages() {
       let allPages = [];
       let start = null;
-
-      // console.log("[computed last thesis]", this.lastThesis);
-      // console.log("[computed book]", this.book);
 
       //if user has a book in progress, start pages from the last thesis end page and add 1 to it
       if (
@@ -270,32 +272,27 @@ export default {
         start = this.lastThesis
           ? this.lastThesis?.end_page + 1
           : this.book.start_page;
-        // console.log("[computed in progress]", start);
       }
       //if user has no book, so this is the first thesis, start pages from the book start page
       else if (!this.book.userBooks.length && !this.lastThesis) {
         start = this.book.start_page;
-        // console.log("[computed first thesis]", start);
       }
 
       //if user is editting the thesis, start pages from the book start page
       if (this.thesisToEdit) {
         start = this.book.start_page;
-        // console.log("[computed editting]", start);
       }
 
       //if start null, it means the user has finished the book
 
       //if start over button is not clicked, return empty array
       if (start === null && !this.startOver) {
-        // console.log("[computed finished]", start);
         return [];
       }
 
       //if start over button is clicked, start pages from the book start page
       if (start === null && this.startOver) {
         start = this.book.start_page;
-        // console.log("[computed start over]", start);
       }
       //add all pages to the array from the start page to the book end page
       for (let i = start; i <= this.book.end_page; i++) {
@@ -303,21 +300,17 @@ export default {
       }
       return allPages;
     },
-    successMessage() {
-      return this.thesisToEdit
-        ? "تم تعديل الأطروحة بنجاح"
-        : "تم إضافة الأطروحة بنجاح";
+    bookPagesEnd() {
+      return this.pages.filter((page) => page > this.thesisForm.start_page);
     },
   },
   watch: {
     book() {
       this.thesisForm.book_id = this.book.id;
-      // console.log("[watch book id]", this.thesisForm.book_id);
     },
   },
   created() {
     if (this.thesisToEdit) {
-      // console.log("[created thesisToEdit]", this.thesisToEdit);
       this.thesisForm.u_comment_id = parseInt(this.thesisToEdit.id);
       this.thesisForm.body = this.thesisToEdit.body
         ? this.thesisToEdit.body
@@ -352,8 +345,6 @@ export default {
           : "";
     } else {
       this.thesisForm.book_id = this.book?.id;
-      // console.log("[book]", this.book);
-      // console.log("[thesisForm created]", this.thesisForm);
     }
   },
   methods: {
@@ -419,7 +410,7 @@ export default {
             throw response.data;
           }
 
-          helper.handleSuccessSwal(this.successMessage);
+          helper.toggleToast(this.successMessage, "success");
 
           if (!this.thesisToEdit) {
             this.$emit("addThesis", response.data);
@@ -446,7 +437,7 @@ export default {
             }, 1800);
           }
         } catch (error) {
-          helper.handleErrorSwal("حدث خطأ ما, يرجى المحاولة مرة أخرى!");
+          helper.toggleErrorToast();
           console.log(error);
         } finally {
           this.loader = false;
