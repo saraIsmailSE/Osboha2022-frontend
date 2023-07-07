@@ -1,60 +1,59 @@
 <template>
-  <div
-    :class="`right-sidebar-mini  ${miniClass} data-scrollbar`"
-    v-click-outside="onClickOutside"
-  >
+  <div :class="`right-sidebar-mini  ${miniClass} data-scrollbar`" v-click-outside="onClickOutside">
     <div class="right-sidebar-panel p-0">
       <div class="card shadow-none">
         <div class="card-body p-0">
           <div class="media-height p-2" data-scrollbar="init">
             <div class="card d-flex align-items-center mb-4">
-              <img
-                src="@/assets/images/main/current_book.png"
-                class="card-img-top"
-                alt="current reading"
-              />
-              <div class="card-body w-100" v-if="book_in_progress">
-                <div class="progress mb-3" v-if="progress">
-                  <div
-                    class="progress-bar progress-bar-striped bg-primary"
-                    role="progressbar"
-                    aria-valuenow="90"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                    :style="`width: ${Math.trunc(progress)}%;`"
-                  ></div>
+              <img src="@/assets/images/main/current_book.png" class="card-img-top" alt="current reading" />
+
+              <h5 class="card-title mt-3">املأ مخزون ثقافتك</h5>
+
+              <div id="carouselExampleCaptions" class="carousel slide w-100" data-bs-ride="false" v-if="book_in_progress">
+                <div class="carousel-inner w-75 m-4">
+                  <div class="carousel-item" v-for="(book, index) in book_in_progress" :key="index"
+                    :class="[index ? 0 : 'active', '']">
+                    <div class="progress mb-3">
+                      <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" aria-valuenow="90"
+                        aria-valuemin="0" aria-valuemax="100" :style="`width: ${Math.trunc(progress[index])}%;`"></div>
+                    </div>
+
+                    <p class="card-text h3">
+                      {{ book.name }}
+                      <router-link class="btn btn-primary w-100 mt-2" :to="{
+                        name: 'book.book-details',
+                        params: { book_id: book.id },
+                      }">
+                        متابعة
+                      </router-link>
+                    </p>
+                  </div>
+
                 </div>
-                <h4 class="card-title">املأ مخزون ثقافتك</h4>
-                <p class="card-text">
-                  {{ book_in_progress.name }}
-                </p>
-
-                <router-link
-                  class="btn btn-primary w-100"
-                  :to="{
-                    name: 'book.book-details',
-                    params: { book_id: book_in_progress.id },
-                  }"
-                >
-                  متابعة
-                </router-link>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                  data-bs-slide="prev">
+                  <span class="carousel-btn material-symbols-outlined carousel-control-prev-icon" aria-hidden="true">
+                    arrow_back_ios
+                  </span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                  data-bs-slide="next">
+                  <span class="carousel-btn material-symbols-outlined carousel-control-next-icon" aria-hidden="true">
+                    arrow_forward_ios
+                  </span>
+                  <span class="visually-hidden">Next</span>
+                </button>
               </div>
-
               <div class="card-body w-100" v-else>
                 <h4 class="card-title">لا يوجد كتب</h4>
-                <router-link
-                  class="btn btn-primary w-100"
-                  :to="{ name: 'osboha.book' }"
-                >
+                <router-link class="btn btn-primary w-100" :to="{ name: 'osboha.book' }">
                   ابدأ الأن
                 </router-link>
               </div>
             </div>
           </div>
-          <div
-            class="right-sidebar-toggle bg-primary text-white mt-3 d-flex"
-            @click="toggleMini"
-          >
+          <div class="right-sidebar-toggle bg-primary text-white mt-3 d-flex" @click="toggleMini">
             <span class="material-symbols-outlined"> auto_stories </span>
           </div>
         </div>
@@ -65,15 +64,19 @@
 <script>
 import vClickOutside from "click-outside-vue3";
 
+
 export default {
   name: "CurrentReading",
   directives: {
     clickOutside: vClickOutside.directive,
   },
+  created() {
+    console.log(this.book_in_progress)
+  },
   props: {
     book_in_progress: {
       type: [Object],
-      default: () => {},
+      default: () => { },
     },
     progress: {
       type: [Number],
@@ -113,5 +116,8 @@ export default {
 <style scoped>
 .bg-primary {
   background-color: #278036 !important;
+}
+.carousel-btn{
+color: #1D1A55;
 }
 </style>

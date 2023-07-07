@@ -359,7 +359,7 @@ const chatChildRoute = (prop, mode = false) => [
     path: "",
     name: prop + ".index",
     meta: { auth: true, name: "ChatIndex" },
-    component: () => import("../views/Chat/index"),
+    component: () => import("../views/Chat/Index"),
   },
 ];
 const chatChildRoute2 = (prop, mode = false) => [
