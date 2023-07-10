@@ -13,12 +13,13 @@
               </i>
               قبول الكل
             </span>
-            <!-- <span role="button" class="btn btn-danger ms-2 mb-3" style="direction: rtl !important" @click="acceptAll()">
+            <span role="button" class="btn btn-danger ms-2 mb-3" style="direction: rtl !important"
+              @click="deleteAllUnAccepted()">
               <i role="button" class="material-symbols-outlined align-middle">
                 delete
               </i>
               رفض الكل
-            </span> -->
+            </span>
 
             <li class="d-flex align-items-center justify-content-between flex-wrap"
               v-for="(request, index1) in requestsLoaded" :key="index1">
@@ -33,20 +34,16 @@
                   <h6>{{ request.user.name }}</h6>
                   <small>{{ formatDateToWritten(request.created_at) }}</small>
                 </router-link>
-              </div>
-              <div class="d-flex align-items-center mt-2 mt-md-0">
-                <span role="button" class="ms-2 mb-3" style="direction: rtl !important"
-                  @click="acceptrequest(request.id)">
-                  <i role="button" class="material-symbols-outlined align-middle">
-                    person_add
-                  </i>
-                </span>
-                <span role="button" class="ms-2 mb-3" style="direction: rtl !important"
-                  @click="deleterequest(request.user_id, request.friend_id)">
-                  <i role="button" class="material-symbols-outlined align-middle">
-                    delete
-                  </i>
-                </span>
+                <div class="d-flex align-items-center mt-2 mt-md-0">
+                  <span role="button" class="btn btn-primary ms-2 mb-3" style="direction: rtl !important"
+                    @click="acceptrequest(request.id)">
+                    قبول
+                  </span>
+                  <span role="button" class="btn btn-secondary ms-2 mb-3" style="direction: rtl !important"
+                    @click="deleterequest(request.user_id, request.friend_id)">
+                    رفض
+                  </span>
+                </div>
               </div>
             </li>
             <li class="d-block text-center mb-0 pb-0" v-if="friendRequest.length > length">
@@ -91,43 +88,16 @@ export default {
      *  @param  request id
      */
     acceptrequest(id) {
-      const swalWithBootstrapButtons = this.$swal.mixin({
-        customClass: {
-          confirmButton: "btn btn-primary btn-lg",
-          cancelButton: "btn btn-outline-primary btn-lg ms-2",
-        },
-        buttonsStyling: false,
-      });
-
-      swalWithBootstrapButtons
-        .fire({
-          title: "هل أنت متأكد؟",
-          text: "لا يمكنك التراجع عن هذا الاجراء",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "نعم، قم بالقبول",
-          cancelButtonText: "تراجع  ",
-          showClass: {
-            popup: "animate__animated animate__zoomIn",
-          },
-          hideClass: {
-            popup: "animate__animated animate__zoomOut",
-          },
+      FriendServices.accept(id)
+        .then(async (response) => {
+          helper.toggleToast(
+            "تم قبول الطلب",
+            "success"
+          );
+          this.friendRequest = await FriendServices.getFriendsRequests();
         })
-        .then((willDelete) => {
-          if (willDelete.isConfirmed) {
-            FriendServices.accept(id)
-            .then(async (response) => {
-                helper.toggleToast(
-                  "تم قبول الطلب",
-                  "success"
-                );
-                this.friendRequest = await FriendServices.getFriendsRequests();
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
+        .catch((error) => {
+          console.log(error);
         });
     },
     /**
@@ -135,43 +105,16 @@ export default {
      *  @param  user id, friend id
      */
     deleterequest(user_id, friend_id) {
-      const swalWithBootstrapButtons = this.$swal.mixin({
-        customClass: {
-          confirmButton: "btn btn-primary btn-lg",
-          cancelButton: "btn btn-outline-primary btn-lg ms-2",
-        },
-        buttonsStyling: false,
-      });
-
-      swalWithBootstrapButtons
-        .fire({
-          title: "هل أنت متأكد؟",
-          text: "لا يمكنك التراجع عن هذا الاجراء",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "نعم، قم بالحذف",
-          cancelButtonText: "تراجع  ",
-          showClass: {
-            popup: "animate__animated animate__zoomIn",
-          },
-          hideClass: {
-            popup: "animate__animated animate__zoomOut",
-          },
+      FriendServices.delete(user_id, friend_id)
+        .then(async (response) => {
+          helper.toggleToast(
+            "تم الحذف",
+            "success"
+          );
+          this.friendRequest = await FriendServices.getFriendsRequests();
         })
-        .then((willDelete) => {
-          if (willDelete.isConfirmed) {
-            FriendServices.delete(user_id, friend_id)
-            .then(async (response) => {
-                helper.toggleToast(
-                  "تم حذف",
-                  "success"
-                );
-                this.friendRequest = await FriendServices.getFriendsRequests();
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
+        .catch((error) => {
+          console.log(error);
         });
     },
 
@@ -183,7 +126,7 @@ export default {
       this.length = this.length + 10;
     },
     /**
-     * load more request.
+     * accept All unaccepted request for auth user.
      */
     acceptAll() {
       const swalWithBootstrapButtons = this.$swal.mixin({
@@ -225,6 +168,51 @@ export default {
           }
         });
     },
+
+    /**
+     * Delete All unaccepted request for auth user.
+     */
+    deleteAllUnAccepted() {
+      const swalWithBootstrapButtons = this.$swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-primary btn-lg",
+          cancelButton: "btn btn-outline-primary btn-lg ms-2",
+        },
+        buttonsStyling: false,
+      });
+
+      swalWithBootstrapButtons
+        .fire({
+          title: "هل أنت متأكد؟",
+          text: "لا يمكنك التراجع عن هذا الاجراء",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "نعم، قم بالحذف",
+          cancelButtonText: "تراجع  ",
+          showClass: {
+            popup: "animate__animated animate__zoomIn",
+          },
+          hideClass: {
+            popup: "animate__animated animate__zoomOut",
+          },
+        })
+        .then((willDelete) => {
+          if (willDelete.isConfirmed) {
+            FriendServices.deleteAllUnAccepted()
+              .then(async (response) => {
+                helper.toggleToast(
+                  "تم حذف جميع الطلبات",
+                  "success"
+                );
+                this.friendRequest = await FriendServices.getFriendsRequests();
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
+        });
+    },
+
   },
   computed: {
     requestsLoaded() {
