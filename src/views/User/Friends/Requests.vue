@@ -6,79 +6,58 @@
           <h4 class="card-title">طلبات الصداقة</h4>
         </template>
         <template v-slot:body>
-          <ul
-            class="request-request request-inline m-0 p-0"
-            v-if="requestsLoaded.length > 0"
-          >
-            <li
-              class="d-flex align-items-center justify-content-between flex-wrap"
-              v-for="(request, index1) in requestsLoaded"
-              :key="index1"
-            >
-              <BaseAvatar
-                :profileImg="request.user.user_profile.profile_picture"
-                :profile_id="request.user.user_profile.id"
-                :title="request.user.name"
-                :gender="request.user.gender"
-                avatarClass="rounded-circle avatar-40"
-                containerClass="flex-shrink-0"
-              />
-              <div class="flex-grow-1 ms-3">
-                <router-link
-                  :to="{
-                    name: 'user.profile',
-                    params: { user_id: request.user.id },
-                  }"
-                >
+          <ul class="request-request request-inline m-0 p-0" v-if="requestsLoaded.length > 0">
+            <span role="button" class="btn btn-primary mb-3" style="direction: rtl !important" @click="acceptAll()">
+              <i role="button" class="material-symbols-outlined align-middle">
+                done
+              </i>
+              قبول الكل
+            </span>
+            <!-- <span role="button" class="btn btn-danger ms-2 mb-3" style="direction: rtl !important" @click="acceptAll()">
+              <i role="button" class="material-symbols-outlined align-middle">
+                delete
+              </i>
+              رفض الكل
+            </span> -->
+
+            <li class="d-flex align-items-center justify-content-between flex-wrap"
+              v-for="(request, index1) in requestsLoaded" :key="index1">
+              <BaseAvatar :profileImg="request.user.user_profile.profile_picture"
+                :profile_id="request.user.user_profile.id" :title="request.user.name" :gender="request.user.gender"
+                avatarClass="rounded-circle avatar-40" containerClass="flex-shrink-0" />
+              <div class="flex-grow-1 ms-2">
+                <router-link :to="{
+                  name: 'user.profile',
+                  params: { user_id: request.user.id },
+                }">
                   <h6>{{ request.user.name }}</h6>
+                  <small>{{ formatDateToWritten(request.created_at) }}</small>
                 </router-link>
               </div>
               <div class="d-flex align-items-center mt-2 mt-md-0">
-                <div class="confirm-click-btn">
-                  <a
-                    role="button"
-                    class="me-3 btn btn-primary rounde d-flex align-items-center"
-                    @click="acceptrequest(request.id)"
-                  >
-                    <span class="material-symbols-outlined md-18 me-1">
-                      person_add
-                    </span>
-                    قبول
-                  </a>
-                  <a
-                    href="@/app/profile.html"
-                    class="me-3 btn btn-primary rounded request-btn"
-                    style="display: none"
-                  ></a>
-                </div>
-                <a
-                  role="button"
-                  class="btn btn-secondary rounded"
-                  data-extra-toggle="delete"
-                  data-closest-elem=".item"
-                  @click="deleterequest(request.user_id, request.friend_id)"
-                  >حذف</a
-                >
+                <span role="button" class="ms-2 mb-3" style="direction: rtl !important"
+                  @click="acceptrequest(request.id)">
+                  <i role="button" class="material-symbols-outlined align-middle">
+                    person_add
+                  </i>
+                </span>
+                <span role="button" class="ms-2 mb-3" style="direction: rtl !important"
+                  @click="deleterequest(request.user_id, request.friend_id)">
+                  <i role="button" class="material-symbols-outlined align-middle">
+                    delete
+                  </i>
+                </span>
               </div>
             </li>
-            <li
-              class="d-block text-center mb-0 pb-0"
-              v-if="friendRequest.length > length"
-            >
-              <a class="me-3 btn" role="button" @click="loadMore()"
-                >عرض المزيد</a
-              >
+            <li class="d-block text-center mb-0 pb-0" v-if="friendRequest.length > length">
+              <a class="me-3 btn" role="button" @click="loadMore()">عرض المزيد</a>
             </li>
           </ul>
           <div class="col-sm-12" v-else>
             <iq-card class="iq-card">
               <div class="iq-card-body p-0">
                 <div class="image-block text-center">
-                  <img
-                    src="@/assets/images/main/no-friend-req.png"
-                    class="img-fluid rounded w-50"
-                    alt="blog-img"
-                  />
+                  <img src="@/assets/images/main/no-friend-req.png" class="img-fluid rounded w-50" alt="blog-img" />
                 </div>
                 <h4 class="text-center mt-3 mb-3">لا يوجد طلبات صداقة</h4>
               </div>
@@ -92,6 +71,7 @@
 
 <script>
 import FriendServices from "@/API/services/friend.service";
+import helper from "@/utilities/helper";
 
 export default {
   name: "FriendRequest",
@@ -105,6 +85,7 @@ export default {
     };
   },
   methods: {
+    ...helper,
     /**
      * acceot friend request.
      *  @param  request id
@@ -136,21 +117,12 @@ export default {
         .then((willDelete) => {
           if (willDelete.isConfirmed) {
             FriendServices.accept(id)
-              .then((response) => {
-                swalWithBootstrapButtons.fire({
-                  title: "تم القبول",
-                  text: "تم قبول طلب الصداقة",
-                  icon: "success",
-                  showClass: {
-                    popup: "animate__animated animate__zoomIn",
-                  },
-                  hideClass: {
-                    popup: "animate__animated animate__zoomOut",
-                  },
-                });
-                setTimeout(function () {
-                  location.reload(true);
-                }, 2000);
+            .then(async (response) => {
+                helper.toggleToast(
+                  "تم قبول الطلب",
+                  "success"
+                );
+                this.friendRequest = await FriendServices.getFriendsRequests();
               })
               .catch((error) => {
                 console.log(error);
@@ -189,21 +161,12 @@ export default {
         .then((willDelete) => {
           if (willDelete.isConfirmed) {
             FriendServices.delete(user_id, friend_id)
-              .then((response) => {
-                swalWithBootstrapButtons.fire({
-                  title: "تم الحذف",
-                  text: "تم حذف طلب الصداقة",
-                  icon: "success",
-                  showClass: {
-                    popup: "animate__animated animate__zoomIn",
-                  },
-                  hideClass: {
-                    popup: "animate__animated animate__zoomOut",
-                  },
-                });
-                setTimeout(function () {
-                  location.reload(true);
-                }, 2000);
+            .then(async (response) => {
+                helper.toggleToast(
+                  "تم حذف",
+                  "success"
+                );
+                this.friendRequest = await FriendServices.getFriendsRequests();
               })
               .catch((error) => {
                 console.log(error);
@@ -218,6 +181,49 @@ export default {
     loadMore() {
       if (this.length > this.friendRequest.length) return;
       this.length = this.length + 10;
+    },
+    /**
+     * load more request.
+     */
+    acceptAll() {
+      const swalWithBootstrapButtons = this.$swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-primary btn-lg",
+          cancelButton: "btn btn-outline-primary btn-lg ms-2",
+        },
+        buttonsStyling: false,
+      });
+
+      swalWithBootstrapButtons
+        .fire({
+          title: "هل أنت متأكد؟",
+          text: "لا يمكنك التراجع عن هذا الاجراء",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "نعم، قم بالقبول",
+          cancelButtonText: "تراجع  ",
+          showClass: {
+            popup: "animate__animated animate__zoomIn",
+          },
+          hideClass: {
+            popup: "animate__animated animate__zoomOut",
+          },
+        })
+        .then((willDelete) => {
+          if (willDelete.isConfirmed) {
+            FriendServices.acceptAll()
+              .then(async (response) => {
+                helper.toggleToast(
+                  "تم قبول جميع الطلبات",
+                  "success"
+                );
+                this.friendRequest = await FriendServices.getFriendsRequests();
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
+        });
     },
   },
   computed: {
