@@ -35,10 +35,7 @@
         </div>
         <div>
           <form class="post-text ml-3 w-100">
-            <ckeditor id="editor" :editor="editor" v-model="post.body" :config="editorConfig" ref="bodyRef"
-              @input="onChange"></ckeditor>
-
-            <!-- <textarea
+            <textarea
               id="editor"
               placeholder="ماذا تريد أن تكتب..."
               class="rounded form-control"
@@ -46,7 +43,7 @@
               v-model.trim="post.body"
               ref="bodyRef"
             >
-            </textarea> -->
+            </textarea>
 
             <input type="file" @change="previewMedia($event)" multiple accept="image/*" class="d-none" ref="fileRef" />
           </form>
@@ -135,8 +132,6 @@ import postService from "@/API/services/post.service";
 import friendService from "@/API/services/friend.service";
 import UserInfo from "@/Services/userInfoService";
 import helper from "@/utilities/helper";
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import CKEditor from "@ckeditor/ckeditor5-vue"
 
 export default {
   name: "AddPost",
@@ -145,7 +140,6 @@ export default {
     PostPoll,
     FriendsList,
     PostUser,
-    ckeditor: CKEditor.component
 
   },
   props: {
@@ -162,17 +156,6 @@ export default {
   data() {
     return {
       postModal: null,
-      editor: ClassicEditor,
-      editorConfig: {
-        toolbar: [
-          'undo', 'redo',
-          '|', 'heading',
-          '|', 'fontfamily', 'fontsize', 'fontColor', 'fontBackgroundColor',
-          '|', 'bold', 'italic', 'strikethrough', 'subscript', 'superscript', 'code',
-          '|', 'blockQuote',
-          '|', 'bulletedList', 'numberedList', 'todoList', 'outdent', 'indent'
-        ]
-      },
       friendsListModal: null,
       friends: [],
       friendsTemp: [],
@@ -238,13 +221,13 @@ export default {
     },
   },
   watch: {
-    // postBody() {
-    //   this.$refs.bodyRef.style.height = "auto";
-    //   this.$nextTick(() => {
-    //     this.$refs.bodyRef.style.height =
-    //       this.$refs.bodyRef.scrollHeight + "px";
-    //   });
-    // },
+    postBody() {
+      this.$refs.bodyRef.style.height = "auto";
+      this.$nextTick(() => {
+        this.$refs.bodyRef.style.height =
+          this.$refs.bodyRef.scrollHeight + "px";
+      });
+    },
   },
   async created() {
 

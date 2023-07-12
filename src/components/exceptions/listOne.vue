@@ -9,15 +9,9 @@
       <div class="iq-card-body">
         <div class="image-block text-center">
           <div class="profile-img">
-            <BaseAvatar
-              :profileImg="exception.user.user_profile.profile_picture"
-              :profile_id="exception.user.user_profile.id"
-              :dimensions="'512x512'"
-              :title="exception.user?.name"
-              :gender="exception.user?.gender"
-              avatarClass="avatar-130 img-fluid"
-              containerClass="flex-shrink-0"
-            />
+            <BaseAvatar :profileImg="exception.user.user_profile.profile_picture"
+              :profile_id="exception.user.user_profile.id" :dimensions="'512x512'" :title="exception.user?.name"
+              :gender="exception.user?.gender" avatarClass="avatar-130 img-fluid" containerClass="flex-shrink-0" />
             <h4 class="text-center mt-3 mb-3">
               {{ exception.user.name }}
             </h4>
@@ -27,23 +21,26 @@
         <div class="iq-card-body ps-3 pe-3 mt-1">
           <h4 class="mb-2">السبب</h4>
           <p class="m-auto">{{ exception.reason }}</p>
-          <h4 class="mb-2">الحالة</h4>
+          <p class="m-auto"> تاريخ الطلب: {{ formatFullDate(exception.created_at) }}</p>
 
-          <p class="m-auto" v-if="exception.status == 'pending'">
-            <span class="badge bg-warning">تحت المراجعة</span>
-          </p>
-          <p class="m-auto" v-if="exception.status == 'accepted'">
-            <span class="badge bg-primary">مقبول</span>
-          </p>
-          <p class="m-auto" v-if="exception.status == 'rejected'">
-            <span class="badge bg-danger">مرفوض</span>
-          </p>
-          <p class="m-auto" v-if="exception.status == 'finished'">
-            <span class="badge bg-success">منتهي</span>
-          </p>
-          <p class="m-auto" v-if="exception.status == 'cancelled'">
-            <span class="badge bg-danger">ملغي</span>
-          </p>
+
+          <h4 class="mb-2">الحالة
+            <p class="m-auto" v-if="exception.status == 'pending'">
+              <span class="badge bg-warning">تحت المراجعة</span>
+            </p>
+            <p class="m-auto" v-if="exception.status == 'accepted'">
+              <span class="badge bg-primary">مقبول</span>
+            </p>
+            <p class="m-auto" v-if="exception.status == 'rejected'">
+              <span class="badge bg-danger">مرفوض</span>
+            </p>
+            <p class="m-auto" v-if="exception.status == 'finished'">
+              <span class="badge bg-success">منتهي</span>
+            </p>
+            <p class="m-auto" v-if="exception.status == 'cancelled'">
+              <span class="badge bg-danger">ملغي</span>
+            </p>
+          </h4>
           <table class="table w-100" v-if="exception.reviewer">
             <thead>
               <tr>
@@ -207,6 +204,7 @@ import exceptionService from "@/API/services/user-exception.service";
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, maxLength } from "@vuelidate/validators";
 import UserInfo from "@/Services/userInfoService";
+import helper from "@/utilities/helper";
 
 const greaterThanMinusOne = (value) => value > -1;
 
@@ -253,6 +251,7 @@ export default {
     };
   },
   methods: {
+    ...helper,
     async submitDecision() {
       this.v$.$touch();
       if (!this.v$.decideForm.$invalid) {

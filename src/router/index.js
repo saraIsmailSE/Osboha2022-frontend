@@ -354,6 +354,23 @@ const bookChildRoute = (prop, mode = false) => [
   },
 ];
 
+const chatChildRoute = (prop, mode = false) => [
+  {
+    path: "",
+    name: prop + ".index",
+    meta: { auth: true, name: "ChatIndex" },
+    component: () => import("../views/Chat/Index"),
+  },
+];
+const chatChildRoute2 = (prop, mode = false) => [
+  {
+    path: "",
+    name: prop + ".index-2",
+    meta: { auth: true, name: "ChatIndex" },
+    component: () => import("../views/Chat/index-2"),
+  },
+];
+
 const routes = [
   {
     path: "/:pathMatch(.*)*",
@@ -430,10 +447,18 @@ const routes = [
     children: bookChildRoute("book"),
   },
   {
-    path: "/test-query",
-    name: "testQuery",
-    component: () => import("../views/testQuery"),
+    path: "/chat",
+    name: "chat",
+    component: () => import("../layouts/Default"),
     meta: { auth: true },
+    children: chatChildRoute("chat"),
+  },
+  {
+    path: "/chat-2",
+    name: "chat2",
+    component: () => import("../layouts/ChatHeader"),
+    meta: { auth: true },
+    children: chatChildRoute2("chat2"),
   },
 ];
 

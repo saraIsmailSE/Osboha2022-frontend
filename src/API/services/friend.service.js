@@ -64,7 +64,28 @@ class FriendService {
       handleError(error);
     }
   }
+  /**
+   * accept All.
+   */
+  async acceptAll() {
+    try {
+      const friends = await api.get(`/friends/accept-all`);
+      return friends.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 
+  /**
+s   */
+  async deleteAllUnAccepted() {
+    try {
+      const friends = await api.get(`/friends/delete-all-unaccepted`);
+      return friends.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
   /**
    * delete Friendship between 2 users.
    *  @param  user id, friend id
