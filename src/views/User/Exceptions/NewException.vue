@@ -20,8 +20,8 @@
                   {{ type.type }}
                 </option>
               </select>
-              <small style="color: red" v-if="v$.exceptionForm.type_id.$error">
-                يرجى اختيار نوع الاجازة</small>
+              <small class="d-block text-start mt-1" style="color: red" v-if="v$.exceptionForm.type_id.$error">
+                * يرجى اختيار نوع الاجازة</small>
             </div>
 
             <div class="form-group col-12" v-if="isAdmin && v$.exceptionForm.type_id.$model == 5">
@@ -29,15 +29,16 @@
               <input :disabled="message" type="date" class="form-control mt-2" id="exceptionEndDate"
                 v-model="v$.exceptionForm.end_date.$model" name="end_date" />
               <template v-if="v$.exceptionForm.end_date.$error">
-                <small style="color: red" v-if="v$.exceptionForm.end_date.required.$invalid">
-                  يرجى اختيار تاريخ انتهاء الاجازة
+                <small class="d-block text-start mt-1" style="color: red" v-if="v$.exceptionForm.end_date.required.$invalid">
+                  * يرجى اختيار تاريخ انتهاء الاجازة
                 </small>
-                <small style="color: red" v-if="v$.exceptionForm.end_date.date_format.$invalid">
-                  يرجى اختيار تاريخ انتهاء الاجازة بتاريخ لا يقل عن اليوم
+                <small class="d-block text-start mt-1" style="color: red" v-if="v$.exceptionForm.end_date.date_format.$invalid">
+                  * يرجى اختيار تاريخ انتهاء الاجازة بتاريخ لا يقل عن اليوم
                 </small>
               </template>
             </div>
-            <div class="form-group" v-if="exceptionForm.type_id != 0 && exceptionForm.type_id != 1 && exceptionForm.type_id != 2">
+            <div class="form-group"
+              v-if="exceptionForm.type_id == 3 || exceptionForm.type_id == 4 || exceptionForm.type_id == 5">
               <h4>المدة المطلوبة</h4>
               <div class="form-group row">
                 <select :disabled="message" v-model="v$.exceptionForm.desired_duration.$model" class="form-select mt-2"
@@ -53,10 +54,29 @@
                     ثلاثة أسابيع
                   </option>
                 </select>
-                <small style="color: red" v-if="v$.exceptionForm.desired_duration.$error">
-                  يرجى اختيار مدة الاجازة</small>
               </div>
+              <small class="d-block text-start mt-1" style="color: red" v-if="v$.exceptionForm.desired_duration.$error">
+                  * يرجى اختيار مدة الاجازة
+                </small>
             </div>
+            <div class="form-group" v-if="exceptionForm.type_id == 3 || exceptionForm.type_id == 4">
+              <h4>
+                أرفق جدول الامتحانات
+              </h4>
+              <input class="form-control mt-2" type="file" name="exam_media" id="exam_media" ref="exam_media"
+                accept="image/*" @change="uploadFile" />
+              <div class="form-check mt-2 w-100 text-start">
+                <input type="checkbox" :checked="no_exam_media" class="form-check-input" id="no_exam_media"
+                  ref="no_exam_media" @click="no_exam_media = !no_exam_media">
+                <label class="form-check-label" for="no_exam_media">
+                  لا امتلك جدول ثابت للامتحانات
+                </label>
+              </div>
+              <small class="d-block text-start mt-1" style="color: red" v-if="v$.exceptionForm.exam_media.$invalid">
+                * يرجى ارفاق جدول الامتحانات في حال وجود جدول ثابت
+              </small>
+            </div>
+
             <div class="form-group">
               <h4>السبب</h4>
               <div class="form-group row">
@@ -64,15 +84,15 @@
                   class="rounded form-control mt-2 col-12" id="exceptionReason" v-model="v$.exceptionForm.reason.$model"
                   name="reason">
                 </textarea>
-                <p>
+                <p class="mb-0">
                   <span :class="{ 'text-danger': v$.exceptionForm.reason.$error }">
                     {{ v$.exceptionForm.reason.$model.length }}
                   </span>
                   /250
                 </p>
               </div>
-              <small style="color: red" v-if="v$.exceptionForm.reason.$error">
-                قم بادخال سبب لا ينقص عن 10 حروف ولا يزيد عن 250 حرف
+              <small class="d-block text-start mt-1" style="color: red" v-if="v$.exceptionForm.reason.$error">
+                * قم بادخال سبب لا ينقص عن 10 حروف ولا يزيد عن 250 حرف
               </small>
             </div>
             <hr />
@@ -106,7 +126,7 @@
 import exceptionTypeService from "@/API/services/exception-type.service";
 import exceptionService from "@/API/services/user-exception.service";
 import useVuelidate from "@vuelidate/core";
-import { required, minLength, maxLength } from "@vuelidate/validators";
+import { required, minLength, maxLength, requiredIf } from "@vuelidate/validators";
 import UserInfoService from "@/Services/userInfoService";
 
 const greaterThanZero = (value) => value > 0;
@@ -127,8 +147,10 @@ export default {
         reason: "",
         type_id: 0,
         end_date: new Date().toISOString().slice(0, 10),
-        desired_duration:'',
+        desired_duration: '',
+        exam_media: [],
       },
+      no_exam_media: false,
       exceptionTypes: null,
       message: null,
     };
@@ -150,8 +172,18 @@ export default {
           required,
           maxValue: greaterThanZero,
         },
-        desired_duration:{
-          required,
+        desired_duration: {
+          required: requiredIf(function () {
+            if (this.exceptionForm.type_id == 3 || this.exceptionForm.type_id == 4 || this.exceptionForm.type_id == 5)
+              return true;
+            else
+              return false;
+          }),
+        },
+        exam_media: {
+          required: requiredIf(function () {
+            return !this.no_exam_media;
+          }),
         },
         //after yesterday
         end_date: {
@@ -183,6 +215,10 @@ export default {
           this.loader = false;
         }
       }
+    },
+    uploadFile() {
+      this.exceptionForm.exam_media = this.$refs.exam_media.files[0];
+      console.log(this.exceptionForm.exam_media)
     },
     back() {
       this.$router.push({

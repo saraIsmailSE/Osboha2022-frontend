@@ -3,7 +3,7 @@
         <div class="col-sm-12 mt-3">
             <iq-card class="iq-card">
                 <div class="iq-card-header-toolbar d-flex align-items-center mx-auto">
-                    <h3 class="text-center mt-3 mb-3">{{group_title}} - {{week_title}}</h3>
+                    <h3 class="text-center mt-3 mb-3">{{ group_title }} - {{ week_title }}</h3>
                 </div>
                 <div class="iq-card-body p-3">
                     <div class="d-flex align-items-center mt-3">
@@ -58,8 +58,8 @@
 
                                                 </tr>
                                             </thead>
-                                            <tbody v-if="exceptions && exceptions.length>0">
-                                                <tr v-for="exception in exceptions" :key="exception.id">
+                                            <tbody v-if="exceptions && exceptions.length > 0">
+                                                <tr v-for="exception in exceptions.slice(0, length)" :key="exception.id">
                                                     <td>{{ exception.user.name }}</td>
                                                     <td> {{ exception.type.type }}</td>
                                                     <td> {{ exception_status[exception.status] }}</td>
@@ -77,12 +77,16 @@
                                                 </tr>
                                             </tbody>
                                             <tbody v-else>
-                                            <tr colspan="4">
-                                                <td>لا يوجد بيانات لعرضها</td>
-                                            </tr>    
+                                                <tr colspan="4">
+                                                    <td>لا يوجد بيانات لعرضها</td>
+                                                </tr>
                                             </tbody>
 
                                         </table>
+                                        <span class="w-100 text-center mt-3  btn" role="button" @click="loadMore()"
+                                            v-if="exceptions && exceptions.length > length">
+                                            عرض المزيد
+                                        </span>
                                         <hr>
                                     </div>
                                 </div>
@@ -111,8 +115,8 @@ export default {
         try {
             const response = await GroupService.getAllGroupExceptions(this.group_id);
             this.exceptions = response.exceptions
-            this.group_title=response.group.name
-            this.week_title=response.week.title
+            this.group_title = response.group.name
+            this.week_title = response.week.title
         }
         catch (error) {
             console.log(error);
@@ -122,19 +126,23 @@ export default {
     data() {
         return {
             exceptions: null,
-            group_title:'',
-            week_title:'',
+            group_title: '',
+            week_title: '',
             group_id: this.$route.params.group_id,
-            exception_status:{ 
+            exception_status: {
                 "pending": "قيد المراجعة",
                 "accepted": "مقبول",
-                "rejected":"مرفوض",
-                "cancelled":"ملغي",
-                "finished":"منتهي"
-            }
+                "rejected": "مرفوض",
+                "cancelled": "ملغي",
+                "finished": "منتهي"
+            },
+            length: 10,
         };
     },
     methods: {
+        loadMore() {
+            this.length += 10;
+        },
         back() {
             this.$router.push({ name: 'group.group-detail', params: { group_id: this.group_id } })
         },

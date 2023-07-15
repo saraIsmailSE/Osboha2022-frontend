@@ -10,29 +10,18 @@
               </div>
               <hr />
               <div class="container row d-inline text-center m-auto">
-                <span
-                  class="col-lg-1 col-md-1 col-sm-2 text-center"
-                  v-for="section in sections"
-                  :key="section.section_id"
-                  v-on:click="filterResults(section.section_id)"
-                >
-                  <span
-                    class="btn button-60 mr-2 mt-1"
-                    :class="checkActive(section.active)"
-                    >{{ section.section }}</span
-                  >
+                <span class="col-lg-1 col-md-1 col-sm-2 text-center" v-for="section in sections" :key="section.section_id"
+                  v-on:click="filterResults(section.section_id)">
+                  <span class="btn button-60 mr-2 mt-1" :class="checkActive(section.active)">{{ section.section }}</span>
                 </span>
               </div>
 
               <div class="mt-3 inputs">
-                <i class="fa fa-search"></i>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder=" ... ابحث عن كتاب"
-                  v-model.trim="searchModel"
-                  v-on:keyup="searchBookByName(searchModel)"
-                />
+                <i class="material-symbols-outlined">
+                  search
+                </i>
+                <input type="text" class="form-control" placeholder=" ... ابحث عن كتاب" v-model.trim="searchModel"
+                  v-on:keyup="searchBookByName(searchModel)" />
               </div>
             </div>
           </div>
@@ -41,32 +30,20 @@
     </div>
     <div class="row mb-3">
       <div class="col-4">
-        <button
-          class="button-53"
-          role="button"
-          style="background-color: #77d792"
-          v-on:click="filterResults(recentAddedBooks)"
-        >
+        <button class="button-53" role="button" style="background-color: #77d792"
+          v-on:click="filterResults(recentAddedBooks)">
           مضاف حديثًا
         </button>
       </div>
       <div class="col-4">
-        <button
-          class="button-53"
-          role="button"
-          style="background-color: #0a6681"
-          v-on:click="filterResults(mostReadableBooks)"
-        >
+        <button class="button-53" role="button" style="background-color: #0a6681"
+          v-on:click="filterResults(mostReadableBooks)">
           الأكثر قراءة
         </button>
       </div>
       <div class="col-4">
-        <button
-          class="button-53 animated-btn"
-          role="button"
-          style="background-color: #f9c93e; color: black"
-          v-on:click="filterResults(randomBook)"
-        >
+        <button class="button-53 animated-btn" role="button" style="background-color: #f9c93e; color: black"
+          v-on:click="filterResults(randomBook)">
           اختر لي
         </button>
       </div>
