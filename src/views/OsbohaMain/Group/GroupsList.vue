@@ -1,22 +1,27 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-sm-12" v-if="groups && groups.length > 0">
+      <div class="col-sm-12">
         <iq-card>
           <template v-slot:headerTitle>
-            <h4 class="card-title">قائمة المجموعات - {{ groups.length }}</h4>
+            <h4 class="card-title" v-if="groups && groups.length > 0">قائمة المجموعات - {{ groups.length }}</h4>
+            <h4 class="card-title" v-else>قائمة المجموعات - 0</h4>
           </template>
 
           <template v-slot:body>
-            <router-link
-              class="btn btn-primary float-end"
-              :to="{
-                name: 'group.addGroup',
-              }"
-            >
+            <div class="mt-3 inputs mb-3">
+              <i class="material-symbols-outlined">
+                search
+              </i>
+              <input type="text" class="form-control" placeholder=" ... ابحث عن مجموعة" v-model.trim="searchModel"
+                v-on:keyup="searchGroupByName(searchModel)" />
+            </div>
+            <router-link class="mb-3 btn btn-primary float-end" :to="{
+              name: 'group.addGroup',
+            }">
               اضافة مجموعة
             </router-link>
-            <div class="table-responsive">
+            <div class="table-responsive" v-if="groups && groups.length > 0">
               <table id="datatable" class="table table-striped table-bordered">
                 <thead>
                   <tr>
@@ -26,15 +31,12 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(group, index) in groups" :key="index">
+                  <tr v-for="(group, index) in groups.slice(0, length)" :key="index">
                     <td>
-                      <router-link
-                        class="text-center"
-                        :to="{
-                          name: 'group.group-detail',
-                          params: { group_id: group.id },
-                        }"
-                      >
+                      <router-link class="text-center" :to="{
+                        name: 'group.group-detail',
+                        params: { group_id: group.id },
+                      }">
                         {{ group.name }}
                       </router-link>
                     </td>
@@ -59,9 +61,23 @@
                   </tr>
                 </tbody>
               </table>
+              <span class="w-100 text-center me-3 btn" role="button" @click="loadMore()" v-if="groups.length > length">
+                عرض المزيد
+              </span>
+
+            </div>
+
+            <div v-else>
+              <h4>
+                لا يوجد مجموعات
+                <span class="material-symbols-outlined align-middle">
+                  info
+                </span>
+              </h4>
             </div>
           </template>
         </iq-card>
+
       </div>
     </div>
   </div>
@@ -76,7 +92,6 @@ export default {
     const groups = await GroupService.getAll();
     this.groups = groups.data;
   },
-
   data() {
     return {
       groups: [],
@@ -87,6 +102,8 @@ export default {
         consultation: "فريق الاستشارة",
         Administration: "الإدارة العليا",
       },
+      searchModel: "",
+      length: 10,
     };
   },
 
@@ -102,6 +119,49 @@ export default {
         console.log(error);
       }
     },
+    async searchGroupByName(name) {
+      const groups = await GroupService.searchGroupByName(name);
+      this.groups = groups.data;
+    },
+    loadMore() {
+      this.length += 10;
+    },
   },
 };
+
+
 </script>
+
+<style lang="scss" scoped>
+.inputs {
+  position: relative;
+}
+
+.form-control {
+  text-indent: 15px;
+  border: none;
+  height: 45px;
+  border-radius: 0px;
+  border-bottom: 1px solid #eee;
+}
+
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #eee;
+  outline: 0;
+  box-shadow: none;
+  border-bottom: 1px solid blue;
+}
+
+.form-control:focus {
+  color: blue;
+}
+
+.inputs i {
+  position: absolute;
+  top: 14px;
+  left: 4px;
+  color: #b8b9bc;
+}
+</style>

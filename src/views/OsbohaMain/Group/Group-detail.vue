@@ -196,6 +196,7 @@ export default {
     try {
       const response = await GroupService.getById(this.group_id);
       this.group = response.info;
+      console.log(response.week_avg)
       this.week_avg = (Math.round(response.week_avg * 100) / 100).toFixed(2);
       this.week = response.week;
       this.authInGroup = response.authInGroup;

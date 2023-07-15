@@ -13,6 +13,11 @@ class GroupService {
       handleError(error);
     }
   }
+  /**
+   * Get all groups.
+   *
+   * @return groups;
+   */
   async getAll() {
     try {
       const groups = await api.get("/group");
@@ -21,6 +26,27 @@ class GroupService {
       return error;
     }
   }
+  /**
+   * Get groups by name.
+   *
+   * @param  group name
+   * @return groups;
+   */
+  async searchGroupByName(name) {
+    try {
+      const groups = await api.get(`group/search-group-by-name/${name}`);
+      return await groups.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  /**
+   * Find an existing group by its id and display it.
+   *
+   * @param  $group_id
+   * @return group info [users , administrators] - posts;
+   */
 
   async getById(group_id) {
     try {
@@ -31,6 +57,13 @@ class GroupService {
     }
   }
 
+  /**
+   * Get all books belongs to group users.
+   *
+   * @param  $group_id
+   * @return group books;
+   */
+
   async getBooks(group_id) {
     try {
       const books = await api.get(`group/books/${group_id}`);
@@ -39,6 +72,13 @@ class GroupService {
       handleError(error);
     }
   }
+
+  /**
+   * List all exceptions in a group by group Administrators
+   *
+   * @param $group_id
+   * @return group exceptions
+   */
 
   async getAllGroupExceptions(group_id) {
     try {
@@ -50,6 +90,14 @@ class GroupService {
       return error;
     }
   }
+
+  /**
+   * Filter group exceptions.
+   *
+   * @param  exception filter , group _id
+   * @return filterd group exceptions
+   */
+
   async exceptionsFilter(filter, group_id) {
     try {
       const exceptions = await api.get(
@@ -61,6 +109,13 @@ class GroupService {
     }
   }
 
+  /**
+   * Basic group marks.
+   *
+   * @param  group _id
+   * @return group info , week satistics [100 - 0 -incomplete - most read]
+   */
+
   async BasicMarksView(group_id) {
     try {
       const BasicMarksView = await api.get(`group/basic-mark-view/${group_id}`);
@@ -69,6 +124,13 @@ class GroupService {
       return error;
     }
   }
+
+  /**
+   * all ambassadors achievments.
+   *
+   * @param  group _id , week filter [current - previous ]
+   * @return ambassadors achievments
+   */
   async AllAchievements(group_id, week_filter) {
     try {
       const response = await api.get(
@@ -79,6 +141,13 @@ class GroupService {
       return error;
     }
   }
+
+  /**
+   * all ambassadors achievments as pages, order by total pages desc.
+   *
+   * @param  group _id , week filter [current - previous ]
+   * @return ambassadors achievments as total pages
+   */
   async AchievementAsPages(group_id, week_filter) {
     try {
       const response = await api.get(
@@ -89,6 +158,14 @@ class GroupService {
       return error;
     }
   }
+
+  /**
+   * ambassador achievment in a week
+   *
+   * @param  ambassador_name, group _id , week filter [current - previous ]
+   * @return ambassador achievment
+   */
+
   async searchForAmbassadorAchievement(ambassador_name, group_id, week_filter) {
     try {
       const response = await api.get(
@@ -99,6 +176,14 @@ class GroupService {
       return error;
     }
   }
+
+  /**
+   * search for ambassador in group
+   *
+   * @param  ambassador_name, group _id
+   * @return ambassador achievment
+   */
+
   async searchForAmbassador(ambassador_name, group_id) {
     try {
       const response = await api.get(
@@ -110,6 +195,12 @@ class GroupService {
     }
   }
 
+  /**
+   * Add a new leader request (“create RequestAmbassador” permission is required)
+   *
+   * @param  request information [gender - number of requested members]
+  
+   */
   async createLeaderRequest(request) {
     try {
       const response = await api.post(`/group/create-leader-request`, request, {
@@ -120,6 +211,13 @@ class GroupService {
       return error;
     }
   }
+
+  /**
+   * get last leader ambassador request
+   *
+   * @param  $group id
+   * @return last request;
+   */
 
   async lastLeaderRequest(group_id) {
     try {

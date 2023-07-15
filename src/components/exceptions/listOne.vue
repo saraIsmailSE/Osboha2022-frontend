@@ -19,12 +19,7 @@
         </div>
 
         <div class="iq-card-body ps-3 pe-3 mt-1">
-          <h4 class="mb-2">السبب</h4>
-          <p class="m-auto">{{ exception.reason }}</p>
-          <p class="m-auto"> تاريخ الطلب: {{ formatFullDate(exception.created_at) }}</p>
-
-
-          <h4 class="mb-2">الحالة
+          <h4 class="mb-2">
             <p class="m-auto" v-if="exception.status == 'pending'">
               <span class="badge bg-warning">تحت المراجعة</span>
             </p>
@@ -41,6 +36,19 @@
               <span class="badge bg-danger">ملغي</span>
             </p>
           </h4>
+          <p class="m-auto"> تاريخ الطلب: {{ formatFullDate(exception.created_at) }}</p>
+          <h4 class="mb-2">السبب</h4>
+          <p class="m-auto">{{ exception.reason }}</p>
+
+          <div v-if="exception.type.type == 'نظام امتحانات - شهري' || exception.type.type == 'نظام امتحانات - فصلي'">
+            <h4 class="mb-2">جدول الامتحانات</h4>
+
+            <img class="img-fluid w-75" v-if="exception.media" :src="showMedia(exception.media.id)" />
+            <p class="m-auto" v-else>
+              لا يوجد جدول ثابت للامتحانات
+            </p>
+          </div>
+
           <table class="table w-100" v-if="exception.reviewer">
             <thead>
               <tr>
@@ -154,7 +162,7 @@
                 </div>
 
                 <div class="form-group">
-                  <button type="submit" :disabled="message" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
+                  <button type="submit" :disabled="message" class="btn d-block btn-primary mt-3 w-75 mx-auto">
                     اعتماد
                   </button>
                 </div>
@@ -172,12 +180,12 @@
             </div>
           </div>
 
-          <div class="d-inline-flex justify-content-center alert alert-success mt-2 w-100" v-else>
+          <div class="d-inline-flex justify-content-center alert alert-success mt-2 w-75" v-else>
             <h5>تم اتخاذ الاجراء مسبقًا</h5>
             <hr>
           </div>
         </div>
-        <div class="d-inline-flex justify-content-center w-100" v-if="exception.user.id == auth.id &&
+        <div class="d-inline-flex justify-content-center w-100" v-if="(exception.user.id == auth.id) &&
           (exception.status == 'accepted' || exception.status == 'pending')
           ">
           <button @click="cancelException(exception.id)" class="btn btn-danger d-block w-75">
@@ -205,6 +213,7 @@ import useVuelidate from "@vuelidate/core";
 import { required, minLength, maxLength } from "@vuelidate/validators";
 import UserInfo from "@/Services/userInfoService";
 import helper from "@/utilities/helper";
+import mediaService from "@/API/services/media.services";
 
 const greaterThanMinusOne = (value) => value > -1;
 
@@ -264,6 +273,12 @@ export default {
           );
           this.loader = false;
           this.message = response;
+          helper.toggleToast(
+            this.message,
+            "success"
+          );
+          this.$emit("update_exception");
+
           this.v$.decideForm.$reset();
         } catch (error) {
           console.log(error);
@@ -299,19 +314,13 @@ export default {
             this.loader = true;
             exceptionService
               .cancelException(exception_id)
-              .then((response) => {
-                swalWithBootstrapButtons.fire({
-                  title: "تم الاغاء",
-                  text: "تم الغاء الاعفاء",
-                  icon: "success",
-                  showClass: {
-                    popup: "animate__animated animate__zoomIn",
-                  },
-                  hideClass: {
-                    popup: "animate__animated animate__zoomOut",
-                  },
-                });
-                //location.reload()
+              .then(() => {
+                this.loader = false;
+                helper.toggleToast(
+                  "تم الغاء الاعفاء",
+                  "success"
+                );
+                this.$emit("update_exception");
               })
               .catch((error) => {
                 console.log(error);
@@ -319,6 +328,15 @@ export default {
           }
         });
     },
+    /**
+ * get exam media.
+ * @param  {int} media id,
+ * @return image url
+ */
+    showMedia(id) {
+      return mediaService.show(id);
+    },
+
   },
 };
 </script>

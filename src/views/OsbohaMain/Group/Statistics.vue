@@ -6,7 +6,7 @@
         :statistics="statistics.total_statistics"
         :week_title="this.statistics.week.title"
       />
-      <MostRead :most_read="statistics.most_read" v-if="statistics.most_read" />
+      <MostRead :most_read="statistics.most_read" v-if="statistics.most_read && statistics.most_read.max_total_pages >0" />
       <Achievement :total="this.statistics.total" v-if="!noStatistics" />
       <ThseseAndQuotes
         :total_theses="statistics.total_statistics.total_thesis ?? 0"

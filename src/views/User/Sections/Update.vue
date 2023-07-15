@@ -690,7 +690,7 @@ export default {
           required,
         },
         bio: {
-          maxLength: maxLength(300),
+          maxLength: maxLength(600),
         },
         fav_book: {
           maxLength: maxLength(100),
