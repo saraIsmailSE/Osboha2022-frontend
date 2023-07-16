@@ -164,3 +164,7 @@ class PostService {
 }
 
 export default new PostService();
+
+export const getPostsTest = (page) => {
+  return api.get(`/posts/home?page=${page}`).then((response) => response.data);
+};
