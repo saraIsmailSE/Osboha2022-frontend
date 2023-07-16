@@ -1,110 +1,184 @@
 <template>
-	<div>
-		<vue-advanced-chat dir="ltr"
-			height="calc(100vh - 20px)"
-			:current-user-id="currentUserId"
-			:rooms="JSON.stringify(rooms)"
-			:rooms-loaded="true"
-			:messages="JSON.stringify(messages)"
-			:messages-loaded="messagesLoaded"
-			@send-message="sendMessage($event.detail[0])"
-			@fetch-messages="fetchMessages($event.detail[0])"
-		/>
-	</div>
+  <div>
+    <vue-advanced-chat
+      dir="ltr"
+      height="calc(100vh - 20px)"
+      :current-user-id="currentUserId"
+      :rooms="rooms"
+      :loading-rooms="roomsLoading"
+      :rooms-loaded="roomsLoaded"
+      :messages="messages"
+      :messages-loaded="messagesLoaded"
+      :show-audio="false"
+      :show-add-room="false"
+      :message-actions="JSON.stringify(messageActions)"
+      @fetch-more-rooms="fetchMoreRooms"
+      @fetch-messages="fetchMessages($event.detail[0])"
+      @send-message="sendMessage($event.detail[0])"
+      @delete-message="deleteMessage($event.detail[0])"
+    />
+  </div>
 </template>
 
 <script>
-import { register } from 'vue-advanced-chat'
-register()
+import { register } from "vue-advanced-chat";
+import helper from "@/utilities/helper";
+import MessageService from "@/API/services/messages.service";
+
+register();
 
 export default {
-	created(){
-	},
-	data() {
-		return {
-			currentUserId: '1234',
-			rooms: [
-				{
-					roomId: '1',
-					roomName: 'user 1',
-					avatar: 'https://avataaars.io/?avatarStyle=Circle&topType=ShortHairShortWaved&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Wink&eyebrowType=Default&mouthType=Smile&skinColor=Light',
-					users: [
-						{ _id: '1234', username: 'John Doe' },
-						{ _id: '4321', username: 'John Snow' }
-					]
-				},
-				{
-					roomId: '2',
-					roomName: 'user 2',
-					avatar: 'https://avataaars.io/?avatarStyle=Circle&topType=ShortHairShortWaved&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Wink&eyebrowType=Default&mouthType=Smile&skinColor=Light',
-					users: [
-						{ _id: '1234', username: 'John Doe' },
-						{ _id: '4321', username: 'John Snow' }
-					]
-				}
-			],
-			messages: [],
-			messagesLoaded: false
-		}
-	},
+  mounted() {
+    this.loadRooms();
+  },
+  data() {
+    return {
+      roomsLoading: false,
+      roomsLoaded: false,
+      rooms: [],
+      roomsPerPage: 15,
+      roomsPage: 1,
+      totalRooms: 0,
+      lastRoomPage: 1,
+      selectedRoom: null,
+      messages: [],
+      messagesLoaded: false,
+      lastMessagePage: 1,
+      messagesPerPage: 20,
+      messagesPage: 1,
+      messageActions: [
+        {
+          name: "replyMessage",
+          title: "Reply",
+        },
 
-	methods: {
-		fetchMessages({ options = {} }) {
-			setTimeout(() => {
-				if (options.reset) {
-					this.messages = this.addMessages(true)
-				} else {
-					this.messages = [...this.addMessages(), ...this.messages]
-					this.messagesLoaded = true
-				}
-				// this.addNewMessage()
-			})
-		},
+        {
+          name: "deleteMessage",
+          title: "Delete Message",
+          onlyMe: true,
+        },
+      ],
+    };
+  },
+  computed: {
+    currentUserId() {
+      return this.$store.getters.getUser.id.toString();
+    },
+  },
 
-		addMessages(reset) {
-			const messages = []
+  methods: {
+    resetRooms() {
+      this.loadingRooms = true;
+      this.roomsLoaded = true;
+      this.rooms = [];
+      this.roomsPage = 1;
+      this.totalRooms = 0;
+      this.lastRoomPage = 1;
+      //reset messages
+    },
 
-			for (let i = 0; i < 30; i++) {
-				messages.push({
-					_id: reset ? i : this.messages.length + i,
-					content: `${reset ? '' : 'paginated'} message ${i + 1}`,
-					senderId: '4321',
-					username: 'John Doe',
-					date: '13 November',
-					timestamp: '10:20'
-				})
-			}
+    resetMessages() {
+      this.messages = [];
+      this.messagesLoaded = false;
+      this.messagesPage = 1;
+      this.lastMessagePage = 1;
+    },
 
-			return messages
-		},
+    async loadRooms() {
+      this.resetRooms();
+      await this.fetchMoreRooms();
+    },
 
-		sendMessage(message) {
-			this.messages = [
-				...this.messages,
-				{
-					_id: this.messages.length,
-					content: message.content,
-					senderId: this.currentUserId,
-					timestamp: new Date().toString().substring(16, 21),
-					date: new Date().toDateString()
-				}
-			]
-		},
+    async fetchMoreRooms() {
+      if (this.roomsPage > this.lastRoomPage) {
+        this.roomsLoaded = true;
+        return;
+      }
 
-		addNewMessage() {
-			setTimeout(() => {
-				this.messages = [
-					...this.messages,
-					{
-						_id: this.messages.length,
-						content: 'NEW MESSAGE',
-						senderId: '1234',
-						timestamp: new Date().toString().substring(16, 21),
-						date: new Date().toDateString()
-					}
-				]
-			}, 2000)
-		}
-	}
-}
+      this.roomsLoading = true;
+      try {
+        const response = await MessageService.listRooms(this.roomsPage);
+        this.totalRooms = response.data?.total;
+        this.lastRoomPage = response.data?.last_page;
+        this.roomsPage++;
+        this.roomsLoaded =
+          response.data?.rooms?.length === 0 ||
+          response.data?.rooms?.length < this.roomsPerPage;
+        this.rooms = this.rooms.concat(response.data?.rooms);
+      } catch (error) {
+        helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
+      } finally {
+        this.roomsLoading = false;
+      }
+    },
+
+    fetchMessages({ room, options = {} }) {
+      if (options.reset) {
+        this.resetMessages();
+      }
+
+      if (this.messagesPage > this.lastMessagePage) {
+        this.messagesLoaded = true;
+        return;
+      }
+
+      this.selectedRoom = room.roomId;
+
+      MessageService.listRoomMessages(room.roomId, this.messagesPage)
+        .then((response) => {
+          if (
+            response.data?.messages?.length === 0 ||
+            response.data?.messages?.length < this.messagesPerPage
+          ) {
+            setTimeout(() => {
+              this.messagesLoaded = true;
+            }, 0);
+          }
+
+          const newMessages = [];
+          response.data?.messages?.forEach((message) => {
+            newMessages.unshift(message);
+          });
+
+          this.messages = newMessages.concat(this.messages);
+
+          this.lastMessagePage = response.data?.last_page;
+          this.messagesPage++;
+
+          //mark messages as read
+          MessageService.markMessagesAsRead(room.roomId).then((response) => {
+            const selected = this.rooms.find(
+              (room) => room.roomId === this.selectedRoom
+            );
+
+            if (selected) {
+              selected.unreadCount = 0;
+              this.rooms = [...this.rooms];
+            }
+          });
+        })
+        .catch((error) => {
+          helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
+        });
+    },
+
+    async sendMessage(message) {
+      try {
+        const response = await MessageService.create(message);
+        this.messages = [...this.messages, response.data];
+      } catch (error) {
+        helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
+      }
+    },
+
+    async deleteMessage({ message }) {
+      try {
+        await MessageService.delete(message._id);
+        this.messages = this.messages.filter((m) => m._id !== message._id);
+      } catch (error) {
+        helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
+      }
+    },
+  },
+};
 </script>
