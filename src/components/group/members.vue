@@ -1,33 +1,14 @@
 <template>
   <div class="group-member d-flex align-items-center mt-md-0 mt-3 w-100">
-    <div
-      class="iq-media-group me-3 col-6 d-flex align-items-center"
-      v-if="members.length > 0"
-    >
-      <router-link
-        class="iq-media"
-        :to="{ name: 'group.group-members', params: { group_id: group_id } }"
-      >
-        <img
-          src="@/assets/images/main/more_users.png"
-          alt="profile-img"
-          class="img-fluid avatar-40 rounded-circle"
-          :title="`عرض الكل`"
-        />
+    <div class="iq-media-group me-3 col-6 d-flex align-items-center" v-if="members.length > 0">
+      <router-link class="iq-media" :to="{ name: 'group.group-members', params: { group_id: group_id } }">
+        <img src="@/assets/images/main/more_users.png" alt="profile-img" class="img-fluid avatar-40 rounded-circle"
+          :title="`عرض الكل`" />
       </router-link>
-      <router-link
-        class="iq-media"
-        v-for="member in members.slice(0, 5)"
-        :key="member.id"
-        :to="{ name: 'user.profile', params: { user_id: member.id } }"
-      >
-        <BaseAvatar
-          :profileImg="member.user_profile.profile_picture"
-          :profile_id="member.user_profile.id"
-          :title="member.name"
-          :gender="member.gender"
-          avatarClass="rounded-circle avatar-40 img-fluid"
-        />
+      <router-link class="iq-media" v-for="member in members.slice(0, 5)" :key="member.id"
+        :to="{ name: 'user.profile', params: { user_id: member.id } }">
+        <BaseAvatar :profileImg="member.user_profile.profile_picture" :profile_id="member.user_profile.id"
+          :title="member.name" :gender="member.gender" avatarClass="rounded-circle avatar-40 img-fluid" />
       </router-link>
     </div>
     <div class="iq-media-group me-3 col-6" v-else>
@@ -35,31 +16,19 @@
     </div>
 
     <!-- DISPLAY FOR ADVISOR -->
-    <div
-      class="d-flex align-items-center mt-3 col-6"
-      v-if="authInGroup && authInGroup.user_type != 'ambassador'"
-      v-click-outside="onClickOutside"
-    >
-      <div
-        class="d-inline-block w-100 text-center"
-        @click="show = !show"
-        role="button"
-      >
+    <div class="d-flex align-items-center mt-3 col-6"
+      v-if="(authInGroup && authInGroup.user_type != 'ambassador') || isAdmin" v-click-outside="onClickOutside">
+      <div class="d-inline-block w-100 text-center" @click="show = !show" role="button">
         <span class="align-middle material-symbols-outlined"> settings </span>
         <span>اعدادت المجموعة</span>
       </div>
 
-      <div
-        :class="`dropdown-menu dropdown-menu-right ${show ? 'show' : ''}`"
-        aria-labelledby="dropdownMenuButton"
-        style=""
-      >
-        <router-link
-          :to="{
-            name: 'group.requestAmbassadors',
-            params: { group_id: group_id },
-          }"
-        >
+      <div :class="`dropdown-menu dropdown-menu-right ${show ? 'show' : ''}`" aria-labelledby="dropdownMenuButton"
+        style="">
+        <router-link :to="{
+          name: 'group.requestAmbassadors',
+          params: { group_id: group_id },
+        }">
           <a role="button" class="dropdown-item d-flex align-items-center">
             <span class="material-symbols-outlined me-2 md-18">
               diversity_1
@@ -68,12 +37,10 @@
           </a>
         </router-link>
 
-        <router-link
-          :to="{
-            name: 'group.addMemeber',
-            params: { group_id: group_id },
-          }"
-        >
+        <router-link :to="{
+          name: 'group.addMemeber',
+          params: { group_id: group_id },
+        }">
           <a role="button" class="dropdown-item d-flex align-items-center">
             <span class="material-symbols-outlined me-2 md-18">
               person_add
@@ -89,6 +56,7 @@
 <script>
 import profileImagesService from "@/API/services/profile.images.service";
 import vClickOutside from "click-outside-vue3";
+import UserInfoService from "@/Services/userInfoService";
 
 export default {
   name: "card",
@@ -115,6 +83,15 @@ export default {
     onClickOutside() {
       this.show = false;
     },
+  },
+  computed: {
+    user() {
+      return this.$store.getters.getUser;
+    },
+    isAamin() {
+      return UserInfoService.hasRole(this.user, "admin");
+    },
+
   },
 };
 </script>

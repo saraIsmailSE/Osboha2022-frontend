@@ -134,7 +134,7 @@
               <div v-show="show_friends">
                 <ul class="profile-img-gallary p-0 m-0 list-unstyled">
                   <li
-                    v-for="friend in friends"
+                    v-for="friend in friends.slice(0,6)"
                     :key="friend.id"
                     class="text-center"
                   >
@@ -151,11 +151,6 @@
                         :gender="friend?.gender"
                         avatarClass="avatar-50 rounded-circle"
                       />
-                      <!-- <img
-                        src="../../../assets/images/avatar/avatar-02.jpg"
-                        alt="user-image"
-                        class="img-fluid rounded-circle w-50"
-                      /> -->
                     </router-link>
                     <h6 class="mt-2 text-center">{{ friend.name }}</h6>
                   </li>

@@ -120,7 +120,13 @@ export default {
       }
     },
     async searchGroupByName(name) {
-      const groups = await GroupService.searchGroupByName(name);
+      let groups=null;
+      if(name != ''){
+        groups = await GroupService.searchGroupByName(name);
+      }
+      else{
+        groups = await GroupService.getAll();
+      }
       this.groups = groups.data;
     },
     loadMore() {

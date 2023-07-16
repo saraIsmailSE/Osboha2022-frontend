@@ -29,6 +29,7 @@
       <div class="image-block mt-3 mb-3">
         <img v-if="comment.media" :src="comment.media.path" class="img-fluid rounded w-25 comment-image" alt="blog-img" />
       </div>
+      <!-- <imgModal :propSrc="'https://www.w3schools.com/howto/img_snow.jpg'" /> -->
       <div class="d-flex flex-wrap align-items-center comment-activity">
         <tooltip tag="span" class="text-muted small" tooltipPlacement="bottom" data-bs-toggle="tooltip"
           :title="formatFullDate(comment.created_at)">{{ formatDateToWritten(comment.created_at) }}</tooltip>
@@ -75,6 +76,7 @@
 <script>
 import rate from "@/components/book/rate/rate.vue";
 import CreateComment from "@/components/comment/CreateComment.vue";
+import imgModal from "@/components/modal/image.vue";
 import CommentHeader from "@/components/comment/CommentHeader.vue";
 import helper from "@/utilities/helper";
 import ReactionService from "@/API/services/reaction.service";
@@ -85,6 +87,7 @@ export default {
     CreateComment,
     CommentHeader,
     // rate,
+    //imgModal,
   },
   emits: ["addComment", "editComment", "reactToComment"],
   props: {

@@ -4,11 +4,13 @@
       <div class="position-absolute top-0 end-0 p-2 rounded-start" style="background-color: #278036; opacity: 50%">
         <h6 class="text-white">{{ bookTypeLanguage }}</h6>
       </div>
-      <div class="position-absolute start-0">
-        <font-awesome-icon role="button" class="me-3" :icon="[isSaved ? 'fas' : 'far', 'heart']" size="2xl"
-          color="#f75c78" @click.prevent="markBookForLater" v-if="!isProfile" />
-        <span role="button" @click="download(cardInfo.link)"
-          class="material-symbols-outlined align-middle display-5 me-3">
+      <div class="position-absolute start-0 mt-2">
+
+        <span class="material-symbols-outlined me-2 later-book align-middle" :class="[isSaved ? 'later-book-on' : 'later-book-off']"
+          role="button" @click.prevent="markBookForLater" v-if="!isProfile">
+          favorite
+        </span>
+        <span role="button" @click="download(cardInfo.link)" class="material-symbols-outlined download-book align-middle me-3">
           download
         </span>
       </div>
@@ -120,7 +122,7 @@ export default {
       body.removeAttribute("style");
       body.classList.remove("modal-open");
       const element = document.getElementsByClassName("modal-backdrop");
-      for(let i=0; i < element.length ; i++){
+      for (let i = 0; i < element.length; i++) {
         element[i].remove();
       }
       this.removePopstateEventAction();
@@ -274,5 +276,25 @@ export default {
 
 .left-direction {
   direction: ltr;
+}
+
+.later-book {
+  font-variation-settings:
+    'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48
+}
+.download-book {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
+
+.later-book-on {
+  color: darkred;
+}
+
+.later-book-off {
+  color: rgb(97, 96, 96);
 }
 </style>

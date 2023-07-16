@@ -20,7 +20,16 @@ class UserBooks {
       return error;
     }
   }
-
+  //delete for later book
+  async deleteForLeater(id) {
+    try {
+      const books = await api.get(`user-books/delete-for-later-book/${id}`);
+      return books.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+  
   async saveBookForLater(bookId) {
     try {
       const book = await api.patch(`/user-books/${bookId}/save-for-later`);

@@ -152,11 +152,6 @@ export default {
           title: "الاطروحات",
           value: 0,
         },
-        //LATER
-        // {
-        //   title: 'الأنشطة والدورات',
-        //   value: 100
-        // }
       ],
       profile_media: [
         require("../../assets/images/600x600.jpg"),

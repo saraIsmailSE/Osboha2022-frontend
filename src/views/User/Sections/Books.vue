@@ -17,7 +17,7 @@
         >
           <h4 class="text-center mt-3 mb-3">
             للقراءة لاحقاً
-            <span class="align-middle material-symbols-outlined text-danger">
+            <span class="align-middle material-symbols-outlined later-book later-book-on">
               favorite
             </span>
           </h4>
@@ -99,3 +99,12 @@ export default {
   },
 };
 </script>
+
+<style>
+.later-book {
+  font-variation-settings:
+    'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48
+}
+.later-book-on {
+  color: darkred;
+}</style>
