@@ -51,12 +51,11 @@ export default {
           name: "replyMessage",
           title: "Reply",
         },
-
-        {
-          name: "deleteMessage",
-          title: "Delete Message",
-          onlyMe: true,
-        },
+        // {
+        //   name: "deleteMessage",
+        //   title: "Delete Message",
+        //   onlyMe: true,
+        // },
       ],
     };
   },

@@ -18,7 +18,7 @@ import "vue3-toastify/dist/index.css";
 import GlobalComponent from "./utilities/_globals";
 import progressBar from "./utilities/progress-bar";
 import "nprogress/nprogress.css";
-import { VueQueryPlugin } from "@tanstack/vue-query";
+//import { VueQueryPlugin } from "@tanstack/vue-query";
 
 import setupInterceptors from "@/Services/setupInterceptors";
 setupInterceptors(store);
@@ -42,7 +42,7 @@ app.use(BootstrapVue3);
 app.use(VueApexCharts);
 app.use(fontawsome);
 app.use(GlobalComponent);
-app.use(VueQueryPlugin);
+// app.use(VueQueryPlugin);
 app.use(Vue3Toasity, {
   autoClose: 3000,
   limit: 3,

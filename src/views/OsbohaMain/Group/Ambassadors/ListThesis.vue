@@ -51,7 +51,7 @@
 
               <!--Thesis body-->
               <div class="col-md-12 form-group" v-if="thesis.comment.body">
-                <p class="form-control-plaintext">
+                <p style="white-space: pre-wrap; direction: rtl;" class="form-control-plaintext">
                   {{ thesis.comment.body }}
                 </p>
               </div>

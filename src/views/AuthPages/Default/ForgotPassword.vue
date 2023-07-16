@@ -19,7 +19,7 @@
           </div>
           <div class="d-inline-block w-100 text-center">
             <div class="col-sm-12 text-center" v-if="loader">
-              <img src="../../../assets/images/page-img/page-load-loader.gif" alt="loader" style="height: 100px;">
+              <img src="@/assets/images/page-img/page-load-loader.gif" alt="loader" style="height: 100px;">
             </div>
             <h4 class="text-center mt-3 mb-3" v-if="message"> {{ message }}</h4>
             <button type="submit" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto" v-if="!sent">
@@ -87,7 +87,7 @@ export default {
         this.message = "";
         this.loader = true;
         const response = await Auth.forgetPassword(this.form.email)
-        if (response.success) {
+        if (response.statusCode == 200) {
           this.sent = true;
           this.message = "تم ارسال بريد"
         }
