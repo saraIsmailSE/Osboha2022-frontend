@@ -2,12 +2,13 @@
   <CommentHeader :comment="comment" @triggerEditBox="triggerEditBox" />
   <div class="blog-description">
     <div class="row">
-
-      <div class="col-6 form-group">
-        <label class="form-control-plaintext">صفحة البداية: {{ comment.thesis.start_page }}</label>
-      </div>
-      <div class="col-6 form-group">
-        <label class="form-control-plaintext">صفحة النهاية:  {{ comment.thesis.end_page }}</label>
+      <div class="row" v-if="comment.thesis">
+        <div class="col-6 form-group">
+          <label class="form-control-plaintext">صفحة البداية: {{ comment.thesis.start_page }}</label>
+        </div>
+        <div class="col-6 form-group">
+          <label class="form-control-plaintext">صفحة النهاية: {{ comment.thesis.end_page }}</label>
+        </div>
       </div>
     </div>
     <h6 v-if="totalThesisPages > 0">
