@@ -25,37 +25,60 @@
 
       <div :class="`dropdown-menu dropdown-menu-right ${show ? 'show' : ''}`" aria-labelledby="dropdownMenuButton"
         style="">
-        <router-link :to="{
+        <router-link 
+          v-if="groupType == 'فريق متابعة'"
+          class="dropdown-item d-flex align-items-center" :to="{
           name: 'group.requestAmbassadors',
           params: { group_id: group_id },
         }">
-          <a role="button" class="dropdown-item d-flex align-items-center">
-            <span class="material-symbols-outlined me-2 md-18">
-              diversity_1
-            </span>
-            طلب سفراء
-          </a>
+          <span class="material-symbols-outlined me-2 md-18">
+            diversity_1
+          </span>
+          طلب سفراء
         </router-link>
 
-        <router-link :to="{
+        <router-link class="dropdown-item d-flex align-items-center" :to="{
           name: 'group.addMemeber',
           params: { group_id: group_id },
         }">
-          <a role="button" class="dropdown-item d-flex align-items-center">
-            <span class="material-symbols-outlined me-2 md-18">
-              person_add
-            </span>
-            اضافه عضو
-          </a>
+          <span class="material-symbols-outlined me-2 md-18">
+            person_add
+          </span>
+          اضافه عضو
         </router-link>
+        <router-link v-if="isAdmin" class="dropdown-item d-flex align-items-center" :to="{
+          name: 'group.update',
+          params: { group_id: group_id },
+        }">
+          <span class="material-symbols-outlined me-2 md-18">
+            edit
+          </span>
+          تعديل
+        </router-link>
+        <!-- <router-link v-if="isAdmin" class="dropdown-item d-flex align-items-center" :to="{
+          name: 'group.update-leader',
+          params: { group_id: group_id },
+        }">
+          <span class="material-symbols-outlined me-2 md-18">
+            edit
+          </span>
+          تبديل القائد
+        </router-link> -->
+        <a role="button" v-if="isAdmin" class="dropdown-item d-flex align-items-center" @click="deleteGroup(group_id)" >
+          <span class="material-symbols-outlined me-2 md-18">
+            delete
+          </span>
+          حذف
+        </a>
       </div>
     </div>
     <!-- DISPLAY FOR ADVISOR -->
   </div>
 </template>
 <script>
-import profileImagesService from "@/API/services/profile.images.service";
+import GroupService from "@/API/services/group.service";
 import vClickOutside from "click-outside-vue3";
+import helper from "@/utilities/helper";
 import UserInfoService from "@/Services/userInfoService";
 
 export default {
@@ -72,6 +95,10 @@ export default {
       type: [Object],
       required: true,
     },
+    groupType:{
+      type: [String],
+      required: true,
+    }
   },
   data() {
     return {
@@ -83,12 +110,52 @@ export default {
     onClickOutside() {
       this.show = false;
     },
+    async deleteGroup(id) {
+
+      const swalWithBootstrapButtons = this.$swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-primary btn-lg",
+          cancelButton: "btn btn-outline-primary btn-lg ms-2",
+        },
+        buttonsStyling: false,
+      });
+
+      swalWithBootstrapButtons
+        .fire({
+          title: "هل أنت متأكد؟",
+          text: "لا يمكنك التراجع عن هذا الاجراء",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "نعم، قم بالحذف",
+          cancelButtonText: "تراجع  ",
+          showClass: {
+            popup: "animate__animated animate__zoomIn",
+          },
+          hideClass: {
+            popup: "animate__animated animate__zoomOut",
+          },
+        })
+        .then(async (willDelete) => {
+          if (willDelete.isConfirmed) {
+            const response = await GroupService.deleteById(id)
+              .then(async (response) => {
+                helper.toggleToast("تم الحذف", "success");
+                this.$router.push({ name: 'osboha.groupsList' })
+              })
+              .catch((error) => {
+                helper.toggleToast("حصل خطأ - لم يتم الحذف!", "danger");
+                console.log(error);
+              });
+          }
+        });
+    },
+
   },
   computed: {
     user() {
       return this.$store.getters.getUser;
     },
-    isAamin() {
+    isAdmin() {
       return UserInfoService.hasRole(this.user, "admin");
     },
 

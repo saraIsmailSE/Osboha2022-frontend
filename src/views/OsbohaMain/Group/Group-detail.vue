@@ -21,7 +21,7 @@
             </p>
           </div>
         </div>
-        <listMembers :members="group.users" :authInGroup="authInGroup" />
+        <listMembers :members="group.users" :authInGroup="authInGroup" :groupType="group_type[group.type.type]"/>
       </div>
     </div>
     <div class="col-lg-4">

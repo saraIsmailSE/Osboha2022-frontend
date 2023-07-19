@@ -58,6 +58,22 @@ class GroupService {
   }
 
   /**
+   * Find an existing group by its id and display its basic information.
+   *
+   * @param  $group_id
+   * @return group info;
+   */
+
+  async showBasicInfo(group_id) {
+    try {
+      const group = await api.get(`group/show-basic-info/${group_id}`);
+      return group.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  /**
    * Get all books belongs to group users.
    *
    * @param  $group_id
@@ -236,12 +252,15 @@ class GroupService {
     }
   }
 
-  async update(id) {
-    // try{
-    //     return await api.post(`/group/update`, id);
-    // }catch(error){
-    //     return error;
-    // }
+  async update(groupForm) {
+    try {
+      const response = await api.post(`/group/update`, groupForm, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
   }
 
   async getGroupByType(typeId) {

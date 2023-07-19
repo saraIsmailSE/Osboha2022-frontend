@@ -11,7 +11,7 @@
         :style="{
           'padding-right': isEdit ? '1rem !important' : '3rem !important',
         }"
-        style="max-height: 120px; resize: none; overflow: auto"
+        style="direction: rtl; max-height: 120px; resize: none; overflow: auto"
         :rows="isEdit ? 4 : 1"
         ref="bodyRef"
       ></textarea>

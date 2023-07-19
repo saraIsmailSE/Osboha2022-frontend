@@ -47,16 +47,18 @@
                       {{ group.users_count }}
                     </td>
 
-                    <td>
-                      <!-- <span class="btn btn-primary text-white material-symbols-outlined ms-1 me-1">
+                    <td v-if="isAdmin">
+                      <router-link class="text-primary material-symbols-outlined ms-1 me-1" :to="{
+                        name: 'group.update',
+                        params: { group_id: group.id },
+                      }">
+
                         edit
-                      </span> -->
-                      <!-- <span
-                        @click="deleteGroup(group.id)"
-                        class="btn btn-danger text-white material-symbols-outlined ms-1 me-1"
-                      >
+                      </router-link>
+                      <span role="button" @click="deleteGroup(group.id)"
+                        class="text-danger material-symbols-outlined ms-1 me-1">
                         delete
-                      </span> -->
+                      </span>
                     </td>
                   </tr>
                 </tbody>
@@ -85,6 +87,8 @@
 <script>
 import GroupService from "@/API/services/group.service";
 import helper from "@/utilities/helper";
+import UserInfoService from "@/Services/userInfoService";
+
 
 export default {
   name: "Groups List",
@@ -109,22 +113,50 @@ export default {
 
   methods: {
     async deleteGroup(id) {
-      try {
-        const response = await GroupService.deleteById(id);
-        const groups = await GroupService.getAll();
-        this.groups = groups.data;
-        helper.toggleToast("تم الحذف", "success");
-      } catch (error) {
-        helper.toggleToast("حصل خطأ - لم يتم الحذف!", "danger");
-        console.log(error);
-      }
+      const swalWithBootstrapButtons = this.$swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-primary btn-lg",
+          cancelButton: "btn btn-outline-primary btn-lg ms-2",
+        },
+        buttonsStyling: false,
+      });
+
+      swalWithBootstrapButtons
+        .fire({
+          title: "هل أنت متأكد؟",
+          text: "لا يمكنك التراجع عن هذا الاجراء",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "نعم، قم بالحذف",
+          cancelButtonText: "تراجع  ",
+          showClass: {
+            popup: "animate__animated animate__zoomIn",
+          },
+          hideClass: {
+            popup: "animate__animated animate__zoomOut",
+          },
+        })
+        .then(async (willDelete) => {
+          if (willDelete.isConfirmed) {
+            const response = await GroupService.deleteById(id)
+              .then(async (response) => {
+                const groups = await GroupService.getAll();
+                this.groups = groups.data;
+                helper.toggleToast("تم الحذف", "success");
+              })
+              .catch((error) => {
+                helper.toggleToast("حصل خطأ - لم يتم الحذف!", "danger");
+                console.log(error);
+              });
+          }
+        });
     },
     async searchGroupByName(name) {
-      let groups=null;
-      if(name != ''){
+      let groups = null;
+      if (name != '') {
         groups = await GroupService.searchGroupByName(name);
       }
-      else{
+      else {
         groups = await GroupService.getAll();
       }
       this.groups = groups.data;
@@ -133,6 +165,14 @@ export default {
       this.length += 10;
     },
   },
+  computed: {
+    user() {
+      return this.$store.getters.getUser;
+    },
+    isAdmin() {
+      return UserInfoService.hasRole(this.user, "admin");
+    },
+  }
 };
 
 

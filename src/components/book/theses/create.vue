@@ -120,6 +120,7 @@
           id="thesisBody"
           name="thesisBody"
           v-model.trim="v$.thesisForm.body.$model"
+          style="direction: rtl;"
         ></textarea>
         <p style="direction: rtl">
           <span> {{ v$.thesisForm.body.$model.length }}/400 حرف</span>

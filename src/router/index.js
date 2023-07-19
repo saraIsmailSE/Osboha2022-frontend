@@ -206,6 +206,12 @@ const groupChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMain/Group/Group-detail"),
   },
   {
+    path: "update/:group_id",
+    name: prop + ".update",
+    meta: { auth: true, name: "Group Update" },
+    component: () => import("../views/OsbohaMain/Group/Update"),
+  },
+  {
     path: "change-leader/:group_id",
     name: prop + ".change-leader",
     meta: { auth: true, name: "Group" },

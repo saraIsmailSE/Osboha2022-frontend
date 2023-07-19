@@ -191,11 +191,13 @@
                   id="bio"
                   v-model="v$.infoForm.bio.$model"
                   name="bio"
+                  dir="rtl"
                 >
                 </textarea>
+                <span> {{ v$.infoForm.bio.$model.length }}/600 حرف</span>
               </div>
               <small style="color: red" v-if="v$.infoForm.bio.$error">
-                قم بادخال نبدة عنك لا يزيد عدد حروفها عن 300
+                قم بادخال نبدة عنك لا يزيد عدد حروفها عن 600 حرف
               </small>
 
               <div class="form-group row">

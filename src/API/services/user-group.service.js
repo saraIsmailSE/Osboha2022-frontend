@@ -36,6 +36,14 @@ class UserGroup {
       customHandleError(error, "UserGroupService.AddMember");
     }
   }
+  async delete(group_id,user_id){
+    try {
+      return await api.delete(`${this.prefix}/delete/${group_id}/${user_id}`);
+    } catch (error) {
+      return error;
+    }
+
+  }
 }
 
 export default new UserGroup();
