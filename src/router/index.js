@@ -191,7 +191,14 @@ const userChildRoute = (prop, mode = false) => [
     component: () => import("../views/AuthPages/Default/AssignRole"),
   },
 ];
-
+const statisticsChildRoute = (prop, mode = false) => [
+  {
+    path: "weekly/:week_id",
+    name: prop + ".byWeek",
+    meta: { auth: true, name: "Statistics by Week" },
+    component: () => import("../views/OsbohaMain/Statistics/Statistics"),
+  },
+];
 const groupChildRoute = (prop, mode = false) => [
   {
     path: "request-ambassadors/:group_id",
@@ -430,6 +437,13 @@ const routes = [
     component: () => import("../layouts/Default"),
     meta: { auth: true },
     children: groupChildRoute("group"),
+  },
+  {
+    path: "/statistics",
+    name: "statistics",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: statisticsChildRoute("statistics"),
   },
   {
     path: "/exceptions",
