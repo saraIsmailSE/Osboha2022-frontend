@@ -218,7 +218,6 @@ export default {
     },
     uploadFile() {
       this.exceptionForm.exam_media = this.$refs.exam_media.files[0];
-      console.log(this.exceptionForm.exam_media)
     },
     back() {
       this.$router.push({

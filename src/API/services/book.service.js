@@ -150,6 +150,40 @@ class BookService {
       return "";
     }
   }
+  /**
+   * Find an existing book by its id and display its basic information.
+   *
+   * @param  book_id
+   * @return book info;
+   */
+
+  async showBasicInfo(book_id) {
+    try {
+      const book = await api.get(`books/${book_id}`);
+      return book.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+  /**
+   * update book.
+   *
+   * @param   book data,book id
+   * @return book info;
+   */
+
+  async update(book, id) {
+    console.log("🚀 ~  ~ book form:", book)
+    try {
+      
+      const response = await api.post(`/books/update`, book, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 }
 
 export default new BookService();

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-12" ref="listContainer">
         <iq-card>
           <template v-slot:headerTitle>
             <h4 class="card-title" v-if="groups && groups.length > 0">قائمة المجموعات - {{ groups.length }}</h4>
@@ -14,13 +14,18 @@
                 search
               </i>
               <input type="text" class="form-control" placeholder=" ... ابحث عن مجموعة" v-model.trim="searchModel"
-                v-on:keyup="searchGroupByName(searchModel)" />
+                v-on:keyup="loadGroups()" />
             </div>
             <router-link class="mb-3 btn btn-primary float-end" :to="{
               name: 'group.addGroup',
             }">
               اضافة مجموعة
             </router-link>
+
+            <div class="col-sm-12 text-center" v-if="loading">
+              <img :src="require('@/assets/images/page-img/page-load-loader.gif')" alt="loader" style="height: 100px" />
+            </div>
+
             <div class="table-responsive" v-if="groups && groups.length > 0">
               <table id="datatable" class="table table-striped table-bordered">
                 <thead>
@@ -31,7 +36,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(group, index) in groups.slice(0, length)" :key="index">
+                  <tr v-for="(group, index) in groups" :key="index">
                     <td>
                       <router-link class="text-center" :to="{
                         name: 'group.group-detail',
@@ -63,15 +68,11 @@
                   </tr>
                 </tbody>
               </table>
-              <span class="w-100 text-center me-3 btn" role="button" @click="loadMore()" v-if="groups.length > length">
-                عرض المزيد
-              </span>
-
             </div>
 
             <div v-else>
               <h4>
-                لا يوجد مجموعات
+                {{ emptyMessage }}
                 <span class="material-symbols-outlined align-middle">
                   info
                 </span>
@@ -88,14 +89,20 @@
 import GroupService from "@/API/services/group.service";
 import helper from "@/utilities/helper";
 import UserInfoService from "@/Services/userInfoService";
+import axios from "axios";
 
 
 export default {
   name: "Groups List",
-  async created() {
-    const groups = await GroupService.getAll();
-    this.groups = groups.data;
+  async mounted() {
+    this.loadGroups();
+    window.addEventListener("scroll", this.handleScroll);
   },
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
+    this.cancelToken.cancel();
+  },
+
   data() {
     return {
       groups: [],
@@ -107,7 +114,14 @@ export default {
         Administration: "الإدارة العليا",
       },
       searchModel: "",
-      length: 10,
+      page: 1,
+      totalPages: 1,
+      loading: false,
+      pendingRequest: false,
+      hasMore: true,
+      emptyMessage: "",
+      cancelToken: axios.CancelToken.source(),
+
     };
   },
 
@@ -151,18 +165,74 @@ export default {
           }
         });
     },
-    async searchGroupByName(name) {
-      let groups = null;
-      if (name != '') {
-        groups = await GroupService.searchGroupByName(name);
+    async loadGroups() {
+      if (this.pendingRequest) {
+        return;
       }
-      else {
-        groups = await GroupService.getAll();
+
+      if (this.searchModel == '' && this.groups.length == 0) {
+        this.page = 1;
       }
-      this.groups = groups.data;
+      if (this.searchModel != '') {
+        this.page = 1;
+        this.groups=[]
+      }
+
+      this.pendingRequest = true;
+      this.loading = true;
+      this.emptyMessage=""
+      try {
+        let response;
+        response = await GroupService.getAll(this.searchModel,
+          this.page,
+          this.cancelToken
+        );
+        if (response.statusCode !== 200) {
+          helper.toggleToast(
+            "حدث خطأ أثناء تحميل المجموعات, حاول مرة أخرى",
+            "error"
+          );
+          return;
+        }
+
+        if (response.statusCode === 200 && !response.data) {
+          this.emptyMessage = "لا يوجد مجموعات";
+          this.hasMore = false;
+          return;
+        }
+
+        this.groups = [...this.groups, ...response.data.groups.data];
+        this.totalPages = response.data?.last_page ?? 1;
+        this.page++;
+      } catch (error) {
+        console.log(error)
+        helper.toggleToast(
+          "حدث خطأ أثناء تحميل المجموعات, حاول مرة أخرى",
+          "error"
+        );
+      } finally {
+        this.loading = false;
+        this.pendingRequest = false;
+
+      }
     },
-    loadMore() {
-      this.length += 10;
+    /**
+     * Check if the user has scrolled to the bottom of the page
+     * @returns {boolean}
+     */
+    isAtBottomOfPage() {
+      const containerRect = this.$refs.listContainer.getBoundingClientRect();
+      const containerBottom = containerRect.bottom;
+      const windowHeight = window.innerHeight;
+      return containerBottom >= windowHeight;
+    },
+    /*
+     * Load more groups when the user scrolls to the bottom of the page
+     */
+    handleScroll() {
+      if (this.hasMoreToLoad && this.isAtBottomOfPage()) {
+        this.loadGroups();
+      }
     },
   },
   computed: {
@@ -171,6 +241,9 @@ export default {
     },
     isAdmin() {
       return UserInfoService.hasRole(this.user, "admin");
+    },
+    hasMoreToLoad() {
+      return this.page <= this.totalPages && this.hasMore;
     },
   }
 };
