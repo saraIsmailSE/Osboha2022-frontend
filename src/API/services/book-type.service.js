@@ -4,7 +4,7 @@ class BookType {
     async getAllBookTypes(){
         try {
             const bookTypes = await api.get('/book-type');
-            return bookTypes.data;
+            return bookTypes.data.data;
         } catch(error){
             return error;
         }

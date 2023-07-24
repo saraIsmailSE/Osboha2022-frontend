@@ -18,9 +18,9 @@ class GroupService {
    *
    * @return groups;
    */
-  async getAll() {
+  async getAll(name,page) {
     try {
-      const groups = await api.get("/group");
+      const groups = await api.get(`/group?page=${page}&name=${name}`);
       return await groups.data;
     } catch (error) {
       return error;
@@ -271,10 +271,10 @@ class GroupService {
       return error;
     }
   }
-  async userGroups() {
+  async userGroups(name,page) {
     try {
-      const groups = await api.get("/group/user-groups");
-      return groups.data.data;
+      const groups = await api.get(`/group/user-groups?page=${page}&name=${name}`);
+      return groups.data;
     } catch (error) {
       return error;
     }
