@@ -1,5 +1,51 @@
 <template>
   <div>
+    <div class="new-room" v-if="addNewRoom">
+      <form class="add-room-form" @submit.prevent="createRoom">
+        <div class="searchable-dropdown" :class="{ active: showDropdown }">
+          <div class="search-input" :class="{ active: showCloseBtn }">
+            <input
+              v-model="addRoomUsername"
+              type="text"
+              placeholder="البحث عن اسم"
+              @focus="showCloseBtn = true"
+              @input="searchUsers"
+            />
+            <button class="button-cancel" @click="closeSearch">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          <div class="dropdown-list">
+            <div v-if="showEmpty" class="dropdown-list-item">
+              <span>لا يوجد نتائج</span>
+            </div>
+            <div
+              class="dropdown-list-item text-center justify-content-center"
+              v-if="fetchingUsers"
+            >
+              <img
+                src="@/assets/images/page-img/page-load-loader.gif"
+                alt="loader"
+                style="height: 50px"
+              />
+            </div>
+            <div
+              class="dropdown-list-item"
+              v-for="user in users"
+              :key="user.id"
+              @click="openNewRoom(user)"
+            >
+              <div class="user-avatar">
+                {{ user.name?.charAt(0).toUpperCase() }}
+              </div>
+
+              <!-- <img :src="user.profilePicture" alt="profile-img" /> -->
+              <span>{{ user.name }}</span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
     <vue-advanced-chat
       dir="ltr"
       height="calc(100vh - 20px)"
@@ -10,13 +56,15 @@
       :messages="messages"
       :messages-loaded="messagesLoaded"
       :show-audio="false"
-      :show-add-room="false"
+      :show-reaction-emojis="false"
       :message-actions="JSON.stringify(messageActions)"
-      @fetch-more-rooms="fetchMoreRooms"
       @fetch-messages="fetchMessages($event.detail[0])"
       @send-message="sendMessage($event.detail[0])"
       @delete-message="deleteMessage($event.detail[0])"
+      @add-room="addRoom($event.detail[0])"
+      @open-file="openFile($event.detail[0])"
     />
+    <!-- @fetch-more-rooms="fetchMoreRooms" -->
   </div>
 </template>
 
@@ -24,6 +72,7 @@
 import { register } from "vue-advanced-chat";
 import helper from "@/utilities/helper";
 import MessageService from "@/API/services/messages.service";
+import UserService from "@/API/services/user.service";
 
 register();
 
@@ -33,10 +82,12 @@ export default {
   },
   data() {
     return {
+      addNewRoom: false,
+      addRoomUsername: "",
       roomsLoading: false,
       roomsLoaded: false,
       rooms: [],
-      roomsPerPage: 15,
+      roomsPerPage: 4,
       roomsPage: 1,
       totalRooms: 0,
       lastRoomPage: 1,
@@ -57,6 +108,164 @@ export default {
         //   onlyMe: true,
         // },
       ],
+      // users: [
+      //   {
+      //     name: "Ahmed",
+      //     id: 1,
+      //     profilePicture: "https://i.pravatar.cc/150?img=1",
+      //   },
+      //   {
+      //     name: "Mohamed",
+      //     id: 2,
+      //     profilePicture: "https://i.pravatar.cc/150?img=2",
+      //   },
+      //   {
+      //     name: "Ali",
+      //     id: 3,
+      //     profilePicture: "https://i.pravatar.cc/150?img=3",
+      //   },
+      //   {
+      //     name: "Omar",
+      //     id: 4,
+      //     profilePicture: "https://i.pravatar.cc/150?img=4",
+      //   },
+      //   {
+      //     name: "Khaled",
+      //     id: 5,
+      //     profilePicture: "https://i.pravatar.cc/150?img=5",
+      //   },
+      //   {
+      //     name: "Mahmoud",
+      //     id: 6,
+      //     profilePicture: "https://i.pravatar.cc/150?img=6",
+      //   },
+      //   {
+      //     name: "Hassan",
+      //     id: 7,
+      //     profilePicture: "https://i.pravatar.cc/150?img=7",
+      //   },
+      //   {
+      //     name: "Hussein",
+      //     id: 8,
+      //     profilePicture: "https://i.pravatar.cc/150?img=8",
+      //   },
+      //   {
+      //     name: "Abdullah",
+      //     id: 9,
+      //     profilePicture: "https://i.pravatar.cc/150?img=9",
+      //   },
+      //   {
+      //     name: "Yousef",
+      //     id: 10,
+      //     profilePicture: "https://i.pravatar.cc/150?img=10",
+      //   },
+      //   {
+      //     name: "Yahia",
+      //     id: 11,
+      //     profilePicture: "https://i.pravatar.cc/150?img=11",
+      //   },
+      //   {
+      //     name: "Yasser",
+      //     id: 12,
+      //     profilePicture: "https://i.pravatar.cc/150?img=12",
+      //   },
+      //   {
+      //     name: "Yousef",
+      //     id: 13,
+      //     profilePicture: "https://i.pravatar.cc/150?img=13",
+      //   },
+      //   {
+      //     name: "Yahia",
+      //     id: 14,
+      //     profilePicture: "https://i.pravatar.cc/150?img=14",
+      //   },
+      //   {
+      //     name: "Yasser",
+      //     id: 15,
+      //     profilePicture: "https://i.pravatar.cc/150?img=15",
+      //   },
+      //   {
+      //     name: "Yousef",
+      //     id: 16,
+      //     profilePicture: "https://i.pravatar.cc/150?img=16",
+      //   },
+      //   {
+      //     name: "Yahia",
+      //     id: 17,
+      //     profilePicture: "https://i.pravatar.cc/150?img=17",
+      //   },
+      //   {
+      //     name: "Yasser",
+      //     id: 18,
+      //     profilePicture: "https://i.pravatar.cc/150?img=18",
+      //   },
+      //   {
+      //     name: "Yousef",
+      //     id: 19,
+      //     profilePicture: "https://i.pravatar.cc/150?img=19",
+      //   },
+      //   {
+      //     name: "Yahia",
+      //     id: 20,
+      //     profilePicture: "https://i.pravatar.cc/150?img=20",
+      //   },
+      //   {
+      //     name: "Yasser",
+      //     id: 21,
+      //     profilePicture: "https://i.pravatar.cc/150?img=21",
+      //   },
+      //   {
+      //     name: "Yousef",
+      //     id: 22,
+      //     profilePicture: "https://i.pravatar.cc/150?img=22",
+      //   },
+      //   {
+      //     name: "Yahia",
+      //     id: 23,
+      //     profilePicture: "https://i.pravatar.cc/150?img=23",
+      //   },
+      //   {
+      //     name: "Yasser",
+      //     id: 24,
+      //     profilePicture: "https://i.pravatar.cc/150?img=24",
+      //   },
+      //   {
+      //     name: "Yousef",
+      //     id: 25,
+      //     profilePicture: "https://i.pravatar.cc/150?img=25",
+      //   },
+      //   {
+      //     name: "Yahia",
+      //     id: 26,
+      //     profilePicture: "https://i.pravatar.cc/150?img=26",
+      //   },
+      //   {
+      //     name: "Yasser",
+      //     id: 27,
+      //     profilePicture: "https://i.pravatar.cc/150?img=27",
+      //   },
+      //   {
+      //     name: "Yousef",
+      //     id: 28,
+      //     profilePicture: "https://i.pravatar.cc/150?img=28",
+      //   },
+      //   {
+      //     name: "Yahia",
+      //     id: 29,
+      //     profilePicture: "https://i.pravatar.cc/150?img=29",
+      //   },
+      //   {
+      //     name: "Yasser",
+      //     id: 30,
+      //     profilePicture: "https://i.pravatar.cc/150?img=30",
+      //   },
+      // ],
+      users: [],
+      delayTimer: null,
+      showDropdown: false,
+      showCloseBtn: false,
+      showEmpty: false,
+      fetchingUsers: false,
     };
   },
   computed: {
@@ -89,21 +298,26 @@ export default {
     },
 
     async fetchMoreRooms() {
-      if (this.roomsPage > this.lastRoomPage) {
-        this.roomsLoaded = true;
-        return;
-      }
+      // if (this.roomsPage > this.lastRoomPage) {
+      //   this.roomsLoaded = true;
+      //   return;
+      // }
 
       this.roomsLoading = true;
       try {
         const response = await MessageService.listRooms(this.roomsPage);
-        this.totalRooms = response.data?.total;
-        this.lastRoomPage = response.data?.last_page;
-        this.roomsPage++;
-        this.roomsLoaded =
-          response.data?.rooms?.length === 0 ||
-          response.data?.rooms?.length < this.roomsPerPage;
-        this.rooms = this.rooms.concat(response.data?.rooms);
+        // this.totalRooms = response.data?.total;
+        // this.lastRoomPage = response.data?.last_page;
+        // this.roomsPage++;
+        // this.roomsLoaded =
+        //   response.data?.rooms?.length === 0 ||
+        //   response.data?.rooms?.length < this.roomsPerPage;
+        // this.rooms =
+        //   response.data?.rooms?.length &&
+        //   this.rooms?.concat(response.data?.rooms);
+
+        this.rooms = response.data?.rooms;
+        this.roomsLoaded = true;
       } catch (error) {
         helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
       } finally {
@@ -121,7 +335,7 @@ export default {
         return;
       }
 
-      this.selectedRoom = room.roomId;
+      this.selectedRoom = room;
 
       MessageService.listRoomMessages(room.roomId, this.messagesPage)
         .then((response) => {
@@ -134,12 +348,11 @@ export default {
             }, 0);
           }
 
-          const newMessages = [];
-          response.data?.messages?.forEach((message) => {
-            newMessages.unshift(message);
-          });
+          if (options.reset) this.messages = [];
 
-          this.messages = newMessages.concat(this.messages);
+          response.data?.messages?.forEach((message) => {
+            this.messages.unshift(message);
+          });
 
           this.lastMessagePage = response.data?.last_page;
           this.messagesPage++;
@@ -147,7 +360,7 @@ export default {
           //mark messages as read
           MessageService.markMessagesAsRead(room.roomId).then((response) => {
             const selected = this.rooms.find(
-              (room) => room.roomId === this.selectedRoom
+              (room) => room.roomId === this.selectedRoom?.roomId
             );
 
             if (selected) {
@@ -163,8 +376,44 @@ export default {
 
     async sendMessage(message) {
       try {
-        const response = await MessageService.create(message);
-        this.messages = [...this.messages, response.data];
+        const newMessage = this.selectedRoom.isFake
+          ? {
+              ...message,
+              roomId: null,
+              receiver_id: this.selectedRoom.users[1]._id,
+            }
+          : message;
+
+        const response = await MessageService.create(newMessage);
+
+        //replace the selected fake room with the created one
+        if (this.selectedRoom.isFake) {
+          const fakeRoomIndex = this.rooms.findIndex(
+            (room) => room.roomId === this.selectedRoom.roomId
+          );
+          this.rooms[fakeRoomIndex] = response.data?.room;
+          this.rooms = [...this.rooms];
+          this.selectedRoom = response.data?.room;
+
+          this.loadRooms();
+
+          return;
+        }
+        this.messages = [...this.messages, response.data?.message];
+
+        //update last message in rooms
+        const roomIndex = this.rooms.findIndex(
+          (room) => room.roomId === response.data?.room.roomId
+        );
+        const newRoom = {
+          ...this.rooms[roomIndex],
+          lastMessage: response.data?.message,
+          index: response.data?.message?.indexId,
+        };
+
+        this.rooms[roomIndex] = newRoom;
+        this.rooms = [...this.rooms];
+        this.selectedRoom = newRoom;
       } catch (error) {
         helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
       }
@@ -178,6 +427,252 @@ export default {
         helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
       }
     },
+
+    addRoom() {
+      this.addNewRoom = true;
+      //remove fake rooms
+      const filteredRooms = this.rooms?.filter((room) => !room.isFake);
+      this.rooms = filteredRooms;
+    },
+
+    closeSearch() {
+      this.addNewRoom = false;
+      this.addRoomUsername = "";
+      this.showDropdown = false;
+      this.showCloseBtn = false;
+    },
+
+    async searchUsers() {
+      clearTimeout(this.delayTimer);
+
+      this.delayTimer = setTimeout(() => {
+        this.fetchUsers();
+      }, 1000);
+    },
+
+    async fetchUsers() {
+      if (this.addRoomUsername === "") {
+        this.showDropdown = false;
+        return;
+      }
+
+      if (this.fetchingUsers) return;
+
+      this.showDropdown = true;
+      this.fetchingUsers = true;
+
+      try {
+        const response = await UserService.searchUsers(this.addRoomUsername);
+        this.users = response.data;
+        console.log(
+          "🚀 ~ file: index.vue:395 ~ searchUsers ~ data:",
+          response.data
+        );
+      } catch (error) {
+        helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
+      } finally {
+        if (this.users.length === 0 && this.addRoomUsername !== "") {
+          this.showEmpty = true;
+        } else if (this.users.length > 0 && this.addRoomUsername !== "") {
+          this.showEmpty = false;
+        } else if (this.users.length === 0 && this.addRoomUsername === "") {
+          this.showEmpty = false;
+          this.showDropdown = false;
+        }
+
+        this.fetchingUsers = false;
+      }
+    },
+
+    openNewRoom(user) {
+      this.addRoomUsername = user.name;
+      this.showDropdown = false;
+
+      //check room if exists
+      const room =
+        this.rooms?.length > 0
+          ? this.rooms.find((room) => {
+              //check first user
+              if (room.users[0]._id === user.id) {
+                return true;
+              }
+
+              //check second user
+              if (room.users[1]._id === user.id) {
+                return true;
+              }
+
+              return false;
+            })
+          : null;
+
+      this.addNewRoom = false;
+      this.addRoomUsername = "";
+      if (room) {
+        this.selectedRoom = room;
+        this.fetchMessages({ room });
+        return;
+      } else {
+        this.selectedRoom = null;
+        this.createFakeRoom(user);
+        return;
+      }
+    },
+
+    createFakeRoom(user) {
+      //create a room object
+      const room = {
+        roomId: helper.generateRandomId(),
+        roomName: user.name,
+        index: new Date().toISOString(),
+        users: [
+          {
+            _id: this.currentUserId,
+            name: this.$store.getters.getUser.name,
+            profilePicture:
+              this.$store.getters.getUser.user_profile.profile_picture,
+          },
+          {
+            _id: user.id.toString(),
+            name: user.name,
+            profilePicture: user.profile?.profile_picture,
+          },
+        ],
+        unreadCount: 0,
+        lastMessage: null,
+        lastMessageDate: null,
+        isFake: true,
+      };
+
+      console.log("🚀 ~ file: index.vue:477 ~ createFakeRoom ~ room", room);
+      console.log(
+        "🚀 ~ file: index.vue:477 ~ createFakeRoom ~ rooms",
+        this.rooms
+      );
+
+      this.rooms = [...(this.rooms || []), room];
+      this.selectedRoom = room;
+    },
+
+    openFile({ file }) {
+      window.open(file.file.url, "_blank");
+    },
   },
 };
 </script>
+
+<style>
+.new-room {
+  direction: ltr;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.add-room-form {
+  width: 300px;
+}
+
+.searchable-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.search-input {
+  position: relative;
+  width: 100%;
+}
+
+.search-input input {
+  width: 100%;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
+}
+
+.search-input .button-cancel {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: none;
+}
+
+.dropdown-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  z-index: 1000;
+  box-shadow: 0 0 5px #ccc;
+  display: none;
+}
+
+.dropdown-list-item {
+  padding: 10px 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.dropdown-list-item img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.dropdown-list-item span {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dropdown-list-item .user-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+  background: #278036;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.dropdown-list-item:hover {
+  background: #eee;
+}
+
+.dropdown-list-item:not(:last-child) {
+  border-bottom: 1px solid #ccc;
+}
+
+.dropdown-list-item:last-child {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.searchable-dropdown.active .dropdown-list {
+  display: block;
+}
+
+.search-input.active .button-cancel {
+  display: block;
+}
+</style>

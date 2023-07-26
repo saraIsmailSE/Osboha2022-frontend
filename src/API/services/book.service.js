@@ -172,10 +172,8 @@ class BookService {
    * @return book info;
    */
 
-  async update(book, id) {
-    console.log("🚀 ~  ~ book form:", book)
+  async update(book) {
     try {
-      
       const response = await api.post(`/books/update`, book, {
         headers: { "Content-type": "multipart/form-data" },
       });
