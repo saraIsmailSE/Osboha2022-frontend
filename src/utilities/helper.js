@@ -112,4 +112,8 @@ export default {
     if (!number) return "0";
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   },
+
+  generateRandomId() {
+    return Math.floor(Math.random() * 1000000).toString();
+  },
 };
