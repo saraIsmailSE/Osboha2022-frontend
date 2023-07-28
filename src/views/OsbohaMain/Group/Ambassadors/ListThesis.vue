@@ -88,7 +88,7 @@
             >
               <div class="col-12 col-md-6">
                 <select
-                  class="form-select btn btn-danger w-100 mt-2"
+                  class="form-select w-100 mt-2"
                   v-model="status"
                 >
                   <option class="bg-white text-dark" value="" selected>
@@ -108,7 +108,7 @@
 
               <div class="col-12 col-md-6">
                 <select
-                  class="form-select btn btn-info w-100 mt-2"
+                  class="form-select w-100 mt-2"
                   v-model="reason"
                   :disabled="status === 'accepted'"
                 >
@@ -209,7 +209,7 @@ export default {
     this.reasons = await ReasonService.getReasonsForLeader();
     this.thesis = response;
     this.week = response.mark?.week;
-    this.expired = new Date(this.week?.main_timer) < new Date();
+    this.expired = new Date(this.week?.modify_timer) < new Date();
   },
   data() {
     return {

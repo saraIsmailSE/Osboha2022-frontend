@@ -7,6 +7,7 @@ export const ARABIC_ROLES = {
   advisor: "موجه",
   consultant: "مستشار",
   admin: "ادارة",
+  book_quality_team: "جودة الكتب",
 };
 
 export const LANUAGES = {

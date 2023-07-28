@@ -11,6 +11,16 @@ class UserBooks {
       return error;
     }
   }
+
+  //All Free
+  async getAllFree(user_id) {
+    try {
+      const books = await api.get(`user-books/free-books/${user_id}`);
+      return books.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
   //All Later
   async laterBooks(user_id) {
     try {

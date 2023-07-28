@@ -44,7 +44,7 @@
       <div class="col-4">
         <button class="button-53 animated-btn" role="button" style="background-color: #f9c93e; color: black"
           v-on:click="filterResults(randomBook)">
-          اختر لي
+          اختر لي كتاباً
         </button>
       </div>
     </div>

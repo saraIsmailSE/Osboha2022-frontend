@@ -3,38 +3,14 @@ import { handleError } from "vue";
 import { customHandleError } from "../../utilities/errors";
 
 class BookService {
-  async create(
-    name,
-    writer,
-    publisher,
-    brief,
-    startPage,
-    endPage,
-    link,
-    sectionId,
-    image,
-    level,
-    type_id
-  ) {
-    let formData = new FormData();
-    formData.append("name", name);
-    formData.append("writer", writer);
-    formData.append("start_page", startPage);
-    formData.append("end_page", endPage);
-    formData.append("publisher", publisher);
-    formData.append("brief", brief);
-    formData.append("link", link);
-    formData.append("type_id", type_id);
-    formData.append("section_id", sectionId);
-    formData.append("level", level);
-    formData.append("image", image);
+  async create(book) {
     try {
-      const response = await api.post("/books", formData, {
+      const response = await api.post(`/books`, book, {
         headers: { "Content-type": "multipart/form-data" },
       });
-      return response.data;
+      return response.data.data;
     } catch (error) {
-      return error;
+      handleError(error);
     }
   }
 

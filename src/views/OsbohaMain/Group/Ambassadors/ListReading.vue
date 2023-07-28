@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="col-sm-12 mt-3">
-      <count-down v-if="week" :week="week" :timer_type="'main_timer'" />
+      <count-down v-if="week" :week="week" :timer_type="'modify_timer'" />
       <iq-card class="iq-card">
         <!-- <div class="iq-card-header-toolbar d-flex align-items-center mx-auto">
           <h3
