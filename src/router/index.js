@@ -354,6 +354,18 @@ const bookChildRoute = (prop, mode = false) => [
     component: () => import("../views/Book/Update"),
   },
   {
+    path: "create",
+    name: prop + ".create",
+    meta: { auth: true, name: "Book Create" },
+    component: () => import("../views/Book/Create"),
+  },
+  {
+    path: "free-books/:user_id",
+    name: prop + ".free-book",
+    meta: { auth: true, name: "Free Book" },
+    component: () => import("../views/Book/Free"),
+  },
+  {
     path: "later-books/:user_id",
     name: prop + ".later-books",
     meta: { auth: true, name: "UserBooks" },
