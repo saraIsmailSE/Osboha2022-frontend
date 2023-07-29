@@ -8,6 +8,7 @@
         v-if="ambassadorsAchievementList"
         :ambassadorsAchievementList="ambassadorsAchievementList"
         :group_id="group.id"
+        :week_id="week_id"
         :group_name="group.name"
         :group_users="group_users"
         :most_read="most_read"
@@ -50,7 +51,7 @@ export default {
   name: "Team Reading Info",
   async created() {
     try {
-      const response = await GroupService.BasicMarksView(this.group_id);
+      const response = await GroupService.BasicMarksView(this.group_id,this.week_id);
       this.group = response.group;
       this.group_users = response.group_users;
       this.categories[0].number = response.full;
@@ -67,6 +68,7 @@ export default {
   data() {
     return {
       group_id: this.$route.params.group_id,
+      week_id: this.$route.params.week_id,
       group: [],
       group_users: 0,
       categories: [

@@ -1,5 +1,5 @@
 <template>
-  <div class="d-grid gap-3 d-grid-template-1fr-19">
+  <div class="d-grid gap-3 d-grid-template-1fr-19" ref="listContainer">
     <div class="mt-3 inputs mb-3">
       <i class="material-symbols-outlined">
         search

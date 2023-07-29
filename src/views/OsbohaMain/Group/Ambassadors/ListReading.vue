@@ -77,7 +77,7 @@ export default {
   async created() {
     try {
       const response = await MarkService.ambassadorMark(
-        this.$route.params.ambassador_id
+        this.$route.params.ambassador_id,this.$route.params.week_id
       );
 
       this.mark = response.mark;

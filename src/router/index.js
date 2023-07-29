@@ -249,14 +249,14 @@ const groupChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMain/Group/Exceptions/ListAll"),
   },
   {
-    path: "/group/ambassadors-reading/:group_id",
+    path: "/group/ambassadors-reading/:group_id/week/:week_id",
     name: prop + ".ambassadors-reading",
     meta: { auth: true, name: "Ambassadors reading" },
     component: () =>
       import("../views/OsbohaMain/Group/Ambassadors/TeamReading"),
   },
   {
-    path: "/group/list-ambassador-reading/:ambassador_id",
+    path: "/group/list-ambassador-reading/:ambassador_id/week/:week_id",
     name: prop + ".listOneAmbassadorReading",
     meta: { auth: true, name: "Ambassador list reading" },
     component: () =>
@@ -269,7 +269,7 @@ const groupChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMain/Group/Ambassadors/ListThesis"),
   },
   {
-    path: "/group/all-ambassadors-achement/:group_id",
+    path: "/group/all-ambassadors-achement/:group_id/week/:week_id",
     name: prop + ".listAllAmbassadorAchievements",
     meta: { auth: true, name: "All Ambassadors Achievement" },
     component: () =>

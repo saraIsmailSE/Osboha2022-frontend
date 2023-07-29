@@ -4,16 +4,17 @@
             <iq-card body-class="p-0">
                 <template v-slot:body>
                     <GroupTitle :group_id:="group.id" :group_name="group.name" :group_users="group_users" />
-                    <div class="dropdown w-100 p-3">
+                    <!-- <div class="dropdown w-100 p-3">
                         <select class="form-select" @change="listByWeek()" v-model="weekFilter">
                             <option class="dropdown-item" value="current" selected>هذا الأسبوع</option>
                             <option class="dropdown-item" value="previous">الاسبوع السابق</option>
                         </select>
-                    </div>
+                    </div> -->
+                    <h4 v-if="week" class="ms-3"> الأسبوع || {{ week.title }}</h4>
                     <ul class="todo-task-lists m-0 p-0" v-if="achievementsLoaded && achievementsLoaded.length > 0">
                         <template v-for="(ambassador, index) in achievementsLoaded" :key="index">
 
-                            <AchievementProgress :ambassador="ambassador" />
+                            <AchievementProgress :ambassador="ambassador" :week_id="week.id"/>
 
                         </template>
                         <li class="d-block text-center mb-0 pb-0" v-if="ambassadorsAchievement.length > length">
@@ -46,8 +47,9 @@ export default {
     async created() {
 
         try {
-            const response = await GroupService.AllAchievements(this.group_id, this.weekFilter);
+            const response = await GroupService.AllAchievements(this.group_id, this.$route.params.week_id,);
             this.group = response.group
+            this.week = response.week
             this.group_users = response.group_users
             this.ambassadorsAchievement = response.ambassadors_achievement
         }
@@ -63,6 +65,7 @@ export default {
         return {
             group_id: this.$route.params.group_id,
             group: [],
+            week:null,
             group_users: 0,
             ambassadorsAchievement: [],
             length: 10,

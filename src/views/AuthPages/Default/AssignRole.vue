@@ -75,7 +75,7 @@
                   :key="index"
                   :value="role.id"
                 >
-                  {{ user_type[role.name] }}
+                  {{       ARABIC_ROLES[role.name] }}
                 </option>
               </select>
               <small style="color: red" v-if="v$.form.role_id.$error">
@@ -116,6 +116,8 @@
 import useVuelidate from "@vuelidate/core";
 import { required, email, maxLength } from "@vuelidate/validators";
 import { api } from "@/API/Intercepter";
+import { ARABIC_ROLES } from "@/utilities/constants";
+
 import authService from "@/API/services/auth.service";
 const greaterThanZero = (value) => value > 0;
 
@@ -131,14 +133,7 @@ export default {
   data() {
     return {
       loader: false,
-      user_type: {
-        ambassador: "سفير",
-        leader: "قائد",
-        supervisor: "مراقب",
-        advisor: "موجه",
-        consultant: "مستشار",
-        admin: "ادارة",
-      },
+      ARABIC_ROLES,
       form: {
         user: "",
         head_user: "",

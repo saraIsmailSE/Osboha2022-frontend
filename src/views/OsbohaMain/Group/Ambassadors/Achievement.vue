@@ -18,10 +18,10 @@
               </div>
             </form>
             <template v-for="(ambassador, index) in achievementList" :key="index">
-              <AchievementProgress :ambassador="ambassador" />
+              <AchievementProgress :ambassador="ambassador" :week_id="week_id" />
             </template>
             <li class="d-block text-center mb-0 pb-0">
-              <router-link :to="{ name: 'group.listAllAmbassadorAchievements', params: { group_id: group_id } }">
+              <router-link :to="{ name: 'group.listAllAmbassadorAchievements', params: { group_id: group_id,week_id:week_id } }">
                 <span class="me-3 btn" role="button">عرض جميع الانجازات</span>
               </router-link>
             </li>
@@ -64,6 +64,10 @@ export default {
       required: true,
     },
     group_id: {
+      type: [Number],
+      required: true,
+    },
+    week_id: {
       type: [Number],
       required: true,
     },
