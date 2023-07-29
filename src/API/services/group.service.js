@@ -132,9 +132,9 @@ class GroupService {
    * @return group info , week satistics [100 - 0 -incomplete - most read]
    */
 
-  async BasicMarksView(group_id) {
+  async BasicMarksView(group_id,week_id) {
     try {
-      const BasicMarksView = await api.get(`group/basic-mark-view/${group_id}`);
+      const BasicMarksView = await api.get(`group/basic-mark-view/${group_id}/${week_id}`);
       return BasicMarksView.data.data;
     } catch (error) {
       return error;
@@ -147,10 +147,10 @@ class GroupService {
    * @param  group _id , week filter [current - previous ]
    * @return ambassadors achievments
    */
-  async AllAchievements(group_id, week_filter) {
+  async AllAchievements(group_id, week_id) {
     try {
       const response = await api.get(
-        `group/all-achievements/${group_id}/${week_filter}`
+        `group/all-achievements/${group_id}/${week_id}`
       );
       return response.data.data;
     } catch (error) {

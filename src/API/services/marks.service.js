@@ -37,9 +37,9 @@ class Marks {
    *  @param  user_id
    * @return week Achievement
    */
-  async ambassadorMark(user_id) {
+  async ambassadorMark(user_id,week_id) {
     try {
-      const response = await api.get(`marks/ambassador-mark/${user_id}`);
+      const response = await api.get(`marks/ambassador-mark/${user_id}/${week_id}`);
       return response.data.data;
     } catch (error) {
       handleError(error);

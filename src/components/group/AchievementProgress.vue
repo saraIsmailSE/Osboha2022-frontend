@@ -40,7 +40,7 @@
         <router-link
           :to="{
             name: 'group.listOneAmbassadorReading',
-            params: { ambassador_id: ambassador.user_id },
+            params: { ambassador_id: ambassador.user_id , week_id: week_id },
           }"
         >
           <span
@@ -60,6 +60,10 @@ export default {
   props: {
     ambassador: {
       type: [Object],
+      required: true,
+    },
+    week_id: {
+      type: [Number],
       required: true,
     },
   },
