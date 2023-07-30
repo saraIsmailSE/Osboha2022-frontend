@@ -77,6 +77,16 @@ class PostService {
     }
   }
 
+  
+  async getCurrentWeekSupportPost() {
+    try {
+      const posts = await api.get(`/posts/current-week-support`);
+      return posts.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   async postsByTimelineId(timeline_id, page) {
     try {
       const posts = await api.get(

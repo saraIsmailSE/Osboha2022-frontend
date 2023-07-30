@@ -184,12 +184,6 @@ const userChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Privacy Setting" },
     component: () => import("../views/User/PrivacySetting"),
   },
-  {
-    path: "/assign-role",
-    name: prop + ".assignRole",
-    meta: { auth: true, name: "Assign Role" },
-    component: () => import("../views/AuthPages/Default/AssignRole"),
-  },
 ];
 const statisticsChildRoute = (prop, mode = false) => [
   {
@@ -197,6 +191,20 @@ const statisticsChildRoute = (prop, mode = false) => [
     name: prop + ".byWeek",
     meta: { auth: true, name: "Statistics by Week" },
     component: () => import("../views/OsbohaMain/Statistics/Statistics"),
+  },
+];
+const rolesChildRoute = (prop, mode = false) => [
+  {
+    path: "/assign-role",
+    name: prop + ".assignRole",
+    meta: { auth: true, name: "Assign Role" },
+    component: () => import("../views/RolesAdministration/AssignRole"),
+  },
+  {
+    path: "/change-advising-team",
+    name: prop + ".changeAdvisingTeam",
+    meta: { auth: true, name: "Change Advising Team" },
+    component: () => import("../views/RolesAdministration/ChangeAdvisingTeam"),
   },
 ];
 const groupChildRoute = (prop, mode = false) => [
@@ -462,6 +470,13 @@ const routes = [
     component: () => import("../layouts/Default"),
     meta: { auth: true },
     children: statisticsChildRoute("statistics"),
+  },
+  {
+    path: "/roles",
+    name: "roles",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: rolesChildRoute("roles"),
   },
   {
     path: "/exceptions",
