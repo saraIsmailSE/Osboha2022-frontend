@@ -9,6 +9,10 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <div class="col-sm-12 text-center" v-if="loading">
+                            <img  src="@/assets/images/gif/loader-3.gif" alt="loader" />
+                        </div>
+
                         <div class="col-12">
                             <div class="row">
                                 <div class="text-center w-100 col-12 col-md-12 col-lg-12">
@@ -21,7 +25,8 @@
                                                 </div>
                                             </div>
                                             <div class="mt-4">
-                                                <h3 class="text-center">{{ getRounded(statistics.total_statistics.total_avg) }}</h3>
+                                                <h3 class="text-center">{{ getRounded(statistics.total_statistics.total_avg)
+                                                }}</h3>
                                                 <p class="mb-0 text-center">المعدل العام</p>
                                             </div>
                                         </div>
@@ -103,14 +108,14 @@
                                             <div class="d-flex align-items-center justify-content-center">
                                                 <div
                                                     class="border rounded avatar-55 d-flex align-items-center justify-content-center">
-                                                    <img class="img-fluid" src="@/assets/images/gif/screen.gif"
+                                                    <img class="img-fluid" src="@/assets/images/gif/applause.gif"
                                                         alt="screen-animated" />
                                                 </div>
                                             </div>
                                             <div class="mt-4">
                                                 <h3 class="text-center">{{ statistics.total_100 }}
                                                 </h3>
-                                                <p class="mb-0 text-center">عدد الحاصلين على العلامة الكاملة </p>
+                                                <p class="mb-0 text-center"> الحاصلين على العلامة الكاملة </p>
                                             </div>
                                         </div>
                                     </div>
@@ -122,14 +127,14 @@
                                             <div class="d-flex align-items-center justify-content-center">
                                                 <div
                                                     class="border rounded avatar-55 d-flex align-items-center justify-content-center">
-                                                    <img class="img-fluid" src="@/assets/images/gif/screen.gif"
+                                                    <img class="img-fluid" src="@/assets/images/gif/thumb-down.gif"
                                                         alt="screen-animated" />
                                                 </div>
                                             </div>
                                             <div class="mt-4">
                                                 <h3 class="text-center">{{ statistics.total_0 }}
                                                 </h3>
-                                                <p class="mb-0 text-center">عدد الحاصلين على صفر </p>
+                                                <p class="mb-0 text-center"> الحاصلين على صفر </p>
                                             </div>
                                         </div>
                                     </div>
@@ -141,7 +146,7 @@
                                             <div class="d-flex align-items-center justify-content-center">
                                                 <div
                                                     class="border rounded avatar-55 d-flex align-items-center justify-content-center">
-                                                    <img class="img-fluid" src="@/assets/images/gif/screen.gif"
+                                                    <img class="img-fluid" src="@/assets/images/gif/minus-circle.gif"
                                                         alt="screen-animated" />
                                                 </div>
                                             </div>
@@ -160,7 +165,7 @@
                                             <div class="d-flex align-items-center justify-content-center">
                                                 <div
                                                     class="border rounded avatar-55 d-flex align-items-center justify-content-center">
-                                                    <img class="img-fluid" src="@/assets/images/gif/screen.gif"
+                                                    <img class="img-fluid" src="@/assets/images/gif/no-entry.gif"
                                                         alt="screen-animated" />
                                                 </div>
                                             </div>
@@ -205,9 +210,9 @@ import StatisticsService from "@/API/services/statistics.service";
 
 export default {
     name: 'Statistics',
-    async mounted() {
-        console.log(await StatisticsService.byWeek())
-        this.statistics = await StatisticsService.byWeek()
+    async created() {
+        this.statistics = await StatisticsService.byWeek();
+        this.loading=false;
     },
     data() {
         return {
@@ -215,6 +220,7 @@ export default {
             thesises: {},
             questions: {},
             general_informations: {},
+            loading:true,
         };
     },
     methods: {

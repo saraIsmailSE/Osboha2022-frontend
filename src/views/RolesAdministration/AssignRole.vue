@@ -118,7 +118,7 @@ import { required, email, maxLength } from "@vuelidate/validators";
 import { api } from "@/API/Intercepter";
 import { ARABIC_ROLES } from "@/utilities/constants";
 
-import authService from "@/API/services/auth.service";
+import rolesService from "@/API/services/roles.service";
 const greaterThanZero = (value) => value > 0;
 
 export default {
@@ -162,7 +162,7 @@ export default {
         this.loader = true;
         try {
           this.message = "";
-          const response = await authService.assignRole(this.form);
+          const response = await rolesService.assignRole(this.form);
           this.message = response;
 
           this.v$.form.$reset();

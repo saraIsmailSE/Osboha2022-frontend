@@ -19,15 +19,6 @@ class AuthService {
     }
   }
 
-  async assignRole(formData) {
-    try {
-      const response = await api.post("assign-role", formData);
-      return response.data.data;
-    } catch (error) {
-      return error.response;
-    }
-  }
-
   logout() {
     UserInfo.removeUser();
   }

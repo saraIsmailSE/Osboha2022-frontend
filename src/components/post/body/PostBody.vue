@@ -5,36 +5,16 @@
 
   <!--Polls-->
   <div v-if="post.pollOptions?.length" class="mt-3">
-    <div
-      class="progress my-2 border border-light rounded bg-transparent"
-      v-for="option in post.pollOptions"
-      :key="option.id"
-    >
-      <progressbar
-        :style="{ width: getOptionVotesPercentage(option.id) }"
-        class="progress-bar"
-        className="rounded"
-        aria-valuemin="0"
-        aria-valuemax="100"
-      >
+    <div class="progress my-2 border border-light rounded bg-transparent" v-for="option in post.pollOptions"
+      :key="option.id">
+      <progressbar :style="{ width: getOptionVotesPercentage(option.id) }" class="progress-bar" className="rounded"
+        aria-valuemin="0" aria-valuemax="100">
       </progressbar>
 
-      <div
-        class="poll-input d-flex justify-content-around align-items-center w-100 h-100"
-      >
-        <input
-          type="radio"
-          :id="option.id"
-          :value="option.id"
-          v-model="choosedOption"
-          class="ms-1 mt-0"
-          @change="vote"
-        />
-        <label
-          :for="option.id"
-          class="form-check-label flex-grow-1 text-truncate ms-2 align-right"
-          >{{ option.option }}</label
-        >
+      <div class="poll-input d-flex justify-content-around align-items-center w-100 h-100">
+        <input type="radio" :id="option.id" :value="option.id" v-model="choosedOption" class="ms-1 mt-0" @change="vote"  :disabled="!post.allow_comments"/>
+        <label :for="option.id" class="form-check-label flex-grow-1 text-truncate ms-2 align-right">{{ option.option
+        }}</label>
         <span class="me-2 text-primary bold-600">
           {{ getOptionVotesPercentage(option.id) }}
         </span>
@@ -51,7 +31,7 @@ export default {
   name: "PostBody",
   inject: {
     voteOnPost: {
-      default: () => {},
+      default: () => { },
     },
     post: {
       required: true,
@@ -133,11 +113,13 @@ export default {
       return optionSelectedByUser ? optionSelectedByUser.id : "";
     },
     urlifyFn(text) {
-    let urlRegex = /(https?:\/\/[^\s]+)/g;
-    return text.replace(urlRegex, function(url) {
-        return '<a href="' + url + '"  target="_blank" direction: rtl;">' + url + '</a>';
-    })
-  },
+      if (text) {
+        let urlRegex = /(https?:\/\/[^\s]+)/g;
+        return text.replace(urlRegex, function (url) {
+          return '<a href="' + url + '"  target="_blank" direction: rtl;">' + url + '</a>';
+        })
+      }
+    },
 
   },
 };
@@ -185,13 +167,13 @@ input[type="radio"]:checked::after {
   position: relative;
 }
 
-.progress > .poll-input {
+.progress>.poll-input {
   position: absolute;
   top: 0;
   right: 0;
 }
 
-.poll-input > label {
+.poll-input>label {
   font-size: 0.9rem;
 }
 

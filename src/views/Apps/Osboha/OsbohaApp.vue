@@ -44,7 +44,10 @@
 import AddPost from "@/components/post/add/AddPost";
 import LazyLoadedPosts from "@/components/post/LazyLoadedPosts.vue";
 import bookService from "@/API/services/book.service";
-import knowAboutOsboha from '@/assets/images/main/know-about-osboha-2.png'
+import postService from "@/API/services/post.service";
+import knowAboutOsboha0 from '@/assets/images/main/know-about-osboha-0.png'
+import knowAboutOsboha1 from '@/assets/images/main/know-about-osboha-1.png'
+import knowAboutOsboha2 from '@/assets/images/main/know-about-osboha-2.png'
 import latestBook from '@/assets/images/main/latest-book.png'
 
 export default {
@@ -53,12 +56,26 @@ export default {
   data() {
     return {
       latest_book: null,
-      knowAboutOsboha,
+      knowAboutOsboha: '',
+      knowAboutOsboha0,
+      knowAboutOsboha1,
+      knowAboutOsboha2,
       latestBook
     };
   },
   async created() {
+    this.knowAboutOsboha = this.knowAboutOsboha2;
+
     this.latest_book = await bookService.latestBooks();
+    const response = await postService.getCurrentWeekSupportPost();
+    if (response) {
+      if (response.userVote) {
+        this.knowAboutOsboha = this.knowAboutOsboha0;
+      }
+      else {
+        this.knowAboutOsboha = this.knowAboutOsboha1;
+      }
+    }
   },
   methods: {
     addPost(post) {

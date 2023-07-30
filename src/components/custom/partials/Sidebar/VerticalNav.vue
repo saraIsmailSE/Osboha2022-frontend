@@ -39,6 +39,14 @@
         <span class="user.profile">طلبات الصداقة</span>
       </router-link>
     </li>
+    <!-- ###### Statistics ###### -->
+    <li class="nav-item">
+      <router-link :class="checkActive('statistics.byWeek') ? 'active nav-link' : 'nav-link'" aria-current="page"
+        :to="{ name: 'statistics.byWeek', params: { week_id: 1 }, }">
+        <i class="icon material-symbols-outlined"> monitoring </i>
+        <span class="item-name">احصائيات الأسبوع</span>
+      </router-link>
+    </li>
     <!-- ###### group ###### -->
     <li class="nav-item">
       <router-link :class="checkActive('osboha.group') ? 'active nav-link' : 'nav-link'" aria-current="page"
@@ -154,12 +162,22 @@
       </li>
       <!-- ###### Asign Roles ###### -->
       <li class="nav-item">
-        <router-link :class="checkActive('user.assignRole') ? 'active nav-link' : 'nav-link'
+        <router-link :class="checkActive('roles.assignRole') ? 'active nav-link' : 'nav-link'
           " aria-current="page" :to="{
-    name: 'user.assignRole',
+    name: 'roles.assignRole',
   }">
           <i class="icon material-symbols-outlined"> assignment_ind </i>
           <span class="item-name">ترقية </span>
+        </router-link>
+      </li>
+      <!-- ###### Asign Roles ###### -->
+      <li class="nav-item mb-5">
+        <router-link :class="checkActive('roles.changeAdvisingTeam') ? 'active nav-link' : 'nav-link'
+          " aria-current="page" :to="{
+    name: 'roles.changeAdvisingTeam',
+  }">
+          <i class="icon material-symbols-outlined"> swap_horizontal_circle </i>
+          <span class="item-name">نقل مراقب </span>
         </router-link>
       </li>
     </template>
