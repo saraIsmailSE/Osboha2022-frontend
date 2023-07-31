@@ -63,7 +63,7 @@
         <span class="item-name">الكتب</span>
       </router-link>
     </li>
-    <!-- <li class="nav-item">
+    <li class="nav-item"  v-if="advisorAndAbove || inBooksTeam">
       <router-link :class="checkActive('book.free-book') ? 'active nav-link' : 'nav-link'" aria-current="page" :to="{
         name: 'book.free-book',
         params: {
@@ -73,7 +73,7 @@
         <i class="icon material-symbols-outlined"> local_library </i>
         <span class="item-name">الكتاب الحر</span>
       </router-link>
-    </li> -->
+    </li>
     <li class="nav-item" v-if="isAdmin || inBooksTeam">
       <router-link :class="checkActive('book.create') ? 'active nav-link' : 'nav-link'" aria-current="page"
         :to="{ name: 'book.create' }">

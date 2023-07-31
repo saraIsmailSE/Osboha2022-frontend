@@ -22,6 +22,21 @@
             </span>
           </h4>
         </router-link>
+        <router-link  v-if="advisorAndAbove || inBooksTeam"
+          :to="{
+            name: 'book.free-book',
+            params: {
+              user_id: this.$route.params.user_id,
+            },
+          }"
+        >
+          <h4 class="text-center mt-3 mb-3">
+            الكتب الحرة
+            <span class="align-middle material-symbols-outlined later-book">
+              local_library
+            </span>
+          </h4>
+        </router-link>
       </div>
       <div
         class="d-grid gap-3 d-grid-template-1fr-19"
@@ -68,6 +83,7 @@
 </template>
 <script>
 import BookCard from "@/components/book/BookCard.vue";
+import UserInfoService from "@/Services/userInfoService";
 
 export default {
   name: "User Book",
@@ -95,6 +111,19 @@ export default {
     },
     isAuth() {
       return this.$store.getters.getUser.id == this.$route.params.user_id;
+    },
+    user() {
+      return this.$store.getters.getUser;
+    },
+    advisorAndAbove() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "consultant",
+        "advisor",
+      ]);
+    },
+    inBooksTeam() {
+      return UserInfoService.hasRole(this.user, "book_quality_team");
     },
   },
 };
