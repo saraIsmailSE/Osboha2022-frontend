@@ -371,6 +371,7 @@ const bookChildRoute = (prop, mode = false) => [
     path: "free-books/:user_id",
     name: prop + ".free-book",
     meta: { auth: true, name: "Free Book" },
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
     component: () => import("../views/Book/Free"),
   },
   {

@@ -13,14 +13,32 @@ class UserBooks {
   }
 
   //All Free
-  async getAllFree(user_id) {
+  async getAllFree(page, user_id) {
     try {
-      const books = await api.get(`user-books/free-books/${user_id}`);
+      const books = await api.get(`user-books/free-books/${user_id}/${page}`);
       return books.data.data;
     } catch (error) {
       return error;
     }
   }
+
+  /**
+   * Check rules for free book.
+   *
+   * @param user_id
+   * @return jsonResponse[eligible_to_write_thesis boolean]
+   */
+  async eligibleToWriteThesis(user_id) {
+    try {
+      const books = await api.get(
+        `user-books/eligible-to-write-thesis/${user_id}`
+      );
+      return books.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
   //All Later
   async laterBooks(user_id) {
     try {
@@ -39,7 +57,7 @@ class UserBooks {
       return error;
     }
   }
-  
+
   async saveBookForLater(bookId) {
     try {
       const book = await api.patch(`/user-books/${bookId}/save-for-later`);

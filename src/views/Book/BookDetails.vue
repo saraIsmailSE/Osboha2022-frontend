@@ -60,7 +60,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-12" v-if="book?.book?.allow_comments">
+      <div class="col-lg-12" v-if="book?.book?.allow_comments && eligibleToWriteThesis">
         <div class="card card-block card-stretch card-height blog">
           <button type="submit" class="btn btn-primary d-block w-100" data-bs-toggle="modal" data-bs-target="#modals">
             كتابة أطروحة
@@ -170,6 +170,7 @@ import Comment from "@/components/comment/Comment.vue";
 import CreateComment from "@/components/comment/CreateComment.vue";
 import createThesis from "@/components/book/theses/create.vue";
 import bookService from "@/API/services/book.service";
+import userBookService from "@/API/services/user-books.service";
 import thesisService from "@/API/services/thesis.service";
 import moment from "moment";
 import helper from "@/utilities/helper";
@@ -202,6 +203,7 @@ export default {
       page: 1,
       totalTheses: 0,
       loading: false,
+      eligibleToWriteThesis: true,
     };
   },
   methods: {
@@ -225,7 +227,22 @@ export default {
       this.book = response.data;
       this.fullBriefText = this.book.book?.brief;
       this.shortBriefText = this.fullBriefText?.slice(0, 200);
+
+      //check if free book 
+      if (this.book.book.type.type == 'free') {
+        //check if auth user is the owner
+        if (response.book_owner == this.user.id) {
+          // Check rules for free book.
+          this.eligibleToWriteThesis = await userBookService.eligibleToWriteThesis(this.user.id);
+        }
+        else {
+          this.eligibleToWriteThesis = false;
+        }
+      }
+
     },
+
+
     loadMoreBriefText() {
       this.shortBriefText = this.fullBriefText;
     },
@@ -413,6 +430,7 @@ export default {
         this.theses.length > 0
       );
     },
+
   },
 };
 </script>

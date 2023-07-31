@@ -194,7 +194,7 @@
                   dir="rtl"
                 >
                 </textarea>
-                <span> {{ v$.infoForm.bio.$model.length }}/600 حرف</span>
+                <span v-if="v$.infoForm.bio.$model"> {{ v$.infoForm.bio.$model.length }}/600 حرف</span>
               </div>
               <small style="color: red" v-if="v$.infoForm.bio.$error">
                 قم بادخال نبدة عنك لا يزيد عدد حروفها عن 600 حرف
