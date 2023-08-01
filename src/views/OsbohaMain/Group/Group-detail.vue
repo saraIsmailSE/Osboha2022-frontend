@@ -120,7 +120,8 @@
             class="btn btn-primary d-block mt-3 col-5 me-1" v-if="authInGroup &&
               authInGroup.user_type != 'ambassador' &&
               (group.type.type == 'supervising' ||
-                group.type.type == 'advising')
+              group.type.type == 'advising' ||
+              group.type.type == 'followup')
               ">
             تدقيق العلامات
           </router-link>

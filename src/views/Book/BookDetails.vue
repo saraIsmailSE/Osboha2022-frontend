@@ -60,9 +60,9 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-12" v-if="book?.book?.allow_comments && eligibleToWriteThesis">
+      <div class="col-lg-12">
         <div class="card card-block card-stretch card-height blog">
-          <button type="submit" class="btn btn-primary d-block w-100" data-bs-toggle="modal" data-bs-target="#modals">
+          <button type="submit" class="btn btn-primary d-block w-100" data-bs-toggle="modal" data-bs-target="#modals" :disabled="!(book?.book?.allow_comments && eligibleToWriteThesis)">
             كتابة أطروحة
           </button>
         </div>
