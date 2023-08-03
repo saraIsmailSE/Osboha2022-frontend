@@ -210,6 +210,7 @@ export default {
     this.thesis = response;
     this.week = response.mark?.week;
     this.expired = new Date(this.week?.modify_timer) < new Date();
+        
   },
   data() {
     return {
@@ -360,6 +361,7 @@ export default {
                 thesis_id: this.thesis.id,
                 reason_id: this.reason ? parseInt(this.reason) : null,
                 status: this.status,
+                week_id:this.week.id
               });
 
               if (response.statusCode === 200) {
