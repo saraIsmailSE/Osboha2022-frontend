@@ -6,16 +6,16 @@
                     <GroupTitle :group_id:="group.id" :group_name="group.name" :group_users="group_users" />
                     <div class="iq-todo-right">
                         <div class="iq-todo-friendlist mt-3">
-                            <div class="dropdown w-100 p-3">
+                            <!-- <div class="dropdown w-100 p-3">
                                 <select class="form-select" @change="listByWeek()" v-model="weekFilter">
                                     <option class="dropdown-item" value="current" selected>هذا الأسبوع</option>
                                     <option class="dropdown-item" value="previous">الاسبوع السابق</option>
                                 </select>
-                            </div>
+                            </div> -->
                             <ul class="todo-task-lists m-0 p-0" v-if="achievementsLoaded && achievementsLoaded.length > 0">
                                 <li class="d-flex mb-4 align-items-center" v-for="(record, index) in achievementsLoaded"
                                     :key=index>
-                                    <AchievementPages :record="record" />
+                                    <AchievementPages :record="record" :week_id="week_id" />
                                 </li>
                                 <li class="d-block text-center mb-0 pb-0" v-if="ambassadorsAchievement.length > length">
                                     <a class="me-3 btn" role="button" @click="loadMore()">عرض المزيد</a>
@@ -55,7 +55,7 @@ export default {
     async created() {
 
         try {
-            const response = await GroupService.AchievementAsPages(this.group_id, this.weekFilter);
+            const response = await GroupService.AchievementAsPages(this.group_id, this.week_id);            
             this.group = response.group
             this.group_users = response.group_users
             this.ambassadorsAchievement = response.ambassadors_achievement
@@ -70,6 +70,7 @@ export default {
             group: [],
             group_users: 0,
             group_id: this.$route.params.group_id,
+            week_id:this.$route.params.week_id,
             ambassadorsAchievement: [],
             length: 10,
             weekFilter: 'current'

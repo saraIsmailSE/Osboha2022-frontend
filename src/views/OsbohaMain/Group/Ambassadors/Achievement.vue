@@ -31,7 +31,7 @@
       </iq-card>
     </div>
 
-    <MostRead v-if="most_read" :most_read="most_read" />
+    <MostRead v-if="most_read" :most_read="most_read"  :week_id="week_id" />
   </div>
 </template>
 

@@ -7,7 +7,7 @@
                         <ul class="suggestions-lists m-0 p-0">
                             <li class="d-flex mb-4 align-items-center" v-for="(record, index) in most_read.slice(0, 2)"
                                 :key=index>
-                                <AchievementPages :record="record" />
+                                <AchievementPages :record="record" :week_id="week_id" />
                             </li>
                         </ul>
                         <div class="container mt-3 mb-3 d-flex  align-items-center justify-content-center" hight="200px">
@@ -41,19 +41,24 @@ export default {
         Bar,
         AchievementPages,
     },
-    created(){
-            if (this.most_read) {
-                for (let i = 0; i < this.most_read.length; i++) {
-                    this.chartData.datasets[0].data[i] = this.most_read[i].total_pages
-                    this.chartData.labels[i] = this.most_read[i].user.name
-                }
+    created() {
+        if (this.most_read) {
+            for (let i = 0; i < this.most_read.length; i++) {
+                this.chartData.datasets[0].data[i] = this.most_read[i].total_pages
+                this.chartData.labels[i] = this.most_read[i].user.name
             }
+        }
     },
     props: {
         most_read: {
             type: [Object],
             required: true,
         },
+        week_id: {
+            type: [Number],
+            required: true,
+        },
+
     },
     data() {
         return {
