@@ -15,7 +15,7 @@
                         <label class="form-label" for="email">ادخل بريدك الالكتروني الجديد</label>
                         <input type="email" class="form-control mb-0 w-75 mx-auto" id="email"
                             placeholder="  ادخل بريدك الالكتروني " v-model="v$.form.email.$model">
-                        <p style="color:red" v-if="v$.form.email.$error">قم بادخال بريدك الالكتروني</p>
+                        <p class="p-2 text-center" style="color:red" v-if="v$.form.email.$error">قم بادخال بريدك الالكتروني</p>
                     </div>
                     <div class="col-sm-12 text-center" v-if="loader">
                         <img src="@/assets/images/page-img/page-load-loader.gif" alt="loader" style="height: 100px;">

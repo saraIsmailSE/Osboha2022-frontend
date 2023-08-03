@@ -295,7 +295,7 @@ const groupChildRoute = (prop, mode = false) => [
       import("../views/OsbohaMain/Group/Ambassadors/ListAllAchievement"),
   },
   {
-    path: "/group/achievement-as-pages/:group_id",
+    path: "/group/achievement-as-pages/:group_id/:week_id",
     name: prop + ".achievementAsPages",
     meta: { auth: true, name: "Achievement As Pages" },
     component: () =>

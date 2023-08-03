@@ -164,10 +164,10 @@ class GroupService {
    * @param  group _id , week filter [current - previous ]
    * @return ambassadors achievments as total pages
    */
-  async AchievementAsPages(group_id, week_filter) {
+  async AchievementAsPages(group_id, week_id) {
     try {
       const response = await api.get(
-        `group/achievement-as-pages/${group_id}/${week_filter}`
+        `group/achievement-as-pages/${group_id}/${week_id}`
       );
       return response.data.data;
     } catch (error) {

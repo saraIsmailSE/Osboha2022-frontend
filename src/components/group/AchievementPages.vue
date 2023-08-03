@@ -15,7 +15,7 @@
       <router-link
         :to="{
           name: 'group.listOneAmbassadorReading',
-          params: { ambassador_id: record.user_id },
+          params: { ambassador_id: record.user_id , week_id: week_id },
         }"
       >
         <i class="material-symbols-outlined md-18 me-1 text-primary">
@@ -32,6 +32,10 @@ export default {
   props: {
     record: {
       type: [Object],
+      required: true,
+    },
+    week_id: {
+      type: [Number],
       required: true,
     },
   },

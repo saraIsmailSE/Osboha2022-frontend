@@ -4,6 +4,8 @@ import { api } from "../API/Intercepter";
 import { handleError } from "vue";
 import router from "../router";
 
+export const strict = false;
+
 export default new Vuex.Store({
   modules: {
     setting,
