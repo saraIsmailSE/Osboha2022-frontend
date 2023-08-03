@@ -18,7 +18,6 @@ class AuthService {
       console.log(error);
     }
   }
-
   logout() {
     UserInfo.removeUser();
   }
@@ -43,6 +42,16 @@ class AuthService {
         error;
       });
     return { data: res.data, error };
+  }
+  async resetEmail(email) {
+    try {
+      const response = await api.post("email/reset", {
+        email: email,
+      });
+      return response.data.data;
+    } catch (error) {
+      return error.response;
+    }
   }
 
   async resetPassword(password, email, token) {

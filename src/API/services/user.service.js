@@ -7,6 +7,10 @@ class UserService {
     return users;
   }
 
+  async searchByEmail(email) {
+    const response = await api.get(`users/search-by-email/${email}`);
+    return response.data.data;
+  }
   async getUnactiveReviwers() {
     const users = await api.get(`users/list/un-active-reviwers-auditors`);
     return users;

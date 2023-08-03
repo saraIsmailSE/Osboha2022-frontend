@@ -62,7 +62,9 @@
       </div>
       <div class="col-lg-12">
         <div class="card card-block card-stretch card-height blog">
-          <button type="submit" class="btn btn-primary d-block w-100" data-bs-toggle="modal" data-bs-target="#modals" :disabled="!(book?.book?.allow_comments && eligibleToWriteThesis)">
+          <button type="submit" class="btn btn-primary d-block w-100" 
+              data-bs-toggle="modal" data-bs-target="#modals" 
+              :disabled="!(book?.book?.allow_comments && eligibleToWriteThesis)">
             كتابة أطروحة
           </button>
         </div>
@@ -193,6 +195,8 @@ export default {
     await this.getBook(this.$route.params.book_id);
     await this.getTheses(this.page);
     window.addEventListener('popstate', this.popstateEventAction);
+    console.log("book:   " + this.book)
+
   },
   data() {
     return {
@@ -228,10 +232,11 @@ export default {
       this.fullBriefText = this.book.book?.brief;
       this.shortBriefText = this.fullBriefText?.slice(0, 200);
 
+
       //check if free book 
-      if (this.book.book.type.type == 'free') {
+      if (response.data.book.type.type == 'free') {
         //check if auth user is the owner
-        if (response.book_owner == this.user.id) {
+        if (response.data.book_owner == this.user.id) {
           // Check rules for free book.
           this.eligibleToWriteThesis = await userBookService.eligibleToWriteThesis(this.user.id);
         }

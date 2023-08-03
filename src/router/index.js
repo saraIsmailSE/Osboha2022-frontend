@@ -107,9 +107,14 @@ const authchildRoutes = (prop, mode) => [
     component: () => import("../views/AuthPages/Default/ForgotPassword.vue"),
   },
   {
-    path: "reset-password/:token",
-    name: prop + ".reset-password",
-    component: () => import("../views/AuthPages/Default/ResetPassword"),
+    path: "reset-email",
+    name: prop + ".reset-email",
+    component: () => import("../views/AuthPages/Default/ResetEmail"),
+  },
+  {
+    path: "forgot-password",
+    name: prop + ".forgot-password",
+    component: () => import("../views/AuthPages/Default/ForgotPassword.vue"),
   },
   {
     path: "not-ambassador-in-any-group/",
@@ -135,6 +140,12 @@ const authchildRoutes = (prop, mode) => [
 ];
 
 const userChildRoute = (prop, mode = false) => [
+  {
+    path: "search",
+    name: prop + ".search",
+    meta: { auth: true, name: "User search" },
+    component: () => import("../views/AuthPages/Default/SearchForUser"),
+  },
   {
     path: "profile/:user_id",
     name: prop + ".profile",
