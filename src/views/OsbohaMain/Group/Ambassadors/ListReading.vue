@@ -19,9 +19,10 @@
           </div>
 
           <!--Support-->
-          <Support
+          <Support v-if="mark"
             :support="support"
             :supportMark="mark?.support"
+            :week_id="mark.week_id"
             @updateSupportMark="updateSupportMark"
           />
 

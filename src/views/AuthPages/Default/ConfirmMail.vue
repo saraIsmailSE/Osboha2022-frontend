@@ -15,6 +15,12 @@
                 اعادة ارسال البريد الالكتروني
               </button>
             </div>
+            <h4 class="p-2 text-center text-danger">
+              اذا كنت تواجه مشكلة في تأكيد بريدك الالكتروني الحالي يمكن إعادة تعيينه من
+              <router-link :to="{name: 'auth.reset-email'}">
+                هنا
+              </router-link>
+            </h4>
 
             <a href="javascript:void(0);" class="d-flex align-items-center m-3" @click="logout">
               <i class="material-symbols-outlined">logout</i>
@@ -28,6 +34,7 @@
 </template>
 <script>
 import Auth from '@/API/services/auth.service'
+import UserInfoService from "@/Services/userInfoService";
 
 export default {
   name: "ConfirmMail",
@@ -44,6 +51,11 @@ export default {
       this.$store.dispatch('logout');
       this.$router.push({ name: 'osboha' })
     }
+  },
+  computed: {
+    user() {
+      return this.$store.getters.getUser;
+    },
   }
 };
 </script>

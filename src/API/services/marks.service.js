@@ -52,9 +52,9 @@ class Marks {
    * @return {object} response
    * @throws {object} error
    */
-  async acceptSupport(user_id) {
+  async acceptSupport(user_id,week_id) {
     try {
-      const response = await api.put(`marks/accept-support/user/${user_id}`);
+      const response = await api.put(`marks/accept-support/user/${user_id}/${week_id}`);
       return response.data;
     } catch (error) {
       handleError(error);
@@ -67,9 +67,9 @@ class Marks {
    * @return {object} response
    * @throws {object} error
    */
-  async rejectSupport(user_id) {
+  async rejectSupport(user_id,week_id) {
     try {
-      const response = await api.put(`marks/reject-support/user/${user_id}`);
+      const response = await api.put(`marks/reject-support/user/${user_id}/${week_id}`);
       return response.data;
     } catch (error) {
       handleError(error);

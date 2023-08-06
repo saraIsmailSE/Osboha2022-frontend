@@ -153,6 +153,10 @@ export default {
       type: Object,
       required: true,
     },
+    week_id: {
+      type: Number,
+      required: true,
+    },
     supportMark: {
       type: Number,
       default: 0,
@@ -164,6 +168,8 @@ export default {
       ambassador_id: this.$route.params.ambassador_id,
       loading: false,
     };
+  },
+  created(){
   },
   computed: {
     noSupportPost() {
@@ -219,9 +225,9 @@ export default {
               let response;
 
               if (status)
-                response = await MarkService.acceptSupport(this.ambassador_id);
+                response = await MarkService.acceptSupport(this.ambassador_id,this.week_id);
               else
-                response = await MarkService.rejectSupport(this.ambassador_id);
+                response = await MarkService.rejectSupport(this.ambassador_id,this.week_id);
 
               if (response.statusCode === 200) {
                 const statusText = status ? "قبول" : "رفض";

@@ -21,4 +21,5 @@ export const BOOK_Types = {
   young: "يافعين",
   kids: "أطفال",
   tafseer: "تفسير",
+  free: "كتاب حر",
 };

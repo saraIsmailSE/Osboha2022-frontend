@@ -53,10 +53,10 @@
                                                     <span class="display-5 text-dark material-symbols-outlined">
                                                         send
                                                     </span>
-
                                                 </button>
                                             </div>
-                                            <input type="text" placeholder="اكتب ملاحظة" aria-describedby="button-addon2"
+                                            <input type="text" placeholder="اكتب ملاحظة"
+                                                aria-describedby="button-addon2"
                                                 class="border-bottom form-control rounded-0 border-0 py-4"
                                                 v-model="v$.noteForm.body.$model">
                                             <small style="color: red" v-if="v$.noteForm.body.$invalid">
@@ -198,7 +198,8 @@ input::placeholder {
 .bg-recipient {
     background-color: #cae0cd
 }
-.font-weight-bold{
+
+.font-weight-bold {
     font-weight: bold;
 }
 </style>
