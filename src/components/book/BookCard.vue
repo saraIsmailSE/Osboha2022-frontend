@@ -1,37 +1,61 @@
 <template>
   <div class="d-grid gap-3 d-grid-template-1fr-19">
     <div class="card mb-0">
-      <div class="position-absolute top-0 end-0 p-2 rounded-start" style="background-color: #278036; opacity: 50%">
+      <div
+        class="position-absolute top-0 end-0 p-2 rounded-start"
+        style="background-color: #278036; opacity: 50%"
+      >
         <h6 class="text-white">{{ bookTypeLanguage }}</h6>
       </div>
       <div class="position-absolute start-0 mt-2">
-
-        <span class="material-symbols-outlined me-2 later-book align-middle" :class="[isSaved ? 'later-book-on' : 'later-book-off']"
-          role="button" @click.prevent="markBookForLater" v-if="!isProfile">
+        <span
+          class="material-symbols-outlined me-2 align-middle"
+          :class="[isSaved ? 'later-book-on' : 'later-book-off']"
+          role="button"
+          @click.prevent="markBookForLater"
+          v-if="!isProfile"
+        >
           favorite
         </span>
-        <span role="button" @click="download(cardInfo.link)" class="material-symbols-outlined download-book align-middle me-3">
+        <span
+          role="button"
+          @click="download(cardInfo.link)"
+          class="material-symbols-outlined download-book align-middle me-3"
+        >
           download
         </span>
       </div>
 
       <div class="card-body text-center">
-        <img :src="resolve_img_url(cardInfo.media?.path ?? '')" class="img-fluid rounded w-75 mt-4" alt="blog-img" />
+        <img
+          :src="resolve_img_url(cardInfo.media?.path ?? '')"
+          class="img-fluid rounded w-75 mt-4"
+          alt="blog-img"
+        />
 
         <div class="group-info pt-3 pb-3">
           <h4>
-            <router-link :to="{
-              name: 'book.book-details',
-              params: { book_id: this.cardInfo.id },
-            }" data-toggle="tooltip" data-placement="top" :title="cardInfo.name" class="truncated"
-              :class="directionClass">{{ cardInfo.name }}</router-link>
+            <router-link
+              :to="{
+                name: 'book.book-details',
+                params: { book_id: this.cardInfo.id },
+              }"
+              data-toggle="tooltip"
+              data-placement="top"
+              :title="cardInfo.name"
+              class="truncated"
+              :class="directionClass"
+              >{{ cardInfo.name }}</router-link
+            >
           </h4>
           <p class="truncated" :class="directionClass">
             {{ cardInfo.writer }}
           </p>
         </div>
         <div class="group-details d-inline-block pb-3">
-          <ul class="d-flex align-items-center justify-content-between list-inline m-0 p-0">
+          <ul
+            class="d-flex align-items-center justify-content-between list-inline m-0 p-0"
+          >
             <li class="pe-3 ps-3">
               <p class="mb-0">المستوى</p>
               <h6>{{ cardInfo.level.arabic_level }}</h6>
@@ -49,7 +73,11 @@
         <div class="row" v-if="isProfile">
           <div class="row d-flex justify-content-center" v-if="isAmbassador">
             <div class="col-12">
-              <button type="submit" class="btn btn-primary d-block w-100" @click="thesesDetails()">
+              <button
+                type="submit"
+                class="btn btn-primary d-block w-100"
+                @click="thesesDetails()"
+              >
                 عرض
                 <span v-if="myProfile"> أطروحاتي </span>
                 <span v-else> أطروحات السفير </span>
@@ -58,7 +86,11 @@
           </div>
           <div class="row d-flex justify-content-center" v-else>
             <div class="col-12">
-              <button type="submit" class="btn btn-primary d-block w-100" @click="bookDetails()">
+              <button
+                type="submit"
+                class="btn btn-primary d-block w-100"
+                @click="bookDetails()"
+              >
                 صفحة الكتاب
               </button>
             </div>
@@ -66,13 +98,22 @@
         </div>
         <div class="row" v-else>
           <div class="col-6">
-            <button type="submit" class="btn btn-primary d-block w-100" data-bs-toggle="modal"
-              :data-bs-target="`#modal-${cardInfo.id}`" :disabled="!cardInfo.allow_comments">
+            <button
+              type="submit"
+              class="btn btn-primary d-block w-100"
+              data-bs-toggle="modal"
+              :data-bs-target="`#modal-${cardInfo.id}`"
+              :disabled="!cardInfo.allow_comments"
+            >
               كتابة أطروحة
             </button>
           </div>
           <div class="col-6">
-            <button type="submit" class="btn btn-primary d-block w-100" @click="bookDetails()">
+            <button
+              type="submit"
+              class="btn btn-primary d-block w-100"
+              @click="bookDetails()"
+            >
               عرض الأطروحات
             </button>
           </div>
@@ -80,18 +121,35 @@
       </div>
     </div>
   </div>
-  <modal class="modal fade" :id="`modal-${cardInfo.id}`" dialogClass="modal-fullscreen-sm-down" tabindex="-1"
-    title="Create Thesis" :aria-labelledby="`modalsLabel-${cardInfo.id}`" :aria-hidden="true">
+  <modal
+    class="modal fade"
+    :id="`modal-${cardInfo.id}`"
+    dialogClass="modal-fullscreen-sm-down"
+    tabindex="-1"
+    title="Create Thesis"
+    :aria-labelledby="`modalsLabel-${cardInfo.id}`"
+    :aria-hidden="true"
+  >
     <model-header>
       <h5 class="modal-title" :id="`modalsLabel-${cardInfo.id}`">
         {{ cardInfo.name }} || أطروحة جديدة
       </h5>
-      <a href="javascript:void(0);" class="lh-1" data-bs-dismiss="modal" ref="closeBtn">
+      <a
+        href="javascript:void(0);"
+        class="lh-1"
+        data-bs-dismiss="modal"
+        ref="closeBtn"
+      >
         <span class="material-symbols-outlined">close</span>
       </a>
     </model-header>
     <model-body>
-      <createThesis :book="cardInfo" :lastThesis="cardInfo.last_thesis" @closeModel="closeModel" @addThesis="addThesis" />
+      <createThesis
+        :book="cardInfo"
+        :lastThesis="cardInfo.last_thesis"
+        @closeModel="closeModel"
+        @addThesis="addThesis"
+      />
     </model-body>
   </modal>
 </template>
@@ -111,13 +169,13 @@ export default {
     isAmbassador: { type: Boolean, default: true },
   },
   created() {
-    window.addEventListener('popstate', this.popstateEventAction);
+    window.addEventListener("popstate", this.popstateEventAction);
   },
   emits: ["updateUserBook"],
   methods: {
     popstateEventAction() {
-      const body = document.querySelector('body');
-      body.removeAttribute("data-bs-overflow")
+      const body = document.querySelector("body");
+      body.removeAttribute("data-bs-overflow");
       body.removeAttribute("data-bs-padding-right");
       body.removeAttribute("style");
       body.classList.remove("modal-open");
@@ -128,7 +186,7 @@ export default {
       this.removePopstateEventAction();
     },
     removePopstateEventAction() {
-      window.removeEventListener('popstate', this.popstateEventAction);
+      window.removeEventListener("popstate", this.popstateEventAction);
     },
 
     resolve_img_url: function (path) {
@@ -171,10 +229,10 @@ export default {
           this.cardInfo.id,
           response.data
             ? {
-              id: response.data.id,
-              status: response.data.status,
-              counter: response.data.counter,
-            }
+                id: response.data.id,
+                status: response.data.status,
+                counter: response.data.counter,
+              }
             : null
         );
       } catch (error) {
@@ -251,7 +309,7 @@ export default {
         this.isProfile &&
         this.isAmbassador &&
         parseInt(this.$store.getters.getUser.id) ===
-        parseInt(this.$route.params.user_id)
+          parseInt(this.$route.params.user_id)
       );
     },
     directionClass() {
@@ -277,24 +335,17 @@ export default {
 .left-direction {
   direction: ltr;
 }
-
-.later-book {
-  font-variation-settings:
-    'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48
-}
 .download-book {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 48
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
 }
 
 .later-book-on {
   color: darkred;
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
 }
 
 .later-book-off {
   color: rgb(97, 96, 96);
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
 }
 </style>

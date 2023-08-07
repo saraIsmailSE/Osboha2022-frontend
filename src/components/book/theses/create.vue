@@ -120,7 +120,7 @@
           id="thesisBody"
           name="thesisBody"
           v-model.trim="v$.thesisForm.body.$model"
-          style="direction: rtl;"
+          style="direction: rtl"
         ></textarea>
         <p style="direction: rtl">
           <span> {{ v$.thesisForm.body.$model.length }}/400 حرف</span>
@@ -274,8 +274,12 @@ export default {
           ? this.lastThesis?.end_page + 1
           : this.book.start_page;
       }
-      //if user has no book, so this is the first thesis, start pages from the book start page
-      else if (!this.book.userBooks.length && !this.lastThesis) {
+      //if user has no book/ or the book is in the favorites shelf, so this is the first thesis, start pages from the book start page
+      else if (
+        (!this.book.userBooks.length && !this.lastThesis) ||
+        (this.book.userBooks.length &&
+          this.book.userBooks[0].status === "later")
+      ) {
         start = this.book.start_page;
       }
 
