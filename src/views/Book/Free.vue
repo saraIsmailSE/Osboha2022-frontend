@@ -28,9 +28,9 @@
                                 ⚠️علمًا أن بإمكانك اختيار كتب حرة أخرى فقط فور انتهاءك من أحد الكتب ال(3) التي سبق لك
                                 اختيارها. لذلك اختر كتبك بعناية وتأكد من أنك ترغب بقراءتها كيلا تخسر اختياراتك.
                             </h4>
-                            <h2 class="text-center mt-3 mb-3">{{ in_progress_books }}/3</h2>
+                            <h2 class="text-center mt-3 mb-3" v-if="isAuth">{{ in_progress_books }}/3</h2>
 
-                            <div class="row" v-if="can_add_books">
+                            <div class="row" v-if="can_add_books && isAuth">
                                 <div class="col-12">
                                     <router-link :to="{ name: 'book.create' }"
                                         class="col-6 btn btn-primary d-block w-75 mx-auto mb-3">
@@ -49,8 +49,7 @@
 
         <template v-else>
             <div class="d-grid gap-3 d-grid-template-1fr-19">
-                <BookCard v-for="bookInfo in books" :key="bookInfo.id" :cardInfo="bookInfo" 
-                    :isProfile="true" />
+                <BookCard v-for="bookInfo in books" :key="bookInfo.id" :cardInfo="bookInfo" :isProfile="true" />
             </div>
             <div class="text-center mt-3" v-if="books && books.length > 0">
                 <nav aria-label="...">
@@ -147,6 +146,13 @@ export default {
         totalPages() {
             return Math.ceil(this.totalBooks / this.booksPerPage);
         },
+        user() {
+            return this.$store.getters.getUser;
+        },
+
+        isAuth() {
+            return (this.$route.params.user_id == this.user.id)
+        }
     },
 };
 </script>

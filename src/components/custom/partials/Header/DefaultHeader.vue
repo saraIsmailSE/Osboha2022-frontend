@@ -23,9 +23,6 @@
             </div>
           </a>
         </div>
-        <router-link :to="{ name: 'osboha.list' }" class="navbar-brand p-0">
-          <img src="@/assets/images/main/osboha-logo.png" alt="logo" class="" />
-        </router-link>
         <div class="social-media">
           <p class="mb-0 d-flex">
             <i
@@ -68,6 +65,22 @@
                 <span class="visually-hidden">unread messages</span>
               </span>
             </router-link>
+            <!-- <router-link
+              :to="{
+                name: 'chat.index',
+              }"
+              class="d-flex align-items-center justify-content-center ms-2 me-2 position-relative"
+            >
+              <i class="material-symbols-outlined">forum</i>
+              <span
+                v-if="friendRequest.length > 0"
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info"
+              >
+                {{ friendRequest.length }}
+              </span>
+
+            </router-link> -->
+            
             <router-link
               :to="{ name: 'osboha.list' }"
               class="d-flex align-items-center justify-content-center ms-2 me-2"
@@ -141,19 +154,20 @@ export default {
   },
   mounted() {
     // Pusher.logToConsole = true;
-    // const pusher = new Pusher("0098112dc7c6ed8e4777", {
-    //   cluster: "ap2",
+    // var pusher = new Pusher('0098112dc7c6ed8e4777', {
+    //   cluster: 'ap2'
     // });
-    // const channel = pusher.subscribe("notifications-channel");
-    // channel.bind("new-notification", async function (data) {
-    //   if (data) {
-    //     this.notifications =
-    //       await notificationsServices.listUnreadNotification();
-    //     this.un_read_notifications = Object.keys(this.notifications).length;
-    //     console.log(this.notifications);
-    //     helper.toggleToast(data.message, "success");
-    //   }
+
+    // var channel = pusher.subscribe('my-channel');
+    // channel.bind('my-event', function(data) {
+    //   alert(data);
     // });
+    // var privateChannel = pusher.subscribe("message-channel." + 4);
+    // console.log("🚀 privateChannel:", privateChannel)
+    // privateChannel.bind('new-message', function (data) {
+    //   alert(data);
+    // });
+
   },
   methods: {
     logout() {

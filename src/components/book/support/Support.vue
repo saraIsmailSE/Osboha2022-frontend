@@ -80,7 +80,7 @@
                     style="height: 50px"
                   />
                   <template v-else>
-                    <button
+                    <!-- <button
                       class="btn btn-success"
                       @click="handleSupport"
                       v-if="supportMark === 0"
@@ -93,7 +93,7 @@
                       @click="handleSupport(false)"
                     >
                       رفض
-                    </button>
+                    </button> -->
 
                     <!-- <span
                     v-if="supportMark === 0"
@@ -170,6 +170,7 @@ export default {
     };
   },
   created(){
+    console.log("NO SUPPORT"+this.support)
   },
   computed: {
     noSupportPost() {

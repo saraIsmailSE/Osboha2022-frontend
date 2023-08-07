@@ -37,7 +37,7 @@
                   @click="$router.go(-1)"
                   class="d-block mt-3 mb-3 w-75 mx-auto"
                 >
-                  <span>عودة</span>
+                  <span>إنجازات الفريق</span>
                   <span class="align-middle material-symbols-outlined">
                     keyboard_return
                   </span>

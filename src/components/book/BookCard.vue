@@ -295,6 +295,7 @@ export default {
 }
 
 .later-book-off {
-  color: rgb(97, 96, 96);
+  font-variation-settings:
+    'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48
 }
 </style>
