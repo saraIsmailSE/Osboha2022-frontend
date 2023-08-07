@@ -63,7 +63,7 @@
         <span class="item-name">الكتب</span>
       </router-link>
     </li>
-    <li class="nav-item"  v-if="advisorAndAbove || inBooksTeam">
+    <li class="nav-item" v-if="(leaderAndAbove || inBooksTeam)">
       <router-link :class="checkActive('book.free-book') ? 'active nav-link' : 'nav-link'" aria-current="page" :to="{
         name: 'book.free-book',
         params: {
@@ -153,7 +153,7 @@
         </a>
       </li>
       <!-- ###### Control Groups ###### -->
-      <li class="nav-item">
+      <li class="nav-item last-element">
         <router-link :class="checkActive('control.groups') ? 'active nav-link' : 'nav-link'
           " aria-current="page" :to="{
     name: 'control.groups',
@@ -189,6 +189,15 @@ export default {
         "admin",
         "consultant",
         "advisor",
+      ]);
+    },
+    leaderAndAbove() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "consultant",
+        "advisor",
+        'supervisor',
+        'leader'
       ]);
     },
     inBooksTeam() {
@@ -233,3 +242,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.last-element {
+  margin-bottom: 50%;
+}
+</style>
