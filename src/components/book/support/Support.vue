@@ -20,39 +20,23 @@
               <tr class="text-center">
                 <td>
                   <span v-if="noReaction">لا يوجد</span>
-                  <font-awesome-icon
-                    v-else-if="support.reaction.type === 'like'"
-                    :icon="['fas', 'thumbs-up']"
-                    size="xl"
-                    class="text-primary"
-                  />
-                  <img
-                    v-else
-                    :src="support.reaction.media.path"
-                    :alt="support.reaction.type"
-                    class="reaction-img"
-                    height="20"
-                    width="20"
-                  />
+                  <font-awesome-icon v-else-if="support.reaction.type === 'like'" :icon="['fas', 'thumbs-up']" size="xl"
+                    class="text-primary" />
+                  <img v-else :src="support.reaction.media.path" :alt="support.reaction.type" class="reaction-img"
+                    height="20" width="20" />
                 </td>
                 <td>
                   {{ noVote ? "لا يوجد" : support.vote.option }}
                 </td>
                 <td>
-                  <router-link
-                    :to="{
-                      name: 'osboha.post',
-                      params: {
-                        post_id: support.post_id,
-                        user_id: $route.params.ambassador_id,
-                      },
-                    }"
-                    class="d-flex align-items-center justify-content-center"
-                  >
-                    <span
-                      class="material-symbols-outlined"
-                      style="font-size: 1rem"
-                    >
+                  <router-link :to="{
+                    name: 'osboha.post',
+                    params: {
+                      post_id: support.post_id,
+                      user_id: $route.params.ambassador_id,
+                    },
+                  }" class="d-flex align-items-center justify-content-center">
+                    <span class="material-symbols-outlined" style="font-size: 1rem">
                       link
                     </span>
                     عرض
@@ -61,37 +45,17 @@
                 <td>
                   {{ supportMark }}
                 </td>
-                <td
-                  :rowspan="managementRowSpan"
-                  class="align-middle"
-                  v-if="noReaction && noVote && noComments"
-                >
-                  <span class="text-danger-modified font-weight-600"
-                    >لا يوجد دعم بعد</span
-                  >
+                <td :rowspan="managementRowSpan" class="align-middle" v-if="noReaction && noVote && noComments">
+                  <span class="text-danger-modified font-weight-600">لا يوجد دعم بعد</span>
                 </td>
                 <td v-else :rowspan="managementRowSpan" class="align-middle">
-                  <img
-                    v-if="loading"
-                    :src="
-                      require('@/assets/images/page-img/page-load-loader.gif')
-                    "
-                    alt="loader"
-                    style="height: 50px"
-                  />
+                  <img v-if="loading" :src="require('@/assets/images/page-img/page-load-loader.gif')
+                    " alt="loader" style="height: 50px" />
                   <template v-else>
-                    <button
-                      class="btn btn-success"
-                      @click="handleSupport"
-                      v-if="supportMark === 0"
-                    >
+                    <button class="btn btn-success" @click="handleSupport" v-if="(supportMark === 0 && !expired)" >
                       قبول
                     </button>
-                    <button
-                      v-else
-                      class="btn btn-danger-modified"
-                      @click="handleSupport(false)"
-                    >
+                    <button v-else class="btn btn-danger-modified" @click="handleSupport(false)">
                       رفض
                     </button>
 
@@ -118,10 +82,7 @@
               <tr v-for="comment in support.comments" :key="comment.id">
                 <td colspan="4">
                   {{ comment.body }}
-                  <span
-                    v-if="comment.comment_id > 0"
-                    class="rounded-pill badge bg-info px-2 ms-1"
-                    >رد
+                  <span v-if="comment.comment_id > 0" class="rounded-pill badge bg-info px-2 ms-1">رد
                   </span>
                 </td>
               </tr>
@@ -130,10 +91,7 @@
               </tr>
             </tbody>
           </table>
-          <p
-            class="text-danger-modified font-weight-600"
-            style="direction: rtl !important"
-          >
+          <p class="text-danger-modified font-weight-600" style="direction: rtl !important">
             {{ support?.supportError }}
           </p>
         </div>
@@ -153,8 +111,8 @@ export default {
       type: Object,
       required: true,
     },
-    week_id: {
-      type: Number,
+    week: {
+      type: Object,
       required: true,
     },
     supportMark: {
@@ -167,11 +125,23 @@ export default {
     return {
       ambassador_id: this.$route.params.ambassador_id,
       loading: false,
+      date: null,
+      now: null,
+      expired: true,
     };
   },
-  created(){
+  created() {
+    console.log("NO noVote" + this.noVote)
+    const riyadh = new Date().toLocaleString("en-US", { timeZone: "Asia/Riyadh" });
+    this.now = new Date(riyadh);
+    this.date = new Date(this.week.audit_timer);
+    this.expired = this.time < 0;
+
   },
   computed: {
+    time() {
+      return this.date - this.now;
+    },
     noSupportPost() {
       return this.support?.supportError !== null;
     },
@@ -225,9 +195,9 @@ export default {
               let response;
 
               if (status)
-                response = await MarkService.acceptSupport(this.ambassador_id,this.week_id);
+                response = await MarkService.acceptSupport(this.ambassador_id, this.week.id);
               else
-                response = await MarkService.rejectSupport(this.ambassador_id,this.week_id);
+                response = await MarkService.rejectSupport(this.ambassador_id, this.week.id);
 
               if (response.statusCode === 200) {
                 const statusText = status ? "قبول" : "رفض";
@@ -250,6 +220,7 @@ export default {
 .text-danger-modified {
   color: #ff0000;
 }
+
 .font-weight-600 {
   font-weight: 600;
 }

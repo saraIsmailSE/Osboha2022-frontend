@@ -263,10 +263,10 @@ class GroupService {
     }
   }
 
-  async getGroupByType(typeId) {
+  async getGroupByType(type) {
     try {
-      const groups = await api.post("/group/GroupByType", { type_id: typeId });
-      return groups.data;
+      const groups=  await api.get(`/group/group-by-type/${type}`);
+      return groups.data.data;
     } catch (error) {
       return error;
     }
@@ -338,6 +338,18 @@ class GroupService {
       handleError(error);
     }
   }
+  async assignAdministrator(form) {
+    try {
+      const response = await api.post(`/group/assign-administrator`, form, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  
 }
 
 export default new GroupService();

@@ -137,6 +137,11 @@ const authchildRoutes = (prop, mode) => [
     name: prop + ".confirmmail",
     component: () => import("../views/AuthPages/Default/ConfirmMail"),
   },
+  {
+    path: "reset-password/:token",
+    name: prop + ".reset-password",
+    component: () => import("../views/AuthPages/Default/ResetPassword"),
+  },
 ];
 
 const userChildRoute = (prop, mode = false) => [
@@ -405,18 +410,31 @@ const bookChildRoute = (prop, mode = false) => [
   },
 ];
 
-const chatChildRouteD = (prop, mode = false) => [
+const controlChildRoute = (prop, mode = false) => [
   {
-    path: "",
-    name: prop + ".index",
-    meta: { auth: true, name: "ChatIndex" },
-    component: () => import("../views/Chat/draft/Index"),
+    path: "groups",
+    name: prop + ".groups",
+    meta: { auth: true, name: "Control Groups" },
+    component: () => import("../views/OsbohaMain/Control/groups"),
+  },
+  {
+    path: "assign-administrator/",
+    name: prop + ".assign-administrator",
+    meta: { auth: true, name: "Assign Administrator" },
+    component: () => import("../views/OsbohaMain/Control/assignAdministrator"),
+  },
+  {
+    path: "pending-theses/:supervisor_id/",
+    name: prop + ".pending-theses",
+    meta: { auth: true, name: "Assign Administrator" },
+    component: () => import("../views/OsbohaMain/Control/Theses/pending"),
   },
 ];
+
 const chatChildRoute = (prop, mode = false) => [
   {
     path: "",
-    name: prop + ".index-2",
+    name: prop + ".index",
     meta: { auth: true, name: "ChatIndex" },
     component: () => import("../views/Chat/Index"),
   },
@@ -512,11 +530,11 @@ const routes = [
     children: bookChildRoute("book"),
   },
   {
-    path: "/chat-draft",
-    name: "chat-draft",
+    path: "/control",
+    name: "control",
     component: () => import("../layouts/Default"),
     meta: { auth: true },
-    children: chatChildRouteD("chatDraft"),
+    children: controlChildRoute("control"),
   },
   {
     path: "/chat",

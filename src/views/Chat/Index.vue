@@ -1,16 +1,35 @@
 <template>
   <div>
+    <div class="iq-top-navbar mt-2">
+      <nav class="nmt-4 av navbar navbar-expand-lg navbar-light iq-navbar p-lg-0">
+        <div class="container-fluid p-auto">
+          <router-link :to="{ name: 'osboha.list' }" class="navbar-brand p-0">
+            <img src="@/assets/images/main/osboha-logo.png" alt="logo" class="" />
+          </router-link>
+          <div class="social-media">
+            <p class="mb-0 d-flex">
+              <i class="d-flex align-items-center justify-content-center ms-2 me-3 position-relative">
+                <i class="material-symbols-outlined">chat_bubble</i>
+                <span v-if="unreadMessages"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
+                  {{ unreadMessages }}
+                </span>
+              </i>
+              <i class="d-flex align-items-center justify-content-center ms-2 me-1 position-relative">
+                <router-link :to="{ name: 'osboha.list' }" class="material-symbols-outlined">home</router-link>
+              </i>
+
+            </p>
+          </div>
+        </div>
+      </nav>
+    </div>
     <div class="new-room" v-if="addNewRoom">
       <form class="add-room-form" @submit.prevent="createRoom">
         <div class="searchable-dropdown" :class="{ active: showDropdown }">
           <div class="search-input" :class="{ active: showCloseBtn }">
-            <input
-              v-model="addRoomUsername"
-              type="text"
-              placeholder="البحث عن اسم"
-              @focus="showCloseBtn = true"
-              @input="searchUsers"
-            />
+            <input v-model="addRoomUsername" type="text" placeholder="البحث عن اسم" @focus="showCloseBtn = true"
+              @input="searchUsers" />
             <button class="button-cancel" @click="closeSearch">
               <span class="material-symbols-outlined">close</span>
             </button>
@@ -19,22 +38,10 @@
             <div v-if="showEmpty" class="dropdown-list-item">
               <span>لا يوجد نتائج</span>
             </div>
-            <div
-              class="dropdown-list-item text-center justify-content-center"
-              v-if="fetchingUsers"
-            >
-              <img
-                src="@/assets/images/page-img/page-load-loader.gif"
-                alt="loader"
-                style="height: 50px"
-              />
+            <div class="dropdown-list-item text-center justify-content-center" v-if="fetchingUsers">
+              <img src="@/assets/images/page-img/page-load-loader.gif" alt="loader" style="height: 50px" />
             </div>
-            <div
-              class="dropdown-list-item"
-              v-for="user in users"
-              :key="user.id"
-              @click="openNewRoom(user)"
-            >
+            <div class="dropdown-list-item" v-for="user in users" :key="user.id" @click="openNewRoom(user)">
               <div class="user-avatar">
                 {{ user.name?.charAt(0).toUpperCase() }}
               </div>
@@ -46,24 +53,12 @@
         </div>
       </form>
     </div>
-    <vue-advanced-chat
-      dir="ltr"
-      height="calc(100vh - 20px)"
-      :current-user-id="currentUserId"
-      :rooms="rooms"
-      :loading-rooms="roomsLoading"
-      :rooms-loaded="roomsLoaded"
-      :messages="messages"
-      :messages-loaded="messagesLoaded"
-      :show-audio="false"
-      :show-reaction-emojis="false"
-      :message-actions="JSON.stringify(messageActions)"
-      @fetch-messages="fetchMessages($event.detail[0])"
-      @send-message="sendMessage($event.detail[0])"
-      @delete-message="deleteMessage($event.detail[0])"
-      @add-room="addRoom($event.detail[0])"
-      @open-file="openFile($event.detail[0])"
-    />
+    <vue-advanced-chat dir="ltr" height="calc(100vh - 20px)" :current-user-id="currentUserId" :rooms="rooms"
+      :loading-rooms="roomsLoading" :rooms-loaded="roomsLoaded" :messages="messages" :messages-loaded="messagesLoaded"
+      :show-audio="false" :show-reaction-emojis="false" :message-actions="JSON.stringify(messageActions)"
+      @fetch-messages="fetchMessages($event.detail[0])" @send-message="sendMessage($event.detail[0])"
+      @delete-message="deleteMessage($event.detail[0])" @add-room="addRoom($event.detail[0])"
+      @open-file="openFile($event.detail[0])" />
     <!-- @fetch-more-rooms="fetchMoreRooms" -->
   </div>
 </template>
@@ -73,6 +68,8 @@ import { register } from "vue-advanced-chat";
 import helper from "@/utilities/helper";
 import MessageService from "@/API/services/messages.service";
 import UserService from "@/API/services/user.service";
+import { watchEffect } from "vue";
+import Pusher from "pusher-js";
 
 register();
 
@@ -80,9 +77,54 @@ export default {
   mounted() {
     this.loadRooms();
   },
+
+  async created() {
+    this.unreadMessages = await MessageService.unreadMessages();
+
+    // Initialize Pusher
+    const pusher = new Pusher('0098112dc7c6ed8e4777', {
+      cluster: 'ap2',
+      encrypted: true,
+    });
+
+    const channel = pusher.subscribe('rooms-channel.' + this.user.id);
+    // Listen for 'new-message' events
+    channel.bind('new-messages', (response) => {
+      if (response) {
+        this.rooms = response.rooms;
+        this.roomsLoaded = true;
+        this.unreadMessages = response.unreadMessages;
+      }
+
+    });
+
+    watchEffect(() => {
+      // Subscribe to the 'chat' channel
+      if (this.selectedRoom) {
+        if (this.selectedRoom.roomId != this.currentRoomId) {
+          pusher.unsubscribe('single-room-channel.' + this.currentRoomId);
+          this.currentRoomId = this.selectedRoom.roomId;
+        }
+        const channel = pusher.subscribe('single-room-channel.' + this.currentRoomId);
+        // Listen for 'new-message' events
+        channel.bind('new-message', (response) => {
+          if (!this.displayedMessageIds.includes(response.message._id)) {
+            this.messages = [...this.messages, response.message];
+            this.displayedMessageIds.push(response.message._id);
+          }
+        });
+      }
+
+    });
+  },
+
   data() {
     return {
+      unreadMessages: 0,
+      pusher: null,
       addNewRoom: false,
+      currentRoomId: 0,
+      displayedMessageIds: [],
       addRoomUsername: "",
       roomsLoading: false,
       roomsLoaded: false,
@@ -108,172 +150,24 @@ export default {
         //   onlyMe: true,
         // },
       ],
-      // users: [
-      //   {
-      //     name: "Ahmed",
-      //     id: 1,
-      //     profilePicture: "https://i.pravatar.cc/150?img=1",
-      //   },
-      //   {
-      //     name: "Mohamed",
-      //     id: 2,
-      //     profilePicture: "https://i.pravatar.cc/150?img=2",
-      //   },
-      //   {
-      //     name: "Ali",
-      //     id: 3,
-      //     profilePicture: "https://i.pravatar.cc/150?img=3",
-      //   },
-      //   {
-      //     name: "Omar",
-      //     id: 4,
-      //     profilePicture: "https://i.pravatar.cc/150?img=4",
-      //   },
-      //   {
-      //     name: "Khaled",
-      //     id: 5,
-      //     profilePicture: "https://i.pravatar.cc/150?img=5",
-      //   },
-      //   {
-      //     name: "Mahmoud",
-      //     id: 6,
-      //     profilePicture: "https://i.pravatar.cc/150?img=6",
-      //   },
-      //   {
-      //     name: "Hassan",
-      //     id: 7,
-      //     profilePicture: "https://i.pravatar.cc/150?img=7",
-      //   },
-      //   {
-      //     name: "Hussein",
-      //     id: 8,
-      //     profilePicture: "https://i.pravatar.cc/150?img=8",
-      //   },
-      //   {
-      //     name: "Abdullah",
-      //     id: 9,
-      //     profilePicture: "https://i.pravatar.cc/150?img=9",
-      //   },
-      //   {
-      //     name: "Yousef",
-      //     id: 10,
-      //     profilePicture: "https://i.pravatar.cc/150?img=10",
-      //   },
-      //   {
-      //     name: "Yahia",
-      //     id: 11,
-      //     profilePicture: "https://i.pravatar.cc/150?img=11",
-      //   },
-      //   {
-      //     name: "Yasser",
-      //     id: 12,
-      //     profilePicture: "https://i.pravatar.cc/150?img=12",
-      //   },
-      //   {
-      //     name: "Yousef",
-      //     id: 13,
-      //     profilePicture: "https://i.pravatar.cc/150?img=13",
-      //   },
-      //   {
-      //     name: "Yahia",
-      //     id: 14,
-      //     profilePicture: "https://i.pravatar.cc/150?img=14",
-      //   },
-      //   {
-      //     name: "Yasser",
-      //     id: 15,
-      //     profilePicture: "https://i.pravatar.cc/150?img=15",
-      //   },
-      //   {
-      //     name: "Yousef",
-      //     id: 16,
-      //     profilePicture: "https://i.pravatar.cc/150?img=16",
-      //   },
-      //   {
-      //     name: "Yahia",
-      //     id: 17,
-      //     profilePicture: "https://i.pravatar.cc/150?img=17",
-      //   },
-      //   {
-      //     name: "Yasser",
-      //     id: 18,
-      //     profilePicture: "https://i.pravatar.cc/150?img=18",
-      //   },
-      //   {
-      //     name: "Yousef",
-      //     id: 19,
-      //     profilePicture: "https://i.pravatar.cc/150?img=19",
-      //   },
-      //   {
-      //     name: "Yahia",
-      //     id: 20,
-      //     profilePicture: "https://i.pravatar.cc/150?img=20",
-      //   },
-      //   {
-      //     name: "Yasser",
-      //     id: 21,
-      //     profilePicture: "https://i.pravatar.cc/150?img=21",
-      //   },
-      //   {
-      //     name: "Yousef",
-      //     id: 22,
-      //     profilePicture: "https://i.pravatar.cc/150?img=22",
-      //   },
-      //   {
-      //     name: "Yahia",
-      //     id: 23,
-      //     profilePicture: "https://i.pravatar.cc/150?img=23",
-      //   },
-      //   {
-      //     name: "Yasser",
-      //     id: 24,
-      //     profilePicture: "https://i.pravatar.cc/150?img=24",
-      //   },
-      //   {
-      //     name: "Yousef",
-      //     id: 25,
-      //     profilePicture: "https://i.pravatar.cc/150?img=25",
-      //   },
-      //   {
-      //     name: "Yahia",
-      //     id: 26,
-      //     profilePicture: "https://i.pravatar.cc/150?img=26",
-      //   },
-      //   {
-      //     name: "Yasser",
-      //     id: 27,
-      //     profilePicture: "https://i.pravatar.cc/150?img=27",
-      //   },
-      //   {
-      //     name: "Yousef",
-      //     id: 28,
-      //     profilePicture: "https://i.pravatar.cc/150?img=28",
-      //   },
-      //   {
-      //     name: "Yahia",
-      //     id: 29,
-      //     profilePicture: "https://i.pravatar.cc/150?img=29",
-      //   },
-      //   {
-      //     name: "Yasser",
-      //     id: 30,
-      //     profilePicture: "https://i.pravatar.cc/150?img=30",
-      //   },
-      // ],
       users: [],
       delayTimer: null,
       showDropdown: false,
       showCloseBtn: false,
       showEmpty: false,
       fetchingUsers: false,
+      options: null,
     };
   },
   computed: {
     currentUserId() {
       return this.$store.getters.getUser.id.toString();
     },
-  },
+    user() {
+      return this.$store.getters.getUser;
+    },
 
+  },
   methods: {
     resetRooms() {
       this.loadingRooms = true;
@@ -326,6 +220,7 @@ export default {
     },
 
     fetchMessages({ room, options = {} }) {
+      this.options = options
       if (options.reset) {
         this.resetMessages();
       }
@@ -351,6 +246,7 @@ export default {
           if (options.reset) this.messages = [];
 
           response.data?.messages?.forEach((message) => {
+            this.displayedMessageIds.push(message._id);
             this.messages.unshift(message);
           });
 
@@ -378,10 +274,10 @@ export default {
       try {
         const newMessage = this.selectedRoom.isFake
           ? {
-              ...message,
-              roomId: null,
-              receiver_id: this.selectedRoom.users[1]._id,
-            }
+            ...message,
+            roomId: null,
+            receiver_id: this.selectedRoom.users[1]._id,
+          }
           : message;
 
         const response = await MessageService.create(newMessage);
@@ -399,7 +295,7 @@ export default {
 
           return;
         }
-        this.messages = [...this.messages, response.data?.message];
+        //this.messages = [...this.messages, response.data?.message];
 
         //update last message in rooms
         const roomIndex = this.rooms.findIndex(
@@ -414,6 +310,7 @@ export default {
         this.rooms[roomIndex] = newRoom;
         this.rooms = [...this.rooms];
         this.selectedRoom = newRoom;
+
       } catch (error) {
         helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
       }
@@ -464,10 +361,6 @@ export default {
       try {
         const response = await UserService.searchUsers(this.addRoomUsername);
         this.users = response.data;
-        console.log(
-          "🚀 ~ file: index.vue:395 ~ searchUsers ~ data:",
-          response.data
-        );
       } catch (error) {
         helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
       } finally {
@@ -492,18 +385,18 @@ export default {
       const room =
         this.rooms?.length > 0
           ? this.rooms.find((room) => {
-              //check first user
-              if (room.users[0]._id === user.id) {
-                return true;
-              }
+            //check first user
+            if (room.users[0]._id === user.id) {
+              return true;
+            }
 
-              //check second user
-              if (room.users[1]._id === user.id) {
-                return true;
-              }
+            //check second user
+            if (room.users[1]._id === user.id) {
+              return true;
+            }
 
-              return false;
-            })
+            return false;
+          })
           : null;
 
       this.addNewRoom = false;

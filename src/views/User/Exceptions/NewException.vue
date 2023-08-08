@@ -29,10 +29,12 @@
               <input :disabled="message" type="date" class="form-control mt-2" id="exceptionEndDate"
                 v-model="v$.exceptionForm.end_date.$model" name="end_date" />
               <template v-if="v$.exceptionForm.end_date.$error">
-                <small class="d-block text-start mt-1" style="color: red" v-if="v$.exceptionForm.end_date.required.$invalid">
+                <small class="d-block text-start mt-1" style="color: red"
+                  v-if="v$.exceptionForm.end_date.required.$invalid">
                   * يرجى اختيار تاريخ انتهاء الاجازة
                 </small>
-                <small class="d-block text-start mt-1" style="color: red" v-if="v$.exceptionForm.end_date.date_format.$invalid">
+                <small class="d-block text-start mt-1" style="color: red"
+                  v-if="v$.exceptionForm.end_date.date_format.$invalid">
                   * يرجى اختيار تاريخ انتهاء الاجازة بتاريخ لا يقل عن اليوم
                 </small>
               </template>
@@ -56,8 +58,8 @@
                 </select>
               </div>
               <small class="d-block text-start mt-1" style="color: red" v-if="v$.exceptionForm.desired_duration.$error">
-                  * يرجى اختيار مدة الاجازة
-                </small>
+                * يرجى اختيار مدة الاجازة
+              </small>
             </div>
             <div class="form-group" v-if="exceptionForm.type_id == 3 || exceptionForm.type_id == 4">
               <h4>
@@ -150,7 +152,7 @@ export default {
         desired_duration: '',
         exam_media: [],
       },
-      no_exam_media: false,
+      no_exam_media: true,
       exceptionTypes: null,
       message: null,
     };

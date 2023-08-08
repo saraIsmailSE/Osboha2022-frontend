@@ -195,7 +195,6 @@ export default {
     await this.getBook(this.$route.params.book_id);
     await this.getTheses(this.page);
     window.addEventListener('popstate', this.popstateEventAction);
-    console.log("book:   " + this.book)
 
   },
   data() {
@@ -236,7 +235,7 @@ export default {
       //check if free book 
       if (response.data.book.type.type == 'free') {
         //check if auth user is the owner
-        if (response.data.book_owner == this.user.id) {
+        if (response.data.book_owner == this.user.id) {          
           // Check rules for free book.
           this.eligibleToWriteThesis = await userBookService.eligibleToWriteThesis(this.user.id);
         }
