@@ -22,7 +22,7 @@
           <Support v-if="mark"
             :support="support"
             :supportMark="mark?.support"
-            :week_id="mark.week_id"
+            :week="week"
             @updateSupportMark="updateSupportMark"
           />
 

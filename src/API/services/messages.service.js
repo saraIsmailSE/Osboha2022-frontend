@@ -70,6 +70,15 @@ class MessageService {
       handleError();
     }
   }
+
+  async unreadMessages() {
+    try {
+      const response = await api.get(`/messages/unread-messages/`);
+      return response.data;
+    } catch (error) {
+      handleError();
+    }
+  }
 }
 
 export default new MessageService();

@@ -1,5 +1,29 @@
 <template>
   <div>
+    <div class="iq-top-navbar mt-2">
+      <nav class="nmt-4 av navbar navbar-expand-lg navbar-light iq-navbar p-lg-0">
+        <div class="container-fluid p-auto">
+          <router-link :to="{ name: 'osboha.list' }" class="navbar-brand p-0">
+            <img src="@/assets/images/main/osboha-logo.png" alt="logo" class="" />
+          </router-link>
+          <div class="social-media">
+            <p class="mb-0 d-flex">
+              <i class="d-flex align-items-center justify-content-center ms-2 me-3 position-relative">
+                <i class="material-symbols-outlined">chat_bubble</i>
+                <span v-if="unreadMessages"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
+                  {{ unreadMessages }}
+                </span>
+              </i>
+              <i class="d-flex align-items-center justify-content-center ms-2 me-1 position-relative">
+                <router-link :to="{ name: 'osboha.list' }" class="material-symbols-outlined">home</router-link>
+              </i>
+
+            </p>
+          </div>
+        </div>
+      </nav>
+    </div>
     <div class="new-room" v-if="addNewRoom">
       <form class="add-room-form" @submit.prevent="createRoom">
         <div class="searchable-dropdown" :class="{ active: showDropdown }">
@@ -52,11 +76,55 @@ register();
 export default {
   mounted() {
     this.loadRooms();
-
   },
+
+  async created() {
+    this.unreadMessages = await MessageService.unreadMessages();
+
+    // Initialize Pusher
+    const pusher = new Pusher('0098112dc7c6ed8e4777', {
+      cluster: 'ap2',
+      encrypted: true,
+    });
+
+    const channel = pusher.subscribe('rooms-channel.' + this.user.id);
+    // Listen for 'new-message' events
+    channel.bind('new-messages', (response) => {
+      if (response) {
+        this.rooms = response.rooms;
+        this.roomsLoaded = true;
+        this.unreadMessages = response.unreadMessages;
+      }
+
+    });
+
+    watchEffect(() => {
+      // Subscribe to the 'chat' channel
+      if (this.selectedRoom) {
+        if (this.selectedRoom.roomId != this.currentRoomId) {
+          pusher.unsubscribe('single-room-channel.' + this.currentRoomId);
+          this.currentRoomId = this.selectedRoom.roomId;
+        }
+        const channel = pusher.subscribe('single-room-channel.' + this.currentRoomId);
+        // Listen for 'new-message' events
+        channel.bind('new-message', (response) => {
+          if (!this.displayedMessageIds.includes(response.message._id)) {
+            this.messages = [...this.messages, response.message];
+            this.displayedMessageIds.push(response.message._id);
+          }
+        });
+      }
+
+    });
+  },
+
   data() {
     return {
+      unreadMessages: 0,
+      pusher: null,
       addNewRoom: false,
+      currentRoomId: 0,
+      displayedMessageIds: [],
       addRoomUsername: "",
       roomsLoading: false,
       roomsLoaded: false,
@@ -88,29 +156,18 @@ export default {
       showCloseBtn: false,
       showEmpty: false,
       fetchingUsers: false,
-      pusher: null,
+      options: null,
     };
   },
   computed: {
     currentUserId() {
       return this.$store.getters.getUser.id.toString();
     },
+    user() {
+      return this.$store.getters.getUser;
+    },
+
   },
-  created() {
-    Pusher.logToConsole = true;
-    this.pusher = new Pusher('0098112dc7c6ed8e4777', {
-      cluster: 'ap2'
-    });
-
-
-
-    var privateChannel = this.pusher.subscribe("message-channel." + 4);
-    console.log("🚀 privateChannel:", privateChannel)
-    privateChannel.bind('new-message', function (data) {
-      alert(data);
-    });
-  },
-
   methods: {
     resetRooms() {
       this.loadingRooms = true;
@@ -163,6 +220,7 @@ export default {
     },
 
     fetchMessages({ room, options = {} }) {
+      this.options = options
       if (options.reset) {
         this.resetMessages();
       }
@@ -188,6 +246,7 @@ export default {
           if (options.reset) this.messages = [];
 
           response.data?.messages?.forEach((message) => {
+            this.displayedMessageIds.push(message._id);
             this.messages.unshift(message);
           });
 
@@ -236,7 +295,7 @@ export default {
 
           return;
         }
-        this.messages = [...this.messages, response.data?.message];
+        //this.messages = [...this.messages, response.data?.message];
 
         //update last message in rooms
         const roomIndex = this.rooms.findIndex(
@@ -251,6 +310,7 @@ export default {
         this.rooms[roomIndex] = newRoom;
         this.rooms = [...this.rooms];
         this.selectedRoom = newRoom;
+
       } catch (error) {
         helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
       }
@@ -301,10 +361,6 @@ export default {
       try {
         const response = await UserService.searchUsers(this.addRoomUsername);
         this.users = response.data;
-        console.log(
-          "🚀 ~ file: index.vue:395 ~ searchUsers ~ data:",
-          response.data
-        );
       } catch (error) {
         helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
       } finally {
