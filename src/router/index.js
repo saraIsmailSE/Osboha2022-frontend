@@ -418,10 +418,23 @@ const controlChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMain/Control/groups"),
   },
   {
+    path: "transfer-ambassador",
+    name: prop + ".transfer-ambassador",
+    meta: { auth: true, name: "Aransfer Ambassador" },
+    component: () => import("../views/OsbohaMain/Control/Ambassador/transfer"),
+  },
+  {
     path: "assign-administrator/",
     name: prop + ".assign-administrator",
     meta: { auth: true, name: "Assign Administrator" },
     component: () => import("../views/OsbohaMain/Control/assignAdministrator"),
+  },
+  {
+    path: "supervisors-swap/",
+    name: prop + ".supervisorsSwap",
+    meta: { auth: true, name: "Supervisors Swap" },
+    component: () =>
+      import("../views/OsbohaMain/Control/Supervisors/supervisorsSwap"),
   },
   {
     path: "pending-theses/:supervisor_id/",

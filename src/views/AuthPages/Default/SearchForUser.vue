@@ -16,7 +16,10 @@
             </button>
         </form>
         <div class="col-sm-12" v-if="user">
-            <InfoCard :user="user" :followup_team="followup_team" :roles="roles" />
+            <InfoCard :user="user" :followup_team="followup_team" :roles="roles" :in_charge_of="in_charge_of" />
+        </div>
+        <div class="col-sm-12 text-center" v-if="loader">
+            <img :src="require('@/assets/images/page-img/page-load-loader.gif')" alt="loader" style="height: 100px" />
         </div>
         <div class="col-sm-12" v-if="message">
             <iq-card class="iq-card">
@@ -50,7 +53,9 @@ export default {
             user: null,
             groups: null,
             roles: null,
+            in_charge_of: null,
             followup_team: null,
+            loader: false,
             form: {
                 email: '',
             },
@@ -69,6 +74,7 @@ export default {
     },
     methods: {
         async getUser() {
+            this.loader = true;
             this.user = null;
             this.groups = null;
             this.roles = null;
@@ -78,16 +84,18 @@ export default {
             if (!this.v$.form.$invalid) {
 
                 const response = await userService.searchByEmail(this.form.email);
-                console.log(response)
                 if (response) {
                     this.user = response.user;
                     this.groups = response.groups;
                     this.roles = response.roles
                     this.followup_team = response.followup_team
+                    this.in_charge_of = response.in_charge_of
                 }
                 else {
                     this.message = 'المستخدم غير موجود';
                 }
+                this.loader = false;
+
             }
         },
         // checkActiveQuestions(item, active) {

@@ -52,7 +52,7 @@
                   <img v-if="loading" :src="require('@/assets/images/page-img/page-load-loader.gif')
                     " alt="loader" style="height: 50px" />
                   <template v-else>
-                    <button class="btn btn-success" @click="handleSupport" v-if="(supportMark === 0 && !expired)" >
+                    <button class="btn btn-success" @click="handleSupport" v-if="(supportMark === 0)" >
                       قبول
                     </button>
                     <button v-else class="btn btn-danger-modified" @click="handleSupport(false)">
