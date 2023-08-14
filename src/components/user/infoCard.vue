@@ -14,11 +14,13 @@
                         <p class="text-center mb-4" style="direction: rtl">
                             فريق المتابعة
                             <span class="mx-2">|</span>
-                            <router-link class="text-center" :to="{
+                            <router-link v-if="followup_team" class="text-center" :to="{
                                 name: 'group.group-detail',
                                 params: { group_id: followup_team.group.id },
                             }">
                                 {{ followup_team.group.name }}</router-link>
+                            <span v-else class="mx-2">لا يوجد</span>
+
                         </p>
                         <div class="social-links mt-1 mb-2">
                             <ul class="social-data-block align-items-center justify-content-center list-inline p-0 m-0"
@@ -43,9 +45,27 @@
                                     <span class="material-symbols-outlined align-middle">
                                         person_pin
                                     </span>
-                                    المسؤول عنه: {{ user.parent.name }}
+                                    المسؤول عنه:
+                                    <span v-if="user.parent_id">{{ user.parent.name }}</span>
+                                    <span v-else>لا يوجد</span>
                                 </h3>
                             </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-12 p-1">
+                                <h3 class="mb-2 text-start" style="direction: rtl">
+                                    <span class="material-symbols-outlined align-middle">
+                                        sensor_occupied
+                                    </span>
+                                    المسؤول عنهم:
+                                </h3>
+                                <ul v-if="in_charge_of.length>0">
+                                    <li style="direction: rtl" class="text-start h5" v-for="user in in_charge_of"
+                                        :key="user.id">{{ user.name }}</li>
+                                </ul>
+                                <h4 v-else>لا يوجد</h4>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -73,6 +93,10 @@ export default {
             required: true,
         },
         roles: {
+            type: [Object],
+            required: true,
+        },
+        in_charge_of: {
             type: [Object],
             required: true,
         }

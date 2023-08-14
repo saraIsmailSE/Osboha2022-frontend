@@ -6,7 +6,7 @@
             </div>
             <div class="iq-card-body p-4">
                 <div class="image-block text-center">
-                    <img src="@/assets/images/main/upgrade-user.png" class="img-fluid rounded w-75" alt="blog-img" />
+                    <img src="@/assets/images/main/assign-administrator.png" class="img-fluid rounded w-75" alt="blog-img" />
                 </div>
             </div>
             <div class="col-12 bg-white pt-2">

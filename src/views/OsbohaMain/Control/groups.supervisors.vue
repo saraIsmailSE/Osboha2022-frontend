@@ -73,9 +73,9 @@
 
             <!-- ###### SWAP SUPERVISORS ###### -->
 
-            <!-- <div class="col-6 col-md-6 col-lg-6">
+            <div class="col-6 col-md-6 col-lg-6">
                 <div class="card">
-                    <router-link :to="{ name: 'roles.changeAdvisingTeam', }">
+                    <router-link :to="{ name: 'control.supervisorsSwap', }">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-center">
                                 <div class="border rounded d-flex align-items-center justify-content-center">
@@ -86,14 +86,14 @@
                             </div>
                             <div class="mt-2">
                                 <h3 class="mb-0 text-center">
-                                    تبديل مراقب
+                                    تبديل مراقبين
                                 </h3>
                             </div>
                         </div>
                     </router-link>
 
                 </div>
-            </div> -->
+            </div>
 
             <!-- ###### DELETE SUPERVISOR ###### -->
             <!-- <div class="col-6 col-md-6 col-lg-6">
