@@ -25,9 +25,7 @@
 
       <div :class="`dropdown-menu dropdown-menu-right ${show ? 'show' : ''}`" aria-labelledby="dropdownMenuButton"
         style="">
-        <router-link 
-          v-if="groupType == 'فريق متابعة'"
-          class="dropdown-item d-flex align-items-center" :to="{
+        <router-link v-if="groupType == 'فريق متابعة'" class="dropdown-item d-flex align-items-center" :to="{
           name: 'group.requestAmbassadors',
           params: { group_id: group_id },
         }">
@@ -46,7 +44,7 @@
           </span>
           اضافه عضو
         </router-link>
-        <router-link v-if="isAdmin" class="dropdown-item d-flex align-items-center" :to="{
+        <router-link v-if="isAdmin || isConsultant" class="dropdown-item d-flex align-items-center" :to="{
           name: 'group.update',
           params: { group_id: group_id },
         }">
@@ -64,7 +62,8 @@
           </span>
           تبديل القائد
         </router-link> -->
-        <a role="button" v-if="isAdmin" class="dropdown-item d-flex align-items-center" @click="deleteGroup(group_id)" >
+        <a role="button" v-if="isAdmin || isConsultant" class="dropdown-item d-flex align-items-center"
+          @click="deleteGroup(group_id)">
           <span class="material-symbols-outlined me-2 md-18">
             delete
           </span>
@@ -95,7 +94,7 @@ export default {
       type: [Object],
       required: true,
     },
-    groupType:{
+    groupType: {
       type: [String],
       required: true,
     }
@@ -158,7 +157,9 @@ export default {
     isAdmin() {
       return UserInfoService.hasRole(this.user, "admin");
     },
-
+    isConsultant() {
+      return UserInfoService.hasRole(this.user, "consultant");
+    },
   },
 };
 </script>

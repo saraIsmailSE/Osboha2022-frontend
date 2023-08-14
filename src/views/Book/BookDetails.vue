@@ -270,7 +270,6 @@ export default {
     await this.getBook(this.$route.params.book_id);
     await this.getTheses(this.page);
     window.addEventListener("popstate", this.popstateEventAction);
-    console.log("book:   " + this.book);
   },
   data() {
     return {

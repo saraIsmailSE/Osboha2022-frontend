@@ -174,6 +174,32 @@ class AuditMarks {
     }
   }
 
+  
+  /**
+  * Get Pending Theses.
+  * @param supervisor_id
+  * @return response
+  */
+  async   pendingTheses(supervisor_id) {
+    try {
+      const response = await api.get(`/${this.prefix}/pending-theses/${supervisor_id}`)
+        .catch((error) => { // error is handled in catch block
+          if (error.response) {
+            handelErrors(error.response.status)
+
+          } else if (error.request) { // The request was made but no response was received
+            console.log(error.request);
+          } else {// Error on setting up the request
+            console.log('Error', error.message);
+          }
+        })
+      return response.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
+
 }
 
 export default new AuditMarks();

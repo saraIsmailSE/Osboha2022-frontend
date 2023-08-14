@@ -30,10 +30,10 @@ class UserBooks {
    */
   async eligibleToWriteThesis(user_id) {
     try {
-      const books = await api.get(
+      const response = await api.get(
         `user-books/eligible-to-write-thesis/${user_id}`
       );
-      return books.data.data;
+      return response.data.data;
     } catch (error) {
       return error;
     }

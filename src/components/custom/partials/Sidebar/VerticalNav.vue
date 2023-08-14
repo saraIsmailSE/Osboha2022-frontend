@@ -63,7 +63,7 @@
         <span class="item-name">الكتب</span>
       </router-link>
     </li>
-    <li class="nav-item"  v-if="advisorAndAbove || inBooksTeam">
+    <li class="nav-item" v-if="(leaderAndAbove || inBooksTeam)">
       <router-link :class="checkActive('book.free-book') ? 'active nav-link' : 'nav-link'" aria-current="page" :to="{
         name: 'book.free-book',
         params: {
@@ -118,6 +118,19 @@
       </router-link>
     </li>
 
+    <li class="nav-item" v-if="isSupervisor">
+      <router-link :class="checkActive('control.pending-theses') ? 'active nav-link' : 'nav-link'
+        " aria-current="page" :to="{
+    name: 'control.pending-theses',
+    params: {
+      supervisor_id: user.id,
+    },
+  }">
+        <i class="icon material-symbols-outlined"> rule </i>
+        <span class="item-name">لم يعتمد</span>
+      </router-link>
+    </li>
+
     <!-- ###### Advisor Audit ###### -->
     <li class="nav-item" v-if="isAdvisor">
       <router-link :class="checkActive('group.AdvisorAudit') ? 'active nav-link' : 'nav-link'
@@ -139,47 +152,17 @@
           <span class="mini-icon" data-bs-toggle="tooltip" title="Social" data-bs-placement="right">-</span>
         </a>
       </li>
-      <!-- ###### List All Groups ###### -->
-      <li class="nav-item">
-        <router-link :class="checkActive('osboha.groupsList') ? 'active nav-link' : 'nav-link'
+      <!-- ###### Control Groups ###### -->
+      <li class="nav-item last-element">
+        <router-link :class="checkActive('control.groups') ? 'active nav-link' : 'nav-link'
           " aria-current="page" :to="{
-    name: 'osboha.groupsList',
+    name: 'control.groups',
   }">
           <i class="icon material-symbols-outlined"> list_alt </i>
-          <span class="item-name">عرض المجموعات</span>
+          <span class="item-name">التحكم بالمجموعات</span>
         </router-link>
       </li>
 
-      <!-- ###### Add Group ###### -->
-      <li class="nav-item">
-        <router-link :class="checkActive('group.addGroup') ? 'active nav-link' : 'nav-link'
-          " aria-current="page" :to="{
-    name: 'group.addGroup',
-  }">
-          <i class="icon material-symbols-outlined"> list_alt_add </i>
-          <span class="item-name">اضافة مجموعة</span>
-        </router-link>
-      </li>
-      <!-- ###### Asign Roles ###### -->
-      <li class="nav-item">
-        <router-link :class="checkActive('roles.assignRole') ? 'active nav-link' : 'nav-link'
-          " aria-current="page" :to="{
-    name: 'roles.assignRole',
-  }">
-          <i class="icon material-symbols-outlined"> assignment_ind </i>
-          <span class="item-name">ترقية </span>
-        </router-link>
-      </li>
-      <!-- ###### Asign Roles ###### -->
-      <li class="nav-item mb-5">
-        <router-link :class="checkActive('roles.changeAdvisingTeam') ? 'active nav-link' : 'nav-link'
-          " aria-current="page" :to="{
-    name: 'roles.changeAdvisingTeam',
-  }">
-          <i class="icon material-symbols-outlined"> swap_horizontal_circle </i>
-          <span class="item-name">نقل مراقب </span>
-        </router-link>
-      </li>
     </template>
   </ul>
   <!-- Sidebar Menu End -->
@@ -206,6 +189,15 @@ export default {
         "admin",
         "consultant",
         "advisor",
+      ]);
+    },
+    leaderAndAbove() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "consultant",
+        "advisor",
+        'supervisor',
+        'leader'
       ]);
     },
     inBooksTeam() {
@@ -250,3 +242,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.last-element {
+  margin-bottom: 50%;
+}
+</style>

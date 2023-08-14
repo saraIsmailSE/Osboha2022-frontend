@@ -9,6 +9,10 @@
             <h2 class="mb-2 text-center">تفقد بريدك الالكتروني</h2>
             <p class="text-center">قم بتاكيد بريدك الالكتروني لتستطيع استخذام الموقع</p>
 
+            <div class="alert alert-warning w-75 m-auto" role="alert">
+              الايميل المسجل به: {{ user.email }}
+            </div>
+
             <div class="d-inline-block w-100 text-center">
               <h4 class="text-center" style="color:red;" v-if="message">تم الارسال</h4>
               <button type="submit" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto" @click="sendMail">
@@ -17,7 +21,7 @@
             </div>
             <h4 class="p-2 text-center text-danger">
               اذا كنت تواجه مشكلة في تأكيد بريدك الالكتروني الحالي يمكن إعادة تعيينه من
-              <router-link :to="{name: 'auth.reset-email'}">
+              <router-link :to="{ name: 'auth.reset-email' }">
                 هنا
               </router-link>
             </h4>

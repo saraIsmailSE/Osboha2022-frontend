@@ -3,11 +3,7 @@
     <div class="row no-gutters">
       <div class="col-sm-12 text-center">
         <div class="iq-error position-relative mt-5">
-          <img
-            src="@/assets/images/main/no-team.png"
-            class="img-fluid iq-error-img"
-            alt="403"
-          />
+          <img src="@/assets/images/main/no-team.png" class="img-fluid iq-error-img" alt="403" />
           <div>
             <h2 class="mb-2 text-center">حتى اللحظة لم يتم توزيعك لفريق</h2>
             <h5 class="text-center m-auto w-75">
@@ -16,11 +12,11 @@
               <br />
               ❤️ لن نتأخر ... كن بالقرب
             </h5>
-            <a
-              href="javascript:void(0);"
-              class="d-flex align-items-center m-3"
-              @click="logout"
-            >
+
+            <div class="alert alert-warning w-75 m-auto mt-3" role="alert">
+              الايميل المسجل به: {{ user.email }}
+            </div>
+            <a href="javascript:void(0);" class="d-flex align-items-center m-3" @click="logout">
               <i class="material-symbols-outlined">logout</i>
               <span class="mobile-text d-lg-none ms-3">تسجيل خروج</span>
             </a>
@@ -41,5 +37,11 @@ export default {
       this.$store.dispatch("logout");
     },
   },
+  computed: {
+    user() {
+      return this.$store.getters.getUser;
+    },
+  }
+
 };
 </script>

@@ -22,9 +22,6 @@
               اضافة مجموعة
             </router-link>
 
-            <div class="col-sm-12 text-center" v-if="loading">
-              <img :src="require('@/assets/images/page-img/page-load-loader.gif')" alt="loader" style="height: 100px" />
-            </div>
 
             <div class="table-responsive" v-if="groups && groups.length > 0">
               <table id="datatable" class="table table-striped table-bordered">
@@ -78,6 +75,11 @@
                 </span>
               </h4>
             </div>
+
+            <div class="col-sm-12 text-center" v-if="loading">
+              <img :src="require('@/assets/images/page-img/page-load-loader.gif')" alt="loader" style="height: 100px" />
+            </div>
+
           </template>
         </iq-card>
 
@@ -175,12 +177,12 @@ export default {
       }
       if (this.searchModel != '') {
         this.page = 1;
-        this.groups=[]
+        this.groups = []
       }
 
       this.pendingRequest = true;
       this.loading = true;
-      this.emptyMessage=""
+      this.emptyMessage = ""
       try {
         let response;
         response = await GroupService.getAll(this.searchModel,

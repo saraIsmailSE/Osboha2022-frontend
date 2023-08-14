@@ -3,7 +3,7 @@
         <div class="col-sm-12">
             <div class="card position-relative inner-page-bg bg-primary" style="height: 150px">
                 <div class="inner-page-title">
-                    <h3 class="text-white">البحث عن مستخدم</h3>
+                    <h3 class="text-white">البحث عن المستخدمين</h3>
                 </div>
             </div>
         </div>
@@ -16,16 +16,18 @@
             </button>
         </form>
         <div class="col-sm-12" v-if="user">
-            <InfoCard :user="user"  :followup_team="followup_team"/>
+            <InfoCard :user="user" :followup_team="followup_team" :roles="roles" :in_charge_of="in_charge_of" />
+        </div>
+        <div class="col-sm-12 text-center" v-if="loader">
+            <img :src="require('@/assets/images/page-img/page-load-loader.gif')" alt="loader" style="height: 100px" />
         </div>
         <div class="col-sm-12" v-if="message">
             <iq-card class="iq-card">
+                <h3 class="text-center mt-2">{{ message }}</h3>
                 <div class="iq-card-body p-0">
-                    <div class="image-block text-center">
-                        <!-- <img src="@/assets/images/no-E.png" class="img-fluid rounded w-50" alt="blog-img"> -->
+                    <div class="image-block text-center mt-3">
+                        <img src="@/assets/images/main/reader.png" class="img-fluid rounded w-75" alt="blog-img">
                     </div>
-
-                    <h4 class="text-center mt-3 mb-3">{{message}}</h4>
                 </div>
             </iq-card>
         </div>
@@ -35,7 +37,7 @@
 import InfoCard from "@/components/user/infoCard";
 import userService from "@/API/services/user.service";
 import useVuelidate from '@vuelidate/core'
-import { required, email, minLength } from '@vuelidate/validators'
+import { required, email } from '@vuelidate/validators'
 
 
 export default {
@@ -51,7 +53,9 @@ export default {
             user: null,
             groups: null,
             roles: null,
-            followup_team:null,
+            in_charge_of: null,
+            followup_team: null,
+            loader: false,
             form: {
                 email: '',
             },
@@ -70,25 +74,28 @@ export default {
     },
     methods: {
         async getUser() {
+            this.loader = true;
             this.user = null;
             this.groups = null;
             this.roles = null;
-            this.followup_team=null;
-            this.message=''
+            this.followup_team = null;
+            this.message = ''
             this.v$.$touch()
             if (!this.v$.form.$invalid) {
 
                 const response = await userService.searchByEmail(this.form.email);
-                console.log(response)
                 if (response) {
                     this.user = response.user;
                     this.groups = response.groups;
                     this.roles = response.roles
-                    this.followup_team=response.followup_team
+                    this.followup_team = response.followup_team
+                    this.in_charge_of = response.in_charge_of
                 }
                 else {
-                    this.message='المستخدم غير موجود';
+                    this.message = 'المستخدم غير موجود';
                 }
+                this.loader = false;
+
             }
         },
         // checkActiveQuestions(item, active) {
