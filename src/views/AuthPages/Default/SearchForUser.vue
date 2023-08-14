@@ -37,7 +37,7 @@
 import InfoCard from "@/components/user/infoCard";
 import userService from "@/API/services/user.service";
 import useVuelidate from '@vuelidate/core'
-import { required, email, minLength } from '@vuelidate/validators'
+import { required, email } from '@vuelidate/validators'
 
 
 export default {
