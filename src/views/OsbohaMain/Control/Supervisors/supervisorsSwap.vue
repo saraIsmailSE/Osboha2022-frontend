@@ -2,7 +2,7 @@
     <div class="col-sm-12 mt-3">
         <iq-card class="iq-card">
             <div class="iq-card-header-toolbar text-center align-items-center mx-auto">
-                <h1 class="text-center mt-3">تبديل القادة بين مراقبين</h1>
+                <h1 class="text-center mt-3">تبديل المراقبين</h1>
                 <h4 class="text-center mt-1 mb-3">في التوجيه نفسه</h4>
             </div>
             <div class="iq-card-body p-4">
@@ -25,6 +25,7 @@
                             <option value="" selected>اختر نوع الاجراء ...</option>
                             <option value="newSupervisor_currentToLeader">مراقب جديد - الحالي إلى قائد</option>
                             <option value="newSupervisor_currentToAmbassador">مراقب جديد - الحالي إلى سفير</option>
+                            <option value="newSupervisor_currentTo_is_hold">مراقب جديد - الحالي إلى منسحب</option>
                             <option value="supervisorsSwap">تبديل بين مراقبين</option>
                         </select>
                     </div>
@@ -61,6 +62,21 @@
                             </template>
                         </div>
 
+                        <div class="form-group" v-if="newSupervisor_currentToAmbassador || newSupervisor_currentTo_is_hold">
+                            <!-- ########## New Leader  => if newSupervisor_currentToAmbassador ########## -->
+                            <label for="newLeader">القائد الجديد</label>
+                            <input v-model="v$.form.newLeader.$model" type="email" class="form-control mb-0" id="newLeader"
+                                placeholder="ادخل بريد القائد الجديد" />
+                            <template v-if="v$.form.newLeader.$error">
+                                <small style="color: red" v-if="v$.form.newLeader.required.$invalid">البريد الالكتروني
+                                    القائد الجديد
+                                    مطلوب</small>
+                                <small style="color: red" v-if="v$.form.newLeader.email.$invalid">البريد الالكتروني
+                                    القائد الجديد غير
+                                    صحيح</small>
+                            </template>
+                        </div>
+
                         <div class="form-group text-center" v-if="message">
                             <small style="color: red">
                                 {{ message }}
@@ -84,7 +100,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import { required, email } from "@vuelidate/validators";
+import { required, email, requiredIf } from "@vuelidate/validators";
 import RolesService from "@/API/services/roles.service";
 
 export default {
@@ -98,6 +114,7 @@ export default {
             form: {
                 supervisor1: "",
                 supervisor2: '',
+                newLeader: '',
             },
             message: "",
             formOption: "",
@@ -112,6 +129,13 @@ export default {
             form: {
                 supervisor1: { required, email },
                 supervisor2: { required, email },
+                newLeader: {
+                    required: requiredIf(function () {
+                        return (this.newSupervisor_currentToAmbassador || this.newSupervisor_currentTo_is_hold ) ;
+                    }),
+                    email
+                },
+
             },
         };
     },
@@ -123,6 +147,7 @@ export default {
                     this.supervisorsSwap = true;
                     this.newSupervisor_currentToAmbassador = false;
                     this.newSupervisor_currentToLeader = false;
+                    this.newSupervisor_currentTo_is_hold = false;
                     this.resetForm();
                     break;
 
@@ -130,13 +155,23 @@ export default {
                     this.supervisorsSwap = false;
                     this.newSupervisor_currentToAmbassador = true;
                     this.newSupervisor_currentToLeader = false;
+                    this.newSupervisor_currentTo_is_hold = false;
                     this.resetForm();
                     break;
                 case "newSupervisor_currentToLeader":
                     this.supervisorsSwap = false;
                     this.newSupervisor_currentToAmbassador = false;
                     this.newSupervisor_currentToLeader = true;
+                    this.newSupervisor_currentTo_is_hold = false;
                     this.resetForm();
+                    break;
+                case "newSupervisor_currentTo_is_hold":
+                    this.supervisorsSwap = false;
+                    this.newSupervisor_currentToAmbassador = false;
+                    this.newSupervisor_currentToLeader = false;
+                    this.newSupervisor_currentTo_is_hold = true;
+                    this.resetForm();
+
                     break;
                 default:
                     this.supervisorsSwap = false;
@@ -163,6 +198,10 @@ export default {
                     }
                     else if (this.newSupervisor_currentToLeader) {
                         response = await RolesService.newSupervisor_currentToLeader(this.form);
+
+                    }
+                    else if (this.newSupervisor_currentTo_is_hold) {
+                        response = await RolesService.newSupervisor_currentTo_is_hold(this.form);
 
                     }
                     else {
