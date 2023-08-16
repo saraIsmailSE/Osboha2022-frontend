@@ -55,6 +55,15 @@ class RolesService {
   }
 
   
+  async newSupervisor_currentTo_is_hold(formData) {
+    try {
+      const response = await api.post(`${this.prefix}/new-supervisor-current-to-is-hold`, formData);
+      return response.data.data;
+    } catch (error) {
+      return error.response;
+    }
+  }
+ld
   async transferAmbassador(formData) {
     try {
       const response = await api.post(`${this.prefix}/transfer-ambassador`, formData);
