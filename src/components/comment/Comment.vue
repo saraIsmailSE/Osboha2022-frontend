@@ -4,62 +4,109 @@
     <div class="row">
       <div class="row" v-if="comment.thesis">
         <div class="col-6 form-group">
-          <label class="form-control-plaintext">صفحة البداية: {{ comment.thesis.start_page }}</label>
+          <label class="form-control-plaintext"
+            >صفحة البداية: {{ comment.thesis.start_page }}</label
+          >
         </div>
         <div class="col-6 form-group">
-          <label class="form-control-plaintext">صفحة النهاية: {{ comment.thesis.end_page }}</label>
+          <label class="form-control-plaintext"
+            >صفحة النهاية: {{ comment.thesis.end_page }}</label
+          >
         </div>
       </div>
     </div>
     <h6 v-if="totalThesisPages > 0">
       الصفحات المنجزة: {{ totalThesisPages }}
-      <span class="text-muted text-sm ms-1" style="font-size: 0.7rem" v-if="!comment.body && !comment.media">قراءة
-        فقط</span>
+      <span
+        class="text-muted text-sm ms-1"
+        style="font-size: 0.7rem"
+        v-if="!comment.body && !comment.media"
+        >قراءة فقط</span
+      >
     </h6>
     <!-- <h6>     
       <rate :rate="5" />
     </h6> -->
-    <CreateComment v-if="showEditBox" :isEdit="true" ref="commentEditRef" :comment="comment" @editComment="editComment"
-      @cancelEdit="cancelEdit" />
+    <CreateComment
+      v-if="showEditBox"
+      :isEdit="true"
+      ref="commentEditRef"
+      :comment="comment"
+      @editComment="editComment"
+      @cancelEdit="cancelEdit"
+    />
     <template v-else>
       <p v-if="comment.body" style="white-space: pre-wrap; direction: rtl">
         {{ briefBody }}
-        <a class="load-btn" href="#" v-if="comment.body.length > briefBody.length"
-          @click.prevent="briefBody = comment.body">عرض المزيد</a>
+        <a
+          class="load-btn"
+          href="#"
+          v-if="comment.body.length > briefBody.length"
+          @click.prevent="briefBody = comment.body"
+          >عرض المزيد</a
+        >
       </p>
-      <div class="image-block mt-3 mb-3">
-        <img v-if="comment.media" :src="comment.media.path" class="img-fluid rounded w-25 comment-image" alt="blog-img" />
+      <div
+        class="image-block mt-3 mb-3"
+        v-if="comment.media"
+        data-bs-toggle="modal"
+        :data-bs-target="`#imgModal-${comment.id}`"
+      >
+        <img
+          :src="comment.media.path"
+          class="img-fluid rounded w-25 comment-image"
+          alt="blog-img"
+        />
       </div>
       <!-- <imgModal :propSrc="'https://www.w3schools.com/howto/img_snow.jpg'" /> -->
       <div class="d-flex flex-wrap align-items-center comment-activity">
-        <tooltip tag="span" class="text-muted small" tooltipPlacement="bottom" data-bs-toggle="tooltip"
-          :title="formatFullDate(comment.created_at)">{{ formatDateToWritten(comment.created_at) }}</tooltip>
+        <tooltip
+          tag="span"
+          class="text-muted small"
+          tooltipPlacement="bottom"
+          data-bs-toggle="tooltip"
+          :title="formatFullDate(comment.created_at)"
+          >{{ formatDateToWritten(comment.created_at) }}</tooltip
+        >
         &nbsp;&nbsp;
         <a href="javascript:void();">
           <span class="me-1" v-if="comment.reactions_count > 0">
             {{ comment.reactions_count }}
           </span>
-          <span :style="{
-            color:
-              selectedReaction.type === 'like'
-                ? comment.reacted_by_user
-                  ? selectedReaction.text_color
-                  : '#555770'
-                : selectedReaction.text_color,
-          }" @click.prevent="reactOnComment(selectedReaction.id)">
+          <span
+            :style="{
+              color:
+                selectedReaction.type === 'like'
+                  ? comment.reacted_by_user
+                    ? selectedReaction.text_color
+                    : '#555770'
+                  : selectedReaction.text_color,
+            }"
+            @click.prevent="reactOnComment(selectedReaction.id)"
+          >
             {{ selectedReaction.title }}
           </span>
         </a>
-        <a href="javascript:void();" v-on:click="showReply" style="color: #555770" v-if="allowComment">
+        <a
+          href="javascript:void();"
+          v-on:click="showReply"
+          style="color: #555770"
+          v-if="allowComment"
+        >
           {{ showReplyBox ? "إخفاء" : "رد" }}
         </a>
       </div>
       <!--display a button to hide replies-->
-      <a role="button" class="load-btn" v-on:click="toggleShowReplies" v-if="hasReplies">
+      <a
+        role="button"
+        class="load-btn"
+        v-on:click="toggleShowReplies"
+        v-if="hasReplies"
+      >
         {{
           showReplies
-          ? `إخفاء ${totalReplies} من الردود`
-          : `عرض ${totalReplies} من الردود`
+            ? `إخفاء ${totalReplies} من الردود`
+            : `عرض ${totalReplies} من الردود`
         }}
       </a>
     </template>
@@ -67,12 +114,44 @@
   <div class="comment-list" v-if="comment.replies && showReplies">
     <ul class="post-comments list-inline p-0 m-0">
       <li class="mb-2" v-for="cmnt in comment.replies" :key="cmnt.id">
-        <Comment :allowComment="allowComment" :comment="cmnt" @addComment="addComment" @editComment="editComment"
-          @reactToComment="reactToComment" />
+        <Comment
+          :allowComment="allowComment"
+          :comment="cmnt"
+          @addComment="addComment"
+          @editComment="editComment"
+          @reactToComment="reactToComment"
+        />
       </li>
     </ul>
   </div>
-  <CreateComment v-if="showReplyBox" ref="commentReplyRef" :comment="comment" :type="'reply'" @addComment="addComment" />
+  <CreateComment
+    v-if="showReplyBox"
+    ref="commentReplyRef"
+    :comment="comment"
+    :type="'reply'"
+    @addComment="addComment"
+  />
+
+  <modal
+    :id="`imgModal-${comment.id}`"
+    dialogClass="modal-dialog-centered modal-lg"
+    tabindex="-1"
+    aria-labelledby="displayImageLabel"
+    :aria-hidden="false"
+  >
+    <model-header>
+      <a href="javascript:void(0);" class="lh-1" data-bs-dismiss="modal">
+        <span class="material-symbols-outlined">close</span>
+      </a>
+    </model-header>
+    <model-body>
+      <img
+        :src="comment.media?.path"
+        class="img-fluid rounded w-100"
+        alt="blog-img"
+      />
+    </model-body>
+  </modal>
 </template>
 <script>
 import rate from "@/components/book/rate/rate.vue";
@@ -222,7 +301,7 @@ export default {
   margin-top: 15px;
 }
 
-.post-comments>li {
+.post-comments > li {
   border-right: 2px solid #ddd;
   border-bottom-right-radius: 10px;
   border-top-right-radius: 10px;
