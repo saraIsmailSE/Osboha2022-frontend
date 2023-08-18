@@ -437,6 +437,14 @@ const controlChildRoute = (prop, mode = false) => [
       import("../views/OsbohaMain/Control/Supervisors/supervisorsSwap"),
   },
   {
+    path: "leaders-swap/",
+    name: prop + ".leadersSwap",
+    meta: { auth: true, name: "Leaders Swap" },
+    component: () =>
+      import("../views/OsbohaMain/Control/Leaders/leadersSwap"),
+  },
+  
+  {
     path: "pending-theses/:supervisor_id/",
     name: prop + ".pending-theses",
     meta: { auth: true, name: "Assign Administrator" },

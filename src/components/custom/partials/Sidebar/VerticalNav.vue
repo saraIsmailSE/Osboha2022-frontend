@@ -63,7 +63,7 @@
         <span class="item-name">الكتب</span>
       </router-link>
     </li>
-    <li class="nav-item" v-if="(leaderAndAbove || inBooksTeam)">
+    <li class="nav-item">
       <router-link :class="checkActive('book.free-book') ? 'active nav-link' : 'nav-link'" aria-current="page" :to="{
         name: 'book.free-book',
         params: {

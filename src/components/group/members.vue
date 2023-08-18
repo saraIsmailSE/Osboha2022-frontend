@@ -25,7 +25,7 @@
 
       <div :class="`dropdown-menu dropdown-menu-right ${show ? 'show' : ''}`" aria-labelledby="dropdownMenuButton"
         style="">
-        <router-link v-if="groupType == 'فريق متابعة'" class="dropdown-item d-flex align-items-center" :to="{
+        <!-- <router-link v-if="groupType == 'فريق متابعة'" class="dropdown-item d-flex align-items-center" :to="{
           name: 'group.requestAmbassadors',
           params: { group_id: group_id },
         }">
@@ -33,7 +33,7 @@
             diversity_1
           </span>
           طلب سفراء
-        </router-link>
+        </router-link> -->
 
         <router-link class="dropdown-item d-flex align-items-center" :to="{
           name: 'group.addMemeber',
@@ -53,15 +53,15 @@
           </span>
           تعديل
         </router-link>
-        <!-- <router-link v-if="isAdmin" class="dropdown-item d-flex align-items-center" :to="{
-          name: 'group.update-leader',
+        <router-link v-if="groupType == 'فريق متابعة' && (isAdmin || isConsultant)" class="dropdown-item d-flex align-items-center" :to="{
+          name: 'control.leadersSwap',
           params: { group_id: group_id },
         }">
           <span class="material-symbols-outlined me-2 md-18">
             edit
           </span>
           تبديل القائد
-        </router-link> -->
+        </router-link>
         <a role="button" v-if="isAdmin || isConsultant" class="dropdown-item d-flex align-items-center"
           @click="deleteGroup(group_id)">
           <span class="material-symbols-outlined me-2 md-18">

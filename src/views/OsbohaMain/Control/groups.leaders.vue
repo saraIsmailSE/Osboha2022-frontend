@@ -3,7 +3,7 @@
         <div class="row">
             <h1 class="text-center"> التحكم بالقادة</h1>
             <hr />
-            <div class="col-6 col-md-6 col-lg-6">
+            <!-- <div class="col-6 col-md-6 col-lg-6">
                 <div class="card">
                     <router-link :to="{ name: 'roles.changeAdvisingTeam', }">
                         <div class="card-body">
@@ -23,8 +23,7 @@
                     </router-link>
 
                 </div>
-            </div>
-
+            </div> -->
             <!-- ###### TRANSFER LEADER ###### -->
             <!-- <div class="col-6 col-md-6 col-lg-6">
                 <div class="card">
