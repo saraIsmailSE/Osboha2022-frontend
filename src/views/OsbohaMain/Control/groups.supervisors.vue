@@ -73,7 +73,7 @@
 
             <!-- ###### SWAP SUPERVISORS ###### -->
 
-            <div class="col-6 col-md-6 col-lg-6">
+            <div class="col-6 col-md-6 col-lg-6" v-if="isConsultant || isAdmin">
                 <div class="card">
                     <router-link :to="{ name: 'control.supervisorsSwap', }">
                         <div class="card-body">
@@ -123,9 +123,21 @@
     </div>
 </template>
 <script>
+import UserInfoService from "@/Services/userInfoService";
+
 export default {
     name: 'Control Groups - supervisors',
-    async created() {
+    computed: {
+        user() {
+            return this.$store.getters.getUser;
+        },
+        isConsultant() {
+            return UserInfoService.hasRole(this.user, "consultant");
+        },
+
+        isAdmin() {
+            return UserInfoService.hasRole(this.user, "admin");
+        },
     },
     data() {
     },

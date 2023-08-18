@@ -18,7 +18,7 @@
                   name: 'book.update',
                   params: { book_id: book?.book?.id },
                 }"
-                v-if="isAdmin || inBooksTeam"
+                v-if="isAdmin || inBooksTeam || book_owner"
               >
                 edit
               </router-link>
@@ -281,6 +281,7 @@ export default {
       totalTheses: 0,
       loading: false,
       eligibleToWriteThesis: true,
+      book_owner:false,
     };
   },
   methods: {
@@ -309,6 +310,7 @@ export default {
       if (response.data.book.type.type == "free") {
         //check if auth user is the owner
         if (response.data.book_owner == this.user.id) {
+          this.book_owner=true;
           // Check rules for free book.
           this.eligibleToWriteThesis =
             await userBookService.eligibleToWriteThesis(this.user.id);

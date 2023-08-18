@@ -246,7 +246,7 @@ export default {
       message: "",
       loading: false,
       currentMedia: null,
-      book_id:0,
+      book_id: 0,
     };
   },
   validations() {
@@ -354,11 +354,11 @@ export default {
         this.loading = true;
         try {
           const newBook = await bookService.create(this.bookForm);
-          this.book_id=newBook.id
-          this.message = "تم اضافة الكتاب";
+          this.book_id = newBook.id
+          this.message = " تم لاضافة - سيتم تحويلك لصفحة الكتاب";
           setTimeout(() => {
-            this.message = "";
-          }, 1800);
+            this.$router.push({ name: 'book.book-details', params: { book_id: this.book_id } })
+          }, 3000);
         } catch (error) {
           this.message = "حصل خطأ - لم يتم الاضافة!";
           console.log(error);

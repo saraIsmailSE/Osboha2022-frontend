@@ -2,7 +2,6 @@ import { api } from "../Intercepter";
 import { handleError } from "vue";
 
 class RolesService {
-
   constructor() {
     this.prefix = "roles";
   }
@@ -15,11 +14,13 @@ class RolesService {
       return error.response;
     }
   }
-  
 
   async ChangeAdvisingTeam(formData) {
     try {
-      const response = await api.post(`${this.prefix}/change-advising-team`, formData);
+      const response = await api.post(
+        `${this.prefix}/change-advising-team`,
+        formData
+      );
       return response.data.data;
     } catch (error) {
       return error.response;
@@ -27,59 +28,62 @@ class RolesService {
   }
   async supervisorsSwap(formData) {
     try {
-      const response = await api.post(`${this.prefix}/supervisors-swap`, formData);
+      const response = await api.post(
+        `${this.prefix}/supervisors-swap`,
+        formData
+      );
       return response.data.data;
     } catch (error) {
       return error.response;
     }
   }
 
-  
   async newSupervisor_currentToAmbassador(formData) {
     try {
-      const response = await api.post(`${this.prefix}/new-supervisor-current-to-ambassador`, formData);
+      const response = await api.post(
+        `${this.prefix}/new-supervisor-current-to-ambassador`,
+        formData
+      );
       return response.data.data;
     } catch (error) {
       return error.response;
     }
   }
 
-  
   async newSupervisor_currentToLeader(formData) {
     try {
-      const response = await api.post(`${this.prefix}/new-supervisor-current-to-leader`, formData);
+      const response = await api.post(
+        `${this.prefix}/new-supervisor-current-to-leader`,
+        formData
+      );
       return response.data.data;
     } catch (error) {
       return error.response;
     }
   }
 
-  
-  async newSupervisor_currentTo_is_hold(formData) {
+  async newLeader_currentToAmbassador(formData) {
     try {
-      const response = await api.post(`${this.prefix}/new-supervisor-current-to-is-hold`, formData);
+      const response = await api.post(
+        `${this.prefix}/new-leader-current-to-ambassador`,
+        formData
+      );
       return response.data.data;
     } catch (error) {
       return error.response;
     }
   }
-ld
   async transferAmbassador(formData) {
     try {
-      const response = await api.post(`${this.prefix}/transfer-ambassador`, formData);
+      const response = await api.post(
+        `${this.prefix}/transfer-ambassador`,
+        formData
+      );
       return response.data.data;
     } catch (error) {
       return error.response;
     }
   }
-
-  
-
-  
-
-  
-  
-  
 }
 
 export default new RolesService();
