@@ -69,7 +69,7 @@ export default {
                 this.message = "";
                 this.loader = true;
                 const response = await Auth.resetPassword(this.form.password, this.form.email, this.$route.params.token)
-                if (response.success) {
+                if (response) {
                     this.$router.push({ name: 'osboha' })
                 }
                 else {

@@ -33,7 +33,7 @@
                 ARABIC_ROLES[user.pivot.user_type]
               }}</span>
             </div>
-            <div v-if="isAdmin" class="d-flex justify-content-end flex-grow-1 ms-3">
+            <div v-if="(advisorAndAbove && user.pivot.user_type=='ambassador') || isAdmin" class="d-flex justify-content-end flex-grow-1 ms-3">
               <span role="button" @click="showList(index)" class="material-symbols-outlined">
                 more_horiz
               </span>
@@ -56,7 +56,8 @@
                   </span>
                   اضافة
                 </a> -->
-                <a role="button" class="dropdown-item d-flex align-items-center" @click="deleteMember(user.pivot.group_id,user.pivot.user_id)">
+                <a role="button" class="dropdown-item d-flex align-items-center"
+                  @click="deleteMember(user.pivot.group_id, user.pivot.user_id)">
                   <span class="material-symbols-outlined me-2 md-18">
                     delete
                   </span>
@@ -129,7 +130,7 @@ export default {
       console.log(friend_id)
       const response = await FriendServices.create(friend_id);
     },
-    async deleteMember(group_id,user_id) {
+    async deleteMember(group_id, user_id) {
       const swalWithBootstrapButtons = this.$swal.mixin({
         customClass: {
           confirmButton: "btn btn-primary btn-lg",
@@ -155,7 +156,7 @@ export default {
         })
         .then(async (willDelete) => {
           if (willDelete.isConfirmed) {
-            const response = await UserGroup.delete(group_id,user_id)
+            const response = await UserGroup.delete(group_id, user_id)
               .then(async (response) => {
                 this.getUsers();
                 this.hideList();
@@ -195,6 +196,14 @@ export default {
     isAdmin() {
       return UserInfoService.hasRole(this.user, "admin");
     },
+    advisorAndAbove() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "consultant",
+        "advisor",
+      ]);
+    },
+
   },
 };
 </script>

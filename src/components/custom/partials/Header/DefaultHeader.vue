@@ -22,6 +22,7 @@
               style="-webkit-transform: scaleX(-1); transform: scaleX(-1)">
               logout
             </i>
+            <ThemeScheme />
 
             <router-link :to="{
               name: 'user.friendsRequests',
@@ -74,6 +75,7 @@ import helper from "@/utilities/helper";
 import FriendServices from "@/API/services/friend.service";
 import MessageService from "@/API/services/messages.service";
 import UserInfoService from "@/Services/userInfoService";
+import ThemeScheme from '../../setting/sections/ThemeScheme.vue'
 
 export default {
   name: "DefaultHeader",
@@ -83,6 +85,11 @@ export default {
       default: require("@/assets/images/logo.png"),
     },
   },
+  components: {
+    // Style Components
+    ThemeScheme,
+  },
+
   setup() {
     const store = useStore();
     const sidebarType = computed(() => store.getters["setting/sidebar_type"]);
