@@ -7,17 +7,12 @@
           <h5 class="form-label">نوع الأطروحة</h5>
         </div>
         <div class="form-group">
-          <select
-            class="form-select w-100"
-            name="type_of_thesis"
-            id="type_of_thesis"
-            v-model="v$.thesisForm.typeOfThesis.$model"
-            v-on:change="
+          <select class="form-select w-100" name="type_of_thesis" id="type_of_thesis"
+            v-model="v$.thesisForm.typeOfThesis.$model" v-on:change="
               changeTypeOfThesis(
                 $event.target.options[$event.target.options.selectedIndex].value
               )
-            "
-          >
+              ">
             <option value="">اختر نوع الأطروحة</option>
             <option value="read">قراءة</option>
             <option value="readAndWrite">كتابة أطروحة</option>
@@ -29,10 +24,7 @@
       <!-- الصفحات -->
       <div class="row mt-2" v-if="showPages">
         <div class="form-group">
-          <h5
-            class="form-label"
-            :class="{ 'text-primary': pages.length === 0 && !startOver }"
-          >
+          <h5 class="form-label" :class="{ 'text-primary': pages.length === 0 && !startOver }">
             {{
               pages.length === 0 && !startOver ? "لقد أنهيت الكتاب" : "الصفحات"
             }}
@@ -40,24 +32,18 @@
         </div>
       </div>
       <div class="row" v-if="showPages">
-        <button
-          class="btn btn-primary me-2 d-flex align-content-center justify-content-center"
-          @click.prevent="startBookOver"
-          v-if="pages.length === 0 && !startOver"
-        >
+        <button class="btn btn-primary me-2 d-flex align-content-center justify-content-center"
+          @click.prevent="startBookOver" v-if="pages.length === 0 && !startOver">
           <span class="material-symbols-outlined md-18"> refresh </span>
           إعادة قراءة الكتاب
         </button>
 
         <template v-else>
+          <small style="color: red" v-if="numberOfPages < 3">* الحد الأدنى 3 صفحات</small>
+
           <div class="form-group col-6">
-            <select
-              class="form-select"
-              data-trigger
-              name="start_page"
-              id="start_page"
-              v-model="v$.thesisForm.start_page.$model"
-            >
+            <select class="form-select" data-trigger name="start_page" id="start_page"
+              v-model="v$.thesisForm.start_page.$model">
               <option value="">صفحة البداية</option>
               <option v-for="page in pages" :value="page" :key="page">
                 {{ page }}
@@ -65,113 +51,59 @@
             </select>
 
             <div class="help-block" v-if="v$.thesisForm.start_page.$error">
-              <small
-                style="color: red"
-                v-if="v$.thesisForm.start_page.required.$invalid"
-                >الرجاء اختيار صفحة البداية</small
-              >
-              <small
-                style="color: red"
-                v-if="
-                  !v$.thesisForm.start_page.required.$invalid &&
-                  v$.thesisForm.start_page.between.$invalid
-                "
-                >البداية يجب ان تكون اقل من النهاية</small
-              >
+              <small style="color: red" v-if="v$.thesisForm.start_page.required.$invalid">الرجاء اختيار صفحة
+                البداية</small>
+              <small style="color: red" v-if="!v$.thesisForm.start_page.required.$invalid &&
+                v$.thesisForm.start_page.between.$invalid
+                ">البداية يجب ان تكون اقل من النهاية</small>
             </div>
           </div>
           <div class="form-group col-6">
-            <select
-              class="form-select"
-              data-trigger
-              name="end_page"
-              id="end_page"
-              v-model="v$.thesisForm.end_page.$model"
-            >
+            <select class="form-select" data-trigger name="end_page" id="end_page"
+              v-model="v$.thesisForm.end_page.$model">
               <option value="">صفحة النهاية</option>
               <option v-for="page in bookPagesEnd" :value="page" :key="page">
                 {{ page }}
               </option>
             </select>
             <div class="help-block" v-if="v$.thesisForm.end_page.$error">
-              <small
-                style="color: red"
-                v-if="v$.thesisForm.end_page.required.$invalid"
-                >الرجاء اختيار صفحة النهاية</small
-              >
-              <small
-                style="color: red"
-                v-if="
-                  !v$.thesisForm.end_page.required.$invalid &&
-                  v$.thesisForm.end_page.between.$invalid
-                "
-                >النهاية يجب ان تكون اكبر من البداية</small
-              >
+              <small style="color: red" v-if="v$.thesisForm.end_page.required.$invalid">الرجاء اختيار صفحة النهاية</small>
+              <small style="color: red" v-if="!v$.thesisForm.end_page.required.$invalid &&
+                v$.thesisForm.end_page.between.$invalid
+                ">النهاية يجب ان تكون اكبر من البداية</small>
             </div>
           </div>
         </template>
       </div>
       <div class="form-group" v-if="thesis">
         <label class="form-label" for="thesisBody">الأطروحة</label>
-        <textarea
-          rows="5"
-          placeholder="... اكتب أطروحتك"
-          class="rounded form-control"
-          id="thesisBody"
-          name="thesisBody"
-          v-model.trim="v$.thesisForm.body.$model"
-          style="direction: rtl"
-        ></textarea>
+        <textarea rows="5" placeholder="... اكتب أطروحتك" class="rounded form-control" id="thesisBody" name="thesisBody"
+          v-model.trim="v$.thesisForm.body.$model" style="direction: rtl"></textarea>
         <p style="direction: rtl">
           <span> {{ v$.thesisForm.body.$model.length }}/400 حرف</span>
           <span> - </span>
-          <span
-            style="color: red"
-            class="text-center"
-            v-if="v$.thesisForm.body.$model.length < 400"
-            >أطروحة غير شاملة
+          <span style="color: red" class="text-center" v-if="v$.thesisForm.body.$model.length < 400">أطروحة غير شاملة
             <span class="material-symbols-outlined font-small">error</span>
           </span>
-          <span style="color: green" v-else
-            >أطروحة شاملة
-            <span class="material-symbols-outlined font-small"
-              >check_circle</span
-            >
+          <span style="color: green" v-else>أطروحة شاملة
+            <span class="material-symbols-outlined font-small">check_circle</span>
           </span>
         </p>
         <div class="help-block" v-if="v$.thesisForm.body.$error">
-          <small
-            style="color: red"
-            v-if="v$.thesisForm.body.requiredIf.$invalid"
-            >الرجاء ادخال الأطروحة</small
-          >
+          <small style="color: red" v-if="v$.thesisForm.body.requiredIf.$invalid">الرجاء ادخال الأطروحة</small>
         </div>
       </div>
 
       <div class="form-group" v-if="screenshots">
         <label class="form-label" for="customFile"> اضافة اقتباس</label>
-        <input
-          class="form-control"
-          type="file"
-          id="customFile"
-          multiple
-          accept="image/jpeg, image/png, image/jpg, image/gif, image/svg"
-          ref="screenShots"
-          @change="previewImages"
-        />
+        <input class="form-control" type="file" id="customFile" multiple
+          accept="image/jpeg, image/png, image/jpg, image/gif, image/svg" ref="screenShots" @change="previewImages" />
         <div class="help-block" v-if="v$.thesisForm.screenShots.$error">
-          <small
-            style="color: red"
-            v-if="v$.thesisForm.screenShots.requiredIf.$invalid"
-            >الرجاء ادخال اقتباس واحد على الاقل</small
-          >
+          <small style="color: red" v-if="v$.thesisForm.screenShots.requiredIf.$invalid">الرجاء ادخال اقتباس واحد على
+            الاقل</small>
         </div>
-        <ImagePreviewer
-          v-if="thesisForm.screenShots.length"
-          :media="thesisForm.screenShots"
-          @remove-media="removeImage"
-          ref="imagePreviewer"
-        />
+        <ImagePreviewer v-if="thesisForm.screenShots.length" :media="thesisForm.screenShots" @remove-media="removeImage"
+          ref="imagePreviewer" />
       </div>
       <hr />
       <!--Success and error messages-->
@@ -179,25 +111,13 @@
       <small class="text-danger text-center" v-if="errorMessage">
         {{ errorMessage }}
       </small>
-      <small
-        class="text-danger text-center"
-        v-if="mediaNoteText && thesisToEdit"
-      >
+      <small class="text-danger text-center" v-if="mediaNoteText && thesisToEdit">
         {{ mediaNoteText }}
       </small>
       <div class="col-sm-12 text-center" v-if="loader">
-        <img
-          :src="require('@/assets/images/page-img/page-load-loader.gif')"
-          alt="loader"
-          style="height: 100px"
-        />
+        <img :src="require('@/assets/images/page-img/page-load-loader.gif')" alt="loader" style="height: 100px" />
       </div>
-      <button
-        type="submit"
-        class="btn btn-primary d-block mt-3"
-        v-if="!loader"
-        :disabled="v$.thesisForm.$invalid"
-      >
+      <button type="submit" class="btn btn-primary d-block mt-3" v-if="!loader" :disabled="v$.thesisForm.$invalid">
         إضافة
       </button>
     </div>
@@ -256,6 +176,10 @@ export default {
     };
   },
   computed: {
+    numberOfPages() {
+      return (this.thesisForm.end_page - this.thesisForm.start_page) + 1
+    },
+
     successMessage() {
       return this.thesisToEdit
         ? "تم تعديل الأطروحة بنجاح"
@@ -398,7 +322,7 @@ export default {
     },
     async submit() {
       this.v$.$touch();
-      if (!this.v$.thesisForm.$invalid) {
+      if (!this.v$.thesisForm.$invalid && this.numberOfPages >= 3) {
         this.loader = true;
         try {
           this.updateThesisForm();
@@ -521,6 +445,7 @@ export default {
 .font-small {
   font-size: 0.8rem;
 }
+
 .text-danger {
   color: #c50714 !important;
 }

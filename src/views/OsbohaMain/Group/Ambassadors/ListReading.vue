@@ -19,12 +19,8 @@
           </div>
 
           <!--Support-->
-          <Support v-if="mark"
-            :support="support"
-            :supportMark="mark?.support"
-            :week="week"
-            @updateSupportMark="updateSupportMark"
-          />
+          <Support v-if="mark" :support="support" :supportMark="mark?.support" :week="week"
+            @updateSupportMark="updateSupportMark" />
 
           <div class="d-flex align-items-center mt-3 row">
             <!-- <div class="alert alert-danger text-center" role="alert">
@@ -32,16 +28,15 @@
             </div> -->
             <div class="d-flex align-items-center mt-3 row">
               <div class="d-inline-block w-100 text-center col-12">
-                <a
-                  role="button"
-                  @click="$router.go(-1)"
-                  class="d-block mt-3 mb-3 w-75 mx-auto"
-                >
+                <router-link v-if="group && week" :to="{
+                  name: 'group.ambassadors-reading',
+                  params: { group_id: group.id, week_id: week.id },
+                }" class="d-block mt-3 mb-3 w-75 mx-auto">
                   <span>إنجازات الفريق</span>
                   <span class="align-middle material-symbols-outlined">
                     keyboard_return
                   </span>
-                </a>
+                </router-link>
               </div>
             </div>
           </div>
@@ -78,7 +73,7 @@ export default {
   async created() {
     try {
       const response = await MarkService.ambassadorMark(
-        this.$route.params.ambassador_id,this.$route.params.week_id
+        this.$route.params.ambassador_id, this.$route.params.week_id
       );
 
       this.mark = response.mark;
