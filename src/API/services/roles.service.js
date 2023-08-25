@@ -73,6 +73,17 @@ class RolesService {
       return error.response;
     }
   }
+  async transferLeader(formData) {
+    try {
+      const response = await api.post(
+        `${this.prefix}/transfer-leader`,
+        formData
+      );
+      return response.data.data;
+    } catch (error) {
+      return error.response;
+    }
+  }
   async transferAmbassador(formData) {
     try {
       const response = await api.post(

@@ -105,7 +105,7 @@
                         <Supervisors />
 
                         <!-- ########## Leaders ########## -->
-                        <!-- <Leaders /> -->
+                        <Leaders />
 
                         <!-- ########## Ambassadors ########## -->
                         <Ambassadors />
@@ -126,7 +126,7 @@ export default {
     name: 'Control Groups',
     components: {
         Supervisors,
-        //Leaders,
+        Leaders,
         Ambassadors,
 
     },

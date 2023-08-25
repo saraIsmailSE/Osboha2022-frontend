@@ -33,7 +33,7 @@
                 ARABIC_ROLES[user.pivot.user_type]
               }}</span>
             </div>
-            <div v-if="(advisorAndAbove && user.pivot.user_type=='ambassador') || isAdmin" class="d-flex justify-content-end flex-grow-1 ms-3">
+            <div v-if="(advisorAndAbove && user.pivot.user_type !='leader') || isAdmin" class="d-flex justify-content-end flex-grow-1 ms-3">
               <span role="button" @click="showList(index)" class="material-symbols-outlined">
                 more_horiz
               </span>

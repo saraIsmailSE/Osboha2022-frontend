@@ -424,6 +424,12 @@ const controlChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMain/Control/Ambassador/transfer"),
   },
   {
+    path: "transfer-leader",
+    name: prop + ".transfer-leader",
+    meta: { auth: true, name: "Aransfer Leader" },
+    component: () => import("../views/OsbohaMain/Control/Leaders/transfer"),
+  },
+  {
     path: "assign-administrator/",
     name: prop + ".assign-administrator",
     meta: { auth: true, name: "Assign Administrator" },
