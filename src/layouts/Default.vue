@@ -163,6 +163,12 @@ export default {
           console.log(error);
         }
       }
+
+      this.$store.commit("SET_MAIN_TIMER", this.sessionData?.timer?.main_timer);
+      this.$store.commit(
+        "SET_WEEK_START_DATE",
+        this.sessionData?.timer?.created_at
+      );
     },
   },
 };
