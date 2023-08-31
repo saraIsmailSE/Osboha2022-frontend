@@ -481,7 +481,7 @@ const routes = [
   {
     path: "/server-error",
     name: "ServerError",
-    component: () => import("../views/Errors/500"),
+    component: () => import("../views/Errors/500-server"),
   },
   {
     path: "/",
