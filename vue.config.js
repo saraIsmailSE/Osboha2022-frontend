@@ -10,6 +10,16 @@ module.exports = {
       localeDir: 'locales',
       enableInSFC: false
     },
+    pwa: {
+      name: 'Osboha180 Platform',
+      themeColor: '#208040',
+      msTileColor: '#208040',
+      appleMobileWebAppCapable: 'yes',
+      appleMobileWebAppStatusBarStyle: '#208040',
+      manifestOptions: {
+        display: 'standalone',
+      },
+    },  
 
   }
 }

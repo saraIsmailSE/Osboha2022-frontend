@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-// import "./registerServiceWorker";
+import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 import "./plugins";
@@ -18,23 +18,18 @@ import "vue3-toastify/dist/index.css";
 import GlobalComponent from "./utilities/_globals";
 import progressBar from "./utilities/progress-bar";
 import "nprogress/nprogress.css";
+import VueCookies from 'vue3-cookies'
+
+
 //import { VueQueryPlugin } from "@tanstack/vue-query";
 
 import setupInterceptors from "@/Services/setupInterceptors";
+
+import './registerServiceWorker';
+
 setupInterceptors(store);
 
 progressBar(router);
-
-// Vuetify
-//import 'vuetify/styles'
-//import { createVuetify } from 'vuetify'
-// import * as components from 'vuetify/components'
-//import * as directives from 'vuetify/directives'
-
-//const vuetify = createVuetify({
-// components,
-//directives,
-//})
 
 const app = createApp(App);
 app.use(VueSweetalert2);
@@ -42,6 +37,7 @@ app.use(BootstrapVue3);
 app.use(VueApexCharts);
 app.use(fontawsome);
 app.use(GlobalComponent);
+app.use(VueCookies);
 // app.use(VueQueryPlugin);
 app.use(Vue3Toasity, {
   autoClose: 3000,
