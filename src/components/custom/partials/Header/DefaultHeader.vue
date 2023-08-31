@@ -129,16 +129,17 @@ export default {
       if (response) {
         this.unreadMessages = response.unreadMessages;
       }
-
     });
 
   },
+
   data() {
     return {
       unreadMessages: 0,
       notifications: [],
       un_read_notifications: 0,
       friendRequest: [],
+      deferredPrompt: 'test',
 
     };
   },
@@ -160,26 +161,58 @@ export default {
 
   },
   mounted() {
-    // Pusher.logToConsole = true;
-    // var pusher = new Pusher('0098112dc7c6ed8e4777', {
-    //   cluster: 'ap2'
-    // });
-
-    // var channel = pusher.subscribe('my-channel');
-    // channel.bind('my-event', function(data) {
-    //   alert(data);
-    // });
-    // var privateChannel = pusher.subscribe("message-channel." + 4);
-    // console.log("🚀 privateChannel:", privateChannel)
-    // privateChannel.bind('new-message', function (data) {
-    //   alert(data);
-    // });
-
+    window.addEventListener("beforeinstallprompt", this.handelinstall);
   },
+  beforeUnmount() {
+    window.removeEventListener("beforeinstallprompt", this.handelinstall);
+  },
+
+
   methods: {
     logout() {
       this.$store.dispatch("logout");
     },
+    handelinstall(event) {
+      event.preventDefault()
+      if (!this.$cookies.get("add-to-home-screen")) {
+        const swalWithBootstrapButtons = this.$swal.mixin({
+          customClass: {
+            confirmButton: 'btn btn-primary btn-lg',
+            cancelButton: 'btn btn-outline-primary btn-lg ms-2'
+          },
+          buttonsStyling: false
+        })
+
+        swalWithBootstrapButtons.fire({
+          title: 'تطبيق مصغر بانتظارك',
+          text: `بإمكانك الان تحميل تطبيق (أصبوحة 180) على هاتفك المحمول لتكون تجربتك في استخدامه دائما سهلة وميسرة`,
+          imageUrl: require("@/assets/images/main/signup.png"),
+          showCancelButton: true,
+          confirmButtonText: 'تحميل',
+          cancelButtonText: 'لاحقًا  ',
+          showClass: {
+            popup: 'animate__animated animate__zoomIn'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__zoomOut'
+          }
+        })
+          .then((willDelete) => {
+            if (willDelete.isConfirmed) {
+              event.prompt();
+            }
+            else {
+              this.$cookies.set("add-to-home-screen", 'later', { expires: 5 });
+            }
+          })
+      }
+
+      console.log("🚀  handelinstall ~ event:", event)
+
+
+
+    },
+
   },
 };
 </script>

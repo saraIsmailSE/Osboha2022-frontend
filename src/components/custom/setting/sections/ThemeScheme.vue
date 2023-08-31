@@ -45,7 +45,6 @@ export default {
     const themeSchemeDirection = computed(() => store.getters['setting/sheme_scheme_direction'])
 
     const updateRadio = (value, name) => {
-      console.log("🚀 ~ file: ThemeScheme.vue:59 ~ updateRadio ~ value:", value)
       store.dispatch(`setting/${name}`, value)
     }
     return {
@@ -54,13 +53,25 @@ export default {
       updateRadio
     }
   },
+  created(){
+    const store = useStore()
+
+    if(this.$cookies.get("theme-mode")){
+      this.mode= this.$cookies.get("theme-mode");
+      store.dispatch(`setting/theme_scheme`, this.mode)
+    }
+    else{
+      this.mode= 'light'
+    }
+  },
   data() {
     return {
-      mode: 'light'
+      mode: ''
     }
   },
   methods: {
     setMode(value) {
+      this.$cookies.set("theme-mode", value);
       this.mode = value;
       this.updateRadio(value, 'theme_scheme')
     }
