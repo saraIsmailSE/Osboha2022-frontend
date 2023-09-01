@@ -16,6 +16,8 @@ export default new Vuex.Store({
     isNewUser: true,
     reactions: [],
     unreadNotifications: 0,
+    week_start_date: null,
+    main_timer: null,
   },
   mutations: {
     SET_USER_DATA(state, userData) {
@@ -38,6 +40,12 @@ export default new Vuex.Store({
     SET_PROFILE_PICTURE(state, profilePicture) {
       state.user.user_profile.profile_picture = profilePicture;
       localStorage.setItem("osboha__user", JSON.stringify(state.user));
+    },
+    SET_MAIN_TIMER(state, timer) {
+      state.main_timer = timer;
+    },
+    SET_WEEK_START_DATE(state, date) {
+      state.week_start_date = date;
     },
   },
   actions: {

@@ -26,7 +26,10 @@
         >
       </div>
     </div>
-    <div class="card-post-toolbar d-flex align-items-center" v-if="authorized">
+    <div
+      class="card-post-toolbar d-flex align-items-center"
+      v-if="authorized && showOptions"
+    >
       <div class="dropdown">
         <span
           class="dropdown-toggle"
@@ -120,6 +123,16 @@ export default {
           UserInfoService.hasPermission(user, "delete comment")) ||
         UserInfoService.hasRole(user, "admin")
       );
+    },
+    showOptions() {
+      const isThesis =
+        this.comment?.type === "thesis" || this.comment?.type === "screenshot";
+      if (!isThesis) return true;
+      const thesisDate = new Date(this.comment?.created_at);
+      const start_week = new Date(this.$store.state.week_start_date);
+      const end_week = new Date(this.$store.state.main_timer);
+
+      return thesisDate >= start_week && thesisDate <= end_week;
     },
   },
   created() {

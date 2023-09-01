@@ -54,7 +54,7 @@
       >
         <img
           :src="comment.media.path"
-          class="img-fluid rounded w-25 comment-image"
+          class="img-fluid rounded w-50 comment-image"
           alt="blog-img"
         />
       </div>
