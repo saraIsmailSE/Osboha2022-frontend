@@ -415,7 +415,7 @@ export default {
   },
   computed: {
     formattedDate() {
-      return moment(this.book?.created_at).format("YYYY-MM-DD");
+      return moment(this.book?.book?.created_at).format("YYYY-MM-DD");
     },
     isMore() {
       return this.shortBriefText?.length < this.fullBriefText?.length;

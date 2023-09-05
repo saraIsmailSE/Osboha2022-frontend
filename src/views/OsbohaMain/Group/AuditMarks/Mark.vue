@@ -16,7 +16,7 @@
                 <div class="iq-card-body p-3">
                     <AchievementCard v-if="mark" :mark="mark" :group="group" />
                     <div class="d-flex align-items-center mt-3">
-                        <Check v-if="theses.length > 0" :theses="theses" />
+                        <Check v-if="Object.keys(theses).length > 0" :theses="theses" />
                         <div v-else class="alert alert-secondary w-100 text-center" role="alert">
                             لا يوجد انجاز
                         </div>

@@ -16,7 +16,18 @@
       <div class="col-lg-5 col-md-5 col-sm-12 form-check mt-2">
         <div class="d-block w-100">
           <div class="progress">
-            <div
+            <div v-if="ambassador.is_freezed"
+              :class="`${markClass(-1)}`"
+              class="progress-bar progress-bar-striped"
+              role="progressbar"
+              aria-valuenow="90"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              :style="`width: ${
+                100
+              }%;`"
+            ></div>
+            <div v-else
               :class="`${markClass(
                 ambassador.reading_mark +
                   ambassador.writing_mark +
@@ -78,6 +89,8 @@ export default {
      */
     markClass(mark) {
       switch (mark) {
+        case -1:
+          return 'freeze'
         case 100:
           return "full-mark";
 
@@ -113,5 +126,9 @@ export default {
     var(--bs-warning-rgb),
     var(--bs-bg-opacity)
   ) !important;
+}
+.freeze {
+  --bs-bg-opacity: 1;
+  background-color: #223E7F !important;
 }
 </style>

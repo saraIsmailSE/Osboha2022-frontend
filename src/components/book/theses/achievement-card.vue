@@ -5,14 +5,9 @@
         <div class="card" style="border-radius: 15px">
           <div class="card-body text-center">
             <div class="mt-3 mb-3">
-              <BaseAvatar
-                :profileImg="mark.user.user_profile.profile_picture"
-                :profile_id="mark.user.user_profile.id"
-                :title="mark.user.gender"
-                :gender="mark.user.gender"
-                avatarClass="avatar-130 img-fluid rounded-circle"
-                dimensions="150x150"
-              />
+              <BaseAvatar :profileImg="mark.user.user_profile.profile_picture" :profile_id="mark.user.user_profile.id"
+                :title="mark.user.gender" :gender="mark.user.gender" avatarClass="avatar-130 img-fluid rounded-circle"
+                dimensions="150x150" />
             </div>
             <h4 class="mb-2 text-center">{{ mark.user.name }}</h4>
             <p class="text-center mb-4" style="direction: rtl">
@@ -23,11 +18,9 @@
             <div class="d-flex justify-content-between text-center mt-5 mb-2">
               <div>
                 <p class="text-center mb-2 h5">
-                  <strong
-                    >{{
-                      mark.reading_mark + mark.writing_mark + mark.support
-                    }}%</strong
-                  >
+                  <strong>{{
+                    mark.reading_mark + mark.writing_mark + mark.support
+                  }}%</strong>
                 </p>
                 <p class="text-center mb-0">
                   العلامة
@@ -55,6 +48,9 @@
                   الصفحات
                 </p>
               </div>
+            </div>
+            <div class="alert alert-info text-center mt-3 mb-2" v-if="mark.is_freezed">
+              تحت التجميد
             </div>
           </div>
         </div>
