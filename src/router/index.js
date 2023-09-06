@@ -355,6 +355,15 @@ const exceptionChildRoute = (prop, mode = false) => [
   },
 ];
 
+const generalConversionChildRoute = (prop, mode = false) => [
+  {
+    path: "",
+    name: prop + ".index",
+    meta: { auth: true, name: "General Conversion Index" },
+    component: () => import("../views/OsbohaMain/GeneralConversion/index"),
+  },
+];
+
 const timerChildRoute = (prop, mode = false) => [
   {
     path: "timer-list",
@@ -569,6 +578,13 @@ const routes = [
     component: () => import("../layouts/ChatHeader"),
     meta: { auth: true },
     children: chatChildRoute("chat"),
+  },
+  {
+    path: "/general-conversion",
+    name: "general-conversion",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: generalConversionChildRoute("general-conversion"),
   },
 ];
 
