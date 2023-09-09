@@ -10,6 +10,14 @@ class StatisticsService {
       handleError(error);
     }
   }
+  async lastWeek() {
+    try {
+      const response = await api.get(`/statistics/last-week/`);
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 }
 
 export default new StatisticsService();

@@ -208,6 +208,12 @@ const statisticsChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Statistics by Week" },
     component: () => import("../views/OsbohaMain/Statistics/Statistics"),
   },
+  {
+    path: "top-users",
+    name: prop + ".top-users",
+    meta: { auth: true, name: "Statistics for Top Users" },
+    component: () => import("../views/OsbohaMain/Statistics/TopUsers"),
+  },
 ];
 const rolesChildRoute = (prop, mode = false) => [
   {
@@ -379,6 +385,12 @@ const bookChildRoute = (prop, mode = false) => [
     name: prop + ".book-details",
     meta: { auth: true, name: "BookDetails" },
     component: () => import("../views/Book/BookDetails"),
+  },
+  {
+    path: "latest",
+    name: prop + ".latest",
+    meta: { auth: true, name: "Latest Book" },
+    component: () => import("../views/Book/LatestBook"),
   },
   {
     path: "update/:book_id",

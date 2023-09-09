@@ -23,3 +23,19 @@ export const BOOK_Types = {
   tafseer: "تفسير",
   free: "كتاب حر",
 };
+
+
+export const MONTHS = {
+  January: "يناير",
+  February: "فبراير",
+  March:'مارس',
+  April:'ابريل',
+  May:'مايو',
+  June:'يونيو',
+  July:'يوليو',
+  August:'أغسطس',
+  September:'سبتمبر',
+  October:'أكتوبر',
+  November :'نوفمبر',
+  December : 'ديسمبر'
+  };
