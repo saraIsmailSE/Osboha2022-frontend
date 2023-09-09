@@ -50,7 +50,7 @@ const setup = (store) => {
         ) {
           router.push({ path: `/auth/excluded_ambassador` });
         }
-        else if (err.response.status === 504) {
+        else if (err.response.status === 504 || err.response.status === 502) {
           router.push({ name: "ServerError" });
         }
       }

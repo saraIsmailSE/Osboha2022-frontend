@@ -207,10 +207,6 @@ export default {
           })
       }
 
-      console.log("🚀  handelinstall ~ event:", event)
-
-
-
     },
 
   },

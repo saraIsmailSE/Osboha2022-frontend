@@ -1,32 +1,33 @@
 <template>
   <div class="d-flex align-items-center justify-content-center mb-3">
-    <BaseAvatar
-      :profileImg="comment.user?.profile.profile_picture"
-      :profile_id="comment.user?.profile.id"
-      :title="comment.user?.name"
-      :gender="comment.user?.gender"
-      avatarClass="rounded-circle avatar-50"
-    />
+    <BaseAvatar :profileImg="comment.user?.profile.profile_picture" :profile_id="comment.user?.profile.id"
+      :title="comment.user?.name" :gender="comment.user?.gender" avatarClass="rounded-circle avatar-50" />
 
     <div class="ms-3 flex-grow-1">
-      <h5
-        role="button"
-        class="author-name hover-undelined"
-        @click.prevent="sendToProfile(comment.user.id)"
-      >
+      <h5 role="button" class="author-name hover-undelined" @click.prevent="sendToProfile(comment.user.id)">
         {{ comment.user?.name }}
       </h5>
       <div class="mt-1" v-if="comment.user?.roles?.length > 0">
-        <span
-          class="badge bg-primary rounded-pill ms-1 px-2"
-          v-for="role in comment.user?.roles"
-          :key="role"
-        >
-          {{ ARABIC_ROLES[role] }}</span
-        >
+        <span class="badge bg-primary rounded-pill ms-1 px-2" v-for="role in comment.user?.roles" :key="role">
+          {{ ARABIC_ROLES[role] }}</span>
       </div>
     </div>
-    <div
+    <div class="card-post-toolbar d-flex align-items-center" v-if="authorized && showOptions">
+        <div>
+          <template v-if="canEdit">
+            <a class=" d-flex align-items-center" href="#" data-bs-toggle="modal" :data-bs-target="`#editThesis-${comment.type.trim() === 'screenshot'
+              ? comment.comment_id
+              : comment.id
+              }`" v-if="comment.type === 'thesis' || comment.type === 'screenshot'"><span
+                class="material-symbols-outlined me-2 md-18"> edit </span></a>
+            <a v-else class=" d-flex align-items-center" href="#" @click.prevent="editCmnt"><span
+                class="material-symbols-outlined me-2 md-18"> edit </span></a>
+          </template>
+          <a class=" d-flex align-items-center" href="#" v-if="canDelete" @click.prevent="deleteCmnt"><span
+              class="material-symbols-outlined me-2 md-18"> delete </span></a>
+        </div>
+    </div>
+    <!-- <div
       class="card-post-toolbar d-flex align-items-center"
       v-if="authorized && showOptions"
     >
@@ -77,7 +78,7 @@
           >
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -90,7 +91,7 @@ export default {
   name: "CommentUser",
   inject: {
     deleteComment: {
-      default: () => {},
+      default: () => { },
     },
   },
   props: {
@@ -229,6 +230,7 @@ export default {
   font-size: 1rem;
   font-weight: 600;
 }
+
 .hover-undelined:hover {
   text-decoration: underline;
 }
