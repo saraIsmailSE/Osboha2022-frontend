@@ -12,27 +12,35 @@
                             </h4>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row d-flex justify-content-center mb-2">
-                            <div class="col-6 m-auto d-flex justify-content-end">
-                                <BaseAvatar :profileImg="response.max_total_pages.user.user_profile.profile_picture"
-                                    :profile_id="response.max_total_pages.user.user_profile.id"
-                                    :title="response.max_total_pages.user.name"
-                                    :gender="response.max_total_pages.user.gender"
-                                    avatarClass="avatar-120 rounded-circle" />
-                            </div>
-                            <div class="col-6 m-auto">
-                                <router-link :to="{
-                                    name: 'user.profile',
-                                    params: { user_id: response.max_total_pages.user.id },
-                                }">
-                                    <h3>{{ response.max_total_pages.user.name }}</h3>
-                                </router-link>
-                                <h5 style="direction: rtl">
-                                    {{ formatNumber(response.max_total_pages.max_total_pages) }}
-                                    صفحة
-                                </h5>
-                            </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-12" v-for="topPages in response.max_total_pages.slice(0, 3) "
+                            :key="topPages.user.id">
+                            <TopUserFrame :userID="topPages.user.id" :userName="topPages.user.name"
+                                :topValue="formatNumber(topPages.max_total_pages)" :topValueType="'صفحة'"
+                                :profileImg="topPages.user.user_profile.profile_picture"
+                                :profile_id="topPages.user.user_profile.id" :title="topPages.user.name"
+                                :gender="topPages.user.gender" :dimensions="'512x512'" avatarClass="rounded-2 " />
+                        </div>
+                        <div class="header-title">
+                            <h3 class="ms-3 title">
+                                50 أخرين
+                                <span role="button" class="align-middle material-symbols-outlined"
+                                    @click="show_top_pages = !show_top_pages">
+                                    {{ show_top_pages ? "expand_less" : "expand_more" }}
+                                </span>
+
+                            </h3>
+                        </div>
+
+                    </div>
+                    <div class="row" v-show="show_top_pages">
+
+                        <div class="col" v-for="topPages in response.max_total_pages.slice(3)" :key="topPages.user.id">
+                            <TopUserFrame_2 :userID="topPages.user.id" :userName="topPages.user.name"
+                                :topValue="formatNumber(topPages.max_total_pages)" :topValueType="'صفحة'"
+                                :profileImg="topPages.user.user_profile.profile_picture"
+                                :profile_id="topPages.user.user_profile.id" :title="topPages.user.name"
+                                :gender="topPages.user.gender" :dimensions="'60x60'" avatarClass="rounded-circle " />
                         </div>
                     </div>
                 </div>
@@ -42,36 +50,47 @@
                         <div class="header-title">
                             <h4 class="card-title">
                                 الأكثر أطروحات
-                                <img class="img-fluid avatar-55" src="@/assets/images/gif/thesis.gif"
-                                    alt="write-animated" />
 
+                                <img class="img-fluid avatar-55" src="@/assets/images/gif/book.gif" alt="book-animated" />
                             </h4>
+
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row d-flex justify-content-center mb-2">
-                            <div class="col-6 m-auto d-flex justify-content-end">
-                                <BaseAvatar :profileImg="response.max_total_thesis.user.user_profile.profile_picture"
-                                    :profile_id="response.max_total_thesis.user.user_profile.id"
-                                    :title="response.max_total_thesis.user.name"
-                                    :gender="response.max_total_thesis.user.gender"
-                                    avatarClass="avatar-120 rounded-circle" />
-                            </div>
-                            <div class="col-6 m-auto">
-                                <router-link :to="{
-                                    name: 'user.profile',
-                                    params: { user_id: response.max_total_thesis.user.id },
-                                }">
-                                    <h3>{{ response.max_total_thesis.user.name }}</h3>
-                                </router-link>
-                                <h5 style="direction: rtl">
-                                    {{ formatNumber(response.max_total_thesis.max_total_thesis) }}
-                                    أطروحة
-                                </h5>
-                            </div>
+
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-12" v-for="topTheses in response.max_total_thesis.slice(0, 3) "
+                            :key="topTheses.user.id">
+                            <TopUserFrame :userID="topTheses.user.id" :userName="topTheses.user.name"
+                                :topValue="formatNumber(topTheses.max_total_thesis)" :topValueType="'اطروحة'"
+                                :profileImg="topTheses.user.user_profile.profile_picture"
+                                :profile_id="topTheses.user.user_profile.id" :title="topTheses.user.name"
+                                :gender="topTheses.user.gender" :dimensions="'512x512'" avatarClass="rounded-2 " />
+                        </div>
+                        <div class="header-title">
+                            <h3 class="ms-3 title">
+                                50 أخرين
+                                <span role="button" class="align-middle material-symbols-outlined"
+                                    @click="show_top_theses = !show_top_theses">
+                                    {{ show_top_theses ? "expand_less" : "expand_more" }}
+                                </span>
+
+                            </h3>
                         </div>
                     </div>
+                    <div class="row" v-show="show_top_theses">
+
+                        <div class="col" v-for="topTheses in response.max_total_thesis.slice(3)" :key="topTheses.user.id">
+                            <TopUserFrame_2 :userID="topTheses.user.id" :userName="topTheses.user.name"
+                                :topValue="formatNumber(topTheses.max_total_thesis)" :topValueType="'اطروحة'"
+                                :profileImg="topTheses.user.user_profile.profile_picture"
+                                :profile_id="topTheses.user.user_profile.id" :title="topTheses.user.name"
+                                :gender="topTheses.user.gender" :dimensions="'60x60'" avatarClass="rounded-circle " />
+                        </div>
+
+                    </div>
+
                 </div>
+
             </div>
         </template>
     </iq-card>
@@ -79,6 +98,8 @@
 <script>
 import helper from "@/utilities/helper.js";
 import MarkService from "@/API/services/marks.service";
+import TopUserFrame from "@/components/statistics/TopUserFrame";
+import TopUserFrame_2 from "@/components/statistics/TopUserFrame_2.vue";
 
 export default {
     name: "By Month",
@@ -88,6 +109,11 @@ export default {
             required: true,
         },
     },
+    components: {
+        TopUserFrame,
+        TopUserFrame_2
+    },
+    
     async created() {
         this.response = await MarkService.topUsersByMonth();
     },
@@ -95,6 +121,9 @@ export default {
     data() {
         return {
             response: null,
+            show_top_theses: false,
+            show_top_pages: false,
+
         };
     },
     methods: {
@@ -103,3 +132,17 @@ export default {
 
 };
 </script>
+
+<style scoped>
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 700,
+        'GRAD' 0,
+        'opsz' 24
+}
+
+.title {
+    direction: rtl;
+}
+</style>
