@@ -27,7 +27,7 @@
                             <ByWeek />
                         </tab-content-item>
                         <tab-content-item :active="false" id="by-month" aria-labelled-by="month-top-usres">
-                            <ByMonth :monthName="MONTHS[monthName]"/>
+                            <ByMonth :monthName="MONTHS[monthName]" />
                         </tab-content-item>
                     </tab-content>
                 </div>

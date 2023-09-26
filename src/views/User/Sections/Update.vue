@@ -5,77 +5,41 @@
         <div class="iq-card-body profile-page p-0">
           <div class="profile-header">
             <div class="cover-container">
-              <img
-                :src="
-                  resolve_porfile_img(
-                    '1300x325',
-                    profileInfo.cover_picture,
-                    profileInfo.id
-                  )
-                "
-                alt="profile-bg"
-                class="rounded img-fluid"
-                v-if="profileInfo && profileInfo.cover_picture"
-              />
+              <img :src="resolve_porfile_img(
+                '1300x325',
+                profileInfo.cover_picture,
+                profileInfo.id
+              )
+                " alt="profile-bg" class="rounded img-fluid" v-if="profileInfo && profileInfo.cover_picture" />
 
-              <img
-                src="@/assets/images/main/book-banner.png"
-                alt="profile-bg"
-                class="rounded img-fluid"
-                v-else
-              />
+              <img src="@/assets/images/main/book-banner.png" alt="profile-bg" class="rounded img-fluid" v-else />
             </div>
           </div>
         </div>
         <div class="profile-img">
-          <img
-            :src="
-              resolve_porfile_img(
-                '150x150',
-                profileInfo.profile_picture,
-                profileInfo.id
-              )
-            "
-            alt="profile-img"
-            class="avatar-130 img-fluid"
-            style="border: 4px solid #1d1a55"
-            v-if="profileInfo && profileInfo.profile_picture"
-          />
+          <img :src="resolve_porfile_img(
+            '150x150',
+            profileInfo.profile_picture,
+            profileInfo.id
+          )
+            " alt="profile-img" class="avatar-130 img-fluid" style="border: 4px solid #1d1a55"
+            v-if="profileInfo && profileInfo.profile_picture" />
 
-          <img
-            src="@/assets/images/main/reader.png"
-            alt="profile-img"
-            class="avatar-130 img-fluid"
-            style="border: 4px solid #1d1a55"
-            v-else
-          />
+          <img src="@/assets/images/main/reader.png" alt="profile-img" class="avatar-130 img-fluid"
+            style="border: 4px solid #1d1a55" v-else />
         </div>
         <div class="mt-3 row">
           <div class="form-group col-6">
             <label class="form-label" for="profile_picture">
               صورة الملف الشخصي
             </label>
-            <input
-              class="form-control"
-              type="file"
-              name="profile_picture"
-              id="profile_picture"
-              ref="profile_picture"
-              accept="image/*"
-              @change="submitProfilePic"
-            />
+            <input class="form-control" type="file" name="profile_picture" id="profile_picture" ref="profile_picture"
+              accept="image/*" @change="submitProfilePic" />
           </div>
           <div class="form-group col-6">
             <label class="form-label" for="cover_picture"> صورة الغلاف </label>
-            <input
-              class="form-control"
-              type="file"
-              name="cover_picture"
-              id="cover_picture"
-              ref="cover_picture"
-              accept="image/*"
-              @change="submitProfileCover"
-            />
+            <input class="form-control" type="file" name="cover_picture" id="cover_picture" ref="cover_picture"
+              accept="image/*" @change="submitProfileCover" />
           </div>
         </div>
       </div>
@@ -86,52 +50,27 @@
       </div>
       <div class="iq-card-body p-3">
         <div class="image-block text-center">
-          <img
-            src="@/assets/images/main/update-profile-info.png"
-            class="img-fluid rounded w-50"
-            alt="profile-img"
-          />
+          <img src="@/assets/images/main/update-profile-info.png" class="img-fluid rounded w-50" alt="profile-img" />
         </div>
 
         <div class="d-flex align-items-center mt-3">
-          <form
-            @submit.prevent="submitProfileInfo"
-            class="post-text ml-3 w-100 row"
-          >
+          <form @submit.prevent="submitProfileInfo" class="post-text ml-3 w-100 row">
             <div class="form-group col-12">
               <h4>اسمك الكامل بالعربية</h4>
               <div class="form-group row">
-                <input
-                  type="text"
-                  class="form-control mt-2"
-                  name="first_name_ar"
-                  id="first_name_ar"
-                  v-model="v$.infoForm.first_name_ar.$model"
-                  placeholder="الاسم الأول"
-                />
+                <input type="text" class="form-control mt-2" name="first_name_ar" id="first_name_ar"
+                  v-model="v$.infoForm.first_name_ar.$model" placeholder="الاسم الأول" />
               </div>
               <small style="color: red" v-if="v$.infoForm.first_name_ar.$error">
                 قم بادخال الاسم الأول
               </small>
               <div class="form-group row">
-                <input
-                  type="text"
-                  class="form-control mt-2"
-                  name="middle_name_ar"
-                  id="middle_name_ar"
-                  v-model="infoForm.middle_name_ar"
-                  placeholder="الاسم الثاني"
-                />
+                <input type="text" class="form-control mt-2" name="middle_name_ar" id="middle_name_ar"
+                  v-model="infoForm.middle_name_ar" placeholder="الاسم الثاني" />
               </div>
               <div class="form-group row">
-                <input
-                  type="text"
-                  class="form-control mt-2"
-                  name="last_name_ar"
-                  id="last_name_ar"
-                  v-model="v$.infoForm.last_name_ar.$model"
-                  placeholder="الاسم الأخير"
-                />
+                <input type="text" class="form-control mt-2" name="last_name_ar" id="last_name_ar"
+                  v-model="v$.infoForm.last_name_ar.$model" placeholder="الاسم الأخير" />
               </div>
               <small style="color: red" v-if="v$.infoForm.last_name_ar.$error">
                 قم بادخال الاسم الأخير
@@ -139,44 +78,24 @@
             </div>
             <div class="form-group col-12">
               <h4>تاريخ الميلاد</h4>
-              <input
-                type="date"
-                class="form-control mt-2"
-                name="birthdate"
-                id="birthdate"
-                v-model="infoForm.birthdate"
-                placeholder="تاريخ الملاد"
-              />
+              <input type="date" class="form-control mt-2" name="birthdate" id="birthdate" v-model="infoForm.birthdate"
+                placeholder="تاريخ الملاد" />
             </div>
 
             <div class="form-group col-12">
               <h4>الدولة</h4>
               <select class="form-select mt-2" v-model="infoForm.country">
                 <option value="" selected>الدولة</option>
-                <option
-                  v-for="(country, index) in countries"
-                  :key="index"
-                  :value="country.code"
-                >
+                <option v-for="(country, index) in countries" :key="index" :value="country.code">
                   {{ country.name }}
                 </option>
               </select>
             </div>
             <div class="form-group col-12">
               <h4>بلد الاقامة</h4>
-              <select
-                class="form-select mt-2"
-                data-trigger
-                name="resident"
-                id="resident"
-                v-model="infoForm.resident"
-              >
+              <select class="form-select mt-2" data-trigger name="resident" id="resident" v-model="infoForm.resident">
                 <option value="" selected>بلد الاقامة</option>
-                <option
-                  v-for="(country, index) in countries"
-                  :key="index"
-                  :value="country.code"
-                >
+                <option v-for="(country, index) in countries" :key="index" :value="country.code">
                   {{ country.name }}
                 </option>
               </select>
@@ -184,15 +103,8 @@
             <div class="form-group col-12">
               <h4>من أنا</h4>
               <div class="form-group row">
-                <textarea
-                  rows="3"
-                  placeholder="نبذة عني"
-                  class="rounded form-control mt-2 col-12"
-                  id="bio"
-                  v-model="v$.infoForm.bio.$model"
-                  name="bio"
-                  dir="rtl"
-                >
+                <textarea rows="3" placeholder="نبذة عني" class="rounded form-control mt-2 col-12" id="bio"
+                  v-model="v$.infoForm.bio.$model" name="bio" dir="rtl">
                 </textarea>
                 <span v-if="v$.infoForm.bio.$model"> {{ v$.infoForm.bio.$model.length }}/600 حرف</span>
               </div>
@@ -201,42 +113,24 @@
               </small>
 
               <div class="form-group row">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="fav_book"
-                  id="fav_book"
-                  v-model="v$.infoForm.fav_book.$model"
-                  placeholder="كتابي المفضل"
-                />
+                <input type="text" class="form-control" name="fav_book" id="fav_book"
+                  v-model="v$.infoForm.fav_book.$model" placeholder="كتابي المفضل" />
               </div>
               <small style="color: red" v-if="v$.infoForm.fav_book.$error">
                 قم بادخال اسم كتاب لا يزيد عدد حروفه عن 250
               </small>
 
               <div class="form-group row">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="fav_writer"
-                  id="fav_writer"
-                  v-model="v$.infoForm.fav_writer.$model"
-                  placeholder="الكاتب المفضل"
-                />
+                <input type="text" class="form-control" name="fav_writer" id="fav_writer"
+                  v-model="v$.infoForm.fav_writer.$model" placeholder="الكاتب المفضل" />
               </div>
               <small style="color: red" v-if="v$.infoForm.fav_writer.$error">
                 قم بادخال اسم كاتب لا يزيد عدد حروفه عن 250
               </small>
 
               <div class="form-group row">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="fav_quote"
-                  id="fav_quote"
-                  v-model="v$.infoForm.fav_quote.$model"
-                  placeholder="الاقتباس المفضل"
-                />
+                <input type="text" class="form-control" name="fav_quote" id="fav_quote"
+                  v-model="v$.infoForm.fav_quote.$model" placeholder="الاقتباس المفضل" />
               </div>
               <small style="color: red" v-if="v$.infoForm.fav_quote.$error">
                 قم بادخال اقتباس لا يزيد عدد حروفه عن 250
@@ -244,40 +138,22 @@
             </div>
             <div class="form-group col-12">
               <h4>قسم القراءة المفضل</h4>
-              <select
-                class="form-select mt-2"
-                data-trigger
-                name="section"
-                id="section"
-                v-model="infoForm.fav_section"
-              >
+              <select class="form-select mt-2" data-trigger name="section" id="section" v-model="infoForm.fav_section">
                 <option value="" selected>اختر قسمك المفضل</option>
-                <option
-                  v-for="section in sections"
-                  :key="section.id"
-                  :value="section.section"
-                >
+                <option v-for="section in sections" :key="section.id" :value="section.section">
                   {{ section.section }}
                 </option>
               </select>
             </div>
             <hr />
             <div class="form-group">
-              <button
-                type="submit"
-                :disabled="message"
-                class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto"
-              >
+              <button type="submit" :disabled="message" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
                 تعديل
               </button>
             </div>
 
             <div class="col-sm-12 text-center" v-if="loader">
-              <img
-                src="@/assets/images/page-img/page-load-loader.gif"
-                alt="loader"
-                style="height: 100px"
-              />
+              <img src="@/assets/images/page-img/page-load-loader.gif" alt="loader" style="height: 100px" />
             </div>
             <h4 class="text-center mt-3 mb-3" v-if="message">{{ message }}</h4>
           </form>
@@ -290,61 +166,28 @@
       </div>
       <div class="iq-card-body p-3">
         <div class="image-block text-center">
-          <img
-            src="@/assets/images/main/social-media.png"
-            class="img-fluid rounded w-50"
-            alt="profile-img"
-          />
+          <img src="@/assets/images/main/social-media.png" class="img-fluid rounded w-50" alt="profile-img" />
         </div>
 
         <div class="d-flex align-items-center mt-3">
-          <form
-            @submit.prevent="submitSociaMedia"
-            class="post-text ml-3 w-100 row"
-          >
+          <form @submit.prevent="submitSociaMedia" class="post-text ml-3 w-100 row">
             <div class="form-group col-12">
-              <input
-                type="text"
-                class="form-control mt-2"
-                name="facebook"
-                id="facebook"
-                v-model="socialMediaForm.facebook"
-                placeholder="فيسبوك"
-              />
-              <input
-                type="text"
-                class="form-control mt-2"
-                name="instagram"
-                id="instagram"
-                v-model="socialMediaForm.instagram"
-                placeholder="انستغرام"
-              />
-              <input
-                type="text"
-                class="form-control mt-2"
-                name="twitter"
-                id="twitter"
-                v-model="socialMediaForm.twitter"
-                placeholder="تويتر"
-              />
+              <input type="text" class="form-control mt-2" name="facebook" id="facebook"
+                v-model="socialMediaForm.facebook" placeholder="فيسبوك" />
+              <input type="text" class="form-control mt-2" name="instagram" id="instagram"
+                v-model="socialMediaForm.instagram" placeholder="انستغرام" />
+              <input type="text" class="form-control mt-2" name="twitter" id="twitter" v-model="socialMediaForm.twitter"
+                placeholder="تويتر" />
             </div>
             <hr />
             <div class="form-group">
-              <button
-                type="submit"
-                :disabled="socialMediaMessage"
-                class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto"
-              >
+              <button type="submit" :disabled="socialMediaMessage" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
                 تعديل
               </button>
             </div>
 
             <div class="col-sm-12 text-center" v-if="loader">
-              <img
-                src="@/assets/images/page-img/page-load-loader.gif"
-                alt="loader"
-                style="height: 100px"
-              />
+              <img src="@/assets/images/page-img/page-load-loader.gif" alt="loader" style="height: 100px" />
             </div>
             <h4 class="text-center mt-3 mb-3" v-if="message">
               {{ socialMediaMessage }}
@@ -353,11 +196,56 @@
         </div>
         <div class="d-flex align-items-center mt-3 row">
           <div class="d-inline-block w-100 text-center col-12">
-            <a
-              role="button"
-              @click="back()"
-              class="d-block mt-3 mb-3 w-75 mx-auto"
-            >
+            <a role="button" @click="back()" class="d-block mt-3 mb-3 w-75 mx-auto">
+              <span>عودة للملف الشخصي</span>
+              <span class="align-middle material-symbols-outlined">
+                keyboard_return
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </iq-card>
+
+    <iq-card class="iq-card">
+      <div class="iq-card-header-toolbar d-flex align-items-center mx-auto">
+        <h3 class="text-center mt-3 mb-3">
+          اعادة تعيين البريد الالكتروني
+        </h3>
+      </div>
+      <div class="iq-card-body p-3">
+        <div class="image-block text-center">
+          <img src="@/assets/images/main/no-friend-req.png" class="img-fluid rounded w-50" alt="profile-img" />
+        </div>
+
+        <div class="d-flex align-items-center mt-3">
+          <form class="mt-4 w-100" @submit.prevent="resetEmail">
+            <div class="alert alert-warning w-75 mb-2" role="alert">
+              الايميل المسجل به: {{ user.email }}
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="email">ادخل بريدك الالكتروني الجديد</label>
+              <input type="email" class="form-control mb-0 w-75 mx-auto" id="email" placeholder="  ادخل بريدك الالكتروني "
+                v-model="v$.resetEmailForm.email.$model">
+              <p class="p-2 text-center" style="color:red" v-if="v$.resetEmailForm.email.$error">قم بادخال بريدك
+                الالكتروني</p>
+            </div>
+            <div class="col-sm-12 text-center" v-if="loader">
+              <img src="@/assets/images/page-img/page-load-loader.gif" alt="loader" style="height: 100px;">
+            </div>
+            <h4 class="text-center mt-3 mb-3" v-if="resetEmailMsg"> {{ resetEmailMsg }}</h4>
+            <div class="d-inline-block w-100 text-center">
+              <button type="submit" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
+                تعيين
+              </button>
+            </div>
+          </form>
+
+        </div>
+        <div class="d-flex align-items-center mt-3 row">
+          <div class="d-inline-block w-100 text-center col-12">
+            <a role="button" @click="back()" class="d-block mt-3 mb-3 w-75 mx-auto">
               <span>عودة للملف الشخصي</span>
               <span class="align-middle material-symbols-outlined">
                 keyboard_return
@@ -371,10 +259,12 @@
 </template>
 <script>
 import useVuelidate from "@vuelidate/core";
-import { required, minLength, maxLength } from "@vuelidate/validators";
+import { required, minLength, maxLength, email } from "@vuelidate/validators";
 import UserProfile from "@/API/services/user-profile.service";
 import SocialMedia from "@/API/services/social-media.service";
 import profileImagesService from "@/API/services/profile.images.service";
+import Auth from '@/API/services/auth.service'
+import UserInfoService from "@/Services/userInfoService";
 
 export default {
   name: "update profile",
@@ -409,6 +299,9 @@ export default {
   },
   data() {
     return {
+      resetEmailForm: {
+        email: '',
+      },
       loader: false,
       profileInfo: null,
       profilePictureForm: {
@@ -680,6 +573,7 @@ export default {
       sections: [],
       message: null,
       socialMediaMessage: null,
+      resetEmailMsg: ''
     };
   },
   validations() {
@@ -704,6 +598,13 @@ export default {
           maxLength: maxLength(300),
         },
       },
+      resetEmailForm: {
+        email: {
+          required,
+          email
+        },
+      },
+
     };
   },
   methods: {
@@ -741,6 +642,24 @@ export default {
       }
     },
 
+
+    async resetEmail() {
+      this.v$.$touch()
+      if (!this.v$.resetEmailForm.$invalid) {
+        this.resetEmailMsg = "";
+        this.loader = true;
+        const response = await Auth.resetEmail(this.resetEmailForm.email)
+        console.log(response)
+        if (response == 'Reset Successfully!') {
+          this.resetEmailMsg = " تم التعيين - تفقد بريدك الالكتروني وقم بتسجيل الدخول مرة أخرى"
+          setTimeout(this.logout, 10000);
+        }
+        else {
+          this.resetEmailMsg = " حدث خطأ"
+        }
+        this.loader = false;
+      }
+    },
     /**
      * update profile picture.
      * @return updated profile
@@ -792,5 +711,11 @@ export default {
       });
     },
   },
+  computed: {
+    user() {
+      return this.$store.getters.getUser;
+    },
+  },
+
 };
 </script>
