@@ -22,15 +22,15 @@ export default {
    * @param {Date} dateToConvert
    * @returns {String} full date
    */
-  formatFullDate(dateToConvert) {
+  formatFullDate(dateToConvert, withTime = true) {
     return new Date(dateToConvert).toLocaleString("ar", {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
+      hour: withTime ? "numeric" : undefined,
+      minute: withTime ? "numeric" : undefined,
+      hour12: withTime ? true : undefined,
     });
   },
 
@@ -115,5 +115,20 @@ export default {
 
   generateRandomId() {
     return Math.floor(Math.random() * 1000000).toString();
+  },
+
+  minutesToHoursAndMinutes(minutes) {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `${hours} ساعة و ${remainingMinutes} دقيقة`;
+  },
+
+  convertTZ(date, tzString) {
+    return new Date(
+      (typeof date === "string" ? new Date(date) : date).toLocaleString(
+        "en-US",
+        { timeZone: tzString }
+      )
+    );
   },
 };

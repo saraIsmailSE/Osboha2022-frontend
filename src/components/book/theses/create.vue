@@ -7,24 +7,44 @@
           <h5 class="form-label">نوع الأطروحة</h5>
         </div>
         <div class="form-group">
-          <select class="form-select w-100" name="type_of_thesis" id="type_of_thesis"
-            v-model="v$.thesisForm.typeOfThesis.$model" v-on:change="
+          <select
+            class="form-select w-100"
+            name="type_of_thesis"
+            id="type_of_thesis"
+            v-model="v$.thesisForm.typeOfThesis.$model"
+            v-on:change="
               changeTypeOfThesis(
                 $event.target.options[$event.target.options.selectedIndex].value
               )
-              ">
+            "
+          >
             <option value="">اختر نوع الأطروحة</option>
             <option value="read">قراءة</option>
             <option value="readAndWrite">كتابة أطروحة</option>
-            <option value="screenshots">اقتباسات</option>
-            <option value="screenshotsAndWrite">كتابة واقتباسات</option>
+            <option value="screenshots" :disabled="screenshotsDisabled">
+              اقتباسات
+              <span v-if="screenshotsDisabled">
+                -
+                <small> (مغلق اليوم) </small>
+              </span>
+            </option>
+            <option value="screenshotsAndWrite" :disabled="screenshotsDisabled">
+              كتابة واقتباسات
+              <span v-if="screenshotsDisabled">
+                -
+                <small> (مغلق اليوم) </small>
+              </span>
+            </option>
           </select>
         </div>
       </div>
       <!-- الصفحات -->
       <div class="row mt-2" v-if="showPages">
         <div class="form-group">
-          <h5 class="form-label" :class="{ 'text-primary': pages.length === 0 && !startOver }">
+          <h5
+            class="form-label"
+            :class="{ 'text-primary': pages.length === 0 && !startOver }"
+          >
             {{
               pages.length === 0 && !startOver ? "لقد أنهيت الكتاب" : "الصفحات"
             }}
@@ -32,18 +52,28 @@
         </div>
       </div>
       <div class="row" v-if="showPages">
-        <button class="btn btn-primary me-2 d-flex align-content-center justify-content-center"
-          @click.prevent="startBookOver" v-if="pages.length === 0 && !startOver">
+        <button
+          class="btn btn-primary me-2 d-flex align-content-center justify-content-center"
+          @click.prevent="startBookOver"
+          v-if="pages.length === 0 && !startOver"
+        >
           <span class="material-symbols-outlined md-18"> refresh </span>
           إعادة قراءة الكتاب
         </button>
 
         <template v-else>
-          <small style="color: red" v-if="numberOfPages < 3">* الحد الأدنى 3 صفحات</small>
+          <small style="color: red" v-if="numberOfPages < 3"
+            >* الحد الأدنى 3 صفحات</small
+          >
 
           <div class="form-group col-6">
-            <select class="form-select" data-trigger name="start_page" id="start_page"
-              v-model="v$.thesisForm.start_page.$model">
+            <select
+              class="form-select"
+              data-trigger
+              name="start_page"
+              id="start_page"
+              v-model="v$.thesisForm.start_page.$model"
+            >
               <option value="">صفحة البداية</option>
               <option v-for="page in pages" :value="page" :key="page">
                 {{ page }}
@@ -51,59 +81,116 @@
             </select>
 
             <div class="help-block" v-if="v$.thesisForm.start_page.$error">
-              <small style="color: red" v-if="v$.thesisForm.start_page.required.$invalid">الرجاء اختيار صفحة
-                البداية</small>
-              <small style="color: red" v-if="!v$.thesisForm.start_page.required.$invalid &&
-                v$.thesisForm.start_page.between.$invalid
-                ">البداية يجب ان تكون اقل من النهاية</small>
+              <small
+                style="color: red"
+                v-if="v$.thesisForm.start_page.required.$invalid"
+                >الرجاء اختيار صفحة البداية</small
+              >
+              <small
+                style="color: red"
+                v-if="
+                  !v$.thesisForm.start_page.required.$invalid &&
+                  v$.thesisForm.start_page.between.$invalid
+                "
+                >البداية يجب ان تكون اقل من النهاية</small
+              >
             </div>
           </div>
           <div class="form-group col-6">
-            <select class="form-select" data-trigger name="end_page" id="end_page"
-              v-model="v$.thesisForm.end_page.$model">
+            <select
+              class="form-select"
+              data-trigger
+              name="end_page"
+              id="end_page"
+              v-model="v$.thesisForm.end_page.$model"
+            >
               <option value="">صفحة النهاية</option>
               <option v-for="page in bookPagesEnd" :value="page" :key="page">
                 {{ page }}
               </option>
             </select>
             <div class="help-block" v-if="v$.thesisForm.end_page.$error">
-              <small style="color: red" v-if="v$.thesisForm.end_page.required.$invalid">الرجاء اختيار صفحة النهاية</small>
-              <small style="color: red" v-if="!v$.thesisForm.end_page.required.$invalid &&
-                v$.thesisForm.end_page.between.$invalid
-                ">النهاية يجب ان تكون اكبر من البداية</small>
+              <small
+                style="color: red"
+                v-if="v$.thesisForm.end_page.required.$invalid"
+                >الرجاء اختيار صفحة النهاية</small
+              >
+              <small
+                style="color: red"
+                v-if="
+                  !v$.thesisForm.end_page.required.$invalid &&
+                  v$.thesisForm.end_page.between.$invalid
+                "
+                >النهاية يجب ان تكون اكبر من البداية</small
+              >
             </div>
           </div>
         </template>
       </div>
       <div class="form-group" v-if="thesis">
         <label class="form-label" for="thesisBody">الأطروحة</label>
-        <textarea rows="5" placeholder="... اكتب أطروحتك" class="rounded form-control" id="thesisBody" name="thesisBody"
-          v-model.trim="v$.thesisForm.body.$model" style="direction: rtl"></textarea>
+        <textarea
+          rows="5"
+          placeholder="... اكتب أطروحتك"
+          class="rounded form-control"
+          id="thesisBody"
+          name="thesisBody"
+          v-model.trim="v$.thesisForm.body.$model"
+          style="direction: rtl"
+        ></textarea>
         <p style="direction: rtl">
           <span> {{ v$.thesisForm.body.$model.length }}/400 حرف</span>
           <span> - </span>
-          <span style="color: red" class="text-center" v-if="v$.thesisForm.body.$model.length < 400">أطروحة غير شاملة
+          <span
+            style="color: red"
+            class="text-center"
+            v-if="v$.thesisForm.body.$model.length < 400"
+            >أطروحة غير شاملة
             <span class="material-symbols-outlined font-small">error</span>
           </span>
-          <span style="color: green" v-else>أطروحة شاملة
-            <span class="material-symbols-outlined font-small">check_circle</span>
+          <span style="color: green" v-else
+            >أطروحة شاملة
+            <span class="material-symbols-outlined font-small"
+              >check_circle</span
+            >
           </span>
         </p>
         <div class="help-block" v-if="v$.thesisForm.body.$error">
-          <small style="color: red" v-if="v$.thesisForm.body.requiredIf.$invalid">الرجاء ادخال الأطروحة</small>
+          <small
+            style="color: red"
+            v-if="v$.thesisForm.body.requiredIf.$invalid"
+            >الرجاء ادخال الأطروحة</small
+          >
         </div>
       </div>
 
       <div class="form-group" v-if="screenshots">
         <label class="form-label" for="customFile"> اضافة اقتباس</label>
-        <input class="form-control" type="file" id="customFile" multiple
-          accept="image/jpeg, image/png, image/jpg, image/gif, image/svg" ref="screenShots" @change="previewImages" />
+        <input
+          class="form-control"
+          type="file"
+          id="customFile"
+          multiple
+          accept="image/jpeg, image/png, image/jpg, image/gif, image/svg"
+          ref="screenShots"
+          @change="previewImages"
+        />
         <div class="help-block" v-if="v$.thesisForm.screenShots.$error">
-          <small style="color: red" v-if="v$.thesisForm.screenShots.requiredIf.$invalid">الرجاء ادخال اقتباس واحد على
-            الاقل</small>
+          <small
+            style="color: red"
+            v-if="v$.thesisForm.screenShots.requiredIf.$invalid"
+            >الرجاء ادخال اقتباس واحد على الاقل</small
+          >
         </div>
-        <ImagePreviewer v-if="thesisForm.screenShots.length" :media="thesisForm.screenShots" @remove-media="removeImage"
-          ref="imagePreviewer" />
+        <div class="help-block" v-if="filesLimitError">
+          <small style="color: red">{{ filesLimitError }}</small>
+        </div>
+        <ImagePreviewer
+          v-if="thesisForm.screenShots.length"
+          :media="thesisForm.screenShots"
+          @remove-media="removeImage"
+          ref="imagePreviewer"
+        />
       </div>
       <hr />
       <!--Success and error messages-->
@@ -111,13 +198,25 @@
       <small class="text-danger text-center" v-if="errorMessage">
         {{ errorMessage }}
       </small>
-      <small class="text-danger text-center" v-if="mediaNoteText && thesisToEdit">
+      <small
+        class="text-danger text-center"
+        v-if="mediaNoteText && thesisToEdit"
+      >
         {{ mediaNoteText }}
       </small>
       <div class="col-sm-12 text-center" v-if="loader">
-        <img :src="require('@/assets/images/page-img/page-load-loader.gif')" alt="loader" style="height: 100px" />
+        <img
+          :src="require('@/assets/images/page-img/page-load-loader.gif')"
+          alt="loader"
+          style="height: 100px"
+        />
       </div>
-      <button type="submit" class="btn btn-primary d-block mt-3" v-if="!loader" :disabled="v$.thesisForm.$invalid">
+      <button
+        type="submit"
+        class="btn btn-primary d-block mt-3"
+        v-if="!loader"
+        :disabled="v$.thesisForm.$invalid"
+      >
         إضافة
       </button>
     </div>
@@ -125,7 +224,7 @@
 </template>
 <script>
 import useVuelidate from "@vuelidate/core";
-import { required, requiredIf } from "@vuelidate/validators";
+import { required, requiredIf, maxLength } from "@vuelidate/validators";
 import commentService from "@/API/services/comment.service";
 import ImagePreviewer from "@/components/media/ImagePreviewer.vue";
 import helper from "@/utilities/helper";
@@ -173,11 +272,25 @@ export default {
       },
       mediaNoteText: "",
       errorMessage: "",
+      filesLimitError: "",
+      screenshotsDisabled: false,
+      currentTime: new Date(),
+      timer: null,
     };
+  },
+  mounted() {
+    this.timer = setInterval(() => {
+      this.currentTime = new Date();
+    }, 1000);
+
+    this.informUserAboutClosingScreenShots();
+  },
+  beforeUnmount() {
+    clearInterval(this.timer);
   },
   computed: {
     numberOfPages() {
-      return (this.thesisForm.end_page - this.thesisForm.start_page) + 1
+      return this.thesisForm.end_page - this.thesisForm.start_page + 1;
     },
 
     successMessage() {
@@ -232,10 +345,41 @@ export default {
     bookPagesEnd() {
       return this.pages.filter((page) => page > this.thesisForm.start_page);
     },
+    isTimeValid() {
+      //disable screenshots on saturday afte 6:00 pm Asia/Riyadh
+      const convertedDate = helper.convertTZ(this.currentTime, "Asia/Riyadh");
+      const day = convertedDate.getDay();
+      const hour = convertedDate.getHours();
+      const minutes = convertedDate.getMinutes();
+
+      if (
+        day === 2 &&
+        hour >= 12
+        // &&
+        // (hour < 14 || (hour === 14 && minutes <= 59))
+      ) {
+        return true;
+      }
+      return false;
+    },
   },
   watch: {
     book() {
       this.thesisForm.book_id = this.book.id;
+    },
+    currentTime() {
+      if (this.isTimeValid) {
+        this.screenshotsDisabled = true;
+      } else {
+        this.screenshotsDisabled = false;
+      }
+    },
+    screenshotsDisabled() {
+      if (this.screenshotsDisabled) {
+        this.screenshots = false;
+        this.thesisForm.screenShots = [];
+        this.informUserAboutClosingScreenShots();
+      }
     },
   },
   created() {
@@ -309,7 +453,14 @@ export default {
       }
     },
     previewImages(event) {
-      this.thesisForm.screenShots = event.target.files;
+      const { files } = event.target;
+
+      if (files.length > 5) {
+        this.filesLimitError = "لا يمكنك رفع أكثر من 5 اقتباسات";
+        return;
+      }
+      this.filesLimitError = "";
+      this.thesisForm.screenShots = files;
     },
     removeImage(index) {
       const files = [...this.thesisForm.screenShots];
@@ -404,6 +555,39 @@ export default {
       }
 
       return media;
+    },
+
+    informUserAboutClosingScreenShots() {
+      // if (this.isTimeValid) {
+      if (!this.$cookies.get("showClosingScreenShotsAlert")) {
+        const swal = this.$swal.mixin({
+          customClass: {
+            confirmButton: "btn btn-primary btn-lg",
+          },
+          buttonsStyling: false,
+        });
+
+        swal
+          .fire({
+            title: "تنبيه!",
+            text: `بسبب كثرة القراء الذين يدخلون تصويت القراءة الآن،  لا يتحمل السيرفر تحميل الصور،  فضلا ادخل أطروحتك أو اقتباساتك بشكل مكتوب. يتاح رفع الصور من الأحد إلى عصر يوم السبت أسبوعيا`,
+            showCancelButton: false,
+            confirmButtonText: "حسنًا",
+            icon: "warning",
+            showClass: {
+              popup: "animate__animated animate__zoomIn",
+            },
+            hideClass: {
+              popup: "animate__animated animate__zoomOut",
+            },
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              this.$cookies.set("showClosingScreenShotsAlert", true, "1d");
+            }
+          });
+      }
+      // }
     },
   },
   validations() {

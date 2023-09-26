@@ -60,9 +60,7 @@ class BookService {
 
   async getBooksByName(name, page) {
     try {
-      const books = await api.post(`/books/name?page=${page}`, {
-        name,
-      });
+      const books = await api.get(`/books/name?page=${page}&name=${name}`);
       return books.data.data;
     } catch (error) {
       handleError(error);

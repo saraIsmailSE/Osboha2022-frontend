@@ -361,14 +361,34 @@ const exceptionChildRoute = (prop, mode = false) => [
   },
 ];
 
-const generalConversionChildRoute = (prop, mode = false) => [
-  {
-    path: "",
-    name: prop + ".index",
-    meta: { auth: true, name: "General Conversion Index" },
-    component: () => import("../views/OsbohaMain/GeneralConversion/index"),
-  },
-];
+// const generalConversionChildRoute = (prop, mode = false) => [
+//   {
+//     path: "",
+//     name: prop + ".index",
+//     meta: { auth: true, name: "General Conversion Index" },
+//     component: () => import("../views/OsbohaMain/GeneralConversion/index"),
+//   },
+//   {
+//     path: "statistics",
+//     name: prop + ".statistics",
+//     meta: { auth: true, name: "General Conversion Statistics" },
+//     component: () => import("../views/OsbohaMain/GeneralConversion/Statistics"),
+//   },
+//   {
+//     path: "working-hours",
+//     name: prop + ".workingHours",
+//     meta: { auth: true, name: "General Conversion Working Hours" },
+//     component: () =>
+//       import("../views/OsbohaMain/GeneralConversion/WorkingHours"),
+//   },
+//   {
+//     path: "working-hours-stats",
+//     name: prop + ".workingHoursStats",
+//     meta: { auth: true, name: "General Conversion Working Hours Stats" },
+//     component: () =>
+//       import("../views/OsbohaMain/GeneralConversion/WorkingHoursStats"),
+//   },
+// ];
 
 const timerChildRoute = (prop, mode = false) => [
   {
@@ -467,10 +487,9 @@ const controlChildRoute = (prop, mode = false) => [
     path: "leaders-swap/",
     name: prop + ".leadersSwap",
     meta: { auth: true, name: "Leaders Swap" },
-    component: () =>
-      import("../views/OsbohaMain/Control/Leaders/leadersSwap"),
+    component: () => import("../views/OsbohaMain/Control/Leaders/leadersSwap"),
   },
-  
+
   {
     path: "pending-theses/:supervisor_id/",
     name: prop + ".pending-theses",
@@ -591,13 +610,13 @@ const routes = [
     meta: { auth: true },
     children: chatChildRoute("chat"),
   },
-  {
-    path: "/general-conversion",
-    name: "general-conversion",
-    component: () => import("../layouts/Default"),
-    meta: { auth: true },
-    children: generalConversionChildRoute("general-conversion"),
-  },
+  // {
+  //   path: "/general-conversion",
+  //   name: "general-conversion",
+  //   component: () => import("../layouts/Default"),
+  //   meta: { auth: true },
+  //   children: generalConversionChildRoute("general-conversion"),
+  // },
 ];
 
 const router = createRouter({

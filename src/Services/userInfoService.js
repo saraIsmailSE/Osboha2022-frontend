@@ -25,6 +25,7 @@ class UserInfoService {
     return found;
   }
 
+  //return true if user has any of the roles
   hasRoles(user, roles) {
     let hasRoles = false;
     roles.forEach((role) => {
