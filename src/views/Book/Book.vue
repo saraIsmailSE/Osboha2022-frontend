@@ -108,6 +108,7 @@ export default {
         { section_id: 4, section: "عربي", lang: "arabic", active: false },
         { section_id: 5, section: "إنجليزي", lang: "english", active: false },
       ],
+      timer: null,
     };
   },
   methods: {
@@ -191,24 +192,44 @@ export default {
     async searchBookByName(searchKey) {
       this.empty = "";
 
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+
       if (searchKey) {
         this.search = searchKey;
-        const response = await bookService.getBooksByName(
-          this.search,
-          this.page
-        );
-        if (response) {
-          this.books = response.books;
-          this.totalBooks = response.total;
-          this.current = this.page;
-        } else {
-          this.empty = "لا يوجد كتاب بهذا الاسم";
-          this.books = [];
-        }
+        this.timer = setTimeout(async () => {
+          this.loading = true;
+          try {
+            const response = await bookService.getBooksByName(
+              this.search,
+              this.page
+            );
+            if (response?.total > 0) {
+              this.books = response.books;
+              this.totalBooks = response.total;
+              this.current = this.page;
+            } else {
+              this.empty = "لا يوجد كتاب بهذا الاسم";
+              this.books = [];
+            }
+          } catch (e) {
+            helper.toggleToast("حدث خطأ ما, يرجى المحاولة مرة أخرى", "error");
+          } finally {
+            this.loading = false;
+          }
+        }, 500);
       } else {
+        this.search = "";
         //display all books if the search input is empty
-        this.getBooks(this.page);
+        // await this.getBooks(this.page);
       }
+      // if (searchKey) {
+      // } else {
+      //   //display all books if the search input is empty
+      //   this.getBooks(this.page);
+      // }
     },
     //check which page is active
     checkActive(item) {

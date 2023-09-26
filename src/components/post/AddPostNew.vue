@@ -1656,7 +1656,7 @@
   </div>
 </template>
 <script>
-import AddSocialPost from "@/views/Apps/Social/Components/AddSocialPost";
+import AddSocialPost from "@/views/Apps/Osboha/Components/AddSocialPost";
 export default {
   name: "AddSocialPostNew",
   components: { AddSocialPost },

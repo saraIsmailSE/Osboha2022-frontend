@@ -1,206 +1,287 @@
 <template>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card position-relative inner-page-bg bg-primary" style="height: 80px;">
-                <div class="inner-page-title">
-                    <h2 class="text-white">التحويل العام</h2>
-                </div>
-            </div>
+  <div class="col-sm-12 text-center" v-if="loadingClose">
+    <img
+      :src="require('@/assets/images/page-img/page-load-loader.gif')"
+      alt="loader"
+      style="height: 100px"
+    />
+  </div>
+  <div class="row" v-else>
+    <div class="col-sm-12">
+      <div
+        class="card position-relative inner-page-bg bg-primary mb-2"
+        style="height: 80px"
+      >
+        <div class="inner-page-title">
+          <h2 class="text-white">التحويل العام</h2>
         </div>
-
-        <div class="timer-container">
-            <div class="container">
-                <span class="title">ثانية</span>
-                <div>
-                    <div>
-                        <span class="single-digit">{{
-                            stopwatch.seconds
-                        }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <span class="separator-container">
-                <span class="separator"></span>
-            </span>
-            <div class="container">
-                <span class="title">دقيقة</span>
-                <div>
-                    <div>
-                        <span class="single-digit">{{
-                            stopwatch.minutes
-                        }}</span>
-                    </div>
-                </div>
-            </div>
-            <span class="separator-container">
-                <span class="separator"></span>
-            </span>
-            <div class="container">
-                <span class="title">ساعة</span>
-                <div>
-                    <span class="single-digit">{{
-                        stopwatch.hours
-                    }}</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- <button @click="getTime" >get time</button> -->
-        <div class="col-lg-12">
-            <div class="mt-3 d-flex align-content-start flex-wrap">
-                <p class="ms-1 me-1">
-                    <span class="bg-primary rounded badge text-white">الكل</span>
-                </p>
-                <p class="ms-1 me-1">
-                    <span class="bg-dark rounded badge text-white">my questions</span>
-                </p>
-                <p class="ms-1 me-1">
-                    <span class="bg-danger rounded badge text-white">assigned to me</span>
-                </p>
-            </div>
-
-            <div class="accordion" id="accordionExample">
-                <div class="accordion-item mb-3" v-for="(question, index) in questions" :key="index">
-                    <div class="mt-3 d-flex align-items-center justify-content-start w-100">
-                        <BaseAvatar :profileImg="null" :profile_id="1" :title="'name'" :gender="'female'"
-                            avatarClass="rounded-circle avatar-40" />
-                        <div class="ms-3">
-                            <h6>user name</h6>
-                        </div>
-                    </div>
-                    <h2 class="accordion-header " id="heading1">
-                        <button class="rtl accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            :data-bs-target="'#collapse' + index" aria-expanded="true" :aria-controls="'collapse' + index">
-                            {{ question.title }}
-                        </button>
-                    </h2>
-                    <div :id="'collapse' + index" class="accordion-collapse collapse " aria-labelledby="heading1"
-                        data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <p>{{ question.description }}</p>
-
-                            <div class="d-flex align-content-start flex-wrap">
-                                <small class="ms-2 me-2">
-                                    <span class="align-middle material-symbols-outlined">
-                                        task_alt
-                                    </span>
-                                    تم الحل خلال 12 ساعة
-                                </small>
-                                <small class="ms-2 me-2">
-                                    <span class="align-middle material-symbols-outlined">
-                                        person_check
-                                    </span>
-                                    اسم المسؤول
-                                </small>
-                            </div>
-
-                            <div class="mt-3 d-flex align-content-start flex-wrap">
-                                <small class="ms-1 me-1">
-                                    <span class="bg-primary rounded badge text-white">الحالة</span>
-                                </small>
-                                <small class="ms-1 me-1">
-                                    <span class="bg-dark rounded badge text-white">الحالة</span>
-                                </small>
-                                <small class="ms-1 me-1">
-                                    <span class="bg-danger rounded badge text-white">تعيين إلى اسم المسؤول</span>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+
+    <AddQuestion @add-question="addNewQuestion" />
+
+    <div class="col-12">
+      <div class="card card-block card-stretch card-height blog">
+        <div class="card-header">
+          <h2>{{ title }}</h2>
+        </div>
+        <div class="card-body">
+          <div class="blog-description">
+            <div class="col-lg-12 mb-3">
+              <FilterQuestion :filterQuestions="filterQuestions" />
+            </div>
+            <div
+              class="d-flex align-items-center justify-content-start"
+              v-if="emptyMessage"
+            >
+              <div class="me-2">
+                <font-awesome-icon
+                  :icon="['fas', 'circle-exclamation']"
+                  size="xl"
+                />
+              </div>
+              <div>{{ emptyMessage }}</div>
+            </div>
+
+            <Questions v-else :questions="questions" @updateKey="updateKey" />
+
+            <div class="col-sm-12 text-center" v-if="loading">
+              <img
+                :src="require('@/assets/images/page-img/page-load-loader.gif')"
+                alt="loader"
+                style="height: 100px"
+              />
+            </div>
+
+            <div class="col-12" v-if="hasMore && questions.length > 0">
+              <div class="card card-block card-stretch card-height blog">
+                <button
+                  type="button"
+                  class="btn btn-primary d-block w-100"
+                  @click="loadMore"
+                  :disabled="loading"
+                >
+                  تحميل المزيد من الأسئلة
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
-import { defineComponent } from "vue";
-import { useStopwatch } from 'vue-timer-hook';
+import userInfoService from "@/Services/userInfoService";
+import AddQuestion from "@/components/conversation/AddQuestion.vue";
+import GeneralConversationService from "@/API/services/general-conversation.service";
+import Questions from "@/components/conversation/Questions.vue";
+import FilterQuestion from "@/components/conversation/FilterQuestion.vue";
+import helper from "@/utilities/helper";
 
 export default {
-    name: 'index',
-    setup() {
-        const autoStart = true;
-        const stopwatch = useStopwatch(autoStart);
-        return { stopwatch };
+  name: "GeneralConversion",
+  components: {
+    AddQuestion,
+    Questions,
+    FilterQuestion,
+  },
+  provide() {
+    return {
+      addNewAnswer: this.addNewAnswer,
+    };
+  },
+  async created() {
+    await this.checkUserPermission();
+    await this.closeOverdueQuestions();
+    await this.getQuestions();
+  },
+  data() {
+    return {
+      questions: [],
+      loading: false,
+      emptyMessage: "",
+      keyword: "all",
+      loadingClose: false,
+      hasMore: false,
+      page: 1,
+    };
+  },
+  computed: {
+    auth() {
+      return this.$store.getters.getUser;
     },
-    data() {
-        return {
-            questions: [
-                {
-                    title: 'تم تطوير هذا النص بمرور الوقت ليتناسب مع احتياجات الطباعة الحديثة.',
-                    description: 'Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy.'
-                },
-                {
-                    title: 'Distracted by the readable content of a page whent?',
-                    description: 'It has survived not only five centuries, but also the leap into electronic typesetting. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur.'
-                },
-            ]
-        }
+    title() {
+      if (this.keyword === "my-questions") {
+        return "أسئلتي";
+      } else if (this.keyword === "assigned-to-me") {
+        return "الأسئلة المعينة لي";
+      }
+      return "كل الأسئلة";
     },
-    methods: {
-        getTime() {
-            console.log(this.stopwatch.seconds.value)
+  },
+  watch: {
+    keyword: function (val) {
+      this.emptyMessage = "";
+      this.page = 1;
+      this.hasMore = false;
+      this.questions = [];
+      this.getQuestions();
+    },
+  },
+  methods: {
+    ...helper,
+    checkUserPermission() {
+      if (
+        !userInfoService.hasRoles(this.auth, [
+          "admin",
+          "consultant",
+          "advisor",
+          "supervisor",
+          "leader",
+        ])
+      ) {
+        this.$router.push({ name: "NotFound" });
+      }
+    },
+
+    addNewQuestion(question) {
+      this.questions.unshift(question);
+    },
+
+    addNewAnswer(answer) {
+      const question = this.questions.find((q) => q.id === answer.question_id);
+
+      if (question) {
+        question.answers.push(answer);
+      }
+    },
+
+    async getQuestions() {
+      if (this.loading) {
+        return;
+      }
+
+      this.loading = true;
+
+      try {
+        let response;
+        if (this.keyword === "all" || this.keyword === "") {
+          //get all questions
+          response = await GeneralConversationService.getQuestions(this.page);
+        } else if (this.keyword === "my-questions") {
+          //get my questions
+          response = await GeneralConversationService.getMyQuestions(this.page);
+        } else if (this.keyword === "assigned-to-me") {
+          //get assigned to me questions
+          response = await GeneralConversationService.getAssignedToMeQuestions(
+            this.page
+          );
         }
-    }
-}
+
+        if (response.data.length === 0) {
+          this.emptyMessage = response.message;
+          return;
+        }
+
+        this.questions = [...this.questions, ...response.data.questions];
+        this.hasMore = response.data.has_more_pages;
+
+        console.log(response);
+      } catch (error) {
+        this.toggleErrorToast();
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async filterQuestions(key) {
+      this.keyword = key;
+    },
+
+    async loadMore() {
+      this.page++;
+      await this.getQuestions();
+    },
+
+    updateKey(question, key, value) {
+      question[key] = value;
+    },
+
+    async closeOverdueQuestions() {
+      if (this.loadingClose) {
+        return;
+      }
+
+      this.loadingClose = true;
+
+      try {
+        await GeneralConversationService.closeOverdueQuestions();
+      } catch (error) {
+        this.toggleErrorToast();
+      } finally {
+        this.loadingClose = false;
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
 .rtl {
-    direction: rtl;
-    text-align: start;
+  direction: rtl;
+  text-align: start;
 }
 
 .timer-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 30px;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .digital-container {
-    display: flex;
-    flex-direction: row;
-    padding: 0;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
 }
 
 .single-digit {
-    position: relative;
-    display: flex;
-    flex: 0 1 25%;
-    font-size: 30px;
-    background-color: #404549;
-    border-radius: 5px;
-    padding: 10px 12px;
-    color: #fff;
+  position: relative;
+  display: flex;
+  flex: 0 1 25%;
+  font-size: 30px;
+  background-color: #404549;
+  border-radius: 5px;
+  padding: 10px 12px;
+  color: #fff;
 }
 
 .separator-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-self: flex-end;
-    margin: 0 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: flex-end;
+  margin: 0 0 10px;
 }
 
 .separator {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background-color: #404549;
-    border-radius: 6px;
-    margin: 1px 0;
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: #404549;
+  border-radius: 6px;
+  margin: 1px 0;
 }
 
 .title {
-    font-size: 12px;
-    margin-bottom: 5px;
+  font-size: 12px;
+  margin-bottom: 5px;
 }
 </style>

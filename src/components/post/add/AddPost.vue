@@ -130,7 +130,6 @@ import PostUser from "@/components/post/header/PostUser.vue";
 import { Modal } from "bootstrap";
 import postService from "@/API/services/post.service";
 import friendService from "@/API/services/friend.service";
-import UserInfo from "@/Services/userInfoService";
 import helper from "@/utilities/helper";
 
 export default {
@@ -140,7 +139,6 @@ export default {
     PostPoll,
     FriendsList,
     PostUser,
-
   },
   props: {
     type: {
