@@ -271,7 +271,7 @@
           <span class="item-name">إضافة ساعات العمل</span>
         </router-link>
       </li>
-      <li class="nav-item last-element" v-if="isAdmin">
+      <li class="nav-item" v-if="isAdmin">
         <router-link
           :class="
             checkActive('general-conversion.workingHoursStats')
