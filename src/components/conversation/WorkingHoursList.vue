@@ -51,58 +51,30 @@
 </template>
 
 <script>
-import GeneralConversationService from "@/API/services/general-conversation.service";
 import helper from "@/utilities/helper";
 export default {
   name: "WorkingHoursList",
-  async created() {
-    await this.getWorkingHours();
-  },
-  data() {
-    return {
-      workingHours: [],
-      loading: false,
-      empty: false,
-      total: 0,
-    };
+  props: {
+    workingHours: {
+      type: Array,
+      default: () => [],
+    },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     ...helper,
-    async getWorkingHours() {
-      if (this.loading) return;
-
-      this.empty = false;
-      this.loading = true;
-      try {
-        const response = await GeneralConversationService.getWorkingHours();
-
-        const data = response.data?.workingHours;
-
-        if (!data) {
-          this.empty = true;
-          return;
-        }
-
-        // console.log("data", data);
-
-        // const mappedData = Object.keys(data).map((key) => {
-        //   const date = helper.formatFullDate(key, false);
-        //   const time = helper.minutesToHoursAndMinutes(data[key][0].minutes);
-        //   const id = data[key][0].id;
-        //   return { date, time, id };
-        // });
-
-        this.workingHours = data;
-
-        this.total = helper.minutesToHoursAndMinutes(
-          response.data?.totalMinutes
-        );
-      } catch (error) {
-        console.log("error", error);
-        helper.toggleErrorToast();
-      } finally {
-        this.loading = false;
-      }
+  },
+  computed: {
+    empty() {
+      return this.workingHours?.length === 0 && !this.loading;
+    },
+    total() {
+      return this.minutesToHoursAndMinutes(
+        this.workingHours?.reduce((a, b) => a + b.minutes, 0),
+      );
     },
   },
 };

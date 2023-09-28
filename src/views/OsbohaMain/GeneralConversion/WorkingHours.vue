@@ -37,6 +37,7 @@
                     class="form-control mb-0"
                     id="hours"
                     placeholder="ادخل عدد الساعات"
+                    :disabled="loader"
                   />
                   <template v-if="v$.form.hours.$error">
                     <small
@@ -67,6 +68,7 @@
                     class="form-control mb-0"
                     id="minutes"
                     placeholder="ادخل عدد الدقائق"
+                    :disabled="loader"
                   />
                   <template v-if="v$.form.minutes.$error">
                     <small
@@ -119,7 +121,7 @@
       </div>
     </iq-card>
 
-    <WorkingHoursList />
+    <WorkingHoursList :workingHours="workingHours" :loading="loadingStats" />
   </div>
 </template>
 
@@ -128,6 +130,7 @@ import useVuelidate from "@vuelidate/core";
 import { requiredIf, maxValue, minValue } from "@vuelidate/validators";
 import GeneralConversationService from "@/API/services/general-conversation.service";
 import WorkingHoursList from "@/components/conversation/WorkingHoursList.vue";
+import helper from "@/utilities/helper";
 
 export default {
   name: "WorkingHours",
@@ -136,6 +139,9 @@ export default {
   },
   setup() {
     return { v$: useVuelidate() };
+  },
+  async created() {
+    await this.getWorkingHours();
   },
   data() {
     return {
@@ -146,6 +152,9 @@ export default {
       message: "",
       variant: "success",
       loader: false,
+
+      workingHours: [],
+      loadingStats: false,
     };
   },
   validations() {
@@ -182,23 +191,60 @@ export default {
         const overAllMinutes = parseInt(hours) * 60 + parseInt(minutes);
 
         try {
-          const response = await GeneralConversationService.addWorkingHours(
-            overAllMinutes
-          );
+          const response =
+            await GeneralConversationService.addWorkingHours(overAllMinutes);
 
-          console.log(response);
           this.message = "تم إدخال الساعات بنجاح";
           this.variant = "success";
 
-          this.form.hours = null;
-          this.form.minutes = null;
+          this.form.hours = 0;
+          this.form.minutes = 0;
           this.v$.form.$reset();
+
+          this.updateWorkingHours(response);
         } catch (error) {
           this.message = "حدث خطأ أثناء إدخال الساعات";
           this.variant = "danger";
         } finally {
           this.loader = false;
         }
+      }
+    },
+
+    updateWorkingHours(response) {
+      const { data } = response;
+      const workingHoursId = data.id;
+
+      const isFound = this.workingHours.find(
+        (item) => item.id === workingHoursId,
+      );
+
+      if (!isFound) {
+        this.workingHours.push(data);
+      } else {
+        this.workingHours = this.workingHours.map((item) => {
+          if (item.id === workingHoursId) {
+            return data;
+          }
+          return item;
+        });
+      }
+    },
+
+    async getWorkingHours() {
+      if (this.loading) return;
+
+      this.empty = false;
+      this.loadingStats = true;
+      try {
+        const response = await GeneralConversationService.getWorkingHours();
+
+        this.workingHours = response.data;
+      } catch (error) {
+        console.log("error", error);
+        helper.toggleErrorToast();
+      } finally {
+        this.loadingStats = false;
       }
     },
   },
