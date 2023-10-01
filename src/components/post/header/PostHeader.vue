@@ -22,7 +22,7 @@
 
             <span
               v-if="post.type.toLowerCase() === 'announcement'"
-              class="ms-1 text-danger"
+              class="ms-1 text-white badge bg-danger rounded-pill px-2"
               >إعلان</span
             >
           </div>
@@ -202,7 +202,7 @@ export default {
               helper.handleSuccessSwal("تم حذف المنشور بنجاح");
             } catch (error) {
               helper.handleErrorSwal(
-                "حدث خطأ أثناء الحذف, يرجى المحاولة مرة أخرى!"
+                "حدث خطأ أثناء الحذف, يرجى المحاولة مرة أخرى!",
               );
             } finally {
               this.deleteLoading = false;
