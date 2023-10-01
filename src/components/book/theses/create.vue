@@ -14,7 +14,8 @@
             v-model="v$.thesisForm.typeOfThesis.$model"
             v-on:change="
               changeTypeOfThesis(
-                $event.target.options[$event.target.options.selectedIndex].value
+                $event.target.options[$event.target.options.selectedIndex]
+                  .value,
               )
             "
           >
@@ -353,8 +354,8 @@ export default {
       const minutes = convertedDate.getMinutes();
 
       if (
-        day === 2 &&
-        hour >= 12
+        day === 6 &&
+        hour >= 18
         // &&
         // (hour < 14 || (hour === 14 && minutes <= 59))
       ) {
@@ -558,36 +559,45 @@ export default {
     },
 
     informUserAboutClosingScreenShots() {
-      // if (this.isTimeValid) {
-      if (!this.$cookies.get("showClosingScreenShotsAlert")) {
-        const swal = this.$swal.mixin({
-          customClass: {
-            confirmButton: "btn btn-primary btn-lg",
-          },
-          buttonsStyling: false,
-        });
-
-        swal
-          .fire({
-            title: "تنبيه!",
-            text: `بسبب كثرة القراء الذين يدخلون تصويت القراءة الآن،  لا يتحمل السيرفر تحميل الصور،  فضلا ادخل أطروحتك أو اقتباساتك بشكل مكتوب. يتاح رفع الصور من الأحد إلى عصر يوم السبت أسبوعيا`,
-            showCancelButton: false,
-            confirmButtonText: "حسنًا",
-            icon: "warning",
-            showClass: {
-              popup: "animate__animated animate__zoomIn",
+      if (this.isTimeValid) {
+        if (!this.$cookies.get("showClosingScreenShotsAlert")) {
+          const swal = this.$swal.mixin({
+            customClass: {
+              confirmButton: "btn btn-primary btn-lg",
             },
-            hideClass: {
-              popup: "animate__animated animate__zoomOut",
-            },
-          })
-          .then((result) => {
-            if (result.isConfirmed) {
-              this.$cookies.set("showClosingScreenShotsAlert", true, "1d");
-            }
+            buttonsStyling: false,
           });
+
+          let html =
+            "<p class='text-center'>بسبب كثرة القراء الذين يدخلون تصويت القراءة الآن</p>";
+          html +=
+            "<p class='text-center'>لا يتحمل السيرفر <b class='text-danger'>تحميل الصور</b></p>";
+          html +=
+            "<p class='text-center'>فضلا ادخل أطروحتك أو اقتباساتك بشكل <b>مكتوب</b></p>";
+          html +=
+            "<p class='text-center'>يتاح رفع الصور <span class='text-primary'><b>من الأحد إلى عصر يوم السبت</b></span> أسبوعياً</p>";
+
+          swal
+            .fire({
+              title: "لا يمكنك وضع اقتباسات مؤقتًا",
+              html,
+              showCancelButton: false,
+              confirmButtonText: "حسنًا",
+              icon: "warning",
+              showClass: {
+                popup: "animate__animated animate__zoomIn",
+              },
+              hideClass: {
+                popup: "animate__animated animate__zoomOut",
+              },
+            })
+            .then((result) => {
+              if (result.isConfirmed) {
+                this.$cookies.set("showClosingScreenShotsAlert", true, "1d");
+              }
+            });
+        }
       }
-      // }
     },
   },
   validations() {
@@ -610,14 +620,14 @@ export default {
           requiredIf: requiredIf(
             () =>
               this.thesisForm.typeOfThesis == "readAndWrite" ||
-              this.thesisForm.typeOfThesis == "screenshotsAndWrite"
+              this.thesisForm.typeOfThesis == "screenshotsAndWrite",
           ),
         },
         screenShots: {
           requiredIf: requiredIf(
             () =>
               this.thesisForm.typeOfThesis == "screenshots" ||
-              this.thesisForm.typeOfThesis == "screenshotsAndWrite"
+              this.thesisForm.typeOfThesis == "screenshotsAndWrite",
           ),
         },
       },

@@ -189,87 +189,6 @@
       </router-link>
     </li>
 
-    <!-- ###### General Conversation ###### -->
-    <!-- <template v-if="leaderAndAbove">
-      <li class="nav-item static-item">
-        <a class="nav-link static-item disabled" tabindex="-1">
-          <span class="default-icon">التحويل العام</span>
-          <span
-            class="mini-icon"
-            data-bs-toggle="tooltip"
-            title="Social"
-            data-bs-placement="right"
-            >-</span
-          >
-        </a>
-      </li>
-    
-      <li class="nav-item">
-        <router-link
-          :class="
-            checkActive('general-conversion.index')
-              ? 'active nav-link'
-              : 'nav-link'
-          "
-          aria-current="page"
-          :to="{
-            name: 'general-conversion.index',
-          }"
-        >
-          <i class="icon material-symbols-outlined"> live_help </i>
-          <span class="item-name">التحويل العام</span>
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link
-          :class="
-            checkActive('general-conversion.statistics')
-              ? 'active nav-link'
-              : 'nav-link'
-          "
-          aria-current="page"
-          :to="{
-            name: 'general-conversion.statistics',
-          }"
-        >
-          <i class="icon material-symbols-outlined"> stacked_bar_chart </i>
-          <span class="item-name">إحصائيات التحويل العام</span>
-        </router-link>
-      </li>
-      <li class="nav-item">
-        <router-link
-          :class="
-            checkActive('general-conversion.workingHours')
-              ? 'active nav-link'
-              : 'nav-link'
-          "
-          aria-current="page"
-          :to="{
-            name: 'general-conversion.workingHours',
-          }"
-        >
-          <i class="icon material-symbols-outlined"> more_time </i>
-          <span class="item-name">إضافة ساعات العمل</span>
-        </router-link>
-      </li>
-      <li class="nav-item last-element">
-        <router-link
-          :class="
-            checkActive('general-conversion.workingHoursStats')
-              ? 'active nav-link'
-              : 'nav-link'
-          "
-          aria-current="page"
-          :to="{
-            name: 'general-conversion.workingHoursStats',
-          }"
-        >
-          <i class="icon material-symbols-outlined"> hourglass_top </i>
-          <span class="item-name">إحصائيات ساعات العمل</span>
-        </router-link>
-      </li>
-    </template> -->
-
     <!-- ###### Advisor Audit ###### -->
     <li class="nav-item" v-if="isAdvisor">
       <router-link
@@ -288,6 +207,87 @@
         <span class="item-name">تدقيق المراقبين</span>
       </router-link>
     </li>
+
+    <!-- ###### General Conversation ###### -->
+    <template v-if="leaderAndAbove">
+      <li class="nav-item static-item">
+        <a class="nav-link static-item disabled" tabindex="-1">
+          <span class="default-icon">التحويل العام</span>
+          <span
+            class="mini-icon"
+            data-bs-toggle="tooltip"
+            title="Social"
+            data-bs-placement="right"
+            >-</span
+          >
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <router-link
+          :class="
+            checkActive('general-conversion.index')
+              ? 'active nav-link'
+              : 'nav-link'
+          "
+          aria-current="page"
+          :to="{
+            name: 'general-conversion.index',
+          }"
+        >
+          <i class="icon material-symbols-outlined"> live_help </i>
+          <span class="item-name">التحويل العام</span>
+        </router-link>
+      </li>
+      <li class="nav-item" v-if="consultantAndAbove">
+        <router-link
+          :class="
+            checkActive('general-conversion.statistics')
+              ? 'active nav-link'
+              : 'nav-link'
+          "
+          aria-current="page"
+          :to="{
+            name: 'general-conversion.statistics',
+          }"
+        >
+          <i class="icon material-symbols-outlined"> stacked_bar_chart </i>
+          <span class="item-name">إحصائيات التحويل العام</span>
+        </router-link>
+      </li>
+      <li class="nav-item" v-if="advisorAndAbove">
+        <router-link
+          :class="
+            checkActive('general-conversion.workingHours')
+              ? 'active nav-link'
+              : 'nav-link'
+          "
+          aria-current="page"
+          :to="{
+            name: 'general-conversion.workingHours',
+          }"
+        >
+          <i class="icon material-symbols-outlined"> more_time </i>
+          <span class="item-name">إضافة ساعات العمل</span>
+        </router-link>
+      </li>
+      <li class="nav-item" v-if="isAdmin">
+        <router-link
+          :class="
+            checkActive('general-conversion.workingHoursStats')
+              ? 'active nav-link'
+              : 'nav-link'
+          "
+          aria-current="page"
+          :to="{
+            name: 'general-conversion.workingHoursStats',
+          }"
+        >
+          <i class="icon material-symbols-outlined"> hourglass_top </i>
+          <span class="item-name">إحصائيات ساعات العمل</span>
+        </router-link>
+      </li>
+    </template>
 
     <template v-if="advisorAndAbove">
       <li class="nav-item static-item">
@@ -361,6 +361,9 @@ export default {
     isAdmin() {
       return UserInfoService.hasRole(this.user, "admin");
     },
+    consultantAndAbove() {
+      return UserInfoService.hasRoles(this.user, ["consultant", "admin"]);
+    },
   },
   setup() {
     const store = useStore();
@@ -370,7 +373,7 @@ export default {
       if (sidebarType.value.includes("sidebar-mini")) {
         store.dispatch(
           "setting/sidebar_type",
-          sidebarType.value.filter((item) => item !== "sidebar-mini")
+          sidebarType.value.filter((item) => item !== "sidebar-mini"),
         );
       } else {
         store.dispatch("setting/sidebar_type", [

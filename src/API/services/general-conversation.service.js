@@ -55,7 +55,7 @@ class GeneralConversation {
   async getMyQuestions(page) {
     try {
       const questions = await api.get(
-        `${this.prefix}/questions/my-questions?page=${page}`
+        `${this.prefix}/questions/my-questions?page=${page}`,
       );
       return questions.data;
     } catch (error) {
@@ -66,7 +66,7 @@ class GeneralConversation {
   async getAssignedToMeQuestions(page) {
     try {
       const questions = await api.get(
-        `${this.prefix}/questions/assigned-to-me?page=${page}`
+        `${this.prefix}/questions/assigned-to-me?page=${page}`,
       );
       return questions.data;
     } catch (error) {
@@ -77,7 +77,7 @@ class GeneralConversation {
   async solveQuestion(questionId) {
     try {
       const response = await api.put(
-        `${this.prefix}/questions/${questionId}/solve`
+        `${this.prefix}/questions/${questionId}/solve`,
       );
       return response.data;
     } catch (error) {
@@ -88,7 +88,7 @@ class GeneralConversation {
   async closeQuestion(questionId) {
     try {
       const response = await api.put(
-        `${this.prefix}/questions/${questionId}/close`
+        `${this.prefix}/questions/${questionId}/close`,
       );
       return response.data;
     } catch (error) {
@@ -99,7 +99,7 @@ class GeneralConversation {
   async assignToParent(questionId) {
     try {
       const response = await api.put(
-        `${this.prefix}/questions/${questionId}/assign-to-parent`
+        `${this.prefix}/questions/${questionId}/assign-to-parent`,
       );
       return response.data;
     } catch (error) {
@@ -145,9 +145,11 @@ class GeneralConversation {
     }
   }
 
-  async getWorkingHoursStatistics() {
+  async getWorkingHoursStatistics(selectedMonth = "") {
     try {
-      const response = await api.get(`${this.prefix}/working-hours/statistics`);
+      const response = await api.get(
+        `${this.prefix}/working-hours/statistics?month=${selectedMonth}`,
+      );
       return response.data;
     } catch (error) {
       handleError(error);
