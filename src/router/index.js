@@ -96,6 +96,7 @@ const authchildRoutes = (prop, mode) => [
     component: () => import("../views/AuthPages/Default/SignIn"),
     beforeEnter: authGuard,
   },
+
   {
     path: "signup",
     name: prop + ".sign-up",
@@ -507,6 +508,14 @@ const chatChildRoute = (prop, mode = false) => [
   },
 ];
 
+const mediaChildRoute = (prop, mode = false) => [
+  {
+    path: "",
+    name: prop + ".index",
+    component: () => import("../views/UploadImages"),
+  },
+];
+
 const routes = [
   {
     path: "/:pathMatch(.*)*",
@@ -547,6 +556,13 @@ const routes = [
     component: () => import("../layouts/Empty"),
     children: authchildRoutes("auth"),
   },
+  {
+    path: "/upload-media",
+    name: "upload-media",
+    component: () => import("../layouts/Empty"),
+    children: mediaChildRoute("upload-media"),
+  },
+
   {
     path: "/user",
     name: "user",
@@ -616,7 +632,7 @@ const routes = [
     component: () => import("../layouts/Default"),
     meta: { auth: true },
     children: generalConversionChildRoute("general-conversion"),
-  },
+  },  
 ];
 
 const router = createRouter({
