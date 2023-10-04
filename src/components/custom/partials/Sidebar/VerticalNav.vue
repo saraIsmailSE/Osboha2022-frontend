@@ -209,6 +209,7 @@
     </li>
 
     <!-- ###### General Conversation ###### -->
+<!-- 
     <template v-if="leaderAndAbove">
       <li class="nav-item static-item">
         <a class="nav-link static-item disabled" tabindex="-1">
@@ -222,7 +223,6 @@
           >
         </a>
       </li>
-
       <li class="nav-item">
         <router-link
           :class="
@@ -287,7 +287,7 @@
           <span class="item-name">إحصائيات ساعات العمل</span>
         </router-link>
       </li>
-    </template>
+    </template> -->
 
     <template v-if="advisorAndAbove">
       <li class="nav-item static-item">
