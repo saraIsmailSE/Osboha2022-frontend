@@ -209,7 +209,8 @@
     </li>
 
     <!-- ###### General Conversation ###### -->
-    <!-- <template v-if="leaderAndAbove">
+    <!-- 
+    <template v-if="leaderAndAbove">
       <li class="nav-item static-item">
         <a class="nav-link static-item disabled" tabindex="-1">
           <span class="default-icon">التحويل العام</span>
@@ -222,7 +223,6 @@
           >
         </a>
       </li>
-
       <li class="nav-item">
         <router-link
           :class="
