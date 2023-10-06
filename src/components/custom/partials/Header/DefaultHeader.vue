@@ -143,6 +143,7 @@ export default {
   async created() {
     this.friendRequest = await FriendServices.getFriendsRequests();
     this.unreadMessages = await MessageService.unreadMessages();
+    this.unread_notifications = await notificationsServices.listUnreadNotification();
 
     // Initialize Pusher
     // const pusher = new Pusher('0098112dc7c6ed8e4777', {
@@ -163,7 +164,7 @@ export default {
     return {
       unreadMessages: 0,
       notifications: [],
-      un_read_notifications: 0,
+      unread_notifications: 0,
       friendRequest: [],
       deferredPrompt: "test",
     };
@@ -174,7 +175,8 @@ export default {
     },
     unread() {
       //by asmaa
-      return this.$store.state.unreadNotifications;
+      //return this.$store.state.unreadNotifications;
+      return this.unread_notifications.length;
     },
     advisorAndAbove() {
       return UserInfoService.hasRoles(this.user, [

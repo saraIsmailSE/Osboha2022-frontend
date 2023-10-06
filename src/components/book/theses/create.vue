@@ -347,7 +347,7 @@ export default {
       return this.pages.filter((page) => page > this.thesisForm.start_page);
     },
     isTimeValid() {
-      //disable screenshots on saturday afte 6:00 pm Asia/Riyadh
+      //disable screenshots on saturday after 09:00 pm Asia/Riyadh
       const convertedDate = helper.convertTZ(this.currentTime, "Asia/Riyadh");
       const day = convertedDate.getDay();
       const hour = convertedDate.getHours();
@@ -355,7 +355,7 @@ export default {
 
       if (
         day === 6 &&
-        hour >= 18
+        hour >= 21
         // &&
         // (hour < 14 || (hour === 14 && minutes <= 59))
       ) {
@@ -575,7 +575,7 @@ export default {
           html +=
             "<p class='text-center'>فضلا ادخل أطروحتك أو اقتباساتك بشكل <b>مكتوب</b></p>";
           html +=
-            "<p class='text-center'>يتاح رفع الصور <span class='text-primary'><b>من الأحد إلى عصر يوم السبت</b></span> أسبوعياً</p>";
+            "<p class='text-center'>يتاح رفع الصور <span class='text-primary'><b>من الأحد إلى الساعة التاسعة من يوم السبت</b></span> أسبوعياً</p>";
 
           swal
             .fire({

@@ -1,7 +1,7 @@
 <template>
     <div class="mt-3 p-5">
-        <form class="comment-text d-flex align-items-end mt-3" @submit.prevent="uploadImageToServer">
-            <div class="comment-attagement d-flex mb-1">
+        <form class="d-flex align-items-end mt-3" @submit.prevent="uploadImageToServer">
+            <div class=" d-flex mb-1">
                 <input type="file" ref="imageInput" @change="uploadImage" accept="image/*" />
                 <button type="submit">UPLOAD</button>
             </div>
