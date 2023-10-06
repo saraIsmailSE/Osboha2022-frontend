@@ -127,8 +127,12 @@ export default {
     return new Date(
       (typeof date === "string" ? new Date(date) : date).toLocaleString(
         "en-US",
-        { timeZone: tzString }
-      )
+        { timeZone: tzString },
+      ),
     );
+  },
+
+  getAssetsUrl() {
+    return process.env.VUE_APP_BASE_URL.replace("api/v1", "assets/images");
   },
 };

@@ -209,7 +209,7 @@
     </li>
 
     <!-- ###### General Conversation ###### -->
-<!-- 
+    <!-- 
     <template v-if="leaderAndAbove">
       <li class="nav-item static-item">
         <a class="nav-link static-item disabled" tabindex="-1">

@@ -560,7 +560,7 @@ export default {
 
     informUserAboutClosingScreenShots() {
       if (this.isTimeValid) {
-        if (!this.$cookies.get("showClosingScreenShotsAlert")) {
+        if (!this.$cookies.get("show-closing-screenshots-alert")) {
           const swal = this.$swal.mixin({
             customClass: {
               confirmButton: "btn btn-primary btn-lg",
@@ -593,7 +593,7 @@ export default {
             })
             .then((result) => {
               if (result.isConfirmed) {
-                this.$cookies.set("showClosingScreenShotsAlert", true, "1d");
+                this.$cookies.set("show-closing-screenshots-alert", true, "1d");
               }
             });
         }

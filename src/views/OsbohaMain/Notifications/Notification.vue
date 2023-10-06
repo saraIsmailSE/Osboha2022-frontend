@@ -38,7 +38,9 @@
       v-for="(notification, index) in notifications"
       :key="index"
     >
-      <iq-card :class="seenClass(notification.read_at)">
+      <iq-card
+        :class="[seenClass(notification.read_at), notification.data.type]"
+      >
         <template v-slot:body>
           <div class="notification-list m-0 p-0">
             <div class="d-flex align-items-center justify-content-between">
@@ -54,10 +56,21 @@
               <div class="w-100">
                 <div class="d-flex justify-content-between">
                   <div class="ms-3">
-                    <h6 style="direction: rtl;">{{ notification.data.message }}</h6>
+                    <h6
+                      style="direction: rtl"
+                      :class="{
+                        'text-white': notification.data.type === 'announcement',
+                      }"
+                    >
+                      {{ notification.data.message }}
+                    </h6>
                     <tooltip
                       tag="span"
                       class="text-muted small"
+                      :class="{
+                        'text-white-50':
+                          notification.data.type === 'announcement',
+                      }"
                       tooltipPlacement="bottom"
                       data-bs-toggle="tooltip"
                       :title="formatFullDate(notification.created_at)"
@@ -69,6 +82,9 @@
                     <span
                       role="button"
                       class="me-1"
+                      :class="{
+                        'text-white': notification.data.type === 'announcement',
+                      }"
                       @click.prevent="
                         sendToPage(notification.data.path, notification.id)
                       "
@@ -79,6 +95,9 @@
                     <i
                       role="button"
                       class="material-symbols-outlined md-18 me-3"
+                      :class="{
+                        'text-white': notification.data.type === 'announcement',
+                      }"
                       v-if="!notification.read_at"
                       @click="markAsRead(notification.id)"
                     >
@@ -144,10 +163,10 @@ export default {
       this.loading = true;
       try {
         let response = await notificationsServices.listAllNotification(
-          this.page
+          this.page,
         );
         this.notifications = response.data;
-
+        console.log(response.data[0].data.type);
         this.checkUnread();
 
         this.totalPages = response.data?.last_page ?? 1;
@@ -241,14 +260,25 @@ export default {
 };
 </script>
 
-<style scoped>
-.seen {
+<style scoped lang="scss">
+.seen:not(.announcement) {
   --bs-bg-opacity: 1;
   background-color: white;
 }
 
-.un-seen {
+.un-seen:not(.announcement) {
   --bs-bg-opacity: 1;
   background-color: #e2e2e2;
+}
+
+.announcement {
+  $primary: #1f662b;
+  $secondary: #237330;
+  --bs-bg-opacity: 1;
+  background-color: $primary;
+
+  &.seen {
+    background-color: $secondary;
+  }
 }
 </style>
