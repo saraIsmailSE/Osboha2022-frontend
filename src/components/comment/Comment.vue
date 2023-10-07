@@ -146,7 +146,7 @@
     </model-header>
     <model-body>
       <img
-        :src="comment.media?.path"
+        :src="`${getAssetsUrl()}/${comment.media?.media}`"
         class="img-fluid rounded w-100"
         alt="blog-img"
       />
