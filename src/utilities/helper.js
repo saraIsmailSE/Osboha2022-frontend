@@ -120,7 +120,20 @@ export default {
   minutesToHoursAndMinutes(minutes) {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-    return `${hours} ساعة و ${remainingMinutes} دقيقة`;
+
+    let str = "";
+
+    if (hours > 0) {
+      str += `${hours} ساعة`;
+    }
+
+    if (remainingMinutes > 0) {
+      if (str.length > 0) str += " و ";
+
+      str += `${remainingMinutes} دقيقة`;
+    }
+
+    return str;
   },
 
   convertTZ(date, tzString) {

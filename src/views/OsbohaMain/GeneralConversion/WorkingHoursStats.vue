@@ -104,10 +104,17 @@
                         </div>
                         <div class="card-body">
                           <div class="blog-description">
-                            <table class="table w-100">
+                            <table class="table w-100 table-bordered">
                               <thead>
-                                <tr>
+                                <tr class="py-3">
                                   <th scope="col">الاسم</th>
+                                  <th scope="col">الأحد</th>
+                                  <th scope="col">الاثنين</th>
+                                  <th scope="col">الثلاثاء</th>
+                                  <th scope="col">الأربعاء</th>
+                                  <th scope="col">الخميس</th>
+                                  <th scope="col">الجمعة</th>
+                                  <th scope="col">السبت</th>
                                   <th scope="col">مجموع الساعات</th>
                                 </tr>
                               </thead>
@@ -118,8 +125,8 @@
                                 >
                                   <tr>
                                     <td
-                                      colspan="3"
-                                      class="text-center bold text-primary py-3"
+                                      colspan="9"
+                                      class="table-info text-center bold py-2"
                                     >
                                       {{ role.key }}
                                     </td>
@@ -130,6 +137,19 @@
                                     :key="user.user.id"
                                   >
                                     <td>{{ user.user.name }}</td>
+
+                                    <!-- print minutes of each day for each user -->
+                                    <td v-for="day in 7" :key="day">
+                                      {{
+                                        user.days[`0${day}`]
+                                          ? minutesToHoursAndMinutes(
+                                              user.days[`0${day}`],
+                                            )
+                                          : 0
+                                      }}
+                                    </td>
+
+                                    <!-- print total minutes of each user -->
                                     <td>
                                       {{
                                         user.minutes
@@ -141,9 +161,23 @@
                                     </td>
                                   </tr>
 
+                                  <!-- print total of minutes in minutes format-->
                                   <tr>
-                                    <td class="bold">المجموع</td>
-                                    <td class="bold">
+                                    <td class="bold">المجموع بالدقائق</td>
+                                    <td class="bold" colspan="8">
+                                      {{
+                                        role.value
+                                          ? calculateTotalMinutes(role.value) +
+                                            " دقيقة"
+                                          : 0
+                                      }}
+                                    </td>
+                                  </tr>
+
+                                  <!-- print total of minutes in hours format-->
+                                  <tr>
+                                    <td class="bold">المجموع بالساعات</td>
+                                    <td class="bold" colspan="8">
                                       {{
                                         role.value
                                           ? minutesToHoursAndMinutes(
