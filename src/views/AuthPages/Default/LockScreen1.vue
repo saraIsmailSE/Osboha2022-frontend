@@ -33,7 +33,7 @@
       </div>
       <div class="col-sm-6 bg-white pt-5">
         <div class="sign-in-from">
-          <img src="@/assets/images/user/1.jpg" alt="user-image" class="rounded-circle">
+          <img src="@/assets/images/avatar/12.jpg" alt="user-image" class="rounded-circle">
           <h4 class="mt-3 mb-0">Hi ! Michael Smith</h4>
           <p>Enter your password to access the admin.</p>
           <form class="mt-4" @submit.prevent="onSubmit()">
@@ -56,8 +56,8 @@
 </template>
 <script>
 
-import Swiper from '../../../components/custom/slider/Swiper'
-import SwiperSlide from '../../../components/custom/slider/SwiperSlide'
+import Swiper from '@/components/custom/slider/Swiper'
+import SwiperSlide from '@/components/custom/slider/SwiperSlide'
 export default {
   name: 'LockScreen1',
   components: { Swiper, SwiperSlide },

@@ -208,7 +208,7 @@
                </div>
                <div class="col-lg-6">
                   <div class="image-block mt-3">
-                     <img src="../../../assets/images/blog/b4.jpg" class="img-fluid rounded w-100" alt="blog-img">
+                     <img src="@/assets/images/blog/b4.jpg" class="img-fluid rounded w-100" alt="blog-img">
                   </div>
                </div>
             </div>

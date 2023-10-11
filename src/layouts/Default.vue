@@ -133,7 +133,7 @@ export default {
           title: "Book",
         },
         {
-          img: require("@/assets/images/profile-bg.jpg"),
+          img: require("@/assets/images/main/book-banner.png"),
           title: "Infographic",
         },
       ],

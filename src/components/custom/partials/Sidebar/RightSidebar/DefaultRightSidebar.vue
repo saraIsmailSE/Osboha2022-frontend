@@ -30,61 +30,61 @@ export default {
       miniClass: '',
       items: [
         {
-          src: require('@/assets/images/user/01.jpg'),
+          src: require('@/assets/images/avatar/avatar-01.jpg'),
           status: 'ofline',
           name: 'Anna Sthesia',
           post: 'Just Now'
         },
         {
-          src: require('@/assets/images/user/02.jpg'),
+          src: require('@/assets/images/avatar/avatar-02.jpg'),
           status: 'online',
           name: 'Paul Molive',
           post: 'Admin'
         },
         {
-          src: require('@/assets/images/user/03.jpg'),
+          src: require('@/assets/images/avatar/avatar-03.jpg'),
           status: 'online',
           name: 'Anna Mull',
           post: 'Admin'
         },
         {
-          src: require('@/assets/images/user/04.jpg'),
+          src: require('@/assets/images/avatar/avatar-04.jpg'),
           status: 'online',
           name: 'Paige Turner',
           post: 'Admin'
         },
         {
-          src: require('@/assets/images/user/11.jpg'),
+          src: require('@/assets/images/avatar/11.jpg'),
           status: 'online',
           name: 'Bob Frapples',
           post: 'Admin'
         },
         {
-          src: require('@/assets/images/user/02.jpg'),
+          src: require('@/assets/images/avatar/avatar-02.jpg'),
           status: 'online',
           name: 'Barb Ackue',
           post: 'Admin'
         },
         {
-          src: require('@/assets/images/user/03.jpg'),
+          src: require('@/assets/images/avatar/avatar-03.jpg'),
           status: '',
           name: 'Greta Life',
           post: 'Admin'
         },
         {
-          src: require('@/assets/images/user/12.jpg'),
+          src: require('@/assets/images/avatar/12.jpg'),
           status: 'away',
           name: 'Ira Membrit',
           post: 'Admin'
         },
         {
-          src: require('@/assets/images/user/01.jpg'),
+          src: require('@/assets/images/avatar/avatar-01.jpg'),
           status: 'away',
           name: 'Pete Sariya',
           post: 'Admin'
         },
         {
-          src: require('@/assets/images/user/02.jpg'),
+          src: require('@/assets/images/avatar/avatar-02.jpg'),
           status: '',
           name: 'Monty Carlo',
           post: 'Admin'

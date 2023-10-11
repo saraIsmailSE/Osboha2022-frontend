@@ -146,7 +146,7 @@
                         <div class="card-body">
                            <div class="d-flex align-items-center">
                               <div class="user-image mb-3">
-                                 <img class="avatar-80 rounded" src="@/assets/images/user/01.jpg" alt="#" data-original-title="" title="">
+                                 <img class="avatar-80 rounded" src="@/assets/images/avatar/avatar-01.jpg" alt="#" data-original-title="" title="">
                               </div>
                               <div class="ms-3">
                                  <h5>Kaya Scodelario</h5>
@@ -174,7 +174,7 @@
                         <div class="card-body">
                            <div class="d-flex align-items-center">
                               <div class="user-image mb-3">
-                                 <img class="avatar-80 rounded" src="@/assets/images/user/02.jpg" alt="#" data-original-title="" title="">
+                                 <img class="avatar-80 rounded" src="@/assets/images/avatar/avatar-02.jpg" alt="#" data-original-title="" title="">
                               </div>
                               <div class="ms-3">
                                  <h5>Tom Cruise</h5>
@@ -202,7 +202,7 @@
                         <div class="card-body">
                            <div class="d-flex align-items-center">
                               <div class="user-image mb-3">
-                                 <img class="avatar-80 rounded" src="@/assets/images/user/03.jpg" alt="#" data-original-title="" title="">
+                                 <img class="avatar-80 rounded" src="@/assets/images/avatar/avatar-03.jpg" alt="#" data-original-title="" title="">
                               </div>
                               <div class="ms-3">
                                  <h5>Walter Hucko</h5>
@@ -230,7 +230,7 @@
                         <div class="card-body">
                            <div class="d-flex align-items-center">
                               <div class="user-image mb-3">
-                                 <img class="avatar-80 rounded" src="@/assets/images/user/04.jpg" alt="#" data-original-title="" title="">
+                                 <img class="avatar-80 rounded" src="@/assets/images/avatar/avatar-04.jpg" alt="#" data-original-title="" title="">
                               </div>
                               <div class="ms-3">
                                  <h5>Mark Walton</h5>
