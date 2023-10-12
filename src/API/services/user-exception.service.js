@@ -14,6 +14,27 @@ class ExceptionService {
     }
   }
 
+  async setExceptionalFreez(exception) {
+    try {
+      const response = await api.post(`/userexception/set-exceptional-freez`, exception, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+  
+  async setNewUser(exception) {
+    try {
+      const response = await api.post(`/userexception/set-new-user`, exception, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
   async getExceptionById(exception_id) {
     try {
       const response = await api.get(`userexception/show/${exception_id}`);
@@ -44,6 +65,7 @@ class ExceptionService {
         {
           decision: decision.decision,
           note: decision.note,
+          week_id: decision.week_id
         }
       );
 
