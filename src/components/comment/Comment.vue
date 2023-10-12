@@ -52,9 +52,9 @@
         data-bs-toggle="modal"
         :data-bs-target="`#imgModal-${comment.id}`"
       >
-        <img
+        <BaseImage
           :src="`${getAssetsUrl()}/${comment.media.media}`"
-          class="img-fluid rounded w-50 comment-image"
+          classes="img-fluid rounded w-50 comment-image"
           alt="blog-img"
         />
       </div>
@@ -145,7 +145,7 @@
       </a>
     </model-header>
     <model-body>
-      <img
+      <BaseImage
         :src="`${getAssetsUrl()}/${comment.media?.media}`"
         class="img-fluid rounded w-100"
         alt="blog-img"
