@@ -2,7 +2,7 @@
     <div class="d-grid gap-3 d-grid-template-1fr-19">
         <div class="card mb-0">
             <div class="position-absolute top-0 end-0 p-2 rounded-start" style="background-color: #278036; opacity: 50%">
-                <h6 class="text-white">{{ bookTypeLanguage }}</h6>
+                <h6 class="text-white m-auto">{{ bookTypeLanguage }}</h6>
             </div>
             <div class="position-absolute start-0 mt-2">
                 <span class="material-symbols-outlined me-2 align-middle"
