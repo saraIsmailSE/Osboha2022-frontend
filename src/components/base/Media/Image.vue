@@ -16,7 +16,7 @@
 
   <img
     v-else-if="isError"
-    src="@/assets/images/main/404.png"
+    src="@/assets/images/main/finish-audit.png"
     alt="404"
     :class="classes"
   />
