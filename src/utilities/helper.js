@@ -120,15 +120,32 @@ export default {
   minutesToHoursAndMinutes(minutes) {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
-    return `${hours} ساعة و ${remainingMinutes} دقيقة`;
+
+    let str = "";
+
+    if (hours > 0) {
+      str += `${hours} ساعة`;
+    }
+
+    if (remainingMinutes > 0) {
+      if (str.length > 0) str += " و ";
+
+      str += `${remainingMinutes} دقيقة`;
+    }
+
+    return str;
   },
 
   convertTZ(date, tzString) {
     return new Date(
       (typeof date === "string" ? new Date(date) : date).toLocaleString(
         "en-US",
-        { timeZone: tzString }
-      )
+        { timeZone: tzString },
+      ),
     );
+  },
+
+  getAssetsUrl() {
+    return process.env.VUE_APP_BASE_URL.replace("api/v1", "assets/images");
   },
 };

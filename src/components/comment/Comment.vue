@@ -53,7 +53,7 @@
         :data-bs-target="`#imgModal-${comment.id}`"
       >
         <img
-          :src="comment.media.path"
+          :src="`${getAssetsUrl()}/${comment.media.media}`"
           class="img-fluid rounded w-50 comment-image"
           alt="blog-img"
         />
@@ -77,7 +77,7 @@
             :style="{
               color:
                 selectedReaction.type === 'like'
-                  ? comment.reacted_by_user
+                  ? comment.is_liked
                     ? selectedReaction.text_color
                     : '#555770'
                   : selectedReaction.text_color,
@@ -146,7 +146,7 @@
     </model-header>
     <model-body>
       <img
-        :src="comment.media?.path"
+        :src="`${getAssetsUrl()}/${comment.media?.media}`"
         class="img-fluid rounded w-100"
         alt="blog-img"
       />
@@ -273,7 +273,7 @@ export default {
       try {
         const response = await ReactionService.reactOnComment(
           this.comment.id,
-          reactionId
+          reactionId,
         );
 
         if (response.statusCode !== 200) {

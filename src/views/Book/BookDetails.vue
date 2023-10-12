@@ -163,7 +163,7 @@
               <div class="col-sm-12 text-center" v-if="loading">
                 <img
                   :src="
-                    require('@/assets/images/page-img/page-load-loader.gif')
+                    require('@/assets/images/gif/page-load-loader.gif')
                   "
                   alt="loader"
                   style="height: 100px"
@@ -194,7 +194,7 @@
               <div class="col-sm-12 text-center" v-if="loading">
                 <img
                   :src="
-                    require('@/assets/images/page-img/page-load-loader.gif')
+                    require('@/assets/images/gif/page-load-loader.gif')
                   "
                   alt="loader"
                   style="height: 100px"
@@ -355,14 +355,16 @@ export default {
         if (this.$route.params.thesis_id) {
           response = await thesisService.getBookThesis(
             this.$route.params.book_id,
-            this.$route.params.thesis_id
+            this.$route.params.thesis_id,
           );
         } else {
           response = await thesisService.getThesesByBookId(
             this.$route.params.book_id,
             page,
-            this.$route.params.user_id ?? ""
+            this.$route.params.user_id ?? "",
           );
+
+          console.log(response);
         }
 
         if (response.statusCode === 200) {
@@ -371,13 +373,13 @@ export default {
         } else {
           helper.toggleToast(
             "حدث خطأ أثناء تحميل البيانات, الرجاء المحاولة مرة أخرى",
-            "error"
+            "error",
           );
         }
       } catch (e) {
         helper.toggleToast(
           "حدث خطأ أثناء تحميل البيانات, الرجاء المحاولة مرة أخرى",
-          "error"
+          "error",
         );
       } finally {
         this.loading = false;
@@ -397,7 +399,8 @@ export default {
       this.book.comments_count =
         this.book.comments_count + thesis.replies.length + 1;
       this.totalTheses++;
-      this.book.book.userBooks = thesis.user.userBooks;
+      this.book.book.userBooks =
+        thesis.user.userBooks || thesis.user.user_books;
       this.book.last_thesis = thesis.thesis;
 
       if (

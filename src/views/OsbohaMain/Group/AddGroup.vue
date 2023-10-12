@@ -85,7 +85,7 @@
             <div class="col-sm-12 text-center" v-if="loading">
               <p class="text-center">جاري الاضافة</p>
               <img
-                src="@/assets/images/page-img/page-load-loader.gif"
+                src="@/assets/images/gif/page-load-loader.gif"
                 alt="loader"
                 style="height: 100px"
               />

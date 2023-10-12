@@ -11,7 +11,7 @@
 
     <div class="col-sm-12 text-center" v-if="loading && books.length <= 0">
       <img
-        :src="require('@/assets/images/page-img/page-load-loader.gif')"
+        :src="require('@/assets/images/gif/page-load-loader.gif')"
         alt="loader"
         style="height: 100px"
       />

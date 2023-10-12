@@ -96,6 +96,7 @@ const authchildRoutes = (prop, mode) => [
     component: () => import("../views/AuthPages/Default/SignIn"),
     beforeEnter: authGuard,
   },
+
   {
     path: "signup",
     name: prop + ".sign-up",
@@ -126,11 +127,6 @@ const authchildRoutes = (prop, mode) => [
     path: "excluded_ambassador/",
     name: prop + ".ExcludedAmbassador",
     component: () => import("../views/AuthPages/Default/ExcludedAmbassador"),
-  },
-  {
-    path: "lockscreen",
-    name: prop + ".lockscreen1",
-    component: () => import("../views/AuthPages/Default/LockScreen1"),
   },
   {
     path: "confirm-mail",
@@ -576,6 +572,13 @@ const bookChildRoute = (prop, mode = false) => [
     component: () => import("../views/Book/LatestBook"),
   },
   {
+    path: "eligible",
+    name: prop + ".eligible",
+    meta: { auth: true, name: "eligible Books" },
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
+    component: () => import("../views/OsbohaEligible/Books/List"),
+  },
+  {
     path: "update/:book_id",
     name: prop + ".update",
     meta: { auth: true, name: "Book Update" },
@@ -670,6 +673,14 @@ const chatChildRoute = (prop, mode = false) => [
   },
 ];
 
+const mediaChildRoute = (prop, mode = false) => [
+  {
+    path: "",
+    name: prop + ".index",
+    component: () => import("../views/UploadImages"),
+  },
+];
+
 const routes = [
   {
     path: "/:pathMatch(.*)*",
@@ -710,6 +721,13 @@ const routes = [
     component: () => import("../layouts/Empty"),
     children: authchildRoutes("auth"),
   },
+  {
+    path: "/upload-media",
+    name: "upload-media",
+    component: () => import("../layouts/Empty"),
+    children: mediaChildRoute("upload-media"),
+  },
+
   {
     path: "/user",
     name: "user",
@@ -839,24 +857,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // redirect to login page if user is not logged in and trying to access a restricted page
-  // const publicPages = [
-  //   "/auth/signin",
-  //   "/auth/signup",
-  //   "/auth/admin/signup",
-  //   "/auth/forgot-password",
-  //   "reset-password",
-  // ];
-  // const authRequired = !publicPages.includes(to.path);
-  // const resetRoute = to.path.split("/");
-  // console.log("resetRoute", resetRoute);
-  // const resetPassword = !publicPages.includes(resetRoute[2]);
-  // console.log("resetPassword", resetPassword);
-
-  // if (authRequired && !loggedIn() && resetPassword) {
-  //   return next("/auth/signin");
-  // }
-
   if (to.meta.auth && !loggedIn()) {
     return next("/auth/signin");
   } else {

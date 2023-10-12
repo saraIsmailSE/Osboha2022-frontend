@@ -19,7 +19,7 @@
             <InfoCard :user="user" :followup_team="followup_team" :roles="roles" :in_charge_of="in_charge_of" />
         </div>
         <div class="col-sm-12 text-center" v-if="loader">
-            <img :src="require('@/assets/images/page-img/page-load-loader.gif')" alt="loader" style="height: 100px" />
+            <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
         </div>
         <div class="col-sm-12" v-if="message">
             <iq-card class="iq-card">

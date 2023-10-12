@@ -87,7 +87,7 @@
           {{ errorMessage }}
         </div>
         <div class="col-sm-12 text-center" v-if="loader">
-          <img :src="require('@/assets/images/page-img/page-load-loader.gif')" alt="loader" style="height: 100px" />
+          <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
         </div>
         <button v-else class="btn btn-primary btn-block my-3 w-100 flex-grow-1" @click="addNewPost()"
           :disabled="!allowPosting">

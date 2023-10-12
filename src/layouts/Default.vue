@@ -73,7 +73,7 @@ export default {
       sessionData: null,
       breadcrumboptions: [
         {
-          img: require("@/assets/images/page-img/profile-bg2.jpg"),
+          img: require("@/assets/images/main/book-banner-2.png"),
           title: "Weather",
         },
         {
@@ -85,47 +85,47 @@ export default {
           title: "Group detail",
         },
         {
-          img: require("@/assets/images/page-img/profile-bg4.jpg"),
+          img: require("@/assets/images/main/book-banner-2.png"),
           title: "Birthday",
         },
         {
-          img: require("@/assets/images/page-img/profile-bg5.jpg"),
+          img: require("@/assets/images/main/book-banner-2.png"),
           title: "Profile Image",
         },
         {
-          img: require("@/assets/images/page-img/profile-bg9.jpg"),
+          img: require("@/assets/images/main/book-banner-2.png"),
           title: "Profile Video",
         },
         {
-          img: require("@/assets/images/page-img/profile-bg3.jpg"),
+          img: require("@/assets/images/main/book-banner-2.png"),
           title: "Friend List",
         },
         {
-          img: require("@/assets/images/page-img/profile-bg6.jpg"),
+          img: require("@/assets/images/main/book-banner-2.png"),
           title: "Profile Event",
         },
         {
-          img: require("@/assets/images/page-img/profile-bg8.jpg"),
+          img: require("@/assets/images/main/book-banner-2.png"),
           title: "Music",
         },
         {
-          img: require("@/assets/images/page-img/profile-bg6.jpg"),
+          img: require("@/assets/images/main/book-banner-2.png"),
           title: "Calendar",
         },
         {
-          img: require("@/assets/images/page-img/profile-bg7.jpg"),
+          img: require("@/assets/images/main/book-banner-2.png"),
           title: "Store Category",
         },
         {
-          img: require("@/assets/images/page-img/profile-bg7.jpg"),
+          img: require("@/assets/images/main/book-banner-2.png"),
           title: "Category List",
         },
         {
-          img: require("@/assets/images/page-img/profile-bg7.jpg"),
+          img: require("@/assets/images/main/book-banner-2.png"),
           title: "Store",
         },
         {
-          img: require("@/assets/images/page-img/profile-bg7.jpg"),
+          img: require("@/assets/images/main/book-banner-2.png"),
           title: "Store Checkout",
         },
         {

@@ -18,7 +18,7 @@
                         <p class="p-2 text-center" style="color:red" v-if="v$.form.email.$error">قم بادخال بريدك الالكتروني</p>
                     </div>
                     <div class="col-sm-12 text-center" v-if="loader">
-                        <img src="@/assets/images/page-img/page-load-loader.gif" alt="loader" style="height: 100px;">
+                        <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 100px;">
                     </div>
                     <h4 class="text-center mt-3 mb-3" v-if="message"> {{ message }}</h4>
                     <div class="d-inline-block w-100 text-center">

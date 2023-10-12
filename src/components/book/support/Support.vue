@@ -49,7 +49,7 @@
                   <span class="text-danger-modified font-weight-600">لا يوجد دعم بعد</span>
                 </td>
                 <td v-else :rowspan="managementRowSpan" class="align-middle">
-                  <img v-if="loading" :src="require('@/assets/images/page-img/page-load-loader.gif')
+                  <img v-if="loading" :src="require('@/assets/images/gif/page-load-loader.gif')
                     " alt="loader" style="height: 50px" />
                   <template v-else>
                     <button class="btn btn-success" @click="handleSupport" v-if="(supportMark === 0)" >

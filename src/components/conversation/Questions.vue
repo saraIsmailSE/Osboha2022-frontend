@@ -107,7 +107,7 @@
                       <img
                         v-if="loadingSolve"
                         :src="
-                          require('@/assets/images/page-img/page-load-loader.gif')
+                          require('@/assets/images/gif/page-load-loader.gif')
                         "
                         alt="loader"
                         style="height: 20px"
@@ -123,7 +123,7 @@
                       <img
                         v-if="loadingClose"
                         :src="
-                          require('@/assets/images/page-img/page-load-loader.gif')
+                          require('@/assets/images/gif/page-load-loader.gif')
                         "
                         alt="loader"
                         style="height: 20px"
@@ -143,7 +143,7 @@
                     <img
                       v-if="loadingAssign"
                       :src="
-                        require('@/assets/images/page-img/page-load-loader.gif')
+                        require('@/assets/images/gif/page-load-loader.gif')
                       "
                       alt="loader"
                       style="height: 20px"

@@ -63,7 +63,7 @@
               v-if="fetchingUsers"
             >
               <img
-                src="@/assets/images/page-img/page-load-loader.gif"
+                src="@/assets/images/gif/page-load-loader.gif"
                 alt="loader"
                 style="height: 50px"
               />

@@ -79,13 +79,9 @@
     </div>
 </template>
 <script>
-import { socialvue } from '../../config/pluginInit'
 import questionServices from "@/API/EligibleServices/questionServices";
 export default {
     name: 'ListQuestion',
-    mounted() {
-        socialvue.index()
-    },
     components: {
     },
     props: {

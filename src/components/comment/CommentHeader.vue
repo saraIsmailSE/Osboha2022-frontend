@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex align-items-center justify-content-center mb-3">
-    <BaseAvatar :profileImg="comment.user?.profile.profile_picture" :profile_id="comment.user?.profile.id"
+    <BaseAvatar :profileImg="comment.user?.user_profile.profile_picture" :profile_id="comment.user?.user_profile.id"
       :title="comment.user?.name" :gender="comment.user?.gender" avatarClass="rounded-circle avatar-50" />
 
     <div class="ms-3 flex-grow-1">
@@ -8,8 +8,8 @@
         {{ comment.user?.name }}
       </h5>
       <div class="mt-1" v-if="comment.user?.roles?.length > 0">
-        <span class="badge bg-primary rounded-pill ms-1 px-2" v-for="role in comment.user?.roles" :key="role">
-          {{ ARABIC_ROLES[role] }}</span>
+        <span class="badge bg-primary rounded-pill ms-1 px-2" v-for="role in comment.user?.roles" :key="role.name">
+          {{ ARABIC_ROLES[role.name] }}</span>
       </div>
     </div>
     <div class="card-post-toolbar d-flex align-items-center" v-if="authorized && showOptions">

@@ -180,7 +180,7 @@
 <script>
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, maxLength } from "@vuelidate/validators";
-import ListQuestion from "@/components/Questions/ListQuestion.vue";
+import ListQuestion from "@/components/EligibleComponents/Questions/ListQuestion.vue";
 import questionServices from "@/API/EligibleServices/questionServices";
 
 export default {

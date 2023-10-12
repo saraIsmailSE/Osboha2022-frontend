@@ -207,7 +207,7 @@
       </small>
       <div class="col-sm-12 text-center" v-if="loader">
         <img
-          :src="require('@/assets/images/page-img/page-load-loader.gif')"
+          :src="require('@/assets/images/gif/page-load-loader.gif')"
           alt="loader"
           style="height: 100px"
         />
@@ -347,7 +347,7 @@ export default {
       return this.pages.filter((page) => page > this.thesisForm.start_page);
     },
     isTimeValid() {
-      //disable screenshots on saturday afte 6:00 pm Asia/Riyadh
+      //disable screenshots on saturday after 09:00 pm Asia/Riyadh
       const convertedDate = helper.convertTZ(this.currentTime, "Asia/Riyadh");
       const day = convertedDate.getDay();
       const hour = convertedDate.getHours();
@@ -355,7 +355,7 @@ export default {
 
       if (
         day === 6 &&
-        hour >= 18
+        hour >= 21
         // &&
         // (hour < 14 || (hour === 14 && minutes <= 59))
       ) {
@@ -560,7 +560,7 @@ export default {
 
     informUserAboutClosingScreenShots() {
       if (this.isTimeValid) {
-        if (!this.$cookies.get("showClosingScreenShotsAlert")) {
+        if (!this.$cookies.get("show-closing-screenshots-alert")) {
           const swal = this.$swal.mixin({
             customClass: {
               confirmButton: "btn btn-primary btn-lg",
@@ -575,7 +575,7 @@ export default {
           html +=
             "<p class='text-center'>فضلا ادخل أطروحتك أو اقتباساتك بشكل <b>مكتوب</b></p>";
           html +=
-            "<p class='text-center'>يتاح رفع الصور <span class='text-primary'><b>من الأحد إلى عصر يوم السبت</b></span> أسبوعياً</p>";
+            "<p class='text-center'>يتاح رفع الصور <span class='text-primary'><b>من الأحد إلى الساعة التاسعة من يوم السبت</b></span> أسبوعياً</p>";
 
           swal
             .fire({
@@ -593,7 +593,7 @@ export default {
             })
             .then((result) => {
               if (result.isConfirmed) {
-                this.$cookies.set("showClosingScreenShotsAlert", true, "1d");
+                this.$cookies.set("show-closing-screenshots-alert", true, "1d");
               }
             });
         }
