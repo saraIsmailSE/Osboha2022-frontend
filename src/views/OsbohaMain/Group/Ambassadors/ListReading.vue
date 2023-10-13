@@ -10,10 +10,10 @@
           </div>
 
           <!--Support-->
-          <Support :support="support" :supportMark="mark?.support" :week="week" @updateSupportMark="updateSupportMark" />
+          <Support :expired="expired" :support="support" :supportMark="mark?.support" :week="week" @updateSupportMark="updateSupportMark" />
 
 
-          <div class="col-12">
+          <div class="col-12" v-if="!expired">
             <div class="card card-block card-stretch card-height blog">
               <div class="card-header">
                 <h2>اجراءات أخرى</h2>
@@ -25,7 +25,7 @@
                     تجميد استثنائي
                   </button>
                   <button class="btn btn-success ms-2 mt-1"
-                    v-if="!isnew && ((mark.reading_mark + mark.writing_mark + mark.support) <= 50)" @click="() => {
+                    v-if="isnew && ((mark.reading_mark + mark.writing_mark + mark.support) <= 50)" @click="() => {
                       showIsNewForm = !showIsNewForm;
                       showExceptionForm = false;
                     }">
@@ -140,7 +140,9 @@ export default {
       allowSubmitIsNew: false,
       loader: false,
       message: null,
-
+      date: null,
+      now: null,
+      expired: true,
     };
   },
   async created() {
@@ -160,8 +162,17 @@ export default {
       this.group = response.group;
       this.week = response.currentWeek;
       this.support = response.support;
-      this.exceptionForm.user_id = this.mark.user.id;
-      this.exceptionForm.week_id = this.$route.params.week_id;
+
+      const riyadh = new Date().toLocaleString("en-US", { timeZone: "Asia/Riyadh" });
+      this.now = new Date(riyadh);
+      this.date = new Date(this.week.modify_timer);
+      this.expired = this.time < 0;
+
+      if (!this.expired) {
+        this.exceptionForm.user_id = this.mark.user.id;
+        this.exceptionForm.week_id = this.$route.params.week_id;
+      }
+
 
     } catch (error) {
       const res = error.response.data;
@@ -211,7 +222,7 @@ export default {
       this.message = "";
       this.loader = true;
       try {
-        this.exceptionForm.reason='عضو جديد';
+        this.exceptionForm.reason = 'عضو جديد';
         const response = await exceptionService.setNewUser(this.exceptionForm);
 
         this.message = response;
@@ -244,7 +255,11 @@ export default {
       else {
         return false;
       }
-    }
+    },
+    time() {
+      return this.date - this.now;
+    },
+
   },
 };
 </script>
