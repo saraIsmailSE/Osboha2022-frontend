@@ -1,10 +1,25 @@
 <template>
-  <img v-if="!isError && !isLoading" :src="imageSRC" :alt="alt" :style="style" :class="classes" />
+  <img
+    v-if="!isError && !isLoading"
+    :src="imageSRC"
+    :alt="alt"
+    :style="style"
+    :class="classes"
+  />
   <div class="col-sm-12 text-right" v-else-if="isLoading">
-    <img :src="require('@/assets/images/page-img/page-load-loader.gif')" alt="loader" style="height: 100px" />
+    <img
+      :src="require('@/assets/images/page-img/page-load-loader.gif')"
+      alt="loader"
+      style="height: 100px"
+    />
   </div>
 
-  <img v-else-if="isError" src="@/assets/images/main/finish-audit.png" alt="404" :class="classes" />
+  <img
+    v-else-if="isError"
+    src="@/assets/images/main/finish-audit.png"
+    alt="404"
+    :class="classes"
+  />
 </template>
 
 <script>
@@ -17,19 +32,21 @@ export default {
     return {
       isError: false,
       isLoading: true,
+      imageSRC: "",
     };
   },
   async created() {
-    const IMAGE_URL = mediaService.show(this.mediaID)
-    const response = await axios.get(IMAGE_URL).then((res) => {
-      this.imageSRC = IMAGE_URL;
-      this.isLoading = false;
-    })
+    const IMAGE_URL = mediaService.show(this.mediaID);
+    const response = await axios
+      .get(IMAGE_URL)
+      .then((res) => {
+        this.imageSRC = IMAGE_URL;
+        this.isLoading = false;
+      })
       .catch((err) => {
         this.isError = true;
         this.isLoading = false;
       });
-
   },
   props: {
     mediaID: {
