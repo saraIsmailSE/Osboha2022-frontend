@@ -52,10 +52,10 @@
                   <img v-if="loading" :src="require('@/assets/images/page-img/page-load-loader.gif')
                     " alt="loader" style="height: 50px" />
                   <template v-else>
-                    <button class="btn btn-success" @click="handleSupport" v-if="(supportMark === 0)" >
+                    <button class="btn btn-success" @click="handleSupport" v-if="(supportMark === 0)"  :disabled="expired">
                       قبول
                     </button>
-                    <button v-else class="btn btn-danger-modified" @click="handleSupport(false)">
+                    <button v-else class="btn btn-danger-modified" @click="handleSupport(false)" :disabled="expired">
                       رفض
                     </button>
 
@@ -119,29 +119,22 @@ export default {
       type: Number,
       default: 0,
     },
+    expired:{
+      type: Boolean,
+      required:true,
+    },
   },
   emits: ["updateSupportMark"],
   data() {
     return {
       ambassador_id: this.$route.params.ambassador_id,
       loading: false,
-      date: null,
-      now: null,
-      expired: true,
     };
   },
   created() {
-    console.log("NO noVote" + this.noVote)
-    const riyadh = new Date().toLocaleString("en-US", { timeZone: "Asia/Riyadh" });
-    this.now = new Date(riyadh);
-    this.date = new Date(this.week.audit_timer);
-    this.expired = this.time < 0;
 
   },
   computed: {
-    time() {
-      return this.date - this.now;
-    },
     noSupportPost() {
       return this.support?.supportError !== null;
     },
