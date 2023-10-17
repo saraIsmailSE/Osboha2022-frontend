@@ -73,6 +73,7 @@
 </template>
 <script>
 import VueCountdown from "@chenfengyuan/vue-countdown";
+import UserInfoService from "@/Services/userInfoService";
 
 export default {
   name: "Countdown",
@@ -118,7 +119,17 @@ export default {
     },
   },
   computed: {
+    user() {
+      return this.$store.getters.getUser;
+    },
+    isAdvisor() {
+      return UserInfoService.hasRole(this.user, "advisor");
+    },
+
     time() {
+      if(this.isAdvisor && this.timer_type == "audit_timer"){
+        return  (this.date.getTime() + (26 * 60 * 60 * 1000) )- this.now;
+      }
       return this.date - this.now;
     },
   },

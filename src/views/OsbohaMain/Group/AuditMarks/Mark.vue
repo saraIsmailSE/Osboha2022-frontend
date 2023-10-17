@@ -1,6 +1,8 @@
 <template>
     <div>
         <div class="col-sm-12 mt-3">
+            <count-down v-if="week && authorized" :week="week" :timer_type="'audit_timer'" />
+
             <iq-card class="iq-card">
                 <div class="iq-card-header-toolbar d-flex align-items-center mx-auto">
                     <h3 class="text-center mt-3 mb-3" style=" direction: rtl;" v-if="mark && week">{{ mark.user.name }} -
@@ -29,8 +31,6 @@
                             <button class="btn btn-danger ms-1 me-1" @click="updateStatus('unacceptable')">مرفوض</button>
                             <div v-if="msg" class="alert alert-primary mt-2">{{ msg }}</div>
                         </div>
-
-                        <count-down v-if="week && authorized" :week="week" :timer_type="'audit_timer'" />
 
                         <Note v-if="mark_for_audit" />
                         <div class="d-flex align-items-center mt-3 row">
@@ -63,7 +63,6 @@ export default {
 
         try {
             const response = await AuditMarkService.markForAudit(this.$route.params.mark_for_audit);
-            console.log("🚀 ~ file: Mark.vue:62 ~ created ~ response:", response)
             this.mark_for_audit = response.mark_for_audit;
             this.mark = response.mark_for_audit.mark;
             this.theses = response.theses.reduce((groupByBook, item) => {
