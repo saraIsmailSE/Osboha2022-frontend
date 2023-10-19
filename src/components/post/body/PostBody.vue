@@ -1,8 +1,8 @@
 <template>
   <div class="mt-3">
     <p style="white-space: pre-wrap; direction: rtl;" v-html="urlifyFn(shortPostText)"></p>
-    <a role="button" class="load-btn" v-on:click="loadMoreBriefText" v-if="isMore">...قراءة المزيد</a>
-    <a role="button" class="load-btn" v-on:click="loadLessBriefText" v-if="isLess">قراءة أقل</a>
+    <a dir="ltr" role="button" class="load-btn" v-on:click="loadMoreBriefText" v-if="isMore">...قراءة المزيد</a>
+    <a dir="ltr" role="button" class="load-btn" v-on:click="loadLessBriefText" v-if="isLess">قراءة أقل</a>
 
   </div>
 

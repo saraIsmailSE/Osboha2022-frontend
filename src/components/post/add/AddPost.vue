@@ -54,8 +54,7 @@
         <hr />
         <ul class="post-opt-block d-flex list-inline m-0 p-0 flex-wrap">
           <li class="me-2 mb-2">
-            <button class="btn btn-soft-primary d-flex align-items-center" @click="openFilePicker"
-              :disabled="!allowAddingMedia">
+            <button class="btn btn-soft-primary d-flex align-items-center" @click="openFilePicker">
               <span class="material-symbols-outlined me-2">photo_camera</span>
               صورة/فيديو
             </button>
@@ -180,9 +179,9 @@ export default {
       return this.$store.getters.getUser;
     },
 
-    allowAddingMedia() {
-      return this.showPoll ? false : true;
-    },
+    // allowAddingMedia() {
+    //   return this.showPoll ? false : true;
+    // },
     allowPosting() {
       let allow = true;
       if (this.post.body === "" && this.post.media.length === 0) {
@@ -299,8 +298,6 @@ export default {
     openPoll() {
       this.showPoll = true;
       this.addPollOption();
-      this.post.media = [];
-      this.$refs.fileRef.value = null;
     },
     addPollOption() {
       if (this.pollOptions.length >= this.minmaxOptions.max) return;
