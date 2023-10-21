@@ -5,24 +5,6 @@
       <BookCard v-for="(bookInfo, index) in openBook" :key="index" :bookInfo="bookInfo" :current=true />
       <hr>
     </div>  -->
-    <div class="col-sm-12 mt-3">
-      <iq-card class="iq-card">
-        <div class="iq-card-body p-4">
-          <h1 class="mb-0 text-center" style="direction: rtl;">
-            تحية طيبة لكم،
-            <br>
-            في ضوء تطويرنا للعمل، نغلق موقع توثيق القراءة لفترة محدودة
-            ليكون في خدمتكم ولتطوير قراءتكم في المنصة
-            قريبا جدا
-          </h1>
-          <div class="image-block text-center">
-            <img src="@/assets/images/error/500-server.png" class="img-fluid rounded w-75" alt="blog-img">
-          </div>
-
-        </div>
-      </iq-card>
-    </div>
-
     <h2 class="text-center mb-3">ابحث عن كتاب </h2>
     <div class="iq-email-search d-flex justify-content-center mb-3">
       <form class="w-100  me-2 position-relative searchbox">
@@ -72,19 +54,15 @@
 import BookCard from '@/components/EligibleComponents/Book/BookCard.vue'
 import bookService from '@/API/EligibleServices/bookServices'
 import { watchEffect } from 'vue'
-import { useCookies } from "vue3-cookies";
 
 export default {
   name: 'List',
   components: { BookCard },
-  setup() {
-    const { cookies } = useCookies();
-    return { cookies };
-  },
+
   created() {
     watchEffect(() => {
       this.books = null
-      this.getBooks(this.page);
+      this.getBooks(this.page);      
     })
   },
   props: ['page'],
@@ -103,6 +81,7 @@ export default {
   methods: {
     async getBooks(page) {
       const response = await bookService.getAllBooks(page);
+      console.log("🚀 ~ file: List.vue:84 ~ getBooks ~ response:", response)
       this.books = response.books.data;
       this.openBook = response.open_book;
       this.totalBooks = response.books.total
