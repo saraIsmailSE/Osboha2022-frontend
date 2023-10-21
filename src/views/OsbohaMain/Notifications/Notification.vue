@@ -149,7 +149,7 @@ export default {
       return this.page <= this.totalPages && this.hasMore;
     },
     unreadCount() {
-      return this.$store.state.unreadNotifications;
+      return this.notifications.length;
     },
   },
   methods: {

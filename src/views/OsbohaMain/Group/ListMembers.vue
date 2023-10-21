@@ -57,7 +57,7 @@
                   اضافة
                 </a> -->
                 <a role="button" class="dropdown-item d-flex align-items-center"
-                  @click="deleteMember(user.pivot.group_id, user.pivot.user_id)">
+                  @click="deleteMember(user.pivot.id)">
                   <span class="material-symbols-outlined me-2 md-18">
                     delete
                   </span>
@@ -130,7 +130,7 @@ export default {
       console.log(friend_id)
       const response = await FriendServices.create(friend_id);
     },
-    async deleteMember(group_id, user_id) {
+    async deleteMember(user_group_id) {
       const swalWithBootstrapButtons = this.$swal.mixin({
         customClass: {
           confirmButton: "btn btn-primary btn-lg",
@@ -156,7 +156,7 @@ export default {
         })
         .then(async (willDelete) => {
           if (willDelete.isConfirmed) {
-            const response = await UserGroup.delete(group_id, user_id)
+            const response = await UserGroup.delete(user_group_id)
               .then(async (response) => {
                 this.getUsers();
                 this.hideList();

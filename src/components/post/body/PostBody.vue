@@ -1,6 +1,9 @@
 <template>
   <div class="mt-3">
-    <p style="white-space: pre-wrap; direction: rtl;" v-html="urlifyFn(post.body)"></p>
+    <p style="white-space: pre-wrap; direction: rtl;" v-html="urlifyFn(shortPostText)"></p>
+    <a dir="ltr" role="button" class="load-btn" v-on:click="loadMoreBriefText" v-if="isMore">...قراءة المزيد</a>
+    <a dir="ltr" role="button" class="load-btn" v-on:click="loadLessBriefText" v-if="isLess">قراءة أقل</a>
+
   </div>
 
   <!--Polls-->
@@ -12,7 +15,8 @@
       </progressbar>
 
       <div class="poll-input d-flex justify-content-around align-items-center w-100 h-100">
-        <input type="radio" :id="option.id" :value="option.id" v-model="choosedOption" class="ms-1 mt-0" @change="vote"  :disabled="!post.allow_comments"/>
+        <input type="radio" :id="option.id" :value="option.id" v-model="choosedOption" class="ms-1 mt-0" @change="vote"
+          :disabled="!post.allow_comments" />
         <label :for="option.id" class="form-check-label flex-grow-1 text-truncate ms-2 align-right">{{ option.option
         }}</label>
         <span class="me-2 text-primary bold-600">
@@ -41,12 +45,20 @@ export default {
     return {
       choosedOption: "",
       errorMessage: "",
+      fullPostText: "",
+      shortPostText: "",
+
     };
   },
   mounted() {
     if (this.post.pollOptions.length > 0) {
       this.choosedOption = this.getSelectedOptionId();
     }
+  },
+  created() {
+    this.fullPostText = this.post?.body;
+    this.shortPostText = this.fullPostText?.slice(0, 200);
+
   },
   methods: {
     async vote() {
@@ -119,6 +131,23 @@ export default {
           return '<a href="' + url + '"  target="_blank" direction: rtl;">' + url + '</a>';
         })
       }
+    },
+    loadMoreBriefText() {
+      this.shortPostText = this.fullPostText;
+    },
+    loadLessBriefText() {
+      this.shortPostText = this.fullPostText?.slice(0, 200);
+    },
+  },
+  computed: {
+    isMore() {
+      return this.shortPostText?.length < this.fullPostText?.length;
+    },
+    isLess() {
+      return (
+        this.shortPostText?.length >= this.fullPostText?.length &&
+        this.fullPostText?.length > 200
+      );
     },
 
   },

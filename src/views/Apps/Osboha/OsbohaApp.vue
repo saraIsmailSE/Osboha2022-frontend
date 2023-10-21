@@ -1,13 +1,14 @@
 <template>
   <div class="row">
-    <span class="material-symbols-outlined story-next" role="button" @click="prevStory" v-if="currentStoryIndex !=0">
+    <span class="material-symbols-outlined story-next" role="button" @click="prevStory" v-if="currentStoryIndex != 0">
       arrow_circle_right
     </span>
 
-    <router-link :to="{ name: story.route}" class="story" :style="`background-image: url(${story.backgroundImg});`"
-      v-for="story in stories.slice(currentStoryIndex, currentStoryIndex+2)" :key="story.route">
+    <router-link :to="{ name: story.route }" class="story" :style="`background-image: url(${story.backgroundImg});`"
+      v-for="story in stories.slice(currentStoryIndex, currentStoryIndex + 2)" :key="story.route">
     </router-link>
-    <span class="material-symbols-outlined story-next" role="button" @click="nextStory" v-if="currentStoryIndex+2 < totalStories">
+    <span class="material-symbols-outlined story-next" role="button" @click="nextStory"
+      v-if="currentStoryIndex + 2 < totalStories">
       arrow_circle_left
     </span>
 
@@ -69,18 +70,45 @@ export default {
         this.knowAboutOsboha = this.knowAboutOsboha1;
       }
     }
+    this.fireAlert()
   },
   methods: {
     addPost(post) {
       this.$refs.lazyLoadedPostsRef.addNewPost(post);
     },
     nextStory() {
-      this.currentStoryIndex = (this.currentStoryIndex + 1) ;
+      this.currentStoryIndex = (this.currentStoryIndex + 1);
     },
     prevStory() {
       this.currentStoryIndex = (this.currentStoryIndex - 1);
-    }
+    },
+    fireAlert() {
+      const swalWithBootstrapButtons = this.$swal.mixin({
+        customClass: {
+          cancelButton: "btn btn-outline-primary btn-lg ms-2",
+        },
+        buttonsStyling: false,
+      });
 
+      swalWithBootstrapButtons
+        .fire({
+          title: "كل (حسبنا الله ونعم الوكيل)إضافية ستشكل فرقًا لأنها متبوعة بوعد من الله",
+          text: `انقلبوا بنعمة من الله وفضل لم يمسسهم سوء.
+بلسانك أن #تقلب_المعادلة
+وقد نقل في الأثر (مَا لا يُقْضَى بِالفِكْرِ ‏يُقْضَى بِالذِّكْرِ💙)`,
+          imageUrl: require('@/assets/images/main/alertMsg.jpg'),
+          imageAlt: 'A tall image',
+          showConfirmButton: false,
+          showCancelButton: true,
+          cancelButtonText: "حسبنا الله ونعم الوكيل ",
+          showClass: {
+            popup: "animate__animated animate__zoomIn",
+          },
+          hideClass: {
+            popup: "animate__animated animate__zoomOut",
+          },
+        })
+    }
   },
   computed: {
     timeline_id() {
@@ -103,7 +131,7 @@ export default {
 
       ]
     },
-    totalStories(){
+    totalStories() {
       return this.stories.length
     }
   },

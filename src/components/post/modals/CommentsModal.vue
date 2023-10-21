@@ -6,6 +6,7 @@
     :aria-labelledby="`commentModalLabel-${post.id}`"
     :aria-hidden="true"
     dialogClass="modal-lg modal-dialog-centered modal-dialog-scrollable"
+    style="height: 95%;padding-top: 9%;"
   >
     <model-header>
       <h4>التعليقات</h4>

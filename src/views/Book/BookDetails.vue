@@ -69,10 +69,10 @@
               </div>
               <div class="text-center">
                 {{ shortBriefText }}
-                <a class="load-btn" v-on:click="loadMoreBriefText" v-if="isMore"
+                <a role="button" class="load-btn" v-on:click="loadMoreBriefText" v-if="isMore"
                   >...قراءة المزيد</a
                 >
-                <a class="load-btn" v-on:click="loadLessBriefText" v-if="isLess"
+                <a role="button" class="load-btn" v-on:click="loadLessBriefText" v-if="isLess"
                   >قراءة أقل</a
                 >
               </div>

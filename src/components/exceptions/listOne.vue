@@ -39,6 +39,8 @@
           <p class="m-auto"> تاريخ الطلب: {{ formatFullDate(exception.created_at) }}</p>
           <h4 class="mb-2">السبب</h4>
           <p class="m-auto">{{ exception.reason }}</p>
+          <h4 class="mb-2">المدة المطلوبة</h4>
+          <p class="m-auto">{{ exception.desired_duration }}</p>
 
           <div v-if="exception.type.type == 'نظام امتحانات - شهري' || exception.type.type == 'نظام امتحانات - فصلي'">
             <h4 class="mb-2">جدول الامتحانات</h4>
@@ -89,7 +91,27 @@
         </div>
         <div v-if="authInGroup && authInGroup.user_type != 'ambassador'">
           <h3 class="text-center mt-3 mb-3">الاجراء المناسب</h3>
+
           <div v-if="exception.status == 'pending'">
+
+            <div class="form-group text-start ms-3">
+              <h4 class="mt-3 mb-3">اختر الأسبوع</h4>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="weeks" id="currentWeek" v-model="selectedWeek"
+                  :value="`${weeks[0].id}`" @change="selectedWeekError = ''">
+                <label class="form-check-label fs-4 " for="currentWeek">{{ weeks[0].title }} [الأسبوع الحالي]</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="weeks" id="previousWeek" v-model="selectedWeek"
+                  :value="`${weeks[1].id}`" @change="selectedWeekError = ''">
+                <label class="form-check-label fs-4" for="previousWeek">{{ weeks[1].title }} </label>
+              </div>
+              <small style="color: red" v-if="selectedWeekError">
+                * {{ selectedWeekError }}
+              </small>
+
+            </div>
+
             <div class="d-flex align-items-center mt-3" v-if="exception.type.type != 'تجميد استثنائي'">
               <form @submit.prevent="submitDecision" class="post-text m-auto w-100 row">
                 <div class="form-group col-12">
@@ -228,15 +250,19 @@ export default {
     last_exam: { type: Object },
     last_exceptional_freez: { type: Object },
     authInGroup: { type: Object },
+    weeks: { type: Object },
   },
   data() {
     return {
       decideForm: {
         note: "",
         decision: -1,
+        week_id: 0,
       },
       message: null,
       loader: false,
+      selectedWeek: null,
+      selectedWeekError: ''
     };
   },
   computed: {
@@ -262,27 +288,34 @@ export default {
   methods: {
     ...helper,
     async submitDecision() {
-      this.v$.$touch();
-      if (!this.v$.decideForm.$invalid) {
-        this.message = "";
-        this.loader = true;
-        try {
-          const response = await exceptionService.updateStatus(
-            this.exception.id,
-            this.decideForm
-          );
-          this.loader = false;
-          this.message = response;
-          helper.toggleToast(
-            this.message,
-            "success"
-          );
-          this.$emit("update_exception");
+      this.selectedWeekError = ''
+      if (this.selectedWeek) {
+        this.v$.$touch();
+        if (!this.v$.decideForm.$invalid) {
+          this.message = "";
+          this.loader = true;
+          try {
+            this.decideForm.week_id = this.selectedWeek
+            const response = await exceptionService.updateStatus(
+              this.exception.id,
+              this.decideForm
+            );
+            this.loader = false;
+            this.message = response;
+            helper.toggleToast(
+              this.message,
+              "success"
+            );
+            this.$emit("update_exception");
 
-          this.v$.decideForm.$reset();
-        } catch (error) {
-          console.log(error);
+            this.v$.decideForm.$reset();
+          } catch (error) {
+            console.log(error);
+          }
         }
+      }
+      else {
+        this.selectedWeekError = 'يجب اختيار الأسبوع';
       }
     },
 
@@ -329,10 +362,10 @@ export default {
         });
     },
     /**
- * get exam media.
- * @param  {int} media id,
- * @return image url
- */
+  * get exam media.
+  * @param  {int} media id,
+  * @return image url
+  */
     showMedia(id) {
       return mediaService.show(id);
     },
