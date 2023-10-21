@@ -39,6 +39,8 @@
           <p class="m-auto"> تاريخ الطلب: {{ formatFullDate(exception.created_at) }}</p>
           <h4 class="mb-2">السبب</h4>
           <p class="m-auto">{{ exception.reason }}</p>
+          <h4 class="mb-2">المدة المطلوبة</h4>
+          <p class="m-auto">{{ exception.desired_duration }}</p>
 
           <div v-if="exception.type.type == 'نظام امتحانات - شهري' || exception.type.type == 'نظام امتحانات - فصلي'">
             <h4 class="mb-2">جدول الامتحانات</h4>
