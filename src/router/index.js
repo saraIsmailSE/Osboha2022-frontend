@@ -632,7 +632,7 @@ const routes = [
     component: () => import("../layouts/Default"),
     meta: { auth: true },
     children: generalConversionChildRoute("general-conversion"),
-  },  
+  },
 ];
 
 const router = createRouter({
