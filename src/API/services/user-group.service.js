@@ -1,3 +1,4 @@
+import { handleError } from "vue";
 import { customHandleError } from "../../utilities/errors";
 import { api, handelErrors } from "../Intercepter";
 
@@ -24,13 +25,12 @@ class UserGroup {
       customHandleError(error, "UserGroupService.AddMember");
     }
   }
-  async delete(user_group_id){
+  async delete(user_group_id) {
     try {
       return await api.delete(`${this.prefix}/delete/${user_group_id}`);
     } catch (error) {
-      return error;
+      handleError(error);
     }
-
   }
 }
 
