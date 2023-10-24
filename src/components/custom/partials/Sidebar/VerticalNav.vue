@@ -226,13 +226,13 @@
       <li class="nav-item">
         <router-link
           :class="
-            checkActive('general-conversion.index')
+            checkActive('general-conversation.index')
               ? 'active nav-link'
               : 'nav-link'
           "
           aria-current="page"
           :to="{
-            name: 'general-conversion.index',
+            name: 'general-conversation.index',
           }"
         >
           <i class="icon material-symbols-outlined"> live_help </i>
@@ -242,13 +242,13 @@
       <li class="nav-item" v-if="consultantAndAbove">
         <router-link
           :class="
-            checkActive('general-conversion.statistics')
+            checkActive('general-conversation.statistics')
               ? 'active nav-link'
               : 'nav-link'
           "
           aria-current="page"
           :to="{
-            name: 'general-conversion.statistics',
+            name: 'general-conversation.statistics',
           }"
         >
           <i class="icon material-symbols-outlined"> stacked_bar_chart </i>
@@ -258,13 +258,13 @@
       <li class="nav-item" v-if="advisorAndAbove">
         <router-link
           :class="
-            checkActive('general-conversion.workingHours')
+            checkActive('general-conversation.workingHours')
               ? 'active nav-link'
               : 'nav-link'
           "
           aria-current="page"
           :to="{
-            name: 'general-conversion.workingHours',
+            name: 'general-conversation.workingHours',
           }"
         >
           <i class="icon material-symbols-outlined"> more_time </i>
@@ -274,13 +274,13 @@
       <li class="nav-item" v-if="isAdmin">
         <router-link
           :class="
-            checkActive('general-conversion.workingHoursStats')
+            checkActive('general-conversation.workingHoursStats')
               ? 'active nav-link'
               : 'nav-link'
           "
           aria-current="page"
           :to="{
-            name: 'general-conversion.workingHoursStats',
+            name: 'general-conversation.workingHoursStats',
           }"
         >
           <i class="icon material-symbols-outlined"> hourglass_top </i>

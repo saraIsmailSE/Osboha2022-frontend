@@ -53,16 +53,12 @@
                 </div>
 
                 <div class="form-group col-12">
-                  <select class="form-select" v-model="selectedMonth">
-                    <option value="" selected>اختر الشهر</option>
-                    <option
-                      v-for="month in objectToArray(monthsOptions)"
-                      :key="month.key"
-                      :value="month.key"
-                    >
-                      {{ month.value }}
-                    </option>
-                  </select>
+                  <input
+                    type="month"
+                    class="form-control"
+                    id="inputMonth"
+                    v-model="selectedMonthYear"
+                  />
                 </div>
 
                 <div class="col-12 col-md-12 col-lg-12">
@@ -116,6 +112,7 @@
                                   <th scope="col">الجمعة</th>
                                   <th scope="col">السبت</th>
                                   <th scope="col">مجموع الساعات</th>
+                                  <th scope="col">أيام التقصير</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -125,7 +122,7 @@
                                 >
                                   <tr>
                                     <td
-                                      colspan="9"
+                                      :colspan="columns"
                                       class="table-info text-center bold py-2"
                                     >
                                       {{ role.key }}
@@ -139,11 +136,24 @@
                                     <td>{{ user.user.name }}</td>
 
                                     <!-- print minutes of each day for each user -->
-                                    <td v-for="day in 7" :key="day">
+                                    <td
+                                      v-for="day in 7"
+                                      :key="day"
+                                      class="text-white text-center"
+                                      :class="{
+                                        'bg-primary': isMoreThanOneHour(
+                                          user.days[day] ?? 0,
+                                        ),
+
+                                        'bg-danger': !isMoreThanOneHour(
+                                          user.days[day] ?? 0,
+                                        ),
+                                      }"
+                                    >
                                       {{
-                                        user.days[`0${day}`]
+                                        user.days[day]
                                           ? minutesToHoursAndMinutes(
-                                              user.days[`0${day}`],
+                                              user.days[day],
                                             )
                                           : 0
                                       }}
@@ -159,12 +169,19 @@
                                           : 0
                                       }}
                                     </td>
+
+                                    <!-- print days that user worked less than one hour -->
+                                    <td>
+                                      {{
+                                        calculateDaysLessThanOneHour(user.days)
+                                      }}
+                                    </td>
                                   </tr>
 
                                   <!-- print total of minutes in minutes format-->
                                   <tr>
                                     <td class="bold">المجموع بالدقائق</td>
-                                    <td class="bold" colspan="8">
+                                    <td class="bold" :colspan="columns - 1">
                                       {{
                                         role.value
                                           ? calculateTotalMinutes(role.value) +
@@ -177,7 +194,7 @@
                                   <!-- print total of minutes in hours format-->
                                   <tr>
                                     <td class="bold">المجموع بالساعات</td>
-                                    <td class="bold" colspan="8">
+                                    <td class="bold" :colspan="columns - 1">
                                       {{
                                         role.value
                                           ? minutesToHoursAndMinutes(
@@ -216,9 +233,12 @@ export default {
     await this.getStatistics();
   },
   mounted() {
-    console.log(this.monthsOptions);
-  },
+    const date = new Date();
+    const { year, month } = helper.getMonthAndYear(date);
+    const monthYear = `${year}-${month}`;
 
+    this.selectedMonthYear = monthYear;
+  },
   data() {
     return {
       lastWeek: null,
@@ -226,26 +246,19 @@ export default {
       selectedMonth: new Date().getMonth() + 1,
       minutesOfSelectedMonth: 0,
       loading: false,
-      currentMonth: new Date().getMonth() + 1,
+      columns: 10,
+      selectedMonthYear: "",
     };
   },
   computed: {
     monthTitle() {
-      return MONTHS_NUMBERS[this.selectedMonth];
-    },
-    monthsOptions() {
-      // return MONTHS_NUMBERS that are less than current month or equal to it as object
-      const newObject = {};
+      const { month } = helper.getMonthAndYear(this.selectedMonthYear);
 
-      for (let i = 1; i <= this.currentMonth; i++) {
-        newObject[i] = MONTHS_NUMBERS[i];
-      }
-
-      return newObject;
+      return MONTHS_NUMBERS[month];
     },
   },
   watch: {
-    selectedMonth() {
+    selectedMonthYear() {
       this.getStatistics();
     },
   },
@@ -257,7 +270,7 @@ export default {
       try {
         const response =
           await GeneralConversationService.getWorkingHoursStatistics(
-            this.selectedMonth,
+            this.selectedMonthYear,
           );
 
         const data = response.data;
@@ -282,6 +295,24 @@ export default {
 
     calculateTotalMinutes(values) {
       return values.reduce((acc, curr) => acc + curr.minutes, 0);
+    },
+
+    isMoreThanOneHour(minutes) {
+      return minutes >= 60;
+    },
+
+    calculateDaysLessThanOneHour(days) {
+      //skip the  first day if it is less than one hour
+
+      let daysLessThanOneHour = 0;
+
+      for (let i = 1; i <= 7; i++) {
+        if (!days[`0${i}`] || (days[`0${i}`] && days[`0${i}`] < 60)) {
+          daysLessThanOneHour++;
+        }
+      }
+
+      return --daysLessThanOneHour;
     },
   },
 };

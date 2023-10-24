@@ -207,14 +207,14 @@ export default {
       this.loadingSolve = true;
       try {
         const response = await GeneralConversationService.solveQuestion(
-          question.id
+          question.id,
         );
         this.$emit("updateKey", question, "status", response.data.status);
         this.$emit(
           "updateKey",
           question,
           "updated_at",
-          response.data.updated_at
+          response.data.updated_at,
         );
         this.toggleToast("تم حل السؤال", "success");
       } catch (error) {
@@ -231,7 +231,7 @@ export default {
       this.loadingClose = true;
       try {
         const response = await GeneralConversationService.closeQuestion(
-          question.id
+          question.id,
         );
 
         this.$emit("updateKey", question, "status", response.data.status);
@@ -239,7 +239,7 @@ export default {
           "updateKey",
           question,
           "updated_at",
-          response.data.updated_at
+          response.data.updated_at,
         );
 
         this.toggleToast("تم إغلاق السؤال", "success");
@@ -257,7 +257,7 @@ export default {
       this.loadingAssign = true;
       try {
         const response = await GeneralConversationService.assignToParent(
-          question.id
+          question.id,
         );
 
         this.$emit("updateKey", question, "assignee", response.data.assignee);
