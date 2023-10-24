@@ -207,6 +207,23 @@
         <span class="item-name">تدقيق المراقبين</span>
       </router-link>
     </li>
+    <li class="nav-item" v-if="isAdvisor">
+      <router-link
+        :class="
+          checkActive('group.AdvisorMainAudit') ? 'active nav-link' : 'nav-link'
+        "
+        aria-current="page"
+        :to="{
+          name: 'group.AdvisorMainAudit',
+          params: {
+            advisor_id: user.id,
+          },
+        }"
+      >
+        <i class="icon material-symbols-outlined"> rule </i>
+        <span class="item-name">تدقيق الموجه</span>
+      </router-link>
+    </li>
 
     <!-- ###### General Conversation ###### -->
 

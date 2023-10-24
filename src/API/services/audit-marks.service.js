@@ -150,6 +150,30 @@ class AuditMarks {
     }
   }
 
+  
+  /**
+  * get all advisor audit .
+  * @return response
+  */
+  async advisorMainAudit(advisor_id) {
+    try {
+      const response = await api.get(`/${this.prefix}/advisor-main-audit/${advisor_id}`)
+        .catch((error) => { // error is handled in catch block
+          if (error.response) {
+            handelErrors(error.response.status)
+
+          } else if (error.request) { // The request was made but no response was received
+            console.log(error.request);
+          } else {// Error on setting up the request
+            console.log('Error', error.message);
+          }
+        })
+      return response.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+  
 
   /**
   * get notes for specific audit.
