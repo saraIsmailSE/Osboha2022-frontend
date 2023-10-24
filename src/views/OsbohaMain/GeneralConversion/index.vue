@@ -93,7 +93,7 @@ export default {
   },
   async created() {
     await this.checkUserPermission();
-    await this.closeOverdueQuestions();
+    // await this.closeOverdueQuestions(); -- dr. Ahmed asked to remove this feature
     await this.getQuestions();
   },
   data() {
@@ -175,7 +175,7 @@ export default {
         } else if (this.keyword === "assigned-to-me") {
           //get assigned to me questions
           response = await GeneralConversationService.getAssignedToMeQuestions(
-            this.page
+            this.page,
           );
         }
 

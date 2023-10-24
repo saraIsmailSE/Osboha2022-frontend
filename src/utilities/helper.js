@@ -148,4 +148,28 @@ export default {
   getAssetsUrl() {
     return process.env.VUE_APP_BASE_URL.replace("api/v1", "assets/images");
   },
+
+  getMonthAndYear(date) {
+    const dateObj = new Date(date);
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth() + 1;
+
+    return {
+      year,
+      month: month < 10 ? `0${month}` : month,
+    };
+  },
+
+  getDifferenceBetweenDates(date1, date2) {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+
+    const diffTime = Math.abs(d1 - d2);
+    const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
+
+    return {
+      hours: diffHours,
+      minutes: diffHours * 60,
+    };
+  },
 };

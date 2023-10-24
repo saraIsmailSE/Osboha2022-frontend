@@ -1,14 +1,13 @@
 <template>
   <div class="mt-3 d-flex align-content-start flex-wrap">
     <small class="ms-2 me-2">
-      <span class="align-middle material-symbols-outlined"> task_alt </span>
-      {{
-        getStatusText(question.status, question.created_at, question.updated_at)
-      }}
-    </small>
-    <small class="ms-2 me-2">
-      <span class="align-middle material-symbols-outlined"> person_check </span>
-      {{ question.assignee?.name }}
+      <span
+        class="align-middle material-symbols-outlined"
+        :class="isWarning ? 'text-warning' : 'text-success'"
+      >
+        {{ isWarning ? "warning" : "task_alt" }}
+      </span>
+      {{ getStatusText() }}
     </small>
     <small class="ms-2 me-2">
       <span class="align-middle material-symbols-outlined"> forum </span>
@@ -18,11 +17,26 @@
           : "لا يوجد إجابات"
       }}
     </small>
+    <small
+      class="ms-2 me-2"
+      v-for="parent in question.user_parents"
+      :key="parent.role"
+    >
+      <span class="align-middle material-symbols-outlined"> person_check </span>
+      <span style="font-weight: bold">{{ `${parent.role}:` }}</span>
+      {{ parent.name }}
+    </small>
   </div>
 </template>
 <script>
+import helper from "@/utilities/helper";
 export default {
   name: "QuestionStat",
+  data() {
+    return {
+      isWarning: false,
+    };
+  },
   props: {
     question: {
       type: Object,
@@ -30,19 +44,32 @@ export default {
     },
   },
   methods: {
-    getStatusText(status, created_at, updated_at) {
-      switch (status) {
-        case "open":
-          return "لم يتم الحل";
-        case "closed":
-          return "مغلق بسبب عدم الاستجابة";
-        case "solved": {
-          const createdDate = new Date(created_at);
-          const updatedDate = new Date(updated_at);
-          const diffTime = Math.abs(updatedDate - createdDate);
-          const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
+    getStatusText() {
+      switch (this.question?.status) {
+        case "open": {
+          const { hours } = helper.getDifferenceBetweenDates(
+            this.question.created_at,
+            new Date(),
+          );
 
-          if (diffHours <= 12) {
+          if (hours >= 48) {
+            this.isWarning = true;
+            return "مفتوح لأكثر من يومين";
+          }
+
+          return "لم يتم الحل";
+        }
+        case "closed":
+          // return "مغلق بسبب عدم الاستجابة";
+          return "مغلق";
+        case "solved": {
+          this.isWarning = false;
+          const { hours } = helper.getDifferenceBetweenDates(
+            this.question.created_at,
+            this.question.updated_at,
+          );
+
+          if (hours <= 12) {
             return "تم الحل خلال 12 ساعة";
           }
           return "تم الحل بعد أكثر من 12 ساعة";
