@@ -52,6 +52,15 @@ class GeneralConversation {
     }
   }
 
+  async getQuestionById(questionId) {
+    try {
+      const question = await api.get(`${this.prefix}/questions/${questionId}`);
+      return question.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   async getMyQuestions(page) {
     try {
       const questions = await api.get(

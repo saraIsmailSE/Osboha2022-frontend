@@ -112,7 +112,7 @@
                                   <th scope="col">الجمعة</th>
                                   <th scope="col">السبت</th>
                                   <th scope="col">مجموع الساعات</th>
-                                  <th scope="col">أيام أقل من ساعة</th>
+                                  <th scope="col">أيام التقصير</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -142,18 +142,18 @@
                                       class="text-white text-center"
                                       :class="{
                                         'bg-primary': isMoreThanOneHour(
-                                          user.days[`0${day}`] ?? 0,
+                                          user.days[day] ?? 0,
                                         ),
 
                                         'bg-danger': !isMoreThanOneHour(
-                                          user.days[`0${day}`] ?? 0,
+                                          user.days[day] ?? 0,
                                         ),
                                       }"
                                     >
                                       {{
-                                        user.days[`0${day}`]
+                                        user.days[day]
                                           ? minutesToHoursAndMinutes(
-                                              user.days[`0${day}`],
+                                              user.days[day],
                                             )
                                           : 0
                                       }}

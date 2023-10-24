@@ -362,32 +362,33 @@ const exceptionChildRoute = (prop, mode = false) => [
   },
 ];
 
-const generalConversionChildRoute = (prop, mode = false) => [
+const generalConversationChildRoute = (prop, mode = false) => [
   {
-    path: "",
+    path: ":questionId?",
     name: prop + ".index",
-    meta: { auth: true, name: "General Conversion Index" },
-    component: () => import("../views/OsbohaMain/GeneralConversion/index"),
+    meta: { auth: true, name: "General Conversation Index" },
+    component: () => import("../views/OsbohaMain/GeneralConversation/index"),
   },
   {
     path: "statistics",
     name: prop + ".statistics",
-    meta: { auth: true, name: "General Conversion Statistics" },
-    component: () => import("../views/OsbohaMain/GeneralConversion/Statistics"),
+    meta: { auth: true, name: "General Conversation Statistics" },
+    component: () =>
+      import("../views/OsbohaMain/GeneralConversation/Statistics"),
   },
   {
     path: "working-hours",
     name: prop + ".workingHours",
-    meta: { auth: true, name: "General Conversion Working Hours" },
+    meta: { auth: true, name: "General Conversation Working Hours" },
     component: () =>
-      import("../views/OsbohaMain/GeneralConversion/WorkingHours"),
+      import("../views/OsbohaMain/GeneralConversation/WorkingHours"),
   },
   {
     path: "working-hours-stats",
     name: prop + ".workingHoursStats",
-    meta: { auth: true, name: "General Conversion Working Hours Stats" },
+    meta: { auth: true, name: "General Conversation Working Hours Stats" },
     component: () =>
-      import("../views/OsbohaMain/GeneralConversion/WorkingHoursStats"),
+      import("../views/OsbohaMain/GeneralConversation/WorkingHoursStats"),
   },
 ];
 
@@ -627,12 +628,12 @@ const routes = [
     children: chatChildRoute("chat"),
   },
   {
-    path: "/general-conversion",
-    name: "general-conversion",
+    path: "/general-conversation",
+    name: "general-conversation",
     component: () => import("../layouts/Default"),
     meta: { auth: true },
-    children: generalConversionChildRoute("general-conversion"),
-  },  
+    children: generalConversationChildRoute("general-conversation"),
+  },
 ];
 
 const router = createRouter({
