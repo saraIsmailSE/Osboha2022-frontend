@@ -9,8 +9,8 @@
           <table class="table w-100">
             <thead>
               <tr>
-                <th scope="col">التاريخ</th>
-                <th scope="col">المدة</th>
+                <th>التاريخ</th>
+                <th>المدة</th>
               </tr>
             </thead>
             <tbody>

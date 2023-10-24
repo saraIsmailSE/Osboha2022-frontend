@@ -52,6 +52,15 @@ class GeneralConversation {
     }
   }
 
+  async getQuestionById(questionId) {
+    try {
+      const question = await api.get(`${this.prefix}/questions/${questionId}`);
+      return question.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   async getMyQuestions(page) {
     try {
       const questions = await api.get(
@@ -125,9 +134,10 @@ class GeneralConversation {
     }
   }
 
-  async addWorkingHours(minutes) {
+  async addWorkingHours(date, minutes) {
     try {
       const response = await api.post(`${this.prefix}/working-hours`, {
+        date,
         minutes,
       });
       return response.data;
@@ -145,10 +155,10 @@ class GeneralConversation {
     }
   }
 
-  async getWorkingHoursStatistics(selectedMonth = "") {
+  async getWorkingHoursStatistics(selectedDate = "") {
     try {
       const response = await api.get(
-        `${this.prefix}/working-hours/statistics?month=${selectedMonth}`,
+        `${this.prefix}/working-hours/statistics?date=${selectedDate}`,
       );
       return response.data;
     } catch (error) {
