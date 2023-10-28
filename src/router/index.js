@@ -153,6 +153,13 @@ const userChildRoute = (prop, mode = false) => [
     component: () => import("../views/AuthPages/Default/SearchForUser"),
   },
   {
+    path: "assign-to-parent",
+    name: prop + ".assignToParent",
+    meta: { auth: true, name: "Assign To Parent" },
+    component: () =>
+      import("../views/OsbohaMain/Control/Ambassador/assignToParent"),
+  },
+  {
     path: "profile/:user_id",
     name: prop + ".profile",
     meta: { auth: true, name: "User Profile" },

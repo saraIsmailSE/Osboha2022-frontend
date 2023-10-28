@@ -44,18 +44,56 @@
                     </router-link>
                 </div>
             </div>
+            <div class="col-6 col-md-6 col-lg-6" v-if="consultantAndAbove">
+                <div class="card">
+                    <router-link :to="{ name: 'user.assignToParent', }">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div class="border rounded d-flex align-items-center justify-content-center">
+                                    <i class="display-1 img-fluid material-symbols-outlined">
+                                        supervisor_account
+                                    </i>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <h3 class="mb-0 text-center">
+                                    تعيين مسؤول عنه
+                                </h3>
+                            </div>
+                        </div>
+                    </router-link>
+                </div>
+            </div>
 
         </div>
     </div>
 </template>
 <script>
+import UserInfoService from "@/Services/userInfoService";
+
 export default {
     name: 'Control Groups - Ambassadors',
     async created() {
     },
     data() {
     },
-    methods: {
+    computed: {
+        user() {
+            return this.$store.getters.getUser;
+        },
+        isorAndAbove() {
+            return UserInfoService.hasRoles(this.user, [
+                "admin",
+                "consultant",
+                "advisor",
+            ]);
+        },
+        isAdmin() {
+            return UserInfoService.hasRole(this.user, "admin");
+        },
+        consultantAndAbove() {
+            return UserInfoService.hasRoles(this.user, ["consultant", "admin"]);
+        },
     },
 };
 </script>

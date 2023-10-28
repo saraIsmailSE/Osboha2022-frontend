@@ -39,7 +39,7 @@
               id="editor"
               placeholder="ماذا تريد أن تكتب..."
               class="rounded form-control"
-              style="border: none"
+              style="border: none; direction: rtl;"
               v-model.trim="post.body"
               ref="bodyRef"
             >

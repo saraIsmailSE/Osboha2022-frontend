@@ -203,7 +203,7 @@ export default {
       this.currentTime = new Date();
     }, 1000);
 
-    this.informUserAboutClosingScreenShots();
+    //this.informUserAboutClosingScreenShots();
   },
   beforeUnmount() {
     clearInterval(this.timer);

@@ -4,8 +4,8 @@
       <div class="card-body text-center">
         <BaseAvatar :profileImg="supervisor.supervisor.user_profile.profile_picture"
           :profile_id="supervisor.supervisor.user_profile.id" :title="supervisor.supervisor.name"
-          :gender="supervisor.supervisor.gender" avatarClass="rounded-circle img-fluid avatar-120"
-          dimensions="150x150" :noMainClass="true" />
+          :gender="supervisor.supervisor.gender" avatarClass="rounded-circle img-fluid avatar-120" dimensions="150x150"
+          :noMainClass="true" />
         <div class="group-info pt-3 pb-3">
           <router-link :to="{
             name: 'user.profile',
@@ -23,10 +23,19 @@
               <h6>{{ supervisor.num_of_leaders }}</h6>
             </li>
             <li class="pe-3 ps-3">
-              <p class="mb-0">لمعدل العام</p>
+              <p class="mb-0">المعدل العام</p>
               <h6>
                 {{ (Math.round(supervisor.groups_avg * 100) / 100).toFixed(2) }}
                 %
+              </h6>
+            </li>
+            <li class="pe-3 ps-3">
+              <p class="mb-0">تم تدقيق</p>
+              <h6>
+                {{ supervisor.audit_audited }}
+                /
+                {{ supervisor.audit_count }}
+
               </h6>
             </li>
           </ul>
@@ -56,9 +65,5 @@ export default {
       required: true,
     },
   },
-  created() {
-    console.log(this.supervisor.supervisor);
-  },
-
 };
 </script>

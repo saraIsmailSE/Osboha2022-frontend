@@ -1,5 +1,5 @@
 <template>
-    <div class="d-grid gap-3 d-grid-template-1fr-19">
+    <div class="d-grid gap-3 d-grid-template-1fr-19 mb-2">
         <AdvisorAuditCard v-for="supervisor in supervisors" :supervisor="supervisor" :key="supervisor.id" />
     </div>
 </template>
