@@ -1,4 +1,5 @@
 import { handleError } from "vue";
+import { customHandleError } from "../../utilities/errors";
 import { api } from "../Intercepter";
 
 class UserService {
@@ -34,6 +35,16 @@ class UserService {
       return users.data;
     } catch (error) {
       handleError(error);
+    }
+  }
+  async assignToParent(user) {
+    try {
+      const response = await api.post(`users/assign-to-parent`, user, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      customHandleError(error, "UserGroupService.AddMember");
     }
   }
 }

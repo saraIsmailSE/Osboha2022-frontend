@@ -26,7 +26,28 @@
         <div class="sign-in-from">
           <form class="mt-2" @submit.prevent="submit">
             <div class="row">
-              <div class="col-6">
+              <div class="col-12">
+                <div class="form-group">
+                  <label for="hours" class="d-block mb-1">التاريخ</label>
+                  <Datepicker
+                    v-model="v$.form.date.$model"
+                    style="cursor: pointer"
+                    :disabledDates="disabledDatesRange"
+                    wrapperClass="w-100"
+                  />
+
+                  <template v-if="v$.form.date.$error">
+                    <small
+                      style="color: red"
+                      v-if="v$.form.hours.required.$invalid"
+                    >
+                      التاريخ مطلوب</small
+                    >
+                  </template>
+                </div>
+              </div>
+
+              <div class="col-sm-12 col-md-6">
                 <div class="form-group">
                   <label for="hours">الساعات</label>
                   <input
@@ -36,7 +57,8 @@
                     max="24"
                     class="form-control mb-0"
                     id="hours"
-                    placeholder="ادخل عدد الساعات"
+                    placeholder="ادخل عدد
+                  الساعات"
                     :disabled="loader"
                   />
                   <template v-if="v$.form.hours.$error">
@@ -57,7 +79,7 @@
                 </div>
               </div>
 
-              <div class="col-6">
+              <div class="col-sm-12 col-md-6">
                 <div class="form-group">
                   <label for="minutes">الدقائق</label>
                   <input
@@ -127,15 +149,22 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import { requiredIf, maxValue, minValue } from "@vuelidate/validators";
+import {
+  requiredIf,
+  maxValue,
+  minValue,
+  required,
+} from "@vuelidate/validators";
 import GeneralConversationService from "@/API/services/general-conversation.service";
 import WorkingHoursList from "@/components/conversation/WorkingHoursList.vue";
 import helper from "@/utilities/helper";
+import Datepicker from "vuejs3-datepicker";
 
 export default {
   name: "WorkingHours",
   components: {
     WorkingHoursList,
+    Datepicker,
   },
   setup() {
     return { v$: useVuelidate() };
@@ -148,6 +177,7 @@ export default {
       form: {
         hours: 0,
         minutes: 0,
+        date: new Date(),
       },
       message: "",
       variant: "success",
@@ -170,8 +200,20 @@ export default {
           min: this.form.hours ? minValue(0) : minValue(1),
           max: maxValue(60),
         },
+        date: {
+          required,
+        },
       },
     };
+  },
+  computed: {
+    disabledDatesRange() {
+      return {
+        to: new Date(this.$store.state.week_start_date),
+        from: new Date(),
+        preventDisableDateSelection: true,
+      };
+    },
   },
   watch: {
     message() {
@@ -186,13 +228,15 @@ export default {
       this.v$.$touch();
       if (!this.v$.form.$invalid) {
         this.loader = true;
-        const { hours, minutes } = this.form;
+        const { hours, minutes, date } = this.form;
 
         const overAllMinutes = parseInt(hours) * 60 + parseInt(minutes);
 
         try {
-          const response =
-            await GeneralConversationService.addWorkingHours(overAllMinutes);
+          const response = await GeneralConversationService.addWorkingHours(
+            date,
+            overAllMinutes,
+          );
 
           this.message = "تم إدخال الساعات بنجاح";
           this.variant = "success";
@@ -247,8 +291,18 @@ export default {
         this.loadingStats = false;
       }
     },
+    isDateDisabled(date) {
+      const disabledDates = ["2023-10-25", "2023-10-30"];
+
+      console.log("date", date);
+      return disabledDates.includes(date);
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.vuejs3-datepicker #calendar-div {
+  width: 100% !important;
+}
+</style>

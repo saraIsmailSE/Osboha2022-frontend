@@ -59,7 +59,7 @@
                     <h6
                       style="direction: rtl"
                       :class="{
-                        'text-white': notification.data.type === 'announcement',
+                        'text-white': isWhite(notification),
                       }"
                     >
                       {{ notification.data.message }}
@@ -68,8 +68,7 @@
                       tag="span"
                       class="text-muted small"
                       :class="{
-                        'text-white-50':
-                          notification.data.type === 'announcement',
+                        'text-white-50': isWhite(notification),
                       }"
                       tooltipPlacement="bottom"
                       data-bs-toggle="tooltip"
@@ -83,7 +82,7 @@
                       role="button"
                       class="me-1"
                       :class="{
-                        'text-white': notification.data.type === 'announcement',
+                        'text-white': isWhite(notification),
                       }"
                       @click.prevent="
                         sendToPage(notification.data.path, notification.id)
@@ -96,7 +95,7 @@
                       role="button"
                       class="material-symbols-outlined md-18 me-3"
                       :class="{
-                        'text-white': notification.data.type === 'announcement',
+                        'text-white': isWhite(notification),
                       }"
                       v-if="!notification.read_at"
                       @click="markAsRead(notification.id)"
@@ -256,24 +255,42 @@ export default {
       }
       this.markAsRead(id);
     },
+
+    isWhite(notification) {
+      return (
+        notification.data.type === "announcement" ||
+        notification.data.type === "support"
+      );
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
-.seen:not(.announcement) {
+.seen:not(.announcement, .support) {
   --bs-bg-opacity: 1;
   background-color: white;
 }
 
-.un-seen:not(.announcement) {
+.un-seen:not(.announcement, .support) {
   --bs-bg-opacity: 1;
   background-color: #e2e2e2;
 }
 
 .announcement {
   $primary: #1f662b;
-  $secondary: #237330;
+  $secondary: rgba($primary, 0.9);
+  --bs-bg-opacity: 1;
+  background-color: $primary;
+
+  &.seen {
+    background-color: $secondary;
+  }
+}
+
+.support {
+  $primary: #831018;
+  $secondary: rgba($primary, 0.9);
   --bs-bg-opacity: 1;
   background-color: $primary;
 
