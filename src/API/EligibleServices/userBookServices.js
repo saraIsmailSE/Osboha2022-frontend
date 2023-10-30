@@ -5,6 +5,11 @@ class userBookServices {
     this.prefix = "eligible-userbook";
   }
 
+  async checkAchievement(id) {
+    const response = await api.get(`${this.prefix}/check-achievement/${id}`);
+    return response.data.data;
+  }
+
   async acceptUserBook(id) {
     const response = await api.post(`${this.prefix}/review`, {
       id: id,
@@ -51,7 +56,7 @@ class userBookServices {
       const response = await api.post(`${this.prefix}`, {
         book_id: id,
       });
-      return response.data;
+      return response.data.data;
     } catch (e) {
       console.log(e);
     }
