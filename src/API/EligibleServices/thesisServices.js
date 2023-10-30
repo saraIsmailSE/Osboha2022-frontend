@@ -1,144 +1,124 @@
-import { api } from "../Intercepter"
+import { api } from "../Intercepter";
 import userInfoService from "@/Services/userInfoService";
-export default {
-  createThesis: async (thesis, userbook_id) => {
+class ThesesServices {
+  constructor() {
+    this.prefix = "eligible-theses";
+  }
+
+  async createThesis(thesis, userbook_id) {
     let formData = new FormData();
     formData.append("thesis_text", thesis.text);
     formData.append("ending_page", thesis.pageEnd);
     formData.append("starting_page", thesis.pageStart);
-    formData.append("user_book_id", userbook_id);
+    formData.append("eligible_user_books_id", userbook_id);
     formData.append("images[]", thesis.image_1);
-    const response = await api.post("/thesises", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }).catch(error => {
-
-      console.log(error)
-    }
-    )
+    const response = await api
+      .post(`${this.prefix}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     return response;
-  },
+  }
 
 
-  updatePicture: async (image, path) => {
-    let formData = new FormData();
-    formData.append("path", path);
-    formData.append("image", image);
-
-    const response = await api.post("/thesises/update-photo", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }).catch(error => {
-
-      console.log(error)
-    }
-    )
-    return response.data.data;
-  },
-  reviewThesis: async (id) => {
-    const res = await api
-      .patch(`/thesises/review-thesis/${id}`)
- 
-  },
-  deleteThesis(id) {
-    const response = api.delete(`/thesises/${id}`)
+  async reviewThesis(id) {
+    const res = await api.patch(`${this.prefix}/review-thesis/${id}`);
+  }
+  async deleteThesis(id) {
+    const response = api.delete(`${this.prefix}/${id}`);
     return response;
-  },
-  acceptThesis(id,status) {
-    let thesisId, user_book_id=null
-    if(status == 'accept'){
-      thesisId=id
-
+  }
+  async acceptThesis(id, status) {
+    let thesisId,
+      eligible_user_books_id = null;
+    if (status == "accept") {
+      thesisId = id;
+    } else if (status == "audit") {
+      eligible_user_books_id = id;
     }
-    else if(status == 'audit'){
-      user_book_id=id
-    }
-    const response = api.post("/thesises/review", {
+    const response = api.post("${this.prefix}/review", {
       id: thesisId,
-      user_book_id: user_book_id,
+      eligible_user_books_id: eligible_user_books_id,
       status: status,
-      reviewer_id: userInfoService.getUser().id
-    })
+      reviewer_id: userInfoService.getUser().id,
+    });
     return response;
-  },
-  rejectRetardThesis(id, note,status) {
-    const response = api.post("/thesises/review", {
+  }
+  async rejectRetardThesis(id, note, status) {
+    const response = api.post("${this.prefix}/review", {
       id: id,
       status: status,
       reviewer_id: userInfoService.getUser().id,
-      reviews: note
-    })
+      reviews: note,
+    });
     return response;
-  },
-  addDegree(id, note, mark) {
-    const response = api.patch(`/thesises/add-degree/${id}`, {
+  }
+  async addDegree(id, note, mark) {
+    const response = api.patch(`${this.prefix}/add-degree/${id}`, {
       auditor_id: userInfoService.getUser().id,
       reviews: note,
-      degree: mark
-      
-    })
+      degree: mark,
+    });
     return response;
-
-  },
-  updateThesis: async (thesis, id) => {
-    const response = await api.patch(`thesises/${id}`, thesis).catch(error => {
-
-
-      console.log(error)
-    }
-    )
+  }
+  async updateThesis(thesis, id) {
+    const response = await api
+      .patch(`${this.prefix}/${id}`, thesis)
+      .catch((error) => {
+        console.log(error);
+      });
     return response;
-  },
-  getById: async (id) => {
-    const response = await api.get(`thesises/${id}`);
- 
+  }
+  async getById(id) {
+    const response = await api.get(`${this.prefix}/${id}`);
+
     return response.data.data;
-  },
-  getByBook: async (bookID) => {
-    const thesis = await api.get(`thesises/book/${bookID}`);
- 
+  }
+  async getByBook(bookID) {
+    const thesis = await api.get(`${this.prefix}/book/${bookID}`);
     return thesis.data.data;
-  },
-  getByUserBookStatus: async (status) => {
+  }
+  async getByUserBookStatus(status) {
+    const thesis = await api.get(`${this.prefix}/by-status/${status}`);
+    thesis.data;
+    return thesis.data.data;
+  }
+  async getByUserBook(eligible_user_books_id, status) {
+    const thesis = await api.get(
+      `${this.prefix}/eligible_user_books_id/${eligible_user_books_id}&${status}`,
+    );
+    thesis.data;
+    return thesis.data.data;
+  }
+  async deletePhoto(id) {
+    const response = await api.delete(`${this.prefix}/photo/${id}`);
+  }
 
-    const thesis = await api.get(`thesises/by-status/${status}`);
-    (thesis.data)
-    return thesis.data.data;
-  },
-  getByUserBook : async (user_book_id ,status) => {
- 
-    const thesis = await api.get(`thesises/user_book_id/${user_book_id}&${status}`);
-    (thesis.data)
-    return thesis.data.data;
-},
-  deletePhoto: async (id) => {
-    const response = await api.delete(`thesises/photo/${id}`);
-  },
-
-  getPhotosCount: async (user_book_id) => {
-    const response = await api.get(`thesises/photo-count/${user_book_id}`);
+  async getPhotosCount(eligible_user_books_id) {
+    const response = await api.get(
+      `${this.prefix}/photo-count/${eligible_user_books_id}`,
+    );
     return response.data.data;
-   
-  },
+  }
 
-
-  uploadPhoto: async (image, id) => {
+  async uploadPhoto(image, id) {
     let formData = new FormData();
-   
+
     formData.append("image", image);
-    const response = await api.post(`/thesises/upload/${id}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }).catch(error => {
-
-      console.log(error)
-    }
-    ) 
+    const response = await api
+      .post(`${this.prefix}/upload/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     return response;
-  },
-
- }
-
+  }
+}
+export default new ThesesServices();

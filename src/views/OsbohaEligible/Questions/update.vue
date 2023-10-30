@@ -97,7 +97,7 @@ export default {
     this.questionToupdate = await questionServices.getById(this.$route.params.id)
     this.book = this.questionToupdate.user_book.book
     this.questionForm.question = this.questionToupdate.question
-    this.questionForm.user_book_id = this.questionToupdate.user_book.id
+    this.questionForm.eligible_user_books_id = this.questionToupdate.user_book.id
     this.questionForm.starting_page = this.questionToupdate.starting_page
     this.questionForm.ending_page = this.questionToupdate.ending_page
     this.questionForm.quotes = this.questionToupdate.quotation
@@ -114,7 +114,7 @@ export default {
         question: '',
         starting_page: "", 
         ending_page: "",
-        user_book_id:0,
+        eligible_user_books_id:0,
         quotes: [
           { text: '' }
         ]

@@ -227,7 +227,7 @@ export default {
             generalInfromationsform: {
                 general_question: '',
                 summary: '',
-                user_book_id: null,
+                eligible_user_books_id: null,
             },
             generalInformations: [],
             show: false,
@@ -254,7 +254,7 @@ export default {
         async getInformations() {
             const response = await generalInformationsServices.getByBook(this.$route.params.id);
             this.generalInformations = response.general_informations
-            this.generalInfromationsform.user_book_id = response.user_book.id;
+            this.generalInfromationsform.eligible_user_books_id = response.user_book.id;
             this.book = response.user_book.book;
             if (this.generalInformations && (this.generalInformations.status === "retard" || this.generalInformations.status === null)) {
                 this.auditable = true;
@@ -335,7 +335,7 @@ export default {
             })
                 .then((willDelete) => {
                     if (willDelete.isConfirmed) {
-                        generalInformationsServices.reviewGeneralInformation(this.generalInformations.user_book_id)
+                        generalInformationsServices.reviewGeneralInformation(this.generalInformations.eligible_user_books_id)
                             .then(response => {
                                 swalWithBootstrapButtons.fire({
                                     title: 'تم الاعتماد',

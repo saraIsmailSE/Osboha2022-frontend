@@ -1,85 +1,86 @@
-import { api } from "../Intercepter"
+import { api } from "../Intercepter";
 import userInfoService from "@/Services/userInfoService";
 
-export default {
-  getByStatus: async (status) => {
-
-    const general_informations = await api.get(`general-informations/status/${status}`);
+class generalInformationsServices {
+  constructor() {
+    this.prefix = "eligible-general-informations";
+  }
+  async getByStatus(status) {
+    const general_informations = await api.get(
+      `${this.prefix}/status/${status}`,
+    );
     return general_informations.data.data;
-  },
-  getByUserBook: async (user_book_id) => {
-
-    const general_informations = await api.get(`general-informations/user_book_id/${user_book_id}`);
-    (general_informations.data)
+  }
+  async getByUserBook(user_book_id) {
+    const general_informations = await api.get(
+      `${this.prefix}-${this.prefix}/user_book_id/${user_book_id}`,
+    );
+    general_informations.data;
     return general_informations.data.data;
-  },
-  getByBook: async (bookID) => {
-
-    const general_informations = await api.get(`general-informations/book/${bookID}`);
-    (general_informations.data)
+  }
+  async getByBook(bookID) {
+    const general_informations = await api.get(`${this.prefix}/book/${bookID}`);
+    general_informations.data;
     return general_informations.data.data;
-  },
+  }
 
-  addDegree(id, note, mark) {
-    const response = api.patch(`/general-informations/add-degree/${id}`, {
+  async addDegree(id, note, mark) {
+    const response = await api.patch(`/${this.prefix}/add-degree/${id}`, {
       auditor_id: userInfoService.getUser().id,
       reviews: note,
-      degree: mark
-    })
+      degree: mark,
+    });
     return response;
-  },
-
-  getGeneralInformations: async (id) => {
-    const generalInformations = await api.get(`general-informations/user_book_id/${id}`);
+  }
+  async getGeneralInformations(id) {
+    const generalInformations = await api.get(
+      `${this.prefix}/user_book_id/${id}`,
+    );
     return generalInformations.data.data;
-  },
-  addGeneralInformations: async (data) => {
-    const response = await api.post("general-informations/", data)
-    return response.data.data
-      
-  },
-  updateGeneralInformations: async (data,id) => {
-    const response = await api.patch(`general-informations/${id}`, data)
-    return response.data.data
-      
-  },
-  acceptGeneralInformations(id) {
-    const response = api.post("/general-informations/review", {
+  }
+  async addGeneralInformations(data) {
+    const response = await api.post(`${this.prefix}/`, data);
+    return response.data.data;
+  }
+  async updateGeneralInformations(data, id) {
+    const response = await api.patch(`${this.prefix}/${id}`, data);
+    return response.data.data;
+  }
+  async acceptGeneralInformations(id) {
+    const response = await api.post(`${this.prefix}/review`, {
       id: id,
-      status: 'audit',
-      reviewer_id: userInfoService.getUser().id
-    })
+      status: "audit",
+      reviewer_id: userInfoService.getUser().id,
+    });
     return response;
-  },
-  rejectRetardGeneralInformations(id, note , status) {
-    const response = api.post("/general-informations/review", {
+  }
+  async rejectRetardGeneralInformations(id, note, status) {
+    const response = await api.post(`${this.prefix}/review`, {
       id: id,
       status: status,
       reviewer_id: userInfoService.getUser().id,
-      reviews: note
-    })
+      reviews: note,
+    });
     return response;
-  }, 
-  deleteGeneralInformation(id) {
-    const response = api.delete(`/general-informations/${id}`)
+  }
+  async deleteGeneralInformation(id) {
+    const response = await api.delete(`${this.prefix}/${id}`);
     return response;
-  },
-  reviewGeneralInformation: async (id) => {
+  }
+  async reviewGeneralInformation(id) {
     const res = await api
-      .patch(`/general-informations/review-general-informations/${id}`)
+      .patch(`${this.prefix}/review-general-informations/${id}`)
       .catch((e) => {
         // error = e.response.data.message;
-        (e)
-      }).then(e => (e));
+        e;
+      })
+      .then((e) => e);
     // return {data:res.data,error}
-  },
-  getById: async (id) => {
-    const response = await api.get(`general-informations/${id}`);
-    (response.data)
+  }
+  async getById(id) {
+    const response = await api.get(`${this.prefix}/${id}`);
+    response.data;
     return response.data.data;
-  },
-
-
-
-
+  }
 }
+export default new generalInformationsServices();

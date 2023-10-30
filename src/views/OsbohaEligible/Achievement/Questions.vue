@@ -207,7 +207,7 @@ export default {
         question: "",
         starting_page: "",
         ending_page: "",
-        user_book_id: null,
+        eligible_user_books_id: null,
         quotes: [{ text: "" }],
       },
       questions: [],
@@ -249,7 +249,7 @@ export default {
       this.book = response.user_book.book;
       this.questions = response.questions;
       this.user_book = response.user_book;
-      this.questionForm.user_book_id = response.user_book.id;
+      this.questionForm.eligible_user_books_id = response.user_book.id;
       this.status = this.user_book.status;
       this.auditable = this.questions.some((element) => {
         if (element.status === "retard" || element.status === null) {

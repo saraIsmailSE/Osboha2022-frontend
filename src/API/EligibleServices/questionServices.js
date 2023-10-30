@@ -1,102 +1,101 @@
-import { api } from "../Intercepter"
+import { api } from "../Intercepter";
 import userInfoService from "@/Services/userInfoService";
-export default {
-  addQuestion: async (question) => {
-  
-    const response = await api.post("questions", question)
-    return response.data.data
-  },
+class questionServices {
+  constructor() {
+    this.prefix = "eligible-questions";
+  }
 
+  async addQuestion(question) {
+    const response = await api.post(`${this.prefix}`, question);
+    return response.data.data;
+  }
 
-  getQuestions: async (id) => {
-
-    const questions = await api.get(`questions/user-book/${id}`);
+  async getQuestions(id) {
+    const questions = await api.get(`${this.prefix}/user-book/${id}`);
 
     return questions.data.data;
-  },
+  }
 
-  addDegree(id, note, mark) {
-    const response = api.patch(`/questions/add-degree/${id}`, {
+  async addDegree(id, note, mark) {
+    const response = await api.patch(`${this.prefix}/add-degree/${id}`, {
       auditor_id: userInfoService.getUser().id,
       reviews: note,
-      degree: mark
-    })
-    console.log(response)
+      degree: mark,
+    });
+    console.log(response);
     return response;
-
-  },
-  deleteQuestion(id) {
-    const response = api.delete(`/questions/${id}`)
+  }
+  async deleteQuestion(id) {
+    const response = await api.delete(`${this.prefix}/${id}`);
     return response;
-  },
-  getByStatus: async (status) => {
-
-    const response = await api.get(`questions/status/${status}`);
-    (response.data)
+  }
+  async getByStatus(status) {
+    const response = await api.get(`${this.prefix}/status/${status}`);
+    response.data;
     return response.data.data;
-  },
-  getByUserBook: async (user_book_id) => {
-
-    const response = await api.get(`questions/user_book_id/${user_book_id}`);
-    (response.data)
+  }
+  async getByUserBook(user_book_id) {
+    const response = await api.get(
+      `${this.prefix}/user_book_id/${user_book_id}`,
+    );
+    response.data;
     return response.data.data;
-  },
-  acceptQuestion(id,status) {
-    let questionId, user_book_id=null
-    if(status == 'accept'){
-      questionId=id
-
-    }
-    else if(status == 'audit'){
-      user_book_id=id
+  }
+  async acceptQuestion(id, status) {
+    let questionId,
+      user_book_id = null;
+    if (status == "accept") {
+      questionId = id;
+    } else if (status == "audit") {
+      user_book_id = id;
     }
 
-    const response = api.post("/questions/review", {
+    const response = api.post(`${this.prefix}/review`, {
       id: questionId,
       user_book_id: user_book_id,
       status: status,
-      reviewer_id: userInfoService.getUser().id
-    })
+      reviewer_id: userInfoService.getUser().id,
+    });
     return response;
-  },
-  rejectRetardThesis(id, note,status) {
-    const response = api.post("/questions/review", {
+  }
+  rejectRetardThesis(id, note, status) {
+    const response = api.post(`${this.prefix}/review`, {
       id: id,
       status: status,
       reviewer_id: userInfoService.getUser().id,
-      reviews: note
-    })
+      reviews: note,
+    });
     return response;
-  },
+  }
 
-  updateQuestion: async (question, id) => {
-    const response = await api.patch(`/questions/${id}`, question, {
-    }).catch(error => {
-
-      console.log(error)
-    }
-    )
+  async updateQuestion(question, id) {
+    const response = await api
+      .patch(`${this.prefix}/${id}`, question, {})
+      .catch((error) => {
+        console.log(error);
+      });
     return response.data.data;
-    },
-    reviewQuestion: async (id) => {
+  }
+  async reviewQuestion(id) {
     const res = await api
-      .patch(`/questions/review-question/${id}`)
+      .patch(`${this.prefix}/review-question/${id}`)
       .catch((e) => {
         // error = e.response.data.message;
-        (e)
-      }).then(e => (e));
+        e;
+      })
+      .then((e) => e);
     // return {data:res.data,error}
-  },
-  getById: async (id) => {
-    const response = await api.get(`questions/${id}`);
-    (response.data)
-    return response.data.data;
-  },
-  getByBook: async (bookID) => {
-    const response = await api.get(`questions/book/${bookID}`);
-    (response.data)
-    return response.data.data;
-  },
+  }
 
+  async getById(id) {
+    const response = await api.get(`${this.prefix}/${id}`);
+    response.data;
+    return response.data.data;
+  }
+  async getByBook(bookID) {
+    const response = await api.get(`${this.prefix}/book/${bookID}`);
+    response.data;
+    return response.data.data;
+  }
 }
-
+export default new questionServices();

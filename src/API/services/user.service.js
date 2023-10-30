@@ -47,6 +47,14 @@ class UserService {
       customHandleError(error, "UserGroupService.AddMember");
     }
   }
+  async getInfo(id) {
+    try {
+      const users = await api.get(`users/info/${id}`);
+      return users.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 }
 
 export default new UserService();

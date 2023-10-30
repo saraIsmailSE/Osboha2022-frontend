@@ -1,114 +1,122 @@
-import { api } from "../Intercepter"
+import { api } from "../Intercepter";
 import userInfoService from "@/Services/userInfoService";
-export default {
-  acceptUserBook(id) {
-    const response = api.post("/userbook/review", {
+class userBookServices {
+  constructor() {
+    this.prefix = "eligible-userbook";
+  }
+
+  async acceptUserBook(id) {
+    const response = await api.post(`${this.prefix}/review`, {
       id: id,
-      status: 'audit',
-      reviewer_id: userInfoService.getUser().id
-    })
+      status: "audit",
+      reviewer_id: userInfoService.getUser().id,
+    });
     return response;
-  },
-  rejectRetardUserBook(id, note,status) {
-    const response = api.post("/userbook/review", {
+  }
+  async rejectRetardUserBook(id, note, status) {
+    const response = api.post(`${this.prefix}/review`, {
       id: id,
       status: status,
       reviewer_id: userInfoService.getUser().id,
-      reviews: note
-    })
+      reviews: note,
+    });
     return response;
-  },
-  getById: async (id) => {
-    const response = await api.get(`userbook/${id}`);
+  }
+  async getById(id) {
+    const response = await api.get(`${this.prefix}/${id}`);
 
     return response.data.data;
-  },
-  getReadyToAudit: async () => {
-    const response = await api.get(`userbook/ready/to`);
+  }
+  async getReadyToAudit() {
+    const response = await api.get(`${this.prefix}/ready/to`);
 
     return response.data.data;
-  },
-  getByBookID: async (id) => {
-    const response = await api.get(`userbook/by-book-id/${id}`);
+  }
+  async getByBookID(id) {
+    const response = await api.get(`${this.prefix}/by-book-id/${id}`);
     return response.data.data;
-  },
+  }
 
-  updateUserBook: async (status, id) => {
-    const response = await api.patch(`userbook/${id}`,  { status: status }).catch(error => {
-
-      console.log(error)
-    }
-    )
-    console.log(response)
+  async updateUserBook(status, id) {
+    const response = await api
+      .patch(`${this.prefix}/${id}`, { status: status })
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log(response);
     return response;
-  },
-  requestCertificate: async (id) => {
+  }
+  async requestCertificate(id) {
     try {
-      const response = await api.post("userbook", { book_id: id });
+      const response = await api.post(`${this.prefix}`, {
+        book_id: id,
+      });
       return response.data;
     } catch (e) {
       console.log(e);
     }
-  },
+  }
 
-  getByStatus: async (status) => {
+  async getByStatus(status) {
     try {
-      const response = await api.get(`userbook/status/${status}`);
+      const response = await api.get(`${this.prefix}/status/${status}`);
       return response.data.data;
     } catch (e) {
       console.log(e);
     }
-  },
-  
-  
-  lastAchievement: async () => {
+  }
+
+  async lastAchievement() {
     try {
-      const response = await api.get(`userbook/last-achievement/`);
+      const response = await api.get(
+        `${this.prefix}/last-achievement/`,
+      );
       return response.data.data;
     } catch (e) {
       console.log(e);
     }
-  },
+  }
 
-  finishedAchievement: async () => {
+  async finishedAchievement() {
     try {
-      const response = await api.get(`userbook/finished-achievement/`);
+      const response = await api.get(
+        `${this.prefix}/finished-achievement/`,
+      );
       return response.data.data;
     } catch (e) {
       console.log(e);
     }
-  },
+  }
 
-  changeStatus: async (status,id) => {
+  async changeStatus(status, id) {
     try {
-      const response = await api.patch(`userbook/status/${id}`,{status});
+      const response = await api.patch(`${this.prefix}/status/${id}`, {
+        status,
+      });
       return response.data.data;
     } catch (e) {
       console.log(e);
     }
-  },
+  }
 
-  cancel: async (id) => {
-    console.log(id)
+  async cancel(id) {
+    console.log(id);
     try {
-      const response = await api.delete(`userbook/${id}`);
+      const response = await api.delete(`${this.prefix}/${id}`);
       return response.data.data;
     } catch (e) {
-      return e.response.data.data
+      return e.response.data.data;
     }
-  },
+  }
 
-
-  
-  getFullUserBook: async (id) => {
+  async getFullUserBook(id) {
     try {
-      const response = await api.get(`userbook/${id}`);
-      return response.data
+      const response = await api.get(`${this.prefix}/${id}`);
+      return response.data;
     } catch (e) {
-      return e.response.data.data
+      return e.response.data.data;
     }
-  },
-
-  
+  }
 }
 
+export default new userBookServices();

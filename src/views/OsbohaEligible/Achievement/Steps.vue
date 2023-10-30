@@ -98,7 +98,7 @@
 <script>
 import userBookServices from "@/API/EligibleServices/userBookServices";
 import Chart from "@/components/Charts/fluid-meter-chart.vue";
-import UserInfoService from '@/Services/userInfoService'
+import UserService from '@/API/services/user.service'
 export default {
   name: "Steps",
   components: {
@@ -211,9 +211,8 @@ export default {
   },
   methods: {
     async getUserStatus() {
-      const user =UserInfoService.getUser();
-      const res = await UserInfoService.getUser(user.id);
-      this.userStatus = res.is_active;
+      const response = await UserService.getInfo(this.user.id);
+      this.userStatus = response.allowed_to_eligible;
     },
     async updateUserBook() {
       this.isDisabled = true;
@@ -229,6 +228,7 @@ export default {
       );
       this.completionPercentage = response.completionPercentage;
       this.userBook = response.userBook;
+      console.log("🚀 ~ file: Steps.vue:231 ~ getByBookId ~ this.userBook:", this.userBook)
 
       if (this.userBook.status == "rejected") {
         this.rejected = true;
@@ -351,5 +351,10 @@ export default {
         });
     },
   },
+  computed: {
+    user() {
+      return this.$store.getters.getUser;
+    },
+  }
 };
 </script>

@@ -72,7 +72,7 @@ export default {
     this.generalInfortmationToUpdate = await generalInformationsServices.getById(this.$route.params.id)
     this.generalInfromationsUpdateform.general_question = this.generalInfortmationToUpdate.general_question
     this.generalInfromationsUpdateform.summary = this.generalInfortmationToUpdate.summary
-    this.generalInfromationsUpdateform.user_book_id = this.generalInfortmationToUpdate.user_book_id
+    this.generalInfromationsUpdateform.eligible_user_books_id = this.generalInfortmationToUpdate.eligible_user_books_id
   },
   components: {
   },
@@ -86,7 +86,7 @@ export default {
       generalInfromationsUpdateform: {
         general_question: '',
         summary: '',
-        user_book_id: 0,
+        eligible_user_books_id: 0,
       },
       generalInfortmationToUpdate: [],
     };

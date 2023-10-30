@@ -1,10 +1,11 @@
 <template>
   <div>
-    <!-- <div v-if="openBook.length > 0">
+    <div v-if="openBook.length > 0">
       <h1 class="text-center mb-3">الانجاز الحالي </h1>
       <BookCard v-for="(bookInfo, index) in openBook" :key="index" :bookInfo="bookInfo" :current=true />
       <hr>
-    </div>  -->
+    </div> 
+
     <h2 class="text-center mb-3">ابحث عن كتاب </h2>
     <div class="iq-email-search d-flex justify-content-center mb-3">
       <form class="w-100  me-2 position-relative searchbox">
@@ -21,7 +22,6 @@
     </div>
 
     <div v-if="empty" class="alert alert-danger">{{ empty }}</div>
-
     <div class="d-grid gap-3 d-grid-template-1fr-19">
       <BookCard v-for="bookInfo in books" :key="bookInfo.id" :bookInfo="bookInfo" :current=false />
     </div>
@@ -52,7 +52,7 @@
 </template>
 <script>
 import BookCard from '@/components/EligibleComponents/Book/BookCard.vue'
-import bookService from '@/API/EligibleServices/bookServices'
+import bookService from "@/API/services/book.service";
 import { watchEffect } from 'vue'
 
 export default {
@@ -62,7 +62,7 @@ export default {
   created() {
     watchEffect(() => {
       this.books = null
-      this.getBooks(this.page);      
+      this.getBooks(this.page);
     })
   },
   props: ['page'],
@@ -74,13 +74,11 @@ export default {
       current: 1,
       search: "",
       empty: "",
-      deferredPrompt: null
-
     }
   },
   methods: {
     async getBooks(page) {
-      const response = await bookService.getAllBooks(page);
+      const response = await bookService.getAllForEligible(page);
       console.log("🚀 ~ file: List.vue:84 ~ getBooks ~ response:", response)
       this.books = response.books.data;
       this.openBook = response.open_book;
@@ -92,7 +90,7 @@ export default {
       this.empty = ''
 
       if (this.search) {
-        const response = await bookService.getBookByName(this.search);
+        const response = await bookService.getBookByNameForEligible(this.search);
         if (response == 'empty') {
           this.empty = 'لا يوجد كتاب بهذا الاسم'
         }
