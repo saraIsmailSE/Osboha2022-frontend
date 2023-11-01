@@ -11,7 +11,7 @@
                     <div class="card-body">
 
                         <!-- ########## Admin ########## -->
-                        <div class="col-12" v-if="!isAdmin">
+                        <div class="col-12" v-if="isAdmin">
                             <div class="row">
                                 <div class="col-6 col-md-6 col-lg-6">
                                     <div class="card">
@@ -83,7 +83,7 @@
                         </div>
 
                         <!-- ########## Admin  UserAcceptTeam ########## -->
-                        <div class="col-12" v-if="isAdmin || !isUserAcceptTeamMember">
+                        <div class="col-12" v-if="isAdmin || isUserAcceptTeamMember">
                             <h1 class="text-center">
                                 التحكم بالمستخدمين
                             </h1>
@@ -116,7 +116,7 @@
                         </div>
 
                         <!-- ########## Admin - Auditer - Reviewer ########## -->
-                        <div class="col-12" v-if="!isAdmin">
+                        <div class="col-12" v-if="isAdmin || isAuditer || isReviewer">
                             <h1 class="text-center">
                                 المراجعة والتدقيق
                             </h1>
@@ -213,7 +213,7 @@
                         </div>
 
                         <!-- ########## Admin - Reviewer ########## -->
-                        <div class="col-12" v-if="!isReviewer">
+                        <div class="col-12" v-if="isAdmin || isReviewer">
                             <h1 class="text-center">
                                 ادوات المراجعة
                             </h1>

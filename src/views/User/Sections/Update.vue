@@ -1,5 +1,5 @@
 <template>
-  <div class="col-sm-12 mt-3 text-center">
+  <div class="col-sm-12 mt-3 text-center" v-if="user">
     <iq-card class="iq-card">
       <div class="iq-card-body p-3">
         <div class="iq-card-body profile-page p-0">
@@ -59,7 +59,10 @@
                 v-if="official_document_image_src != ''" />
               <img src="@/assets/images/main/stage2.png" class="img-fluid rounded w-50" alt="official_document" v-else />
             </div>
-            قم برفع وثيقة رسمية للتمكن من توثيق الكتب
+            <p class="mt-2 text-center">
+              قم برفع وثيقة رسمية للتمكن من توثيق الكتب
+              [تأكد من اسمك الكامل أولاً]
+            </p>
           </div>
           <div class="m-auto form-group col-6">
             <label class="form-label" for="official_document">
@@ -295,12 +298,14 @@ import { required, minLength, maxLength, email } from "@vuelidate/validators";
 import UserProfile from "@/API/services/user-profile.service";
 import SocialMedia from "@/API/services/social-media.service";
 import profileImagesService from "@/API/services/profile.images.service";
+import UserServices from "@/API/services/user.service";
 import Auth from '@/API/services/auth.service'
-import UserInfoService from "@/Services/userInfoService";
 
 export default {
   name: "update profile",
   async created() {
+
+    this.user = await UserServices.getInfo(this.$route.params.user_id)
     if ((this.user.allowed_to_eligible == 0 || this.user.allowed_to_eligible == 2)) {
       this.official_document_image_src = this.getOfficialDoc(this.user.id);
     }
@@ -613,6 +618,7 @@ export default {
       resetEmailMsg: '',
       ofiicilaDocUploded: false,
       official_document_image_src: '',
+      user: null,
     };
   },
   validations() {
@@ -733,9 +739,9 @@ export default {
       this.official_document_image_src = this.getOfficialDoc(this.user.id);
 
       this.ofiicilaDocUploded = true;
-      this.$store.commit("SET_ALLOWED_TO_ELIGIBLE", 0);
+      this.user = await UserServices.getInfo(this.$route.params.user_id)
       this.$refs.official_document.value = null;
-      //location.reload()
+      location.reload()
     },
 
     /**
@@ -771,11 +777,5 @@ export default {
       });
     },
   },
-  computed: {
-    user() {
-      return this.$store.getters.getUser;
-    },
-  },
-
 };
 </script>

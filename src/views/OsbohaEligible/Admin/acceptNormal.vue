@@ -18,14 +18,14 @@
                             <div class="row align-items-center">
                                 <div class="col-md-6 text-center">
                                     <div class="image-block">
-                                        <img style="cursor:pointer;"
-                                            :src="getOfficialDoc(user.id)" class="img-fluid rounded w-50"
-                                            alt="blog-img" />
+                                        <img style="cursor:pointer;" :src="getOfficialDoc(user.id)"
+                                            class="img-fluid rounded w-50" alt="blog-img" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="blog-description p-2 text-center">
-                                        <h5 class="mb-2 text-center">{{ user.user_profile.first_name_ar }}  {{user.user_profile.middle_name_ar}} {{user.user_profile.last_name_ar}}</h5>
+                                        <h5 class="mb-2 text-center">{{ user.user_profile.first_name_ar }}
+                                            {{ user.user_profile.middle_name_ar }} {{ user.user_profile.last_name_ar }}</h5>
                                         <button @click="acceptrequest(user.id)" type="submit"
                                             class="btn btn-primary d-block w-100">قبول </button>
 
@@ -88,15 +88,7 @@ export default {
         return { v$: useVuelidate() };
     },
     async created() {
-
-        await userServices.listUnAllowedToEligible()
-            .then(response => {
-                this.users = response
-            })
-            .catch(error => {
-
-            })
-        this.reject = new Array(this.users.length).fill(false)
+        this.listUnAllowedToEligible()
     },
 
     data() {
@@ -118,6 +110,15 @@ export default {
         };
     },
     methods: {
+        async listUnAllowedToEligible() {
+            await userServices.listUnAllowedToEligible()
+                .then(response => {
+                    this.users = response
+                })
+                .catch(error => {
+                })
+            this.reject = new Array(this.users.length).fill(false)
+        },
         setReject(index) {
             this.reject[index] = true;
         },
@@ -162,7 +163,7 @@ export default {
                                             popup: 'animate__animated animate__zoomOut'
                                         }
                                     })
-                                    location.reload()
+                                    this.listUnAllowedToEligible()
                                 })
                                 .catch(error => {
                                     (error)
@@ -197,7 +198,7 @@ export default {
             })
                 .then((willDelete) => {
                     if (willDelete.isConfirmed) {
-                        userServices.acceptUser(id)
+                        userServices.acceptEligibleUser(id)
                             .then(response => {
                                 swalWithBootstrapButtons.fire({
                                     title: 'تم القبول',
@@ -210,7 +211,7 @@ export default {
                                         popup: 'animate__animated animate__zoomOut'
                                     }
                                 })
-                                location.reload()
+                                this.listUnAllowedToEligible()
                             })
                             .catch(error => {
                                 (error)
