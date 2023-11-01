@@ -41,7 +41,7 @@
                                  </div>
                                  <hr>
                                  <div class="col-md-12 mb-3 form-group"
-                                    v-if="(informations.status == 'audit' && (role == 'auditor' || role == 'admin'))">
+                                    v-if="(informations.status == 'audit' && isAuditer)">
                                     <label for="address" class="form-label">ملاحظات المراجع *</label>
                                     <textarea name="address" class="form-control" id="address" rows="5" required="required"
                                        v-model="reviweNote"></textarea>
@@ -51,7 +51,7 @@
 
                                  </div>
 
-                                 <div v-if="(informations.status == 'audit' && (role == 'auditor' || role == 'admin'))">
+                                 <div v-if="(informations.status == 'audit' && isAuditer)">
                                     <div class="row form-group">
                                        <label for="address" class="form-label"> * التقييم المناسب </label>
                                        <select class="form-select" data-trigger name="degree" id="degree" v-model="degree"
@@ -106,12 +106,11 @@
                                              <!-- ACCEPT -->
                                              <input type="button" value="انجاز صالح للتقييم"
                                                 class="btn btn-primary d-block w-100 mt-3 "
-                                                @click="accept(informations.id)"
-                                                v-if="(role == 'reviewer' || role == 'admin')" />
+                                                @click="accept(informations.id)" v-if="isReviewer" />
                                              <!-- END ACCEPT -->
 
                                              <!-- RETARD -->
-                                             
+
                                              <input type="button" value="اعادة" class="btn btn-warning d-block mt-3 w-100"
                                                 v-if="!retard" @click="setRetard()" />
                                              <div class="col-md-12 mb-3 form-group mt-2" v-if="retard">
@@ -123,8 +122,8 @@
                                                 </small>
                                                 <div class="d-inline-block w-100 text-center">
                                                    <div class="col-sm-12 text-center" v-if="loader">
-                                                      <img src="@/assets/images/gif/loader-3.gif"
-                                                         alt="loader" style="height: 100px;">
+                                                      <img src="@/assets/images/gif/loader-3.gif" alt="loader"
+                                                         style="height: 100px;">
                                                    </div>
                                                 </div>
 
@@ -148,8 +147,8 @@
                                                    </small>
                                                    <div class="d-inline-block w-100 text-center">
                                                       <div class="col-sm-12 text-center" v-if="loader">
-                                                         <img src="@/assets/images/gif/loader-3.gif"
-                                                            alt="loader" style="height: 100px;">
+                                                         <img src="@/assets/images/gif/loader-3.gif" alt="loader"
+                                                            style="height: 100px;">
                                                       </div>
                                                    </div>
 
@@ -163,8 +162,8 @@
                                           </div>
                                           <div class="col-lg-6 col-md-12 col-sm-12 form-group">
                                              <div class="image-block text-center">
-                                                <img src="@/assets/images/main/accept-reject.png" class="img-fluid rounded w-75"
-                                                   alt="blog-img" />
+                                                <img src="@/assets/images/main/accept-reject.png"
+                                                   class="img-fluid rounded w-75" alt="blog-img" />
                                              </div>
                                           </div>
                                        </div>
@@ -326,20 +325,17 @@
    </div>
 </template>
 <script>
-import generalInformationsServices from '@/API/EligibleServices/generalInformationsServices'
-import UserInfo from '@/Services/userInfoService'
+import generalInformationsServices from '@/API/EligibleServices/generalInformationsServices';
+import UserInfoService from '@/Services/userInfoService';
 import useVuelidate from "@vuelidate/core";
 import { required, requiredIf } from "@vuelidate/validators";
-import UserInfoService from "@/Services/userInfoService";
 
 export default {
    name: 'GeneralInformations',
    components: {
    },
    async created() {
-      await this.generalInformations()
-      this.role = UserInfo.getRole()[0]
-
+      await this.generalInformations();
    },
    setup() {
       return { v$: useVuelidate() };
@@ -348,7 +344,6 @@ export default {
       return {
          current: 1,
          informations: [],
-         role: '',
          reject: false,
          rejectNote: '',
          reviweNote: '',
@@ -629,13 +624,27 @@ export default {
    },
    computed: {
       user() {
-         return UserInfoService.getUser();
+         return this.$store.getters.getUser;
       },
       isSuper() {
          return UserInfoService.hasRoles(this.user, [
             "admin",
             "super_auditer",
             "super_reviewer",
+         ]);
+      },
+      isAuditer() {
+         return UserInfoService.hasRoles(this.user, [
+            "admin",
+            "super_auditer",
+            "auditor",
+         ]);
+      },
+      isReviewer() {
+         return UserInfoService.hasRoles(this.user, [
+            "admin",
+            "super_reviewer",
+            "reviewer",
          ]);
       },
 

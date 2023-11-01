@@ -12,6 +12,16 @@ class profileImagesService {
     const url = `${baseURL}/profile-image/${profile_id}/${image}`;
     return url;
   }
+  /**
+   * get profile picture or cover.
+   *  @param  image size, image name, profile id
+   * @return image url
+   */
+  getOfficialDoc(user_id) {
+    // const url = `${baseURL}/profile-image?fileName=${image}&profileID=${profile_id}`
+    const url = `${baseURL}/official_document/${user_id}`;
+    return url;
+  }
 }
 
 export default new profileImagesService();

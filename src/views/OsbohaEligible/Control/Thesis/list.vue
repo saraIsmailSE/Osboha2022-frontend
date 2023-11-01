@@ -3,28 +3,26 @@
         <div class="col-sm-12">
             <div class="card position-relative inner-page-bg bg-primary" style="height: 150px;">
                 <div class="inner-page-title">
-                    <h3 class="text-white">مراجعة الأسئلة</h3>
-                    <p class="text-white">تبقى {{ totalQuestions }} سؤال </p>
+                    <h3 class="text-white">المراجعة والتدقيق</h3>
+                    <p class="text-white">تبقى {{ totalTheses }} كتاب</p>
                 </div>
             </div>
         </div>
-        <div class="col-sm-12" v-if="questionsToReview.length == 0 && questionsToAudit.length == 0">
+        <div class="col-sm-12" v-if="thesesToReview.length == 0 && thesesToAudit.length == 0">
             <iq-card class="iq-card">
                 <div class="iq-card-body p-0">
                     <div class="image-block text-center">
                         <img src="@/assets/images/main/export-congrats.png" class="img-fluid rounded w-50" alt="blog-img">
                     </div>
 
-                    <h4 class="text-center mt-3 mb-3">لا يوجد أسئلة</h4>
+                    <h4 class="text-center mt-3 mb-3">لا يوجد أطروحات</h4>
                 </div>
             </iq-card>
-
         </div>
-
-        <div class="col-sm-12" v-if="questionsToReview.length > 0">
+        <div class="col-sm-12" v-if="thesesToReview.length > 0">
             <iq-card>
                 <template v-slot:headerTitle>
-                    <h4 class="card-title">أسئلة بحاجة للمراجعة</h4>
+                    <h4 class="card-title">أطروحات بحاجة للمراجعة</h4>
                 </template>
                 <template v-slot:body>
                     <div class="table-responsive">
@@ -34,31 +32,30 @@
                                     <th>رقم التوثيق</th>
                                     <th>اسم السفير</th>
                                     <th>اسم الكتاب</th>
-                                    <th>عدد الأسئلة</th>
+                                    <th>عدد الأطروحات</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="question in questionsToReview" :key="question.id">
+                                <tr v-for="thesis in thesesToReview" :key="thesis.id">
                                     <td class=" btn-primary text-white bg-primary">
-                                        {{ question.user_book.id }}
+                                        {{ thesis.user_book.id }}
                                     </td>
                                     <td>
-                                        <a href="javascript:void(0);" @click="listQuestions(question.user_book.id)">
-                                            {{ question.user_book.user.name }}
+                                        <a href="javascript:void(0);" @click="listThesis(thesis.user_book.id)">
+                                            {{ thesis.user_book.user.name }}
                                         </a>
 
                                     </td>
                                     <td>
-                                        {{ question.user_book.book.name }}
+                                        {{ thesis.user_book.book.name }}
                                     </td>
                                     <td>
-                                        {{ question.user_book.questions.length }}
+                                        {{ thesis.user_book.thesises.length }}
                                     </td>
                                     <td class="text-center">
-                                        {{ getFormatedDate(question.user_book.updated_at) }}
+                                        {{ getFormatedDate(thesis.user_book.updated_at) }}
                                     </td>
-
                                 </tr>
 
                             </tbody>
@@ -67,10 +64,10 @@
                 </template>
             </iq-card>
         </div>
-        <div class="col-sm-12" v-if="questionsToAudit.length > 0">
+        <div class="col-sm-12" v-if="thesesToAudit.length > 0">
             <iq-card>
                 <template v-slot:headerTitle>
-                    <h4 class="card-title">أسئلة بحاجة للتدقيق</h4>
+                    <h4 class="card-title">أطروحات بحاجة للتدقيق</h4>
                 </template>
                 <template v-slot:body>
                     <div class="table-responsive">
@@ -80,33 +77,31 @@
                                     <th>رقم التوثيق</th>
                                     <th>اسم السفير</th>
                                     <th>اسم الكتاب</th>
-                                    <th>عدد الأسئلة</th>
+                                    <th>عدد الأطروحات</th>
                                     <th></th>
-
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="question in questionsToAudit" :key="question.id">
-
+                                <tr v-for="thesis in thesesToAudit" :key="thesis.id">
                                     <td class=" btn-primary text-white bg-primary">
-                                        {{ question.user_book.id }}
+                                        {{ thesis.user_book.id }}
                                     </td>
-
                                     <td>
-                                        <a href="javascript:void(0);" @click="listQuestions(question.user_book.id)">
+                                        <a href="javascript:void(0);" @click="listThesis(thesis.user_book.id)">
                                             ***************
                                         </a>
 
                                     </td>
                                     <td>
-                                        {{ question.user_book.book.name }}
+                                        {{ thesis.user_book.book.name }}
                                     </td>
                                     <td>
-                                        {{ question.user_book.questions.length }}
+                                        {{ thesis.user_book.thesises.length }}
                                     </td>
-                                    <td class="text-center">
-                                        {{ getFormatedDate(question.user_book.updated_at) }}
+                                    <td>
+                                        {{ getFormatedDate(thesis.updated_at) }}
                                     </td>
+
                                 </tr>
 
                             </tbody>
@@ -118,51 +113,52 @@
 
     </div>
 </template>
+
 <script>
 import iqCard from '@/components/custom/cards/iq-card.vue'
-import questionServices from '@/API/EligibleServices/questionServices'
-import UserInfoService from "@/Services/userInfoService";
+import thesisServices from '@/API/EligibleServices/thesisServices'
 import moment from 'moment';
+import UserInfoService from "@/Services/userInfoService";
+
 
 export default {
     components: { iqCard },
-    name: 'ListQuestions',
+    name: 'ListThesis',
     async created() {
         if (this.canReview) {
             this.status = "review";
-            this.questionsToReview = await this.Questions(this.status)
+            this.thesesToReview = await this.getThesis(this.status);
         }
         if (this.canAudit) {
-
             this.status = "audit";
-            this.questionsToAudit = await this.Questions(this.status)
+            this.thesesToAudit = await this.getThesis(this.status);
         }
     },
-
     data() {
         return {
-            questionsToReview: [],
-            questionsToAudit: [],
+            thesesToReview: [],
+            thesesToAudit: [],
             status: '',
         }
     },
     methods: {
+        async getThesis(status) {
+            return await thesisServices.getByUserBookStatus(status);
+        },
+        listThesis(user_book_id) {
+            this.$router.push({ name: `thesis-review.thesis`, params: { user_book_id: user_book_id } });
+        },
         getFormatedDate(value) {
             return moment(String(value)).format('MM/DD/YYYY hA')
-        },
-        async Questions(status) {
-            return await questionServices.getByStatus(status);
-        },
-        listQuestions(user_book_id) {
-            this.$router.push({ name: 'questions.questions', params: { user_book_id: user_book_id } })
-        },
+        }
     },
     computed: {
-        totalQuestions() {
-            return this.questionsToAudit.length + this.questionsToReview.length;
+        totalTheses() {
+            return this.thesesToAudit.length + this.thesesToReview.length;
         },
+
         user() {
-            return UserInfoService.getUser();
+            return this.$store.getters.getUser;
         },
         canAudit() {
             return UserInfoService.hasRoles(this.user, [
@@ -178,8 +174,8 @@ export default {
                 "reviewer",
             ]);
         },
-
     },
 
 }
+
 </script>

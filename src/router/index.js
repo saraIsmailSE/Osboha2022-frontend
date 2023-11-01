@@ -407,13 +407,13 @@ const thesisReview = (prop, mode = false) => [
     path: "thesis/:user_book_id",
     name: prop + ".thesis",
     meta: { auth: true, name: "thesis" },
-    component: () => import("../views/OsbohaEligible/Review/Thesis/theses"),
+    component: () => import("../views/OsbohaEligible/Control/Thesis/theses"),
   },
   {
     path: "list",
     name: prop + ".list",
     meta: { auth: true, name: "list" },
-    component: () => import("../views/OsbohaEligible/Review/Thesis/list"),
+    component: () => import("../views/OsbohaEligible/Control/Thesis/list"),
   },
 
   {
@@ -429,14 +429,14 @@ const generalInformation = (prop, mode = false) => [
     path: "list",
     name: prop + ".list",
     meta: { auth: true, name: "general_informations" },
-    component: () => import("../views/OsbohaEligible/Review/General/list"),
+    component: () => import("../views/OsbohaEligible/Control/General/list"),
   },
   {
     path: "general_informations/:user_book_id",
     name: prop + ".general_informations",
     meta: { auth: true, name: "general_informations" },
     component: () =>
-      import("../views/OsbohaEligible/Review/General/general_informations"),
+      import("../views/OsbohaEligible/Control/General/general_informations"),
   },
   {
     path: "update/:id",
@@ -451,14 +451,14 @@ const questions = (prop, mode = false) => [
     path: "list",
     name: prop + ".list",
     meta: { auth: true, name: "List" },
-    component: () => import("../views/OsbohaEligible/Review/Questions/list"),
+    component: () => import("../views/OsbohaEligible/Control/Questions/list"),
   },
   {
     path: "questions/:user_book_id",
     name: prop + ".questions",
     meta: { auth: true, name: "questionsList" },
     component: () =>
-      import("../views/OsbohaEligible/Review/Questions/questions"),
+      import("../views/OsbohaEligible/Control/Questions/questions"),
   },
   {
     path: "update/:id",
@@ -531,20 +531,6 @@ const adminControll = (prop, mode = false) => [
     meta: { auth: true, name: "statistics" },
     component: () => import("../views/OsbohaEligible/Admin/statistics"),
   },
-
-  {
-    path: "book-list",
-    name: prop + ".book-list",
-    meta: { auth: true, name: "Book List" },
-    component: () => import("../views/OsbohaEligible/Admin/bookList"),
-    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
-  },
-  {
-    path: "accept-reviewers",
-    name: prop + ".accept-reviewers",
-    meta: { auth: true, name: "acceptReviewers" },
-    component: () => import("../views/OsbohaEligible/Admin/acceptReviewers"),
-  },
   {
     path: "accept-certificates",
     name: prop + ".accept-certificates",
@@ -593,6 +579,12 @@ const bookChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "eligible Books" },
     props: (route) => ({ page: parseInt(route.query.page) || 1 }),
     component: () => import("../views/OsbohaEligible/Books/List"),
+  },
+  {
+    path: "eligible-controle",
+    name: prop + ".eligible-controle",
+    meta: { auth: true, name: "eligible Controle" },
+    component: () => import("../views/OsbohaEligible/Control/List"),
   },
   {
     path: "update/:book_id",
@@ -823,6 +815,13 @@ const routes = [
     meta: { auth: true },
     children: thesisReview("thesis-review"),
   },
+  {
+    path: "/ready-to-audit",
+    name: "ReadyToAudit",
+    meta: { auth: true, name: "ReadyToAudit" },
+    component: () => import("../views/OsbohaEligible/Control/readyToAudit"),
+  },
+
   {
     path: "/general",
     name: "general",

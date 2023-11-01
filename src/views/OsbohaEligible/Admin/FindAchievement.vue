@@ -297,8 +297,8 @@
 </template>
 <script>
 import userBookService from "@/API/EligibleServices/userBookServices";
-import Thesis from "../Review/Thesis/thesis";
-import Question from '../Review/Questions/question'
+import Thesis from "../Control/Thesis/thesis";
+import Question from '../Control/Questions/question'
 
 
 export default {
@@ -329,6 +329,7 @@ export default {
   methods: {
     async getInfo() {
       this.achievement = await userBookService.getFullUserBook(this.search);
+      console.log("🚀 ~ file: FindAchievement.vue:332 ~ getInfo ~ this.achievement:", this.achievement)
       if (this.achievement == 'UserBook does not exist') {
         this.show = 0
       } else {

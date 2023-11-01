@@ -12,7 +12,7 @@
          <iq-card>
             <template v-slot:headerTitle>
                <h4 class="card-title">الأسئلة</h4>
-               <span class="px-2" v-if="role == 'reviewer' || role == 'admin'"> اسم السفير :
+               <span class="px-2" v-if="isReviewer"> اسم السفير :
                   {{ questions[0].user_book.user.name }}</span>
                <span class="px-2" v-else> اسم السفير : ***************</span>
                <span class="px-2"> || </span>
@@ -63,7 +63,7 @@
 
                      <!-- ACCEPT -->
                      <input type="button" value="انجاز صالح للتقييم" class="btn btn-primary d-block w-100 mt-3 "
-                        @click="accept()" :disabled='!isAccepted' v-if="role == 'reviewer' || role == 'admin'" />
+                        @click="accept()" :disabled='!isAccepted' v-if="isReviewer" />
                      <!-- END ACCEPT -->
                      <!-- REJECT -->
                      <div v-if="isSuper">
@@ -79,8 +79,7 @@
                            </small>
                            <div class="d-inline-block w-100 text-center">
                               <div class="col-sm-12 text-center" v-if="loader">
-                                 <img src="@/assets/images/gif/loader-3.gif" alt="loader"
-                                    style="height: 100px;">
+                                 <img src="@/assets/images/gif/loader-3.gif" alt="loader" style="height: 100px;">
                               </div>
                            </div>
                            <input type="button" value="انجاز مرفوض" class="btn btn-danger d-block mt-3 w-100"
@@ -137,8 +136,6 @@ export default {
    },
    async created() {
       await this.getQuestions();
-      this.role = UserInfoService.getRole()[0]
-
    },
    data() {
       return {
@@ -149,9 +146,6 @@ export default {
          userBook: null,
          acceptedQuestions: 0,
          loader: false,
-         role: '',
-
-
       }
    },
 
@@ -296,7 +290,7 @@ export default {
          return this.acceptedQuestions >= 5 ? true : false;
       },
       user() {
-         return UserInfoService.getUser();
+         return this.$store.getters.getUser;
       },
       isSuper() {
          return UserInfoService.hasRoles(this.user, [
@@ -305,8 +299,20 @@ export default {
             "super_reviewer",
          ]);
       },
-
-
+      isAuditer() {
+         return UserInfoService.hasRoles(this.user, [
+            "admin",
+            "super_auditer",
+            "auditor",
+         ]);
+      },
+      isReviewer() {
+         return UserInfoService.hasRoles(this.user, [
+            "admin",
+            "super_reviewer",
+            "reviewer",
+         ]);
+      },
    }
 
 }

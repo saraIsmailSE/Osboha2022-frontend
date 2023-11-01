@@ -55,6 +55,15 @@ class UserService {
       handleError(error);
     }
   }
+
+  async listUnAllowedToEligible() {
+    try {
+      const users = await api.get(`users/list-un-allowed-to-eligible`);
+      return users.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 }
 
 export default new UserService();

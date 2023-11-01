@@ -9,7 +9,7 @@
             </div>
         </div>
 
-        <div class="col-lg-12" v-for="(user,index) in users" :key="index">
+        <div class="col-lg-12" v-for="(user, index) in users" :key="index">
             <iq-card>
                 <template v-slot:body>
 
@@ -18,13 +18,14 @@
                             <div class="row align-items-center">
                                 <div class="col-md-6 text-center">
                                     <div class="image-block">
-                                        <img style="cursor:pointer;" @click="openPhoto(user.picture)" :src="resolve_img_url(user.picture)" class="img-fluid rounded w-50"
+                                        <img style="cursor:pointer;"
+                                            :src="getOfficialDoc(user.id)" class="img-fluid rounded w-50"
                                             alt="blog-img" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="blog-description p-2 text-center">
-                                        <h3 class="mb-2 text-center">{{ user.name }}</h3>
+                                        <h5 class="mb-2 text-center">{{ user.user_profile.first_name_ar }}  {{user.user_profile.middle_name_ar}} {{user.user_profile.last_name_ar}}</h5>
                                         <button @click="acceptrequest(user.id)" type="submit"
                                             class="btn btn-primary d-block w-100">قبول </button>
 
@@ -40,8 +41,8 @@
                                             </small>
                                             <div class="d-inline-block w-100 text-center">
                                                 <div class="col-sm-12 text-center" v-if="loader">
-                                                    <img src="@/assets/images/gif/loader-3.gif"
-                                                        alt="loader" style="height: 100px;">
+                                                    <img src="@/assets/images/gif/loader-3.gif" alt="loader"
+                                                        style="height: 100px;">
                                                 </div>
                                             </div>
 
@@ -73,11 +74,10 @@
             </iq-card>
         </div>
     </div>
-
 </template>
 <script>
-import { socialvue } from '@/config/pluginInit'
-import userServices from '@/API/EligibleServices/userServices'
+import userServices from '@/API/services/user.service'
+import profileImagesService from "@/API/services/profile.images.service";
 import useVuelidate from "@vuelidate/core";
 import { required, requiredIf } from "@vuelidate/validators";
 
@@ -87,21 +87,16 @@ export default {
     setup() {
         return { v$: useVuelidate() };
     },
-
-    mounted() {
-        socialvue.index()
-    },
     async created() {
-       
-        await userServices.getUnactive()
+
+        await userServices.listUnAllowedToEligible()
             .then(response => {
-                this.users = response.data.data
-                console.log(response)
+                this.users = response
             })
             .catch(error => {
 
             })
-              this.reject = new Array(this.users.length).fill(false)
+        this.reject = new Array(this.users.length).fill(false)
     },
 
     data() {
@@ -225,14 +220,17 @@ export default {
                     }
                 })
         },
-        resolve_img_url: function (image) {
-            const url = `https://www.eligible.osboha180.com/api/api/users/image?fileName=${image}`
-            return url;
-        }, 
-        openPhoto(image){
-            const url = `https://www.eligible.osboha180.com/api/api/users/image?fileName=${image}`
-            window.open(url, '_blank')
-        }
-    }
+        /**
+         * get gOfficial Doc.
+         *  @param  user id
+         * @return image url
+         */
+        getOfficialDoc(user_id) {
+            return profileImagesService.getOfficialDoc(user_id);
+        },
+
+
+    },
+
 }
 </script>

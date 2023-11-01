@@ -35,15 +35,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="thesis in achevmentsToAudit.theses" :key="thesis.user_book_id">
+                                    <tr v-for="thesis in achevmentsToAudit.theses" :key="thesis.eligible_user_books_id">
                                         <td class="">
                                             <button class="btn btn-primary"
-                                                @click="listThesis(thesis.user_book_id)">عـــرض </button>
+                                                @click="listThesis(thesis.eligible_user_books_id)">عـــرض </button>
 
                                         </td>
                                         <td>
                                             <a href="javascript:void(0);">
-                                                {{ thesis.user_book_id }}
+                                                {{ thesis.eligible_user_books_id }}
                                             </a>
                                         </td>
                                     </tr>
@@ -69,14 +69,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="question in achevmentsToAudit.questions" :key="question.user_book_id">
+                                    <tr v-for="question in achevmentsToAudit.questions"
+                                        :key="question.eligible_user_books_id">
                                         <td class="">
                                             <button class="btn btn-primary"
-                                                @click="listQuestions(question.user_book_id)">عـــرض </button>
+                                                @click="listQuestions(question.eligible_user_books_id)">عـــرض </button>
                                         </td>
                                         <td>
                                             <a href="javascript:void(0);">
-                                                {{ question.user_book_id }}
+                                                {{ question.eligible_user_books_id }}
                                             </a>
                                         </td>
                                     </tr>
@@ -93,17 +94,12 @@
 </template>
 
 <script>
-import iqCard from '@/components/custom/cards/iq-card.vue'
-import UserInfoService from "@/Services/userInfoService";
 import userBookServices from '@/API/EligibleServices/userBookServices'
 
 export default {
-    components: { iqCard },
     name: 'ReadyToAudit',
     async created() {
-        if (UserInfoService.getRole()[0] === 'reviewer' || UserInfoService.getRole()[0] === 'admin') {
-            this.achevmentsToAudit = await this.getReadyToAudit();
-        }
+        this.achevmentsToAudit = await this.getReadyToAudit();
     },
     data() {
         return {
@@ -118,7 +114,7 @@ export default {
             this.$router.push({ name: `thesis-review.thesis`, params: { user_book_id: user_book_id } });
         },
         listQuestions(user_book_id) {
-            this.$router.push({name:'questions.questions', params: { user_book_id: user_book_id } })
+            this.$router.push({ name: 'questions.questions', params: { user_book_id: user_book_id } })
         },
 
 

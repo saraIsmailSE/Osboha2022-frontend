@@ -2,46 +2,29 @@
     <div class="form-card text-start">
         <form>
             <div class="row setup-content" id="user-detail">
-                <div class="col-sm-12" v-if="question.status">
+                <div class="col-sm-12" v-if="thesis.status">
                     <div class="col-md-12 p-0">
-                        <h3 class="mb-0 d-inline-block"> السؤال {{ index + 1 }} </h3>
+                        <h3 class="mb-0 d-inline-block"> الأطروحة {{ index + 1 }} </h3>
                         <div class="row">
                             <div class="col-6 form-group">
                                 <label for="uname" class="form-label">صفحة البداية</label>
-                                <label class="form-control-plaintext">{{ question.starting_page }}</label>
+                                <label class="form-control-plaintext">{{ thesis.starting_page }}</label>
                             </div>
                             <div class="col-6 form-group">
                                 <label for="emailid" class="form-label">صفحة النهاية</label>
-                                <label class="form-control-plaintext">{{ question.ending_page }}</label>
+                                <label class="form-control-plaintext">{{ thesis.ending_page }}</label>
                             </div>
                             <hr>
 
                             <div class="col-md-12 form-group">
                                 <div class="col-md-12 form-group">
-                                    <label for="emailid" class="form-label"> السؤال</label>
-                                    <p class="form-control-plaintext">{{ question.question }}</p>
-                                </div>
-                                <div class="user-post">
-                                    <div class="col-md-12 form-group">
-                                        <label for="emailid" class="form-label"> الاقتباسات</label>
-                                        <ul v-if="question.quotation.length > 0">
-                                            <li v-for="qoute in question.quotation" :key="qoute.id" class="mt-3">
-                                                <p>
-                                                    {{ qoute.text }}
-                                                </p>
-                                            </li>
-                                        </ul>
-                                        <p v-else> لا يوجد اقتباسات</p>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group">
+                                    <label for="emailid" class="form-label"> الاطروحة</label>
+                                    <p class="form-control-plaintext">{{ thesis.thesis_text }}</p>
                                 </div>
                             </div>
                             <div v-if="reviewStage">
-
-                                <div class="col-md-12 mb-3 form-group"
-                                    v-if="(question.status == 'audit' && (role == 'auditor' || role == 'admin'))">
-                                    <label for="address" class="form-label">ملاحظات المراجع *</label>
+                                <div class="col-md-12 mb-3 form-group" v-if="(thesis.status == 'audit' && isAuditer)">
+                                    <label for="address" class="form-label">* ملاحظات المراجع </label>
                                     <textarea name="address" class="form-control" id="address" rows="5" required="required"
                                         v-model="reviweNote"></textarea>
                                     <small style="color: red" v-if="v$.reviweNote.$error">
@@ -50,7 +33,7 @@
 
                                 </div>
 
-                                <div v-if="(question.status == 'audit' && (role == 'auditor' || role == 'admin'))">
+                                <div v-if="(thesis.status == 'audit' && isAuditer)">
                                     <div class="row form-group">
                                         <label for="address" class="form-label"> * التقييم المناسب </label>
                                         <select class="form-select" data-trigger name="degree" id="degree" v-model="degree"
@@ -75,26 +58,40 @@
 
                                         <div class="col-md-3 form-group mt-3">
                                             <input type="button" value="إضافة" class="btn btn-primary d-block w-100 mt-3 "
-                                                @click="addDegree(question.id)" :disabled='!rule3' />
+                                                @click="addDegree(thesis.id)" :disabled='!rule3' />
                                         </div>
                                     </div>
+
                                 </div>
-                                <iq-card v-if="(question.status == 'review' && (role == 'reviewer' || role == 'admin'))">
+                                <iq-card v-if="(thesis.status == 'review' && isReviewer)">
                                     <template v-slot:headerTitle>
-                                        <h4 class="card-title">عنوان</h4>
                                     </template>
                                     <template v-slot:body>
                                         <div>
+                                            <div
+                                                class="form-check form-check-inline form-checkbox form-checkbox-color me-2">
+                                                <input type="checkbox" class="form-check-input" id="rule1" ref="rule1"
+                                                    :checked="rule1" @change="setRule1()">
+                                                <label class="form-check-label" for="rule1">تم التحقق أن الأطروحة حصرية
+                                                    لكاتبها.</label>
+                                            </div>
+                                            <!-- <div
+                                            class="form-check form-check-inline form-checkbox form-checkbox-color me-2">
+                                            <input type="checkbox" class="form-check-input" id="rule2" ref="rule2"
+                                                :checked="rule2" @change="setRule2()">
+                                            <label class="form-check-label" for="rule2">تم التأكد من وجود الأطروحة في
+                                                مجموعة سفراء أصبوحة.</label>
+                                        </div> -->
 
                                             <!-- ACCEPT -->
                                             <input type="button" value="قبول" class="btn btn-primary d-block w-100 mt-3 "
-                                                @click="accept(question.id)"
-                                                v-if="(role == 'reviewer' || role == 'admin')" />
+                                                @click="accept(thesis.id)" v-if="isReviewer"
+                                                :disabled='!isAcceptable' />
                                             <!-- END ACCEPT -->
 
                                             <!-- RETARD -->
                                             <input type="button" value="اعادة" class="btn btn-warning d-block mt-3 w-100"
-                                                v-if="!retard" @click="setRetard()" />
+                                                v-if="!retard" @click="setRetard()" :disabled='isAcceptable' />
                                             <div class="col-md-12 mb-3 form-group mt-2" v-if="retard">
                                                 <label for="retardNote" class="form-label">سبب الاعادة *</label>
                                                 <textarea name="retardNote" class="form-control" id="retardNote" rows="5"
@@ -104,15 +101,18 @@
                                                 </small>
                                                 <div class="d-inline-block w-100 text-center">
                                                     <div class="col-sm-12 text-center" v-if="loader">
-                                                        <img src="@/assets/images/gif/loader-3.gif"
-                                                            alt="loader" style="height: 100px;">
+                                                        <img src="@/assets/images/gif/loader-3.gif" alt="loader"
+                                                            style="height: 100px;">
                                                     </div>
                                                 </div>
+
                                                 <input type="button" value="اعادة"
                                                     class="btn btn-warning d-block mt-3 w-100"
-                                                    @click="retardQuestion(question.id)" />
+                                                    @click="retardThesis(thesis.id)" :disabled='isAcceptable' />
                                             </div>
                                             <!-- END RETARD -->
+
+
                                         </div>
                                     </template>
                                 </iq-card>
@@ -120,7 +120,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12" v-if="question.status == 'review'">
+                <div class="col-lg-12" v-if="thesis.status == 'review'">
                     <iq-card>
                         <template v-slot:headerTitle>
                             <h4 class="card-title">بحاجة لمراجعة</h4>
@@ -142,8 +142,7 @@
                         </template>
                     </iq-card>
                 </div>
-
-                <div class="col-lg-12" v-if="question.status == 'retard'">
+                <div class="col-lg-12" v-if="thesis.status == 'retard'">
                     <iq-card>
                         <template v-slot:headerTitle>
                             <h4 class="card-title">تم الاعادة </h4>
@@ -152,8 +151,8 @@
                             <TimeLine :items="[
                                 {
                                     color: 'primary',
-                                    title: `بحاجة لتعديل ~ ${question.reviewer.name}`,
-                                    description: question.reviews,
+                                    title: `بحاجة لتعديل ~ ${thesis.reviewer.name}`,
+                                    description: thesis.reviews,
                                     child: {
                                         type: 'img',
                                         items: [
@@ -165,7 +164,7 @@
                         </template>
                     </iq-card>
                 </div>
-                <div class="col-lg-12" v-if="question.status == 'accept'">
+                <div class="col-lg-12" v-if="thesis.status == 'accept'">
                     <iq-card>
                         <template v-slot:headerTitle>
                             <h4 class="card-title">تم القبول </h4>
@@ -175,7 +174,7 @@
                                 {
                                     color: 'primary',
                                     title: 'مقبول',
-                                    description: question.reviewer.name,
+                                    description: thesis.reviewer.name,
                                     child: {
                                         type: 'img',
                                         items: [
@@ -187,7 +186,7 @@
                         </template>
                     </iq-card>
                 </div>
-                <div class="col-lg-12" v-if="question.status == 'audite'">
+                <div class="col-lg-12" v-if="thesis.status == 'audite'">
                     <iq-card>
                         <template v-slot:headerTitle>
                             <h4 class="card-title">تم الاعتماد </h4>
@@ -197,7 +196,7 @@
                                 {
                                     color: 'primary',
                                     title: 'معتمد - قابل للتقييم',
-                                    description: question.reviewer.name,
+                                    description: thesis.reviewer.name,
                                     child: {
                                         type: 'img',
                                         items: [
@@ -209,7 +208,7 @@
                         </template>
                     </iq-card>
                 </div>
-                <div class="col-lg-12" v-if="question.status == 'audited'">
+                <div class="col-lg-12" v-if="thesis.status == 'audited'">
                     <iq-card>
                         <template v-slot:headerTitle>
                             <h4 class="card-title">تم التقييم</h4>
@@ -218,8 +217,8 @@
                             <TimeLine :items="[
                                 {
                                     color: 'primary',
-                                    title: `تم التقييم ~ ${question.auditor.name}`,
-                                    description: question.reviews,
+                                    title: `تم التقييم ~ ${thesis.auditor.name}`,
+                                    description: thesis.reviews,
                                     child: {
                                         type: 'img',
                                         items: [
@@ -228,7 +227,7 @@
                                 },
                                 {
                                     color: 'primary',
-                                    title: `تم المراجعة ~ ${question.reviewer.name}`,
+                                    title: `تم المراجعة ~ ${thesis.reviewer.name}`,
                                     description: '',
                                     child: {
                                         type: 'img',
@@ -241,7 +240,7 @@
                         </template>
                     </iq-card>
                 </div>
-                <div class="col-lg-12" v-if="question.status == 'rejected'">
+                <div class="col-lg-12" v-if="thesis.status == 'rejected'">
                     <iq-card>
                         <template v-slot:headerTitle>
                             <h4 class="card-title">تم الرفض </h4>
@@ -250,8 +249,8 @@
                             <TimeLine :items="[
                                 {
                                     color: 'primary',
-                                    title: `مرفوض ~ ${question.reviewer.name} ${question.auditor.name}`,
-                                    description: question.reviews,
+                                    title: `مرفوض ~ ${thesis.reviewer.name} ${thesis.auditor.name}`,
+                                    description: thesis.reviews,
                                     child: {
                                         type: 'img',
                                         items: [
@@ -268,21 +267,21 @@
     </div>
 </template>
 <script>
-import questionServices from '@/API/EligibleServices/questionServices'
-import UserInfo from '@/Services/userInfoService'
+import UserInfoService from "@/Services/userInfoService";
+import thesisServices from '@/API/EligibleServices/thesisServices'
 import useVuelidate from "@vuelidate/core";
 import { required, requiredIf } from "@vuelidate/validators";
+import helper from "@/utilities/helper";
 
 export default {
-    name: 'question',
+    name: 'Thesis',
     created() {
-        this.role = UserInfo.getRole()[0]
     },
     setup() {
         return { v$: useVuelidate() };
     },
     props: {
-        question: {
+        thesis: {
             type: [Object],
             required: true,
         },
@@ -296,20 +295,20 @@ export default {
         reviewStage: {
             required: true
         },
-
     },
     data() {
         return {
-            role: '',
+            retard: false,
+            retardNote: '',
             reviweNote: '',
             mark: 0,
             degree: '',
             markCondition: true,
-            retard: false,
-            retardNote: '',
-            loader: false,
+            isAcceptable: false,
+            rule1: false,
+            rule2: true,
             rule3: false,
-
+            loader: false,
 
         }
     },
@@ -322,21 +321,79 @@ export default {
             },
             reviweNote: {
                 required
-            }, degree: {
+            },
+            degree: {
                 required
             },
-
         };
     },
     methods: {
-
+        setRule1() {
+            this.rule1 = !this.rule1;
+            this.checkAcceptable()
+        },
+        setRule2() {
+            this.rule2 = !this.rule2;
+            this.checkAcceptable()
+        },
+        setRule3() {
+            this.rule3 = !this.rule3;
+        },
+        checkAcceptable() {
+            if (this.rule1 && this.rule2)
+                this.isAcceptable = true
+            else
+                this.isAcceptable = false
+        },
         changeTab(value) {
             this.$emit('onNext', value)
+        },
+        setDegree(e) {
+            this.mark = e.target.value
+
+        },
+        addDegree(id) {
+            this.v$.$touch();
+            if (!this.v$.reviweNote.$invalid && !this.v$.degree.$invalid && this.rule3) {
+                const swalWithBootstrapButtons = this.$swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-primary btn-lg',
+                        cancelButton: 'btn btn-outline-primary btn-lg ms-2'
+                    },
+                    buttonsStyling: false
+                })
+                swalWithBootstrapButtons.fire({
+                    title: 'هل أنت متأكد؟',
+                    text: "موافقتك تعني أن هذه الأطروحة تمت مراجعتها",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'تمت المراجعة  ',
+                    cancelButtonText: 'تراجع  ',
+                    showClass: {
+                        popup: 'animate__animated animate__zoomIn'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__zoomOut'
+                    }
+                })
+                    .then((willDelete) => {
+                        if (willDelete.isConfirmed) {
+                            thesisServices.addDegree(id, this.reviweNote, this.degree)
+                                .then(response => {
+                                    this.$emit('status-updated');
+                                    helper.toggleToast(`تمت مراجعة الأطروحة`, "success");
+                                })
+                                .catch(error => {
+                                    console.log(error)
+                                })
+                        }
+                    })
+            }
         },
         setRetard() {
             this.retard = true;
         },
-        retardQuestion(id) {
+        retardThesis(id) {
             this.v$.$touch();
             if (!this.v$.retardNote.$invalid) {
                 const swalWithBootstrapButtons = this.$swal.mixin({
@@ -348,7 +405,7 @@ export default {
                 })
                 swalWithBootstrapButtons.fire({
                     title: 'هل أنت متأكد؟',
-                    text: "موافقتك تعني اعادة هذا السؤال  ",
+                    text: "موافقتك تعني اعادة هذه الأطروحة ",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'نعم قم بالاعادة',
@@ -363,22 +420,11 @@ export default {
                     .then((willDelete) => {
                         if (willDelete.isConfirmed) {
                             this.loader = true
-                            questionServices.rejectRetardThesis(id, this.retardNote, 'retard')
+                            thesisServices.rejectRetardThesis(id, this.retardNote, 'retard')
                                 .then(response => {
-                                    swalWithBootstrapButtons.fire({
-                                        title: 'تمت الاعادة',
-                                        text: 'تم اعادة السؤال',
-                                        icon: 'success',
-                                        showClass: {
-                                            popup: 'animate__animated animate__zoomIn'
-                                        },
-                                        hideClass: {
-                                            popup: 'animate__animated animate__zoomOut'
-                                        }
-                                    })
                                     this.loader = false
-                                    this.retard = false
-                                    //location.reload()
+                                    this.$emit('status-updated');
+                                    helper.toggleToast(`تمت اعادة الأطروحة`, "success");
                                 })
                                 .catch(error => {
                                     console.log(error)
@@ -387,9 +433,6 @@ export default {
                         }
                     })
             }
-        },
-        setRule3() {
-            this.rule3 = !this.rule3;
         },
         accept(id) {
             const swalWithBootstrapButtons = this.$swal.mixin({
@@ -401,7 +444,7 @@ export default {
             })
             swalWithBootstrapButtons.fire({
                 title: 'هل أنت متأكد؟',
-                text: "موافقتك تعني قبول هذا السؤال",
+                text: "موافقتك تعني قبول هذه الأطروحة",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'نعم قم بالقبول',
@@ -415,20 +458,10 @@ export default {
             })
                 .then((willDelete) => {
                     if (willDelete.isConfirmed) {
-                        questionServices.acceptQuestion(id, 'accept')
+                        thesisServices.acceptThesis(id, 'accept')
                             .then(response => {
-                                swalWithBootstrapButtons.fire({
-                                    title: 'تم القبول',
-                                    text: 'تم قبول السؤال',
-                                    icon: 'success',
-                                    showClass: {
-                                        popup: 'animate__animated animate__zoomIn'
-                                    },
-                                    hideClass: {
-                                        popup: 'animate__animated animate__zoomOut'
-                                    }
-                                });
-                                location.reload()
+                                this.$emit('status-updated');
+                                helper.toggleToast(`تمت قبول الأطروحة`, "success");
                             })
                             .catch(error => {
                                 console.log(error)
@@ -436,58 +469,33 @@ export default {
                     }
                 })
         },
-        setDegree(e) {
-            this.mark = e.target.value
-
+    },
+    computed: {
+        user() {
+            return this.$store.getters.getUser;
         },
-        addDegree(id) {
-            this.v$.$touch();
-            if (!this.v$.reviweNote.$invalid && !this.v$.degree.$invalid) {
-                const swalWithBootstrapButtons = this.$swal.mixin({
-                    customClass: {
-                        confirmButton: 'btn btn-primary btn-lg',
-                        cancelButton: 'btn btn-outline-primary btn-lg ms-2'
-                    },
-                    buttonsStyling: false
-                })
-                swalWithBootstrapButtons.fire({
-                    title: 'هل أنت متأكد؟',
-                    text: "موافقتك تعني أن هذاالسؤال  تمت مراجعتها",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'تمت المراجعة  ',
-                    cancelButtonText: 'تراجع  ',
-                    showClass: {
-                        popup: 'animate__animated animate__zoomIn'
-                    },
-                    hideClass: {
-                        popup: 'animate__animated animate__zoomOut'
-                    }
-                })
-                    .then((willDelete) => {
-                        if (willDelete.isConfirmed) {
-                            questionServices.addDegree(id, this.reviweNote, this.mark)
-                                .then(response => {
-                                    swalWithBootstrapButtons.fire({
-                                        title: 'تمت المراجعة',
-                                        text: 'تم مراجعة السؤال',
-                                        icon: 'success',
-                                        showClass: {
-                                            popup: 'animate__animated animate__zoomIn'
-                                        },
-                                        hideClass: {
-                                            popup: 'animate__animated animate__zoomOut'
-                                        }
-                                    })
-                                    location.reload()
-                                })
-                                .catch(error => {
-                                    console.log(error)
-                                })
-                        }
-                    })
-            }
-        }
-    }
+
+        isSuper() {
+            return UserInfoService.hasRoles(this.user, [
+                "admin",
+                "super_auditer",
+                "super_reviewer",
+            ]);
+        },
+        isAuditer() {
+            return UserInfoService.hasRoles(this.user, [
+                "admin",
+                "super_auditer",
+                "auditor",
+            ]);
+        },
+        isReviewer() {
+            return UserInfoService.hasRoles(this.user, [
+                "admin",
+                "super_reviewer",
+                "reviewer",
+            ]);
+        },
+    },
 }
 </script>

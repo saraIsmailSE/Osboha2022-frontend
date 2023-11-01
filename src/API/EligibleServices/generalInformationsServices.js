@@ -13,7 +13,7 @@ class generalInformationsServices {
   }
   async getByUserBook(user_book_id) {
     const general_informations = await api.get(
-      `${this.prefix}-${this.prefix}/user_book_id/${user_book_id}`,
+      `${this.prefix}/user_book_id/${user_book_id}`,
     );
     general_informations.data;
     return general_informations.data.data;
@@ -25,7 +25,7 @@ class generalInformationsServices {
   }
 
   async addDegree(id, note, mark) {
-    const response = await api.patch(`/${this.prefix}/add-degree/${id}`, {
+    const response = await api.patch(`${this.prefix}/add-degree/${id}`, {
       auditor_id: userInfoService.getUser().id,
       reviews: note,
       degree: mark,

@@ -117,7 +117,7 @@ class userBookServices {
   async getFullUserBook(id) {
     try {
       const response = await api.get(`${this.prefix}/${id}`);
-      return response.data;
+      return response.data.data;
     } catch (e) {
       return e.response.data.data;
     }

@@ -44,6 +44,41 @@
         </div>
       </div>
     </iq-card>
+    <iq-card class="iq-card" v-if="user.allowed_to_eligible == 2 || user.allowed_to_eligible == 0">
+      <div class="iq-card-body p-3">
+        <h1 class="text-center">
+          توثيق الكتب
+        </h1>
+        <hr />
+
+        <div class="mt-3 row"
+          v-if="profileInfo && (profileInfo.first_name_ar && profileInfo.middle_name_ar && profileInfo.last_name_ar)">
+          <div class="form-group col-6">
+            <div class="image-block text-center">
+              <img :src="official_document_image_src" class="img-fluid rounded w-50" alt="official_document"
+                v-if="official_document_image_src != ''" />
+              <img src="@/assets/images/main/stage2.png" class="img-fluid rounded w-50" alt="official_document" v-else />
+            </div>
+            قم برفع وثيقة رسمية للتمكن من توثيق الكتب
+          </div>
+          <div class="m-auto form-group col-6">
+            <label class="form-label" for="official_document">
+              وثيقة رسمية [هوية - جواز سفر - ...]
+            </label>
+            <input class="form-control" type="file" name="official_document" id="official_document"
+              ref="official_document" accept="image/*" @change="submitOfficialDocument" />
+          </div>
+        </div>
+        <div class="mt-3 row" v-else>
+          <h5 class="text-center" style="direction: rtl;">
+            سنحتاج منك كتابة اسمك كاملًا حسب الوثائق الرسمية (جواز سفر / بطاقة شخصية / شهادة المرور) ليتسنى لك توثيق
+            قراءتك بشكل رسمي في قاعدة البيانات. سيتم حذف التوثيق الخاص بكل الحسابات الوهمية.
+          </h5>
+
+        </div>
+
+      </div>
+    </iq-card>
     <iq-card class="iq-card">
       <div class="iq-card-header-toolbar d-flex align-items-center mx-auto">
         <h3 class="text-center mt-3 mb-3">البيانات الشخصية</h3>
@@ -59,22 +94,19 @@
               <h4>اسمك الكامل بالعربية</h4>
               <div class="form-group row">
                 <input type="text" class="form-control mt-2" name="first_name_ar" id="first_name_ar"
-                  v-model="v$.infoForm.first_name_ar.$model" placeholder="الاسم الأول" />
+                  v-model="infoForm.first_name_ar" placeholder="الاسم الأول"
+                  :disabled="(user.allowed_to_eligible == 1 || user.allowed_to_eligible == 0)" />
               </div>
-              <small style="color: red" v-if="v$.infoForm.first_name_ar.$error">
-                قم بادخال الاسم الأول
-              </small>
               <div class="form-group row">
                 <input type="text" class="form-control mt-2" name="middle_name_ar" id="middle_name_ar"
-                  v-model="infoForm.middle_name_ar" placeholder="الاسم الثاني" />
+                  v-model="infoForm.middle_name_ar" placeholder="الاسم الثاني"
+                  :disabled="(user.allowed_to_eligible == 1 || user.allowed_to_eligible == 0)" />
               </div>
               <div class="form-group row">
                 <input type="text" class="form-control mt-2" name="last_name_ar" id="last_name_ar"
-                  v-model="v$.infoForm.last_name_ar.$model" placeholder="الاسم الأخير" />
+                  v-model="infoForm.last_name_ar" placeholder="الاسم الأخير"
+                  :disabled="(user.allowed_to_eligible == 1 || user.allowed_to_eligible == 0)" />
               </div>
-              <small style="color: red" v-if="v$.infoForm.last_name_ar.$error">
-                قم بادخال الاسم الأخير
-              </small>
             </div>
             <div class="form-group col-12">
               <h4>تاريخ الميلاد</h4>
@@ -147,7 +179,7 @@
             </div>
             <hr />
             <div class="form-group">
-              <button type="submit" :disabled="message" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
+              <button type="submit" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
                 تعديل
               </button>
             </div>
@@ -269,6 +301,10 @@ import UserInfoService from "@/Services/userInfoService";
 export default {
   name: "update profile",
   async created() {
+    if ((this.user.allowed_to_eligible == 0 || this.user.allowed_to_eligible == 2)) {
+      this.official_document_image_src = this.getOfficialDoc(this.user.id);
+    }
+
     const response = await UserProfile.getUserProfileToUpdate();
     this.sections = response.sections;
     this.profileInfo = response.profileInfo;
@@ -307,6 +343,7 @@ export default {
       profilePictureForm: {
         profile_picture: [],
         cover_picture: [],
+        official_document: [],
       },
       fileExtnError: null,
       countries: [
@@ -573,18 +610,14 @@ export default {
       sections: [],
       message: null,
       socialMediaMessage: null,
-      resetEmailMsg: ''
+      resetEmailMsg: '',
+      ofiicilaDocUploded: false,
+      official_document_image_src: '',
     };
   },
   validations() {
     return {
       infoForm: {
-        first_name_ar: {
-          required,
-        },
-        last_name_ar: {
-          required,
-        },
         bio: {
           maxLength: maxLength(600),
         },
@@ -619,14 +652,14 @@ export default {
         try {
           const response = await UserProfile.update(this.infoForm);
           this.loader = false;
-          this.message = response;
+          this.profileInfo = response;
+          this.message = 'تم التعديل بنجاح';
           this.v$.infoForm.$reset();
         } catch (error) {
           console.log(error);
         }
       }
     },
-
     /**
      * update profile socialmedia.
      */
@@ -687,6 +720,23 @@ export default {
       this.profileInfo = response;
       this.$refs.cover_picture.value = null;
     },
+    /**
+    * update official document.
+    * @return updated official document
+    */
+    async submitOfficialDocument() {
+      this.profilePictureForm.official_document = this.$refs.official_document.files;
+      const response = await UserProfile.updateOfficialDocument(
+        this.profilePictureForm
+      );
+      this.official_document_image_src = '@/assets/images/main/stage2.png'
+      this.official_document_image_src = this.getOfficialDoc(this.user.id);
+
+      this.ofiicilaDocUploded = true;
+      this.$store.commit("SET_ALLOWED_TO_ELIGIBLE", 0);
+      this.$refs.official_document.value = null;
+      //location.reload()
+    },
 
     /**
      * get profile picture or cover.
@@ -701,6 +751,16 @@ export default {
       );
     },
 
+
+
+    /**
+     * get gOfficial Doc.
+     *  @param  user id
+     * @return image url
+     */
+    getOfficialDoc(user_id) {
+      return profileImagesService.getOfficialDoc(user_id);
+    },
     /**
      * redirect to user profile.
      */

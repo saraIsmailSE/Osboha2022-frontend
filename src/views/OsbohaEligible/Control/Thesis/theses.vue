@@ -12,7 +12,7 @@
          <iq-card>
             <template v-slot:headerTitle>
                <h4 class="card-title">الأطروحات</h4>
-               <span class="px-2" v-if="role == 'reviewer' || role == 'admin'"> اسم السفير : {{
+               <span class="px-2" v-if="isReviewer"> اسم السفير : {{
                   thesis[0].user_book.user.name }}</span>
                <span class="px-2" v-else> اسم السفير : ***************</span>
                <span class="px-2"> || </span>
@@ -38,7 +38,8 @@
                   <!-- fieldsets -->
                   <fieldset v-for="(thesis, index) in    thesis" :key="index"
                      :class="current == index + 1 ? 'd-block' : 'd-none'">
-                     <Thesis :reviewStage="true" @status-updated="handleStatusUpdated" :thesis="thesis" :userBook='userBook' :index='index' @onNext="changeTab" />
+                     <Thesis :reviewStage="true" @status-updated="handleStatusUpdated" :thesis="thesis"
+                        :userBook='userBook' :index='index' @onNext="changeTab" />
                   </fieldset>
                </form>
             </template>
@@ -64,7 +65,7 @@
 
                      <!-- ACCEPT -->
                      <input type="button" value="انجاز صالح للتقييم" class="btn btn-primary d-block w-100 mt-3 "
-                        @click="accept()" :disabled='!isAccepted' v-if="role == 'reviewer' || role == 'admin'" />
+                        @click="accept()" :disabled='!isAccepted' v-if="isReviewer" />
                      <!-- END ACCEPT -->
                      <!-- REJECT -->
                      <div v-if="isSuper">
@@ -79,8 +80,7 @@
                            </small>
                            <div class="d-inline-block w-100 text-center">
                               <div class="col-sm-12 text-center" v-if="loader">
-                                 <img src="'@/assets/images/gif/loader-3.gif" alt="loader"
-                                    style="height: 100px;">
+                                 <img src="'@/assets/images/gif/loader-3.gif" alt="loader" style="height: 100px;">
                               </div>
                            </div>
 
@@ -127,8 +127,7 @@ import { required, requiredIf } from "@vuelidate/validators";
 export default {
    name: 'Theses',
    async created() {
-      this.role = UserInfoService.getRole()[0]
-      await this.getThesis(this.status)
+      await this.getThesis()
    },
    setup() {
       return { v$: useVuelidate() };
@@ -141,7 +140,6 @@ export default {
       return {
          current: 1,
          thesis: [],
-         role: '',
          reject: false,
          rejectNote: '',
          reviweNote: '',
@@ -167,8 +165,8 @@ export default {
       };
    },
    methods: {
-      handleStatusUpdated(){
-         this.getThesis(this.status)
+      handleStatusUpdated() {
+         this.getThesis()
       },
       async getThesis() {
          const response = await thesisServices.getByUserBook(this.$route.params.user_book_id, this.status);
@@ -297,7 +295,7 @@ export default {
          return this.acceptedThesises >= 8 ? true : false;
       },
       user() {
-         return UserInfoService.getUser();
+         return this.$store.getters.getUser;
       },
       isSuper() {
          return UserInfoService.hasRoles(this.user, [
@@ -306,7 +304,20 @@ export default {
             "super_reviewer",
          ]);
       },
-
+      isAuditer() {
+         return UserInfoService.hasRoles(this.user, [
+            "admin",
+            "super_auditer",
+            "auditor",
+         ]);
+      },
+      isReviewer() {
+         return UserInfoService.hasRoles(this.user, [
+            "admin",
+            "super_reviewer",
+            "reviewer",
+         ]);
+      },
    }
 
 }
