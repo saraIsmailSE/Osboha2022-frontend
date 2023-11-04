@@ -165,6 +165,24 @@ class GeneralConversation {
       handleError(error);
     }
   }
+
+  async addFollowup() {
+    try {
+      const response = await api.post(`${this.prefix}/followup`);
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async getFollowupStatistics() {
+    try {
+      const response = await api.get(`${this.prefix}/followup/statistics`);
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 }
 
 export default new GeneralConversation();

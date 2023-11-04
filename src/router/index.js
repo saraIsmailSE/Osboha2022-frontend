@@ -405,6 +405,14 @@ const generalConversationChildRoute = (prop, mode = false) => [
     component: () =>
       import("../views/OsbohaMain/GeneralConversation/WorkingHoursStats"),
   },
+
+  {
+    path: "followup-statistics",
+    name: prop + ".followupStatistics",
+    meta: { auth: true, name: "Followup Statistics" },
+    component: () =>
+      import("../views/OsbohaMain/GeneralConversation/FollowupStatistics"),
+  },
 ];
 
 const timerChildRoute = (prop, mode = false) => [

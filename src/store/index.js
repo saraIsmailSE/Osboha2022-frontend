@@ -18,6 +18,7 @@ export default new Vuex.Store({
     unreadNotifications: 0,
     week_start_date: null,
     main_timer: null,
+    week_title: null,
   },
   mutations: {
     SET_USER_DATA(state, userData) {
@@ -47,6 +48,9 @@ export default new Vuex.Store({
     SET_WEEK_START_DATE(state, date) {
       state.week_start_date = date;
     },
+    SET_WEEK_TITLE(state, title) {
+      state.week_title = title;
+    },
   },
   actions: {
     register({ commit }, credentials) {
@@ -60,7 +64,7 @@ export default new Vuex.Store({
         localStorage.setItem("osboha__token", response.data.data.token);
         localStorage.setItem(
           "osboha__user",
-          JSON.stringify(response.data.data.user)
+          JSON.stringify(response.data.data.user),
         );
         commit("SET_USER_DATA", response.data.data.user);
         commit("SET_TOKEN", response.data.data.token);

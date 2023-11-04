@@ -1,18 +1,33 @@
 <template>
   <div class="col-sm-12 mt-3">
     <iq-card class="iq-card">
-      <div class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto">
+      <div
+        class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto"
+      >
         <h1 class="text-center mt-3 mb-3">تسجيل الدخول</h1>
       </div>
       <div class="iq-card-body p-4">
         <div class="image-block text-center">
-          <img src="@/assets/images/main/login.png" class="img-fluid rounded w-50" alt="blog-img" />
+          <img
+            src="@/assets/images/main/login.png"
+            class="img-fluid rounded w-50"
+            alt="blog-img"
+          />
         </div>
         <form class="mt-4 w-75 mx-auto" @submit.prevent="submit">
           <div class="form-group">
-            <label class="form-label text-right" for="exampleInputEmail1">الايميل</label>
-            <input type="email" class="form-control mb-0 w-100 mx-auto" id="exampleInputEmail1"
-              placeholder="أدخل الايميل هنا" v-model="v$.form.email.$model" />
+            <label class="form-label text-right" for="exampleInputEmail1"
+              >الايميل</label
+            >
+
+            <input
+              type="email"
+              class="form-control mb-0 w-100 mx-auto"
+              id="exampleInputEmail1"
+              placeholder="أدخل الايميل هنا"
+              v-model="v$.form.email.$model"
+            />
+
             <p style="color: red" v-if="v$.form.email.$error">
               <span v-if="v$.form.email.required.$invalid">
                 رجاء قم بادخال البريد الإلكتروني
@@ -23,9 +38,27 @@
             </p>
           </div>
           <div class="form-group">
-            <label class="form-label" for="exampleInputPassword1">الرمز السري</label>
-            <input type="password" class="form-control mb-0 w-100 mx-auto" id="exampleInputPassword1"
-              placeholder="أدخل الرمز السري هنا" v-model="v$.form.password.$model" />
+            <label class="form-label" for="exampleInputPassword1"
+              >الرمز السري</label
+            >
+            <div class="input-group mb-0 w-100 mx-auto">
+              <input
+                :type="showPassword ? 'text' : 'password'"
+                class="form-control"
+                id="exampleInputPassword1"
+                placeholder="أدخل الرمز السري هنا"
+                v-model="v$.form.password.$model"
+              />
+              <button
+                class="input-group-addon btn btn-primary d-flex align-items-center justify-content-center"
+                @click.prevent="showPassword = !showPassword"
+              >
+                <span class="material-symbols-outlined">
+                  {{ showPassword ? "visibility_off" : "visibility" }}
+                </span>
+              </button>
+            </div>
+
             <p style="color: red" v-if="v$.form.password.$error">
               <span v-if="v$.form.password.required.$invalid">
                 رجاء قم بادخال كلمة السر
@@ -39,10 +72,16 @@
             {{ errorMessage }}
           </p>
 
-          <router-link :to="{ name: 'auth.forgot-password' }" class="float-end">هل نسيت كلمة السر؟</router-link>
+          <router-link :to="{ name: 'auth.forgot-password' }" class="float-end"
+            >هل نسيت كلمة السر؟</router-link
+          >
           <div class="d-inline-block w-100 text-center">
             <div class="col-sm-12 text-center" v-if="loading">
-              <img :src="require('@/assets/images/page-img/page-load-loader.gif')" alt="loader" style="height: 80px" />
+              <img
+                :src="require('@/assets/images/page-img/page-load-loader.gif')"
+                alt="loader"
+                style="height: 80px"
+              />
             </div>
 
             <button type="submit" class="btn btn-primary text-center" v-else>
@@ -50,10 +89,12 @@
             </button>
           </div>
           <div class="sign-info">
-            <span class="dark-color d-inline-block line-height-2">لا تملك حساب؟
+            <span class="dark-color d-inline-block line-height-2"
+              >لا تملك حساب؟
               <router-link :to="{ name: 'auth.sign-up' }">
                 سجل الأن
-              </router-link></span>
+              </router-link></span
+            >
           </div>
         </form>
       </div>
@@ -79,6 +120,7 @@ export default {
       errorMessage: "",
       submitStatus: null,
       loading: false,
+      showPassword: false,
     };
   },
   methods: {
@@ -107,13 +149,21 @@ export default {
           //validation errors
           const data = response.data;
           if (data.email) {
-            const err = data.email[0];
+            console.log(
+              "🚀 ~ file: SignIn.vue:152 ~ submit error ~ data.email:",
+              data.email,
+            );
+            const err = data.email.first();
             if (err.includes("required")) {
               this.errorMessage = "رجاءً قم بادخال البريد الالكتروني";
             } else if (err.includes("valid")) {
               this.errorMessage = "رجاءً قم بادخال البريد الالكتروني بشكل صحيح";
             }
           } else if (data.password) {
+            console.log(
+              "🚀 ~ file: SignIn.vue:161 ~ submit error ~ data.password:",
+              data.password,
+            );
             const err = data.password[0];
             console.log(err);
             if (err.includes("required")) {
