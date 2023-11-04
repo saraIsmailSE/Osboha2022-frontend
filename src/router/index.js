@@ -548,6 +548,12 @@ const routes = [
     name: "ServerError",
     component: () => import("../views/Errors/500-server"),
   },
+  // {
+  //   path: "/maintenance",
+  //   name: "maintenance",
+  //   component: () => import("../views/Errors/500-server"),
+  // },
+
   {
     path: "/",
     name: "osboha",
@@ -662,29 +668,24 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // redirect to login page if user is not logged in and trying to access a restricted page
-  // const publicPages = [
-  //   "/auth/signin",
-  //   "/auth/signup",
-  //   "/auth/admin/signup",
-  //   "/auth/forgot-password",
-  //   "reset-password",
-  // ];
-  // const authRequired = !publicPages.includes(to.path);
-  // const resetRoute = to.path.split("/");
-  // console.log("resetRoute", resetRoute);
-  // const resetPassword = !publicPages.includes(resetRoute[2]);
-  // console.log("resetPassword", resetPassword);
-
-  // if (authRequired && !loggedIn() && resetPassword) {
-  //   return next("/auth/signin");
-  // }
-
   if (to.meta.auth && !loggedIn()) {
     return next("/auth/signin");
   } else {
     next();
   }
 });
+
+
+// router.beforeEach((to, from, next) => {
+//   // Check if the destination route is the maintenance page
+//   if (to.path !== '/maintenance') {
+//     // Redirect to the maintenance page
+//     next('/maintenance');
+//   } else {
+//     // Continue with the route
+//     next();
+//   }
+// });
+
 
 export default router;
