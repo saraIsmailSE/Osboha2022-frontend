@@ -222,6 +222,12 @@ const statisticsChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Statistics for Top Users" },
     component: () => import("../views/OsbohaMain/Statistics/TopUsers"),
   },
+  {
+    path: "supervisors",
+    name: prop + ".supervisors",
+    meta: { auth: true, name: "Statistics for Supervisors" },
+    component: () => import("../views/OsbohaMain/Statistics/Supervisors"),
+  },
 ];
 const rolesChildRoute = (prop, mode = false) => [
   {
