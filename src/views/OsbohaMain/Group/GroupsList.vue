@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div ref="listContainer">
     <div class="row">
-      <div class="col-sm-12" ref="listContainer">
+      <div class="col-sm-12">
         <iq-card>
           <template v-slot:headerTitle>
             <h4 class="card-title" v-if="groups && groups.length > 0">قائمة المجموعات - {{ groups.length }}</h4>
@@ -14,7 +14,7 @@
                 search
               </i>
               <input type="text" class="form-control" placeholder=" ... ابحث عن مجموعة" v-model.trim="searchModel"
-                v-on:keyup="loadGroups()" />
+                @keyup="debouncedSearch" />
             </div>
             <router-link class="mb-3 btn btn-primary float-end" :to="{
               name: 'group.addGroup',
@@ -96,6 +96,10 @@ import axios from "axios";
 
 export default {
   name: "Groups List",
+  created() {
+    // Debounce the searchGroup method
+    this.debouncedSearch = this.debounce(this.loadGroups, 300);
+  },
   async mounted() {
     this.loadGroups();
     window.addEventListener("scroll", this.handleScroll);
@@ -236,6 +240,16 @@ export default {
         this.loadGroups();
       }
     },
+    debounce(func, wait) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          func.apply(this, args);
+        }, wait);
+      };
+    }
+
   },
   computed: {
     user() {

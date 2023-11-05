@@ -286,13 +286,6 @@ export default {
       }
     },
 
-    objectToArray(object) {
-      return Object.entries(object).map(([key, value]) => ({
-        key,
-        value,
-      }));
-    },
-
     calculateTotalMinutes(values) {
       return values.reduce((acc, curr) => acc + curr.minutes, 0);
     },

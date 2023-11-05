@@ -167,8 +167,9 @@ export default {
       this.$store.commit("SET_MAIN_TIMER", this.sessionData?.timer?.main_timer);
       this.$store.commit(
         "SET_WEEK_START_DATE",
-        this.sessionData?.timer?.created_at
+        this.sessionData?.timer?.created_at,
       );
+      this.$store.commit("SET_WEEK_TITLE", this.sessionData?.timer?.title);
     },
   },
 };

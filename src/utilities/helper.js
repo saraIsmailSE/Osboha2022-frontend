@@ -172,4 +172,11 @@ export default {
       minutes: diffHours * 60,
     };
   },
+
+  objectToArray(object) {
+    return Object.entries(object).map(([key, value]) => ({
+      key,
+      value,
+    }));
+  },
 };

@@ -220,6 +220,7 @@
           <span class="item-name">إحصائيات التحويل العام</span>
         </router-link>
       </li>
+
       <li class="nav-item" v-if="advisorAndAbove">
         <router-link
           :class="
@@ -234,6 +235,22 @@
         >
           <i class="icon material-symbols-outlined"> more_time </i>
           <span class="item-name">إضافة ساعات العمل</span>
+        </router-link>
+      </li>
+      <li class="nav-item" v-if="isAdmin">
+        <router-link
+          :class="
+            checkActive('general-conversation.followupStatistics')
+              ? 'active nav-link'
+              : 'nav-link'
+          "
+          aria-current="page"
+          :to="{
+            name: 'general-conversation.followupStatistics',
+          }"
+        >
+          <i class="icon material-symbols-outlined"> browse_activity </i>
+          <span class="item-name">إحصائيات تفقد التحويل العام</span>
         </router-link>
       </li>
       <li class="nav-item" v-if="isAdmin">

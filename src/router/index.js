@@ -217,6 +217,12 @@ const statisticsChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Statistics for Top Users" },
     component: () => import("../views/OsbohaMain/Statistics/TopUsers"),
   },
+  {
+    path: "supervisors",
+    name: prop + ".supervisors",
+    meta: { auth: true, name: "Statistics for Supervisors" },
+    component: () => import("../views/OsbohaMain/Statistics/Supervisors"),
+  },
 ];
 const rolesChildRoute = (prop, mode = false) => [
   {
@@ -399,6 +405,14 @@ const generalConversationChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "General Conversation Working Hours Stats" },
     component: () =>
       import("../views/OsbohaMain/GeneralConversation/WorkingHoursStats"),
+  },
+
+  {
+    path: "followup-statistics",
+    name: prop + ".followupStatistics",
+    meta: { auth: true, name: "Followup Statistics" },
+    component: () =>
+      import("../views/OsbohaMain/GeneralConversation/FollowupStatistics"),
   },
 ];
 
@@ -705,6 +719,12 @@ const routes = [
     name: "ServerError",
     component: () => import("../views/Errors/500-server"),
   },
+  // {
+  //   path: "/maintenance",
+  //   name: "maintenance",
+  //   component: () => import("../views/Errors/500-server"),
+  // },
+
   {
     path: "/",
     name: "osboha",
@@ -878,5 +898,18 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
+
+// router.beforeEach((to, from, next) => {
+//   // Check if the destination route is the maintenance page
+//   if (to.path !== '/maintenance') {
+//     // Redirect to the maintenance page
+//     next('/maintenance');
+//   } else {
+//     // Continue with the route
+//     next();
+//   }
+// });
+
 
 export default router;

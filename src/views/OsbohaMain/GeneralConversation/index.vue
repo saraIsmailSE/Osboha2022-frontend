@@ -20,6 +20,21 @@
 
     <AddQuestion @add-question="addNewQuestion" v-if="!questionId" />
 
+    <div class="col-12 my-2" v-if="!questionId && showFollowupButton">
+      <button class="btn btn-info" @click="addFollowupAction">
+        <div class="col-sm-12 text-center" v-if="loadingFollowupAddition">
+          <img
+            :src="require('@/assets/images/page-img/page-load-loader.gif')"
+            alt="loader"
+            style="height: 30px"
+          />
+        </div>
+        <span v-else>
+          {{ counterText }}
+        </span>
+      </button>
+    </div>
+
     <div class="col-12">
       <div class="card card-block card-stretch card-height blog">
         <div class="card-header" v-if="!questionId">
@@ -105,6 +120,8 @@ export default {
     await this.checkUserPermission();
     // await this.closeOverdueQuestions(); -- dr. Ahmed asked to remove this feature
     await this.getQuestions();
+
+    this.followupCounter = this.userFollowup ? this.userFollowup.counter : 0;
   },
   data() {
     return {
@@ -116,6 +133,10 @@ export default {
       hasMore: false,
       page: 1,
       questionId: this.$route.params.questionId || null,
+      userFollowup: null,
+      showFollowupButton: false,
+      followupCounter: null,
+      loadingFollowupAddition: false,
     };
   },
   computed: {
@@ -130,6 +151,9 @@ export default {
       }
       return "كل الأسئلة";
     },
+    counterText() {
+      return this.followupCounter === 0 ? "التفقد الأول" : "التفقد الثاني";
+    },
   },
   watch: {
     keyword: function (val) {
@@ -138,6 +162,29 @@ export default {
       this.hasMore = false;
       this.questions = [];
       this.getQuestions();
+    },
+
+    userFollowup: function (val) {
+      if (val?.counter >= 2) {
+        this.showFollowupButton = false;
+        return;
+      }
+
+      if (!val) {
+        this.showFollowupButton = true;
+        return;
+      }
+
+      //check if the last followup was less than 6 hours so we don't show the button
+      const now = new Date();
+      const followupUpdatedAt = new Date(val?.updated_at);
+      const diff = Math.abs(now - followupUpdatedAt);
+      const hours = Math.ceil(diff / (1000 * 60 * 60));
+      if (hours < 6) {
+        this.showFollowupButton = false;
+      } else {
+        this.showFollowupButton = true;
+      }
     },
   },
   methods: {
@@ -207,13 +254,16 @@ export default {
               );
           }
 
-          if (response.data.length === 0) {
+          if (response.data.questions.length === 0) {
             this.emptyMessage = response.message;
+
+            this.userFollowup = response.data.user_followup;
             return;
           }
 
           this.questions = [...this.questions, ...response.data.questions];
           this.hasMore = response.data.has_more_pages;
+          this.userFollowup = response.data.user_followup;
         }
       } catch (error) {
         this.toggleErrorToast();
@@ -257,6 +307,86 @@ export default {
       this.questionId = null;
       this.questions = [];
       this.getQuestions();
+    },
+
+    checkFollowup() {
+      //check if the time in the userFollowup (updated_at) is less than 6 hrs
+      if (this.userFollowup) {
+        const now = new Date();
+        const updated_at = new Date(this.userFollowup.updated_at);
+        const diff = Math.abs(now - updated_at) / 36e5;
+        console.log(this.userFollowup);
+        if (diff < 6) {
+          this.showFollowupButton = false;
+        }
+      }
+    },
+
+    async addFollowupAction() {
+      if (this.loadingFollowupAddition) {
+        return;
+      }
+
+      if (this.followupCounter >= 2) {
+        return;
+      } else if (this.followupCounter === 1) {
+        await this.addFollowup();
+        return;
+      } else {
+        const swal = this.$swal.mixin({
+          customClass: {
+            confirmButton: "btn btn-primary btn-lg",
+          },
+          buttonsStyling: false,
+        });
+
+        swal
+          .fire({
+            title: "تنويه",
+            text: "لا يمكنك إدخال التفقد الثاني إلا بعد مرور 6 ساعات على إدخال التفقد الأول",
+            showCancelButton: false,
+            confirmButtonText: "حسنًا",
+            icon: "warning",
+            showClass: {
+              popup: "animate__animated animate__zoomIn",
+            },
+            hideClass: {
+              popup: "animate__animated animate__zoomOut",
+            },
+          })
+          .then(async (result) => {
+            if (result.isConfirmed) {
+              await this.addFollowup();
+            }
+          });
+      }
+    },
+
+    async addFollowup() {
+      this.loadingFollowupAddition = true;
+
+      try {
+        const response = await GeneralConversationService.addFollowup();
+
+        setTimeout(() => {
+          this.$swal.fire({
+            title: "تم إضافة التفقد بنجاح",
+            icon: "success",
+            showCancelButton: false,
+            confirmButtonText: "حسنًا",
+            customClass: {
+              confirmButton: "btn btn-primary btn-lg",
+            },
+            buttonsStyling: false,
+          });
+
+          this.userFollowup = response.data;
+        }, 1000);
+      } catch (error) {
+        this.toggleErrorToast();
+      } finally {
+        this.loadingFollowupAddition = false;
+      }
     },
   },
 };
