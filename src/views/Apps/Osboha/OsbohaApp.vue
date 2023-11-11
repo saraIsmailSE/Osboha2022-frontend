@@ -63,7 +63,7 @@ export default {
     this.knowAboutOsboha = this.knowAboutOsboha2;
     const response = await postService.getCurrentWeekSupportPost();
     if (response) {
-      if (response.userVote) {
+      if (response.userVote || response.userComment) {
         this.knowAboutOsboha = this.knowAboutOsboha0;
       }
       else {

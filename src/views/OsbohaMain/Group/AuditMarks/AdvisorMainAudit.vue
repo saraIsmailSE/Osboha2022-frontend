@@ -50,14 +50,16 @@ export default {
     async created() {
         try {
             const response = await AuditMarkService.advisorMainAudit(this.$route.params.advisor_id);
-            this.supervisors = response.reduce((groupBySupervisor, item) => {
-                const supervispr = groupBySupervisor[item.supervisor_name] || [];
-                supervispr["name"] = item.supervisor_name;
-                this.addKeyIfNotExists(this.supervisorsList, supervispr["name"], false);
+            this.supervisors = Object.keys(response).reduce((accumulator, key) => {
+                let supervisorName = response[key].supervisor_name;
+                // If the accumulator doesn't have an array for this supervisor, create one
+                if (!accumulator[supervisorName]) {
+                    accumulator[supervisorName] = [];
+                }
+                // Add the current item to the supervisor's array
+                accumulator[supervisorName].push(response[key]);
 
-                supervispr.push(item);
-                groupBySupervisor[item.supervisor_name] = supervispr;
-                return groupBySupervisor;
+                return accumulator;
             }, {});
             this.audit = response;
         }
