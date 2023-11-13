@@ -115,14 +115,12 @@
 </template>
 
 <script>
-import iqCard from '@/components/custom/cards/iq-card.vue'
 import thesisServices from '@/API/EligibleServices/thesisServices'
 import moment from 'moment';
 import UserInfoService from "@/Services/userInfoService";
 
 
 export default {
-    components: { iqCard },
     name: 'ListThesis',
     async created() {
         if (this.canReview) {

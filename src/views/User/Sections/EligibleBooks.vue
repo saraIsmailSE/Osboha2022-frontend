@@ -90,8 +90,8 @@
                           <div class="d-flex justify-content-between mt-2 text-dark">
                             <h6>التلخيص العام</h6>
                             <small>{{ statistics.general_informations_degree ? statistics.general_informations_degree :
-    0
-}}%</small>
+                              0
+                            }}%</small>
                           </div>
                           <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
                             <progressbar className="bg-primary"
@@ -120,7 +120,7 @@
                   <div class="col-sm-12">
                     <div class="iq-card-body p-0">
                       <div class="image-block text-center">
-                        <img src="@/assets/images/main/statistics.png" class="img-fluid rounded w-50" alt="blog-img">
+                        <img src="@/assets/images/main/team_work.png" class="img-fluid rounded w-50" alt="blog-img">
                       </div>
 
                       <h4 class="text-center mt-3 mb-3 mx-2">
@@ -164,8 +164,8 @@
                                     (10٪) فقط من القراء
                                   </p>
                                 </div>
-                                <button @click="listCertificate(last_achievement.id)" 
-                                  type="submit" class="btn btn-primary d-block w-100 mt-3">اصدار الشهادة
+                                <button @click="listCertificate(last_achievement.id)" type="submit"
+                                  class="btn btn-primary d-block w-100 mt-3">اصدار الشهادة
                                 </button>
                               </div>
                             </div>
@@ -205,10 +205,10 @@
                   <h4 class="text-center ">
                     ابدأ بتوثيق كتابك الأول
                   </h4>
-                  <a href="javascript:void(0);" class="btn btn-primary d-block mt-3 mb-3 w-75 mx-auto"
-                    style="color: white" @click="booksPage()">
+                  <router-link :to="{ name: 'book.eligible' }" class="btn btn-primary d-block mt-3 mb-3 w-75 mx-auto"
+                    style="color: white">
                     ابدأ التوثيق
-                  </a>
+                  </router-link>
                 </div>
 
               </div>
@@ -278,7 +278,6 @@
   </div>
 </template>
 <script>
-import userServices from '@/api/userServices'
 import certificateService from '@/API/EligibleServices/certificateServices'
 import userBookServices from '@/API/EligibleServices/userBookServices'
 export default {
@@ -331,10 +330,6 @@ export default {
     //   const statistics = await userServices.getUserStatistics();
     //   this.statistics = statistics
     // },
-    booksPage() {
-      this.$router.push({ path: `/book` });
-
-    },
   }
 };
 </script>

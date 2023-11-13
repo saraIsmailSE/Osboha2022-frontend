@@ -1,5 +1,5 @@
 import { api } from "../Intercepter";
-import userInfoService from "@/Services/userInfoService";
+import store from '../../store';
 
 class bookServices {
   constructor() {
@@ -47,7 +47,7 @@ class bookServices {
     const response = api.post("/thesises/audit", {
       id: id,
       status: "review",
-      auditor_id: userInfoService.getUser().id,
+      auditor_id: store.getters.getUser.id,
     });
     return response;
   }
@@ -55,7 +55,7 @@ class bookServices {
     const response = api.post("/thesises/audit", {
       id: id,
       status: "rejected",
-      auditor_id: userInfoService.getUser().id,
+      auditor_id: store.getters.getUser.id,
       reviews: note,
     });
     return response;

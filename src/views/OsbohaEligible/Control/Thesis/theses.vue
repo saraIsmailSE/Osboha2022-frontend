@@ -80,7 +80,7 @@
                            </small>
                            <div class="d-inline-block w-100 text-center">
                               <div class="col-sm-12 text-center" v-if="loader">
-                                 <img src="'@/assets/images/gif/loader-3.gif" alt="loader" style="height: 100px;">
+                                 <img src="@/assets/images/gif/loader-3.gif" alt="loader" style="height: 100px;">
                               </div>
                            </div>
 

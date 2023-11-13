@@ -1,5 +1,6 @@
 import { api } from "../Intercepter";
-import userInfoService from "@/Services/userInfoService";
+import store from '../../store';
+
 class userBookServices {
   constructor() {
     this.prefix = "eligible-userbook";
@@ -14,7 +15,7 @@ class userBookServices {
     const response = await api.post(`${this.prefix}/review`, {
       id: id,
       status: "audit",
-      reviewer_id: userInfoService.getUser().id,
+      reviewer_id: store.getters.getUser.id,
     });
     return response;
   }
@@ -22,7 +23,7 @@ class userBookServices {
     const response = api.post(`${this.prefix}/review`, {
       id: id,
       status: status,
-      reviewer_id: userInfoService.getUser().id,
+      reviewer_id: store.getters.getUser.id,
       reviews: note,
     });
     return response;

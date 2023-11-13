@@ -3,18 +3,16 @@
     <template v-slot:body>
       <h2 class="text-center mb-3">الكتب</h2>
       <hr />
-      <div class="mb-3 d-flex justify-content-between">
-        <h4 class="text-center mt-3 mb-3" v-if="books">
+      <div class="row mb-3 d-flex justify-content-between">
+        <h4 class="col-6 text-center mt-3 mb-3" v-if="books">
           العدد الكلي: {{ books.length }}
         </h4>
-        <router-link
-          :to="{
-            name: 'book.later-books',
-            params: {
-              user_id: this.$route.params.user_id,
-            },
-          }"
-        >
+        <router-link class="col-6" :to="{
+          name: 'book.later-books',
+          params: {
+            user_id: this.$route.params.user_id,
+          },
+        }">
           <h4 class="text-center mt-3 mb-3">
             للقراءة لاحقاً
             <span class="align-middle material-symbols-outlined later-book later-book-on">
@@ -22,14 +20,12 @@
             </span>
           </h4>
         </router-link>
-        <router-link  v-if="advisorAndAbove || inBooksTeam"
-          :to="{
-            name: 'book.free-book',
-            params: {
-              user_id: this.$route.params.user_id,
-            },
-          }"
-        >
+        <router-link class="col-6" :to="{
+          name: 'book.free-book',
+          params: {
+            user_id: this.$route.params.user_id,
+          },
+        }">
           <h4 class="text-center mt-3 mb-3">
             الكتب الحرة
             <span class="align-middle material-symbols-outlined later-book">
@@ -37,42 +33,33 @@
             </span>
           </h4>
         </router-link>
+
+        <router-link class="col-6" v-if="isAuth" :to="{
+          name: 'user.eligible-books',
+          params: {
+            user_id: this.$route.params.user_id,
+          },
+        }">
+          <h4 class="text-center mt-3 mb-3">
+            الكتب الموثقة
+            <span class="align-middle material-symbols-outlined later-book">
+              contract_edit
+            </span>
+          </h4>
+        </router-link>
       </div>
-      <div
-        class="d-grid gap-3 d-grid-template-1fr-19"
-        v-if="books && books.length > 0"
-      >
-        <BookCard
-          v-for="bookInfo in booksLoaded"
-          :key="bookInfo.id"
-          :cardInfo="bookInfo"
-          :isProfile="true"
-        />
-        <a
-          class="me-3 btn"
-          role="button"
-          @click="loadMore()"
-          v-if="booksLoaded.length > length"
-          >عرض المزيد</a
-        >
+      <div class="d-grid gap-3 d-grid-template-1fr-19" v-if="books && books.length > 0">
+        <BookCard v-for="bookInfo in booksLoaded" :key="bookInfo.id" :cardInfo="bookInfo" :isProfile="true" />
+        <a class="me-3 btn" role="button" @click="loadMore()" v-if="booksLoaded.length > length">عرض المزيد</a>
       </div>
       <div class="col-sm-12" v-else>
         <iq-card class="iq-card">
           <div class="iq-card-body p-0">
             <div class="image-block text-center">
-              <img
-                src="@/assets/images/main/current_book.png"
-                class="img-fluid rounded w-50"
-                alt="blog-img"
-              />
+              <img src="@/assets/images/main/current_book.png" class="img-fluid rounded w-50" alt="blog-img" />
             </div>
             <h4 class="text-center mt-3 mb-3">لا يوجد كتب</h4>
-            <router-link
-              v-if="isAuth"
-              class="btn btn-primary w-100"
-              aria-current="page"
-              :to="{ name: 'osboha.book' }"
-            >
+            <router-link v-if="isAuth" class="btn btn-primary w-100" aria-current="page" :to="{ name: 'osboha.book' }">
               ابدأ القراءة
             </router-link>
           </div>
@@ -134,6 +121,8 @@ export default {
   font-variation-settings:
     'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48
 }
+
 .later-book-on {
   color: darkred;
-}</style>
+}
+</style>

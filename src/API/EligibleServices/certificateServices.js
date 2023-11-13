@@ -1,31 +1,43 @@
-import { eligibleApi } from "../Intercepter"
-import userInfoService from "@/Services/userInfoService";
-export default {
+import { api } from "../Intercepter";
 
-
-  async getUserCertificates(){
-      const response = await eligibleApi.get('certificates/user');
-      return response.data.data;
+class CertificateServices {
+  constructor() {
+    this.prefix = "eligible-certificates";
   }
-,
- async  createCertificate(id){
- 
-      const response = await eligibleApi.post("certificates", {user_book_id:id})
-      console.log(response)
-      return response.data.data
-   
-  },
-  checkCertificate: async (id) => {
-    const response = await eligibleApi.get(`userbook/certificate/${id}`);
+
+  async getUserCertificates() {
+    const response = await api.get(`${this.prefix}/user`);
+    return response.data.data;
+  }
+
+  async createCertificate(id) {
+    let certificateData = new FormData();
+    certificateData.append("eligible_user_books_id", id);
+    const response = await api
+      .post(`${this.prefix}`, certificateData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     return response.data.data;
-  },
-  fullCretificate: async (id) => {
+  }
+  async checkCertificate(id) {
+    const response = await api.get(`userbook/certificate/${id}`);
+
+    return response.data.data;
+  }
+  async fullCretificate(id) {
     try {
-      const response = await eligibleApi.get(`certificates/full-certificate/${id}`);
+      const response = await api.get(`${this.prefix}/full-certificate/${id}`);
       return response.data.data;
     } catch (e) {
       console.log(e);
     }
-  },
-};
+  }
+}
+
+export default new CertificateServices();

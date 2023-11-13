@@ -173,6 +173,12 @@ const userChildRoute = (prop, mode = false) => [
     component: () => import("../views/User/Sections/Update"),
   },
   {
+    path: "eligible-books/:user_id",
+    name: prop + ".eligible-books",
+    meta: { auth: true, name: "User Eligible Books" },
+    component: () => import("../views/User/Sections/EligibleBooks"),
+  },
+  {
     path: "profile/friends/requests/:user_id",
     name: prop + ".friendsRequests",
     meta: { auth: true, name: "User Frinds Requests" },

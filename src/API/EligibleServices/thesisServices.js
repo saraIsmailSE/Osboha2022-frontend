@@ -1,5 +1,6 @@
 import { api } from "../Intercepter";
-import userInfoService from "@/Services/userInfoService";
+import store from '../../store';
+
 class ThesesServices {
   constructor() {
     this.prefix = "eligible-theses";
@@ -40,26 +41,26 @@ class ThesesServices {
     } else if (status == "audit") {
       eligible_user_books_id = id;
     }
-    const response = api.post("${this.prefix}/review", {
+    const response = api.post(`${this.prefix}/review`, {
       id: thesisId,
       eligible_user_books_id: eligible_user_books_id,
       status: status,
-      reviewer_id: userInfoService.getUser().id,
+      reviewer_id: store.getters.getUser.id,
     });
     return response;
   }
   async rejectRetardThesis(id, note, status) {
-    const response = api.post("${this.prefix}/review", {
+    const response = api.post(`${this.prefix}/review`, {
       id: id,
       status: status,
-      reviewer_id: userInfoService.getUser().id,
+      reviewer_id: store.getters.getUser.id,
       reviews: note,
     });
     return response;
   }
   async addDegree(id, note, mark) {
     const response = api.patch(`${this.prefix}/add-degree/${id}`, {
-      auditor_id: userInfoService.getUser().id,
+      auditor_id: store.getters.getUser.id,
       reviews: note,
       degree: mark,
     });

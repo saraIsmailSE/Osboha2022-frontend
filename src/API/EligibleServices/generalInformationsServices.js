@@ -1,5 +1,5 @@
 import { api } from "../Intercepter";
-import userInfoService from "@/Services/userInfoService";
+import store from '../../store';
 
 class generalInformationsServices {
   constructor() {
@@ -26,7 +26,7 @@ class generalInformationsServices {
 
   async addDegree(id, note, mark) {
     const response = await api.patch(`${this.prefix}/add-degree/${id}`, {
-      auditor_id: userInfoService.getUser().id,
+      auditor_id: store.getters.getUser.id,
       reviews: note,
       degree: mark,
     });
@@ -50,7 +50,7 @@ class generalInformationsServices {
     const response = await api.post(`${this.prefix}/review`, {
       id: id,
       status: "audit",
-      reviewer_id: userInfoService.getUser().id,
+      reviewer_id: store.getters.getUser.id,
     });
     return response;
   }
@@ -58,7 +58,7 @@ class generalInformationsServices {
     const response = await api.post(`${this.prefix}/review`, {
       id: id,
       status: status,
-      reviewer_id: userInfoService.getUser().id,
+      reviewer_id: store.getters.getUser.id,
       reviews: note,
     });
     return response;

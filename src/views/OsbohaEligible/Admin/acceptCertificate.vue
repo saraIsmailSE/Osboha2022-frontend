@@ -7,7 +7,7 @@
                 </template>
                 <template v-slot:body>
                     <div class="d-grid gap-3 d-grid-template-1fr-19">
-        <div class="card mb-0" v-for="certificate in certificates" :key="certificate.id">
+                        <div class="card mb-0" v-for="certificate in certificates" :key="certificate.id">
                             <div class="row align-items-center">
 
                                 <div class="col-12">
@@ -17,17 +17,20 @@
                                                 alt="blog-img">
                                         </div>
 
-                                        <h4 class="mb-2 text-center" style="direction: inherit;"> اسم السفير: {{ certificate.user.name }}</h4>
-                                        <h4 class="mb-2 text-center" style="direction: inherit;">اسم الكتاب:{{ certificate.book.name }}</h4>
-                                        <h4 class="mb-2 text-center" style="direction: inherit;">رقم التوثيق:{{ certificate.id }}</h4>
-                                        <button @click="acceptrequest(certificate.id)" type="submit"
+                                        <h4 class="mb-2 text-center" style="direction: inherit;"> اسم السفير: {{
+                                            certificate.user.name }}</h4>
+                                        <h4 class="mb-2 text-center" style="direction: inherit;">اسم الكتاب:{{
+                                            certificate.book.name }}</h4>
+                                        <h4 class="mb-2 text-center" style="direction: inherit;">رقم التوثيق:{{
+                                            certificate.id }}</h4>
+                                        <button @click="acceptCertificate(certificate.id)" type="submit"
                                             class="btn btn-primary d-block w-100">قبول </button>
 
-                                        <button @click="deleterequest(certificate.id)" type="submit"
+                                        <button @click="rejectCertificate(certificate.id)" type="submit"
                                             class="btn btn-primary d-block w-100 mt-3">رفض </button>
 
-                                        <button @click="listCertificate(certificate.id)"
-                                            type="submit" class="btn btn-primary d-block w-100 mt-3">عرض الشهادة
+                                        <button @click="listCertificate(certificate.id)" type="submit"
+                                            class="btn btn-primary d-block w-100 mt-3">عرض الشهادة
                                         </button>
                                     </div>
                                 </div>
@@ -53,27 +56,16 @@
             </iq-card>
         </div>
     </div>
-
 </template>
 <script>
-import { socialvue } from '@/config/pluginInit'
 import userBookServices from '@/API/EligibleServices/userBookServices'
 import certificateServices from '@/API/EligibleServices/certificateServices'
 
 export default {
     name: 'acceptCertificates',
     components: {},
-    mounted() {
-        socialvue.index()
-    },
     created() {
-        userBookServices.getByStatus('audited')
-            .then(response => {
-                this.certificates = response
-            })
-            .catch(error => {
-
-            })
+        this.getCertificates()
     },
 
     data() {
@@ -82,10 +74,19 @@ export default {
         }
     },
     methods: {
-        listCertificate(id){
+        getCertificates() {
+            userBookServices.getByStatus('audited')
+                .then(response => {
+                    this.certificates = response
+                })
+                .catch(error => {
+
+                })
+        },
+        listCertificate(id) {
             window.open(`https://www.eligible.osboha180.com/api/api/certificates/generate-pdf/${id}`, '_blank');
         },
-        deleterequest(id) {
+        rejectCertificate(id) {
             const swalWithBootstrapButtons = this.$swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-primary btn-lg',
@@ -123,7 +124,7 @@ export default {
                                         popup: 'animate__animated animate__zoomOut'
                                     }
                                 })
-                                location.reload()
+                                this.getCertificates()
                             })
                             .catch(error => {
                                 (error)
@@ -133,7 +134,7 @@ export default {
                     }
                 })
         },
-        acceptrequest(id) {
+        acceptCertificate(id) {
             const swalWithBootstrapButtons = this.$swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-primary btn-lg',
@@ -143,7 +144,7 @@ export default {
             })
             swalWithBootstrapButtons.fire({
                 title: 'هل أنت متأكد؟',
-                text: "موافقتك تعني قبول هذا التوثيق",
+                text: "موافقتك تعني قبول هذا التوثيق وانشاء شهادة له",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'نعم قم بالقبول',
@@ -170,7 +171,7 @@ export default {
                                         popup: 'animate__animated animate__zoomOut'
                                     }
                                 })
-                                location.reload()
+                                this.getCertificates()
                             })
                             .catch(error => {
                                 console.log(error)
@@ -180,13 +181,6 @@ export default {
                     }
                 })
         },
-        resolve_img_url: function (image) {
-
-            const url = `https://www.eligible.osboha180.com/api/api/certificates/image?path=${image}`
-
-            return url;
-        },
-
     }
 }
 </script>
