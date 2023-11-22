@@ -12,6 +12,15 @@ class UserService {
     const response = await api.get(`users/search-by-email/${email}`);
     return response.data.data;
   }
+  async listInChargeOf() {
+    try {
+      const response = await api.get("users/list-in-charge-of");
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   async getUnactiveReviwers() {
     const users = await api.get(`users/list/un-active-reviwers-auditors`);
     return users;

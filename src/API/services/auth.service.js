@@ -98,7 +98,7 @@ class AuthService {
   async returnToTeam() {
     try {
       const response = await api.get("/return-to-team");
-      return response.data;
+      return response.data.data;
     } catch (error) {
       handleError(error);
     }

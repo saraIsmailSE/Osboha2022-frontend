@@ -223,10 +223,16 @@ const statisticsChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMain/Statistics/TopUsers"),
   },
   {
-    path: "supervisors",
+    path: "supervisors/:supervisor_id",
     name: prop + ".supervisors",
     meta: { auth: true, name: "Statistics for Supervisors" },
     component: () => import("../views/OsbohaMain/Statistics/Supervisors"),
+  },
+  {
+    path: "list-supervisors",
+    name: prop + ".list-supervisors",
+    meta: { auth: true, name: "List Supervisors for Advisor" },
+    component: () => import("../views/OsbohaMain/Statistics/ListSupervisors"),
   },
 ];
 const rolesChildRoute = (prop, mode = false) => [

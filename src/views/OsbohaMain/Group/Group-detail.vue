@@ -119,9 +119,7 @@
           <router-link :to="{ name: 'group.auditMarks', params: { group_id: group_id } }"
             class="btn btn-primary d-block mt-3 col-5 me-1" v-if="authInGroup &&
               authInGroup.user_type != 'ambassador' &&
-              (group.type.type == 'supervising' ||
-              group.type.type == 'advising' ||
-              group.type.type == 'followup')
+              group.type.type == 'followup'
               ">
             تدقيق العلامات
           </router-link>
@@ -171,7 +169,7 @@ export default {
       console.log(response.week_avg)
       this.week_avg = (Math.round(response.week_avg * 100) / 100).toFixed(2);
       this.week = response.week;
-      this.previous_week=response.previous_week
+      this.previous_week = response.previous_week
       this.authInGroup = response.authInGroup;
     } catch (error) {
       console.log(error);
@@ -183,7 +181,7 @@ export default {
       group: null,
       group_id: this.$route.params.group_id,
       week: null,
-      previous_week:null,
+      previous_week: null,
       week_avg: 0,
       authInGroup: null,
       group_type: {

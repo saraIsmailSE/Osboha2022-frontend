@@ -22,7 +22,7 @@
             </span>
           </h4>
         </router-link>
-        <router-link  v-if="advisorAndAbove || inBooksTeam"
+        <router-link
           :to="{
             name: 'book.free-book',
             params: {

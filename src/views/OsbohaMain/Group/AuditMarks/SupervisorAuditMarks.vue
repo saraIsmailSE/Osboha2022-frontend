@@ -3,10 +3,7 @@
     <div class="col-12">
       <iq-card body-class="p-0">
         <template v-slot:body>
-          <div
-            class="card position-relative inner-page-bg"
-            style="background-color: #cae0cd; height: 100px"
-          >
+          <div class="card position-relative inner-page-bg" style="background-color: #cae0cd; height: 100px">
             <div class="inner-page-title">
               <h3 class="text-dark" style="direction: rtl">
                 تدقيق العلامات || {{ group.name }}
@@ -18,30 +15,17 @@
           </div>
           <div v-if="audit">
             <ul class="todo-task-lists m-2 p-0">
-              <div
-                class="card position-relative"
-                style="background-color: #208040; height: 60px"
-              >
-                <div
-                  class="d-flex align-items-center justify-content-between w-100"
-                >
+              <div class="card position-relative" style="background-color: #208040; height: 60px">
+                <div class="d-flex align-items-center justify-content-between w-100">
                   <div class="inner-page-title">
                     <h3 class="text-light d-flex justify-content-between">
                       انجاز كامل
-                      <span
-                        role="button"
-                        v-if="!show_full_audit"
-                        class="display-6 text-light material-symbols-outlined"
-                        @click="show_full_audit = !show_full_audit"
-                      >
+                      <span role="button" v-if="!show_full_audit" class="display-6 text-light material-symbols-outlined"
+                        @click="show_full_audit = !show_full_audit">
                         expand_more
                       </span>
-                      <span
-                        role="button"
-                        v-if="show_full_audit"
-                        class="display-6 text-light material-symbols-outlined"
-                        @click="show_full_audit = !show_full_audit"
-                      >
+                      <span role="button" v-if="show_full_audit" class="display-6 text-light material-symbols-outlined"
+                        @click="show_full_audit = !show_full_audit">
                         expand_less
                       </span>
                     </h3>
@@ -50,22 +34,11 @@
               </div>
               <div v-show="show_full_audit">
                 <div v-if="fullAuditLoaded && fullAuditLoaded.length > 0">
-                  <template
-                    v-for="(audit, index) in fullAuditLoaded"
-                    :key="index"
-                  >
+                  <template v-for="(audit, index) in fullAuditLoaded" :key="index">
                     <AchievementProgress :audit="audit" />
                   </template>
-                  <li
-                    class="d-block text-center mb-0 pb-0"
-                    v-if="fullAudit.length > fullAuditLength"
-                  >
-                    <a
-                      class="me-3 btn"
-                      role="button"
-                      @click="loadMoreFullAudit()"
-                      >عرض المزيد</a
-                    >
+                  <li class="d-block text-center mb-0 pb-0" v-if="fullAudit.length > fullAuditLength">
+                    <a class="me-3 btn" role="button" @click="loadMoreFullAudit()">عرض المزيد</a>
                   </li>
                 </div>
                 <div v-else>
@@ -75,27 +48,16 @@
             </ul>
 
             <ul class="todo-task-lists m-2 p-0">
-              <div
-                class="card position-relative"
-                style="background-color: #831018; height: 60px"
-              >
+              <div class="card position-relative" style="background-color: #831018; height: 60px">
                 <div class="inner-page-title">
                   <h3 class="text-light d-flex justify-content-between">
                     انجازات متفرقة
-                    <span
-                      role="button"
-                      v-if="!show_variant_audit"
-                      class="display-6 text-light material-symbols-outlined"
-                      @click="show_variant_audit = !show_variant_audit"
-                    >
+                    <span role="button" v-if="!show_variant_audit" class="display-6 text-light material-symbols-outlined"
+                      @click="show_variant_audit = !show_variant_audit">
                       expand_more
                     </span>
-                    <span
-                      role="button"
-                      v-if="show_variant_audit"
-                      class="display-6 text-light material-symbols-outlined"
-                      @click="show_variant_audit = !show_variant_audit"
-                    >
+                    <span role="button" v-if="show_variant_audit" class="display-6 text-light material-symbols-outlined"
+                      @click="show_variant_audit = !show_variant_audit">
                       expand_less
                     </span>
                   </h3>
@@ -103,22 +65,11 @@
               </div>
               <div v-show="show_variant_audit">
                 <div v-if="variantAuditLoaded && variantAuditLoaded.length > 0">
-                  <template
-                    v-for="(audit, index) in variantAuditLoaded"
-                    :key="index"
-                  >
+                  <template v-for="(audit, index) in variantAuditLoaded" :key="index">
                     <AchievementProgress :audit="audit" />
                   </template>
-                  <li
-                    class="d-block text-center mb-0 pb-0"
-                    v-if="variantAudit.length > variantAuditLength"
-                  >
-                    <a
-                      class="me-3 btn"
-                      role="button"
-                      @click="loadMoreVariantAudit()"
-                      >عرض المزيد</a
-                    >
+                  <li class="d-block text-center mb-0 pb-0" v-if="variantAudit.length > variantAuditLength">
+                    <a class="me-3 btn" role="button" @click="loadMoreVariantAudit()">عرض المزيد</a>
                   </li>
                 </div>
                 <div v-else>
@@ -128,30 +79,17 @@
             </ul>
 
             <ul class="todo-task-lists m-2 p-0">
-              <div
-                class="card position-relative"
-                style="background-color: #1d1a55; height: 60px"
-              >
-                <div
-                  class="d-flex align-items-center justify-content-between w-100"
-                >
+              <div class="card position-relative" style="background-color: #1d1a55; height: 60px">
+                <div class="d-flex align-items-center justify-content-between w-100">
                   <div class="inner-page-title">
                     <h3 class="text-light d-flex justify-content-between">
                       الاعفاءات
-                      <span
-                        role="button"
-                        v-if="!show_exceptions"
-                        class="display-6 text-light material-symbols-outlined"
-                        @click="show_exceptions = !show_exceptions"
-                      >
+                      <span role="button" v-if="!show_exceptions" class="display-6 text-light material-symbols-outlined"
+                        @click="show_exceptions = !show_exceptions">
                         expand_more
                       </span>
-                      <span
-                        role="button"
-                        v-if="show_exceptions"
-                        class="display-6 text-light material-symbols-outlined"
-                        @click="show_exceptions = !show_exceptions"
-                      >
+                      <span role="button" v-if="show_exceptions" class="display-6 text-light material-symbols-outlined"
+                        @click="show_exceptions = !show_exceptions">
                         expand_less
                       </span>
                     </h3>
@@ -160,10 +98,7 @@
               </div>
               <div v-show="show_exceptions">
                 <div v-if="exceptions.length > 0">
-                  <template
-                    v-for="(exception, index) in exceptions"
-                    :key="index"
-                  >
+                  <template v-for="(exception, index) in exceptions" :key="index">
                     <Exceptions :exception="exception" />
                   </template>
                 </div>
@@ -176,11 +111,7 @@
             <iq-card class="iq-card">
               <div class="iq-card-body p-0">
                 <div class="image-block text-center">
-                  <img
-                    src="@/assets/images/main/reader.png"
-                    class="img-fluid rounded w-75 mt-3"
-                    alt="no-amb"
-                  />
+                  <img src="@/assets/images/main/reader.png" class="img-fluid rounded w-75 mt-3" alt="no-amb" />
                 </div>
               </div>
             </iq-card>
@@ -189,11 +120,7 @@
             <iq-card class="iq-card">
               <div class="iq-card-body p-0">
                 <div class="image-block text-center">
-                  <img
-                    src="@/assets/images/main/reader.png"
-                    class="img-fluid rounded w-75 mt-3"
-                    alt="no-amb"
-                  />
+                  <img src="@/assets/images/main/reader.png" class="img-fluid rounded w-75 mt-3" alt="no-amb" />
                 </div>
                 <h4 class="text-center mt-3 mb-3">
                   لا يوجد تدقيق لهذا الاسبوع
@@ -202,6 +129,23 @@
             </iq-card>
           </div>
         </template>
+
+        <div class="d-flex align-items-center mt-3 row" v-if="audit">
+          <div class="d-inline-block w-100 text-center col-12">
+            <router-link :to="{
+              name: 'group.groupsAudit',
+              params: {
+                supervisor_id: audit.auditor_id,
+              },
+            }" class="d-block mt-3 mb-3 w-75 mx-auto">
+              <span>تدقيق المراقب</span>
+              <span class="align-middle material-symbols-outlined">
+                keyboard_return
+              </span>
+            </router-link>
+          </div>
+        </div>
+
       </iq-card>
     </div>
   </div>

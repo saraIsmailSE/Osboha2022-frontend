@@ -167,10 +167,9 @@
                   size="lg"
                 />
               </div>
-              <div v-if="expired">لقد انتهت فترة التدقيق</div>
-              <div v-else-if="readOnly">الأطروحة لا تحتاج إلى تدقيق</div>
+              <div v-if="expired">لقد انتهت فترة المراجعة</div>
               <div v-else-if="!pending">لقد تمت المراجعة من قبل</div>
-              <div v-else-if="!authUserAllowed">غير مسموح لك بالتدقيق</div>
+              <div v-else-if="!authUserAllowed">غير مسموح لك بالمراجعة</div>
             </div>
           </form>
         </div>
