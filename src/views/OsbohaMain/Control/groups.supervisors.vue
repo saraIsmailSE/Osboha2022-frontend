@@ -73,7 +73,7 @@
 
             <!-- ###### SWAP SUPERVISORS ###### -->
 
-            <div class="col-6 col-md-6 col-lg-6" v-if="isConsultant || isAdmin">
+            <div class="col-6 col-md-6 col-lg-6" v-if="advisorAndAbove">
                 <div class="card">
                     <router-link :to="{ name: 'control.supervisorsSwap', }">
                         <div class="card-body">
@@ -137,6 +137,13 @@ export default {
 
         isAdmin() {
             return UserInfoService.hasRole(this.user, "admin");
+        },
+        advisorAndAbove() {
+            return UserInfoService.hasRoles(this.user, [
+                "admin",
+                "consultant",
+                "advisor",
+            ]);
         },
     },
     data() {

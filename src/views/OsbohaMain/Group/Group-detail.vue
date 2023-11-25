@@ -115,7 +115,10 @@
             name: 'group.group-exceptions',
             params: { group_id: group_id },
           }" class="btn btn-primary d-block mt-3 col-5 me-1"
-            v-if="authInGroup && authInGroup.user_type != 'ambassador'">الاجازات</router-link>
+            v-if="authInGroup && authInGroup.user_type != 'ambassador'">الاجازات
+
+          </router-link>
+
           <router-link :to="{ name: 'group.auditMarks', params: { group_id: group_id } }"
             class="btn btn-primary d-block mt-3 col-5 me-1" v-if="authInGroup &&
               authInGroup.user_type != 'ambassador' &&
@@ -123,6 +126,21 @@
               ">
             تدقيق العلامات
           </router-link>
+
+          <router-link :to="{
+            name: 'statistics.supervisors',
+            params: {
+              supervisor_id: supervisorOfTheGroup.id,
+            },
+          }" class="btn btn-primary d-block mt-3 col-5 me-1" v-if="authInGroup &&
+  authInGroup.user_type != 'ambassador' &&
+  group.type.type == 'supervising' && supervisorOfTheGroup
+  ">
+            احصائيات القادة
+          </router-link>
+
+
+
           <router-link :to="{
             name: 'osboha.pendingPosts',
             params: { timeline_id: group.timeline_id },
@@ -166,11 +184,11 @@ export default {
     try {
       const response = await GroupService.getById(this.group_id);
       this.group = response.info;
-      console.log(response.week_avg)
       this.week_avg = (Math.round(response.week_avg * 100) / 100).toFixed(2);
       this.week = response.week;
       this.previous_week = response.previous_week
       this.authInGroup = response.authInGroup;
+      console.log("🚀 ~ file: Group-detail.vue:191 ~ created ~ this.authInGroup:", this.supervisorOfTheGroup)
     } catch (error) {
       console.log(error);
     }
@@ -212,6 +230,9 @@ export default {
         return this.roles[a.pivot.user_type] - this.roles[b.pivot.user_type];
       });
     },
+    supervisorOfTheGroup() {
+      return this.searchByPivotType('supervisor');
+    },
   },
   methods: {
     back() {
@@ -223,6 +244,12 @@ export default {
     addPost(post) {
       this.$refs.lazyLoadedPostsRef.addNewPost(post);
     },
+    searchByPivotType(type) {
+      return this.group.group_administrators.find(item => {
+        return item.pivot && item.pivot.user_type === type;
+      });
+    },
+
   },
 };
 </script>

@@ -44,7 +44,7 @@
                     </router-link>
                 </div>
             </div>
-            <div class="col-6 col-md-6 col-lg-6" v-if="consultantAndAbove">
+            <div class="col-6 col-md-6 col-lg-6" v-if="advisorAndAbove">
                 <div class="card">
                     <router-link :to="{ name: 'user.assignToParent', }">
                         <div class="card-body">
@@ -81,7 +81,7 @@ export default {
         user() {
             return this.$store.getters.getUser;
         },
-        isorAndAbove() {
+        advisorAndAbove() {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
                 "consultant",

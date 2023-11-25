@@ -44,7 +44,7 @@
           </span>
           اضافه عضو
         </router-link>
-        <router-link v-if="isAdmin || isConsultant" class="dropdown-item d-flex align-items-center" :to="{
+        <router-link v-if="advisorAndAbove" class="dropdown-item d-flex align-items-center" :to="{
           name: 'group.update',
           params: { group_id: group_id },
         }">
@@ -53,10 +53,11 @@
           </span>
           تعديل
         </router-link>
-        <router-link v-if="groupType == 'فريق متابعة' && (isAdmin || isConsultant)" class="dropdown-item d-flex align-items-center" :to="{
-          name: 'control.leadersSwap',
-          params: { group_id: group_id },
-        }">
+        <router-link v-if="groupType == 'فريق متابعة' && (advisorAndAbove)"
+          class="dropdown-item d-flex align-items-center" :to="{
+            name: 'control.leadersSwap',
+            params: { group_id: group_id },
+          }">
           <span class="material-symbols-outlined me-2 md-18">
             edit
           </span>
@@ -160,6 +161,14 @@ export default {
     isConsultant() {
       return UserInfoService.hasRole(this.user, "consultant");
     },
+    advisorAndAbove() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "consultant",
+        "advisor",
+      ]);
+    },
+
   },
 };
 </script>
