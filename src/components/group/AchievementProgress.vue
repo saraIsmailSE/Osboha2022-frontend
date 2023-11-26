@@ -1,48 +1,44 @@
 <template>
-  <li class="d-flex align-items-center p-3" v-if="ambassador">
+  <li
+    class="d-flex align-items-center p-3"
+    v-if="ambassador"
+    :style="`cursor: ${cursorStyle(ambassador.mark)}`"
+  >
     <BaseAvatar
-      :profileImg="ambassador.user.user_profile.profile_picture"
-      :profile_id="ambassador.user.user_profile.id"
-      :title="ambassador.user.name"
-      :gender="ambassador.user.gender"
+      :profileImg="ambassador.user_profile.profile_picture"
+      :profile_id="ambassador.user_profile.id"
+      :title="ambassador.name"
+      :gender="ambassador.gender"
       avatarClass="rounded-circle avatar-40"
     />
     <div class="d-flex align-items-center w-100 row">
       <div class="col-lg-3 col-md-3 col-sm-12 ms-3">
         <h6 class="d-inline-block">
-          <strong>{{ ambassador.user.name }} </strong>
+          <strong>{{ ambassador.name }} </strong>
         </h6>
       </div>
       <div class="col-lg-5 col-md-5 col-sm-12 form-check mt-2">
         <div class="d-block w-100">
           <div class="progress">
-            <div v-if="ambassador.is_freezed"
+            <div
+              v-if="ambassador.mark.length > 0 && ambassador.mark[0].is_freezed"
               :class="`${markClass(-1)}`"
               class="progress-bar progress-bar-striped"
               role="progressbar"
               aria-valuenow="90"
               aria-valuemin="0"
               aria-valuemax="100"
-              :style="`width: ${
-                100
-              }%;`"
+              :style="`width: ${100}%;`"
             ></div>
-            <div v-else
-              :class="`${markClass(
-                ambassador.reading_mark +
-                  ambassador.writing_mark +
-                  ambassador.support
-              )}`"
+            <div
+              v-else
+              :class="`${markClass(getMark(ambassador.mark))}`"
               class="progress-bar progress-bar-striped"
               role="progressbar"
               aria-valuenow="90"
               aria-valuemin="0"
               aria-valuemax="100"
-              :style="`width: ${
-                ambassador.reading_mark +
-                ambassador.writing_mark +
-                ambassador.support
-              }%;`"
+              :style="`width: ${getMark(ambassador.mark)}%;`"
             ></div>
           </div>
         </div>
@@ -51,14 +47,20 @@
         <router-link
           :to="{
             name: 'group.listOneAmbassadorReading',
-            params: { ambassador_id: ambassador.user_id , week_id: week_id },
+            params: { ambassador_id: ambassador.id, week_id: week_id },
           }"
         >
-          <span
-            class="badge bg-primary ms-0 ms-md-3 my-1 my-md-0 w-75 text-center"
-            role="button"
-            >عرض
-          </span>
+          <button
+            class="badge ms-0 ms-md-3 my-1 my-md-0 w-75 text-center border-0 outline-none"
+            :class="{
+              'bg-primary': ambassador.mark.length > 0,
+              'bg-secondary': ambassador.mark.length == 0,
+            }"
+            :disabled="ambassador.mark.length == 0"
+            :style="`cursor: ${cursorStyle(ambassador.mark)}`"
+          >
+            عرض
+          </button>
         </router-link>
       </div>
     </div>
@@ -90,7 +92,7 @@ export default {
     markClass(mark) {
       switch (mark) {
         case -1:
-          return 'freeze'
+          return "freeze";
         case 100:
           return "full-mark";
 
@@ -100,6 +102,19 @@ export default {
         default:
           return "incomplete";
       }
+    },
+
+    getMark(mark) {
+      if (mark?.length > 0) {
+        return mark[0].reading_mark + mark[0].writing_mark + mark[0].support;
+      }
+    },
+
+    cursorStyle(mark) {
+      if (mark?.length == 0) {
+        return "not-allowed";
+      }
+      return "pointer";
     },
   },
 };
@@ -129,6 +144,6 @@ export default {
 }
 .freeze {
   --bs-bg-opacity: 1;
-  background-color: #223E7F !important;
+  background-color: #223e7f !important;
 }
 </style>
