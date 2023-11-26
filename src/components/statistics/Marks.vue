@@ -13,18 +13,22 @@
             <div class="d-flex justify-content-between mt-2 text-dark">
               <h6>العلامة الكلية</h6>
               <small
-                >{{ week_mark.reading_mark + week_mark.writing_mark }}%</small
+                >{{
+                  week_mark
+                    ? week_mark.reading_mark + week_mark.writing_mark
+                    : 0
+                }}%</small
               >
             </div>
             <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
               <progressbar
                 className="bg-primary"
                 :style="{
-                  width:
-                    week_mark.reading_mark +
-                    week_mark.writing_mark +
-                    week_mark.support +
-                    '%',
+                  width: week_mark
+                    ? week_mark.reading_mark +
+                      week_mark.writing_mark +
+                      week_mark.support
+                    : 0 + '%',
                 }"
                 aria-valuenow="30"
                 aria-valuemin="0"
@@ -35,12 +39,15 @@
           <div class="mb-3">
             <div class="d-flex justify-content-between mt-2 text-dark">
               <h6>إنجاز القراءة</h6>
-              <small>{{ week_mark.reading_mark }} / 50</small>
+              <small>{{ week_mark ? week_mark.reading_mark : 0 }} / 50</small>
             </div>
             <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
               <progressbar
                 className="bg-primary"
-                :style="{ width: (week_mark.reading_mark / 50) * 100 + '%' }"
+                :style="{
+                  width:
+                    (week_mark ? week_mark.reading_mark : 0 / 50) * 100 + '%',
+                }"
                 aria-valuenow="30"
                 aria-valuemin="0"
                 aria-valuemax="100"
@@ -50,12 +57,15 @@
           <div class="mb-3">
             <div class="d-flex justify-content-between mt-2 text-dark">
               <h6>إنجاز الكتابة</h6>
-              <small> {{ week_mark.writing_mark }} / 40</small>
+              <small> {{ week_mark ? week_mark.writing_mark : 0 }} / 40</small>
             </div>
             <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
               <progressbar
                 className="bg-primary"
-                :style="{ width: (week_mark.writing_mark / 40) * 100 + '%' }"
+                :style="{
+                  width:
+                    (week_mark ? week_mark.writing_mark : 0 / 40) * 100 + '%',
+                }"
                 aria-valuenow="30"
                 aria-valuemin="0"
                 aria-valuemax="100"
@@ -65,12 +75,14 @@
           <div class="mb-3">
             <div class="d-flex justify-content-between mt-2 text-dark">
               <h6>اعرف مشروعك</h6>
-              <small>{{ week_mark.support }} / 10</small>
+              <small>{{ week_mark ? week_mark.support : 0 }} / 10</small>
             </div>
             <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
               <progressbar
                 className="bg-primary"
-                :style="{ width: (week_mark.support / 10) * 100 + '%' }"
+                :style="{
+                  width: (week_mark ? week_mark.support : 0 / 10) * 100 + '%',
+                }"
                 aria-valuenow="30"
                 aria-valuemin="0"
                 aria-valuemax="100"
@@ -87,7 +99,7 @@
                     auto_stories
                   </span>
                 </h6>
-                <h2>{{ week_mark.total_pages }}</h2>
+                <h2>{{ week_mark ? week_mark.total_pages : 0 }}</h2>
               </div>
             </div>
             <div class="col-6">
