@@ -4,8 +4,8 @@
       <StatisticsList :categoryList="categories" />
     </div>
     <div class="col-lg-9">
+      <!-- v-if="ambassadorsAchievementList" -->
       <AmbassadorsAchievement
-        v-if="ambassadorsAchievementList"
         :ambassadorsAchievementList="ambassadorsAchievementList"
         :group_id="group.id"
         :week_id="week_id"
@@ -51,7 +51,10 @@ export default {
   name: "Team Reading Info",
   async created() {
     try {
-      const response = await GroupService.BasicMarksView(this.group_id,this.week_id);
+      const response = await GroupService.BasicMarksView(
+        this.group_id,
+        this.week_id,
+      );
       this.group = response.group;
       this.group_users = response.group_users;
       this.categories[0].number = response.full;
