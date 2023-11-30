@@ -26,20 +26,26 @@
           </div>
 
           <div class="col-sm-12 text-center" v-if="loader">
-              <img
-                src="@/assets/images/page-img/page-load-loader.gif"
-                alt="loader"
-                style="height: 100px"
-              />
-            </div>
-            <h4 class="text-center mt-3 mb-3" v-if="message">{{ message }}</h4>
+            <img src="@/assets/images/page-img/page-load-loader.gif" alt="loader" style="height: 100px" />
+          </div>
+          <h4 class="text-center mt-3 mb-3" v-if="message">{{ message }}</h4>
 
 
         </form>
 
       </div>
       <!-- ##### Display Posts ##### -->
-      <LazyLoadedPosts ref="lazyLoadedPostsRef" type="support" :displayEmpty="true" />
+      <div class="alert alert-success text-center" role="alert">
+
+        <h4>
+          تم اعتماد اعرف مشروعك للجميع
+          <span class="align-middle ms-2 material-symbols-outlined">
+            verified
+          </span>
+        </h4>
+
+      </div>
+      <LazyLoadedPosts ref="lazyLoadedPostsRef" type="support" :displayEmpty="false" />
     </div>
   </div>
 </template>
@@ -66,7 +72,7 @@ export default {
   data() {
     return {
       lastSupportPost: {},
-      showReason:false,
+      showReason: false,
       setMarkForm: {
         reason: '',
       },
