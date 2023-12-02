@@ -36,7 +36,7 @@
         </div>
     </div>
 </template>
-  
+
 <script>
 import GroupService from '@/API/services/group.service';
 import GroupTitle from '@/components/group/GroupTitle.vue';
