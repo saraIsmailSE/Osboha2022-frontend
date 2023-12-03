@@ -1,16 +1,16 @@
 <template>
     <div class="card-body">
         <div class="blog-description">
-            <button class="btn btn-danger mr-2 mt-1"
+            <button class="btn mr-2 mt-1 w-75 btn-freez"
                 @click="() => { showExceptionForm = !showExceptionForm; showIsNewForm = false; }">
-                تجميد استثنائي
+                طلب تجميد استثنائي
             </button>
-            <button class="btn btn-success ms-2 mt-1"
+            <button class="btn btn-success ms-2 mt-1 w-75 "
                 v-if="isnew && ((mark.reading_mark + mark.writing_mark + mark.support) <= 50)" @click="() => {
                     showIsNewForm = !showIsNewForm;
                     showExceptionForm = false;
                 }">
-                عضو جديد
+                تعيين عضو جديد
             </button>
         </div>
         <form @submit.prevent="submitException" class="post-text ml-3 w-100 row" v-show="showExceptionForm">
@@ -32,7 +32,7 @@
                 </small>
             </div>
             <div class="form-group">
-                <button type="submit" :disabled="message" class="btn d-block btn-primary float-end mx-auto">
+                <button type="submit" :disabled="message" class="btn d-block btn-freez float-end mx-auto">
                     تجميد
                 </button>
             </div>
@@ -118,7 +118,7 @@ export default {
                     const response = await exceptionService.setExceptionalFreez(this.exceptionForm);
 
                     this.message = response;
-                    this.showExceptionForm =false
+                    this.showExceptionForm = false
                     this.v$.exceptionForm.$reset();
                 } catch (error) {
                     console.log("[Exception request error]", error);
@@ -135,7 +135,7 @@ export default {
                 const response = await exceptionService.setNewUser(this.exceptionForm);
 
                 this.message = response;
-                this.showIsNewForm=false
+                this.showIsNewForm = false
                 this.v$.exceptionForm.$reset();
             } catch (error) {
                 console.log("[submit new user error]", error);
@@ -169,3 +169,10 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.btn-freez {
+    background-color: #223e7f;
+    color: white;
+}
+</style>
