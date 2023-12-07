@@ -8,6 +8,7 @@ export const ARABIC_ROLES = {
   consultant: "مستشار",
   admin: "ادارة",
   book_quality_team: "جودة الكتب",
+  support_leader: "قائد دعم",
 };
 
 export const LANUAGES = {
@@ -53,3 +54,5 @@ export const MONTHS_NUMBERS = {
   11: "نوفمبر",
   12: "ديسمبر",
 };
+
+export const SUPPORT_LEADER_ROLE_ID = 8;

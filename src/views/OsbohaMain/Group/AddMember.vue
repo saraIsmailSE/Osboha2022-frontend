@@ -51,7 +51,7 @@
                   :key="index"
                   :value="role.id"
                 >
-                  {{ user_type[role.name] }}
+                  {{ ARABIC_ROLES[role.name] }}
                 </option>
               </select>
               <small style="color: red" v-if="v$.form.role_id.$error">
@@ -59,7 +59,11 @@
               </small>
             </div>
             <div class="form-group text-center" v-if="message">
-              <small style="color: red">
+              <small
+                :style="{
+                  color: messageVariant === 'success' ? 'green' : 'red',
+                }"
+              >
                 {{ message }}
               </small>
             </div>
@@ -87,6 +91,7 @@ import useVuelidate from "@vuelidate/core";
 import { required, maxLength, email } from "@vuelidate/validators";
 import UserGroupService from "@/API/services/user-group.service";
 import { api } from "@/API/Intercepter.js";
+import { ARABIC_ROLES } from "@/utilities/constants";
 
 const greaterThanZero = (value) => value > 0;
 
@@ -104,14 +109,7 @@ export default {
   data() {
     return {
       loader: false,
-      user_type: {
-        ambassador: "سفير",
-        leader: "قائد",
-        supervisor: "مراقب",
-        advisor: "موجه",
-        consultant: "مستشار",
-        admin: "ادارة",
-      },
+      ARABIC_ROLES,
       form: {
         email: "",
         role_id: 0,
@@ -119,7 +117,20 @@ export default {
       },
       roles: [],
       message: "",
+      messageVariant: "",
     };
+  },
+  watch: {
+    message: function (val) {
+      if (val) {
+        setTimeout(
+          () => {
+            this.message = "";
+          },
+          this.messageVariant === "success" ? 2000 : 5000,
+        );
+      }
+    },
   },
   methods: {
     async onSubmit() {
@@ -131,6 +142,7 @@ export default {
           this.message = "";
           const response = await UserGroupService.AddMember(this.form);
           this.message = response;
+          this.messageVariant = "success";
 
           this.v$.form.$reset();
           this.form = {
@@ -138,13 +150,14 @@ export default {
             role_id: 0,
             group_id: this.$route.params.group_id,
           };
-
-          setTimeout(() => {
-            this.message = "";
-          }, 1800);
         } catch (error) {
-          this.message = "حدث خطأ";
           console.log(error);
+          if (error?.response?.data?.data) {
+            this.message = error.response.data.data;
+          } else {
+            this.message = "حدث خطأ, يرجى المحاولة لاحقاً";
+          }
+          this.messageVariant = "danger";
         } finally {
           this.loader = false;
         }
