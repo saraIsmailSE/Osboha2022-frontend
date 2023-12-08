@@ -35,17 +35,7 @@
 
       </div>
       <!-- ##### Display Posts ##### -->
-      <div class="alert alert-success text-center" role="alert">
-
-        <h4>
-          تم اعتماد اعرف مشروعك للجميع
-          <span class="align-middle ms-2 material-symbols-outlined">
-            verified
-          </span>
-        </h4>
-
-      </div>
-      <LazyLoadedPosts ref="lazyLoadedPostsRef" type="support" :displayEmpty="false" />
+      <LazyLoadedPosts ref="lazyLoadedPostsRef" type="support" :displayEmpty="true" />
     </div>
   </div>
 </template>

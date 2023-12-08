@@ -33,7 +33,7 @@
                 ARABIC_ROLES[user.pivot.user_type]
               }}</span>
             </div>
-            <div v-if="(advisorAndAbove && user.pivot.user_type !='leader') || isAdmin" class="d-flex justify-content-end flex-grow-1 ms-3">
+            <div v-if="(advisorAndAbove && user.pivot.user_type =='ambassador') || isAdmin" class="d-flex justify-content-end flex-grow-1 ms-3">
               <span role="button" @click="showList(index)" class="material-symbols-outlined">
                 more_horiz
               </span>
@@ -61,7 +61,14 @@
                   <span class="material-symbols-outlined me-2 md-18">
                     delete
                   </span>
-                  حذف
+                  حذف [مكرر]
+                </a>
+                <a role="button" class="dropdown-item d-flex align-items-center"
+                  @click="withdrawnMember(user.pivot.id)">
+                  <span class="material-symbols-outlined me-2 md-18">
+                    directions_run
+                  </span>
+                  منسحب
                 </a>
               </div>
             </div>
@@ -164,6 +171,45 @@ export default {
               })
               .catch((error) => {
                 helper.toggleToast("حصل خطأ - لم يتم الحذف!", "danger");
+                console.log(error);
+              });
+          }
+        });
+    },
+    withdrawnMember(user_group_id) {
+      const swalWithBootstrapButtons = this.$swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-primary btn-lg",
+          cancelButton: "btn btn-outline-primary btn-lg ms-2",
+        },
+        buttonsStyling: false,
+      });
+
+      swalWithBootstrapButtons
+        .fire({
+          title: "هل أنت متأكد؟",
+          text: "لا يمكنك التراجع عن هذا الاجراء",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "نعم، قم بسحب السفير",
+          cancelButtonText: "تراجع  ",
+          showClass: {
+            popup: "animate__animated animate__zoomIn",
+          },
+          hideClass: {
+            popup: "animate__animated animate__zoomOut",
+          },
+        })
+        .then(async (willDelete) => {
+          if (willDelete.isConfirmed) {
+            const response = await UserGroup.withdrawnMember(user_group_id)
+              .then(async (response) => {
+                this.getUsers();
+                this.hideList();
+                helper.toggleToast("تم سحب السفير", "success");
+              })
+              .catch((error) => {
+                helper.toggleToast("حصل خطأ - لم يتم سحب السفير!", "danger");
                 console.log(error);
               });
           }

@@ -141,7 +141,7 @@ export default {
 
           setTimeout(() => {
             this.message = "";
-          }, 1800);
+          }, 3000);
         } catch (error) {
           this.message = "حدث خطأ";
           console.log(error);

@@ -19,7 +19,7 @@
               <div class="card-header">
                 <h2>اجراءات أخرى</h2>
               </div>
-              <OtherActions :user="user"/>
+              <OtherActions :user="mark.user"/>
             </div>
           </div>
 

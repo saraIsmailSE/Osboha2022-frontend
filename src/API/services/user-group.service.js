@@ -32,6 +32,18 @@ class UserGroup {
       handleError(error);
     }
   }
+  async withdrawnMember(user_group_id) {
+    const formData = new FormData();
+    formData.append("user_group_id", user_group_id);
+
+    try {
+      return await api.post(`${this.prefix}/withdrawn`, formData, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+    } catch (error) {
+      handleError(error);
+    }
+  }
 }
 
 export default new UserGroup();

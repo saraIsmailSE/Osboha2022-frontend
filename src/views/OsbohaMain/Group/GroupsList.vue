@@ -33,6 +33,7 @@
                   </tr>
                 </thead>
                 <tbody>
+
                   <tr v-for="(group, index) in groups" :key="index">
                     <td>
                       <router-link class="text-center" :to="{
@@ -49,20 +50,14 @@
                       {{ group.users_count }}
                     </td>
 
-                    <td v-if="isAdmin">
-                      <router-link class="text-primary material-symbols-outlined ms-1 me-1" :to="{
-                        name: 'group.update',
-                        params: { group_id: group.id },
-                      }">
-
-                        edit
-                      </router-link>
-                      <span role="button" @click="deleteGroup(group.id)"
+                    <td>
+                      <span role="button" @click="groupAdministrators(group.group_administrators, group.name)"
                         class="text-danger material-symbols-outlined ms-1 me-1">
-                        delete
+                        shield_person
                       </span>
                     </td>
                   </tr>
+
                 </tbody>
               </table>
             </div>
@@ -92,7 +87,7 @@ import GroupService from "@/API/services/group.service";
 import helper from "@/utilities/helper";
 import UserInfoService from "@/Services/userInfoService";
 import axios from "axios";
-
+import { ARABIC_ROLES } from "@/utilities/constants";
 
 export default {
   name: "Groups List",
@@ -126,13 +121,15 @@ export default {
       pendingRequest: false,
       hasMore: true,
       emptyMessage: "",
+      ARABIC_ROLES,
       cancelToken: axios.CancelToken.source(),
 
     };
   },
 
   methods: {
-    async deleteGroup(id) {
+    async groupAdministrators(group_administrators, groupName) {
+      const tableHTML = this.createAdminTable(group_administrators);
       const swalWithBootstrapButtons = this.$swal.mixin({
         customClass: {
           confirmButton: "btn btn-primary btn-lg",
@@ -143,12 +140,10 @@ export default {
 
       swalWithBootstrapButtons
         .fire({
-          title: "هل أنت متأكد؟",
-          text: "لا يمكنك التراجع عن هذا الاجراء",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "نعم، قم بالحذف",
-          cancelButtonText: "تراجع  ",
+          title: groupName,
+          html: tableHTML,
+          icon: "info",
+          confirmButtonText: "اغلاق",
           showClass: {
             popup: "animate__animated animate__zoomIn",
           },
@@ -156,20 +151,21 @@ export default {
             popup: "animate__animated animate__zoomOut",
           },
         })
-        .then(async (willDelete) => {
-          if (willDelete.isConfirmed) {
-            const response = await GroupService.deleteById(id)
-              .then(async (response) => {
-                const groups = await GroupService.getAll();
-                this.groups = groups.data;
-                helper.toggleToast("تم الحذف", "success");
-              })
-              .catch((error) => {
-                helper.toggleToast("حصل خطأ - لم يتم الحذف!", "danger");
-                console.log(error);
-              });
-          }
-        });
+    },
+    createAdminTable(groupAdministrators) {
+      let tableHTML = '<table  class="table table-striped table-bordered">';
+      tableHTML += '<tr><th colspan="2">المسؤولين في المجموعة</th></tr>';
+
+      // Add a row for each administrator
+      groupAdministrators.forEach(function (admin) {
+        tableHTML += `<tr>`;
+        tableHTML += `<td>${ARABIC_ROLES[admin.pivot.user_type]}</td>`;
+        tableHTML += `<td>${admin.name}</td>`;
+        tableHTML += `</tr>`;
+      });
+
+      tableHTML += '</table>';
+      return tableHTML;
     },
     async loadGroups() {
       if (this.pendingRequest) {
