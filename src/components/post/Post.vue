@@ -66,12 +66,15 @@ export default {
       let images = require.context(
         "../../assets/images/",
         false,
-        /\.png$|\.jpg$/
+        /\.png$|\.jpg$/,
       );
       return images("./" + path);
     },
     showCommentModel() {
-      if (this.post.type.toLowerCase() === "support") {
+      if (
+        this.post.type.toLowerCase() === "support" &&
+        this.post.allow_comments
+      ) {
         const pledge = JSON.parse(localStorage.getItem("pledges"));
         const supported = pledge
           ? pledge[this.post.id] === this.$store.getters.getUser.id
@@ -81,7 +84,7 @@ export default {
         if (!supported) {
           helper.toggleToast(
             "يجب أن تتعهد بأنك قرأت المنشور كاملاً",
-            "warning"
+            "warning",
           );
           return;
         }

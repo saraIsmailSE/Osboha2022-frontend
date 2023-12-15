@@ -90,7 +90,13 @@
 
             <div
               class="form-group row w-75 m-auto"
-              v-if="!expired && pending && authUserAllowed && !readOnly"
+              v-if="
+                !expired &&
+                pending &&
+                authUserAllowed &&
+                !readOnly &&
+                $route.query.can_edit === 'true'
+              "
             >
               <div class="col-12 col-md-6">
                 <select class="form-select w-100 mt-2" v-model="status">
@@ -138,6 +144,7 @@
                   style="height: 50px"
                 />
               </div>
+
               <div class="col-12 mt-2" v-else>
                 <button
                   type="submit"
@@ -169,7 +176,13 @@
               </div>
               <div v-if="expired">لقد انتهت فترة المراجعة</div>
               <div v-else-if="!pending">لقد تمت المراجعة من قبل</div>
-              <div v-else-if="!authUserAllowed">غير مسموح لك بالمراجعة</div>
+              <div
+                v-else-if="
+                  !authUserAllowed || $route.query.can_edit === 'false'
+                "
+              >
+                غير مسموح لك بالمراجعة
+              </div>
             </div>
           </form>
         </div>
@@ -229,6 +242,7 @@ export default {
     authUserAllowed() {
       return userInfoService.hasRoles(this.$store.getters.getUser, [
         "leader",
+        "support_leader",
         "supervisor",
         "advisor",
         "admin",

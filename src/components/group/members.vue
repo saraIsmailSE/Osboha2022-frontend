@@ -98,6 +98,15 @@
         </router-link>
         <a
           role="button"
+          v-if="supervisorAndAbove && hasSupportLeader"
+          class="dropdown-item d-flex align-items-center"
+          @click="deleteSupportLeader(supportLeader?.pivot.id)"
+        >
+          <span class="material-symbols-outlined me-2 md-18"> delete </span>
+          حذف قائد الدعم
+        </a>
+        <a
+          role="button"
           v-if="isAdmin || isConsultant"
           class="dropdown-item d-flex align-items-center"
           @click="deleteGroup(group_id)"
@@ -115,6 +124,7 @@ import GroupService from "@/API/services/group.service";
 import vClickOutside from "click-outside-vue3";
 import helper from "@/utilities/helper";
 import UserInfoService from "@/Services/userInfoService";
+import UserGroup from "@/API/services/user-group.service";
 
 export default {
   name: "card",
@@ -134,6 +144,13 @@ export default {
       type: [String],
       required: true,
     },
+    hasSupportLeader: {
+      type: [Boolean],
+      default: false,
+    },
+  },
+  created() {
+    console.log(this.members);
   },
   data() {
     return {
@@ -183,6 +200,46 @@ export default {
           }
         });
     },
+
+    async deleteSupportLeader(user_group_id) {
+      const swalWithBootstrapButtons = this.$swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-primary btn-lg",
+          cancelButton: "btn btn-outline-primary btn-lg ms-2",
+        },
+        buttonsStyling: false,
+      });
+
+      swalWithBootstrapButtons
+        .fire({
+          title: "هل أنت متأكد؟",
+          text: "سيتم حذف قائد الدعم ورتبته, لا يمكنك التراجع عن هذا الاجراء",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "نعم، قم بالحذف",
+          cancelButtonText: "تراجع  ",
+          showClass: {
+            popup: "animate__animated animate__zoomIn",
+          },
+          hideClass: {
+            popup: "animate__animated animate__zoomOut",
+          },
+        })
+        .then(async (willDelete) => {
+          if (willDelete.isConfirmed) {
+            const response = await UserGroup.delete(user_group_id)
+              .then(async (response) => {
+                this.getUsers();
+                this.hideList();
+                helper.toggleToast("تم الحذف", "success");
+              })
+              .catch((error) => {
+                helper.toggleToast("حصل خطأ - لم يتم الحذف!", "danger");
+                console.log(error);
+              });
+          }
+        });
+    },
   },
   computed: {
     user() {
@@ -208,6 +265,13 @@ export default {
         "advisor",
         "supervisor",
       ]);
+    },
+    supportLeader() {
+      return this.hasSupportLeader
+        ? this.members.find(
+            (member) => member.pivot.user_type == "support_leader",
+          )
+        : null;
     },
   },
 };
