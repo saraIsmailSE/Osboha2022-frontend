@@ -61,6 +61,7 @@
                     :to="{
                       name: 'group.listOneAmbassadorThesis',
                       params: { thesis_id: thesis.id },
+                      query: { can_edit: can_edit },
                     }"
                   >
                     <i
@@ -86,6 +87,7 @@ export default {
   name: "CheckThesis",
   props: {
     theses: { type: Object },
+    can_edit: { type: Boolean, default: true },
   },
   data() {
     return {};

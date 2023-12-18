@@ -11,7 +11,7 @@
       <h6>{{ record.name }}</h6>
       <p class="mb-0">
         عدد الصفحات:
-        {{ record.mark?.length > 0 ? record.mark[0].total_pages : 0 }}
+        {{ record.total_pages ?? 0 }}
       </p>
     </div>
     <div class="card-header-toolbar d-flex align-items-center">

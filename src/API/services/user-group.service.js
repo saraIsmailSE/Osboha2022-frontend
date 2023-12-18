@@ -22,9 +22,10 @@ class UserGroup {
       });
       return response.data.data;
     } catch (error) {
-      customHandleError(error, "UserGroupService.AddMember");
+      handleError(error);
     }
   }
+
   async delete(user_group_id) {
     try {
       return await api.delete(`${this.prefix}/delete/${user_group_id}`);

@@ -1,20 +1,32 @@
 <template>
   <div class="row" v-if="group">
     <div class="col-lg-12">
-      <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap">
+      <div
+        class="d-flex align-items-center justify-content-between mb-3 flex-wrap"
+      >
         <div class="group-info d-flex align-items-center">
           <div class="me-3">
-            <img class="rounded-circle img-fluid avatar-100" src="@/assets/images/main/current_book.png" alt="" />
+            <img
+              class="rounded-circle img-fluid avatar-100"
+              src="@/assets/images/main/current_book.png"
+              alt=""
+            />
           </div>
           <div class="info">
             <h4>{{ group.name }}</h4>
             <p class="mb-0">
-              <i class="ri-lock-fill pe-2"></i>{{ group_type[group.type.type] }} .
+              <i class="ri-lock-fill pe-2"></i
+              >{{ group_type[group.type.type] }} .
               {{ group.user_ambassador_count }} سفير
             </p>
           </div>
         </div>
-        <listMembers :members="group.users" :authInGroup="authInGroup" :groupType="group_type[group.type.type]" />
+        <listMembers
+          :members="group.users"
+          :authInGroup="authInGroup"
+          :groupType="group_type[group.type.type]"
+          :hasSupportLeader="hasSupportLeader"
+        />
       </div>
     </div>
     <div class="col-lg-4">
@@ -42,7 +54,11 @@
                 </div>
               </div>
             </li>
-            <li class="mb-3" v-for="administrator in groupAdministrators" :key="administrator.id">
+            <li
+              class="mb-3"
+              v-for="administrator in groupAdministrators"
+              :key="administrator.id"
+            >
               <div class="d-flex">
                 <div class="flex-shrink-0">
                   <i class="material-symbols-outlined"> supervisor_account </i>
@@ -87,65 +103,93 @@
           </div>
         </div>
         <div class="card-body row d-flex justify-content-center">
-          <router-link :to="{
-            name: 'group.group-statistics',
-            params: { group_id: group_id },
-          }" class="btn btn-primary d-block mt-3 col-5 me-1">احصائيات المجموعة
+          <router-link
+            :to="{
+              name: 'group.group-statistics',
+              params: { group_id: group_id },
+            }"
+            class="btn btn-primary d-block mt-3 col-5 me-1"
+            >احصائيات المجموعة
           </router-link>
-          <router-link :to="{ name: 'group.group-books', params: { group_id: group_id } }"
-            class="btn btn-primary d-block mt-3 col-5 me-1">كتب يقرؤها الأعضاء
+          <router-link
+            :to="{ name: 'group.group-books', params: { group_id: group_id } }"
+            class="btn btn-primary d-block mt-3 col-5 me-1"
+            >كتب يقرؤها الأعضاء
           </router-link>
           <!-- <router-link to="/" class="btn btn-primary d-block mt-3 col-5 me-1">التحديات</router-link> -->
-          <router-link :to="{
-            name: 'group.ambassadors-reading',
-            params: { group_id: group_id, week_id: week.id },
-          }" class="btn btn-primary d-block mt-3 col-5 me-1"
-            v-if="authInGroup && authInGroup.user_type != 'ambassador'">
+          <router-link
+            :to="{
+              name: 'group.ambassadors-reading',
+              params: { group_id: group_id, week_id: week.id },
+            }"
+            class="btn btn-primary d-block mt-3 col-5 me-1"
+            v-if="authInGroup && authInGroup.user_type != 'ambassador'"
+          >
             انجاز الأسبوع الحالي
           </router-link>
-          <router-link :to="{
-            name: 'group.ambassadors-reading',
-            params: { group_id: group_id, week_id: previous_week.id },
-          }" class="btn btn-primary d-block mt-3 col-5 me-1"
-            v-if="(authInGroup && authInGroup.user_type != 'ambassador') && previous_week">
+          <router-link
+            :to="{
+              name: 'group.ambassadors-reading',
+              params: { group_id: group_id, week_id: previous_week.id },
+            }"
+            class="btn btn-primary d-block mt-3 col-5 me-1"
+            v-if="
+              authInGroup &&
+              authInGroup.user_type != 'ambassador' &&
+              previous_week
+            "
+          >
             انجاز الأسبوع السابق
           </router-link>
 
-          <router-link :to="{
-            name: 'group.group-exceptions',
-            params: { group_id: group_id },
-          }" class="btn btn-primary d-block mt-3 col-5 me-1"
-            v-if="authInGroup && authInGroup.user_type != 'ambassador'">الاجازات
-
+          <router-link
+            :to="{
+              name: 'group.group-exceptions',
+              params: { group_id: group_id },
+            }"
+            class="btn btn-primary d-block mt-3 col-5 me-1"
+            v-if="authInGroup && authInGroup.user_type != 'ambassador'"
+            >الاجازات
           </router-link>
 
-          <router-link :to="{ name: 'group.auditMarks', params: { group_id: group_id } }"
-            class="btn btn-primary d-block mt-3 col-5 me-1" v-if="authInGroup &&
+          <router-link
+            :to="{ name: 'group.auditMarks', params: { group_id: group_id } }"
+            class="btn btn-primary d-block mt-3 col-5 me-1"
+            v-if="
+              authInGroup &&
               authInGroup.user_type != 'ambassador' &&
               group.type.type == 'followup'
-              ">
+            "
+          >
             تدقيق العلامات
           </router-link>
 
-          <router-link :to="{
-            name: 'statistics.supervisors',
-            params: {
-              supervisor_id: supervisorOfTheGroup.id,
-            },
-          }" class="btn btn-primary d-block mt-3 col-5 me-1" v-if="authInGroup &&
-  authInGroup.user_type != 'ambassador' &&
-  group.type.type == 'supervising' && supervisorOfTheGroup
-  ">
+          <router-link
+            :to="{
+              name: 'statistics.supervisors',
+              params: {
+                supervisor_id: supervisorOfTheGroup.id,
+              },
+            }"
+            class="btn btn-primary d-block mt-3 col-5 me-1"
+            v-if="
+              authInGroup &&
+              authInGroup.user_type != 'ambassador' &&
+              group.type.type == 'supervising' &&
+              supervisorOfTheGroup
+            "
+          >
             احصائيات القادة
           </router-link>
 
-
-
-          <router-link :to="{
-            name: 'osboha.pendingPosts',
-            params: { timeline_id: group.timeline_id },
-          }" class="btn btn-primary d-block mt-3 col-5 me-1"
-            v-if="authInGroup && authInGroup.user_type != 'ambassador'">
+          <router-link
+            :to="{
+              name: 'osboha.pendingPosts',
+              params: { timeline_id: group.timeline_id },
+            }"
+            class="btn btn-primary d-block mt-3 col-5 me-1"
+            v-if="authInGroup && authInGroup.user_type != 'ambassador'"
+          >
             المنشورات المعلقة
           </router-link>
         </div>
@@ -154,13 +198,20 @@
     <div class="col-lg-8">
       <div id="post-modal-data" class="card">
         <!-- ##### <AddPost /> ##### -->
-        <AddPost @add-post="addPost" type="normal" :timeline_id="group.timeline_id" />
+        <AddPost
+          @add-post="addPost"
+          type="normal"
+          :timeline_id="group.timeline_id"
+        />
         <!-- ##### <AddPost /> ##### -->
       </div>
       <div class="card">
         <div class="card-body">
           <!-- ##### LIST POSTS ##### -->
-          <LazyLoadedPosts :timeline_id="group.timeline_id" ref="lazyLoadedPostsRef" />
+          <LazyLoadedPosts
+            :timeline_id="group.timeline_id"
+            ref="lazyLoadedPostsRef"
+          />
           <!-- ##### END LIST POSTS ##### -->
         </div>
       </div>
@@ -186,9 +237,13 @@ export default {
       this.group = response.info;
       this.week_avg = (Math.round(response.week_avg * 100) / 100).toFixed(2);
       this.week = response.week;
-      this.previous_week = response.previous_week
+      this.previous_week = response.previous_week;
       this.authInGroup = response.authInGroup;
-      console.log("🚀 ~ file: Group-detail.vue:191 ~ created ~ this.authInGroup:", this.supervisorOfTheGroup)
+      this.hasSupportLeader = response.has_support_leader;
+      console.log(
+        "🚀 ~ file: Group-detail.vue:191 ~ created ~ this.authInGroup:",
+        this.authInGroup,
+      );
     } catch (error) {
       console.log(error);
     }
@@ -218,12 +273,13 @@ export default {
         leader: 4,
         ambassador: 5,
       },
+      hasSupportLeader: false,
     };
   },
   computed: {
     groupAdministrators() {
       let admins = this.group.group_administrators.filter(
-        (administrator) => administrator.pivot.user_type != "admin"
+        (administrator) => administrator.pivot.user_type != "admin",
       );
 
       return admins.sort((a, b) => {
@@ -231,7 +287,10 @@ export default {
       });
     },
     supervisorOfTheGroup() {
-      return this.searchByPivotType('supervisor');
+      return this.searchByPivotType("supervisor");
+    },
+    groupSupportLeader() {
+      return this.searchByPivotType("support_leader");
     },
   },
   methods: {
@@ -245,11 +304,10 @@ export default {
       this.$refs.lazyLoadedPostsRef.addNewPost(post);
     },
     searchByPivotType(type) {
-      return this.group.group_administrators.find(item => {
+      return this.group.group_administrators.find((item) => {
         return item.pivot && item.pivot.user_type === type;
       });
     },
-
   },
 };
 </script>
