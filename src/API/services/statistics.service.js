@@ -22,14 +22,24 @@ class StatisticsService {
       handleError(error);
     }
   }
-  async supervisingStatistics(supervisingGroupID) {
+  async leadersStatistics(supervisor_id) {
     try {
-      const response = await api.get(`/${this.prefix}/supervising-statistics/${supervisingGroupID}`);
+      const response = await api.get(`/${this.prefix}/leaders-statistics/${supervisor_id}`);
       return response.data.data;
     } catch (error) {
       handleError(error);
     }
   }
+
+  async supervisorsStatistics(advisor_id) {
+    try {
+      const response = await api.get(`/${this.prefix}/supervisors-statistics/${advisor_id}`);
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
 }
 
 export default new StatisticsService();

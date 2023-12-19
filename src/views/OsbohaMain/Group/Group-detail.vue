@@ -64,6 +64,9 @@
                   <i class="material-symbols-outlined"> supervisor_account </i>
                 </div>
                 <div class="flex-grow-1 ms-3">
+                  <h4 v-if="administrator.pivot.user_type == 'support_leader'">
+                    قائد دعم
+                  </h4>
                   <h4 v-if="administrator.pivot.user_type == 'leader'">
                     قائد المجموعة
                   </h4>

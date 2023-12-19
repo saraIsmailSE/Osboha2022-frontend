@@ -191,13 +191,13 @@
     <li class="nav-item" v-if="isSupervisor">
       <router-link
         :class="
-          checkActive('statistics.list-supervisors')
+          checkActive('statistics.Leaders')
             ? 'active nav-link'
             : 'nav-link'
         "
         aria-current="page"
         :to="{
-          name: 'statistics.supervisors',
+          name: 'statistics.Leaders',
           params: {
             supervisor_id: user?.id,
           },
@@ -212,17 +212,21 @@
     <li class="nav-item" v-if="isAdvisor">
       <router-link
         :class="
-          checkActive('statistics.list-supervisors')
+          checkActive('statistics.supervisors')
             ? 'active nav-link'
             : 'nav-link'
         "
         aria-current="page"
         :to="{
-          name: 'statistics.list-supervisors',
+          name: 'statistics.supervisors',
+          params: {
+            advisor_id: user?.id,
+          },
+
         }"
       >
         <i class="icon material-symbols-outlined"> monitoring </i>
-        <span class="item-name">احصائيات المراقبين</span>
+        <span class="item-name">احصائية فريق التوجيه </span>
       </router-link>
     </li>
 

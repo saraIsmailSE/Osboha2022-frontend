@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col-12">
                         <router-link class="btn btn-primary d-block mt-1 me-1" :to="{
-                            name: 'statistics.supervisors',
+                            name: 'statistics.Leaders',
                             params: {
                                 supervisor_id: supervisor.id,
                             },
