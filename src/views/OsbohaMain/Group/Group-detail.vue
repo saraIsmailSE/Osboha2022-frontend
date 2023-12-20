@@ -169,7 +169,7 @@
 
           <router-link
             :to="{
-              name: 'statistics.supervisors',
+              name: 'statistics.Leaders',
               params: {
                 supervisor_id: supervisorOfTheGroup.id,
               },

@@ -24,7 +24,9 @@ class StatisticsService {
   }
   async leadersStatistics(supervisor_id) {
     try {
-      const response = await api.get(`/${this.prefix}/leaders-statistics/${supervisor_id}`);
+      const response = await api.get(
+        `/${this.prefix}/leaders-statistics/${supervisor_id}`,
+      );
       return response.data.data;
     } catch (error) {
       handleError(error);
@@ -33,13 +35,35 @@ class StatisticsService {
 
   async supervisorsStatistics(advisor_id) {
     try {
-      const response = await api.get(`/${this.prefix}/supervisors-statistics/${advisor_id}`);
+      const response = await api.get(
+        `/${this.prefix}/supervisors-statistics/${advisor_id}`,
+      );
       return response.data.data;
     } catch (error) {
       handleError(error);
     }
   }
 
-}
+  async advisorsStatistics(consultant_id) {
+    try {
+      const response = await api.get(
+        `/${this.prefix}/advisors-statistics/${consultant_id}`,
+      );
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 
+  async consultantsStatistics(admin_id) {
+    try {
+      const response = await api.get(
+        `/${this.prefix}/consultant-statistics/${admin_id}`,
+      );
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+}
 export default new StatisticsService();

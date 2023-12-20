@@ -1,6 +1,12 @@
 <template>
     <div class="col-12">
         <div class="card card-block card-stretch card-height blog">
+            <div class="text-center m-auto" v-if="loding">
+                <img class="img-fluid rounded w-75" src="@/assets/images/gif/chart_2.gif" alt="add-group" />
+                <h4 class="text-center">
+                    يتم تجهيز الجرد
+                </h4>
+            </div>
             <div class="card-header">
                 <h2 v-if="advisorGroup">
                     احصائية المراقبين
@@ -22,7 +28,7 @@
                 <h3>
                     الأفرقة الرقابية
                     <span role="button" class="material-symbols-outlined" v-if="!showSupervisorFollowupTeams"
-                        @click="() => {showOwnFollowupTeams = false; showSupervisorFollowupTeams = !showSupervisorFollowupTeams}">
+                        @click="() => { showOwnFollowupTeams = false; showSupervisorFollowupTeams = !showSupervisorFollowupTeams }">
                         expand_more
                     </span>
                     <span role="button" class="material-symbols-outlined" v-if="showSupervisorFollowupTeams"
@@ -280,11 +286,14 @@ import MembersReading from "@/components/statistics/MembersReading";
 export default {
     name: 'Supervisor Statistics',
     async created() {
+        this.loding = true;
         const response = await StatisticsService.supervisorsStatistics(this.$route.params.advisor_id);
         this.ownFollowupTeams = response.supervisor_own_followup_team;
         this.supervisorFollowupTeams = response.supervisor_followup_teams
         this.supervisorsReading = response.supervisors_reading;
-        this.advisorGroup = response.advisor_group
+        this.advisorGroup = response.advisor_group;
+        this.loding = false;
+
     },
     components: {
         FollowupTeamsStatistics,
@@ -298,7 +307,8 @@ export default {
             ownFollowupTeams: null,
             supervisorFollowupTeams: null,
             showSupervisorFollowupTeams: false,
-            showOwnFollowupTeams: false
+            showOwnFollowupTeams: false,
+            loding: false,
         }
     },
     computed: {

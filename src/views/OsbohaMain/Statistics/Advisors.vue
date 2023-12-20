@@ -1,15 +1,24 @@
 <template>
     <div class="col-12">
+
         <div class="card card-block card-stretch card-height blog">
+
+            <div class="text-center m-auto" v-if="loding">
+                <img class="img-fluid rounded w-75" src="@/assets/images/gif/chart_2.gif" alt="add-group" />
+                <h4 class="text-center">
+                    يتم تجهيز الجرد
+                </h4>
+            </div>
+
             <div class="card-header">
-                <h2 v-if="supervisorGroup">
-                    احصائية القادة
+                <h2 v-if="consultantGroup">
+                    احصائية الموجهين
                     ||
                     <router-link :to="{
                         name: 'group.group-detail',
-                        params: { group_id: supervisorGroup.id },
+                        params: { group_id: consultantGroup.id },
                     }">
-                        {{ supervisorGroup.name }}
+                        {{ consultantGroup.name }}
                     </router-link>
                     <span class="material-symbols-outlined align-middle me-1">
                         diversity_1
@@ -18,36 +27,51 @@
                 </h2>
             </div>
 
-            <div class="card-body" v-if="statistics">
+            <div class="card-body" v-if="advisorStatistics">
                 <div class="blog-description">
                     <table class="table inline-grid w-100">
                         <thead>
                             <tr class="text-center">
-                                <th scope="col">القائد</th>
-                                <th scope="col">فريق المتابعة</th>
-                                <th scope="col">عدد السفراء</th>
+                                <th scope="col">الموجه</th>
+                                <th scope="col">فريق التوجيه</th>
+                                <th scope="col">عدد المراقبين</th>
+                                <th scope="col">عدد القادة</th>
                                 <th scope="col">المعدل الأسبوعي</th>
+                                <th scope="col">احصائية المراقبين</th>
                             </tr>
                         </thead>
-                        <tbody v-for="leader in statistics" :key="leader.leader_name">
+                        <tbody v-for="statistics_data in advisorStatistics" :key="statistics_data.advisor_name">
                             <tr class="">
                                 <td class="align-middle text-center">
-                                    <span>{{ leader.leader_name }} </span>
+                                    <span>{{ statistics_data.advisor_name }} </span>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <span> {{ leader.team }}</span>
+                                    <span> {{ statistics_data.team }}</span>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <span> {{ leader.number_ambassadors }} </span>
+                                    <span> {{ statistics_data.number_of_supervisors }} </span>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <span> {{ (Math.round(leader.week_avg * 100) / 100).toFixed(2) }} </span>
+                                    <span> {{ statistics_data.number_of_leaders }} </span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span> {{ (Math.round(statistics_data.week_avg * 100) / 100).toFixed(2) }} </span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <router-link :to="{
+                                        name: 'statistics.supervisors',
+                                        params: {
+                                            advisor_id: statistics_data.advisor_id,
+                                        },
+                                    }" class="material-symbols-outlined md-18 me-1 text-primary">
+                                        visibility
+                                    </router-link>
                                 </td>
                             </tr>
 
                         </tbody>
                         <tr class="">
-                            <td class="align-middle text-center" colspan="4">
+                            <td class="align-middle text-center" colspan="6">
                                 <span>المعدل العام : {{ generalAvg }} </span>
                             </td>
                         </tr>
@@ -68,14 +92,14 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody v-for="leader in statistics" :key="leader.leader_name">
+                        <tbody v-for="statistics_data in advisorStatistics" :key="statistics_data.advisor_name">
                             <tr class="text-center">
 
                                 <td class="align-middle text-center">
-                                    <span> {{ leader.team }}</span>
+                                    <span> {{ statistics_data.team }}</span>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <span> {{ leader.ambassadors_withdraw_in_group }}</span>
+                                    <span> {{ statistics_data.ambassadors_withdraw_in_group }}</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -100,14 +124,14 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody v-for="leader in statistics" :key="leader.leader_name">
+                        <tbody v-for="statistics_data in advisorStatistics" :key="statistics_data.advisor_name">
                             <tr class="text-center">
 
                                 <td class="align-middle text-center">
-                                    <span> {{ leader.team }}</span>
+                                    <span> {{ statistics_data.team }}</span>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <span> {{ leader.ambassadors_excluded_in_group }}</span>
+                                    <span> {{ statistics_data.ambassadors_excluded_in_group }}</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -133,14 +157,14 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody v-for="leader in statistics" :key="leader.leader_name">
+                        <tbody v-for="statistics_data in advisorStatistics" :key="statistics_data.advisor_name">
                             <tr class="d-flex justify-content-around">
 
                                 <td class="align-middle text-center">
-                                    <span> {{ leader.team }} </span>
+                                    <span> {{ statistics_data.team }} </span>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <span> {{ leader.is_freezed }}</span>
+                                    <span> {{ statistics_data.is_freezed }}</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -165,13 +189,13 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody v-for="leader in statistics" :key="leader.leader_name">
+                        <tbody v-for="statistics_data in advisorStatistics" :key="statistics_data.advisor_name">
                             <tr class="d-flex justify-content-around">
                                 <td class="align-middle text-center">
-                                    <span> {{ leader.team }} </span>
+                                    <span> {{ statistics_data.team }} </span>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <span> {{ leader.number_zero_varible }} </span>
+                                    <span> {{ statistics_data.number_zero_varible }} </span>
                                 </td>
                             </tr>
                         </tbody>
@@ -197,13 +221,13 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody v-for="leader in statistics" :key="leader.leader_name">
+                        <tbody v-for="statistics_data in advisorStatistics" :key="statistics_data.advisor_name">
                             <tr class="d-flex justify-content-around">
                                 <td class="align-middle text-center">
-                                    <span> {{ leader.team }} </span>
+                                    <span> {{ statistics_data.team }} </span>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <span> {{ leader.new_ambassadors }} </span>
+                                    <span> {{ statistics_data.new_ambassadors }} </span>
                                 </td>
                             </tr>
                         </tbody>
@@ -215,144 +239,62 @@
                     </table>
                     <hr />
                 </div>
-                <!-- ##### TO DO LATER ##### -->
-                <!-- <div class="blog-description">
-                    <table class="table inline-grid w-100">
-                        <thead>
-                            <tr class="d-flex justify-content-around">
-                                <th scope="col">قادة حصلو على دعم</th>
-                                <th scope="col">قادة منسحبين</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="d-flex justify-content-around">
-                                <td class="align-middle text-center">
-                                    <span> فريق متابعة 1 </span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span> x </span>
-                                </td>
-                            </tr>
-                            <tr class="d-flex justify-content-around">
-                                <td class="align-middle text-center">
-                                    <span> فريق متابعة 1 </span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span> y </span>
-                                </td>
-                            </tr>
-                            <tr class="d-flex justify-content-center">
-                                <td class="align-middle text-center" colspan="4">
-                                    <span> العدد الكلي z </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <hr />
-                </div> -->
 
-                <div class="blog-description">
-                    <h4>
-                        قراءة القادة
-                        <span class="material-symbols-outlined align-middle me-1">
-                            book_5
-                        </span>
-
-                    </h4>
-                    <table class="table inline-grid w-100">
-                        <thead>
-                            <tr class="d-flex justify-content-around">
-                                <th scope="col">القائد</th>
-                                <th scope="col">عدد الصفحات</th>
-                                <th scope="col">نوع الانجاز</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody v-for="mark in leadersReading" :key="mark.id">
-                            <tr class="d-flex justify-content-around">
-                                <td class="align-middle text-center">
-                                    <span> {{ mark.user.name }} </span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span> {{ mark.total_pages }} </span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span v-if="mark.total_thesis > 0 && mark.total_screenshot > 0">
-                                        أطروحة واقتباسات
-                                    </span>
-                                    <span v-else-if="mark.total_thesis > 0">أطروحة</span>
-                                    <span v-else-if="mark.total_screenshot > 0">اقتباسات</span>
-                                    <span v-else-if="mark.total_pages == 0">لا يوجد انجاز</span>
-                                    <spanb v-else>قراءة فقط</spanb>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <router-link :to="{
-                                        name: 'group.listOneAmbassadorReading',
-                                        params: { ambassador_id: mark.user_id, week_id: mark.week_id },
-                                    }" class="material-symbols-outlined md-18 me-1 text-primary">
-                                        visibility
-                                    </router-link>
-                                </td>
-
-                            </tr>
-
-                        </tbody>
-                        <tr class="d-flex justify-content-center">
-                            <td class="align-middle text-center" colspan="4">
-                                <span> العدد الكلي للصفحات {{ totalPages }} </span>
-                            </td>
-                        </tr>
-
-                    </table>
-                    <hr />
-                </div>
             </div>
+            <div class="card-body" v-if="advisorsReading">
+                <MembersReading :ReadingData="advisorsReading" :headTitle="'الموجيهن'" :usetType="'الموجه'" />
+            </div>
+
         </div>
     </div>
 </template>
 <script>
 import StatisticsService from "@/API/services/statistics.service";
+import MembersReading from "@/components/statistics/MembersReading";
 
 export default {
-    name: 'Supervisor Statistics',
+    name: 'Advisors Statistics',
     async created() {
-        const response = await StatisticsService.supervisingStatistics(this.$route.params.supervisor_id);
-        this.statistics = response.statistics_data;
-        this.leadersReading = response.leaders_reading;
-        this.supervisorGroup = response.supervisor_group
+        this.loding = true;
+        const response = await StatisticsService.advisorsStatistics(this.$route.params.consultant_id);
+        this.advisorStatistics = response.advisor_statistics;
+        this.advisorsReading = response.advisors_reading;
+        this.consultantGroup = response.consultant_group
+        this.loding = false;
+    },
+    components: {
+        MembersReading,
     },
     data() {
         return {
-            statistics: null,
-            leadersReading: null,
-            supervisorGroup: null,
+            advisorStatistics: null,
+            advisorsReading: null,
+            consultantGroup: null,
+            loding: false,
         }
     },
     computed: {
         generalAvg() {
             // Calculate the sum of all week_avg values
-            const sum = this.statistics.reduce((accumulator, item) => accumulator + parseFloat(item.week_avg), 0);
+            const sum = this.advisorStatistics.reduce((accumulator, item) => accumulator + parseFloat(item.week_avg), 0);
             // Calculate the average
-            return Math.round(sum / this.statistics.length).toFixed(2);
+            return Math.round(sum / this.advisorStatistics.length).toFixed(2);
         },
         totalWithdraw() {
-            return this.statistics.reduce((accumulator, item) => accumulator + parseFloat(item.ambassadors_withdraw_in_group), 0);
+            return this.advisorStatistics.reduce((accumulator, item) => accumulator + parseFloat(item.ambassadors_withdraw_in_group), 0);
         },
         totalFreezed() {
-            return this.statistics.reduce((accumulator, item) => accumulator + parseFloat(item.is_freezed), 0);
+            return this.advisorStatistics.reduce((accumulator, item) => accumulator + parseFloat(item.is_freezed), 0);
         },
         totalExcluded() {
-            return this.statistics.reduce((accumulator, item) => accumulator + parseFloat(item.ambassadors_excluded_in_group), 0);
+            return this.advisorStatistics.reduce((accumulator, item) => accumulator + parseFloat(item.ambassadors_excluded_in_group), 0);
         },
         totalOfZeroVarible() {
-            return this.statistics.reduce((accumulator, item) => accumulator + parseFloat(item.number_zero_varible), 0);
+            return this.advisorStatistics.reduce((accumulator, item) => accumulator + parseFloat(item.number_zero_varible), 0);
         },
         totalNewAmbassadros() {
-            return this.statistics.reduce((accumulator, item) => accumulator + parseFloat(item.new_ambassadors), 0);
+            return this.advisorStatistics.reduce((accumulator, item) => accumulator + parseFloat(item.new_ambassadors), 0);
         },
-        totalPages() {
-            return this.leadersReading.reduce((accumulator, item) => accumulator + parseFloat(item.total_pages), 0);
-        }
     }
 
 }

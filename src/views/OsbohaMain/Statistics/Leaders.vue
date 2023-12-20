@@ -1,6 +1,13 @@
 <template>
     <div class="col-12">
         <div class="card card-block card-stretch card-height blog">
+            <div class="text-center m-auto" v-if="loding">
+                <img class="img-fluid rounded w-75" src="@/assets/images/gif/chart_2.gif" alt="add-group" />
+                <h4 class="text-center">
+                    يتم تجهيز الجرد
+                </h4>
+            </div>
+
             <div class="card-header">
                 <h2 v-if="supervisorGroup">
                     احصائية القادة
@@ -37,10 +44,14 @@ import MembersReading from "@/components/statistics/MembersReading";
 export default {
     name: 'Supervisor Statistics',
     async created() {
+        this.loding = true;
+
         const response = await StatisticsService.leadersStatistics(this.$route.params.supervisor_id);
         this.statistics = response.statistics_data;
         this.leadersReading = response.leaders_reading;
-        this.supervisorGroup = response.supervisor_group
+        this.supervisorGroup = response.supervisor_groupك
+        this.loding = false;
+
     },
     components: {
         FollowupTeamsStatistics,
@@ -51,6 +62,8 @@ export default {
             statistics: null,
             leadersReading: null,
             supervisorGroup: null,
+            loding: false
+
         }
     },
     computed: {
