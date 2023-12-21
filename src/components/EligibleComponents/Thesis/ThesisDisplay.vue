@@ -105,7 +105,7 @@ export default {
     },
     methods: {
         resolve_img_url: function (image) {
-            const url = `https://www.eligible.osboha180.com/api/api/thesises/image?path=${image.path}`
+            const url = `https://platform.osboha180.com/backend/public/api/v1/thesises/image?path=${image.path}`
  
             return url;
         },
@@ -161,7 +161,7 @@ export default {
             this.$router.push({ path: `/thesis-review/update/${id}` })
  
         },openPhoto(image){
-              const url = `https://www.eligible.osboha180.com/api/api/thesises/image?path=${image.path}`
+              const url = `https://platform.osboha180.com/backend/public/api/v1/thesises/image?path=${image.path}`
  
             window.open(url, '_blank')
         }

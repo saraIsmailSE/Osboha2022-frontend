@@ -84,7 +84,7 @@ export default {
                 })
         },
         listCertificate(id) {
-            window.open(`https://www.eligible.osboha180.com/api/api/certificates/generate-pdf/${id}`, '_blank');
+            window.open(`https://platform.osboha180.com/backend/public/api/v1/certificates/generate-pdf/${id}`, '_blank');
         },
         rejectCertificate(id) {
             const swalWithBootstrapButtons = this.$swal.mixin({

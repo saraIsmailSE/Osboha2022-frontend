@@ -116,14 +116,14 @@
     </li>
 
     <!-- ###### Osboha Eligible ###### -->
-    <li class="nav-item">
+    <li class="nav-item" v-if="advisorAndAbove || eligibleTeam">
       <router-link :class="checkActive('book.eligible') ? 'active nav-link' : 'nav-link'" aria-current="page"
         :to="{ name: 'book.eligible' }">
         <i class="icon material-symbols-outlined"> contract_edit </i>
         <span class="item-name">توثيق كتاب</span>
       </router-link>
     </li>
-    <li class="nav-item">
+    <li class="nav-item" v-if="advisorAndAbove || eligibleTeam">
       <router-link :class="checkActive('book.eligible-controle') ? 'active nav-link' : 'nav-link'" aria-current="page"
         :to="{ name: 'book.eligible-controle' }">
         <i class="icon material-symbols-outlined"> contract_edit </i>
@@ -380,6 +380,15 @@ export default {
     },
     consultantAndAbove() {
       return UserInfoService.hasRoles(this.user, ["consultant", "admin"]);
+    },
+    eligibleTeam() {
+      return UserInfoService.hasRoles(this.user, [
+        'reviewer',
+        'auditor',
+        'user_accept',
+        'super_auditer',
+        'super_reviewer'
+      ]);
     },
   },
   setup() {

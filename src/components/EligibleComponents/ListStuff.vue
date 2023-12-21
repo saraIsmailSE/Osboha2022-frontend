@@ -119,7 +119,7 @@ export default {
     },
     methods: {
         resolve_img_url: function (path) {
-              const url = `https://www.eligible.osboha180.com/api/api/thesises/image?path=${image.path}`
+              const url = `https://platform.osboha180.com/backend/public/api/v1/thesises/image?path=${image.path}`
               console.log(url)
          
             return url;
