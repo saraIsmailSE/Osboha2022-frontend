@@ -85,10 +85,10 @@ export default {
       try {
         const response = await GroupService.thesesAndScreensByWeek(
           this.$route.params.group_id,
-          this.weekFilter
+          this.weekFilter,
         );
-        this.theses = response.total_thesis;
-        this.screenshots = response.total_screenshot;
+        this.theses = response?.total_thesis ?? 0;
+        this.screenshots = response?.total_screenshot ?? 0;
       } catch (e) {
         console.log("[Group ThseseAndQuotes] error", e);
       }

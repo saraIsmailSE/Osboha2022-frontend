@@ -20,12 +20,14 @@
             </span>
           </h4>
         </router-link>
-        <router-link class="col-6" :to="{
-          name: 'book.free-book',
-          params: {
-            user_id: this.$route.params.user_id,
-          },
-        }">
+        <router-link
+          :to="{
+            name: 'book.free-book',
+            params: {
+              user_id: this.$route.params.user_id,
+            },
+          }"
+        >
           <h4 class="text-center mt-3 mb-3">
             الكتب الحرة
             <span class="align-middle material-symbols-outlined later-book">

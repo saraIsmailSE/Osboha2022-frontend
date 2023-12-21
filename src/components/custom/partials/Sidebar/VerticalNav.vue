@@ -19,7 +19,7 @@
       <router-link :class="checkActive('user.profile') ? 'active nav-link' : 'nav-link'" :to="{
         name: 'user.profile',
         params: {
-          user_id: user.id,
+          user_id: user?.id,
         },
       }">
         <i class="icon material-symbols-outlined"> person </i>
@@ -32,7 +32,7 @@
         " :to="{
     name: 'user.friendsRequests',
     params: {
-      user_id: user.id,
+      user_id: user?.id,
     },
   }">
         <i class="icon material-symbols-outlined"> diversity_1 </i>
@@ -47,6 +47,23 @@
         <span class="item-name">احصائيات الأسبوع</span>
       </router-link>
     </li>
+    <!-- ###### ADMIN statistics ###### -->
+    <li class="nav-item" v-if="isAdmin">
+      <router-link :class="checkActive('statistics.consultants')
+        ? 'active nav-link'
+        : 'nav-link'
+        " aria-current="page" :to="{
+    name: 'statistics.consultants',
+    params: {
+      admin_id: user?.id,
+    },
+
+  }">
+        <i class="icon material-symbols-outlined"> monitoring </i>
+        <span class="item-name">احصائية فريق الادارة </span>
+      </router-link>
+    </li>
+
     <!-- ###### group ###### -->
     <li class="nav-item">
       <router-link :class="checkActive('osboha.group') ? 'active nav-link' : 'nav-link'" aria-current="page"
@@ -67,7 +84,7 @@
       <router-link :class="checkActive('book.free-book') ? 'active nav-link' : 'nav-link'" aria-current="page" :to="{
         name: 'book.free-book',
         params: {
-          user_id: user.id,
+          user_id: user?.id,
         },
       }">
         <i class="icon material-symbols-outlined"> local_library </i>
@@ -127,7 +144,7 @@
         " aria-current="page" :to="{
     name: 'group.groupsAudit',
     params: {
-      supervisor_id: user.id,
+      supervisor_id: user?.id,
     },
   }">
         <i class="icon material-symbols-outlined"> rule </i>
@@ -140,21 +157,51 @@
         " aria-current="page" :to="{
     name: 'control.pending-theses',
     params: {
-      supervisor_id: user.id,
+      supervisor_id: user?.id,
     },
   }">
-        <i class="icon material-symbols-outlined"> rule </i>
+        <i class="icon material-symbols-outlined"> dangerous </i>
         <span class="item-name">لم يعتمد</span>
+      </router-link>
+    </li>
+    <li class="nav-item" v-if="isSupervisor">
+      <router-link :class="checkActive('statistics.Leaders')
+        ? 'active nav-link'
+        : 'nav-link'
+        " aria-current="page" :to="{
+    name: 'statistics.Leaders',
+    params: {
+      supervisor_id: user?.id,
+    },
+  }">
+        <i class="icon material-symbols-outlined"> monitoring </i>
+        <span class="item-name">احصائية الفريق الرقابي</span>
       </router-link>
     </li>
 
     <!-- ###### Advisor Audit ###### -->
     <li class="nav-item" v-if="isAdvisor">
+      <router-link :class="checkActive('statistics.supervisors')
+        ? 'active nav-link'
+        : 'nav-link'
+        " aria-current="page" :to="{
+    name: 'statistics.supervisors',
+    params: {
+      advisor_id: user?.id,
+    },
+
+  }">
+        <i class="icon material-symbols-outlined"> monitoring </i>
+        <span class="item-name">احصائية فريق التوجيه </span>
+      </router-link>
+    </li>
+
+    <li class="nav-item" v-if="isAdvisor">
       <router-link :class="checkActive('group.AdvisorAudit') ? 'active nav-link' : 'nav-link'
         " aria-current="page" :to="{
     name: 'group.AdvisorAudit',
     params: {
-      advisor_id: user.id,
+      advisor_id: user?.id,
     },
   }">
         <i class="icon material-symbols-outlined"> rule </i>
@@ -162,22 +209,43 @@
       </router-link>
     </li>
     <li class="nav-item" v-if="isAdvisor">
-      <router-link
-        :class="
-          checkActive('group.AdvisorMainAudit') ? 'active nav-link' : 'nav-link'
-        "
-        aria-current="page"
-        :to="{
-          name: 'group.AdvisorMainAudit',
-          params: {
-            advisor_id: user.id,
-          },
-        }"
-      >
+      <router-link :class="checkActive('group.AdvisorMainAudit') ? 'active nav-link' : 'nav-link'
+        " aria-current="page" :to="{
+    name: 'group.AdvisorMainAudit',
+    params: {
+      advisor_id: user?.id,
+    },
+  }">
         <i class="icon material-symbols-outlined"> rule </i>
         <span class="item-name">تدقيق الموجه</span>
       </router-link>
     </li>
+
+
+    <li class="nav-item static-item" v-if="isAdvisor || isSupervisor">
+      <a class="nav-link static-item disabled" tabindex="-1">
+        <span class="default-icon">تدقيق العلامات</span>
+        <span class="mini-icon" data-bs-toggle="tooltip" title="Social" data-bs-placement="right">-</span>
+      </a>
+    </li>
+
+    <!-- ###### consultant statistics ###### -->
+    <li class="nav-item" v-if="isConsultant">
+      <router-link :class="checkActive('statistics.advisors')
+        ? 'active nav-link'
+        : 'nav-link'
+        " aria-current="page" :to="{
+    name: 'statistics.advisors',
+    params: {
+      consultant_id: user?.id,
+    },
+
+  }">
+        <i class="icon material-symbols-outlined"> monitoring </i>
+        <span class="item-name">احصائية فريق الاستشارة </span>
+      </router-link>
+    </li>
+
 
     <!-- ###### General Conversation ###### -->
 
@@ -189,82 +257,57 @@
         </a>
       </li>
       <li class="nav-item">
-        <router-link
-          :class="
-            checkActive('general-conversation.index')
-              ? 'active nav-link'
-              : 'nav-link'
-          "
-          aria-current="page"
-          :to="{
-            name: 'general-conversation.index',
-          }"
-        >
+        <router-link :class="checkActive('general-conversation.index')
+          ? 'active nav-link'
+          : 'nav-link'
+          " aria-current="page" :to="{
+    name: 'general-conversation.index',
+  }">
           <i class="icon material-symbols-outlined"> live_help </i>
           <span class="item-name">التحويل العام</span>
         </router-link>
       </li>
       <li class="nav-item" v-if="consultantAndAbove">
-        <router-link
-          :class="
-            checkActive('general-conversation.statistics')
-              ? 'active nav-link'
-              : 'nav-link'
-          "
-          aria-current="page"
-          :to="{
-            name: 'general-conversation.statistics',
-          }"
-        >
+        <router-link :class="checkActive('general-conversation.statistics')
+          ? 'active nav-link'
+          : 'nav-link'
+          " aria-current="page" :to="{
+    name: 'general-conversation.statistics',
+  }">
           <i class="icon material-symbols-outlined"> stacked_bar_chart </i>
           <span class="item-name">إحصائيات التحويل العام</span>
         </router-link>
       </li>
 
       <li class="nav-item" v-if="advisorAndAbove">
-        <router-link
-          :class="
-            checkActive('general-conversation.workingHours')
-              ? 'active nav-link'
-              : 'nav-link'
-          "
-          aria-current="page"
-          :to="{
-            name: 'general-conversation.workingHours',
-          }"
-        >
+        <router-link :class="checkActive('general-conversation.workingHours')
+          ? 'active nav-link'
+          : 'nav-link'
+          " aria-current="page" :to="{
+    name: 'general-conversation.workingHours',
+  }">
           <i class="icon material-symbols-outlined"> more_time </i>
           <span class="item-name">إضافة ساعات العمل</span>
         </router-link>
       </li>
       <li class="nav-item" v-if="isAdmin">
-        <router-link
-          :class="
-            checkActive('general-conversation.followupStatistics')
-              ? 'active nav-link'
-              : 'nav-link'
-          "
-          aria-current="page"
-          :to="{
-            name: 'general-conversation.followupStatistics',
-          }"
-        >
+        <router-link :class="checkActive('general-conversation.followupStatistics')
+          ? 'active nav-link'
+          : 'nav-link'
+          " aria-current="page" :to="{
+    name: 'general-conversation.followupStatistics',
+  }">
           <i class="icon material-symbols-outlined"> browse_activity </i>
           <span class="item-name">إحصائيات تفقد التحويل العام</span>
         </router-link>
       </li>
       <li class="nav-item" v-if="isAdmin">
-        <router-link
-          :class="
-            checkActive('general-conversation.workingHoursStats')
-              ? 'active nav-link'
-              : 'nav-link'
-          "
-          aria-current="page"
-          :to="{
-            name: 'general-conversation.workingHoursStats',
-          }"
-        >
+        <router-link :class="checkActive('general-conversation.workingHoursStats')
+          ? 'active nav-link'
+          : 'nav-link'
+          " aria-current="page" :to="{
+    name: 'general-conversation.workingHoursStats',
+  }">
           <i class="icon material-symbols-outlined"> hourglass_top </i>
           <span class="item-name">إحصائيات ساعات العمل</span>
         </router-link>
@@ -306,6 +349,9 @@ export default {
     },
     isAdvisor() {
       return UserInfoService.hasRole(this.user, "advisor");
+    },
+    isConsultant() {
+      return UserInfoService.hasRole(this.user, "consultant");
     },
     isSupervisor() {
       return UserInfoService.hasRole(this.user, "supervisor");
@@ -364,9 +410,6 @@ export default {
       if (this.$route.name === route) {
         return true;
       }
-      // if (route.includes(this.$route.name)) {
-      //   return true;
-      // }
     },
   },
 };

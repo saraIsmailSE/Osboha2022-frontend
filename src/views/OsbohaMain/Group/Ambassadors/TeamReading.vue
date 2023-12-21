@@ -4,8 +4,8 @@
       <StatisticsList :categoryList="categories" />
     </div>
     <div class="col-lg-9">
+      <!-- v-if="ambassadorsAchievementList" -->
       <AmbassadorsAchievement
-        v-if="ambassadorsAchievementList"
         :ambassadorsAchievementList="ambassadorsAchievementList"
         :group_id="group.id"
         :week_id="week_id"
@@ -41,6 +41,22 @@
       </div>
     </iq-card>
   </div>
+  <div class="row" v-if="support_leader && support_leader?.mark">
+    <div class="col-lg-3">
+      <router-link
+        :to="{
+          name: 'group.listOneAmbassadorReading',
+          params: {
+            ambassador_id: support_leader?.mark?.user?.id,
+            week_id: week_id,
+          },
+        }"
+        class="btn btn-primary d-block mt-3"
+      >
+        إنجاز قائد الدعم
+      </router-link>
+    </div>
+  </div>
 </template>
 <script>
 import StatisticsList from "./StatisticsList.vue";
@@ -51,7 +67,10 @@ export default {
   name: "Team Reading Info",
   async created() {
     try {
-      const response = await GroupService.BasicMarksView(this.group_id,this.week_id);
+      const response = await GroupService.BasicMarksView(
+        this.group_id,
+        this.week_id,
+      );
       this.group = response.group;
       this.group_users = response.group_users;
       this.categories[0].number = response.full;
@@ -59,6 +78,9 @@ export default {
       this.categories[2].number = response.zero;
       this.ambassadorsAchievementList = response.random_achievement;
       this.most_read = response.most_read;
+      this.support_leader = response.support_leader;
+
+      console.log(this.support_leader);
     } catch (error) {
       console.log(error);
     }
@@ -93,6 +115,7 @@ export default {
       ],
       ambassadorsAchievementList: null,
       most_read: null,
+      supportLeaderAchievement: null,
     };
   },
 };

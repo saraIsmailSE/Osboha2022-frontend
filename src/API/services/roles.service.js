@@ -11,7 +11,7 @@ class RolesService {
       const response = await api.post(`${this.prefix}/assign-role`, formData);
       return response.data.data;
     } catch (error) {
-      return error.response;
+      handleError(error);
     }
   }
 
@@ -19,7 +19,7 @@ class RolesService {
     try {
       const response = await api.post(
         `${this.prefix}/change-advising-team`,
-        formData
+        formData,
       );
       return response.data.data;
     } catch (error) {
@@ -30,7 +30,7 @@ class RolesService {
     try {
       const response = await api.post(
         `${this.prefix}/supervisors-swap`,
-        formData
+        formData,
       );
       return response.data.data;
     } catch (error) {
@@ -42,7 +42,7 @@ class RolesService {
     try {
       const response = await api.post(
         `${this.prefix}/new-supervisor-current-to-ambassador`,
-        formData
+        formData,
       );
       return response.data.data;
     } catch (error) {
@@ -54,7 +54,7 @@ class RolesService {
     try {
       const response = await api.post(
         `${this.prefix}/new-supervisor-current-to-leader`,
-        formData
+        formData,
       );
       return response.data.data;
     } catch (error) {
@@ -66,7 +66,7 @@ class RolesService {
     try {
       const response = await api.post(
         `${this.prefix}/new-leader-current-to-ambassador`,
-        formData
+        formData,
       );
       return response.data.data;
     } catch (error) {
@@ -77,7 +77,7 @@ class RolesService {
     try {
       const response = await api.post(
         `${this.prefix}/transfer-leader`,
-        formData
+        formData,
       );
       return response.data.data;
     } catch (error) {
@@ -88,7 +88,7 @@ class RolesService {
     try {
       const response = await api.post(
         `${this.prefix}/transfer-ambassador`,
-        formData
+        formData,
       );
       return response.data.data;
     } catch (error) {

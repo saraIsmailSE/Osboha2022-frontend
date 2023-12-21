@@ -1,63 +1,105 @@
 <template>
   <div class="row">
-
     <div class="col-md-8">
-      <iq-card body-class="p-0" v-if="ambassadorsAchievementList && ambassadorsAchievementList.length > 0">
+      <iq-card body-class="p-0">
         <template v-slot:body>
-
-          <GroupTitle :group_id:="group_id" :group_name="group_name" :group_users="group_users" />
+          <GroupTitle
+            :group_id:="group_id"
+            :group_name="group_name"
+            :group_users="group_users"
+          />
 
           <ul class="todo-task-lists m-0 p-0">
             <form>
               <div class="input-group w-100 m-auto p-2">
-                <input type="search" class="form-control rounded" placeholder="ابحث عن سفير" aria-label="Search"
-                  aria-describedby="search-addon" @input="searchForAmbassadorAchievement()" v-model="ambassador_name" />
-                <button type="button" class="btn btn-outline-primary"><span class="material-symbols-outlined lh-1">
-                    search
-                  </span></button>
+                <input
+                  type="search"
+                  class="form-control rounded"
+                  placeholder="ابحث عن سفير"
+                  aria-label="Search"
+                  aria-describedby="search-addon"
+                  @input="searchForAmbassadorAchievement()"
+                  v-model="ambassador_name"
+                />
+                <button type="button" class="btn btn-outline-primary">
+                  <span class="material-symbols-outlined lh-1"> search </span>
+                </button>
               </div>
             </form>
-            <template v-for="(ambassador, index) in achievementList" :key="index">
-              <AchievementProgress :ambassador="ambassador" :week_id="week_id" />
+            <template
+              v-for="(ambassador, index) in achievementList"
+              :key="index"
+            >
+              <AchievementProgress
+                :ambassador="ambassador"
+                :week_id="week_id"
+              />
             </template>
+            <li
+              v-if="!achievementList || achievementList.length == 0"
+              class="d-block text-center text-danger my-3 py-3"
+            >
+              لا يوجد انجازات لهذا الاسبوع
+            </li>
             <li class="d-block text-center mb-0 pb-0">
-              <router-link :to="{ name: 'group.listAllAmbassadorAchievements', params: { group_id: group_id,week_id:week_id } }">
+              <router-link
+                :to="{
+                  name: 'group.listAllAmbassadorAchievements',
+                  params: { group_id: group_id, week_id: week_id },
+                }"
+              >
                 <span class="me-3 btn" role="button">عرض جميع الانجازات</span>
               </router-link>
             </li>
-
           </ul>
         </template>
       </iq-card>
     </div>
 
-    <MostRead v-if="most_read" :most_read="most_read"  :week_id="week_id" />
+    <MostRead v-if="most_read" :most_read="most_read" :week_id="week_id" />
   </div>
 </template>
 
 <script>
-import GroupTitle from '@/components/group/GroupTitle.vue'
-import AchievementProgress from '@/components/group/AchievementProgress.vue'
-import MostRead from './MostRead'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js'
-import GroupService from '@/API/services/group.service';
+import GroupTitle from "@/components/group/GroupTitle.vue";
+import AchievementProgress from "@/components/group/AchievementProgress.vue";
+import MostRead from "./MostRead";
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  ArcElement,
+} from "chart.js";
+import GroupService from "@/API/services/group.service";
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement)
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  ArcElement,
+);
 
 export default {
-  name: 'General Achievment',
+  name: "General Achievment",
   components: {
     GroupTitle,
     MostRead,
-    AchievementProgress
+    AchievementProgress,
   },
   created() {
-    this.achievementList = this.ambassadorsAchievementList
+    this.achievementList = this.ambassadorsAchievementList;
   },
   props: {
     ambassadorsAchievementList: {
       type: [Object],
-      required: true,
+      default: () => {},
     },
     category: {
       type: [Object],
@@ -87,9 +129,9 @@ export default {
   data() {
     return {
       achievementList: [],
-      ambassador_name: '',
+      ambassador_name: "",
       show: false,
-    }
+    };
   },
   methods: {
     /**
@@ -98,9 +140,13 @@ export default {
      * @return ambassador achievment
      */
     async searchForAmbassadorAchievement() {
-      const response = await GroupService.searchForAmbassadorAchievement(this.ambassador_name, this.$route.params.group_id, 'current');
-      this.achievementList = response.ambassador_achievement
-    }
-  }
-}
+      const response = await GroupService.searchForAmbassadorAchievement(
+        this.ambassador_name,
+        this.$route.params.group_id,
+        "current",
+      );
+      this.achievementList = response.ambassador_achievement;
+    },
+  },
+};
 </script>

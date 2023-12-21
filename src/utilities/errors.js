@@ -1,3 +1,4 @@
+import { handleError } from "vue";
 import router from "../router";
 
 export function customHandleError(error, page = "") {
@@ -7,5 +8,5 @@ export function customHandleError(error, page = "") {
   } else if (error.response.data.statusCode === 403) {
     router.push({ name: "NotAuthorized" });
   }
-  throw error;
+  handleError(error);
 }

@@ -10,7 +10,12 @@
                                 containerClass="profile-img" :imageStyle="{ border: '4px solid #1d1a55' }"
                                 dimensions="150x150" />
                         </div>
-                        <h2 class="mb-2 text-center">{{ user.name }}</h2>
+                        <router-link :to="{
+                            name: 'user.profile',
+                            params: { user_id: user.id },
+                        }">
+                            <h2 class="mb-2 text-center">{{ user.name }}</h2>
+                        </router-link>
                         <p class="text-center mb-4" style="direction: rtl">
                             فريق المتابعة
                             <span class="mx-2">|</span>
@@ -59,7 +64,7 @@
                                     </span>
                                     المسؤول عنهم:
                                 </h3>
-                                <ul v-if="in_charge_of.length>0">
+                                <ul v-if="in_charge_of.length > 0">
                                     <li style="direction: rtl" class="text-start h5" v-for="user in in_charge_of"
                                         :key="user.id">{{ user.name }}</li>
                                 </ul>

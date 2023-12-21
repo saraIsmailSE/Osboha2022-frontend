@@ -4,7 +4,7 @@
             <div class="card-header">
                 <h2>قادة لم يعتمدوا الأطروحات</h2>
             </div>
-            <div class="card-body">
+            <div class="card-body" v-if="theses.length>0">
                 <div class="blog-description" v-for="(leader, index) in theses" :key="index">
                     <h2 class="book-title mb-2 rtl">{{ index }}</h2>
                     <table class="table w-100">
@@ -19,6 +19,11 @@
                     <hr />
                 </div>
             </div>
+            <div class="card-body" v-else>
+                <h4>لا يوجد</h4>
+
+            </div>
+
         </div>
     </div>
 </template>

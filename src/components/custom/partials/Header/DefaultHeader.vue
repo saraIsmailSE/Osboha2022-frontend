@@ -1,5 +1,5 @@
 <template>
-  <div class="iq-top-navbar">
+  <div class="iq-top-navbar" v-if="user">
     <nav class="nav navbar navbar-expand-lg navbar-light iq-navbar p-lg-0">
       <div class="container-fluid p-auto">
         <div class="d-flex align-items-center gap-3">

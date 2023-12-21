@@ -56,6 +56,7 @@ import Check from '@/components/book/theses/check.vue'
 import CountDown from '@/components/timer/Countdown.vue'
 import Note from '@/components/group/audit/Note.vue'
 import AuditMarkService from '@/API/services/audit-marks.service';
+import UserInfoService from "@/Services/userInfoService";
 
 export default {
     name: "Audit Mark",
@@ -74,7 +75,8 @@ export default {
             }, {});
             this.group = response.group
             this.week = response.week
-            this.expired = (((new Date(this.week.audit_timer)) - (new Date())) < 0)
+            this.expired = this.time < 0;
+
             this.authorized = response.authorized
 
         }
@@ -136,6 +138,25 @@ export default {
             this.mark_for_audit.status = status
             this.msg = 'تم التدقيق'
         },
-    }
+    },
+    computed: {
+        user() {
+            return this.$store.getters.getUser;
+        },
+        isAdvisor() {
+            return UserInfoService.hasRole(this.user, "advisor");
+        },
+
+        time() {
+            const riyadh = new Date().toLocaleString("en-US", { timeZone: "Asia/Riyadh" });
+            const date = new Date(this.week.audit_timer);
+            const now = new Date(riyadh);
+            if (this.isAdvisor) {
+                return (date.getTime() + (26 * 60 * 60 * 1000)) - now;
+            }
+            return date - now;
+        },
+    },
+
 };
 </script>

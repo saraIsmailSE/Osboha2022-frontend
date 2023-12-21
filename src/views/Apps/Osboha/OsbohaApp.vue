@@ -70,7 +70,7 @@ export default {
         this.knowAboutOsboha = this.knowAboutOsboha1;
       }
     }
-    this.fireAlert()
+    //this.fireAlert()
   },
   methods: {
     addPost(post) {

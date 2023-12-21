@@ -9,11 +9,21 @@
                 :title="mark.user.gender" :gender="mark.user.gender" avatarClass="avatar-130 img-fluid rounded-circle"
                 dimensions="150x150" />
             </div>
-            <h4 class="mb-2 text-center">{{ mark.user.name }}</h4>
+            <router-link :to="{
+              name: 'user.profile',
+              params: { user_id: mark.user.id },
+            }">
+              <h4 class="mb-2 text-center">{{ mark.user.name }}</h4>
+            </router-link>
             <p class="text-center mb-4" style="direction: rtl">
               فريق المتابعة
               <span class="mx-2">|</span>
-              <a href="#!">{{ group.name }}</a>
+              <router-link class="text-center" :to="{
+                name: 'group.group-detail',
+                params: { group_id: group.id },
+              }">
+                {{ group.name }}
+              </router-link>
             </p>
             <div class="d-flex justify-content-between text-center mt-5 mb-2">
               <div>

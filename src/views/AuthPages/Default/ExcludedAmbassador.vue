@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid p-0">
+    <div class="container-fluid p-0 mb-3">
         <div class="row no-gutters">
             <div class="col-sm-12 text-center">
                 <div class="iq-error position-relative mt-5">
@@ -12,7 +12,9 @@
                         <div class="col-sm-12 text-center" v-if="loader">
                             <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 100px;">
                         </div>
-                        <h4 class="text-center mt-3 mb-3" v-if="message"> {{ message }}</h4>
+                        <div class="alert alert-danger m-2 p-2" role="alert" v-if="message">
+                            <h4 class="text-center mt-3 mb-3"> {{ message }}</h4>
+                        </div>
                         <div class="d-inline-block w-100 text-center">
                             <button @click="returnToTeam()" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
                                 عودة إلى الفريق
@@ -27,6 +29,14 @@
                 </div>
             </div>
         </div>
+        <div class="d-flex justify-content-center">
+            <a href="https://www.messenger.com/t/117840717971244/" target="_blank" class="text-danger">
+                <span class="material-symbols-outlined">
+                    support_agent
+                </span>
+                راسلنا لمساعدتك
+            </a>
+        </div>
     </div>
 </template>
 <script>
@@ -35,7 +45,10 @@ import Auth from '@/API/services/auth.service'
 export default {
     name: "NotAmbassadorInAnyGroup",
     data() {
-        return {};
+        return {
+            message: "",
+            loader: false,
+        };
     },
     methods: {
         logout() {
@@ -45,13 +58,20 @@ export default {
             this.message = "";
             this.loader = true;
             const response = await Auth.returnToTeam()
-            if (response.statusCode == 200) {
-                this.$router.push({ name: 'osboha.list' })
+
+            if (response) {
+                this.message = response
+                if(response == 'تم التعديل بنجاح'){
+                    this.$router.push({ name: 'osboha.list' })
+                }
+
             }
             else {
                 this.message = " حدث خطأ"
             }
+
             this.loader = false;
+
         }
     },
 };

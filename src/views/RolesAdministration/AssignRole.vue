@@ -19,6 +19,29 @@
         <div class="sign-in-from">
           <form class="mt-2" @submit.prevent="onSubmit()">
             <div class="form-group">
+              <label for="role">الترقية</label>
+              <select
+                v-model="v$.form.role_id.$model"
+                class="form-select"
+                data-trigger
+                name="role"
+                id="role"
+              >
+                <option value="0" selected>ترقية إلى</option>
+                <option
+                  v-for="(role, index) in roles"
+                  :key="index"
+                  :value="role.id"
+                >
+                  {{ ARABIC_ROLES[role.name] }}
+                </option>
+              </select>
+              <small style="color: red" v-if="v$.form.role_id.$error">
+                يرجى اختيار نوع الترقية
+              </small>
+            </div>
+
+            <div class="form-group">
               <label for="user">المستخدم</label>
               <input
                 v-model="v$.form.user.$model"
@@ -36,7 +59,7 @@
                 >
               </template>
             </div>
-            <div class="form-group">
+            <div class="form-group" v-if="showHeadUser">
               <label for="head_user"> المسؤول عنه</label>
               <input
                 v-model="v$.form.head_user.$model"
@@ -48,7 +71,7 @@
               <template v-if="v$.form.head_user.$error">
                 <small
                   style="color: red"
-                  v-if="v$.form.head_user.required.$invalid"
+                  v-if="v$.form.head_user.requiredIf.$invalid"
                 >
                   البريد الالكتروني للمسؤول مطلوب</small
                 >
@@ -60,31 +83,13 @@
                 >
               </template>
             </div>
-            <div class="form-group">
-              <label for="role">الترقية</label>
-              <select
-                v-model="v$.form.role_id.$model"
-                class="form-select"
-                data-trigger
-                name="role"
-                id="role"
-              >
-                <option value="0" selected>ترقية إلى</option>
-                <option
-                  v-for="(role, index) in roles"
-                  :key="index"
-                  :value="role.id"
-                >
-                  {{       ARABIC_ROLES[role.name] }}
-                </option>
-              </select>
-              <small style="color: red" v-if="v$.form.role_id.$error">
-                يرجى اختيار نوع الترقية
-              </small>
-            </div>
 
             <div class="form-group text-center" v-if="message">
-              <small style="color: red">
+              <small
+                :style="{
+                  color: messageVariant === 'success' ? 'green' : 'red',
+                }"
+              >
                 {{ message }}
               </small>
             </div>
@@ -114,9 +119,9 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import { required, email, maxLength } from "@vuelidate/validators";
+import { required, requiredIf, email, maxLength } from "@vuelidate/validators";
 import { api } from "@/API/Intercepter";
-import { ARABIC_ROLES } from "@/utilities/constants";
+import { ARABIC_ROLES, SUPPORT_LEADER_ROLE_ID } from "@/utilities/constants";
 
 import rolesService from "@/API/services/roles.service";
 const greaterThanZero = (value) => value > 0;
@@ -134,6 +139,7 @@ export default {
     return {
       loader: false,
       ARABIC_ROLES,
+      SUPPORT_LEADER_ROLE_ID,
       form: {
         user: "",
         head_user: "",
@@ -141,19 +147,43 @@ export default {
       },
       roles: [],
       message: "",
+      messageVariant: "",
+      showHeadUser: false,
     };
   },
   validations() {
     return {
       form: {
         user: { required, email },
-        head_user: { required, email },
+        head_user: {
+          requiredIf: requiredIf(() => this.showHeadUser),
+          email,
+        },
         role_id: {
           required,
           maxValue: greaterThanZero,
         },
       },
     };
+  },
+  watch: {
+    "v$.form.role_id.$model": function (val) {
+      if (val !== this.SUPPORT_LEADER_ROLE_ID && val !== 0) {
+        this.showHeadUser = true;
+      } else {
+        this.showHeadUser = false;
+      }
+    },
+    message: function (val) {
+      if (val) {
+        setTimeout(
+          () => {
+            this.message = "";
+          },
+          this.messageVariant === "success" ? 2000 : 5000,
+        );
+      }
+    },
   },
   methods: {
     async onSubmit() {
@@ -164,6 +194,7 @@ export default {
           this.message = "";
           const response = await rolesService.assignRole(this.form);
           this.message = response;
+          this.messageVariant = "success";
 
           this.v$.form.$reset();
           this.form = {
@@ -171,12 +202,14 @@ export default {
             head_user: "",
             role_id: 0,
           };
-
-          setTimeout(() => {
-            this.message = "";
-          }, 1800);
         } catch (error) {
-          this.message = "حدث خطأ, يرجى المحاولة لاحقاً";
+          console.log(error.response.data);
+          if (error?.response?.data?.data) {
+            this.message = error.response.data.data;
+          } else {
+            this.message = "حدث خطأ, يرجى المحاولة لاحقاً";
+          }
+          this.messageVariant = "danger";
         } finally {
           this.loader = false;
         }

@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       lastSupportPost: {},
-      showReason:false,
+      showReason: false,
       setMarkForm: {
         reason: '',
       },
