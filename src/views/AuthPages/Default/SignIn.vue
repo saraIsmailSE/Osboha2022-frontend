@@ -77,11 +77,7 @@
           >
           <div class="d-inline-block w-100 text-center">
             <div class="col-sm-12 text-center" v-if="loading">
-              <img
-                :src="require('@/assets/images/page-img/page-load-loader.gif')"
-                alt="loader"
-                style="height: 80px"
-              />
+              <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 80px" />
             </div>
 
             <button type="submit" class="btn btn-primary text-center" v-else>

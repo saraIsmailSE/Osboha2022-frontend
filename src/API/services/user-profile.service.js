@@ -64,7 +64,7 @@ class UserProfile {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
       return response.data.data;
     } catch (error) {
@@ -89,7 +89,7 @@ class UserProfile {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
       return response.data.data;
     } catch (error) {
@@ -98,6 +98,32 @@ class UserProfile {
   }
 
   /**
+   * update official document.
+   *  @param  cover_picture
+   * @return updated official document.
+   */
+  async updateOfficialDocument(profilePictureForm) {
+    let formData = new FormData();
+    formData.append(
+      "official_document",
+      profilePictureForm.official_document[0],
+    );
+    try {
+      const response = await api.post(
+        "user-profile/update-official-document",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+      return response.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+  /**
    * update profile picture.
    *  @param  fileName, profileID
    * @return image url
@@ -105,7 +131,7 @@ class UserProfile {
   async getImages(fileName, profileID) {
     try {
       const response = await api.get(
-        `user-profile/profile-image/${fileName}/${profileID}`
+        `user-profile/profile-image/${fileName}/${profileID}`,
       );
       return response;
     } catch (error) {

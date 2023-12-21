@@ -42,6 +42,10 @@ export default new Vuex.Store({
       state.user.user_profile.profile_picture = profilePicture;
       localStorage.setItem("osboha__user", JSON.stringify(state.user));
     },
+    SET_ALLOWED_TO_ELIGIBLE(state, value) {
+      state.user.allowed_to_eligible = value;
+      localStorage.setItem("osboha__user", JSON.stringify(state.user));
+    },
     SET_MAIN_TIMER(state, timer) {
       state.main_timer = timer;
     },

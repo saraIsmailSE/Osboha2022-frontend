@@ -8,7 +8,7 @@
             <div class="me-3">
               <img
                 class="rounded-circle avatar-60"
-                src="@/assets/images/user/1.jpg"
+                src="@/assets/images/avatar/12.jpg"
                 alt=""
               />
             </div>
@@ -420,7 +420,7 @@
             <div class="me-3">
               <img
                 class="rounded-circle avatar-60"
-                src="@/assets/images/user/1.jpg"
+                src="@/assets/images/avatar/12.jpg"
                 alt=""
               />
             </div>
@@ -833,7 +833,7 @@
             <div class="me-3">
               <img
                 class="rounded-circle avatar-60"
-                src="@/assets/images/user/1.jpg"
+                src="@/assets/images/avatar/12.jpg"
                 alt=""
               />
             </div>
@@ -1246,7 +1246,7 @@
             <div class="me-3">
               <img
                 class="rounded-circle avatar-60"
-                src="@/assets/images/user/1.jpg"
+                src="@/assets/images/avatar/12.jpg"
                 alt=""
               />
             </div>

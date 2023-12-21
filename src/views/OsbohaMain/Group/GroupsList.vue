@@ -72,7 +72,7 @@
             </div>
 
             <div class="col-sm-12 text-center" v-if="loading">
-              <img :src="require('@/assets/images/page-img/page-load-loader.gif')" alt="loader" style="height: 100px" />
+              <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
             </div>
 
           </template>

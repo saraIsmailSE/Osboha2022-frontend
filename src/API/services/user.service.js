@@ -56,6 +56,40 @@ class UserService {
       customHandleError(error, "UserGroupService.AddMember");
     }
   }
+  async getInfo(id) {
+    try {
+      const users = await api.get(`users/info/${id}`);
+      return users.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async listUnAllowedToEligible() {
+    try {
+      const users = await api.get(`users/list-un-allowed-to-eligible`);
+      return users.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async deActiveUser(id, rejectNote) {
+    try {
+      const response = await api.post("users/deactive-user", {
+        id: id,
+        rejectNote: rejectNote,
+      });
+      return response.data;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async acceptEligibleUser(id) {
+    const user = api.patch(`users/allow-to-eligible/${id}`);
+    return user;
+  }
 }
 
 export default new UserService();

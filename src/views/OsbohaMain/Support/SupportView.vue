@@ -26,9 +26,13 @@
           </div>
 
           <div class="col-sm-12 text-center" v-if="loader">
-            <img src="@/assets/images/page-img/page-load-loader.gif" alt="loader" style="height: 100px" />
-          </div>
-          <h4 class="text-center mt-3 mb-3" v-if="message">{{ message }}</h4>
+              <img
+                src="@/assets/images/gif/page-load-loader.gif"
+                alt="loader"
+                style="height: 100px"
+              />
+            </div>
+            <h4 class="text-center mt-3 mb-3" v-if="message">{{ message }}</h4>
 
 
         </form>

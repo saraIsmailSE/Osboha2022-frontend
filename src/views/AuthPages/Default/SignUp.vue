@@ -86,7 +86,7 @@
             <div class="col-sm-12 text-center" v-if="loader">
               <p class="text-center">يتم تجهيز حسابك</p>
               <img
-                src="@/assets/images/page-img/page-load-loader.gif"
+                src="@/assets/images/gif/page-load-loader.gif"
                 alt="loader"
                 style="height: 100px"
               />

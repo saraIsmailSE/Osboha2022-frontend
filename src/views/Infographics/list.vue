@@ -12,7 +12,7 @@ export default {
         return {
             infpraphicsImg: [
                 {
-                    img: require('../../assets/images/900x900.jpg'),
+                    img: require('../../assets/images/main/reading_list.png'),
                     otherInfo: [
                         {
                             class: 'thumb_up',
@@ -25,7 +25,7 @@ export default {
                     ]
                 },
                 {
-                    img: require('../../assets/images/900x900.jpg'),
+                    img: require('../../assets/images/main/reading_list.png'),
                     otherInfo: [
                         {
                             class: 'thumb_up',
@@ -38,7 +38,7 @@ export default {
                     ]
                 },
   {
-                    img: require('../../assets/images/2-900x900.jpg'),
+                    img: require('../../assets/images/main/reading_list.png'),
                     otherInfo: [
                         {
                             class: 'thumb_up',
@@ -51,7 +51,7 @@ export default {
                     ]
                 },
                 {
-                    img: require('../../assets/images/900x900.jpg'),
+                    img: require('../../assets/images/main/reading_list.png'),
                     otherInfo: [
                         {
                             class: 'thumb_up',
@@ -64,7 +64,7 @@ export default {
                     ]
                 },
                   {
-                    img: require('../../assets/images/900x900.jpg'),
+                    img: require('../../assets/images/main/reading_list.png'),
                     otherInfo: [
                         {
                             class: 'thumb_up',
@@ -77,7 +77,7 @@ export default {
                     ]
                 },
                 {
-                    img: require('../../assets/images/2-900x900.jpg'),
+                    img: require('../../assets/images/main/reading_list.png'),
                     otherInfo: [
                         {
                             class: 'thumb_up',

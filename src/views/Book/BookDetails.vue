@@ -117,8 +117,13 @@
               </div>
 
               <div class="col-sm-12 text-center" v-if="loading">
-                <img :src="require('@/assets/images/page-img/page-load-loader.gif')
-                  " alt="loader" style="height: 100px" />
+                <img
+                  :src="
+                    require('@/assets/images/gif/page-load-loader.gif')
+                  "
+                  alt="loader"
+                  style="height: 100px"
+                />
               </div>
 
               <!-- <div class="col-lg-12">
@@ -138,8 +143,13 @@
             </div>
             <div class="row" v-else>
               <div class="col-sm-12 text-center" v-if="loading">
-                <img :src="require('@/assets/images/page-img/page-load-loader.gif')
-                  " alt="loader" style="height: 100px" />
+                <img
+                  :src="
+                    require('@/assets/images/gif/page-load-loader.gif')
+                  "
+                  alt="loader"
+                  style="height: 100px"
+                />
               </div>
               <div class="col-lg-12" v-else>
                 <div class="text-center d-flex align-items-center">

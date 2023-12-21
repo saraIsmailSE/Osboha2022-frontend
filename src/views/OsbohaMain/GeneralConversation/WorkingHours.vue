@@ -124,7 +124,7 @@
             </div>
             <div class="col-sm-12 text-center float-end" v-if="loader">
               <img
-                src="@/assets/images/page-img/page-load-loader.gif"
+                src="@/assets/images/gif/page-load-loader.gif"
                 alt="loader"
                 style="height: 100px"
               />

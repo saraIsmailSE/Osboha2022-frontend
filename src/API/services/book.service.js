@@ -22,7 +22,25 @@ class BookService {
       handleError(error);
     }
   }
+  async getAllForEligible(page) {
+    try {
+      const books = await api.get(`books/eligible?page=` + page);
+      return books.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 
+  async getBooksByNameForEligible(name, page) {
+    try {
+      const books = await api.get(
+        `/books/eligible/name?page=${page}&name=${name}`,
+      );
+      return books.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
   async getById(id) {
     try {
       const book = await api.get(`/books/${id}`);

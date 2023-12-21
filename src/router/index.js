@@ -129,11 +129,6 @@ const authchildRoutes = (prop, mode) => [
     component: () => import("../views/AuthPages/Default/ExcludedAmbassador"),
   },
   {
-    path: "lockscreen",
-    name: prop + ".lockscreen1",
-    component: () => import("../views/AuthPages/Default/LockScreen1"),
-  },
-  {
     path: "confirm-mail",
     name: prop + ".confirmmail",
     component: () => import("../views/AuthPages/Default/ConfirmMail"),
@@ -176,6 +171,12 @@ const userChildRoute = (prop, mode = false) => [
     name: prop + ".profileUpdate",
     meta: { auth: true, name: "User Profile Update" },
     component: () => import("../views/User/Sections/Update"),
+  },
+  {
+    path: "eligible-books/:user_id",
+    name: prop + ".eligible-books",
+    meta: { auth: true, name: "User Eligible Books" },
+    component: () => import("../views/User/Sections/EligibleBooks"),
   },
   {
     path: "profile/friends/requests/:user_id",
@@ -445,6 +446,155 @@ const generalConversationChildRoute = (prop, mode = false) => [
   },
 ];
 
+const thesisReview = (prop, mode = false) => [
+  {
+    path: "thesis/:user_book_id",
+    name: prop + ".thesis",
+    meta: { auth: true, name: "thesis" },
+    component: () => import("../views/OsbohaEligible/Control/Thesis/theses"),
+  },
+  {
+    path: "list",
+    name: prop + ".list",
+    meta: { auth: true, name: "list" },
+    component: () => import("../views/OsbohaEligible/Control/Thesis/list"),
+  },
+
+  {
+    path: "update/:id",
+    name: prop + ".update",
+    meta: { auth: true, name: "update" },
+    component: () => import("../views/OsbohaEligible/Theses/update"),
+  },
+];
+
+const generalInformation = (prop, mode = false) => [
+  {
+    path: "list",
+    name: prop + ".list",
+    meta: { auth: true, name: "general_informations" },
+    component: () => import("../views/OsbohaEligible/Control/General/list"),
+  },
+  {
+    path: "general_informations/:user_book_id",
+    name: prop + ".general_informations",
+    meta: { auth: true, name: "general_informations" },
+    component: () =>
+      import("../views/OsbohaEligible/Control/General/general_informations"),
+  },
+  {
+    path: "update/:id",
+    name: prop + ".update",
+    meta: { auth: true, name: "general_informations_update" },
+    component: () => import("../views/OsbohaEligible/GeneralInormation/update"),
+  },
+];
+
+const questions = (prop, mode = false) => [
+  {
+    path: "list",
+    name: prop + ".list",
+    meta: { auth: true, name: "List" },
+    component: () => import("../views/OsbohaEligible/Control/Questions/list"),
+  },
+  {
+    path: "questions/:user_book_id",
+    name: prop + ".questions",
+    meta: { auth: true, name: "questionsList" },
+    component: () =>
+      import("../views/OsbohaEligible/Control/Questions/questions"),
+  },
+  {
+    path: "update/:id",
+    name: prop + ".update",
+    meta: { auth: true, name: "questionsUpdate" },
+    component: () => import("../views/OsbohaEligible/Questions/update"),
+  },
+];
+
+const achievement = (prop, mode = false) => [
+  {
+    path: "steps",
+    name: prop + ".steps",
+    meta: { auth: true, name: "steps" },
+    component: () => import("../views/OsbohaEligible/Achievement/Steps"),
+  },
+  {
+    path: "theses",
+    name: prop + ".theses",
+    meta: { auth: true, name: "theses" },
+    component: () => import("../views/OsbohaEligible/Achievement/Theses"),
+  },
+  {
+    path: "general_summary/",
+    name: prop + ".general_summary",
+    meta: { auth: true, name: "general_summary" },
+    component: () =>
+      import("../views/OsbohaEligible/Achievement/GeneralSummary"),
+  },
+  {
+    path: "questions/",
+    name: prop + ".questions",
+    meta: { auth: true, name: "questions" },
+    component: () => import("../views/OsbohaEligible/Achievement/Questions"),
+  },
+  {
+    path: "check-achievement/",
+    name: prop + ".checkAchievement",
+    meta: { auth: true, name: "check-achievement" },
+    component: () =>
+      import("../views/OsbohaEligible/Achievement/CheckAchievement"),
+  },
+];
+
+const superReviewer = (prop, mode = false) => [
+  {
+    path: "team-work",
+    name: prop + ".team-work",
+    meta: { auth: true, name: "team-work" },
+    component: () => import("../views/OsbohaEligible/SuperReviewer/teamWork"),
+  },
+  {
+    path: "returned",
+    name: prop + ".returned",
+    meta: { auth: true, name: "returned" },
+    component: () => import("../views/OsbohaEligible/SuperReviewer/Returned"),
+  },
+  {
+    path: "accepted",
+    name: prop + ".accepted",
+    meta: { auth: true, name: "accepted" },
+    component: () => import("../views/OsbohaEligible/SuperReviewer/Accepted"),
+  },
+];
+
+const adminControll = (prop, mode = false) => [
+  {
+    path: "statistics",
+    name: prop + ".statistics",
+    meta: { auth: true, name: "statistics" },
+    component: () => import("../views/OsbohaEligible/Admin/statistics"),
+  },
+  {
+    path: "accept-certificates",
+    name: prop + ".accept-certificates",
+    meta: { auth: true, name: "acceptCertificates" },
+    component: () => import("../views/OsbohaEligible/Admin/acceptCertificate"),
+  },
+  {
+    path: "accept-users",
+    name: prop + ".accept-users",
+    meta: { auth: true, name: "acceptNormal" },
+    component: () => import("../views/OsbohaEligible/Admin/acceptNormal"),
+  },
+  {
+    path: "find-achievement",
+    name: prop + ".find-achievement",
+    meta: { auth: true, name: "acceptNormal" },
+    component: () => import("../views/OsbohaEligible/Admin/FindAchievement"),
+  },
+];
+
 const timerChildRoute = (prop, mode = false) => [
   {
     path: "timer-list",
@@ -466,6 +616,19 @@ const bookChildRoute = (prop, mode = false) => [
     name: prop + ".latest",
     meta: { auth: true, name: "Latest Book" },
     component: () => import("../views/Book/LatestBook"),
+  },
+  {
+    path: "eligible",
+    name: prop + ".eligible",
+    meta: { auth: true, name: "eligible Books" },
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
+    component: () => import("../views/OsbohaEligible/Books/List"),
+  },
+  {
+    path: "eligible-controle",
+    name: prop + ".eligible-controle",
+    meta: { auth: true, name: "eligible Controle" },
+    component: () => import("../views/OsbohaEligible/Control/List"),
   },
   {
     path: "update/:book_id",
@@ -693,6 +856,59 @@ const routes = [
     meta: { auth: true },
     children: generalConversationChildRoute("general-conversation"),
   },
+
+  /* ########## Start Eligible Routes ########## */
+  {
+    path: "/thesis-review",
+    name: "thesis-review",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: thesisReview("thesis-review"),
+  },
+  {
+    path: "/ready-to-audit",
+    name: "ReadyToAudit",
+    meta: { auth: true, name: "ReadyToAudit" },
+    component: () => import("../views/OsbohaEligible/Control/readyToAudit"),
+  },
+
+  {
+    path: "/general",
+    name: "general",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: generalInformation("general"),
+  },
+  {
+    path: "/questions",
+    name: "questions",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: questions("questions"),
+  },
+  {
+    path: "/admin",
+    name: "admin",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: adminControll("admin"),
+  },
+  {
+    path: "/achievement/:id/",
+    name: "achievement",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: achievement("achievement"),
+  },
+  {
+    path: "/super-reviewer",
+    name: "super-reviewer",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: superReviewer("super-reviewer"),
+  },
+
+  /* ########## End Eligible Routes ########## */
 ];
 
 const router = createRouter({
