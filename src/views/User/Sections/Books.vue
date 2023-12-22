@@ -34,7 +34,7 @@
           </h4>
         </router-link>
 
-        <router-link class="col-6" v-if="isAuth && (advisorAndAbove || eligibleTeam)" :to="{
+        <router-link class="col-6" v-if="isAuth && (supervisorAndAbove || eligibleTeam)" :to="{
           name: 'user.eligible-books',
           params: {
             user_id: this.$route.params.user_id,
@@ -102,15 +102,18 @@ export default {
     user() {
       return this.$store.getters.getUser;
     },
-    advisorAndAbove() {
+    supervisorAndAbove() {
       return UserInfoService.hasRoles(this.user, [
         "admin",
         "consultant",
         "advisor",
+        "supervisor",
       ]);
     },
     eligibleTeam() {
       return UserInfoService.hasRoles(this.user, [
+        "admin",
+        'eligible_admin',
         'reviewer',
         'auditor',
         'user_accept',

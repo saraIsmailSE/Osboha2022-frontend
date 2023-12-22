@@ -304,7 +304,7 @@ export default {
   },
   methods: {
     listCertificate(id) {
-      window.open(`https://platform.osboha180.com/backend/public/api/v1/certificates/generate-pdf/${id}`, '_blank');
+      window.open(`https://platform.osboha180.com/backend/public/api/v1/eligible-certificates/generate-pdf/${id}`, '_blank');
     },
     async lastAchievement() {
       const response = await userBookServices.lastAchievement();

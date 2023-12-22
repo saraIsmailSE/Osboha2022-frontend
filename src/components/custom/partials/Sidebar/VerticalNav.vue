@@ -116,14 +116,14 @@
     </li>
 
     <!-- ###### Osboha Eligible ###### -->
-    <li class="nav-item" v-if="advisorAndAbove || eligibleTeam">
+    <li class="nav-item" v-if="advisorAndAbove || eligibleTeam || isSupervisor">
       <router-link :class="checkActive('book.eligible') ? 'active nav-link' : 'nav-link'" aria-current="page"
         :to="{ name: 'book.eligible' }">
         <i class="icon material-symbols-outlined"> contract_edit </i>
         <span class="item-name">توثيق كتاب</span>
       </router-link>
     </li>
-    <li class="nav-item" v-if="advisorAndAbove || eligibleTeam">
+    <li class="nav-item" v-if="advisorAndAbove || eligibleTeam || isSupervisor">
       <router-link :class="checkActive('book.eligible-controle') ? 'active nav-link' : 'nav-link'" aria-current="page"
         :to="{ name: 'book.eligible-controle' }">
         <i class="icon material-symbols-outlined"> contract_edit </i>
@@ -383,6 +383,8 @@ export default {
     },
     eligibleTeam() {
       return UserInfoService.hasRoles(this.user, [
+        "admin",
+        'eligible_admin',
         'reviewer',
         'auditor',
         'user_accept',

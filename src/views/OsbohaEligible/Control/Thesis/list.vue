@@ -161,6 +161,7 @@ export default {
         canAudit() {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
+                "eligible_admin",
                 "super_auditer",
                 "auditor",
             ]);
@@ -168,6 +169,7 @@ export default {
         canReview() {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
+                "eligible_admin",
                 "super_reviewer",
                 "reviewer",
             ]);

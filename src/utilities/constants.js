@@ -9,6 +9,7 @@ export const ARABIC_ROLES = {
   admin: "ادارة",
   book_quality_team: "جودة الكتب",
   support_leader: "قائد دعم",
+  eligible_admin: "مسؤول توثيق الكتب"
 };
 
 export const LANUAGES = {

@@ -37,7 +37,7 @@
                   <!-- fieldsets -->
                   <fieldset v-for="(question, index) in  questions" :key="index"
                      :class="current == index + 1 ? 'd-block' : 'd-none'">
-                     <question :question="question" :userBook='userBook' :index='index' @onNext="changeTab" />
+                     <question :question="question" :userBook='userBook' :index='index' @onNext="changeTab" :reviewStage="true" />
                   </fieldset>
                </form>
             </template>
@@ -295,6 +295,7 @@ export default {
       isSuper() {
          return UserInfoService.hasRoles(this.user, [
             "admin",
+            "eligible_admin",
             "super_auditer",
             "super_reviewer",
          ]);
@@ -302,6 +303,7 @@ export default {
       isAuditer() {
          return UserInfoService.hasRoles(this.user, [
             "admin",
+            "eligible_admin",
             "super_auditer",
             "auditor",
          ]);
@@ -309,6 +311,7 @@ export default {
       isReviewer() {
          return UserInfoService.hasRoles(this.user, [
             "admin",
+            "eligible_admin",
             "super_reviewer",
             "reviewer",
          ]);

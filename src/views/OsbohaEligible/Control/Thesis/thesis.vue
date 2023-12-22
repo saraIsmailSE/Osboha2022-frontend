@@ -85,8 +85,7 @@
 
                                             <!-- ACCEPT -->
                                             <input type="button" value="قبول" class="btn btn-primary d-block w-100 mt-3 "
-                                                @click="accept(thesis.id)" v-if="isReviewer"
-                                                :disabled='!isAcceptable' />
+                                                @click="accept(thesis.id)" v-if="isReviewer" :disabled='!isAcceptable' />
                                             <!-- END ACCEPT -->
 
                                             <!-- RETARD -->
@@ -478,6 +477,7 @@ export default {
         isSuper() {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
+                "eligible_admin",
                 "super_auditer",
                 "super_reviewer",
             ]);
@@ -485,6 +485,7 @@ export default {
         isAuditer() {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
+                "eligible_admin",
                 "super_auditer",
                 "auditor",
             ]);
@@ -492,6 +493,7 @@ export default {
         isReviewer() {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
+                "eligible_admin",
                 "super_reviewer",
                 "reviewer",
             ]);

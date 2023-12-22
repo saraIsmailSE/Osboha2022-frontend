@@ -37,6 +37,7 @@
                                 <div class="col-md-12 form-group">
                                 </div>
                             </div>
+                            
                             <div v-if="reviewStage">
 
                                 <div class="col-md-12 mb-3 form-group" v-if="(question.status == 'audit' && isAuditer)">
@@ -490,6 +491,7 @@ export default {
         isSuper() {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
+                "eligible_admin",
                 "super_auditer",
                 "super_reviewer",
             ]);
@@ -497,6 +499,7 @@ export default {
         isAuditer() {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
+                "eligible_admin",
                 "super_auditer",
                 "auditor",
             ]);
@@ -504,6 +507,7 @@ export default {
         isReviewer() {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
+                "eligible_admin",
                 "super_reviewer",
                 "reviewer",
             ]);
