@@ -4,15 +4,15 @@
       <h1 class="text-center mb-3">الانجاز الحالي </h1>
       <BookCard v-for="(bookInfo, index) in openBook" :key="index" :bookInfo="bookInfo" :current=true />
       <hr>
-    </div> 
+    </div>
 
     <h2 class="text-center mb-3">ابحث عن كتاب </h2>
     <div class="iq-email-search d-flex justify-content-center mb-3">
       <form class="w-100  me-2 position-relative searchbox">
         <div class="form-group mb-0">
           <input type="text" class=" border border-primary w-100 text search-input form-control " v-model.trim="search"
-            placeholder="ابحث عن كتاب" @keyup="filteredBooks" />
-          <a class="search-link" href="javascript:void(0);" @click="filteredBooks()">
+            placeholder="ابحث عن كتاب" @keyup="getBooks(page)" />
+          <a class="search-link" href="javascript:void(0);" @click="getBooks(page)">
             <i class="material-symbols-outlined">
               search
             </i>
@@ -78,33 +78,17 @@ export default {
   },
   methods: {
     async getBooks(page) {
-      const response = await bookService.getAllForEligible(page);
-      console.log("🚀 ~ file: List.vue:84 ~ getBooks ~ response:", response)
+      this.empty = ''
+      const response = await bookService.getAllForEligible(page, this.search);
       this.books = response.books.data;
       this.openBook = response.open_book;
       this.totalBooks = response.books.total
       this.current = page
-    },
-
-    async filteredBooks() {
-      this.empty = ''
-
-      if (this.search) {
-        const response = await bookService.getBookByNameForEligible(this.search);
-        if (response == 'empty') {
-          this.empty = 'لا يوجد كتاب بهذا الاسم'
-        }
-        else {
-          this.books = response.data;
-          this.totalBooks = response.total
-
-        }
-      }
-      else {
-        const response = await bookService.getAllBooks(this.page);
-        this.books = response.books.data;
+      if (this.totalBooks == 0) {
+        this.empty = 'لا يوجد نتائج'
       }
     },
+
     checkActive(item) {
       let className = ''
       if (this.current == item) {

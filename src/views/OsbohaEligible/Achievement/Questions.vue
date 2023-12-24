@@ -3,20 +3,21 @@
     <div class="col-sm-12">
       <iq-card>
         <div class="iq-card-body profile-page p-0">
-          <div class="profile-header">
-            <div class="cover-container">
-              <img src="@/assets/images/main/book-banner.png" alt="profile-bg" class="rounded img-fluid" />
-            </div>
-            <div class="user-detail text-center mb-3">
-              <div class="profile-img">
-                <img src="@/assets/images/main/reader.png" alt="profile-img" class="avatar-130 img-fluid" />
-              </div>
-              <div class="profile-detail mt-1">
-                <br />
-                <h3 class="" v-if="book">
-                  {{ book.name }} - قسم الأسئلة العامة
-                </h3>
-              </div>
+          <div class="p-0 text-center">
+            <h3 class="text-center mt-3">
+              <strong> عنوان </strong>
+            </h3>
+            <video class="w-75" controls preload="metadata">
+              <source src="@/assets/videos/eligible_videos/questions.mp4#t=5.0" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="user-detail text-center mb-3">
+            <div class="profile-detail mt-1">
+              <br />
+              <h3 class="" v-if="book">
+                {{ book.name }} - قسم الأسئلة العامة
+              </h3>
             </div>
           </div>
         </div>
@@ -26,8 +27,8 @@
           <div class="user-tabing">
             <tab-nav :pills="true" id="pills-tab"
               class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
-              <tab-nav-items class="w-100 p-0" :active="true" id="pills-feed-tab" href="#questions_container"
-                ariaControls="pills-home" role="tab" :ariaSelected="true" title="المرحلة الثالثة - الاسئلة المعرفية" />
+              <tab-nav-items class="w-100 p-0" :active="true" id="pills-feed-tab" 
+                ariaControls="pills-home" :ariaSelected="true" title="المرحلة الثالثة - الاسئلة المعرفية" />
             </tab-nav>
           </div>
         </div>

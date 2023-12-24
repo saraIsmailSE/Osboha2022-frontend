@@ -4,7 +4,7 @@
             <div class="card-header">
                 <h2>قادة لم يعتمدوا الأطروحات</h2>
             </div>
-            <div class="card-body" v-if="theses.length>0">
+            <div class="card-body" v-if="theses">
                 <div class="blog-description" v-for="(leader, index) in theses" :key="index">
                     <h2 class="book-title mb-2 rtl">{{ index }}</h2>
                     <table class="table w-100">
@@ -40,7 +40,7 @@ export default {
     data() {
         return {
             loader: false,
-            theses: [],
+            theses: null,
             message: "",
         };
     },

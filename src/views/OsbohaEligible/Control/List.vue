@@ -37,7 +37,7 @@
                                 </div>
                                 <div class="col-6 col-md-6 col-lg-6">
                                     <div class="card">
-                                        <router-link :to="{ name: 'group.addGroup', }">
+                                        <router-link :to="{ name: 'roles.upgradeEligibleRole', }">
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center justify-content-center">
                                                     <div

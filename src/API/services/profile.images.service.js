@@ -18,7 +18,6 @@ class profileImagesService {
    * @return image url
    */
   getOfficialDoc(user_id) {
-    // const url = `${baseURL}/profile-image?fileName=${image}&profileID=${profile_id}`
     const url = `${baseURL}/official_document/${user_id}`;
     return url;
   }

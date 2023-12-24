@@ -119,7 +119,8 @@
     <li class="nav-item" v-if="advisorAndAbove || eligibleTeam || isSupervisor">
       <router-link :class="checkActive('book.eligible') ? 'active nav-link' : 'nav-link'" aria-current="page"
         :to="{ name: 'book.eligible' }">
-        <i class="icon material-symbols-outlined"> contract_edit </i>
+        <img src="@/assets/images/main/eligible_logo.png" class="img-fluid rounded w-25" alt="blog-img" />
+        <!-- <i class="icon material-symbols-outlined"> contract_edit </i> -->
         <span class="item-name">توثيق كتاب</span>
       </router-link>
     </li>

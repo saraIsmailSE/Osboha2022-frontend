@@ -50,7 +50,15 @@
               </li>
             </ul>
           </div>
-
+          <div class="p-0 text-center">
+            <h3 class="text-center mt-2">
+              <strong> عنوان </strong>
+            </h3>
+            <video class="w-75" controls preload="metadata">
+              <source src="@/assets/videos/eligible_videos/main.mp4#t=5.0" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
           <TimeLine :items="timelineItems" />
         </template>
       </iq-card>
@@ -135,8 +143,8 @@ export default {
         {
           color: "primary",
           title: "التلخيص العام",
-          description: 
-`
+          description:
+            `
           <h4 class="mb-2">كيف اكتب الملخص العام، وكيف أحدد السؤال العام </h4>
           لكل مادة مقروءة (كتاب) هناك سؤال عام يسعى الكتاب لنقاشه، ومنه يتفرع
                                             الكتاب على شكل

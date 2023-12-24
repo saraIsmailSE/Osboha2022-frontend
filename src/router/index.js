@@ -262,6 +262,12 @@ const rolesChildRoute = (prop, mode = false) => [
     component: () => import("../views/RolesAdministration/AssignRole"),
   },
   {
+    path: "/upgrade-eligible-role",
+    name: prop + ".upgradeEligibleRole",
+    meta: { auth: true, name: "Upgrade Eligible Role" },
+    component: () => import("../views/RolesAdministration/UpgradeEligibleRole"),
+  },
+  {
     path: "/change-advising-team",
     name: prop + ".changeAdvisingTeam",
     meta: { auth: true, name: "Change Advising Team" },

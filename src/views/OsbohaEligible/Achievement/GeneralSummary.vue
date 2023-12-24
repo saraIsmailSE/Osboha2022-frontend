@@ -3,18 +3,22 @@
         <div class="col-sm-12">
             <iq-card>
                 <div class="iq-card-body profile-page p-0">
-                    <div class="profile-header">
-                        <div class="cover-container">
-                            <img src="@/assets/images/main/book-banner.png" alt="profile-bg" class="rounded img-fluid" />
+                    <div class="p-0 text-center">
+                        <h3 class="text-center mt-3">
+                            <strong> عنوان </strong>
+                        </h3>
+                        <video class="w-75" controls preload="metadata">
+                            <source src="@/assets/videos/eligible_videos/general_informations.mp4#t=5.0" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="user-detail text-center mb-3">
+                        <div class="profile-img">
+                            <img src="@/assets/images/main/reader.png" alt="profile-img" class="avatar-130 img-fluid" />
                         </div>
-                        <div class="user-detail text-center mb-3">
-                            <div class="profile-img">
-                                <img src="@/assets/images/main/reader.png" alt="profile-img" class="avatar-130 img-fluid" />
-                            </div>
-                            <div class="profile-detail mt-1">
-                                <br />
-                                <h3 class="" v-if="book">{{ book.name }} - قسم التلخيص والفكرة العامة</h3>
-                            </div>
+                        <div class="profile-detail mt-1">
+                            <br />
+                            <h3 class="" v-if="book">{{ book.name }} - قسم التلخيص والفكرة العامة</h3>
                         </div>
                     </div>
                 </div>
@@ -138,7 +142,8 @@
                                                             <label class="form-label" for="bookGeneralIdea">الفكرة
                                                                 العامة</label>
                                                             <textarea v-model="v$.generalInfromationsform.summary.$model"
-                                                                rows="5" placeholder="... اكتب الملخص العام عدد حروفه بين 350 و 4800"
+                                                                rows="5"
+                                                                placeholder="... اكتب الملخص العام عدد حروفه بين 350 و 4800"
                                                                 class="rounded form-control"
                                                                 id="bookGeneralIdea"></textarea>
                                                             <small style="color:red;"
@@ -152,7 +157,8 @@
                                                             </label>
                                                             <textarea
                                                                 v-model="v$.generalInfromationsform.general_question.$model"
-                                                                rows="5" placeholder="...  اكتب هنا السؤال العام الذي يسعى هذا الكتاب لإجابته لا يزيد عدد حروفة عن 250"
+                                                                rows="5"
+                                                                placeholder="...  اكتب هنا السؤال العام الذي يسعى هذا الكتاب لإجابته لا يزيد عدد حروفة عن 250"
                                                                 class="rounded form-control"
                                                                 id="bookGeneralQuestion"></textarea>
                                                             <small style="color:red;"

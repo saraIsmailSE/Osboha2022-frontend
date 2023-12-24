@@ -5,10 +5,25 @@ class RolesService {
   constructor() {
     this.prefix = "roles";
   }
-
   async assignRole(formData) {
     try {
       const response = await api.post(`${this.prefix}/assign-role`, formData);
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+  async getEligibleRoles() {
+    try {
+      const response = await api.get(`${this.prefix}/get-eligible-roles`);
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+  async assignRoleV2(formData) {
+    try {
+      const response = await api.post(`${this.prefix}/assign-role-v2`, formData);
       return response.data.data;
     } catch (error) {
       handleError(error);
