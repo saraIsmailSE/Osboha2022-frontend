@@ -39,7 +39,7 @@ class generalInformationsServices {
     return generalInformations.data.data;
   }
   async addGeneralInformations(data) {
-    const response = await api.post(`${this.prefix}/`, data);
+    const response = await api.post(`${this.prefix}`, data);
     return response.data.data;
   }
   async updateGeneralInformations(data, id) {
