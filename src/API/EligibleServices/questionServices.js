@@ -53,7 +53,7 @@ class questionServices {
 
     const response = api.post(`${this.prefix}/review`, {
       id: questionId,
-      user_book_id: user_book_id,
+      eligible_user_books_id: user_book_id,
       status: status,
       reviewer_id: store.getters.getUser.id,
     });

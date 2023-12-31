@@ -16,7 +16,7 @@
                     <th scope="col"></th>
                 </tr>
             </thead>
-            <tbody v-for="mark in ReadingData" :key="mark.id">
+            <tbody v-for="mark in ReadingDataTofilter.sort((a, b) => b.total_pages - a.total_pages)" :key="mark.id">
                 <tr class="d-flex justify-content-around">
                     <td class="align-middle text-center">
                         <span> {{ mark.user.name }} </span>
@@ -71,10 +71,18 @@ export default {
         },
 
     },
+    created(){
+        this.ReadingDataTofilter=this.ReadingData
+    },
+    data() {
+        return {
+            ReadingDataTofilter: null,
+        }
+    },
     computed: {
 
         totalPages() {
-            return this.ReadingData.reduce((accumulator, item) => accumulator + parseFloat(item.total_pages), 0);
+            return this.ReadingDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.total_pages), 0);
         }
     }
 

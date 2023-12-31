@@ -148,7 +148,7 @@ export default {
     },
     methods: {
         getFormatedDate(value) {
-            return moment(String(value)).format('MM/DD/YYYY hA')
+            return moment(String(value)).format('DD/MM/YYYY - hA')
         },
         async Questions(status) {
             return await questionServices.getByStatus(status);

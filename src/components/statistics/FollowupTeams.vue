@@ -1,5 +1,5 @@
 <template>
-    <div class="card-body" v-if="teamData">
+    <div class="card-body" v-if="teamDataTofilter">
         <div class="blog-description">
             <table class="table inline-grid w-100">
                 <thead>
@@ -10,7 +10,7 @@
                         <th scope="col">المعدل الأسبوعي</th>
                     </tr>
                 </thead>
-                <tbody v-for="leader in teamData" :key="leader.leader_name">
+                <tbody v-for="leader in teamDataTofilter.sort((a, b) => b.week_avg - a.week_avg)" :key="leader.leader_name">
                     <tr class="">
                         <td class="align-middle text-center">
                             <span>{{ leader.leader_name }} </span>
@@ -49,7 +49,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody v-for="leader in teamData" :key="leader.leader_name">
+                <tbody v-for="leader in teamDataTofilter.sort((a, b) => b.ambassadors_withdraw_in_group - a.ambassadors_withdraw_in_group)" :key="leader.leader_name">
                     <tr class="text-center">
 
                         <td class="align-middle text-center">
@@ -81,7 +81,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody v-for="leader in teamData" :key="leader.leader_name">
+                <tbody v-for="leader in teamDataTofilter.sort((a, b) => b.ambassadors_excluded_in_group - a.ambassadors_excluded_in_group)" :key="leader.leader_name">
                     <tr class="text-center">
 
                         <td class="align-middle text-center">
@@ -114,7 +114,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody v-for="leader in teamData" :key="leader.leader_name">
+                <tbody v-for="leader in teamDataTofilter.sort((a, b) => b.is_freezed - a.is_freezed)" :key="leader.leader_name">
                     <tr class="d-flex justify-content-around">
 
                         <td class="align-middle text-center">
@@ -146,7 +146,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody v-for="leader in teamData" :key="leader.leader_name">
+                <tbody v-for="leader in teamDataTofilter.sort((a, b) => b.number_zero_varible - a.number_zero_varible)" :key="leader.leader_name">
                     <tr class="d-flex justify-content-around">
                         <td class="align-middle text-center">
                             <span> {{ leader.team }} </span>
@@ -178,7 +178,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody v-for="leader in teamData" :key="leader.leader_name">
+                <tbody v-for="leader in teamDataTofilter.sort((a, b) => b.new_ambassadors - a.new_ambassadors)" :key="leader.leader_name">
                     <tr class="d-flex justify-content-around">
                         <td class="align-middle text-center">
                             <span> {{ leader.team }} </span>
@@ -202,33 +202,41 @@
 
 export default {
     name: 'followup teams statistics',
+    created(){
+        this.teamDataTofilter=this.teamData
+    },
     props: {
         teamData: {
             required: true,
         },
-
     },
+    data() {
+        return {
+            teamDataTofilter: null,
+        }
+    },
+
     computed: {
         generalAvg() {
             // Calculate the sum of all week_avg values
-            const sum = this.teamData.reduce((accumulator, item) => accumulator + parseFloat(item.week_avg), 0);
+            const sum = this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.week_avg), 0);
             // Calculate the average
-            return Math.round(sum / this.teamData.length).toFixed(2);
+            return Math.round(sum / this.teamDataTofilter.length).toFixed(2);
         },
         totalWithdraw() {
-            return this.teamData.reduce((accumulator, item) => accumulator + parseFloat(item.ambassadors_withdraw_in_group), 0);
+            return this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.ambassadors_withdraw_in_group), 0);
         },
         totalFreezed() {
-            return this.teamData.reduce((accumulator, item) => accumulator + parseFloat(item.is_freezed), 0);
+            return this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.is_freezed), 0);
         },
         totalExcluded() {
-            return this.teamData.reduce((accumulator, item) => accumulator + parseFloat(item.ambassadors_excluded_in_group), 0);
+            return this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.ambassadors_excluded_in_group), 0);
         },
         totalOfZeroVarible() {
-            return this.teamData.reduce((accumulator, item) => accumulator + parseFloat(item.number_zero_varible), 0);
+            return this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.number_zero_varible), 0);
         },
         totalNewAmbassadros() {
-            return this.teamData.reduce((accumulator, item) => accumulator + parseFloat(item.new_ambassadors), 0);
+            return this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.new_ambassadors), 0);
         },
     }
 

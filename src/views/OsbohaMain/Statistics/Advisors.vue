@@ -40,7 +40,7 @@
                                 <th scope="col">احصائية المراقبين</th>
                             </tr>
                         </thead>
-                        <tbody v-for="statistics_data in advisorStatistics" :key="statistics_data.advisor_name">
+                        <tbody v-for="statistics_data in advisorStatistics.sort((a, b) => b.week_avg - a.week_avg)" :key="statistics_data.advisor_name">
                             <tr class="">
                                 <td class="align-middle text-center">
                                     <span>{{ statistics_data.advisor_name }} </span>
@@ -92,7 +92,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody v-for="statistics_data in advisorStatistics" :key="statistics_data.advisor_name">
+                        <tbody v-for="statistics_data in advisorStatistics.sort((a, b) => b.ambassadors_withdraw_in_group - a.ambassadors_withdraw_in_group)" :key="statistics_data.advisor_name">
                             <tr class="text-center">
 
                                 <td class="align-middle text-center">
@@ -124,7 +124,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody v-for="statistics_data in advisorStatistics" :key="statistics_data.advisor_name">
+                        <tbody v-for="statistics_data in advisorStatistics.sort((a, b) => b.ambassadors_excluded_in_group - a.ambassadors_excluded_in_group)" :key="statistics_data.advisor_name">
                             <tr class="text-center">
 
                                 <td class="align-middle text-center">
@@ -157,7 +157,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody v-for="statistics_data in advisorStatistics" :key="statistics_data.advisor_name">
+                        <tbody v-for="statistics_data in advisorStatistics.sort((a, b) => b.is_freezed - a.is_freezed)" :key="statistics_data.advisor_name">
                             <tr class="d-flex justify-content-around">
 
                                 <td class="align-middle text-center">
@@ -189,7 +189,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody v-for="statistics_data in advisorStatistics" :key="statistics_data.advisor_name">
+                        <tbody v-for="statistics_data in advisorStatistics.sort((a, b) => b.number_zero_varible - a.number_zero_varible)" :key="statistics_data.advisor_name">
                             <tr class="d-flex justify-content-around">
                                 <td class="align-middle text-center">
                                     <span> {{ statistics_data.team }} </span>
@@ -221,7 +221,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody v-for="statistics_data in advisorStatistics" :key="statistics_data.advisor_name">
+                        <tbody v-for="statistics_data in advisorStatistics.sort((a, b) => b.new_ambassadors - a.new_ambassadors)" :key="statistics_data.advisor_name">
                             <tr class="d-flex justify-content-around">
                                 <td class="align-middle text-center">
                                     <span> {{ statistics_data.team }} </span>
