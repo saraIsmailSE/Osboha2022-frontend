@@ -27,7 +27,7 @@
                 <td colspan="2" class="text-center">لا يوجد ساعات عمل</td>
               </tr>
               <tr v-for="item in workingHours" :key="item.id">
-                <td>{{ formatFullDate(item.created_at, false) }}</td>
+                <td>{{ formatFullDate(item.date, false) }}</td>
 
                 <td>{{ minutesToHoursAndMinutes(item.minutes) }}</td>
               </tr>
