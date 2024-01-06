@@ -62,7 +62,7 @@
                             </div>
                             <div class="mt-2">
                                 <h3 class="mb-0 text-center">
-                                    نقل مراقب
+                                    نقل فريق رقابي
                                 </h3>
                             </div>
                         </div>

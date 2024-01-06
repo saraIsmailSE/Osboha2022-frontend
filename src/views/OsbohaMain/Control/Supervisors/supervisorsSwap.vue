@@ -3,7 +3,6 @@
         <iq-card class="iq-card">
             <div class="iq-card-header-toolbar text-center align-items-center mx-auto">
                 <h1 class="text-center mt-3">تبديل المراقبين</h1>
-                <h4 class="text-center mt-1 mb-3">في التوجيه نفسه</h4>
             </div>
             <div class="iq-card-body p-4">
                 <div class="image-block text-center">
