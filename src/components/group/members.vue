@@ -98,7 +98,7 @@
         </router-link>
         <a
           role="button"
-          v-if="(isAdmin || isConsultant) && hasSupportLeader"
+          v-if="advisorAndAbove && hasSupportLeader"
           class="dropdown-item d-flex align-items-center"
           @click="deleteSupportLeader(supportLeader?.pivot.id)"
         >

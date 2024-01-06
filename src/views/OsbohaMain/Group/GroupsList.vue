@@ -50,7 +50,7 @@
                       {{ group.users_count }}
                     </td>
 
-                    <td>
+                    <td v-if="group.group_administrators">
                       <span role="button" @click="groupAdministrators(group.group_administrators, group.name)"
                         class="text-danger material-symbols-outlined ms-1 me-1">
                         shield_person

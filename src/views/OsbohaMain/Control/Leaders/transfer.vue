@@ -15,23 +15,41 @@
 
                 <div class="sign-in-from">
                     <form class="mt-2" @submit.prevent="onSubmit()">
-                        <div class="form-group">
-                            <!-- ########## leader ########## -->
 
-                            <label for="leader">البريد الالكتروني للقائد</label>
-                            <input v-model="v$.form.leader.$model" type="email" class="form-control mb-0" id="leader"
-                                placeholder="ادخل البريد الالكتروني للقائد" />
-                            <template v-if="v$.form.leader.$error">
-                                <small style="color: red" v-if="v$.form.leader.required.$invalid">البريد
+                        <!-- ########## leader ########## -->
+                        <div class="form-group" v-for="(leader, index) in form.leaders" :key="index">
+                            <label for="leader">
+                                البريد الالكتروني للقائد
+                                {{ index + 1 }}
+                            </label>
+                            <div class="d-flex">
+                                <input v-model="leader.leader_email" type="email" class="align-middle form-control mb-0"
+                                    id="leader" placeholder="ادخل البريد الالكتروني للقائد" />
+                                <small class=" material-symbols-outlined" role="button" @click="removeField(index)">
+                                    close
+                                </small>
+                            </div>
+                            <template v-if="v$.form.leaders.$error">
+                                <small style="color: red" v-if="v$.leader.leader_email.required.$invalid">البريد
                                     الالكتروني
                                     للقائد
                                     مطلوب</small>
-                                <small style="color: red" v-if="v$.form.leader.email.$invalid">البريد الالكتروني
+                                <small style="color: red" v-if="v$.leader.leader_email.email.$invalid">البريد
+                                    الالكتروني
                                     للقائد غير
                                     صحيح</small>
                             </template>
                         </div>
 
+                        <div class="ms-2 mb-2">
+                            <button type="button" class="btn btn-info" @click="addField">
+                                <span class="align-middle material-symbols-outlined">
+                                    person_add
+                                </span>
+
+                            </button>
+
+                        </div>
                         <div class="form-group">
                             <!-- ########## New Supervisor  => if newSupervisor_currentToAmbassador ########## -->
                             <label for="newSupervisor">المراقب الجديد</label>
@@ -52,6 +70,20 @@
                                 {{ message }}
                             </small>
                         </div>
+                        <div class="form-group text-center" v-if="need_promotion.length > 0">
+                            <h4> قادة بحاجة لترقية </h4>
+                            <h5 style="color: red" v-for="leader in need_promotion" :key="leader">
+                                - {{ leader }}
+                                <br />
+                            </h5>
+                        </div>
+                        <div class="form-group text-center" v-if="not_exists.length > 0">
+                            <h4> قادة غير موجودون </h4>
+                            <h5 style="color: red" v-for="leader in not_exists" :key="leader">
+                                - {{ leader }}
+                                <br />
+                            </h5>
+                        </div>
                         <div class="col-sm-12 text-center" v-if="loader">
                             <p class="text-center">جاري النقل</p>
                             <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 100px" />
@@ -70,7 +102,7 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import { required, email, requiredIf } from "@vuelidate/validators";
+import { required, email, minLength } from "@vuelidate/validators";
 import RolesService from "@/API/services/roles.service";
 
 export default {
@@ -82,24 +114,41 @@ export default {
         return {
             loader: false,
             form: {
-                leader: "",
+                leaders: [
+                    { leader_email: '' }
+                ],
                 newSupervisor: '',
             },
             message: "",
             formOption: "",
+            need_promotion: [],
+            not_exists: [],
         };
     },
     validations() {
         return {
             form: {
-                leader: { required, email },
+                leaders: {
+                    required,
+                    minLength: minLength(1),
+                    $each: {
+                        leader_email: {
+                            email
+                        }
+                    }
+                },
                 newSupervisor: { required, email }
-
             },
         };
     },
     methods: {
 
+        addField() {
+            this.form.leaders.push({ leader_email: '' });
+        },
+        removeField(index) {
+            this.form.leaders.splice(index, 1);
+        },
 
         async onSubmit() {
             this.v$.$validate();
@@ -108,10 +157,11 @@ export default {
                 try {
                     this.message = "";
                     const response = await RolesService.transferLeader(this.form);
+                    this.need_promotion = response.need_promotion;
+                    this.not_exists = response.not_exists;
+                    this.message = response.message;
 
-                    this.message = response;
-
-                    this.resetForm();
+                    //                    this.resetForm();
 
                     setTimeout(() => {
                         this.message = "";
@@ -126,7 +176,9 @@ export default {
         resetForm() {
             this.v$.form.$reset();
             this.form = {
-                leader: "",
+                leaders: [
+                    { leader_email: '' }
+                ],
                 newSupervisor: "",
             };
 

@@ -13,13 +13,12 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-12" v-for="topPages in response.max_total_pages.slice(0, 3) "
+                        <div class="col-lg-4 col-md-6 col-sm-12" v-for="(topPages,index) in response.max_total_pages.slice(0, 3) "
                             :key="topPages.user.id">
-                            <TopUserFrame :userID="topPages.user.id" :userName="topPages.user.name"
+                            <NewTopUserFrame :userID="topPages.user.id" :userName="topPages.user.name"
                                 :topValue="formatNumber(topPages.max_total_pages)" :topValueType="'صفحة'"
-                                :profileImg="topPages.user.user_profile.profile_picture"
                                 :profile_id="topPages.user.user_profile.id" :title="topPages.user.name"
-                                :gender="topPages.user.gender" :dimensions="'512x512'" avatarClass="rounded-2 " />
+                                :topNumber="index" :image='`most_read_${index + 1}.png`'/>
                         </div>
                         <div class="header-title">
                             <h3 class="ms-3 title">
@@ -58,13 +57,12 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-12" v-for="topTheses in response.max_total_thesis.slice(0, 3) "
+                        <div class="col-lg-4 col-md-6 col-sm-12" v-for="(topTheses,index) in response.max_total_thesis.slice(0, 3) "
                             :key="topTheses.user.id">
-                            <TopUserFrame :userID="topTheses.user.id" :userName="topTheses.user.name"
+                            <NewTopUserFrame :userID="topTheses.user.id" :userName="topTheses.user.name"
                                 :topValue="formatNumber(topTheses.max_total_thesis)" :topValueType="'اطروحة'"
-                                :profileImg="topTheses.user.user_profile.profile_picture"
                                 :profile_id="topTheses.user.user_profile.id" :title="topTheses.user.name"
-                                :gender="topTheses.user.gender" :dimensions="'512x512'" avatarClass="rounded-2 " />
+                                :topNumber="index" :image='`most_write_${index + 1}.png`'/>
                         </div>
                         <div class="header-title">
                             <h3 class="ms-3 title">
@@ -98,12 +96,12 @@
 <script>
 import helper from "@/utilities/helper.js";
 import MarkService from "@/API/services/marks.service";
-import TopUserFrame from "@/components/statistics/TopUserFrame";
+import NewTopUserFrame from "@/components/statistics/NewTopUserFrame";
 import TopUserFrame_2 from "@/components/statistics/TopUserFrame_2.vue";
 export default {
     name: "By Week",
     components: {
-        TopUserFrame,
+        NewTopUserFrame,
         TopUserFrame_2
     },
     async created() {

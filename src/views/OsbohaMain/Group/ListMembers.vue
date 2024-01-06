@@ -6,17 +6,6 @@
       </template>
       <template v-slot:body>
         <ul class="request-list list-inline m-0 p-0" v-if="usersLoaded?.length > 0">
-          <!-- <form class="mb-3">
-                        <div class="input-group w-100 m-auto p-2">
-                            <input type="search" class="form-control rounded" placeholder="ابحث عن سفير" aria-label="Search"
-                                aria-describedby="search-addon" @input="searchForAmbassador()"
-                                v-model="ambassador_name" />
-                            <button type="button" class="btn btn-outline-primary"><span
-                                    class="material-symbols-outlined lh-1">
-                                    search
-                                </span></button>
-                        </div>
-                    </form> -->
 
           <li class="d-flex align-items-center justify-content-between flex-wrap" v-for="(user, index) in usersLoaded"
             :key="index">
@@ -33,29 +22,12 @@
                 ARABIC_ROLES[user.pivot.user_type]
               }}</span>
             </div>
-            <div v-if="(advisorAndAbove && user.pivot.user_type =='ambassador') || isAdmin" class="d-flex justify-content-end flex-grow-1 ms-3">
+            <div v-if="advisorAndAbove || isAdmin" class="d-flex justify-content-end flex-grow-1 ms-3">
               <span role="button" @click="showList(index)" class="material-symbols-outlined">
                 more_horiz
               </span>
               <div :class="`dropdown-menu dropdown-menu-right ${controlList[index] ? 'show' : ''
                 }`" aria-labelledby="dropdownMenuButton">
-                <!-- <router-link
-                class="dropdown-item d-flex align-items-center" :to="{ name: 'user.profile', params: { user_id: user.id } }"
-                >
-                    <span class="material-symbols-outlined me-2 md-18">
-                      person
-                    </span>
-                    الملف الشخصي
-                </router-link>
-                <a role="button"
-                  class="dropdown-item d-flex align-items-center"
-                  @click="createFriendship(user.id)"
-                >
-                  <span class="material-symbols-outlined me-2 md-18">
-                    group_add
-                  </span>
-                  اضافة
-                </a> -->
                 <a role="button" class="dropdown-item d-flex align-items-center"
                   @click="deleteMember(user.pivot.id)">
                   <span class="material-symbols-outlined me-2 md-18">
