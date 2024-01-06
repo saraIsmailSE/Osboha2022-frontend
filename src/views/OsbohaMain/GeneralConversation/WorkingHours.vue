@@ -8,8 +8,8 @@
         <div class="alert alert-warning">
           <font-awesome-icon :icon="['fas', 'circle-exclamation']" size="xl" />
           <span>
-            سيتم حفظ الساعات المدخلة في اليوم الواحد بشكل تراكمي, لذلك يرجى
-            الإدخال بشكل دقيق
+            سيتم حفظ الساعات المدخلة في اليوم الواحد كما هي بدون زيادة تراكمية,
+            لذلك يرجى الإدخال بشكل دقيق
           </span>
         </div>
       </div>
@@ -24,66 +24,48 @@
       </div>
       <div class="col-12 bg-white pt-2">
         <div class="sign-in-from">
-          <form class="mt-2" @submit.prevent="submit">
+          <form
+            class="mt-2"
+            v-for="(day, index) in weekDays"
+            :key="day.date"
+            :id="day.date"
+            @submit.prevent="submit(index)"
+          >
             <div class="row">
-              <div class="col-12">
+              <div class="col-sm-12 col-md-5">
                 <div class="form-group">
-                  <label for="hours" class="d-block mb-1">التاريخ</label>
-                  <Datepicker
-                    v-model="v$.form.date.$model"
-                    style="cursor: pointer"
-                    :disabledDates="disabledDatesRange"
-                    wrapperClass="w-100"
-                  />
-
-                  <template v-if="v$.form.date.$error">
-                    <small
-                      style="color: red"
-                      v-if="v$.form.hours.required.$invalid"
-                    >
-                      التاريخ مطلوب</small
-                    >
-                  </template>
+                  <label
+                    for="hours"
+                    class="d-block mb-1"
+                    style="font-weight: bold"
+                    >اليوم/التاريخ</label
+                  >
+                  <div class="input-group">
+                    <span class="text-primary me-2" style="font-weight: bold">{{
+                      day.name
+                    }}</span>
+                    <input
+                      type="string"
+                      v-model="day.date"
+                      :disabled="true"
+                      class="form-control mb-0"
+                      id="date"
+                      placeholder="ادخل التاريخ"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div class="col-sm-12 col-md-6">
+              <div class="col-sm-12 col-md-5">
                 <div class="form-group">
-                  <label for="hours">الساعات</label>
+                  <label
+                    class="d-block mb-1"
+                    for="minutes"
+                    style="font-weight: bold"
+                    >الدقائق</label
+                  >
                   <input
-                    v-model="v$.form.hours.$model"
-                    type="number"
-                    min="0"
-                    max="24"
-                    class="form-control mb-0"
-                    id="hours"
-                    placeholder="ادخل عدد
-                  الساعات"
-                    :disabled="loader"
-                  />
-                  <template v-if="v$.form.hours.$error">
-                    <small
-                      style="color: red"
-                      v-if="v$.form.hours.requiredIf.$invalid"
-                    >
-                      عدد الساعات مطلوب</small
-                    >
-                    <small style="color: red" v-if="v$.form.hours.min.$invalid">
-                      عدد الساعات يجب ان يكون اكبر من صفر</small
-                    >
-
-                    <small style="color: red" v-if="v$.form.hours.max.$invalid">
-                      عدد الساعات يجب ان يكون اقل من 24</small
-                    >
-                  </template>
-                </div>
-              </div>
-
-              <div class="col-sm-12 col-md-6">
-                <div class="form-group">
-                  <label for="minutes">الدقائق</label>
-                  <input
-                    v-model="v$.form.minutes.$model"
+                    :value="day.minutes"
                     type="number"
                     min="0"
                     max="60"
@@ -91,29 +73,26 @@
                     id="minutes"
                     placeholder="ادخل عدد الدقائق"
                     :disabled="loader"
+                    @change="changeMinutes(index, $event.target.value)"
                   />
-                  <template v-if="v$.form.minutes.$error">
-                    <small
-                      style="color: red"
-                      v-if="v$.form.minutes.requiredIf.$invalid"
-                    >
-                      عدد الدقائق مطلوب</small
-                    >
-                    <small
-                      style="color: red"
-                      v-if="v$.form.minutes.min.$invalid"
-                    >
-                      عدد الدقائق يجب ان يكون اكبر من صفر</small
-                    >
 
-                    <small
-                      style="color: red"
-                      v-if="v$.form.minutes.max.$invalid"
-                    >
-                      عدد الدقائق يجب ان يكون اقل من 60</small
-                    >
-                  </template>
+                  <small style="color: red" v-if="errors[index]">
+                    {{ errors[index] }}
+                  </small>
                 </div>
+              </div>
+
+              <div
+                class="col-sm-12 col-md-2 d-flex justify-content-end align-items-center"
+              >
+                <button
+                  type="submit"
+                  class="btn btn-primary me-2"
+                  style="height: fit-content"
+                  :disabled="loader"
+                >
+                  حفظ
+                </button>
               </div>
             </div>
 
@@ -122,22 +101,7 @@
                 {{ message }}
               </small>
             </div>
-            <div class="col-sm-12 text-center float-end" v-if="loader">
-              <img
-                src="@/assets/images/gif/page-load-loader.gif"
-                alt="loader"
-                style="height: 100px"
-              />
-            </div>
-            <div class="d-inline-block w-100" v-else>
-              <button
-                type="submit"
-                class="btn btn-primary float-end"
-                :disabled="loader"
-              >
-                إدخال
-              </button>
-            </div>
+            <hr />
           </form>
         </div>
       </div>
@@ -148,72 +112,31 @@
 </template>
 
 <script>
-import useVuelidate from "@vuelidate/core";
-import {
-  requiredIf,
-  maxValue,
-  minValue,
-  required,
-} from "@vuelidate/validators";
 import GeneralConversationService from "@/API/services/general-conversation.service";
 import WorkingHoursList from "@/components/conversation/WorkingHoursList.vue";
 import helper from "@/utilities/helper";
-import Datepicker from "vuejs3-datepicker";
 
 export default {
   name: "WorkingHours",
   components: {
     WorkingHoursList,
-    Datepicker,
-  },
-  setup() {
-    return { v$: useVuelidate() };
+    // Datepicker,
   },
   async created() {
     await this.getWorkingHours();
+    this.fillWeekDays();
   },
   data() {
     return {
-      form: {
-        hours: 0,
-        minutes: 0,
-        date: new Date(),
-      },
       message: "",
       variant: "success",
       loader: false,
 
       workingHours: [],
       loadingStats: false,
+      weekDays: [],
+      errors: [],
     };
-  },
-  validations() {
-    return {
-      form: {
-        hours: {
-          requiredIf: requiredIf(() => !this.form.minutes),
-          min: this.form.minutes ? minValue(0) : minValue(1),
-          max: maxValue(24),
-        },
-        minutes: {
-          requiredIf: requiredIf(() => !this.form.hours),
-          min: this.form.hours ? minValue(0) : minValue(1),
-          max: maxValue(60),
-        },
-        date: {
-          required,
-        },
-      },
-    };
-  },
-  computed: {
-    disabledDatesRange() {
-      return {
-        to: new Date(this.$store.state.week_start_date),
-        from: new Date(),
-        preventDisableDateSelection: true,
-      };
-    },
   },
   watch: {
     message() {
@@ -223,38 +146,46 @@ export default {
     },
   },
   methods: {
-    async submit() {
+    async submit(index) {
       this.message = "";
-      this.v$.$touch();
-      if (!this.v$.form.$invalid) {
-        this.loader = true;
-        const { hours, minutes, date } = this.form;
 
-        const overAllMinutes = parseInt(hours) * 60 + parseInt(minutes);
+      this.loader = true;
+      const { minutes, date } = this.weekDays[index];
 
-        try {
-          const response = await GeneralConversationService.addWorkingHours(
-            date,
-            overAllMinutes,
-          );
+      if (!minutes) {
+        this.errors[index] = "عدد الدقائق يجب أن يكون أكبر من 0";
+        this.loader = false;
+        return;
+      }
 
-          this.message = "تم إدخال الساعات بنجاح";
-          this.variant = "success";
+      //check if number of minutes is already entered
+      const isFound = this.workingHours.find(
+        (item) => new Date(item.date).toLocaleDateString() === date,
+      );
 
-          this.form.hours = 0;
-          this.form.minutes = 0;
-          this.v$.form.$reset();
+      if (isFound && Number(isFound.minutes) === Number(minutes)) {
+        this.errors[index] = "تم إدخال هذه الدقائق من قبل";
+        this.loader = false;
+        return;
+      }
 
-          this.updateWorkingHours(response);
-        } catch (error) {
-          this.message = "حدث خطأ أثناء إدخال الساعات";
-          this.variant = "danger";
-        } finally {
-          this.loader = false;
-        }
+      try {
+        const response = await GeneralConversationService.addWorkingHours(
+          date,
+          minutes,
+        );
+
+        this.message = "تم إدخال الدقائق بنجاح";
+        this.variant = "success";
+
+        this.updateWorkingHours(response);
+      } catch (error) {
+        this.message = "حدث خطأ أثناء إدخال الدقائق";
+        this.variant = "danger";
+      } finally {
+        this.loader = false;
       }
     },
-
     updateWorkingHours(response) {
       const { data } = response;
       const workingHoursId = data.id;
@@ -274,7 +205,6 @@ export default {
         });
       }
     },
-
     async getWorkingHours() {
       if (this.loading) return;
 
@@ -285,17 +215,68 @@ export default {
 
         this.workingHours = response.data;
       } catch (error) {
-        console.log("error", error);
         helper.toggleErrorToast();
       } finally {
         this.loadingStats = false;
       }
     },
-    isDateDisabled(date) {
-      const disabledDates = ["2023-10-25", "2023-10-30"];
+    fillWeekDays() {
+      //fill week days as following
+      // [ {"name" : "الأجد" , "date" : "31-12-2024"} , {...} ]
+      //where sunday is the $store.state.week_start_date
 
-      console.log("date", date);
-      return disabledDates.includes(date);
+      const weekDays = [];
+      const startDate = new Date(this.$store.state.week_start_date);
+      startDate.setHours(0, 0, 0, 0);
+      const endDate = new Date(this.$store.state.main_timer);
+      endDate.setHours(0, 0, 0, 0);
+
+      const daysOfWeek = [
+        "الأحد",
+        "الاثنين",
+        "الثلاثاء",
+        "الأربعاء",
+        "الخميس",
+        "الجمعة",
+        "السبت",
+      ];
+
+      let currentDate = startDate;
+
+      while (currentDate < endDate) {
+        const dayName = daysOfWeek[currentDate.getDay()];
+        const formattedDate = currentDate.toLocaleDateString("en-US", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+
+        //find if there is already a working hours for this date
+        const isFound = this.workingHours.find(
+          (item) =>
+            new Date(item.date).toLocaleDateString() ===
+            currentDate.toLocaleDateString(),
+        );
+
+        weekDays.push({
+          name: dayName,
+          date: formattedDate,
+          minutes: isFound ? isFound.minutes : 0,
+        });
+
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+
+      this.weekDays = weekDays;
+    },
+
+    changeMinutes(index, value) {
+      this.weekDays = this.weekDays.map((day, i) => {
+        if (i === index) {
+          return { ...day, minutes: value };
+        }
+        return day;
+      });
     },
   },
 };

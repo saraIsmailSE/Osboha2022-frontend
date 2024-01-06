@@ -155,10 +155,10 @@ class GeneralConversation {
     }
   }
 
-  async getWorkingHoursStatistics(selectedDate = "") {
+  async getWorkingHoursStatistics(type = "", selectedDate = "") {
     try {
       const response = await api.get(
-        `${this.prefix}/working-hours/statistics?date=${selectedDate}`,
+        `${this.prefix}/working-hours/statistics?type=${type}&date=${selectedDate}`,
       );
       return response.data;
     } catch (error) {
