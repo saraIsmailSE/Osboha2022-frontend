@@ -392,7 +392,7 @@ const groupChildRoute = (prop, mode = false) => [
       import("../views/OsbohaMain/Group/AuditMarks/AdvisorMainAudit"),
   },
   {
-    path: "/group/statistics/:group_id",
+    path: "/group/statistics/:group_id/:week_id",
     name: prop + ".group-statistics",
     meta: { auth: true, name: "Group Statistics" },
     component: () => import("../views/OsbohaMain/Group/Statistics"),

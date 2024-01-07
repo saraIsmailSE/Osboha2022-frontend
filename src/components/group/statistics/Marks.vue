@@ -12,75 +12,54 @@
           <div class="mb-3">
             <div class="d-flex justify-content-between mt-2 text-dark">
               <h6>المعدل العام</h6>
-              <small>{{ getAverage(statistics.team_out_of_100) }}%</small>
+              <small>{{ getAverage(statistics.team_out_of_100 / number_of_users) }}%</small>
             </div>
             <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
-              <progressbar
-                className="bg-primary"
-                :style="{
-                  width: getAverage(statistics.team_out_of_100) + '%',
-                }"
-                :aria-valuenow="getAverage(statistics.team_out_of_100)"
-                :aria-valuemin="0"
-                :aria-valuemax="100"
-              ></progressbar>
+              <progressbar className="bg-primary" :style="{
+                width: getAverage(statistics.team_out_of_100 / number_of_users) + '%',
+              }" :aria-valuenow="getAverage(statistics.team_out_of_100 / number_of_users)" :aria-valuemin="0" :aria-valuemax="100">
+              </progressbar>
             </b-progress>
           </div>
           <div class="mb-3">
             <div class="d-flex justify-content-between mt-2 text-dark">
               <h6>إنجاز القراءة</h6>
               <small>
-                {{ getAverage(statistics.team_reading_mark) }}
-                / 50</small
-              >
+                {{ getAverage(statistics.team_reading_mark / number_of_users) }}
+                / 50</small>
             </div>
             <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
-              <progressbar
-                className="bg-primary"
-                :style="{
-                  width:
-                    (getAverage(statistics.team_reading_mark) / 50) * 100 + '%',
-                }"
-                :aria-valuenow="getAverage(statistics.team_reading_mark)"
-                :aria-valuemin="0"
-                :aria-valuemax="50"
-              ></progressbar>
+              <progressbar className="bg-primary" :style="{
+                width:
+                  (getAverage(statistics.team_reading_mark / number_of_users) / 50) * 100 + '%',
+              }" :aria-valuenow="getAverage(statistics.team_reading_mark / number_of_users)" :aria-valuemin="0" :aria-valuemax="50">
+              </progressbar>
             </b-progress>
           </div>
           <div class="mb-3">
             <div class="d-flex justify-content-between mt-2 text-dark">
               <h6>إنجاز الكتابة</h6>
               <small>
-                {{ getAverage(statistics.team_writing_mark) }}
-                / 40</small
-              >
+                {{ getAverage(statistics.team_writing_mark / number_of_users) }}
+                / 40</small>
             </div>
             <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
-              <progressbar
-                className="bg-primary"
-                :style="{
-                  width:
-                    (getAverage(statistics.team_writing_mark) / 40) * 100 + '%',
-                }"
-                :aria-valuenow="getAverage(statistics.team_writing_mark)"
-                :aria-valuemin="0"
-                :aria-valuemax="40"
-              ></progressbar>
+              <progressbar className="bg-primary" :style="{
+                width:
+                  (getAverage(statistics.team_writing_mark / number_of_users) / 40) * 100 + '%',
+              }" :aria-valuenow="getAverage(statistics.team_writing_mark / number_of_users)" :aria-valuemin="0" :aria-valuemax="40">
+              </progressbar>
             </b-progress>
           </div>
           <div class="mb-3">
             <div class="d-flex justify-content-between mt-2 text-dark">
               <h6>اعرف مشروعك</h6>
-              <small>{{ getAverage(statistics.team_support_mark) }} / 10</small>
+              <small>{{ getAverage(statistics.team_support_mark / number_of_users) }} / 10</small>
             </div>
             <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
-              <progressbar
-                className="bg-primary"
-                :style="{ width: (getAverage(statistics.team_support_mark) / 10) * 100 +  '%' }"
-                aria-valuenow="30"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              ></progressbar>
+              <progressbar className="bg-primary"
+                :style="{ width: (getAverage(statistics.team_support_mark / number_of_users) / 10) * 100 + '%' }" aria-valuenow="30"
+                aria-valuemin="0" aria-valuemax="100"></progressbar>
             </b-progress>
           </div>
           <div class="row">
@@ -125,6 +104,11 @@ export default {
       type: [String],
       required: true,
     },
+    number_of_users: {
+      type: [Number],
+      required: true,
+
+    }
   },
   methods: {
     ...helper,

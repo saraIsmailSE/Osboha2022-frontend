@@ -25,7 +25,7 @@
                                                 </div>
                                             </div>
                                             <div class="mt-4">
-                                                <h3 class="text-center">{{ getRounded(statistics.total_statistics.total_avg)
+                                                <h3 class="text-center">{{ getRounded(statistics.total_statistics.total_sum / (statistics.total_users - statistics.freezed ))
                                                 }}</h3>
                                                 <p class="mb-0 text-center">المعدل العام</p>
                                             </div>

@@ -6,11 +6,7 @@
       </div>
       <div class="iq-card-body p-3">
         <div class="image-block text-center">
-          <img
-            src="@/assets/images/main/update-forms.png"
-            class="img-fluid rounded w-50"
-            alt="blog-img"
-          />
+          <img src="@/assets/images/main/update-forms.png" class="img-fluid rounded w-50" alt="blog-img" />
         </div>
 
         <div class="d-flex align-items-center mt-3" v-if="thesis">
@@ -39,10 +35,7 @@
                     <span class="me-2">
                       {{ thesisType }}
                     </span>
-                    <span
-                      class="rounded-pill px-2 py-1 text-white"
-                      :class="thesisStatus.className"
-                    >
+                    <span class="rounded-pill px-2 py-1 text-white" :class="thesisStatus.className">
                       {{ thesisStatus.status }}
                     </span>
                   </label>
@@ -51,36 +44,18 @@
 
               <!--Thesis body-->
               <div class="col-md-12 form-group" v-if="thesis.comment.body">
-                <p
-                  style="white-space: pre-wrap; direction: rtl"
-                  class="form-control-plaintext"
-                >
+                <p style="white-space: pre-wrap; direction: rtl" class="form-control-plaintext">
                   {{ thesis.comment.body }}
                 </p>
               </div>
 
               <!--Thesis media-->
-              <ExpandedCard
-                title="الاقتباسات"
-                :defaultExpanding="media.length <= 3"
-                v-if="media.length > 0"
-              >
+              <ExpandedCard title="الاقتباسات" :defaultExpanding="media.length <= 3" v-if="media.length > 0">
                 <div class="col-12 row justify-content-center">
-                  <div
-                    class="col-lg-3 col-md-6 col-sm-12 mb-2"
-                    v-for="(mediaFile, index) in media"
-                    :key="index"
-                  >
-                    <a
-                      :href="`${getAssetsUrl()}/${mediaFile.media}`"
-                      target="_blank"
-                    >
-                      <img
-                        class="img-fluid rounded w-100 h-100"
-                        :src="`${getAssetsUrl()}/${mediaFile.media}`"
-                        alt="thesis screenshot"
-                        style="object-fit: cover"
-                      />
+                  <div class="col-lg-3 col-md-6 col-sm-12 mb-2" v-for="(mediaFile, index) in media" :key="index">
+                    <a :href="`${getAssetsUrl()}/${mediaFile.media}`" target="_blank">
+                      <img class="img-fluid rounded w-100 h-100" :src="`${getAssetsUrl()}/${mediaFile.media}`"
+                        alt="thesis screenshot" style="object-fit: cover" />
                     </a>
                   </div>
                 </div>
@@ -88,16 +63,12 @@
             </div>
             <hr />
 
-            <div
-              class="form-group row w-75 m-auto"
-              v-if="
-                !expired &&
-                pending &&
-                authUserAllowed &&
-                !readOnly &&
-                $route.query.can_edit === 'true'
-              "
-            >
+            <div class="form-group row w-75 m-auto" v-if="!expired &&
+              pending &&
+              authUserAllowed &&
+              !readOnly &&
+              $route.query.can_edit === 'true'
+              ">
               <div class="col-12 col-md-6">
                 <select class="form-select w-100 mt-2" v-model="status">
                   <option class="bg-white text-dark" value="" selected>
@@ -116,71 +87,41 @@
               </div>
 
               <div class="col-12 col-md-6">
-                <select
-                  class="form-select w-100 mt-2"
-                  v-model="reason"
-                  :disabled="status === 'accepted'"
-                >
+                <select class="form-select w-100 mt-2" v-model="reason" :disabled="status === 'accepted'">
                   <option class="bg-white text-dark" value="" selected>
                     السبب
                   </option>
-                  <option
-                    class="bg-white text-dark"
-                    v-for="reason in reasons"
-                    :key="reason.id"
-                    :value="reason.id"
-                  >
+                  <option class="bg-white text-dark" v-for="reason in reasons" :key="reason.id" :value="reason.id">
                     {{ reason.reason }}
                   </option>
                 </select>
               </div>
 
               <div class="col-12 mt-2 text-center" v-if="loader">
-                <img
-                  :src="
-                    require('@/assets/images/gif/page-load-loader.gif')
-                  "
-                  alt="loader"
-                  style="height: 50px"
-                />
+                <img :src="require('@/assets/images/gif/page-load-loader.gif')
+                  " alt="loader" style="height: 50px" />
               </div>
 
               <div class="col-12 mt-2" v-else>
-                <button
-                  type="submit"
-                  class="btn btn-primary w-100"
-                  :disabled="message.length > 0"
-                >
+                <button type="submit" class="btn btn-primary w-100" :disabled="message.length > 0">
                   اعتماد
                 </button>
               </div>
 
               <div class="col-12" v-if="message">
-                <p
-                  class="form-control-plaintext text-center"
-                  style="color: #ff0000"
-                >
+                <p class="form-control-plaintext text-center" style="color: #ff0000">
                   {{ message }}
                 </p>
               </div>
             </div>
-            <div
-              class="alert alert-danger d-flex align-items-center justify-content-center"
-              v-else
-            >
+            <div class="alert alert-danger d-flex align-items-center justify-content-center" v-else>
               <div class="me-2">
-                <font-awesome-icon
-                  :icon="['fas', 'circle-exclamation']"
-                  size="lg"
-                />
+                <font-awesome-icon :icon="['fas', 'circle-exclamation']" size="lg" />
               </div>
               <div v-if="expired">لقد انتهت فترة المراجعة</div>
               <div v-else-if="!pending">لقد تمت المراجعة من قبل</div>
-              <div
-                v-else-if="
-                  !authUserAllowed || $route.query.can_edit === 'false'
-                "
-              >
+              <div v-else-if="!authUserAllowed || $route.query.can_edit === 'false'
+                ">
                 غير مسموح لك بالمراجعة
               </div>
             </div>
@@ -188,11 +129,7 @@
         </div>
         <div class="d-flex align-items-center mt-3 row">
           <div class="d-inline-block w-100 text-center col-12">
-            <a
-              role="button"
-              @click="$router.go(-1)"
-              class="d-block mt-3 mb-3 w-75 mx-auto"
-            >
+            <a role="button" @click="$router.go(-1)" class="d-block mt-3 mb-3 w-75 mx-auto">
               <span>انجاز القارىء</span>
               <span class="align-middle material-symbols-outlined">
                 keyboard_return
@@ -211,6 +148,7 @@ import ModifiedThesisService from "@/API/services/modified-thesis.service";
 import helper from "@/utilities/helper";
 import userInfoService from "@/Services/userInfoService";
 import ExpandedCard from "@/components/card/ExpandedCard.vue";
+import UserInfoService from "@/Services/userInfoService";
 
 export default {
   name: "List One Thesis",
@@ -224,7 +162,7 @@ export default {
     this.reasons = await ReasonService.getReasonsForLeader();
     this.thesis = response;
     this.week = response.mark?.week;
-    this.expired = new Date(this.week?.modify_timer) < new Date();
+    this.expired = (new Date(this.week?.modify_timer) < new Date()) && (this.SupervisorAndAbove && (new Date(this.week?.audit_timer) < new Date()));
   },
   data() {
     return {
@@ -239,8 +177,12 @@ export default {
     };
   },
   computed: {
+    user() {
+      return this.$store.getters.getUser;
+    },
+
     authUserAllowed() {
-      return userInfoService.hasRoles(this.$store.getters.getUser, [
+      return userInfoService.hasRoles(this.user, [
         "leader",
         "support_leader",
         "supervisor",
@@ -249,6 +191,16 @@ export default {
         "consultant",
       ]);
     },
+
+    SupervisorAndAbove() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "consultant",
+        "advisor",
+        "supervisor",
+      ]);
+    },
+
     thesisStatus() {
       let status = "";
       let className = "bg-primary";

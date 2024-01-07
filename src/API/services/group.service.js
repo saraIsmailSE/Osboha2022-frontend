@@ -298,9 +298,9 @@ class GroupService {
    * @return statistics;
    */
 
-  async statistics(group_id) {
+  async statistics(group_id,week_id) {
     try {
-      const response = await api.get(`group/statistics/${group_id}`);
+      const response = await api.get(`group/statistics/${group_id}/${week_id}`);
       return response.data.data;
     } catch (error) {
       customHandleError(error, "statistics");

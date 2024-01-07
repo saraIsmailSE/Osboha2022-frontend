@@ -76,6 +76,7 @@ export default {
       this.categories[0].number = response.full;
       this.categories[1].number = response.incomplete;
       this.categories[2].number = response.zero;
+      this.categories[3].number = response.freezed;
       this.ambassadorsAchievementList = response.random_achievement;
       this.most_read = response.most_read;
       this.support_leader = response.support_leader;
@@ -110,6 +111,12 @@ export default {
           id: 3,
           name: "انجاز صفر",
           color: "#831018",
+          number: 3,
+        },
+        {
+          id: 4,
+          name: "تجميد",
+          color: "#223e7f",
           number: 3,
         },
       ],
