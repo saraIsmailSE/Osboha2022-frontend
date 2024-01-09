@@ -349,6 +349,19 @@ class GroupService {
     }
   }
 
+  async assignSupervisor(form) {
+    try {
+      const response = await api.post(`/group/assign-supervisor`, form, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  
+
   
 }
 

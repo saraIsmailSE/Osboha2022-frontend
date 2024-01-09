@@ -72,6 +72,39 @@
                             </div>
 
                         </div>
+
+                        <div class="blog-description mt-3">
+                            <h3>
+                                موجود في المجموعات
+                                <span class="material-symbols-outlined align-middle me-1">
+                                    diversity_3
+                                </span>
+
+                            </h3>
+                            <table class="table inline-grid w-100">
+                                <thead>
+                                    <tr class="d-flex justify-content-around">
+                                        <th scope="col">المجموعة</th>
+                                        <th scope="col"> دوره</th>
+                                    </tr>
+                                </thead>
+                                <tbody v-for="group in groups" :key="group.id">
+                                    <tr class="d-flex justify-content-around">
+
+                                        <td class="align-middle text-center">
+                                            <span> {{ group.group.name }} </span>
+                                        </td>
+
+                                        <td class="align-middle text-center">
+                                            <span> {{ ARABIC_ROLES[group.user_type] }} </span>
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                            <hr />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,6 +135,10 @@ export default {
             required: true,
         },
         in_charge_of: {
+            type: [Object],
+            required: true,
+        },
+        groups: {
             type: [Object],
             required: true,
         }

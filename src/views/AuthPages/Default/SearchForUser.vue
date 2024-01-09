@@ -16,7 +16,7 @@
             </button>
         </form>
         <div class="col-sm-12" v-if="user">
-            <InfoCard :user="user" :followup_team="followup_team" :roles="roles" :in_charge_of="in_charge_of" />
+            <InfoCard :user="user" :followup_team="followup_team" :roles="roles" :in_charge_of="in_charge_of" :groups="groups" />
         </div>
         <div class="col-sm-12 text-center" v-if="loader">
             <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />

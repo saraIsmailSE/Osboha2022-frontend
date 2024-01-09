@@ -95,6 +95,30 @@
                 </div>
             </div>
 
+            <!-- ###### ASSIGN SUPERVISORS ###### -->
+
+            <div class="col-6 col-md-6 col-lg-6" v-if="advisorAndAbove">
+                <div class="card">
+                    <router-link :to="{ name: 'control.assignSupervisor', }">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div class="border rounded d-flex align-items-center justify-content-center">
+                                    <i class="display-1 img-fluid material-symbols-outlined">
+                                        admin_panel_settings
+                                    </i>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <h3 class="mb-0 text-center">
+                                    تعيين مراقب
+                                </h3>
+                            </div>
+                        </div>
+                    </router-link>
+
+                </div>
+            </div>
+
             <!-- ###### DELETE SUPERVISOR ###### -->
             <!-- <div class="col-6 col-md-6 col-lg-6">
                 <div class="card">
