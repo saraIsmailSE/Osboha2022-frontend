@@ -67,8 +67,7 @@
                   <input
                     :value="day.minutes"
                     type="number"
-                    min="0"
-                    max="60"
+                    min="1"
                     class="form-control mb-0"
                     id="minutes"
                     placeholder="ادخل عدد الدقائق"
@@ -96,9 +95,9 @@
               </div>
             </div>
 
-            <div class="form-group text-center" v-if="message">
-              <small :class="`text-${variant}`">
-                {{ message }}
+            <div class="form-group text-center" v-if="messages[index]?.message">
+              <small :class="`text-${messages[index]?.variant}`">
+                {{ messages[index]?.message }}
               </small>
             </div>
             <hr />
@@ -128,8 +127,7 @@ export default {
   },
   data() {
     return {
-      message: "",
-      variant: "success",
+      messages: [],
       loader: false,
 
       workingHours: [],
@@ -139,15 +137,20 @@ export default {
     };
   },
   watch: {
-    message() {
-      setTimeout(() => {
-        this.message = "";
-      }, 3000);
+    messages: {
+      handler: function (val) {
+        val.forEach((item, index) => {
+          setTimeout(() => {
+            this.messages[index] = {};
+          }, 3000);
+        });
+      },
+      deep: true,
     },
   },
   methods: {
     async submit(index) {
-      this.message = "";
+      this.messages[index] = {};
 
       this.loader = true;
       const { minutes, date } = this.weekDays[index];
@@ -175,13 +178,13 @@ export default {
           minutes,
         );
 
-        this.message = "تم إدخال الدقائق بنجاح";
-        this.variant = "success";
+        this.messages[index]["message"] = "تم إدخال الدقائق بنجاح";
+        this.messages[index]["variant"] = "success";
 
         this.updateWorkingHours(response);
       } catch (error) {
-        this.message = "حدث خطأ أثناء إدخال الدقائق";
-        this.variant = "danger";
+        this.messages[index]["message"] = "حدث خطأ أثناء إدخال الدقائق";
+        this.messages[index]["variant"] = "danger";
       } finally {
         this.loader = false;
       }
@@ -227,9 +230,8 @@ export default {
 
       const weekDays = [];
       const startDate = new Date(this.$store.state.week_start_date);
-      startDate.setHours(0, 0, 0, 0);
+      startDate.setDate(startDate.getDate() + 1); //add one day to start from sunday
       const endDate = new Date(this.$store.state.main_timer);
-      endDate.setHours(0, 0, 0, 0);
 
       const daysOfWeek = [
         "الأحد",
@@ -243,7 +245,7 @@ export default {
 
       let currentDate = startDate;
 
-      while (currentDate < endDate) {
+      while (currentDate <= endDate) {
         const dayName = daysOfWeek[currentDate.getDay()];
         const formattedDate = currentDate.toLocaleDateString("en-US", {
           day: "2-digit",
