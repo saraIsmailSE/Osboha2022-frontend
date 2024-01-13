@@ -134,11 +134,10 @@ class GeneralConversation {
     }
   }
 
-  async addWorkingHours(date, minutes) {
+  async addWorkingHours(working_hours) {
     try {
       const response = await api.post(`${this.prefix}/working-hours`, {
-        date,
-        minutes,
+        working_hours,
       });
       return response.data;
     } catch (error) {

@@ -24,15 +24,14 @@
       </div>
       <div class="col-12 bg-white pt-2">
         <div class="sign-in-from">
-          <form
-            class="mt-2"
-            v-for="(day, index) in weekDays"
-            :key="day.date"
-            :id="day.date"
-            @submit.prevent="submit(index)"
-          >
-            <div class="row">
-              <div class="col-sm-12 col-md-5">
+          <form class="mt-2" @submit.prevent="submit()">
+            <div
+              class="row"
+              v-for="(day, index) in weekDays"
+              :key="day.date"
+              :id="day.date"
+            >
+              <div class="col-sm-12 col-md-6">
                 <div class="form-group">
                   <label
                     for="hours"
@@ -56,7 +55,7 @@
                 </div>
               </div>
 
-              <div class="col-sm-12 col-md-5">
+              <div class="col-sm-12 col-md-6">
                 <div class="form-group">
                   <label
                     class="d-block mb-1"
@@ -67,23 +66,17 @@
                   <input
                     :value="day.minutes"
                     type="number"
-                    min="1"
                     class="form-control mb-0"
                     id="minutes"
                     placeholder="ادخل عدد الدقائق"
                     :disabled="loader"
                     @change="changeMinutes(index, $event.target.value)"
                   />
-
-                  <small style="color: red" v-if="errors[index]">
-                    {{ errors[index] }}
-                  </small>
                 </div>
               </div>
-
-              <div
-                class="col-sm-12 col-md-2 d-flex justify-content-end align-items-center"
-              >
+            </div>
+            <div class="row">
+              <div class="col-12 d-flex justify-content-end align-items-center">
                 <button
                   type="submit"
                   class="btn btn-primary me-2"
@@ -95,9 +88,9 @@
               </div>
             </div>
 
-            <div class="form-group text-center" v-if="messages[index]?.message">
-              <small :class="`text-${messages[index]?.variant}`">
-                {{ messages[index]?.message }}
+            <div class="form-group text-center" v-if="message">
+              <small :class="`text-${variant}`">
+                {{ message }}
               </small>
             </div>
             <hr />
@@ -119,93 +112,61 @@ export default {
   name: "WorkingHours",
   components: {
     WorkingHoursList,
-    // Datepicker,
   },
   async created() {
     await this.getWorkingHours();
     this.fillWeekDays();
   },
+
   data() {
     return {
-      messages: [],
+      message: "",
+      variant: "success",
       loader: false,
-
+      form: [],
       workingHours: [],
       loadingStats: false,
       weekDays: [],
-      errors: [],
     };
   },
   watch: {
-    messages: {
-      handler: function (val) {
-        val.forEach((item, index) => {
-          setTimeout(() => {
-            this.messages[index] = {};
-          }, 3000);
-        });
-      },
-      deep: true,
+    message() {
+      setTimeout(
+        () => {
+          this.message = "";
+        },
+        this.variant === "success" ? 3000 : 5000,
+      );
     },
   },
   methods: {
     async submit(index) {
-      this.messages[index] = {};
+      this.messages = "";
 
       this.loader = true;
-      const { minutes, date } = this.weekDays[index];
 
-      if (!minutes) {
-        this.errors[index] = "عدد الدقائق يجب أن يكون أكبر من 0";
-        this.loader = false;
-        return;
-      }
-
-      //check if number of minutes is already entered
-      const isFound = this.workingHours.find(
-        (item) => new Date(item.date).toLocaleDateString() === date,
-      );
-
-      if (isFound && Number(isFound.minutes) === Number(minutes)) {
-        this.errors[index] = "تم إدخال هذه الدقائق من قبل";
-        this.loader = false;
-        return;
+      //loop through week days and add working hours
+      for (let i = 0; i < this.weekDays.length; i++) {
+        const { minutes, date } = this.weekDays[i];
+        this.form.push({ minutes, date });
       }
 
       try {
         const response = await GeneralConversationService.addWorkingHours(
-          date,
-          minutes,
+          this.form,
         );
 
-        this.messages[index]["message"] = "تم إدخال الدقائق بنجاح";
-        this.messages[index]["variant"] = "success";
+        this.message = "تم إدخال الدقائق بنجاح";
+        this.variant = "success";
 
-        this.updateWorkingHours(response);
+        this.form = [];
+        // this.weekDays = [];
+        this.getWorkingHours();
       } catch (error) {
-        this.messages[index]["message"] = "حدث خطأ أثناء إدخال الدقائق";
-        this.messages[index]["variant"] = "danger";
+        this.message = "حدث خطأ أثناء إدخال الدقائق";
+        this.variant = "danger";
       } finally {
         this.loader = false;
-      }
-    },
-    updateWorkingHours(response) {
-      const { data } = response;
-      const workingHoursId = data.id;
-
-      const isFound = this.workingHours.find(
-        (item) => item.id === workingHoursId,
-      );
-
-      if (!isFound) {
-        this.workingHours.push(data);
-      } else {
-        this.workingHours = this.workingHours.map((item) => {
-          if (item.id === workingHoursId) {
-            return data;
-          }
-          return item;
-        });
       }
     },
     async getWorkingHours() {
