@@ -10,7 +10,7 @@
             <thead>
               <tr>
                 <th>التاريخ</th>
-                <th>المدة</th>
+                <th>المدة (دقائق)</th>
               </tr>
             </thead>
             <tbody>
@@ -29,7 +29,7 @@
               <tr v-for="item in workingHours" :key="item.id">
                 <td>{{ formatFullDate(item.date, false) }}</td>
 
-                <td>{{ minutesToHoursAndMinutes(item.minutes) }}</td>
+                <td>{{ item.minutes + " دقيقة" }}</td>
               </tr>
               <tr v-if="workingHours.length > 0">
                 <td>
@@ -72,9 +72,7 @@ export default {
       return this.workingHours?.length === 0 && !this.loading;
     },
     total() {
-      return this.minutesToHoursAndMinutes(
-        this.workingHours?.reduce((a, b) => a + b.minutes, 0),
-      );
+      return this.workingHours?.reduce((a, b) => a + b.minutes, 0) + " دقيقة";
     },
   },
 };
