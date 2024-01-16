@@ -86,6 +86,7 @@
                                     <tr class="d-flex justify-content-around">
                                         <th scope="col">المجموعة</th>
                                         <th scope="col"> دوره</th>
+                                        <th scope="col"> حالته</th>
                                     </tr>
                                 </thead>
                                 <tbody v-for="group in groups" :key="group.id">
@@ -98,9 +99,11 @@
                                         <td class="align-middle text-center">
                                             <span> {{ ARABIC_ROLES[group.user_type] }} </span>
                                         </td>
-
+                                        <td class="align-middle text-center">
+                                            <span v-if="group.termination_reason"> {{ TERMINATION_REASONS[group.termination_reason] }} </span>
+                                            <span v-else> فعال </span>
+                                        </td>
                                     </tr>
-
                                 </tbody>
                             </table>
                             <hr />
@@ -112,7 +115,7 @@
     </div>
 </template>
 <script>
-import { ARABIC_ROLES } from "@/utilities/constants";
+import { ARABIC_ROLES,TERMINATION_REASONS } from "@/utilities/constants";
 
 export default {
     name: "Information Card",
@@ -146,6 +149,7 @@ export default {
     data() {
         return {
             ARABIC_ROLES,
+            TERMINATION_REASONS
         };
     },
 };

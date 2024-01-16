@@ -50,7 +50,7 @@
                                     <th scope="col">احصائية القادة</th>
                                 </tr>
                             </thead>
-                            <tbody v-for="supervisor_team in supervisorFollowupTeams.sort((a, b) => b.week_avg - a.week_avg)"
+                            <tbody v-for="supervisor_team in supervisorFollowupTeams"
                                 :key="supervisor_team.superviser_name">
                                 <tr class="">
                                     <td class="align-middle text-center">
@@ -100,7 +100,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody v-for="supervisor_team in supervisorFollowupTeams.sort((a, b) => b.ambassadors_withdraw_in_group - a.ambassadors_withdraw_in_group)"
+                            <tbody v-for="supervisor_team in supervisorFollowupTeams"
                                 :key="supervisor_team.superviser_name">
                                 <tr class="text-center">
 
@@ -133,7 +133,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody v-for="supervisor_team in supervisorFollowupTeams.sort((a, b) => b.ambassadors_excluded_in_group - a.ambassadors_excluded_in_group)"
+                            <tbody v-for="supervisor_team in supervisorFollowupTeams"
                                 :key="supervisor_team.superviser_name">
                                 <tr class="text-center">
 
@@ -167,7 +167,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody v-for="supervisor_team in supervisorFollowupTeams.sort((a, b) => b.is_freezed - a.is_freezed)"
+                            <tbody v-for="supervisor_team in supervisorFollowupTeams"
                                 :key="supervisor_team.superviser_name">
                                 <tr class="d-flex justify-content-around">
 
@@ -200,7 +200,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody v-for="supervisor_team in supervisorFollowupTeams.sort((a, b) => b.number_zero_varible - a.number_zero_varible)"
+                            <tbody v-for="supervisor_team in supervisorFollowupTeams"
                                 :key="supervisor_team.superviser_name">
                                 <tr class="d-flex justify-content-around">
                                     <td class="align-middle text-center">
@@ -233,7 +233,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody v-for="supervisor_team in supervisorFollowupTeams.sort((a, b) => b.new_ambassadors - a.new_ambassadors)"
+                            <tbody v-for="supervisor_team in supervisorFollowupTeams"
                                 :key="supervisor_team.superviser_name">
                                 <tr class="d-flex justify-content-around">
                                     <td class="align-middle text-center">
@@ -274,6 +274,13 @@
             <div class="card-body" v-if="supervisorsReading">
                 <MembersReading :ReadingData="supervisorsReading" :headTitle="'المراقبين'" :usetType="'المراقب'" />
             </div>
+            <h4 @click="$router.go(-1)" class="text-center mb-3" v-if="advisorGroup" role="button">
+                <span class="align-middle material-symbols-outlined">
+                    keyboard_return
+                </span>
+                عودة
+            </h4>
+
         </div>
     </div>
 </template>

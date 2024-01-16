@@ -105,7 +105,7 @@
 
 <script>
 import GeneralConversationService from "@/API/services/general-conversation.service";
-import WorkingHoursList from "@/components/conversation/WorkingHoursList.vue";
+import WorkingHoursList from "@/components/conversation/workHours/WorkingHoursList.vue";
 import helper from "@/utilities/helper";
 
 export default {

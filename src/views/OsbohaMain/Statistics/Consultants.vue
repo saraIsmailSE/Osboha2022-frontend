@@ -72,6 +72,13 @@
                 <MembersReading :ReadingData="consultantsReading" :headTitle="'المستشارين'" :usetType="'المتشار'" />
             </div>
 
+            <h4 @click="$router.go(-1)" class="text-center mb-3" v-if="administratorGroup" role="button">
+                <span class="align-middle material-symbols-outlined">
+                    keyboard_return
+                </span>
+                عودة
+            </h4>
+
         </div>
     </div>
 </template>

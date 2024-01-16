@@ -55,7 +55,7 @@
                         >
                           <td>{{ exception.user.name }}</td>
                           <td>{{ exception.type.type }}</td>
-                          <td>{{ exception_status[exception.status] }}</td>
+                          <td>{{ EXCEPTION_STATUS[exception.status] }}</td>
                           <td v-if="exception.end_at">
                             {{ exception.end_at }}
                           </td>
@@ -115,7 +115,7 @@
 </template>
 <script>
 import GroupService from "@/API/services/group.service";
-
+import { EXCEPTION_STATUS} from "@/utilities/constants";
 export default {
   name: "List Exceptions",
   async created() {
@@ -135,14 +135,8 @@ export default {
       group_title: "",
       week_title: "",
       group_id: this.$route.params.group_id,
-      exception_status: {
-        pending: "قيد المراجعة",
-        accepted: "مقبول",
-        rejected: "مرفوض",
-        cancelled: "ملغي",
-        finished: "منتهي",
-      },
-      length: 10,
+      EXCEPTION_STATUS,
+            length: 10,
     };
   },
   methods: {

@@ -122,7 +122,7 @@
                   @change="selectedWeekError = ''"
                 />
                 <label class="form-check-label fs-4" for="currentWeek"
-                  >{{ weeks[0].title }} [الأسبوع الحالي]</label
+                  >{{ weeks[0].title }}</label
                 >
               </div>
               <div class="form-check form-check-inline">

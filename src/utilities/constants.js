@@ -306,3 +306,18 @@ export const COUNTRIES = {
   HK: "هونغ كونغ SAR",
   WF: "واليس وفوتونا",
 };
+
+export const TERMINATION_REASONS = {
+  withdrawn: "منسحب",
+  excluded: "مستبعد",
+};
+
+export const EXCEPTION_STATUS= {
+  pending: "قيد المراجعة",
+  accepted: "مقبول",
+  rejected: "مرفوض",
+  cancelled: "ملغي",
+  finished: "منتهي",
+};
+
+

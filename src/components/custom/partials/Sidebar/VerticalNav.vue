@@ -104,6 +104,9 @@
 
     <!-- ###### Audit Marks ###### -->
     <AuditMarks v-if="isAdvisor || isSupervisor" />
+    
+    <!-- ###### Audit Marks ###### -->
+    <Exceptions v-if="isAdvisor" />
 
     <!-- ###### Inventory Statistics ###### -->
     <InventoryStatistics v-if="SupervisorAndAbove" />
@@ -127,6 +130,7 @@ import GeneralConversation from './GeneralConversation';
 import OsbohaEligible from './OsbohaEligible.vue'
 import InventoryStatistics from './InventoryStatistics'
 import AuditMarks from './AuditMarks'
+import Exceptions from './Exceptions'
 export default {
   name: "DefaultSidebar",
   components: {
@@ -134,7 +138,8 @@ export default {
     GeneralConversation,
     OsbohaEligible,
     InventoryStatistics,
-    AuditMarks
+    AuditMarks,
+    Exceptions
   },
   computed: {
     user() {

@@ -1,6 +1,6 @@
 <template>
   <div class="mt-3">
-    <p style="white-space: pre-wrap; direction: rtl;" v-html="urlifyFn(shortPostText)"></p>
+    <p style="white-space: pre-wrap; direction: rtl;" v-html="processText(shortPostText)"></p>
     <a dir="ltr" role="button" class="load-btn" v-on:click="loadMoreBriefText" v-if="isMore">...قراءة المزيد</a>
     <a dir="ltr" role="button" class="load-btn" v-on:click="loadLessBriefText" v-if="isLess">قراءة أقل</a>
 
@@ -58,7 +58,6 @@ export default {
   created() {
     this.fullPostText = this.post?.body;
     this.shortPostText = this.fullPostText?.slice(0, 200);
-
   },
   methods: {
     async vote() {
@@ -131,6 +130,19 @@ export default {
           return '<a href="' + url + '"  target="_blank" direction: rtl;">' + url + '</a>';
         })
       }
+    },
+    stylizeHashtags(text) {
+      if (text) {
+        let hashtagRegex = /#([\u0600-\u06FF\w]+)/g;
+        return text.replace(hashtagRegex, function (hashtag) {
+          return '<span style="font-weight: bold; color: #1d1a55;">' + hashtag + '</span>';
+        });
+      }
+    },
+    processText(text) {
+      text = this.urlifyFn(text); // First, turn URLs into hyperlinks
+      text = this.stylizeHashtags(text); // Then, style hashtags
+      return text;
     },
     loadMoreBriefText() {
       this.shortPostText = this.fullPostText;
@@ -220,5 +232,10 @@ input[type="radio"]:checked::after {
   top: 0;
   right: 0;
   background-color: rgba(39, 128, 54, 0.3);
+}
+
+.hashtag {
+  font-weight: bold;
+  color: blue;
 }
 </style>

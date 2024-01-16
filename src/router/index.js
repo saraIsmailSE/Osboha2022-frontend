@@ -148,6 +148,13 @@ const userChildRoute = (prop, mode = false) => [
     component: () => import("../views/AuthPages/Default/SearchForUser"),
   },
   {
+    path: "exception-search",
+    name: prop + ".exception-search",
+    meta: { auth: true, name: "Search for User Exception" },
+    component: () =>
+      import("../views/AuthPages/Default/SearchForUserException"),
+  },
+  {
     path: "assign-to-parent",
     name: prop + ".assignToParent",
     meta: { auth: true, name: "Assign To Parent" },
@@ -411,6 +418,12 @@ const exceptionChildRoute = (prop, mode = false) => [
     name: prop + ".listException",
     meta: { auth: true, name: "List Exception" },
     component: () => import("../views/OsbohaMain/Group/Exceptions/ListOne"),
+  },
+  {
+    path: "list-by-advisor",
+    name: prop + ".listByAdvisor",
+    meta: { auth: true, name: "List Exceptions For Advisor" },
+    component: () => import("../views/OsbohaMain/Exceptions/ListByAdvisor"),
   },
 ];
 
@@ -942,7 +955,6 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-
 // router.beforeEach((to, from, next) => {
 //   // Check if the destination route is the maintenance page
 //   if (to.path !== '/maintenance') {
@@ -953,6 +965,5 @@ router.beforeEach((to, from, next) => {
 //     next();
 //   }
 // });
-
 
 export default router;

@@ -169,7 +169,7 @@ export default {
             }
           }
         } else {
-          this.errorMessage = response.message;
+          this.errorMessage = response.data;
         }
       } finally {
         this.loading = false;

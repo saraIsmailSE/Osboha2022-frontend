@@ -33,6 +33,14 @@
                 <MembersReading :ReadingData="leadersReading" :headTitle="'القادة'" :usetType="'القائد'" />
             </div>
 
+            <h4 @click="$router.go(-1)" class="text-center mb-3" v-if="supervisorGroup" role="button">
+                <span class="align-middle material-symbols-outlined">
+                    keyboard_return
+                </span>
+                عودة
+            </h4>
+
+
         </div>
     </div>
 </template>
@@ -49,7 +57,7 @@ export default {
         const response = await StatisticsService.leadersStatistics(this.$route.params.supervisor_id);
         this.statistics = response.statistics_data;
         this.leadersReading = response.leaders_reading;
-        this.supervisorGroup = response.supervisor_groupك
+        this.supervisorGroup = response.supervisor_group;
         this.loding = false;
 
     },

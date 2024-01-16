@@ -16,20 +16,28 @@ class ExceptionService {
 
   async setExceptionalFreez(exception) {
     try {
-      const response = await api.post(`/userexception/set-exceptional-freez`, exception, {
-        headers: { "Content-type": "multipart/form-data" },
-      });
+      const response = await api.post(
+        `/userexception/set-exceptional-freez`,
+        exception,
+        {
+          headers: { "Content-type": "multipart/form-data" },
+        },
+      );
       return response.data.data;
     } catch (error) {
       handleError(error);
     }
   }
-  
+
   async setNewUser(exception) {
     try {
-      const response = await api.post(`/userexception/set-new-user`, exception, {
-        headers: { "Content-type": "multipart/form-data" },
-      });
+      const response = await api.post(
+        `/userexception/set-new-user`,
+        exception,
+        {
+          headers: { "Content-type": "multipart/form-data" },
+        },
+      );
       return response.data.data;
     } catch (error) {
       handleError(error);
@@ -50,7 +58,7 @@ class ExceptionService {
         exception,
         {
           headers: { "Content-type": "multipart/form-data" },
-        }
+        },
       );
       return response.data.data;
     } catch (error) {
@@ -65,8 +73,8 @@ class ExceptionService {
         {
           decision: decision.decision,
           note: decision.note,
-          week_id: decision.week_id
-        }
+          week_id: decision.week_id,
+        },
       );
 
       return response.data.data;
@@ -93,22 +101,32 @@ class ExceptionService {
   async getAllUserExceptions(user_id) {
     try {
       const userExceptions = await api.get(
-        `userexception/user-exceptions/${user_id}`
+        `userexception/user-exceptions/${user_id}`,
       );
       return userExceptions.data.data;
     } catch (error) {
       return error;
     }
   }
+  async searchByEmail(email) {
+    const response = await api.get(`userexception/search-by-email/${email}`);
+    return response.data.data;
+  }
   async exceptionsFilter(filter, user_id) {
     try {
       const exceptions = await api.get(
-        `userexception/exceptions-filter/${filter}/${user_id}`
+        `userexception/exceptions-filter/${filter}/${user_id}`,
       );
       return exceptions.data.data;
     } catch (error) {
       return error;
     }
+  }
+  async ListByAdvisor(advisor_id) {
+    const response = await api.get(
+      `userexception/list-by-advisor/${advisor_id}`,
+    );
+    return response.data.data;
   }
 }
 

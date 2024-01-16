@@ -118,6 +118,8 @@ export default {
   },
 
   minutesToHoursAndMinutes(minutes) {
+    if (minutes === 0) return "0";
+
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
 
@@ -174,6 +176,7 @@ export default {
   },
 
   objectToArray(object) {
+    if (!object) return [];
     return Object.entries(object).map(([key, value]) => ({
       key,
       value,
