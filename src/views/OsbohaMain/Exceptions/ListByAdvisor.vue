@@ -20,14 +20,14 @@
                       <thead>
                         <tr>
                           <th scope="col">اسم السفير</th>
-                          <th scope="col">الحالة</th>
+                          <th scope="col">فريق المتابعة</th>
                           <th scope="col">الانتهاء</th>
                         </tr>
                       </thead>
                       <tbody v-if="exceptions && exceptions.length > 0">
                         <tr v-for="exception in exceptions.slice(0, length)" :key="exception.id">
                           <td>{{ exception.user.name }}</td>
-                          <td>{{ EXCEPTION_STATUS[exception.status] }}</td>
+                          <td>{{ exception.user.followup_team.group.name }}</td>
                           <td v-if="exception.end_at">
                             {{ exception.end_at }}
                           </td>

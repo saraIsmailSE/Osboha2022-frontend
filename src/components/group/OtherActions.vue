@@ -6,7 +6,7 @@
                 طلب تجميد استثنائي
             </button>
             <button class="btn btn-success ms-2 mt-1 w-75 "
-                v-if="isnew && ((mark.reading_mark + mark.writing_mark + mark.support) <= 50)" @click="() => {
+                v-if="isnew" @click="() => {
                     showIsNewForm = !showIsNewForm;
                     showExceptionForm = false;
                 }">
@@ -153,7 +153,7 @@ export default {
 
                 // Calculate the start date of the 2-week period
                 const twoWeeksAgo = new Date();
-                twoWeeksAgo.setDate(today.getDate() - 14); // Subtract 14 days from today's date
+                twoWeeksAgo.setDate(today.getDate() - 21); // Subtract 21 days from today's date [3 weeks]
 
                 // Reset time for both dates to 00:00:00 for a day-level comparison
                 twoWeeksAgo.setHours(0, 0, 0, 0);
