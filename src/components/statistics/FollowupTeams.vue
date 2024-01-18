@@ -10,8 +10,8 @@
                         <th scope="col">المعدل الأسبوعي</th>
                     </tr>
                 </thead>
-                <tbody v-for="leader in teamDataTofilter" :key="leader.leader_name">
-                    <tr class="">
+                <tbody>
+                    <tr v-for="leader in teamDataTofilter" :key="leader.leader_name">
                         <td class="align-middle text-center">
                             <span>{{ leader.leader_name }} </span>
                         </td>
@@ -22,10 +22,23 @@
                             <span> {{ leader.number_ambassadors }} </span>
                         </td>
                         <td class="align-middle text-center">
-                            <span> {{ (Math.round(leader.week_avg * 100) / 100).toFixed(2) }} </span>
+                            <span> {{ parseFloat(leader.week_avg.toFixed(2)) }} </span>
                         </td>
                     </tr>
-
+                    <tr v-if="supervisor_followup_team" class="supervisor_team">
+                        <td class="align-middle text-center">
+                            <span>{{ supervisor_followup_team.leader_name }} </span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span> {{ supervisor_followup_team.team }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span> {{ supervisor_followup_team.number_ambassadors }} </span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span> {{ parseFloat(supervisor_followup_team.week_avg.toFixed(2)) }} </span>
+                        </td>
+                    </tr>
                 </tbody>
                 <tr class="">
                     <td class="align-middle text-center" colspan="4">
@@ -49,14 +62,21 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody v-for="leader in teamDataTofilter" :key="leader.leader_name">
-                    <tr class="text-center">
-
+                <tbody>
+                    <tr class="d-flex justify-content-around" v-for="leader in teamDataTofilter" :key="leader.leader_name">
                         <td class="align-middle text-center">
                             <span> {{ leader.team }}</span>
                         </td>
                         <td class="align-middle text-center">
                             <span> {{ leader.ambassadors_withdraw_in_group }}</span>
+                        </td>
+                    </tr>
+                    <tr v-if="supervisor_followup_team" class=" d-flex justify-content-around supervisor_team">
+                        <td class="align-middle text-center">
+                            <span> {{ supervisor_followup_team.team }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span> {{ supervisor_followup_team.ambassadors_withdraw_in_group }}</span>
                         </td>
                     </tr>
                 </tbody>
@@ -73,7 +93,6 @@
                 <thead>
                     <tr>
                         <th scope="col">
-
                             <span class="material-symbols-outlined align-middle me-1">
                                 person_cancel
                             </span>
@@ -81,14 +100,22 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody v-for="leader in teamDataTofilter" :key="leader.leader_name">
-                    <tr class="text-center">
+                <tbody>
+                    <tr class=" d-flex justify-content-around" v-for="leader in teamDataTofilter" :key="leader.leader_name">
 
                         <td class="align-middle text-center">
                             <span> {{ leader.team }}</span>
                         </td>
                         <td class="align-middle text-center">
                             <span> {{ leader.ambassadors_excluded_in_group }}</span>
+                        </td>
+                    </tr>
+                    <tr v-if="supervisor_followup_team" class=" d-flex justify-content-around supervisor_team">
+                        <td class="align-middle text-center">
+                            <span> {{ supervisor_followup_team.team }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span> {{ supervisor_followup_team.ambassadors_excluded_in_group }}</span>
                         </td>
                     </tr>
                 </tbody>
@@ -114,8 +141,8 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody v-for="leader in teamDataTofilter" :key="leader.leader_name">
-                    <tr class="d-flex justify-content-around">
+                <tbody>
+                    <tr class="d-flex justify-content-around" v-for="leader in teamDataTofilter" :key="leader.leader_name">
 
                         <td class="align-middle text-center">
                             <span> {{ leader.team }} </span>
@@ -124,6 +151,15 @@
                             <span> {{ leader.is_freezed }}</span>
                         </td>
                     </tr>
+                    <tr v-if="supervisor_followup_team" class=" d-flex justify-content-around supervisor_team">
+                        <td class="align-middle text-center">
+                            <span> {{ supervisor_followup_team.team }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span> {{ supervisor_followup_team.is_freezed }}</span>
+                        </td>
+                    </tr>
+
                 </tbody>
                 <tr>
                     <td class="align-middle text-center" colspan="4">
@@ -146,13 +182,21 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody v-for="leader in teamDataTofilter" :key="leader.leader_name">
-                    <tr class="d-flex justify-content-around">
+                <tbody>
+                    <tr class="d-flex justify-content-around" v-for="leader in teamDataTofilter" :key="leader.leader_name">
                         <td class="align-middle text-center">
                             <span> {{ leader.team }} </span>
                         </td>
                         <td class="align-middle text-center">
                             <span> {{ leader.number_zero_varible }} </span>
+                        </td>
+                    </tr>
+                    <tr v-if="supervisor_followup_team" class=" d-flex justify-content-around supervisor_team">
+                        <td class="align-middle text-center">
+                            <span> {{ supervisor_followup_team.team }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span> {{ supervisor_followup_team.number_zero_varible }}</span>
                         </td>
                     </tr>
                 </tbody>
@@ -178,8 +222,8 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody v-for="leader in teamDataTofilter" :key="leader.leader_name">
-                    <tr class="d-flex justify-content-around">
+                <tbody>
+                    <tr class="d-flex justify-content-around" v-for="leader in teamDataTofilter" :key="leader.leader_name">
                         <td class="align-middle text-center">
                             <span> {{ leader.team }} </span>
                         </td>
@@ -187,6 +231,15 @@
                             <span> {{ leader.new_ambassadors }} </span>
                         </td>
                     </tr>
+                    <tr v-if="supervisor_followup_team" class=" d-flex justify-content-around supervisor_team">
+                        <td class="align-middle text-center">
+                            <span> {{ supervisor_followup_team.team }}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span> {{ supervisor_followup_team.new_ambassadors }}</span>
+                        </td>
+                    </tr>
+
                 </tbody>
                 <tr>
                     <td class="align-middle text-center" colspan="4">
@@ -202,13 +255,17 @@
 
 export default {
     name: 'followup teams statistics',
-    created(){
-        this.teamDataTofilter=this.teamData
+    created() {
+        this.teamDataTofilter = this.teamData
     },
     props: {
         teamData: {
+            type: Object,
             required: true,
         },
+        supervisor_followup_team: {
+            type: Object,
+        }
     },
     data() {
         return {
@@ -219,24 +276,48 @@ export default {
     computed: {
         generalAvg() {
             // Calculate the sum of all week_avg values
-            const sum = this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.week_avg), 0);
+            let sum = this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.week_avg.toFixed(2)), 0);
             // Calculate the average
+            if (this.supervisor_followup_team) {
+                sum += parseFloat(this.supervisor_followup_team.week_avg);
+                return Math.round(sum / (this.teamDataTofilter.length + 1)).toFixed(2);
+            }
             return Math.round(sum / this.teamDataTofilter.length).toFixed(2);
         },
         totalWithdraw() {
-            return this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.ambassadors_withdraw_in_group), 0);
+            const followupTeams_totalWithdraw = this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.ambassadors_withdraw_in_group), 0);
+            if (this.supervisor_followup_team) {
+                return followupTeams_totalWithdraw + parseFloat(this.supervisor_followup_team.ambassadors_withdraw_in_group);
+            }
+            return followupTeams_totalWithdraw;
         },
         totalFreezed() {
-            return this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.is_freezed), 0);
+            const followupTeams_totalFreezed = this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.is_freezed), 0);
+            if (this.supervisor_followup_team) {
+                return followupTeams_totalFreezed + parseFloat(this.supervisor_followup_team.is_freezed);
+            }
+            return followupTeams_totalFreezed
         },
         totalExcluded() {
-            return this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.ambassadors_excluded_in_group), 0);
+            const followupTeams_totalExcluded = this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.ambassadors_excluded_in_group), 0);
+            if (this.supervisor_followup_team) {
+                return followupTeams_totalExcluded + parseFloat(this.supervisor_followup_team.ambassadors_excluded_in_group);
+            }
+            return followupTeams_totalExcluded
         },
         totalOfZeroVarible() {
-            return this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.number_zero_varible), 0);
+            const followupTeams_totalOfZeroVarible = this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.number_zero_varible), 0);
+            if (this.supervisor_followup_team) {
+                return followupTeams_totalOfZeroVarible + parseFloat(this.supervisor_followup_team.number_zero_varible);
+            }
+            return followupTeams_totalOfZeroVarible
         },
         totalNewAmbassadros() {
-            return this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.new_ambassadors), 0);
+            const followupTeams_totalNewAmbassadros = this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.new_ambassadors), 0);
+            if (this.supervisor_followup_team) {
+                return followupTeams_totalNewAmbassadros + parseFloat(this.supervisor_followup_team.ambassadors_excluded_in_group);
+            }
+            return followupTeams_totalNewAmbassadros
         },
     }
 
@@ -245,5 +326,9 @@ export default {
 <style scoped>
 .inline-grid {
     display: inline-table;
+}
+
+.supervisor_team {
+    background-color: #E4E9DE;
 }
 </style>

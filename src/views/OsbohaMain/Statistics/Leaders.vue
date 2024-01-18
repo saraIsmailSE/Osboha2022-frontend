@@ -26,7 +26,7 @@
             </div>
 
             <div class="card-body" v-if="statistics">
-                <FollowupTeamsStatistics :teamData=statistics />
+                <FollowupTeamsStatistics :teamData=statistics  :supervisor_followup_team=supervisor_followup_team />
 
             </div>
             <div class="card-body" v-if="leadersReading">
@@ -55,9 +55,10 @@ export default {
         this.loding = true;
 
         const response = await StatisticsService.leadersStatistics(this.$route.params.supervisor_id);
-        this.statistics = response.statistics_data;
+        this.statistics = response.leaders_followup_team;
         this.leadersReading = response.leaders_reading;
         this.supervisorGroup = response.supervisor_group;
+        this.supervisor_followup_team=response.supervisor_own_followup_team
         this.loding = false;
 
     },
@@ -68,6 +69,7 @@ export default {
     data() {
         return {
             statistics: null,
+            supervisor_followup_team:null,
             leadersReading: null,
             supervisorGroup: null,
             loding: false
