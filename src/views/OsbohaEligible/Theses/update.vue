@@ -39,10 +39,10 @@
               </div>
               <div class="form-group">
                 <label class="form-label" for="thesisBody">الأطروحة</label>
-                <textarea rows="5" placeholder="... اكتب أطروحة عدد حروفها بين 500 و 1800" class="rounded form-control" id="thesisBody"
+                <textarea rows="5" placeholder="... اكتب أطروحة عدد حروفها بين 500 و 4800" class="rounded form-control" id="thesisBody"
                   v-model="v$.thesis.text.$model"></textarea>
                 <p style="color: red" v-if="v$.thesis.text.$error">
-                  لطفًا قم بكتابة اطروحة عدد حروفها بين 500 و 1800 خالية من الرموز التعبيرية (emojis)
+                  لطفًا قم بكتابة اطروحة عدد حروفها بين 500 و 4800 خالية من الرموز التعبيرية (emojis)
                 </p>
               </div>
 
@@ -117,7 +117,7 @@ export default {
         text: {
           required,
           minLength: minLength(500),
-          maxLength: maxLength(1800),
+          maxLength: maxLength(4800)
         },
         starting_page: {
           required,

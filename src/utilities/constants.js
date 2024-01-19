@@ -310,6 +310,8 @@ export const COUNTRIES = {
 export const TERMINATION_REASONS = {
   withdrawn: "منسحب",
   excluded: "مستبعد",
+  "emptying the group":'غير فعال - تفريغ الفريق',
+  "reassignment": "غير فعال - اعادة تعيين اداري"
 };
 
 export const EXCEPTION_STATUS= {

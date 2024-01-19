@@ -73,7 +73,7 @@
 
                         </div>
 
-                        <div class="blog-description mt-3">
+                        <div class="inline-block mt-3">
                             <h3>
                                 موجود في المجموعات
                                 <span class="material-symbols-outlined align-middle me-1">
@@ -92,16 +92,21 @@
                                 <tbody v-for="group in groups" :key="group.id">
                                     <tr class="d-flex justify-content-around">
 
-                                        <td class="align-middle text-center">
-                                            <span> {{ group.group.name }} </span>
+                                        <td  scope="col" class="align-middle text-center w-25">
+                                            <router-link class="text-center" :to="{
+                                                name: 'group.group-detail',
+                                                params: { group_id: group.group.id },
+                                            }">
+                                                <span> {{ group.group.name }} </span></router-link>
                                         </td>
 
-                                        <td class="align-middle text-center">
+                                        <td scope="col" class="align-middle text-center w-25">
                                             <span> {{ ARABIC_ROLES[group.user_type] }} </span>
                                         </td>
-                                        <td class="align-middle text-center">
-                                            <span v-if="group.termination_reason"> {{ TERMINATION_REASONS[group.termination_reason] }} </span>
-                                            <span v-else> فعال </span>
+                                        <td scope="col" class="align-middle text-center w-50">
+                                            <span v-if="group.termination_reason" style="color: darkred;"> {{
+                                                TERMINATION_REASONS[group.termination_reason] }} </span>
+                                            <span v-else class="rounded-pill badge bg-primary px-2"> فعال </span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -115,7 +120,7 @@
     </div>
 </template>
 <script>
-import { ARABIC_ROLES,TERMINATION_REASONS } from "@/utilities/constants";
+import { ARABIC_ROLES, TERMINATION_REASONS } from "@/utilities/constants";
 
 export default {
     name: "Information Card",

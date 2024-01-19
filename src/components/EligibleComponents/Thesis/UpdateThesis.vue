@@ -63,7 +63,7 @@
                 v-model="v$.updateForm.text.$model"
               ></textarea>
               <p style="color: red" v-if="v$.updateForm.text.$error">
-                لطفًا قم بكتابة اطروحة عدد حروفها بين 500 و 1800 خالية من الرموز
+                لطفًا قم بكتابة اطروحة عدد حروفها بين 500 و 4800 خالية من الرموز
                 التعبيرية (emojis)
               </p>
             </div>
@@ -152,7 +152,7 @@ export default {
         text: {
           required,
           minLength: minLength(500),
-          maxLength: maxLength(1800),
+          maxLength: maxLength(4800),
         },
         pageStart: {
           required,
