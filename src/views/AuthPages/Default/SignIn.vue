@@ -139,6 +139,7 @@ export default {
         this.errorMessage = "";
         this.$router.push({ name: "osboha.list" });
       } catch (error) {
+        console.log("🚀 ~ submit ~ error - check if catch block is working:", error)
         const response = error.response.data;
 
         if (response.statusCode === 500) {

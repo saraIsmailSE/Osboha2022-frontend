@@ -44,7 +44,7 @@
                 <input type="checkbox" :checked="allowSubmitIsNew" class="form-check-input" id="allow_submit_is_new"
                     ref="allow_submit_is_new" @click="allowSubmitIsNew = !allowSubmitIsNew">
                 <h4 class="form-check-label" for="allow_submit_is_new">
-                    هذا العضو جديد وفي اسبوعه الأول أو الثاني
+                    هذا العضو جديد وفي اسبوعه الأول أو الثاني أو الثالث
                 </h4>
             </div>
             <div class="form-group">
@@ -152,15 +152,15 @@ export default {
                 const today = new Date();
 
                 // Calculate the start date of the 2-week period
-                const twoWeeksAgo = new Date();
-                twoWeeksAgo.setDate(today.getDate() - 21); // Subtract 21 days from today's date [3 weeks]
+                const threeWeeksAgo = new Date();
+                threeWeeksAgo.setDate(today.getDate() - 21); // Subtract 21 days from today's date [3 weeks]
 
                 // Reset time for both dates to 00:00:00 for a day-level comparison
-                twoWeeksAgo.setHours(0, 0, 0, 0);
+                threeWeeksAgo.setHours(0, 0, 0, 0);
                 givenDate.setHours(0, 0, 0, 0);
 
-                // Check if givenDate is between twoWeeksAgo and today
-                return givenDate >= twoWeeksAgo && givenDate <= today;
+                // Check if givenDate is between threeWeeksAgo and today
+                return givenDate >= threeWeeksAgo && givenDate <= today;
             }
             else {
                 return false;
