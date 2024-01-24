@@ -3,17 +3,12 @@ import UserInfo from "../../Services/userInfoService";
 import { handleError } from "vue";
 
 class AuthService {
-  async login({ username, password }) {
+  async login(user_info) {
     try {
-      const response = api.post("/auth/signin", {
-        username,
-        password,
+      const response = await api.post(`/login`, user_info, {
+        headers: { "Content-type": "multipart/form-data" },
       });
-
-      if (response.data.accessToken) {
-        UserInfo.setUser(response.date);
-      }
-      return response.data;
+      return response;
     } catch (error) {
       console.log(error);
     }
@@ -94,7 +89,6 @@ class AuthService {
     }
   }
 
-  
   async returnToTeam() {
     try {
       const response = await api.get("/return-to-team");
@@ -103,8 +97,6 @@ class AuthService {
       handleError(error);
     }
   }
-
-  
 }
 
 export default new AuthService();

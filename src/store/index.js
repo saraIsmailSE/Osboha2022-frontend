@@ -79,23 +79,12 @@ export default new Vuex.Store({
       // //   commit("SET_REACTIONS", reactions.data.data);
       // });
     },
-    login({ commit }, credentials) {
-      return api
-        .post("login", credentials)
-        .then(({ data }) => {
-          localStorage.setItem("osboha__token", data.data.token);
-          localStorage.setItem("osboha__user", JSON.stringify(data.data.user));
-          commit("SET_USER_DATA", data.data.user);
-          commit("SET_TOKEN", data.data.token);
-
-          // //get all reactions
-          // api.get("reactions/types").then((reactions) => {
-          //   commit("SET_REACTIONS", reactions.data.data);
-          // });
-        })
-        .catch((error) => {
-          handleError(error);
-        });
+    login({ commit }, user_info) {
+      console.log("🚀 ~ login ~ user_info:", user_info)
+      localStorage.setItem("osboha__token", user_info.token);
+      localStorage.setItem("osboha__user", JSON.stringify(user_info.user));
+      commit("SET_USER_DATA", user_info.user);
+      commit("SET_TOKEN", user_info.token);
     },
     logout({ commit }) {
       localStorage.removeItem("osboha__user");

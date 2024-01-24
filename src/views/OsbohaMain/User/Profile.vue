@@ -121,11 +121,11 @@
   </div>
 </template>
 <script>
-import About from "./Sections/About.vue";
-import Books from "./Sections/Books.vue";
-import MainInfo from "./Sections/MainInfo.vue";
-import ProfileFeed from "./Sections/ProfileFeed.vue";
-import Statistics from "./Sections/Statistics.vue";
+import About from "./Sections/About";
+import Books from "./Sections/Books";
+import MainInfo from "./Sections/MainInfo";
+import ProfileFeed from "./Sections/ProfileFeed";
+import Statistics from "./Sections/Statistics";
 
 import UserProfile from "@/API/services/user-profile.service";
 import { watchEffect } from "vue";
@@ -154,15 +154,15 @@ export default {
         },
       ],
       profile_media: [
-        require("../../assets/images/main/reading_list.png"),
-        require("../../assets/images/main/reading_list.png"),
-        require("../../assets/images/main/reading_list.png"),
-        require("../../assets/images/main/reading_list.png"),
-        require("../../assets/images/main/reading_list.png"),
-        require("../../assets/images/main/reading_list.png"),
-        require("../../assets/images/main/reading_list.png"),
-        require("../../assets/images/main/reading_list.png"),
-        require("../../assets/images/main/reading_list.png"),
+        require("@/assets/images/main/reading_list.png"),
+        require("@/assets/images/main/reading_list.png"),
+        require("@/assets/images/main/reading_list.png"),
+        require("@/assets/images/main/reading_list.png"),
+        require("@/assets/images/main/reading_list.png"),
+        require("@/assets/images/main/reading_list.png"),
+        require("@/assets/images/main/reading_list.png"),
+        require("@/assets/images/main/reading_list.png"),
+        require("@/assets/images/main/reading_list.png"),
       ],
     };
   },

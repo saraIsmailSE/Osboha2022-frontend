@@ -310,16 +310,21 @@ export const COUNTRIES = {
 export const TERMINATION_REASONS = {
   withdrawn: "منسحب",
   excluded: "مستبعد",
-  "emptying the group":'غير فعال - تفريغ الفريق',
-  "reassignment": "غير فعال - اعادة تعيين اداري"
+  "emptying the group": "غير فعال - تفريغ الفريق",
+  reassignment: "غير فعال - اعادة تعيين اداري",
 };
 
-export const EXCEPTION_STATUS= {
+export const EXCEPTION_STATUS = {
   pending: "قيد المراجعة",
   accepted: "مقبول",
   rejected: "مرفوض",
   cancelled: "ملغي",
   finished: "منتهي",
 };
-
-
+export const EXCEPTION_STATUS_CLASS = {
+  pending: "bg-warning",
+  accepted: "bg-primary",
+  rejected: "bg-danger",
+  cancelled: "bg-success",
+  finished: "bg-danger",
+};

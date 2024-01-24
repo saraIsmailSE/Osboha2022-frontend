@@ -17,21 +17,30 @@
                                                 alt="blog-img">
                                         </div>
 
-                                        <h4 class="mb-2 text-center" style="direction: inherit;"> اسم السفير: {{
-                                            certificate.user.name }}</h4>
+                                        <h4 class="mb-2 text-center" style="direction: inherit;"> اسم السفير:
+                                            {{ certificate.user.user_profile.first_name_ar }}
+                                            {{ certificate.user.user_profile.middle_name_ar }}
+                                            {{ certificate.user.user_profile.last_name_ar }}
+                                        </h4>
                                         <h4 class="mb-2 text-center" style="direction: inherit;">اسم الكتاب:{{
                                             certificate.book.name }}</h4>
                                         <h4 class="mb-2 text-center" style="direction: inherit;">رقم التوثيق:{{
                                             certificate.id }}</h4>
-                                        <button @click="acceptCertificate(certificate.id)" type="submit"
-                                            class="btn btn-primary d-block w-100">قبول </button>
-
-                                        <button @click="rejectCertificate(certificate.id)" type="submit"
-                                            class="btn btn-primary d-block w-100 mt-3">رفض </button>
-
-                                        <button @click="listCertificate(certificate.id)" type="submit"
-                                            class="btn btn-primary d-block w-100 mt-3">عرض الشهادة
-                                        </button>
+                                        <span role="button" class="  btn-primary material-symbols-outlined fs-3 p-1 me-2"
+                                            @click="acceptCertificate(certificate.id)">
+                                            verified
+                                        </span>
+                                        <span role="button" class="  btn-danger material-symbols-outlined fs-3 p-1 me-2"
+                                            @click="rejectCertificate(certificate.id)">
+                                            dangerous
+                                        </span>
+                                        <span role="button" class="  btn-warning material-symbols-outlined fs-3 p-1 me-2">
+                                            swipe_left
+                                        </span>
+                                        <span role="button" class="  btn-light material-symbols-outlined fs-3 p-1 me-2"
+                                            @click="listCertificate(certificate.id)">
+                                            visibility
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -184,3 +193,13 @@ export default {
     }
 }
 </script>
+<style scoped>
+.material-symbols-outlined {
+    border-radius: 5px;
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+}
+</style>

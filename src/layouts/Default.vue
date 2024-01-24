@@ -36,6 +36,7 @@
       />
       <ReadingTeam :reading_team="sessionData.reading_team" />
       <Timer :timer="sessionData.timer" />
+      <LastException :lastException="sessionData.last_exception" />
     </div>
   </div>
 </template>
@@ -45,7 +46,8 @@ import DefaultHeader from "../components/custom/partials/Header/DefaultHeader";
 import DefaultFooter from "../components/custom/partials/Footer/DefaultFooter";
 import CurrentReading from "@/components/custom/partials/Sidebar/LeftSidebar/CurrentReading";
 import ReadingTeam from "@/components/custom/partials/Sidebar/LeftSidebar/ReadingTeam";
-import Timer from "../components/custom/partials/Sidebar/LeftSidebar/Timer.vue";
+import Timer from "@/components/custom/partials/Sidebar/LeftSidebar/Timer.vue";
+import LastException from "@/components/custom/partials/Sidebar/LeftSidebar/LastException";
 import Breadcrumb from "../components/custom/Breadcrumb/Breadcrumb";
 import logo from "../assets/images/logo.png";
 import authService from "@/API/services/auth.service";
@@ -64,6 +66,7 @@ export default {
     DefaultHeader,
     DefaultFooter,
     Timer,
+    LastException,
     CurrentReading,
     ReadingTeam,
     Breadcrumb,
