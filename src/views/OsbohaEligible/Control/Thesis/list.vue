@@ -43,7 +43,9 @@
                                     </td>
                                     <td>
                                         <a href="javascript:void(0);" @click="listThesis(thesis.user_book.id)">
-                                            {{ thesis.user_book.user.name }}
+                                            {{ thesis.user_book.user.user_profile.first_name_ar }}
+                                            {{ thesis.user_book.user.user_profile.middle_name_ar }}
+                                            {{ thesis.user_book.user.user_profile.last_name_ar }}
                                         </a>
 
                                     </td>

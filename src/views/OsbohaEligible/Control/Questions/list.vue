@@ -45,7 +45,9 @@
                                     </td>
                                     <td>
                                         <a href="javascript:void(0);" @click="listQuestions(question.user_book.id)">
-                                            {{ question.user_book.user.name }}
+                                            {{ question.user_book.user.user_profile.first_name_ar }}
+                                            {{ question.user_book.user.user_profile.middle_name_ar }}
+                                            {{ question.user_book.user.user_profile.last_name_ar }}
                                         </a>
 
                                     </td>

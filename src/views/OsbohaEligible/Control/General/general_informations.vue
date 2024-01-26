@@ -385,7 +385,11 @@ export default {
          const general_nformations = await generalInformationsServices.getByUserBook(this.$route.params.user_book_id);
          this.informations = general_nformations;
          this.bookName = this.informations.user_book.book.name
-         this.userName = this.informations.user_book.user.name
+         this.userName =
+            this.informations.user_book.user.user_profile.first_name_ar
+            + " " + this.informations.user_book.user.user_profile.middle_name_ar + " " +
+            this.informations.user_book.user.user_profile.last_name_ar
+
       },
       checkMark() {
          this.markCondition = (parseInt(this.mark) >= 70 && parseInt(this.mark) <= 100)

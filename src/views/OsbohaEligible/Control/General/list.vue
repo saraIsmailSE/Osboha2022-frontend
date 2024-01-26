@@ -44,7 +44,9 @@
                                     <td>
                                         <a href="javascript:void(0);"
                                             @click="listGeneralInformations(information.user_book.id)">
-                                            {{ information.user_book.user.name }}
+                                            {{ information.user_book.user.user_profile.first_name_ar }}
+                                            {{ information.user_book.user.user_profile.middle_name_ar }}
+                                            {{ information.user_book.user.user_profile.last_name_ar }}
                                         </a>
 
                                     </td>

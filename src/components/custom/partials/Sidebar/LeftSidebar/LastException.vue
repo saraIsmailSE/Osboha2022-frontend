@@ -25,7 +25,7 @@
 
                             </div>
 
-                            <div class="card-body row d-flex justify-content-center card-shadow">
+                            <div class="card-body row d-flex justify-content-center card-shadow" v-if="lastException">
                                 <router-link :to="{
                                     name: 'user.listException',
                                     params: { user_id: lastException.user_id },

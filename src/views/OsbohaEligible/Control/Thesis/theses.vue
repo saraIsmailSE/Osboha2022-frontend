@@ -12,8 +12,11 @@
          <iq-card>
             <template v-slot:headerTitle>
                <h4 class="card-title">الأطروحات</h4>
-               <span class="px-2" v-if="isReviewer"> اسم السفير : {{
-                  thesis[0].user_book.user.name }}</span>
+               <span class="px-2" v-if="isReviewer"> اسم السفير : 
+                  {{ thesis[0].user_book.user.user_profile.first_name_ar }}
+                  {{ thesis[0].user_book.user.user_profile.middle_name_ar }}
+                  {{ thesis[0].user_book.user.user_profile.last_name_ar }}
+               </span>
                <span class="px-2" v-else> اسم السفير : ***************</span>
                <span class="px-2"> || </span>
                <span class="px-2"> اسم الكتاب : {{ thesis[0].user_book.book.name }}</span>
