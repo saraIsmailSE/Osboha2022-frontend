@@ -16,7 +16,7 @@
               <h4 class="mb-2 text-center">{{ mark.user.name }}</h4>
             </router-link>
             <p class="text-center mb-4" style="direction: rtl">
-              فريق المتابعة
+              مارثون
               <span class="mx-2">|</span>
               <router-link class="text-center" :to="{
                 name: 'group.group-detail',

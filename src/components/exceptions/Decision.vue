@@ -58,7 +58,7 @@
             </div>
             <div class="d-flex align-items-center mt-3" v-else-if="exception.type.type == 'تجميد استثنائي' &&
                 authInGroup &&
-                (authInGroup.user_type == 'admin' ||
+                (authInGroup.user_type == 'admin' || authInGroup.user_type == 'consultant' ||
                     authInGroup.user_type == 'advisor')
                 ">
                 <form @submit.prevent="submitDecision" class="post-text m-auto w-100 row">

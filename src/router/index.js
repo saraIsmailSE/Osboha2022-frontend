@@ -201,7 +201,8 @@ const userChildRoute = (prop, mode = false) => [
     path: "list-exception/:user_id",
     name: prop + ".listException",
     meta: { auth: true, name: "List User Exception" },
-    component: () => import("../views/OsbohaMain/User/Exceptions/ListExceptions"),
+    component: () =>
+      import("../views/OsbohaMain/User/Exceptions/ListExceptions"),
   },
 
   {
@@ -275,6 +276,12 @@ const rolesChildRoute = (prop, mode = false) => [
     component: () => import("../views/RolesAdministration/UpgradeEligibleRole"),
   },
   {
+    path: "/upgrade-marathon-role",
+    name: prop + ".upgradeMarathonRole",
+    meta: { auth: true, name: "Upgrade Marathon Role" },
+    component: () => import("../views/RolesAdministration/UpgradeMarathonRole"),
+  },
+  {
     path: "/change-advising-team",
     name: prop + ".changeAdvisingTeam",
     meta: { auth: true, name: "Change Advising Team" },
@@ -313,7 +320,7 @@ const groupChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMain/Group/ListMembers"),
   },
   {
-    path: "add-member/:group_id",
+    path: "add-member/:add_type/:group_id",
     name: prop + ".addMemeber",
     meta: { auth: true, name: "Group" },
     component: () => import("../views/OsbohaMain/Group/AddMember"),
@@ -338,6 +345,13 @@ const groupChildRoute = (prop, mode = false) => [
       import("../views/OsbohaMain/Group/Ambassadors/TeamReading"),
   },
   {
+    path: "/group/marathon-ambassadors-reading/:group_id/week/:week_id",
+    name: prop + ".marathon-ambassadors-reading",
+    meta: { auth: true, name: "Marathon Ambassadors Reading" },
+    component: () =>
+      import("../views/OsbohaMain/Group/Ambassadors/MarathonReading"),
+  },
+  {
     path: "/group/list-ambassador-reading/:ambassador_id/week/:week_id",
     name: prop + ".listOneAmbassadorReading",
     meta: { auth: true, name: "Ambassador list reading" },
@@ -345,11 +359,25 @@ const groupChildRoute = (prop, mode = false) => [
       import("../views/OsbohaMain/Group/Ambassadors/ListReading"),
   },
   {
+    path: "/group/list-marathon-ambassador-reading/:ambassador_id/week/:week_id",
+    name: prop + ".listOneMarathonReading",
+    meta: { auth: true, name: "Ambassador list marathon reading" },
+    component: () =>
+      import("../views/OsbohaMain/Group/Ambassadors/ListMarathonReading"),
+  },
+  {
     path: "/group/list-ambassador-reading/thesis/:thesis_id",
     name: prop + ".listOneAmbassadorThesis",
     meta: { auth: true, name: "Ambassador -  one thesis" },
     component: () => import("../views/OsbohaMain/Group/Ambassadors/ListThesis"),
   },
+  {
+    path: "/group/list-marathon-ambassador-reading/thesis/:thesis_id",
+    name: prop + ".listOneMarathoAmbassadorThesis",
+    meta: { auth: true, name: "Marathon Ambassador -  one thesis" },
+    component: () => import("../views/OsbohaMain/Group/Ambassadors/ListMarathonThesis"),
+  },
+  
   {
     path: "/group/all-ambassadors-achement/:group_id/week/:week_id",
     name: prop + ".listAllAmbassadorAchievements",

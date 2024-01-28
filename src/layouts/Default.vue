@@ -36,7 +36,7 @@
       />
       <ReadingTeam :reading_team="sessionData.reading_team" />
       <Timer :timer="sessionData.timer" />
-      <LastException :lastException="sessionData.last_exception" />
+      <LastException :lastException="sessionData.last_exception" v-if="sessionData.last_exception" />
     </div>
   </div>
 </template>

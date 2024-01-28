@@ -84,7 +84,7 @@
                 id="choices-single-default" :disabled="!shouldfFill">
                 <option value="0" selected>اختر نوع الكتاب</option>
                 <option v-for="(type, index) in types" :key="index" :value="type.id">
-                  {{ BOOK_Types[type.type] }}
+                  {{ BOOK_TYPES[type.type] }}
                 </option>
               </select>
               <small style="color: red" v-if="v$.bookForm.type_id.$error">نوع الكتاب مطلوب</small>
@@ -170,7 +170,7 @@ import bookType from "@/API/services/book-type.service";
 import languages from "@/API/services/language.service";
 import bookLevel from "@/API/services/book-level.service";
 import sections from "@/API/services/sectionService";
-import { LANUAGES, BOOK_Types } from "@/utilities/constants";
+import { LANUAGES, BOOK_TYPES } from "@/utilities/constants";
 import UserInfoService from "@/Services/userInfoService";
 
 const greaterThanZero = (value) => value > 0;
@@ -223,7 +223,7 @@ export default {
       sections: [],
       languages: [],
       LANUAGES,
-      BOOK_Types,
+      BOOK_TYPES,
       bookForm: {
         book_id: this.$route.params.book_id,
         book_media: null,

@@ -1,18 +1,12 @@
 <template>
   <div class="col-sm-12 mt-3">
     <iq-card class="iq-card">
-      <div
-        class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto"
-      >
+      <div class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto">
         <h1 class="text-center mt-3 mb-3">عضو جديد</h1>
       </div>
       <div class="iq-card-body p-4">
         <div class="image-block text-center">
-          <img
-            src="@/assets/images/main/add-user.png"
-            class="img-fluid rounded w-75"
-            alt="add-user"
-          />
+          <img src="@/assets/images/main/add-user.png" class="img-fluid rounded w-75" alt="add-user" />
         </div>
       </div>
       <div class="col-12 bg-white pt-2">
@@ -21,36 +15,18 @@
           <form class="mt-2" @submit.prevent="onSubmit()">
             <div class="form-group">
               <label for="exampleInputEmail1">الايميل</label>
-              <input
-                type="text"
-                v-model="v$.form.email.$model"
-                class="form-control mb-0"
-                id="exampleInputEmail1"
-                placeholder="البريد الالكتروني العضو"
-              />
+              <input type="text" v-model="v$.form.email.$model" class="form-control mb-0" id="exampleInputEmail1"
+                placeholder="البريد الالكتروني العضو" />
               <template v-if="v$.form.email.$error">
-                <small style="color: red" v-if="v$.form.email.required.$invalid"
-                  >البريد الالكتروني مطلوب</small
-                >
-                <small style="color: red" v-if="v$.form.email.email.$invalid"
-                  >البريد الالكتروني غير صحيح</small
-                >
+                <small style="color: red" v-if="v$.form.email.required.$invalid">البريد الالكتروني مطلوب</small>
+                <small style="color: red" v-if="v$.form.email.email.$invalid">البريد الالكتروني غير صحيح</small>
               </template>
             </div>
             <div class="form-group">
-              <select
-                v-model="v$.form.role_id.$model"
-                class="form-select"
-                data-trigger
-                name="choices-single-default"
-                id="choices-single-default"
-              >
+              <select v-model="v$.form.role_id.$model" class="form-select" data-trigger name="choices-single-default"
+                id="choices-single-default">
                 <option value="0" selected>اختر دور العضو</option>
-                <option
-                  v-for="(role, index) in roles"
-                  :key="index"
-                  :value="role.id"
-                >
+                <option v-for="(role, index) in roles" :key="index" :value="role.id">
                   {{ ARABIC_ROLES[role.name] }}
                 </option>
               </select>
@@ -59,21 +35,15 @@
               </small>
             </div>
             <div class="form-group text-center" v-if="message">
-              <small
-                :style="{
-                  color: messageVariant === 'success' ? 'green' : 'red',
-                }"
-              >
+              <small :style="{
+                color: messageVariant === 'success' ? 'green' : 'red',
+              }">
                 {{ message }}
               </small>
             </div>
             <div class="col-sm-12 text-center" v-if="loader">
               <p class="text-center">جاري الاضافة</p>
-              <img
-                src="@/assets/images/gif/page-load-loader.gif"
-                alt="loader"
-                style="height: 100px"
-              />
+              <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 100px" />
             </div>
             <div class="d-inline-block w-100" v-else>
               <button type="submit" class="btn btn-primary float-end">
@@ -87,6 +57,7 @@
   </div>
 </template>
 <script>
+import rolesService from "@/API/services/roles.service";
 import useVuelidate from "@vuelidate/core";
 import { required, maxLength, email } from "@vuelidate/validators";
 import UserGroupService from "@/API/services/user-group.service";
@@ -102,8 +73,14 @@ export default {
   },
 
   async created() {
-    const roles = await api.get(`get-roles/1`);
-    this.roles = roles.data.data;
+    if (this.$route.params.add_type == 'marathon') {
+      this.roles = await rolesService.getMarathonRoles();
+    }
+    else {
+      const roles = await api.get(`get-roles/1`);
+      this.roles = roles.data.data;
+
+    }
   },
 
   data() {

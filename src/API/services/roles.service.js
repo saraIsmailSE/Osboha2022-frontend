@@ -21,9 +21,21 @@ class RolesService {
       handleError(error);
     }
   }
+
+  async getMarathonRoles() {
+    try {
+      const response = await api.get(`${this.prefix}/get-marathon-roles`);
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
   async assignRoleV2(formData) {
     try {
-      const response = await api.post(`${this.prefix}/assign-role-v2`, formData);
+      const response = await api.post(
+        `${this.prefix}/assign-role-v2`,
+        formData,
+      );
       return response.data.data;
     } catch (error) {
       handleError(error);

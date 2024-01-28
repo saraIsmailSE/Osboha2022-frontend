@@ -102,9 +102,12 @@
     <!-- ###### Osboha Eligible ###### -->
     <OsbohaEligible v-if="leaderAndAbove || eligibleTeam" />
 
+    <!-- ###### Osboha Marathon ###### -->
+    <OsbohaMarathon v-if="inMarathon" />
+
     <!-- ###### Audit Marks ###### -->
     <AuditMarks v-if="isAdvisor || isSupervisor" />
-    
+
     <!-- ###### Audit Marks ###### -->
     <Exceptions v-if="isAdvisor" />
 
@@ -131,6 +134,7 @@ import OsbohaEligible from './OsbohaEligible.vue'
 import InventoryStatistics from './InventoryStatistics'
 import AuditMarks from './AuditMarks'
 import Exceptions from './Exceptions'
+import OsbohaMarathon from './OsbohaMarathon'
 export default {
   name: "DefaultSidebar",
   components: {
@@ -139,7 +143,8 @@ export default {
     OsbohaEligible,
     InventoryStatistics,
     AuditMarks,
-    Exceptions
+    Exceptions,
+    OsbohaMarathon,
   },
   computed: {
     user() {
@@ -197,6 +202,15 @@ export default {
         'user_accept',
         'super_auditer',
         'super_reviewer'
+      ]);
+    },
+    inMarathon() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "marathon_coordinator",
+        'marathon_verification_supervisor',
+        "marathon_supervisor",
+        "marathon_ambassador",
       ]);
     },
   },

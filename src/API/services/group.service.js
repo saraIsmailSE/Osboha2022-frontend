@@ -141,6 +141,15 @@ class GroupService {
     }
   }
 
+  async MarathonReading(group_id,week_id) {
+    try {
+      const MarathonReading = await api.get(`group/marathon-reading/${group_id}/${week_id}`);
+      return MarathonReading.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
   /**
    * all ambassadors achievments.
    *

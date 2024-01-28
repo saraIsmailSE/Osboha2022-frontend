@@ -90,7 +90,7 @@
                 id="choices-single-default" v-if="shouldfFill">
                 <option value="0" selected>اختر نوع الكتاب</option>
                 <option v-for="(type, index) in types" :key="index" :value="type.id">
-                  {{ BOOK_Types[type.type] }}
+                  {{ BOOK_TYPES[type.type] }}
                 </option>
               </select>
               <select v-model="v$.bookForm.type_id.$model" class="form-select" data-trigger name="choices-single-default"
@@ -188,7 +188,7 @@ import bookType from "@/API/services/book-type.service";
 import languages from "@/API/services/language.service";
 import bookLevel from "@/API/services/book-level.service";
 import sections from "@/API/services/sectionService";
-import { LANUAGES, BOOK_Types } from "@/utilities/constants";
+import { LANUAGES, BOOK_TYPES } from "@/utilities/constants";
 import UserInfoService from "@/Services/userInfoService";
 
 
@@ -241,7 +241,7 @@ export default {
       sections: [],
       languages: [],
       LANUAGES,
-      BOOK_Types,
+      BOOK_TYPES,
       bookForm: {
         book_media: null,
         name: "",

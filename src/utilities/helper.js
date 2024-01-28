@@ -34,6 +34,15 @@ export default {
     });
   },
 
+  formatDayInArabic(dateToConvert, withTime = false) {
+    const options = { weekday: 'long' };
+    if (withTime) {
+      options.day = 'numeric';
+    }
+    return new Date(dateToConvert).toLocaleString('ar-EG', options);
+  },
+  
+
   /**
    * Toggle a toast message with a specific type
    * @param {String} message

@@ -22,7 +22,7 @@
       </div>
       <div class="col-lg-3 col-md-3 col-sm-12 text-center">
         <router-link :to="{
-          name: 'group.listOneAmbassadorReading',
+          name: route_to,
           params: { ambassador_id: ambassador.id, week_id: week_id },
         }">
           <button class="badge ms-0 ms-md-3 my-1 my-md-0 w-75 text-center border-0 outline-none" :class="{
@@ -56,6 +56,10 @@ export default {
     week_id: {
       type: [Number],
       required: true,
+    },
+    route_to: {
+      type: [String],
+      default: 'group.listOneAmbassadorReading',
     },
   },
   data() {

@@ -47,6 +47,18 @@ class Marks {
       handleError(error);
     }
   }
+  
+  async marathonAmbassadorMark(user_id, week_id) {
+    try {
+      const response = await api.get(
+        `marks/marathon-ambassador-mark/${user_id}/${week_id}`,
+      );
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+  
 
   /**
    * Accept support done by user (ambassador) and update mark

@@ -80,8 +80,6 @@ export default {
       this.ambassadorsAchievementList = response.random_achievement;
       this.most_read = response.most_read;
       this.support_leader = response.support_leader;
-
-      console.log(this.support_leader);
     } catch (error) {
       console.log(error);
     }

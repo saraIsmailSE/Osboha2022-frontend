@@ -6,7 +6,7 @@
             </div>
             <div class="iq-card-body p-4">
                 <div class="image-block text-center">
-                    <img src="@/assets/images/main/upgrade-user.png" class="img-fluid rounded w-75" alt="blog-img" />
+                    <img src="@/assets/images/main/marathon.png" class="img-fluid rounded w-75" alt="blog-img" />
                 </div>
             </div>
             <div class="col-12 bg-white pt-2">
@@ -68,12 +68,12 @@ import rolesService from "@/API/services/roles.service";
 const greaterThanZero = (value) => value > 0;
 
 export default {
-    name: "Upgrade Eligible Role",
+    name: "Upgrade Marathon Role",
     setup() {
         return { v$: useVuelidate() };
     },
     async created() {
-        this.roles= await rolesService.getEligibleRoles();
+        this.roles= await rolesService.getMarathonRoles();
     },
     data() {
         return {

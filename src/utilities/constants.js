@@ -15,6 +15,11 @@ export const ARABIC_ROLES = {
   super_auditer: "مسؤول تقييم التوثيقات",
   super_reviewer: "مسؤول مراجعة التوثيقات",
   user_accept: "مسؤول الوثائق",
+  marathon_coordinator:"مسؤول عام في مارثون أصبوحة",
+  marathon_verification_supervisor:"مسؤول تدقيق مارثون أصبوحة",
+  marathon_supervisor: "مسؤول في مارثون أصبوحة",
+  marathon_ambassador:"سفير مشارك في مارثون أصبوحة"
+
 };
 
 export const LANUAGES = {
@@ -22,13 +27,32 @@ export const LANUAGES = {
   english: "اللغة الانجليزية",
 };
 
-export const BOOK_Types = {
+export const BOOK_TYPES = {
   normal: "منهج",
   ramadan: "رمضان",
   young: "يافعين",
   kids: "أطفال",
   tafseer: "تفسير",
   free: "كتاب حر",
+};
+
+export const GROUP_TYPE= {
+  followup: "فريق متابعة",
+  supervising: "فريق رقابة",
+  advising: "فريق توجيه",
+  consultation: "فريق الاستشارة",
+  Administration: "الإدارة العليا",
+  marathon: "مارثون",
+};
+
+export const DAYS = {
+  Sunday: "الأحد",
+  Monday: "الاثنين",
+  Tuesday: "الثلاثاء",
+  Wednesday: "الاربعاء",
+  Thursday: "الخميس",
+  Friday: "الجمعة",
+  Saturday: "السبت",
 };
 
 export const MONTHS = {
