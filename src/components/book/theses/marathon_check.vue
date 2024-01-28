@@ -1,6 +1,6 @@
 <template>
   <div class="col-12">
-    <div class="card card-block card-stretch card-height blog" v-if="theses.length > 0">
+    <div class="card card-block card-stretch card-height blog">
       <div class="card-header">
         <h2>الانجاز</h2>
       </div>
@@ -51,11 +51,6 @@
           </table>
           <hr />
         </div>
-      </div>
-    </div>
-    <div class="card card-block card-stretch card-height blog" v-else>
-      <div class="card-header">
-        <h2 class="text-center">لا يوجد انجاز</h2>
       </div>
     </div>
     <div class="d-flex align-items-center mt-3 row">
