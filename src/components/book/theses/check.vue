@@ -46,10 +46,12 @@
                 <td v-else-if="thesis.status && thesis.status == 'rejected'">
                   <span class="rounded-pill badge bg-danger px-2">مرفوض </span>
                 </td>
-                <td v-else-if="thesis.status && thesis.status == 'one_thesis'">
-                  <span class="rounded-pill badge bg-info px-2"
-                    >علامة أطروحة واحدة</span
-                  >
+                <td
+                  v-else-if="thesis.status && thesis.status == 'rejected_parts'"
+                >
+                  <span class="rounded-pill badge bg-info px-2">
+                    {{ `رفض ${thesis.rejected_parts} أوراد` }}
+                  </span>
                 </td>
                 <td v-else>
                   <span class="rounded-pill badge bg-warning px-2">

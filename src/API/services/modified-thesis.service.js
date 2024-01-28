@@ -9,6 +9,11 @@ class ModifiedThesisService {
     formData.append("thesis_id", data.thesis_id);
     formData.append("status", data.status);
     formData.append("week_id", data.week_id);
+    if (data.rejected_parts !== null)
+      formData.append("rejected_parts", data.rejected_parts);
+    if (data.modified_thesis_id) {
+      formData.append("modified_thesis_id", data.modified_thesis_id);
+    }
     try {
       const response = await api.post("/modified-theses", formData);
       return response.data;
