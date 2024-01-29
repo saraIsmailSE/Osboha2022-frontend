@@ -188,6 +188,7 @@ export default {
         let response;
         response = await GroupService.getAll(this.searchModel,
           this.page,
+          this.retrieveType,
           this.cancelToken
         );
         if (response.statusCode !== 200) {

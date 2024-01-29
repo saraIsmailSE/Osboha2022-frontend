@@ -31,11 +31,16 @@
 
               <div class="form-group row">
                 <div class="col-12">
-                  <label class="form-control-plaintext">
+                  <h5 class="text-center form-control-plaintext">
+                    <strong class="me-2">
+                      الكتاب: {{ thesis.book.name }}
+                    </strong>
+                  </h5>
+                  <h5 class="text-center form-control-plaintext">
                     <span class="me-2">
                       نوع الانجاز: {{ thesisType }}
                     </span>
-                  </label>
+                  </h5>
                 </div>
               </div>
 

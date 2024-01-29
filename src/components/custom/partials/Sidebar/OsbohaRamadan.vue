@@ -1,23 +1,18 @@
 <template>
     <li class="nav-item static-item">
         <a class="nav-link static-item disabled" tabindex="-1">
-            <span class="default-icon">توثيق الكتب</span>
+            <span class="default-icon">رمضان</span>
             <span class="mini-icon" data-bs-toggle="tooltip" title="Social" data-bs-placement="right">-</span>
         </a>
     </li>
+    <!-- ###### ADD MEMBERS  ###### -->
     <li class="nav-item">
-        <router-link :class="checkActive('book.eligible') ? 'active nav-link' : 'nav-link'" aria-current="page"
-            :to="{ name: 'book.eligible' }">
-            <img src="@/assets/images/main/eligible_logo.png" class="img-fluid rounded w-25" alt="blog-img" />
-            <!-- <i class="icon material-symbols-outlined"> contract_edit </i> -->
-            <span class="item-name">توثيق كتاب</span>
-        </router-link>
-    </li>
-    <li class="nav-item" v-if="eligibleTeam">
-        <router-link :class="checkActive('book.eligible-controle') ? 'active nav-link' : 'nav-link'" aria-current="page"
-            :to="{ name: 'book.eligible-controle' }">
-            <i class="icon material-symbols-outlined"> contract_edit </i>
-            <span class="item-name">تحكم - توثيق الكتب</span>
+        <router-link :class="checkActive('book.ramadan') ? 'active nav-link' : 'nav-link'
+            " aria-current="page" :to="{
+        name: 'book.ramadan',
+    }">
+            <i class="icon material-symbols-outlined"> book_5 </i>
+            <span class="item-name">الكتب</span>
         </router-link>
     </li>
 </template>
@@ -25,22 +20,24 @@
 import { useStore } from "vuex";
 import { computed } from "vue";
 import UserInfoService from "@/Services/userInfoService";
-
 export default {
-    name: "Eligible",
+    name: "Ramadan",
     computed: {
         user() {
             return this.$store.getters.getUser;
         },
-        eligibleTeam() {
+        isMarathonCoordinator() {
+            return UserInfoService.hasRole(this.user, "marathon_coordinator");
+        },
+        isAdmin() {
+            return UserInfoService.hasRole(this.user, "admin");
+        },
+        isMarathonAdministrator() {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
-                'eligible_admin',
-                'reviewer',
-                'auditor',
-                'user_accept',
-                'super_auditer',
-                'super_reviewer'
+                "marathon_coordinator",
+                'marathon_verification_supervisor',
+                "marathon_supervisor",
             ]);
         },
     },
@@ -76,5 +73,3 @@ export default {
     },
 };
 </script>
-
-<style></style>

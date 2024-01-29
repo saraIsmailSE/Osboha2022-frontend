@@ -1,5 +1,5 @@
 <template>
-  <GroupList :retrieveType="all" />
+  <GroupList :retrieveType="'all'" />
 </template>
 <script>
 import GroupList from "@/components/group/List"

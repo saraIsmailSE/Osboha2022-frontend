@@ -32,7 +32,16 @@ class BookService {
       handleError(error);
     }
   }
-
+  async getAllRamadan(page,name) {
+    try {
+      const books = await api.get(
+        `/books/ramadan/?page=${page}&name=${name}`,
+      );
+      return books.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
   async getBooksByNameForEligible(name, page) {
     try {
       const books = await api.get(

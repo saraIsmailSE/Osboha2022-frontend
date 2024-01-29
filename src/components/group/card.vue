@@ -21,7 +21,7 @@
           <h4>
             {{ group.group.name }}
           </h4>
-          <p>{{ group_type[group.group.type.type] }}</p>
+          <p>{{ GROUP_TYPE[group.group.type.type] }}</p>
         </div>
         <div class="group-details d-inline-block pb-3">
           <ul
@@ -53,7 +53,7 @@
   </div>
 </template>
 <script>
-import { ARABIC_ROLES } from "@/utilities/constants";
+import { ARABIC_ROLES,GROUP_TYPE } from "@/utilities/constants";
 export default {
   name: "GroupCard",
   props: {
@@ -64,13 +64,7 @@ export default {
   },
   data() {
     return {
-      group_type: {
-        followup: "فريق متابعة",
-        supervising: "فريق رقابة",
-        advising: "فريق توجيه",
-        consultation: "فريق الاستشارة",
-        Administration: "الإدارة العليا",
-      },
+      GROUP_TYPE,
       ARABIC_ROLES,
     };
   },

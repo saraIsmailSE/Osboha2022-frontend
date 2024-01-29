@@ -5,8 +5,8 @@
             <span class="mini-icon" data-bs-toggle="tooltip" title="Social" data-bs-placement="right">-</span>
         </a>
     </li>
-    <!-- ###### Exceptional Freez  ###### -->
-    <li class="nav-item" >
+    <!-- ###### ADD MEMBERS  ###### -->
+    <li class="nav-item">
         <router-link :class="checkActive('roles.upgradeMarathonRole') ? 'active nav-link' : 'nav-link'
             " aria-current="page" :to="{
         name: 'roles.upgradeMarathonRole',
@@ -15,13 +15,33 @@
             <span class="item-name">تحكم العضويات</span>
         </router-link>
     </li>
+
+    <!-- ###### LIST ALL GROUPS  ###### -->
+    <li class="nav-item">
+        <router-link :class="checkActive('group.listMarathonGroups') ? 'active nav-link' : 'nav-link'
+            " aria-current="page" :to="{
+        name: 'group.listMarathonGroups',
+    }" v-if="isMarathonAdministrator">
+            <i class="icon material-symbols-outlined"> groups </i>
+            <span class="item-name">أفرقة المارثون</span>
+        </router-link>
+    </li>
+    <!-- <li class="nav-item">
+        <router-link :class="checkActive('marathon.participants') ? 'active nav-link' : 'nav-link'
+            " aria-current="page" :to="{
+        name: 'marathon.participants',
+    }" v-if="isMarathonAdministrator">
+            <i class="icon material-symbols-outlined"> group </i>
+            <span class="item-name">المشاركون</span>
+        </router-link>
+    </li> -->
 </template>
 <script>
 import { useStore } from "vuex";
 import { computed } from "vue";
 import UserInfoService from "@/Services/userInfoService";
 export default {
-    name: "Audit Marks",
+    name: "Marathon",
     computed: {
         user() {
             return this.$store.getters.getUser;
@@ -31,6 +51,14 @@ export default {
         },
         isAdmin() {
             return UserInfoService.hasRole(this.user, "admin");
+        },
+        isMarathonAdministrator() {
+            return UserInfoService.hasRoles(this.user, [
+                "admin",
+                "marathon_coordinator",
+                'marathon_verification_supervisor',
+                "marathon_supervisor",
+            ]);
         },
     },
     setup() {

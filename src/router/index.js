@@ -52,10 +52,10 @@ const childRoutes = (prop, mode) => [
     component: () => import("../views/Articles/list"),
   },
   {
-    path: "group",
+    path: "user-groups",
     name: prop + ".group",
-    meta: { auth: true, name: "Group" },
-    component: () => import("../views/OsbohaMain/Group/Group"),
+    meta: { auth: true, name: "User Groups" },
+    component: () => import("../views/OsbohaMain/Group/UserGroups"),
   },
   {
     path: "groups-list",
@@ -290,6 +290,12 @@ const rolesChildRoute = (prop, mode = false) => [
 ];
 const groupChildRoute = (prop, mode = false) => [
   {
+    path: "marathon-groups",
+    name: prop + ".listMarathonGroups",
+    meta: { auth: true, name: "List Marathon Groups" },
+    component: () => import("../views/OsbohaMain/Group/Marathon/ListGroups"),
+  },
+  {
     path: "request-ambassadors/:group_id",
     name: prop + ".requestAmbassadors",
     meta: { auth: true, name: "Request AmbFgrassadors" },
@@ -375,9 +381,10 @@ const groupChildRoute = (prop, mode = false) => [
     path: "/group/list-marathon-ambassador-reading/thesis/:thesis_id",
     name: prop + ".listOneMarathoAmbassadorThesis",
     meta: { auth: true, name: "Marathon Ambassador -  one thesis" },
-    component: () => import("../views/OsbohaMain/Group/Ambassadors/ListMarathonThesis"),
+    component: () =>
+      import("../views/OsbohaMain/Group/Ambassadors/ListMarathonThesis"),
   },
-  
+
   {
     path: "/group/all-ambassadors-achement/:group_id/week/:week_id",
     name: prop + ".listAllAmbassadorAchievements",
@@ -438,6 +445,15 @@ const groupChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Group" },
     component: () => import("../views/OsbohaMain/Group/AddGroup"),
   },
+];
+
+const marathonChildRoute = (prop, mode = false) => [
+  {
+    path: "list-participants",
+    name: prop + ".participants",
+    meta: { auth: true, name: "List Exception" },
+    component: () => import("../views/OsbohaMarathon/Participants"),
+  }
 ];
 
 const exceptionChildRoute = (prop, mode = false) => [
@@ -672,6 +688,13 @@ const bookChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaEligible/Books/List"),
   },
   {
+    path: "ramadan",
+    name: prop + ".ramadan",
+    meta: { auth: true, name: "ramadan Books" },
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
+    component: () => import("../views/OsbohaRamadan/Books/List"),
+  },
+  {
     path: "eligible-controle",
     name: prop + ".eligible-controle",
     meta: { auth: true, name: "eligible Controle" },
@@ -853,6 +876,13 @@ const routes = [
     component: () => import("../layouts/Default"),
     meta: { auth: true },
     children: groupChildRoute("group"),
+  },
+  {
+    path: "/marathon",
+    name: "marathon",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: marathonChildRoute("marathon"),
   },
   {
     path: "/statistics",

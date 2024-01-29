@@ -105,6 +105,9 @@
     <!-- ###### Osboha Marathon ###### -->
     <OsbohaMarathon v-if="inMarathon" />
 
+    <!-- ###### Osboha Ramadan ###### -->
+    <OsbohaRamadan v-if="isAdmin" />
+
     <!-- ###### Audit Marks ###### -->
     <AuditMarks v-if="isAdvisor || isSupervisor" />
 
@@ -130,11 +133,12 @@ import { computed } from "vue";
 import UserInfoService from "@/Services/userInfoService";
 import ControlGroups from './ControlGroups'
 import GeneralConversation from './GeneralConversation';
-import OsbohaEligible from './OsbohaEligible.vue'
+import OsbohaEligible from './OsbohaEligible'
 import InventoryStatistics from './InventoryStatistics'
 import AuditMarks from './AuditMarks'
 import Exceptions from './Exceptions'
 import OsbohaMarathon from './OsbohaMarathon'
+import OsbohaRamadan from "./OsbohaRamadan";
 export default {
   name: "DefaultSidebar",
   components: {
@@ -145,6 +149,7 @@ export default {
     AuditMarks,
     Exceptions,
     OsbohaMarathon,
+    OsbohaRamadan
   },
   computed: {
     user() {

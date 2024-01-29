@@ -18,9 +18,11 @@ class GroupService {
    *
    * @return groups;
    */
-  async getAll(name,page) {
+  async getAll(name, page, retrieveType) {
     try {
-      const groups = await api.get(`/group?page=${page}&name=${name}`);
+      const groups = await api.get(
+        `/group/list-all/${retrieveType}/${name}?page=${page}`,
+      );
       return await groups.data;
     } catch (error) {
       return error;
@@ -99,7 +101,7 @@ class GroupService {
   async getAllGroupExceptions(group_id) {
     try {
       const groupExceptions = await api.get(
-        `group/group-exceptions/${group_id}`
+        `group/group-exceptions/${group_id}`,
       );
       return groupExceptions.data.data;
     } catch (error) {
@@ -117,7 +119,7 @@ class GroupService {
   async exceptionsFilter(filter, group_id) {
     try {
       const exceptions = await api.get(
-        `group/exceptions-filter/${filter}/${group_id}`
+        `group/exceptions-filter/${filter}/${group_id}`,
       );
       return exceptions.data.data;
     } catch (error) {
@@ -132,18 +134,22 @@ class GroupService {
    * @return group info , week satistics [100 - 0 -incomplete - most read]
    */
 
-  async BasicMarksView(group_id,week_id) {
+  async BasicMarksView(group_id, week_id) {
     try {
-      const BasicMarksView = await api.get(`group/basic-mark-view/${group_id}/${week_id}`);
+      const BasicMarksView = await api.get(
+        `group/basic-mark-view/${group_id}/${week_id}`,
+      );
       return BasicMarksView.data.data;
     } catch (error) {
       return error;
     }
   }
 
-  async MarathonReading(group_id,week_id) {
+  async MarathonReading(group_id, week_id) {
     try {
-      const MarathonReading = await api.get(`group/marathon-reading/${group_id}/${week_id}`);
+      const MarathonReading = await api.get(
+        `group/marathon-reading/${group_id}/${week_id}`,
+      );
       return MarathonReading.data.data;
     } catch (error) {
       return error;
@@ -159,7 +165,7 @@ class GroupService {
   async AllAchievements(group_id, week_id) {
     try {
       const response = await api.get(
-        `group/all-achievements/${group_id}/${week_id}`
+        `group/all-achievements/${group_id}/${week_id}`,
       );
       return response.data.data;
     } catch (error) {
@@ -176,7 +182,7 @@ class GroupService {
   async AchievementAsPages(group_id, week_id) {
     try {
       const response = await api.get(
-        `group/achievement-as-pages/${group_id}/${week_id}`
+        `group/achievement-as-pages/${group_id}/${week_id}`,
       );
       return response.data.data;
     } catch (error) {
@@ -194,7 +200,7 @@ class GroupService {
   async searchForAmbassadorAchievement(ambassador_name, group_id, week_filter) {
     try {
       const response = await api.get(
-        `group/search-for-ambassador-achievement/${ambassador_name}/${group_id}/${week_filter}`
+        `group/search-for-ambassador-achievement/${ambassador_name}/${group_id}/${week_filter}`,
       );
       return response.data.data;
     } catch (error) {
@@ -212,7 +218,7 @@ class GroupService {
   async searchForAmbassador(ambassador_name, group_id) {
     try {
       const response = await api.get(
-        `group/search-for-ambassador/${ambassador_name}/${group_id}`
+        `group/search-for-ambassador/${ambassador_name}/${group_id}`,
       );
       return response.data.data;
     } catch (error) {
@@ -274,15 +280,17 @@ class GroupService {
 
   async getGroupByType(type) {
     try {
-      const groups=  await api.get(`/group/group-by-type/${type}`);
+      const groups = await api.get(`/group/group-by-type/${type}`);
       return groups.data.data;
     } catch (error) {
       return error;
     }
   }
-  async userGroups(name,page) {
+  async userGroups(name, page) {
     try {
-      const groups = await api.get(`/group/user-groups?page=${page}&name=${name}`);
+      const groups = await api.get(
+        `/group/user-groups?page=${page}&name=${name}`,
+      );
       return groups.data;
     } catch (error) {
       return error;
@@ -307,7 +315,7 @@ class GroupService {
    * @return statistics;
    */
 
-  async statistics(group_id,week_id) {
+  async statistics(group_id, week_id) {
     try {
       const response = await api.get(`group/statistics/${group_id}/${week_id}`);
       return response.data.data;
@@ -324,7 +332,7 @@ class GroupService {
   async thesesAndScreensByWeek(group_id, filter) {
     try {
       const response = await api.get(
-        `group/theses-and-screens-by-week/${group_id}/${filter}`
+        `group/theses-and-screens-by-week/${group_id}/${filter}`,
       );
       return response.data.data;
     } catch (error) {
@@ -340,7 +348,7 @@ class GroupService {
   async monthAchievement(group_id, filter) {
     try {
       const response = await api.get(
-        `group/month-achievement/${group_id}/${filter}`
+        `group/month-achievement/${group_id}/${filter}`,
       );
       return response.data.data;
     } catch (error) {
@@ -368,10 +376,6 @@ class GroupService {
       handleError(error);
     }
   }
-
-  
-
-  
 }
 
 export default new GroupService();

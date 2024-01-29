@@ -28,7 +28,7 @@ import axios from "axios";
 
 export default {
   components: { card },
-  name: "Group",
+  name: "User Groups",
   async mounted() {
     this.loadGroups();
     window.addEventListener("scroll", this.handleScroll);
