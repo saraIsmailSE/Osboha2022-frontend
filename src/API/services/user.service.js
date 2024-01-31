@@ -90,17 +90,6 @@ class UserService {
     const user = api.patch(`users/allow-to-eligible/${id}`);
     return user;
   }
-
-  async getMarathonParticipants(page) {
-    try {
-      const users = await api.get(
-        `/users/list-marathon-participants?page=${page}`,
-      );
-      return users.data;
-    } catch (error) {
-      return error;
-    }
-  }
 }
 
 export default new UserService();

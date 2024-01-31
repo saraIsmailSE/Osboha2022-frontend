@@ -26,7 +26,7 @@
             <span class="item-name">أفرقة المارثون</span>
         </router-link>
     </li>
-    <!-- <li class="nav-item">
+    <li class="nav-item">
         <router-link :class="checkActive('marathon.participants') ? 'active nav-link' : 'nav-link'
             " aria-current="page" :to="{
         name: 'marathon.participants',
@@ -34,7 +34,7 @@
             <i class="icon material-symbols-outlined"> group </i>
             <span class="item-name">المشاركون</span>
         </router-link>
-    </li> -->
+    </li>
 </template>
 <script>
 import { useStore } from "vuex";

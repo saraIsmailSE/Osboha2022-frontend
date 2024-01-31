@@ -100,7 +100,7 @@
     </li>
 
     <!-- ###### Osboha Eligible ###### -->
-    <OsbohaEligible v-if="leaderAndAbove || eligibleTeam" />
+    <OsbohaEligible />
 
     <!-- ###### Osboha Marathon ###### -->
     <OsbohaMarathon v-if="inMarathon" />

@@ -4,56 +4,47 @@
             <div class="col-sm-12">
                 <iq-card>
                     <template v-slot:headerTitle>
-                        <h4 class="card-title" v-if="Participants && Participants.length > 0">المشاركون في المارثون - {{ Participants.length }}</h4>
-                        <h4 class="card-title" v-else>المشاركون في المارثون - 0</h4>
+                        <h4 class="card-title">مارثون أصبوحة - {{ participants.length ? participants.length : 0 }} أفرقة
+                        </h4>
                     </template>
 
                     <template v-slot:body>
                         <router-link class="mb-3 btn btn-primary float-end" :to="{
-                            name: 'group.addGroup',
-                        }">
+                            name: 'roles.upgradeMarathonRole',
+                        }" v-if="isMarathonCoordinator || isAdmin">
                             اضافة مشارك
                         </router-link>
 
 
-                        <div class="table-responsive" v-if="Participants && Participants.length > 0">
-                            <table id="datatable" class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>السفير</th>
-                                        <th>فريق المارثون</th>
-                                        <th>فريق المتابعة</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        <div class="card-body" v-if="participants">
+                            <div class="blog-description" v-for="(group, index) in participants" :key="index">
+                                <h3 class="book-title mb-2">
+                                    <router-link class="text-center" :to="{
+                                        name: 'group.group-detail',
+                                        params: { group_id: group.id },
+                                    }">
+                                        {{ group.name }}
+                                        <i class="icon material-symbols-outlined align-middle"> sprint </i>
+                                    </router-link>
+                                </h3>
+                                <div class=" me-3 col-6 d-flex align-items-center" v-if="group.users.length > 0">
+                                    <router-link class="me-3" v-for="user in group.users" :key="user.id"
+                                        :to="{ name: 'user.profile', params: { user_id: user.id } }">
+                                        <BaseAvatar :profileImg="user.user_profile.profile_picture"
+                                            :profile_id="user.user_profile.id" :title="user.name" :gender="user.gender"
+                                            :dimensions="'100x100'" avatarClass="rounded-circle " />
+                                        <br />
+                                        <div>
+                                            <p>{{ user.name }}</p>
+                                        </div>
 
-                                    <tr v-for="(group, index) in Participants" :key="index">
-                                        <td>
-                                            <router-link class="text-center" :to="{
-                                                name: 'group.group-detail',
-                                                params: { group_id: group.id },
-                                            }">
-                                                {{ group.name }}
-                                            </router-link>
-                                        </td>
-                                        <td>
-                                            {{ GROUP_TYPE[group.type.type] }}
-                                        </td>
-                                        <td>
-                                            {{ group.users_count }}
-                                        </td>
-
-                                        <td v-if="group.group_administrators">
-                                            <span role="button"
-                                                @click="groupAdministrators(group.group_administrators, group.name)"
-                                                class="text-danger material-symbols-outlined ms-1 me-1">
-                                                shield_person
-                                            </span>
-                                        </td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
+                                    </router-link>
+                                </div>
+                                <div class="iq-media-group me-3 col-6" v-else>
+                                    <p>لا يوجد أعضاء</p>
+                                </div>
+                                <hr />
+                            </div>
                         </div>
 
                         <div v-else>
@@ -78,7 +69,7 @@
     </div>
 </template>
 <script>
-import userService from "@/API/services/user.service";
+import groupService from "@/API/services/group.service";
 import helper from "@/utilities/helper";
 import UserInfoService from "@/Services/userInfoService";
 import axios from "axios";
@@ -107,7 +98,7 @@ export default {
 
     data() {
         return {
-            Participants: [],
+            participants: [],
             GROUP_TYPE,
             searchModel: "",
             page: 1,
@@ -128,12 +119,12 @@ export default {
                 return;
             }
 
-            if (this.searchModel == '' && this.Participants.length == 0) {
+            if (this.searchModel == '' && this.participants.length == 0) {
                 this.page = 1;
             }
             if (this.searchModel != '') {
                 this.page = 1;
-                this.Participants = []
+                this.participants = []
             }
 
             this.pendingRequest = true;
@@ -141,7 +132,7 @@ export default {
             this.emptyMessage = ""
             try {
                 let response;
-                response = await userService.getMarathonParticipants(this.page);
+                response = await groupService.getMarathonParticipants(this.page);
                 if (response.statusCode !== 200) {
                     helper.toggleToast(
                         "حدث خطأ أثناء تحميل المشاركين, حاول مرة أخرى",
@@ -155,8 +146,9 @@ export default {
                     this.hasMore = false;
                     return;
                 }
+                console.log("🚀 ~ loadParticipants ~ this.participants:", response)
 
-                this.Participants = [...this.Participants, ...response.data.Participants.data];
+                this.participants = [...this.participants, ...response.data.participants.data];
                 this.totalPages = response.data?.last_page ?? 1;
                 this.page++;
             } catch (error) {
@@ -182,7 +174,7 @@ export default {
             return containerBottom >= windowHeight;
         },
         /*
-         * Load more Participants when the user scrolls to the bottom of the page
+         * Load more participants when the user scrolls to the bottom of the page
          */
         handleScroll() {
             if (this.hasMoreToLoad && this.isAtBottomOfPage()) {
@@ -204,49 +196,18 @@ export default {
         user() {
             return this.$store.getters.getUser;
         },
-        isAdmin() {
-            return UserInfoService.hasRole(this.user, "admin");
-        },
         hasMoreToLoad() {
             return this.page <= this.totalPages && this.hasMore;
         },
+        isMarathonCoordinator() {
+            return UserInfoService.hasRole(this.user, "marathon_coordinator");
+        },
+        isAdmin() {
+            return UserInfoService.hasRole(this.user, "admin");
+        },
+
     }
 };
 
 
 </script>
-
-<style lang="scss" scoped>
-.inputs {
-    position: relative;
-}
-
-.form-control {
-    text-indent: 15px;
-    border: none;
-    height: 45px;
-    border-radius: 0px;
-    border-bottom: 1px solid #eee;
-}
-
-.form-control:focus {
-    color: #495057;
-    background-color: #fff;
-    border-color: #eee;
-    outline: 0;
-    box-shadow: none;
-    border-bottom: 1px solid blue;
-}
-
-.form-control:focus {
-    color: blue;
-}
-
-.inputs i {
-    position: absolute;
-    top: 14px;
-    left: 4px;
-    color: #b8b9bc;
-}
-</style>
-  

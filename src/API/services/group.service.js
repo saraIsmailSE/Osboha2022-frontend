@@ -230,7 +230,7 @@ class GroupService {
    * Add a new leader request (“create RequestAmbassador” permission is required)
    *
    * @param  request information [gender - number of requested members]
-  
+
    */
   async createLeaderRequest(request) {
     try {
@@ -374,6 +374,16 @@ class GroupService {
       return response.data.data;
     } catch (error) {
       handleError(error);
+    }
+  }
+  async getMarathonParticipants(page) {
+    try {
+      const users = await api.get(
+        `/group/list-marathon-participants?page=${page}`,
+      );
+      return users.data;
+    } catch (error) {
+      return error;
     }
   }
 }
