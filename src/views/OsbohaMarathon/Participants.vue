@@ -35,7 +35,7 @@
                                             :dimensions="'100x100'" avatarClass="rounded-circle " />
                                         <br />
                                         <div>
-                                            <p>{{ user.name }}</p>
+                                            <p class="text-center">{{ user.name }}</p>
                                         </div>
 
                                     </router-link>
