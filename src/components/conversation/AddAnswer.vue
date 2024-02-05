@@ -56,6 +56,10 @@ export default {
       type: Number,
       required: true,
     },
+    status: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -64,6 +68,7 @@ export default {
         answer: "",
         image: null,
         question_id: this.question_id,
+        is_discussion: this.status === "discussion" ? 1 : 0,
       },
     };
   },
@@ -91,7 +96,7 @@ export default {
 
         try {
           const response = await GeneralConversationService.addAnswer(
-            this.answerData
+            this.answerData,
           );
 
           this.addNewAnswer(response.data);

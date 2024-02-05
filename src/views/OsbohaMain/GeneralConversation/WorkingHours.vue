@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import GeneralConversationService from "@/API/services/general-conversation.service";
+import WorkingHourService from "@/API/services/working-hour.service";
 import WorkingHoursList from "@/components/conversation/workHours/WorkingHoursList.vue";
 import helper from "@/utilities/helper";
 
@@ -152,7 +152,7 @@ export default {
       }
 
       try {
-        const response = await GeneralConversationService.addWorkingHours(
+        const response = await WorkingHourService.addWorkingHours(
           this.form,
         );
 
@@ -175,7 +175,7 @@ export default {
       this.empty = false;
       this.loadingStats = true;
       try {
-        const response = await GeneralConversationService.getWorkingHours();
+        const response = await WorkingHourService.getWorkingHours();
 
         this.workingHours = response.data;
       } catch (error) {
