@@ -1,6 +1,27 @@
 <template>
   <div class="mt-3 d-flex align-content-start flex-wrap">
     <small class="ms-2 me-2">
+      <span class="align-middle material-symbols-outlined"> timer </span>
+      <vue-countdown
+        v-if="timer > 0"
+        :time="timer"
+        v-slot="{ hours, minutes, seconds }"
+        @end="onTimerEnd"
+      >
+        <span class="align-middle text-danger">
+          {{ pad(hours) }}:{{ pad(minutes) }}:{{ pad(seconds) }}
+        </span>
+      </vue-countdown>
+      <span v-else class="align-middle text-danger">متأخر</span>
+    </small>
+
+    <small class="ms-2 me-2">
+      <span class="align-middle material-symbols-outlined">
+        calendar_month
+      </span>
+      {{ formatFullDate(question.created_at) }}
+    </small>
+    <small class="ms-2 me-2">
       <span
         class="align-middle material-symbols-outlined"
         :class="isWarning ? 'text-warning' : 'text-success'"
@@ -10,73 +31,77 @@
       {{ getStatusText() }}
     </small>
     <small class="ms-2 me-2">
-      <span class="align-middle material-symbols-outlined"> forum </span>
-      {{
-        question.answers.length > 0
-          ? `${question.answers.length} إجابات`
-          : "لا يوجد إجابات"
-      }}
-    </small>
-    <small
-      class="ms-2 me-2"
-      v-for="parent in question.user_parents"
-      :key="parent.role"
-    >
       <span class="align-middle material-symbols-outlined"> person_check </span>
-      <span style="font-weight: bold">{{ `${parent.role}:` }}</span>
-      {{ parent.name }}
+      <span style="font-weight: bold">المسؤول</span>
+      {{ question.assignee.name }}
+    </small>
+
+    <small class="ms-2 me-2">
+      <span class="align-middle material-symbols-outlined"> diversity_4 </span>
+      <span style="font-weight: bold">الفريق الإداري</span>
+      {{ question.management_team.group.name }}
     </small>
   </div>
 </template>
 <script>
 import helper from "@/utilities/helper";
+import VueCountdown from "@chenfengyuan/vue-countdown";
+
 export default {
   name: "QuestionStat",
+  components: {
+    VueCountdown,
+  },
   data() {
     return {
       isWarning: false,
+      startTime: null,
     };
+  },
+  created() {
+    this.startTime = new Date(this.question?.created_at);
+    //add 12 hours to the start time
+    this.startTime.setHours(this.startTime.getHours() + 12);
+
+    const riyadh = new Date().toLocaleString("en-US", {
+      timeZone: "Asia/Riyadh",
+    });
+    this.now = new Date(riyadh);
   },
   props: {
     question: {
       type: Object,
       required: true,
     },
+    onTimerEnd: {
+      type: Function,
+      required: true,
+    },
+  },
+  computed: {
+    timer() {
+      return this.startTime - this.now;
+    },
   },
   methods: {
+    ...helper,
     getStatusText() {
       switch (this.question?.status) {
         case "open": {
-          const { hours } = helper.getDifferenceBetweenDates(
-            this.question.created_at,
-            new Date(),
-          );
-
-          if (hours >= 48) {
-            this.isWarning = true;
-            return "مفتوح لأكثر من يومين";
-          }
-
           return "لم يتم الحل";
         }
-        case "closed":
-          // return "مغلق بسبب عدم الاستجابة";
-          return "مغلق";
-        case "solved": {
-          this.isWarning = false;
-          const { hours } = helper.getDifferenceBetweenDates(
-            this.question.created_at,
-            this.question.updated_at,
-          );
-
-          if (hours <= 12) {
-            return "تم الحل خلال 12 ساعة";
-          }
-          return "تم الحل بعد أكثر من 12 ساعة";
+        case "solved":
+          return "تم الحل في: " + this.formatFullDate(this.question.closed_at);
+        case "discussion": {
+          return "مفتوح للنقاش";
         }
         default:
           return "غير معروف";
       }
+    },
+
+    pad(value) {
+      return value < 10 ? `0${value}` : value;
     },
   },
 };

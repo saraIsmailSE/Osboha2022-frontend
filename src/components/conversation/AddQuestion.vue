@@ -37,7 +37,7 @@
             />
           </form>
         </div>
-        <!-- <hr />
+        <hr />
         <ul class="post-opt-block d-flex list-inline m-0 p-0 flex-wrap">
           <li class="me-2 mb-2">
             <button
@@ -48,7 +48,7 @@
               إضافة صورة
             </button>
           </li>
-        </ul> -->
+        </ul>
         <template v-if="question.media.length > 0">
           <hr />
           <ImagePreviewer :media="question.media" @remove-media="removeMedia" />
@@ -138,7 +138,7 @@ export default {
 
       try {
         const response = await GeneralConversationService.addQuestion(
-          this.question
+          this.question,
         );
 
         this.$emit("add-question", response.data);
