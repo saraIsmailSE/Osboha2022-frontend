@@ -233,7 +233,6 @@ export default {
             );
           }
 
-          console.log(response.data?.questions?.length);
           if (response.data?.length === 0) {
             this.emptyMessage = response.message;
             return;
@@ -243,7 +242,6 @@ export default {
           this.hasMore = response.data.has_more_pages;
         }
       } catch (error) {
-        console.log(error);
         this.toggleErrorToast();
       } finally {
         this.loading = false;

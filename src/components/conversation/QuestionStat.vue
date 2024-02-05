@@ -62,7 +62,6 @@ export default {
     this.startTime = new Date(this.question?.created_at);
     //add 12 hours to the start time
     this.startTime.setHours(this.startTime.getHours() + 12);
-    console.log(this.startTime);
 
     const riyadh = new Date().toLocaleString("en-US", {
       timeZone: "Asia/Riyadh",

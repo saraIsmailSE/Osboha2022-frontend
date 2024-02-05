@@ -154,8 +154,6 @@ export default {
   components: { StatsHeader, StatsIndicators, StatsTables },
   async created() {
     await this.getStatistics();
-
-    console.log("working hours", this.objectToArray(this.workingHours));
   },
   data() {
     return {
