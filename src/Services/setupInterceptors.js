@@ -13,7 +13,7 @@ const setup = (store) => {
     },
     (error) => {
       return Promise.reject(error);
-    }
+    },
   );
 
   api.interceptors.response.use(
@@ -43,20 +43,23 @@ const setup = (store) => {
           err.response.data.data == "ambassador without group"
         ) {
           router.push({ path: `/auth/not-ambassador-in-any-group` });
-        }
-        else if (
+        } else if (
           err.response.status === 400 &&
           err.response.data.data == "excluded ambassador"
         ) {
           router.push({ path: `/auth/excluded_ambassador` });
-        }
-        else if (err.response.status === 504 || err.response.status === 502) {
+        } else if (
+          err.response.status === 400 &&
+          err.response.data.data == "withdrawn ambassador"
+        ) {
+          router.push({ path: `/auth/withdrawn_ambassador` });
+        } else if (err.response.status === 504 || err.response.status === 502) {
           router.push({ name: "ServerError" });
         }
       }
 
       return Promise.reject(err);
-    }
+    },
   );
 };
 

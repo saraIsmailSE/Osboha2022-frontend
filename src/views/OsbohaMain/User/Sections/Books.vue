@@ -34,7 +34,7 @@
           </h4>
         </router-link>
 
-        <router-link class="col-6" v-if="isAuth && (supervisorAndAbove || eligibleTeam)" :to="{
+        <router-link class="col-6" v-if="isAuth" :to="{
           name: 'user.eligible-books',
           params: {
             user_id: this.$route.params.user_id,

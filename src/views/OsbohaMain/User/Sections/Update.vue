@@ -255,7 +255,7 @@
 
         <div class="d-flex align-items-center mt-3">
           <form class="mt-4 w-100" @submit.prevent="resetEmail">
-            <div class="alert alert-warning w-75 mb-2" role="alert">
+            <div class="m-auto alert alert-warning w-75 mb-2" role="alert">
               الايميل المسجل به: {{ user.email }}
             </div>
 

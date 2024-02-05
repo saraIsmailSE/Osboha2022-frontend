@@ -3,11 +3,13 @@
         <div class="row no-gutters">
             <div class="col-sm-12 text-center">
                 <div class="iq-error position-relative mt-5">
-                    <img src="@/assets/images/main/excluded-ambassador.png" class="img-fluid iq-error-img" alt="403" />
+                    <img src="@/assets/images/main/no-team.png" class="img-fluid iq-error-img" alt="403" />
                     <div>
-                        <h2 class="mb-2 text-center">تم استبعادك</h2>
+                        <h2 class="mb-2 text-center">أهلاً مجدداً</h2>
                         <h5 class="text-center m-auto w-75">
-                            بسبب عدم التزامك بالقراءة طيلة الأسابيع الماضية
+                            مرحبًا بك مجددًا! نحن سعداء بعودتك بعد فترة الانسحاب. يمكنك الآن العودة إلى فريقك
+                            السابق، أو في حال رغبت في التغيير، نحن هنا لمساعدتك في الانضمام إلى فريق جديد. لا تتردد في
+                            التواصل معنا لأي استفسارات أو دعم تحتاجه
                         </h5>
                         <div class="col-sm-12 text-center" v-if="loader">
                             <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 100px;">
@@ -43,7 +45,7 @@
 import Auth from '@/API/services/auth.service'
 
 export default {
-    name: "Excluded Ambassador",
+    name: "Withdrawn Ambassador",
     data() {
         return {
             message: "",
@@ -61,7 +63,7 @@ export default {
 
             if (response) {
                 this.message = response
-                if(response == 'تم التعديل بنجاح'){
+                if (response == 'تم التعديل بنجاح') {
                     this.$router.push({ name: 'osboha.list' })
                 }
 

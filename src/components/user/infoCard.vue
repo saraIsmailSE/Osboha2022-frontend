@@ -27,7 +27,7 @@
                             <span v-else class="mx-2">لا يوجد</span>
 
                         </p>
-                        <div class="social-links mt-1 mb-2">
+                        <div class="social-links mt-1 mb-3">
                             <ul class="social-data-block align-items-center justify-content-center list-inline p-0 m-0"
                                 style="display: flex !important">
                                 <li v-for="(role, index) in roles" :key="index" class="text-center pe-2">
@@ -41,29 +41,43 @@
                                         مستبعد
                                     </span>
                                 </li>
+                                <li v-if="user.is_hold" class="text-center pe-2">
+                                    <span class="rounded-pill badge bg-secondary px-2">
+                                        منسحب
+                                    </span>
+                                </li>
                             </ul>
                         </div>
 
+                        <div class="row">
+                            <h5 class="mb-2 text-start" style="direction: rtl">
+                                <span class="material-symbols-outlined align-middle">
+                                    heart_plus
+                                </span>
+                                تاريخ الانضمام:
+                                <span>
+                                    {{ format_date(user.created_at) }}
+                                </span>
+                            </h5>
+                        </div>
                         <div class="row text-center">
-                            <div class="col-12 p-1">
-                                <h3 class="mb-2 text-center" style="direction: rtl">
-                                    <span class="material-symbols-outlined align-middle">
-                                        person_pin
-                                    </span>
-                                    المسؤول عنه:
-                                    <span v-if="user.parent_id">{{ user.parent.name }}</span>
-                                    <span v-else>لا يوجد</span>
-                                </h3>
-                            </div>
+                            <h5 class="mb-2 text-start" style="direction: rtl">
+                                <span class="material-symbols-outlined align-middle">
+                                    person_pin
+                                </span>
+                                المسؤول عنه:
+                                <span v-if="user.parent_id">{{ user.parent.name }}</span>
+                                <span v-else>لا يوجد</span>
+                            </h5>
                         </div>
                         <div class="row text-center">
                             <div class="col-12 p-1">
-                                <h3 class="mb-2 text-start" style="direction: rtl">
+                                <h5 class="mb-2 text-start" style="direction: rtl">
                                     <span class="material-symbols-outlined align-middle">
                                         sensor_occupied
                                     </span>
                                     المسؤول عنهم:
-                                </h3>
+                                </h5>
                                 <ul v-if="in_charge_of.length > 0">
                                     <li style="direction: rtl" class="text-start h5" v-for="user in in_charge_of"
                                         :key="user.id">{{ user.name }}</li>
@@ -74,13 +88,13 @@
                         </div>
 
                         <div class="inline-block mt-3">
-                            <h3>
+                            <h5>
                                 موجود في المجموعات
                                 <span class="material-symbols-outlined align-middle me-1">
                                     diversity_3
                                 </span>
 
-                            </h3>
+                            </h5>
                             <table class="table inline-grid w-100">
                                 <thead>
                                     <tr class="d-flex justify-content-around">
@@ -92,7 +106,7 @@
                                 <tbody v-for="group in groups" :key="group.id">
                                     <tr class="d-flex justify-content-around">
 
-                                        <td  scope="col" class="align-middle text-center w-25">
+                                        <td scope="col" class="align-middle text-center w-25">
                                             <router-link class="text-center" :to="{
                                                 name: 'group.group-detail',
                                                 params: { group_id: group.group.id },
@@ -121,6 +135,7 @@
 </template>
 <script>
 import { ARABIC_ROLES, TERMINATION_REASONS } from "@/utilities/constants";
+import moment from "moment";
 
 export default {
     name: "Information Card",
@@ -157,5 +172,13 @@ export default {
             TERMINATION_REASONS
         };
     },
+    methods: {
+        format_date(value) {
+            if (value) {
+                return moment(String(value)).format("MM/DD/YYYY");
+            }
+        },
+    },
+
 };
-</script>  
+</script>

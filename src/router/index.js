@@ -129,6 +129,11 @@ const authchildRoutes = (prop, mode) => [
     component: () => import("../views/AuthPages/Default/ExcludedAmbassador"),
   },
   {
+    path: "withdrawn_ambassador/",
+    name: prop + ".WithdrawnAmbassador",
+    component: () => import("../views/AuthPages/Default/WithdrawnAmbassador"),
+  },
+  {
     path: "confirm-mail",
     name: prop + ".confirmmail",
     component: () => import("../views/AuthPages/Default/ConfirmMail"),
