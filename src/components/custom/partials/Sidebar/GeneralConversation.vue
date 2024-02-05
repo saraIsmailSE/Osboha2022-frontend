@@ -60,7 +60,7 @@
       <span class="item-name">إضافة ساعات العمل</span>
     </router-link>
   </li>
-  <li class="nav-item" v-if="isAdmin">
+  <li class="nav-item" v-if="advisorAndAbove">
     <router-link
       :class="
         checkActive('general-conversation.workingHoursStats')

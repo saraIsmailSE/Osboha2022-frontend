@@ -127,6 +127,7 @@ export default {
       workingHours: [],
       loadingStats: false,
       weekDays: [],
+      startDate: null,
     };
   },
   watch: {
@@ -152,9 +153,7 @@ export default {
       }
 
       try {
-        const response = await WorkingHourService.addWorkingHours(
-          this.form,
-        );
+        const response = await WorkingHourService.addWorkingHours(this.form);
 
         this.message = "تم إدخال الدقائق بنجاح";
         this.variant = "success";
@@ -177,7 +176,8 @@ export default {
       try {
         const response = await WorkingHourService.getWorkingHours();
 
-        this.workingHours = response.data;
+        this.workingHours = response.data?.workingHours || [];
+        this.startDate = new Date(response.data?.startDate);
       } catch (error) {
         helper.toggleErrorToast();
       } finally {
@@ -189,9 +189,10 @@ export default {
       // [ {"name" : "الأجد" , "date" : "31-12-2024"} , {...} ]
       //where sunday is the $store.state.week_start_date
 
+      if (!this.startDate) return;
+
       const weekDays = [];
-      const startDate = new Date(this.$store.state.week_start_date);
-      startDate.setDate(startDate.getDate() + 1); //add one day to start from sunday
+      this.startDate.setDate(this.startDate.getDate() + 1); //add one day to start from sunday
       const endDate = new Date(this.$store.state.main_timer);
 
       const daysOfWeek = [
@@ -204,7 +205,7 @@ export default {
         "السبت",
       ];
 
-      let currentDate = startDate;
+      let currentDate = this.startDate;
 
       while (currentDate <= endDate) {
         const dayName = daysOfWeek[currentDate.getDay()];
