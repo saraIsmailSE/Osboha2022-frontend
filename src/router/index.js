@@ -458,7 +458,7 @@ const marathonChildRoute = (prop, mode = false) => [
     name: prop + ".participants",
     meta: { auth: true, name: "List Exception" },
     component: () => import("../views/OsbohaMarathon/Participants"),
-  }
+  },
 ];
 
 const exceptionChildRoute = (prop, mode = false) => [
@@ -503,14 +503,6 @@ const generalConversationChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "General Conversation Working Hours Stats" },
     component: () =>
       import("../views/OsbohaMain/GeneralConversation/WorkingHoursStats"),
-  },
-
-  {
-    path: "followup-statistics",
-    name: prop + ".followupStatistics",
-    meta: { auth: true, name: "Followup Statistics" },
-    component: () =>
-      import("../views/OsbohaMain/GeneralConversation/FollowupStatistics"),
   },
 ];
 

@@ -31,6 +31,8 @@ class GeneralConversation {
     formData.append("answer", answer.answer);
     formData.append("question_id", answer.question_id);
     if (answer.image) formData.append("image", answer.image);
+    if (answer.is_discussion)
+      formData.append("is_discussion", answer.is_discussion);
 
     try {
       const response = await api.post(`${this.prefix}/answers`, formData, {
@@ -43,9 +45,9 @@ class GeneralConversation {
     }
   }
 
-  async getQuestions(paeg) {
+  async getAllQuestions(page) {
     try {
-      const questions = await api.get(`${this.prefix}/questions?page=${paeg}`);
+      const questions = await api.get(`${this.prefix}/questions?page=${page}`);
       return questions.data;
     } catch (error) {
       handleError(error);
@@ -72,10 +74,32 @@ class GeneralConversation {
     }
   }
 
-  async getAssignedToMeQuestions(page) {
+  async getMyActiveQuestions(page) {
     try {
       const questions = await api.get(
-        `${this.prefix}/questions/assigned-to-me?page=${page}`,
+        `${this.prefix}/questions/my-active-questions?page=${page}`,
+      );
+      return questions.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async getMyLateQuestions(page) {
+    try {
+      const questions = await api.get(
+        `${this.prefix}/questions/my-late-questions?page=${page}`,
+      );
+      return questions.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async getDiscussionQuestions(page) {
+    try {
+      const questions = await api.get(
+        `${this.prefix}/questions/discussion-questions?page=${page}`,
       );
       return questions.data;
     } catch (error) {
@@ -94,17 +118,6 @@ class GeneralConversation {
     }
   }
 
-  async closeQuestion(questionId) {
-    try {
-      const response = await api.put(
-        `${this.prefix}/questions/${questionId}/close`,
-      );
-      return response.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
   async assignToParent(questionId) {
     try {
       const response = await api.put(
@@ -116,48 +129,10 @@ class GeneralConversation {
     }
   }
 
-  async getStatistics() {
+  async moveToDiscussion(questionId) {
     try {
-      const response = await api.get(`${this.prefix}/questions/statistics`);
-      return response.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
-  async closeOverdueQuestions() {
-    try {
-      const response = await api.put(`${this.prefix}/questions/close-overdue`);
-      return response.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
-  async addWorkingHours(working_hours) {
-    try {
-      const response = await api.post(`${this.prefix}/working-hours`, {
-        working_hours,
-      });
-      return response.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
-  async getWorkingHours() {
-    try {
-      const response = await api.get(`${this.prefix}/working-hours`);
-      return response.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
-  async getWorkingHoursStatistics(type = "", selectedDate = "") {
-    try {
-      const response = await api.get(
-        `${this.prefix}/working-hours/statistics?type=${type}&date=${selectedDate}`,
+      const response = await api.put(
+        `${this.prefix}/questions/${questionId}/move-to-discussion`,
       );
       return response.data;
     } catch (error) {
@@ -165,18 +140,22 @@ class GeneralConversation {
     }
   }
 
-  async addFollowup() {
+  async moveToQuestions(questionId) {
     try {
-      const response = await api.post(`${this.prefix}/followup`);
+      const response = await api.put(
+        `${this.prefix}/questions/${questionId}/move-to-questions`,
+      );
       return response.data;
     } catch (error) {
       handleError(error);
     }
   }
 
-  async getFollowupStatistics() {
+  async getStatistics(type = "week", selectedDate = "") {
     try {
-      const response = await api.get(`${this.prefix}/followup/statistics`);
+      const response = await api.get(
+        `${this.prefix}/questions/statistics?type=${type}&date=${selectedDate}`,
+      );
       return response.data;
     } catch (error) {
       handleError(error);

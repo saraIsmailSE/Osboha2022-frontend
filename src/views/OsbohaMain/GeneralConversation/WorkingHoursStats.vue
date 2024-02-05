@@ -143,7 +143,7 @@
   </div>
 </template>
 <script>
-import GeneralConversationService from "@/API/services/general-conversation.service";
+import WorkingHourService from "@/API/services/working-hour.service";
 import helper from "@/utilities/helper";
 import StatsHeader from "@/components/conversation/workHours/StatsHeader.vue";
 import StatsIndicators from "@/components/conversation/workHours/StatsIndicators.vue";
@@ -154,8 +154,6 @@ export default {
   components: { StatsHeader, StatsIndicators, StatsTables },
   async created() {
     await this.getStatistics();
-
-    console.log("working hours", this.objectToArray(this.workingHours));
   },
   data() {
     return {
@@ -211,11 +209,10 @@ export default {
       this.loading = true;
 
       try {
-        const response =
-          await GeneralConversationService.getWorkingHoursStatistics(
-            this.type,
-            this.type === "week" ? this.selectedWeek : this.selectedMonthYear,
-          );
+        const response = await WorkingHourService.getWorkingHoursStatistics(
+          this.type,
+          this.type === "week" ? this.selectedWeek : this.selectedMonthYear,
+        );
 
         const data = response.data;
         this.weeks = data.weeks;
