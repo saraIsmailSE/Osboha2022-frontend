@@ -33,6 +33,8 @@ class GeneralConversation {
     if (answer.image) formData.append("image", answer.image);
     if (answer.is_discussion)
       formData.append("is_discussion", answer.is_discussion);
+    else
+    formData.append("is_discussion", 0);
 
     try {
       const response = await api.post(`${this.prefix}/answers`, formData, {

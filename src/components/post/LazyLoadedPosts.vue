@@ -139,8 +139,11 @@ export default {
         } else {
           if (this.type === "announcement")
             response = await PostService.getAnnouncements(this.page);
-          else if (this.type === "support") {
+            else if (this.type === "support") {
             response = await PostService.getSupportPosts(this.page);
+          }
+          else if (this.type === "friday-thesis") {
+            response = await PostService.getFridayThesisPosts(this.page);
           } else
             response = await PostService.postsByTimelineId(
               this.timeline_id,

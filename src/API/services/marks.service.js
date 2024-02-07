@@ -47,7 +47,7 @@ class Marks {
       handleError(error);
     }
   }
-  
+
   async marathonAmbassadorMark(user_id, week_id) {
     try {
       const response = await api.get(
@@ -58,7 +58,7 @@ class Marks {
       handleError(error);
     }
   }
-  
+
 
   /**
    * Accept support done by user (ambassador) and update mark
@@ -94,12 +94,33 @@ class Marks {
     }
   }
 
+  async setActivityMark(user_id, week_id) {
+    try {
+      const response = await api.put(
+        `marks/set-activity-mark/${user_id}/${week_id}`,
+      );
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+  async unsetActivityMark(user_id, week_id) {
+    try {
+      const response = await api.put(
+        `marks/unset-activity-mark/${user_id}/${week_id}`,
+      );
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+
   /**
    * Set support mark for all active users
    * @param  form contain reason
    * @throws {object} error
    */
-
   async setSupportMarkForAll(reason) {
     try {
       const response = await api.post(`/marks/set-support-for-all`, reason, {

@@ -17,10 +17,16 @@
                         <div class="alert alert-danger m-2 p-2" role="alert" v-if="message">
                             <h4 class="text-center mt-3 mb-3"> {{ message }}</h4>
                         </div>
-                        <div class="d-inline-block w-100 text-center">
-                            <button @click="returnToTeam()" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
+                        <div class="d-flex w-100 text-center p-2">
+                            <button @click="returnToTeam()" class="btn d-block btn-primary mt-3 mb-3 w-75 ms-1 me-1">
                                 عودة إلى الفريق
                             </button>
+                            <a href="https://www.messenger.com/t/117840717971244/" target="_blank" class="btn d-block btn-success mt-3 mb-3 w-75 ms-1 me-1">
+                                <span class="material-symbols-outlined align-middle">
+                                    support_agent
+                                </span>
+                                راسلنا لمساعدتك
+                            </a>
                         </div>
 
                         <a href="javascript:void(0);" class="d-flex align-items-center m-3" @click="logout">
@@ -30,14 +36,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="d-flex justify-content-center">
-            <a href="https://www.messenger.com/t/117840717971244/" target="_blank" class="text-danger">
-                <span class="material-symbols-outlined">
-                    support_agent
-                </span>
-                راسلنا لمساعدتك
-            </a>
         </div>
     </div>
 </template>

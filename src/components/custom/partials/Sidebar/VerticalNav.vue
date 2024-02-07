@@ -99,6 +99,15 @@
       </router-link>
     </li>
 
+    <!-- ###### Support ###### -->
+    <li class="nav-item" v-if="isAdmin">
+      <router-link :class="checkActive('osboha.friday-thesis') ? 'active nav-link' : 'nav-link'" aria-current="page"
+        :to="{ name: 'osboha.friday-thesis' }">
+        <i class="icon material-symbols-outlined"> mosque </i>
+        <span class="item-name">أطروحة الجمعة</span>
+      </router-link>
+    </li>
+
     <!-- ###### Osboha Eligible ###### -->
     <OsbohaEligible />
 

@@ -15,11 +15,10 @@ export const ARABIC_ROLES = {
   super_auditer: "مسؤول تقييم التوثيقات",
   super_reviewer: "مسؤول مراجعة التوثيقات",
   user_accept: "مسؤول الوثائق",
-  marathon_coordinator:"مسؤول عام في مارثون أصبوحة",
-  marathon_verification_supervisor:"مسؤول تدقيق مارثون أصبوحة",
+  marathon_coordinator: "مسؤول عام في مارثون أصبوحة",
+  marathon_verification_supervisor: "مسؤول تدقيق مارثون أصبوحة",
   marathon_supervisor: "مسؤول في مارثون أصبوحة",
-  marathon_ambassador:"سفير مشارك في مارثون أصبوحة"
-
+  marathon_ambassador: "سفير مشارك في مارثون أصبوحة",
 };
 
 export const LANUAGES = {
@@ -36,7 +35,7 @@ export const BOOK_TYPES = {
   free: "كتاب حر",
 };
 
-export const GROUP_TYPE= {
+export const GROUP_TYPE = {
   followup: "فريق متابعة",
   supervising: "فريق رقابة",
   advising: "فريق توجيه",
@@ -351,4 +350,15 @@ export const EXCEPTION_STATUS_CLASS = {
   rejected: "bg-danger",
   cancelled: "bg-success",
   finished: "bg-danger",
+};
+
+export const POST_TYPES = {
+  normal: "عام",
+  book: "كتاب",
+  article: "مقال",
+  infographic: "انفوجرافيك",
+  support: "اعرف مشروعك",
+  announcement: "اعلان",
+  discussion: "النقاش المنهجي",
+  "friday-thesis": "اطروحة الجمعة",
 };

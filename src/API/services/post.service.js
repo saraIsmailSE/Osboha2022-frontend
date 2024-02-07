@@ -77,7 +77,7 @@ class PostService {
     }
   }
 
-  
+
   async getCurrentWeekSupportPost() {
     try {
       const posts = await api.get(`/posts/current-week-support`);
@@ -115,6 +115,14 @@ class PostService {
       handleError(error);
     }
   }
+  async getFridayThesisPosts(page) {
+    try {
+      const posts = await api.get(`/posts/friday-thesis?page=${page}`);
+      return posts.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 
   async contolComments(post_id) {
     try {
@@ -137,6 +145,14 @@ class PostService {
   async getLastSupportPost() {
     try {
       const response = await api.get(`/posts/support/latest`);
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+  async getLastFridayThesisPost() {
+    try {
+      const response = await api.get(`/posts/friday-thesis/latest`);
       return response.data;
     } catch (error) {
       handleError(error);

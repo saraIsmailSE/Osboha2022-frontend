@@ -10,14 +10,12 @@
           </div>
 
           <!--Support-->
-          <Support
-            :expired="expired"
-            :support="support"
-            :supportMark="mark?.support"
-            :week="week"
-            :can_edit="can_edit"
-            @updateSupportMark="updateSupportMark"
-          />
+          <Support :expired="expired" :support="support" :supportMark="mark?.support" :week="week" :can_edit="can_edit"
+            @updateSupportMark="updateSupportMark" />
+
+          <!--Activities-->
+          <Activities :expired="expired" :activities="activities" :graded="graded" :week="week" :can_edit="can_edit"
+            @updateMark="updateMark" v-if="isAdmin" />
 
           <div class="col-12" v-if="!expired && can_edit">
             <div class="card card-block card-stretch card-height blog">
@@ -30,14 +28,10 @@
 
           <div class="d-flex align-items-center mt-3 row" v-if="can_edit">
             <div class="d-inline-block w-100 text-center col-12">
-              <router-link
-                v-if="group && week"
-                :to="{
-                  name: 'group.ambassadors-reading',
-                  params: { group_id: group.id, week_id: week.id },
-                }"
-                class="d-block mt-3 mb-3 w-75 mx-auto"
-              >
+              <router-link v-if="group && week" :to="{
+                name: 'group.ambassadors-reading',
+                params: { group_id: group.id, week_id: week.id },
+              }" class="d-block mt-3 mb-3 w-75 mx-auto">
                 <span>إنجازات الفريق</span>
                 <span class="align-middle material-symbols-outlined">
                   keyboard_return
@@ -56,8 +50,10 @@ import Check from "@/components/book/theses/check.vue";
 import MarkService from "@/API/services/marks.service";
 import CountDown from "@/components/timer/Countdown.vue";
 import Support from "@/components/book/support/Support.vue";
+import Activities from "@/components/book/activities/Activities";
 import OtherActions from "@/components/group/OtherActions";
 import helper from "@/utilities/helper";
+import UserInfoService from "@/Services/userInfoService";
 
 export default {
   name: "List Reading",
@@ -66,12 +62,15 @@ export default {
     AchievementCard,
     CountDown,
     Support,
+    Activities,
     OtherActions,
   },
   data() {
     return {
       theses: [],
       support: null,
+      activities: null,
+      graded: false,
       group: null,
       week: null,
       mark: null,
@@ -83,51 +82,66 @@ export default {
       can_edit: true,
     };
   },
-  async created() {
-    try {
-      const response = await MarkService.ambassadorMark(
-        this.$route.params.ambassador_id,
-        this.$route.params.week_id,
-      );
+  created() {
+    this.initMark();
 
-      this.mark = response.mark;
-      this.theses = response.theses.reduce((groupByBook, item) => {
-        const group = groupByBook[item.book.name] || [];
-        group["title"] = item.book.name;
-        group.push(item);
-        groupByBook[item.book.name] = group;
-        return groupByBook;
-      }, {});
-      this.group = response.group;
-      this.week = response.currentWeek;
-      this.support = response.support;
-      this.can_edit = response.can_edit;
-
-      const riyadh = new Date().toLocaleString("en-US", {
-        timeZone: "Asia/Riyadh",
-      });
-      this.now = new Date(riyadh);
-      this.date = new Date(this.week.modify_timer);
-      this.expired = this.time < 0;
-    } catch (error) {
-      const res = error.response.data;
-      if (res.statusCode === 401) {
-        this.$router.push({ name: "NotAuthorized" });
-      } else if (res.statusCode === 404) {
-        this.$router.push({ name: "NotFound" });
-      } else {
-        helper.toggleToast("حدث خطأ ما", "error");
-      }
-    }
   },
   methods: {
+    async initMark() {
+      try {
+        const response = await MarkService.ambassadorMark(
+          this.$route.params.ambassador_id,
+          this.$route.params.week_id,
+        );
+
+        this.mark = response.mark;
+        this.theses = response.theses.reduce((groupByBook, item) => {
+          const group = groupByBook[item.book.name] || [];
+          group["title"] = item.book.name;
+          group.push(item);
+          groupByBook[item.book.name] = group;
+          return groupByBook;
+        }, {});
+        this.group = response.group;
+        this.week = response.currentWeek;
+        this.support = response.support;
+        this.activities = response.activities.activities_post;
+        this.graded = response.activities.graded;
+        this.can_edit = response.can_edit;
+
+        const riyadh = new Date().toLocaleString("en-US", {
+          timeZone: "Asia/Riyadh",
+        });
+        this.now = new Date(riyadh);
+        this.date = new Date(this.week.modify_timer);
+        this.expired = this.time < 0;
+      } catch (error) {
+        const res = error.response.data;
+        if (res.statusCode === 401) {
+          this.$router.push({ name: "NotAuthorized" });
+        } else if (res.statusCode === 404) {
+          this.$router.push({ name: "NotFound" });
+        } else {
+          helper.toggleToast("حدث خطأ ما", "error");
+        }
+      }
+    },
     updateSupportMark(mark) {
       this.mark.support = mark;
     },
+    updateMark() {
+      this.initMark();
+    }
   },
   computed: {
     time() {
       return this.date - this.now;
+    },
+    user() {
+      return this.$store.getters.getUser;
+    },
+    isAdmin() {
+      return UserInfoService.hasRole(this.user, "admin");
     },
   },
 };

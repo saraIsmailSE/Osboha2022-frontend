@@ -76,6 +76,12 @@ const childRoutes = (prop, mode) => [
     component: () => import("../views/OsbohaMain/Support/SupportView"),
   },
   {
+    path: "friday-thesis",
+    name: prop + ".friday-thesis",
+    meta: { auth: true, name: "Friday Thesis" },
+    component: () => import("../views/OsbohaMain/Post/FridayThesis"),
+  },
+  {
     path: "post/:post_id/:user_id?",
     name: prop + ".post",
     meta: { auth: true, name: "post" },
