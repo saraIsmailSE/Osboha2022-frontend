@@ -52,7 +52,7 @@
                   <option value="أسبوعين">
                     أسبوعين
                   </option>
-                  <option value="ثلاثة أسابيع">
+                  <option value="ثلاثة أسابيع" v-if="exceptionForm.type_id == 5">
                     ثلاثة أسابيع
                   </option>
                 </select>

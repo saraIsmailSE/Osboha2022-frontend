@@ -15,7 +15,7 @@
 
           <!--Activities-->
           <Activities :expired="expired" :activities="activities" :graded="graded" :week="week" :can_edit="can_edit"
-            @updateMark="updateMark" v-if="isAdmin" />
+            @updateMark="updateMark" v-if="SupervisorAndAbove" />
 
           <div class="col-12" v-if="!expired && can_edit">
             <div class="card card-block card-stretch card-height blog">
@@ -143,6 +143,15 @@ export default {
     isAdmin() {
       return UserInfoService.hasRole(this.user, "admin");
     },
+    SupervisorAndAbove() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "consultant",
+        "advisor",
+        "supervisor",
+      ]);
+    },
+
   },
 };
 </script>
