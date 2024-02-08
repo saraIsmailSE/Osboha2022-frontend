@@ -68,7 +68,7 @@ export default {
         answer: "",
         image: null,
         question_id: this.question_id,
-        is_discussion: this.status === "discussion" ? 1 : 0,
+        is_discussion: this.$route.query?.keyword === "discussion-questions",
       },
     };
   },

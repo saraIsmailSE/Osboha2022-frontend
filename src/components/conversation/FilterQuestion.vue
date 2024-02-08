@@ -1,21 +1,21 @@
 <template>
-  <div class="my-2 d-flex align-content-start flex-wrap">
+  <div class="my-2 d-flex align-content-start flex-wrap gap-2">
     <button
-      class="bg-primary rounded badge text-white border-0 ms-1 me-1"
-      @click="filterQuestions('my_questions')"
+      class="bg-primary rounded badge text-white border-0"
+      @click="filterQuestions('my-questions')"
     >
       تحويلاتي
     </button>
 
     <button
-      class="bg-dark rounded badge text-white border-0 ms-1 me-1"
+      class="bg-dark rounded badge text-white border-0"
       @click="filterQuestions('my-active-questions')"
     >
       تحويلاتي فعالة
     </button>
 
     <button
-      class="bg-danger rounded badge text-white border-0 ms-1 me-1"
+      class="bg-danger rounded badge text-white border-0"
       @click="filterQuestions('my-late-questions')"
     >
       تحويلات متأخرة
@@ -23,7 +23,7 @@
 
     <button
       v-if="consultantAndAbove"
-      class="bg-info rounded badge text-white border-0 ms-1 me-1"
+      class="bg-info rounded badge text-white border-0"
       @click="filterQuestions('discussion-questions')"
     >
       نقاش إداري
@@ -31,7 +31,7 @@
 
     <button
       v-if="advisorAndAbove"
-      class="bg-warning rounded badge text-white border-0 ms-1 me-1"
+      class="bg-warning rounded badge text-white border-0"
       @click="filterQuestions('all')"
     >
       كافة التحويل العام
