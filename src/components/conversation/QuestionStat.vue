@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-3 d-flex align-content-start flex-wrap">
-    <small class="ms-2 me-2">
+  <div class="mt-3 d-flex align-content-start flex-wrap gap-2">
+    <small>
       <span class="align-middle material-symbols-outlined"> timer </span>
       <vue-countdown
         v-if="timer > 0"
@@ -15,13 +15,13 @@
       <span v-else class="align-middle text-danger">متأخر</span>
     </small>
 
-    <small class="ms-2 me-2">
+    <small>
       <span class="align-middle material-symbols-outlined">
         calendar_month
       </span>
       {{ formatFullDate(question.created_at) }}
     </small>
-    <small class="ms-2 me-2">
+    <small>
       <span
         class="align-middle material-symbols-outlined"
         :class="isWarning ? 'text-warning' : 'text-success'"
@@ -30,13 +30,13 @@
       </span>
       {{ getStatusText() }}
     </small>
-    <small class="ms-2 me-2">
+    <small>
       <span class="align-middle material-symbols-outlined"> person_check </span>
       <span style="font-weight: bold">المسؤول</span>
       {{ question.assignee.name }}
     </small>
 
-    <small class="ms-2 me-2">
+    <small>
       <span class="align-middle material-symbols-outlined"> diversity_4 </span>
       <span style="font-weight: bold">الفريق الإداري</span>
       {{ question.management_team.group.name }}

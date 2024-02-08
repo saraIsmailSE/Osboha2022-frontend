@@ -139,20 +139,22 @@ export default {
           return "تحويلات متأخرة";
         case "discussion-questions":
           return "النقاش الإداري";
-        default:
+        case "all":
           return "كافة التحويل العام";
+        default:
+          return null;
       }
     },
   },
   watch: {
     keyword: function (val) {
       //add query parameter to the url
-      this.$router.push({ query: { keyword: val } });
       this.emptyMessage = "";
       this.page = 1;
       this.hasMore = false;
       this.questions = [];
       this.getQuestions();
+      this.$router.push({ query: { keyword: val } });
     },
   },
   methods: {
@@ -226,11 +228,13 @@ export default {
             response = await GeneralConversationService.getDiscussionQuestions(
               this.page,
             );
-          } else {
+          } else if (this.keyword === "all") {
             //get all questions
             response = await GeneralConversationService.getAllQuestions(
               this.page,
             );
+          } else {
+            return;
           }
 
           if (response.data?.length === 0) {
