@@ -25,12 +25,17 @@
           name: route_to,
           params: { ambassador_id: ambassador.id, week_id: week_id },
         }">
-          <button class="badge ms-0 ms-md-3 my-1 my-md-0 w-75 text-center border-0 outline-none" :class="{
+          <button class="badge ms-0 ms-md-3 my-1 my-md-0 w-75 text-center border-0 outline-none position-relative" :class="{
             'bg-primary': ambassador.mark.length > 0,
             'd-none': ambassador.mark.length == 0,
-          }"  
-          :style="`cursor: ${cursorStyle(ambassador.mark)}`">
+          }" :style="`cursor: ${cursorStyle(ambassador.mark)}`">
             عرض
+
+            <span v-if="ambassador.mark[0] && ambassador.mark[0].pending_thesis_count.length > 0"
+              class="mt-1 fs-6 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{ ambassador.mark[0].pending_thesis_count[0].pending_thesis }}
+            </span>
+
           </button>
         </router-link>
         <OtherActions v-if="ambassador.mark.length == 0" :user="ambassador" />
@@ -90,7 +95,7 @@ export default {
       if (mark?.length > 0) {
         return mark[0].reading_mark + mark[0].writing_mark + mark[0].support;
       }
-      else{
+      else {
         return 0
       }
     },

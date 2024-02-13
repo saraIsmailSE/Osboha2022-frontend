@@ -44,7 +44,7 @@
         </div>
       </div>
     </iq-card>
-    <iq-card class="iq-card" v-if="(supervisorAndAbove || eligibleTeam) && (user.allowed_to_eligible == 2 || user.allowed_to_eligible == 0)">
+    <iq-card class="iq-card" v-if="(user.allowed_to_eligible == 2 || user.allowed_to_eligible == 0)">
       <div class="iq-card-body p-3">
         <h1 class="text-center">
           توثيق الكتب
@@ -128,7 +128,7 @@
             </div>
             <div class="form-group col-12">
               <h4>بلد الاقامة</h4>
-              <select class="form-select mt-2"  v-model="infoForm.resident">
+              <select class="form-select mt-2" v-model="infoForm.resident">
                 <option value="" selected>بلد الاقامة</option>
                 <option v-for="(country, index) in COUNTRIES" :key="index" :value="index">
                   {{ country }}
