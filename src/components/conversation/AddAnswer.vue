@@ -28,7 +28,27 @@
           Send
         </button>
       </div>
+      <div class="comment-attagement d-flex mb-1">
+        <input
+          type="file"
+          ref="fileInput"
+          class="d-none"
+          multiple
+          @change="uploadImages"
+          accept="image/*"
+        />
+        <span
+          role="button"
+          class="material-symbols-outlined me-3"
+          @click="chooseImages"
+        >
+          photo_camera
+        </span>
+      </div>
     </form>
+    <template v-if="answerData.media?.length">
+      <ImagePreviewer :media="answerData.media" @remove-media="removeMedia" />
+    </template>
   </div>
 </template>
 <script>
@@ -36,6 +56,7 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import GeneralConversationService from "@/API/services/general-conversation.service";
 import helper from "@/utilities/helper";
+import ImagePreviewer from "@/components/media/ImagePreviewer.vue";
 
 export default {
   name: "AddAnswer",
@@ -44,6 +65,9 @@ export default {
     return {
       v$,
     };
+  },
+  components: {
+    ImagePreviewer,
   },
   emits: ["add-answer"],
   inject: {
@@ -66,9 +90,10 @@ export default {
       loading: false,
       answerData: {
         answer: "",
-        image: null,
+        media: [],
         question_id: this.question_id,
-        is_discussion: this.$route.query?.keyword === "discussion-questions",
+        is_discussion:
+          this.$route.query?.keyword === "discussion-questions" ? 1 : 0,
       },
     };
   },
@@ -87,6 +112,22 @@ export default {
     },
   },
   methods: {
+    chooseImages() {
+      this.$refs.fileInput.click();
+    },
+    uploadImages(e) {
+      const files = [...e.target.files];
+      this.answerData.media = files;
+    },
+    removeMedia(index) {
+      const files = [...this.answerData.media];
+      files.splice(index, 1);
+      this.answerData.media = files;
+
+      if (this.answerData.media.length === 0) {
+        this.$refs.fileInput.value = null;
+      }
+    },
     async addAnswer() {
       if (this.loading) return;
 
@@ -105,6 +146,12 @@ export default {
           this.answerData.image = null;
 
           this.v$.$reset();
+
+          this.answerData = {
+            ...this.answerData,
+            answer: "",
+            media: [],
+          };
           helper.toggleToast("تم إضافة الجواب ", "success");
         } catch (error) {
           helper.toggleErrorToast("حدث خطأ ما, حاول مرة أخرى");
