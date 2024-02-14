@@ -186,10 +186,6 @@ export default {
     },
 
     async getQuestions() {
-      if (this.loading) {
-        return;
-      }
-
       this.loading = true;
 
       try {

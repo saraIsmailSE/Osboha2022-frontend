@@ -35,13 +35,12 @@ export default {
   },
 
   formatDayInArabic(dateToConvert, withTime = false) {
-    const options = { weekday: 'long' };
+    const options = { weekday: "long" };
     if (withTime) {
-      options.day = 'numeric';
+      options.day = "numeric";
     }
-    return new Date(dateToConvert).toLocaleString('ar-EG', options);
+    return new Date(dateToConvert).toLocaleString("ar-EG", options);
   },
-  
 
   /**
    * Toggle a toast message with a specific type
@@ -190,5 +189,33 @@ export default {
       key,
       value,
     }));
+  },
+
+  styleUrlsAndHashtags(text) {
+    if (!text) return;
+
+    //style urls
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    text = text.replace(urlRegex, function (url) {
+      return (
+        '<a href="' +
+        url +
+        '"  target="_blank" direction: rtl;">' +
+        url +
+        "</a>"
+      );
+    });
+
+    //style hashtags
+    const hashtagRegex = /#([\u0600-\u06FF\w]+)/g;
+    text = text.replace(hashtagRegex, function (hashtag) {
+      return (
+        '<span style="font-weight: bold; color: #1d1a55;">' +
+        hashtag +
+        "</span>"
+      );
+    });
+
+    return text;
   },
 };
