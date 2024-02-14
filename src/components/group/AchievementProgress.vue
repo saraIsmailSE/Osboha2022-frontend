@@ -31,7 +31,7 @@
           }" :style="`cursor: ${cursorStyle(ambassador.mark)}`">
             عرض
 
-            <span v-if="ambassador.mark[0] && ambassador.mark[0].pending_thesis_count.length > 0"
+            <span v-if="ambassador.mark[0] && ambassador.mark[0].pending_thesis_count.length > 0 && show_pending_count"
               class="mt-1 fs-6 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
               {{ ambassador.mark[0].pending_thesis_count[0].pending_thesis }}
             </span>
@@ -65,6 +65,10 @@ export default {
     route_to: {
       type: [String],
       default: 'group.listOneAmbassadorReading',
+    },
+    show_pending_count: {
+      type: [Boolean],
+      default: true,
     },
   },
   data() {

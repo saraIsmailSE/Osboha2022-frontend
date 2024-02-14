@@ -104,7 +104,7 @@ export default {
           () => {
             this.message = "";
           },
-          this.messageVariant === "success" ? 2000 : 5000,
+          this.messageVariant === "success" ? 4000 : 6000,
         );
       }
     },
