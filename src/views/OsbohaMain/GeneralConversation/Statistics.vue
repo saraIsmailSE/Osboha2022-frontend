@@ -112,6 +112,7 @@
                       <div class="mt-2">
                         <div class="card-body">
                           <div class="blog-description">
+                            <h3 class="mb-2 bold" v-if="isAdmin">المستشارين</h3>
                             <table class="table w-100 table-bordered">
                               <thead>
                                 <tr class="py-3">
@@ -147,7 +148,7 @@
                                     }}
                                   </td>
                                 </tr>
-                                <tr>
+                                <tr v-if="statistics.length">
                                   <td>
                                     <strong>المجموع</strong>
                                   </td>
@@ -181,8 +182,97 @@
                                     </strong>
                                   </td>
                                 </tr>
+                                <tr v-else>
+                                  <td colspan="6" class="text-center">
+                                    لا يوجد إحصائيات
+                                  </td>
+                                </tr>
                               </tbody>
                             </table>
+
+                            <template v-if="isAdmin">
+                              <h3 class="mb-2 mt-4 bold" v-if="isAdmin">
+                                الموجهين
+                              </h3>
+                              <table class="table w-100 table-bordered">
+                                <thead>
+                                  <tr class="py-3">
+                                    <th scope="col">الاسم</th>
+                                    <th scope="col">التحويلات</th>
+                                    <th scope="col">التحويلات الفعالة</th>
+                                    <th scope="col">
+                                      التحويلات المجابة بعد 12س
+                                    </th>
+                                    <th scope="col">التحويلات المجابة</th>
+                                    <th scope="col">التحويلات المرفوعة</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr
+                                    v-for="statistic in advisorsStatistics"
+                                    :key="statistic.id"
+                                  >
+                                    <td>{{ statistic.user.name }}</td>
+                                    <td>{{ statistic.total_questions }}</td>
+                                    <td>
+                                      {{ statistic.total_active_questions }}
+                                    </td>
+                                    <td>
+                                      {{
+                                        statistic.total_solved_questions_after_12_hrs
+                                      }}
+                                    </td>
+                                    <td>
+                                      {{ statistic.total_solved_questions }}
+                                    </td>
+                                    <td>
+                                      {{
+                                        statistic.total_questions_assigned_to_parent
+                                      }}
+                                    </td>
+                                  </tr>
+                                  <tr v-if="advisorsStatistics.length">
+                                    <td>
+                                      <strong>المجموع</strong>
+                                    </td>
+                                    <td>
+                                      <strong>
+                                        {{ totals.total_questions }}
+                                      </strong>
+                                    </td>
+                                    <td>
+                                      <strong>
+                                        {{ totals.total_active_questions }}
+                                      </strong>
+                                    </td>
+                                    <td>
+                                      <strong>
+                                        {{
+                                          totals.total_solved_questions_after_12_hrs
+                                        }}
+                                      </strong>
+                                    </td>
+                                    <td>
+                                      <strong>
+                                        {{ totals.total_solved_questions }}
+                                      </strong>
+                                    </td>
+                                    <td>
+                                      <strong>
+                                        {{
+                                          totals.total_questions_assigned_to_parent
+                                        }}
+                                      </strong>
+                                    </td>
+                                  </tr>
+                                  <tr v-else>
+                                    <td colspan="6" class="text-center">
+                                      لا يوجد إحصائيات
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </template>
                           </div>
                         </div>
                       </div>
@@ -200,7 +290,7 @@
 <script>
 import GeneralConversationService from "@/API/services/general-conversation.service";
 import helper from "@/utilities/helper";
-
+import userInfoService from "@/Services/userInfoService";
 export default {
   name: "GeneralConversationStatistics",
   async created() {
@@ -216,6 +306,7 @@ export default {
       months: [],
       type: "week",
       monthTitle: null,
+      advisorsStatistics: [],
     };
   },
   computed: {
@@ -243,6 +334,14 @@ export default {
       });
 
       return totals;
+    },
+
+    auth() {
+      return this.$store.getters.getUser;
+    },
+
+    isAdmin() {
+      return userInfoService.hasRole(this.auth, "admin");
     },
   },
   watch: {
@@ -281,6 +380,7 @@ export default {
         this.selectedWeek = this.type === "week" ? data.selectedDate : "";
         this.selectedMonthYear = this.type === "month" ? data.selectedDate : "";
         this.statistics = data.statistics;
+        this.advisorsStatistics = data.advisorsStatistics;
         this.monthTitle = data.monthTitle;
       } catch (error) {
         this.toggleErrorToast();
@@ -291,3 +391,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.bold {
+  font-weight: bold;
+}
+</style>

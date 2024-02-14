@@ -32,9 +32,14 @@ class GeneralConversation {
     formData.append("question_id", answer.question_id);
     if (answer.image) formData.append("image", answer.image);
     if (answer.is_discussion)
-      formData.append("is_discussion", answer.is_discussion);
-    else
-    formData.append("is_discussion", 0);
+      formData.append("is_discussion", parseInt(answer.is_discussion));
+    else formData.append("is_discussion", 0);
+
+    if (answer.media && answer.media.length > 0) {
+      answer.media.forEach((element) => {
+        formData.append("media[]", element);
+      });
+    }
 
     try {
       const response = await api.post(`${this.prefix}/answers`, formData, {

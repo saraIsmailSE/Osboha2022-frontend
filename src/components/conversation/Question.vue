@@ -16,14 +16,18 @@
         </div>
         <h2 class="accordion-header" id="heading1">
           <button
-            class="rtl accordion-button collapsed"
+            class="accordion-button collapsed align-items-start"
             type="button"
             data-bs-toggle="collapse"
             :data-bs-target="'#collapse' + question.id"
             aria-expanded="true"
             :aria-controls="'collapse' + question.id"
           >
-            {{ question.question }}
+            <span
+              class="ms-2"
+              style="white-space: pre-wrap; direction: rtl; width: 100%"
+              v-html="styleUrlsAndHashtags(question.question)"
+            />
           </button>
         </h2>
         <div
@@ -77,9 +81,28 @@
                 </div>
               </div>
               <div>
-                <p class="">
+                <p style="white-space: pre-wrap; direction: rtl">
                   {{ answer.answer }}
                 </p>
+                <div
+                  class="col-12 row justify-content-start mt-2"
+                  v-if="answer.media?.length > 0"
+                >
+                  <div
+                    class="col-lg-3 col-md-6 col-sm-12 mb-2"
+                    v-for="(mediaFile, index) in answer.media"
+                    :key="index"
+                  >
+                    <a :href="`${mediaFile.path}`" target="_blank">
+                      <img
+                        class="img-fluid rounded w-100 h-100"
+                        :src="`${mediaFile.path}`"
+                        alt="answer media"
+                        style="object-fit: cover; border: 1px solid #e5e5e5"
+                      />
+                    </a>
+                  </div>
+                </div>
                 <div
                   class="d-flex flex-wrap align-items-center comment-activity"
                 >
@@ -147,7 +170,8 @@
 
               <button
                 v-if="
-                  question.user.id === auth.id && question.status === 'open'
+                  (question.user.id === auth.id || isAuthAdmin) &&
+                  question.status === 'open'
                 "
                 class="bg-primary rounded badge text-white border-0 ms-1 me-1"
                 @click="solveQuestion"
@@ -252,6 +276,9 @@ export default {
   computed: {
     auth() {
       return this.$store.getters.getUser;
+    },
+    isAuthAdmin() {
+      return userInfoService.hasRole(this.auth, "admin");
     },
     consultantAndAbove() {
       return userInfoService.hasRoles(this.auth, ["admin", "consultant"]);
