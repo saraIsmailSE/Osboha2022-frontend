@@ -122,9 +122,9 @@ class ExceptionService {
       return error;
     }
   }
-  async ListByAdvisor(advisor_id) {
+  async ListByAdvisor(exception_type, advisor_id) {
     const response = await api.get(
-      `userexception/list-by-advisor/${advisor_id}`,
+      `userexception/list-by-advisor/${exception_type}/${advisor_id}`,
     );
     return response.data.data;
   }

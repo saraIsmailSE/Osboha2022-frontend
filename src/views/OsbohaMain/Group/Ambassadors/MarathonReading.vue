@@ -5,11 +5,11 @@
                 <template v-slot:body>
                     <GroupTitle :group_id:="group.id" :group_name="group.name" :group_users="group_users" />
                     <h4 v-if="week" class="ms-3"> الأسبوع || {{ week.title }}</h4>
-                    
+
                     <ul class="todo-task-lists m-0 p-0" v-if="achievementsLoaded && achievementsLoaded.length > 0">
                         <template v-for="(ambassador, index) in achievementsLoaded" :key="index">
 
-                            <AchievementProgress :ambassador="ambassador" :week_id="week_id" :route_to="'group.listOneMarathonReading'"/>
+                            <AchievementProgress :ambassador="ambassador" :week_id="week_id" :route_to="'group.listOneMarathonReading'" :show_pending_count="false"/>
 
                         </template>
                         <li class="d-block text-center mb-0 pb-0" v-if="ambassadors_achievement.length > length">

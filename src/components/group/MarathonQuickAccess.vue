@@ -10,20 +10,21 @@
                 name: 'group.marathon-ambassadors-reading',
                 params: { group_id: group_id, week_id: week.id },
             }" class="btn btn-primary d-block mt-3 col-5 me-1"
-                v-if="authInGroup && authInGroup.user_type != 'marathon_ambassador'">
+                v-if="(authInGroup && authInGroup.user_type != 'marathon_ambassador') || isAdmin">
                 انجاز الأسبوع الحالي
             </router-link>
             <router-link :to="{
                 name: 'group.marathon-ambassadors-reading',
                 params: { group_id: group_id, week_id: previous_week.id },
             }" class="btn btn-primary d-block mt-3 col-5 me-1"
-                v-if="authInGroup && authInGroup.user_type != 'marathon_ambassador' && previous_week">
+                v-if="((authInGroup && authInGroup.user_type != 'marathon_ambassador') || isAdmin) && previous_week">
                 انجاز الأسبوع السابق
             </router-link>
         </div>
     </div>
 </template>
 <script>
+import UserInfoService from "@/Services/userInfoService";
 
 export default {
     name: "Main Quick Access",
@@ -50,5 +51,14 @@ export default {
             group_id: this.$route.params.group_id,
         };
     },
+
+    computed: {
+        user() {
+            return this.$store.getters.getUser;
+        },
+        isAdmin() {
+            return UserInfoService.hasRole(this.user, "admin");
+        },
+    }
 };
 </script>
