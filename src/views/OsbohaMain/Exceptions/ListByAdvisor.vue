@@ -12,7 +12,7 @@
             <div class="col-12">
               <div class="card card-block card-stretch card-height blog">
                 <div class="card-header">
-                  <h2>الاجازات - التجميد الاستثنائي</h2>
+                  <h2>الاجازات - {{EXCEPTION_TYPES[this.exception_type]}}</h2>
                 </div>
                 <div class="card-body">
                   <div class="blog-description">
@@ -76,15 +76,19 @@
 </template>
 <script>
 import exceptionService from "@/API/services/user-exception.service";
-import { EXCEPTION_STATUS } from "@/utilities/constants";
+import { EXCEPTION_STATUS, EXCEPTION_TYPES } from "@/utilities/constants";
+import { watchEffect } from "vue";
+
 export default {
   name: "List Exceptions",
   async created() {
     try {
-      const response = await exceptionService.ListByAdvisor(this.user.id);
-      this.exceptions = response.exceptions;
-      this.group_title = response.advisingGroup;
-      // this.week_title = response.week.title;
+      watchEffect(async () => {
+        if (this.$route.params.exception_type) {
+          this.exception_type=this.$route.params.exception_type;
+          await this.getExceptions(this.exception_type);
+        }
+      });
     } catch (error) {
       console.log(error);
     }
@@ -95,8 +99,9 @@ export default {
       exceptions: null,
       group_title: "",
       week_title: "",
-      group_id: this.$route.params.group_id,
+      exception_type:'',
       EXCEPTION_STATUS,
+      EXCEPTION_TYPES,
       length: 10,
     };
   },
@@ -104,6 +109,12 @@ export default {
     loadMore() {
       this.length += 10;
     },
+    async getExceptions(exception_type) {
+      const response = await exceptionService.ListByAdvisor(exception_type, this.user.id);
+      this.exceptions = response.exceptions;
+      this.group_title = response.advisingGroup;
+
+    }
   },
   computed: {
     user() {

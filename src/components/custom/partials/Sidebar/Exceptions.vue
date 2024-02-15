@@ -7,15 +7,30 @@
     </li>
     <!-- ###### Exceptional Freez  ###### -->
     <li class="nav-item" v-if="isAdvisor">
-        <router-link :class="checkActive('exceptions.listByAdvisor') ? 'active nav-link' : 'nav-link'
+        <router-link :class="checkActive('exceptions.listByAdvisor','exceptional_freez') ? 'active nav-link' : 'nav-link'
             " aria-current="page" :to="{
         name: 'exceptions.listByAdvisor',
         params: {
+            exception_type:'exceptional_freez',
             advisor_id: user?.id,
         },
     }">
             <i class="icon material-symbols-outlined"> do_not_disturb_on </i>
             <span class="item-name">التجميد الاستثنائي</span>
+        </router-link>
+    </li>
+    <!-- ###### Exceptional Freez  ###### -->
+    <li class="nav-item" v-if="isAdvisor">
+        <router-link :class="checkActive('exceptions.listByAdvisor','withdrawn') ? 'active nav-link' : 'nav-link'
+            " aria-current="page" :to="{
+        name: 'exceptions.listByAdvisor',
+        params: {
+            exception_type:'withdrawn',
+            advisor_id: user?.id,
+        },
+    }">
+            <i class="icon material-symbols-outlined"> waving_hand </i>
+            <span class="item-name">انسحاب مؤقت</span>
         </router-link>
     </li>
 </template>
@@ -60,8 +75,8 @@ export default {
         };
     },
     methods: {
-        checkActive(route) {
-            if (this.$route.name === route) {
+        checkActive(route , params) {
+            if (this.$route.name === route && this.$route.params.exception_type === params) {
                 return true;
             }
         },

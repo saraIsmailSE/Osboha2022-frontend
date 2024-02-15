@@ -34,6 +34,13 @@ export const BOOK_TYPES = {
   tafseer: "تفسير",
   free: "كتاب حر",
 };
+export const EXCEPTION_TYPES = {
+  exceptional_freez: "تجميد استثنائي",
+  freez: "تجميد",
+  exams_monthly: "نظام امتحانات - شهري",
+  exams_seasonal: "نظام امتحانات - فصلي",
+  withdrawn: "انسحاب مؤقت",
+};
 
 export const GROUP_TYPE = {
   followup: "فريق متابعة",

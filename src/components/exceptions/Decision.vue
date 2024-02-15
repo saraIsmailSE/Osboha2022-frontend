@@ -3,7 +3,7 @@
         <h3 class="text-center mt-3 mb-3">الاجراء المناسب</h3>
 
         <div v-if="exception.status == 'pending'">
-            <div class="form-group text-start ms-3">
+            <div class="form-group text-start ms-3" v-if="exception.type.type != 'انسحاب مؤقت'">
                 <h4 class="mt-3 mb-3">اختر الأسبوع</h4>
                 <div class="form-check form-check-inline" v-for="week in weeks" :key="week.id">
                     <input class="form-check-input" type="radio" name="weeks" id="currentWeek" v-model="selectedWeek"
@@ -16,7 +16,8 @@
                 </small>
             </div>
 
-            <div class="d-flex align-items-center mt-3" v-if="exception.type.type != 'تجميد استثنائي'">
+            <div class="d-flex align-items-center mt-3"
+                v-if="exception.type.type == 'نظام امتحانات - شهري' || exception.type.type == 'نظام امتحانات - فصلي'">
                 <form @submit.prevent="submitDecision" class="post-text m-auto w-100 row">
                     <div class="form-group col-12">
                         <select class="form-select" v-model="v$.decideForm.decision.$model"
@@ -103,6 +104,45 @@
                     </h4>
                 </form>
             </div>
+            <div class="d-flex align-items-center mt-3" v-else-if="exception.type.type == 'انسحاب مؤقت' &&
+                authInGroup &&
+                (authInGroup.user_type == 'admin' || authInGroup.user_type == 'consultant' ||
+                    authInGroup.user_type == 'advisor')
+                ">
+                <form @submit.prevent="submitDecision" class="post-text m-auto w-100 row">
+                    <div class="form-group col-12">
+                        <select class="form-select" v-model="v$.decideForm.decision.$model" :disabled="message">
+                            <option value="-1" selected>اختر الاجراء المناسب</option>
+                            <option value="1">مقبول</option>
+                            <option value="0">رفض</option>
+                        </select>
+                        <small style="color: red" v-if="v$.decideForm.decision.$error">
+                            هذا الخيار مطلوب
+                        </small>
+                    </div>
+                    <div class="form-group col-12">
+                        <label class="form-label" for="note">ملاحظاتك</label>
+                        <textarea v-model="v$.decideForm.note.$model" rows="5" placeholder="... اكتب ملاحظة"
+                            class="rounded form-control" id="note" :disabled="message"></textarea>
+                        <small style="color: red" v-if="v$.decideForm.note.$error">
+                            * ملاحظاتك مطلوبة
+                        </small>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" :disabled="message" class="btn d-block btn-primary mt-3 w-75 mx-auto">
+                            اعتماد
+                        </button>
+                    </div>
+
+                    <div class="col-sm-12 text-center" v-if="loader">
+                        <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 100px" />
+                    </div>
+                    <h4 class="text-center mt-3 mb-3" v-if="message">
+                        {{ message }}
+                    </h4>
+                </form>
+            </div>
             <div class="d-inline-flex justify-content-center alert alert-success mt-2 w-75" v-else>
                 <h5>يتطلب هذا الاجراء موافقة موجه المجموعة</h5>
             </div>
@@ -131,6 +171,12 @@ export default {
         exception: { type: Object },
         authInGroup: { type: Object },
         weeks: { type: Object },
+    },
+    created() {
+        if (this.exception.type.type == 'انسحاب مؤقت') {
+            this.selectedWeek =this.weeks[0].id
+        }
+
     },
     data() {
         return {
@@ -198,4 +244,3 @@ export default {
     },
 };
 </script>
-  

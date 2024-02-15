@@ -8,7 +8,7 @@
               <img src="@/assets/images/main/current_book.png" class="card-img-top" alt="current reading" />
 
               <h5 class="card-title mt-3">املأ مخزون ثقافتك</h5>
-              <div id="carouselExampleCaptions" class="carousel slide w-100" data-bs-ride="false" v-if="book_in_progress.length>0">
+              <div id="carouselExampleCaptions" class="carousel slide w-100" data-bs-ride="false" v-if="book_in_progress">
                 <div class="carousel-inner w-75 m-4">
                   <div class="carousel-item" v-for="(book, index) in book_in_progress" :key="index"
                     :class="(index == 0) ? 'active' : ''">

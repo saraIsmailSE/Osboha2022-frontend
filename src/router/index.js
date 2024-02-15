@@ -475,7 +475,7 @@ const exceptionChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMain/Group/Exceptions/ListOne"),
   },
   {
-    path: "list-by-advisor",
+    path: "list-by-advisor/:exception_type",
     name: prop + ".listByAdvisor",
     meta: { auth: true, name: "List Exceptions For Advisor" },
     component: () => import("../views/OsbohaMain/Exceptions/ListByAdvisor"),
