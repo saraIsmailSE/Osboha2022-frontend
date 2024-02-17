@@ -30,7 +30,7 @@
         <ul class="pagination w-100">
           <router-link
             class="page-item page-link"
-            :to="{ name: 'osboha.book', query: { page: page - 1 } }"
+            :to="{ name: 'book.ramadan', query: { page: page - 1 } }"
             rel="prev"
             v-if="page != 1"
           >
@@ -39,7 +39,7 @@
           <li class="page-item page-link" :class="checkActive(page)">
             <router-link
               class="page-item page-link"
-              :to="{ name: 'osboha.book', query: { page: page } }"
+              :to="{ name: 'book.ramadan', query: { page: page } }"
             >
               {{ page }}
             </router-link>
@@ -47,7 +47,7 @@
 
           <router-link
             class="page-item page-link"
-            :to="{ name: 'osboha.book', query: { page: page + 1 } }"
+            :to="{ name: 'book.ramadan', query: { page: page + 1 } }"
             rel="next"
             v-if="hasNextPage"
           >
@@ -138,7 +138,7 @@ export default {
       if (index < this.sections.length) {
         //reset the page parameter of the route to 1 for each level/lang to start the page from the beginning
         if (this.lastSelectedSection != index) {
-          this.$router.push({ name: "osboha.book", query: { page: 1 } });
+          this.$router.push({ name: "book.ramadan", query: { page: 1 } });
         }
 
         if (Number(index) === 0) {
@@ -150,21 +150,21 @@ export default {
             //by level
             response = await bookService.getBooksByLevel(
               this.sections[index].level,
-              this.page
+              this.page,
             );
           } else if (index >= 4) {
             //arabic - english
             //by language
             response = await bookService.getBooksByLanguage(
               this.sections[index].lang,
-              this.page
+              this.page,
             );
           }
         }
 
         this.lastSelectedSection = index;
       } else {
-        this.$router.push({ name: "osboha.book", query: { page: 1 } });
+        this.$router.push({ name: "osboha.ramadan", query: { page: 1 } });
 
         if (index == this.recentAddedBooks) {
           response = await bookService.getRecentAddedBooks();
@@ -204,7 +204,7 @@ export default {
           try {
             const response = await bookService.getBooksByName(
               this.search,
-              this.page
+              this.page,
             );
             if (response?.total > 0) {
               this.books = response.books;
