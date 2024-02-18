@@ -1,12 +1,11 @@
 <template>
   <div class="mt-3 d-flex align-content-start flex-wrap gap-2">
-    <small>
+    <small v-if="timer > 0 || question.is_answered_late">
       <span class="align-middle material-symbols-outlined"> timer </span>
       <vue-countdown
         v-if="timer > 0"
         :time="timer"
         v-slot="{ hours, minutes, seconds }"
-        @end="onTimerEnd"
       >
         <span class="align-middle text-danger">
           {{ pad(hours) }}:{{ pad(minutes) }}:{{ pad(seconds) }}
@@ -28,7 +27,7 @@
       >
         {{ isWarning ? "warning" : "task_alt" }}
       </span>
-      {{ getStatusText() }}
+      {{ statusText }}
     </small>
     <small>
       <span class="align-middle material-symbols-outlined"> person_check </span>
@@ -36,11 +35,26 @@
       {{ question.assignee.name }}
     </small>
 
-    <small>
-      <span class="align-middle material-symbols-outlined"> diversity_4 </span>
-      <span style="font-weight: bold">الفريق الإداري</span>
-      {{ question.management_team.group.name }}
-    </small>
+    <template v-if="question.management_teams">
+      <small class="bg-danger rounded-pill badge">
+        <!-- <span class="align-middle material-symbols-outlined">
+          diversity_4
+        </span> -->
+        <span style="font-weight: bold">
+          {{ question.management_teams.leaderTeam.title }}</span
+        >
+        {{ question.management_teams.leaderTeam.name }}
+      </small>
+      <small class="bg-primary rounded-pill badge">
+        <!-- <span class="align-middle material-symbols-outlined">
+          diversity_4
+        </span> -->
+        <span style="font-weight: bold">
+          {{ question.management_teams.ambassadorTeam.title }}</span
+        >
+        {{ question.management_teams.ambassadorTeam.name }}
+      </small>
+    </template>
   </div>
 </template>
 <script>
@@ -59,7 +73,7 @@ export default {
     };
   },
   created() {
-    this.startTime = new Date(this.question?.created_at);
+    this.startTime = new Date(this.question?.current_assignee_created_at);
     //add 12 hours to the start time
     this.startTime.setHours(this.startTime.getHours() + 12);
 
@@ -68,30 +82,31 @@ export default {
     });
     this.now = new Date(riyadh);
   },
+  inject: ["question"],
   props: {
-    question: {
-      type: Object,
-      required: true,
-    },
     onTimerEnd: {
       type: Function,
       required: true,
     },
+    is_late: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     timer() {
+      if (this.question.status === "solved") {
+        return 0;
+      }
       return this.startTime - this.now;
     },
-  },
-  methods: {
-    ...helper,
-    getStatusText() {
+    statusText() {
       switch (this.question?.status) {
         case "open": {
           return "لم يتم الحل";
         }
         case "solved":
-          return "تم الحل في: " + this.formatFullDate(this.question.closed_at);
+          return this.formatFullDate(this.question.closed_at);
         case "discussion": {
           return "مفتوح للنقاش";
         }
@@ -99,7 +114,9 @@ export default {
           return "غير معروف";
       }
     },
-
+  },
+  methods: {
+    ...helper,
     pad(value) {
       return value < 10 ? `0${value}` : value;
     },

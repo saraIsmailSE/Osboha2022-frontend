@@ -17,8 +17,9 @@ class UserInfoService {
     let roles = user.roles;
     let found = false;
     roles.forEach((role) => {
-      if (role.name === role_name) {
+      if (role?.name === role_name || role === role_name) {
         found = true;
+        return;
       }
     });
 
@@ -49,7 +50,7 @@ class UserInfoService {
       }
       if (
         role.permissions.find(
-          (permission) => permission.name === permission_name
+          (permission) => permission.name === permission_name,
         )
       ) {
         found = true;

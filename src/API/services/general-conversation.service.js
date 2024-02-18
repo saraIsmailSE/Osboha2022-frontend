@@ -168,6 +168,17 @@ class GeneralConversation {
       handleError(error);
     }
   }
+
+  async checkQuestionLate(questionId) {
+    try {
+      const response = await api.get(
+        `${this.prefix}/questions/${questionId}/check-late`,
+      );
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 }
 
 export default new GeneralConversation();
