@@ -192,8 +192,9 @@ export default {
       if (!this.startDate) return;
 
       const weekDays = [];
-      this.startDate.setDate(this.startDate.getDate() + 1); //add one day to start from sunday
+      // this.startDate.setDate(this.startDate.getDate() + 1); //add one day to start from sunday
       const endDate = new Date(this.$store.state.main_timer);
+      // endDate.setDate(endDate.getDate() - 1); //remove one day to end on saturday
 
       const daysOfWeek = [
         "الأحد",
@@ -207,7 +208,7 @@ export default {
 
       let currentDate = this.startDate;
 
-      while (currentDate <= endDate) {
+      while (currentDate < endDate) {
         const dayName = daysOfWeek[currentDate.getDay()];
         const formattedDate = currentDate.toLocaleDateString("en-US", {
           day: "2-digit",
