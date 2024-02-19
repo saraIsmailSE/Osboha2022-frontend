@@ -10,3 +10,12 @@ export function customHandleError(error, page = "") {
   }
   handleError(error);
 }
+
+export const getErrorMessage = (error) => {
+  return (
+    error?.response?.data?.message ||
+    error?.response?.data ||
+    error?.message ||
+    "حدث خطأ ما, يرجى المحاولة لاحقاً"
+  );
+};

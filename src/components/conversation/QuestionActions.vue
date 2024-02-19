@@ -101,6 +101,7 @@ import GeneralConversationService from "@/API/services/general-conversation.serv
 import vClickOutside from "click-outside-vue3";
 import userInfoService from "@/Services/userInfoService";
 import helper from "@/utilities/helper";
+import { getErrorMessage } from "@/utilities/errors";
 
 export default {
   name: "QuestionActions",
@@ -160,7 +161,7 @@ export default {
           location.reload();
         }, 1000);
       } catch (error) {
-        this.toggleErrorToast();
+        this.toggleToast(getErrorMessage(error), "error");
       } finally {
         this.loadingSolve = false;
       }
@@ -182,7 +183,7 @@ export default {
           location.reload();
         }, 1000);
       } catch (error) {
-        this.toggleErrorToast();
+        this.toggleToast(getErrorMessage(error), "error");
       } finally {
         this.loadingAssign = false;
       }
@@ -202,7 +203,7 @@ export default {
           location.reload();
         }, 1000);
       } catch (error) {
-        this.toggleErrorToast();
+        this.toggleToast(getErrorMessage(error), "error");
       } finally {
         this.loadingDiscussion = false;
       }
@@ -222,7 +223,7 @@ export default {
           location.reload();
         }, 1000);
       } catch (error) {
-        this.toggleErrorToast();
+        this.toggleToast(getErrorMessage(error), "error");
       } finally {
         this.loadingDiscussion = false;
       }
