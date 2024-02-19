@@ -22,21 +22,19 @@
                 ARABIC_ROLES[user.pivot.user_type]
               }}</span>
             </div>
-            <div v-if="advisorAndAbove || isAdmin" class="d-flex justify-content-end flex-grow-1 ms-3">
+            <div v-if="allowedTodelete" class="d-flex justify-content-end flex-grow-1 ms-3">
               <span role="button" @click="showList(index)" class="material-symbols-outlined">
                 more_horiz
               </span>
               <div :class="`dropdown-menu dropdown-menu-right ${controlList[index] ? 'show' : ''
                 }`" aria-labelledby="dropdownMenuButton">
-                <a role="button" class="dropdown-item d-flex align-items-center"
-                  @click="deleteMember(user.pivot.id)">
+                <a role="button" class="dropdown-item d-flex align-items-center" @click="deleteMember(user.pivot.id)">
                   <span class="material-symbols-outlined me-2 md-18">
                     delete
                   </span>
                   حذف [مكرر]
                 </a>
-                <a role="button" class="dropdown-item d-flex align-items-center"
-                  @click="withdrawnMember(user.pivot.id)">
+                <a role="button" class="dropdown-item d-flex align-items-center" @click="withdrawnMember(user.pivot.id)">
                   <span class="material-symbols-outlined me-2 md-18">
                     directions_run
                   </span>
@@ -214,14 +212,18 @@ export default {
     isAdmin() {
       return UserInfoService.hasRole(this.user, "admin");
     },
-    advisorAndAbove() {
+    consultantAndAbove() {
       return UserInfoService.hasRoles(this.user, [
         "admin",
         "consultant",
-        "advisor",
       ]);
     },
-
+    allowedTodelete() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "consultant",
+      ]);
+    }
   },
 };
 </script>
