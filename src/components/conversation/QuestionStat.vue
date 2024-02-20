@@ -36,19 +36,19 @@
     </small>
 
     <template v-if="question.management_teams">
-      <small class="bg-danger rounded-pill badge">
-        <!-- <span class="align-middle material-symbols-outlined">
-          diversity_4
-        </span> -->
+      <small
+        class="bg-danger rounded-pill badge"
+        v-if="question.management_teams.leaderTeam"
+      >
         <span style="font-weight: bold">
           {{ question.management_teams.leaderTeam.title }}</span
         >
         {{ question.management_teams.leaderTeam.name }}
       </small>
-      <small class="bg-primary rounded-pill badge">
-        <!-- <span class="align-middle material-symbols-outlined">
-          diversity_4
-        </span> -->
+      <small
+        class="bg-primary rounded-pill badge"
+        v-if="question.management_teams.ambassadorTeam"
+      >
         <span style="font-weight: bold">
           {{ question.management_teams.ambassadorTeam.title }}</span
         >
@@ -84,10 +84,6 @@ export default {
   },
   inject: ["question"],
   props: {
-    onTimerEnd: {
-      type: Function,
-      required: true,
-    },
     is_late: {
       type: Boolean,
       default: false,
