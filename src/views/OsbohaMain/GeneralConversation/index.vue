@@ -97,6 +97,7 @@ export default {
     return {
       addNewAnswer: this.addNewAnswer,
       filterQuestions: this.filterQuestions,
+      updateKeyword: this.updateKeyword,
     };
   },
   async created() {
