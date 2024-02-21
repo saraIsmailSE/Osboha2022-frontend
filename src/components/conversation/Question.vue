@@ -14,7 +14,7 @@
 
             <Answers />
 
-            <QuestionStat :onTimerEnd="onTimerEnd" />
+            <QuestionStat />
 
             <QuestionActions />
           </div>
@@ -29,7 +29,6 @@ import QuestionStat from "@/components/conversation/QuestionStat.vue";
 import QuestionMedia from "@/components/conversation/QuestionMedia.vue";
 import QuestionActions from "@/components/conversation/QuestionActions.vue";
 import Answers from "@/components/conversation/Answers.vue";
-import helper from "@/utilities/helper";
 
 export default {
   name: "Question",
