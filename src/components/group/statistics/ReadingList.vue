@@ -25,7 +25,7 @@
                     :class="`${ambassador.is_freezed ? 'freeze' : markClass(ambassador.reading_mark + ambassador.writing_mark + ambassador.support)} `">
                     <td class="align-middle text-center">
                         <span> {{ getFirstTwoNames(ambassador.name) }} </span>
-                        <small class="badge bg-success ms-1 me-1" v-if="is_leader(ambassador)">قائد</small>
+                        <small class="badge bg-success ms-1 me-1" v-if="groupLeader ==ambassador.id">قائد</small>
                     </td>
                     <td class="align-middle text-center">
                         <span> {{ ambassador.reading_mark + ambassador.writing_mark + ambassador.support }} </span>
@@ -82,6 +82,10 @@ export default {
         ReadingData: {
             required: true,
         },
+        groupLeader: {
+            type: Number,
+            default:0
+        },
     },
     created() {
         this.ReadingDataTofilter = this.ReadingData
@@ -124,12 +128,6 @@ export default {
                 default:
                     return "incomplete";
             }
-        },
-        is_leader(user) {
-            return UserInfoService.hasRoles(user, [
-                "leader",
-                "support_leader",
-            ]);
         },
     },
 };

@@ -633,6 +633,14 @@ const superReviewer = (prop, mode = false) => [
     component: () => import("../views/OsbohaEligible/SuperReviewer/Accepted"),
   },
 ];
+const eligibleTeamChildRoute = (prop, mode = false) => [
+  {
+    path: "team-work",
+    name: prop + ".team-work",
+    meta: { auth: true, name: "team-work" },
+    component: () => import("../views/OsbohaEligible/Teams/ListWork"),
+  },
+];
 
 const adminControll = (prop, mode = false) => [
   {
@@ -972,6 +980,13 @@ const routes = [
     component: () => import("../layouts/Default"),
     meta: { auth: true },
     children: questions("questions"),
+  },
+  {
+    path: "/eligible-team",
+    name: "eligibleTeam",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: eligibleTeamChildRoute("eligibleTeam"),
   },
   {
     path: "/admin",

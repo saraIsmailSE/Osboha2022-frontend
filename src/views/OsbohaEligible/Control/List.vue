@@ -208,6 +208,27 @@
                                         </router-link>
                                     </div>
                                 </div>
+                                <div class="col-6 col-md-6 col-lg-6" v-if="isSuper_teamLeader">
+                                    <div class="card">
+                                        <router-link :to="{ name: 'eligibleTeam.team-work', }">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center justify-content-center">
+                                                    <div
+                                                        class="border rounded d-flex align-items-center justify-content-center">
+                                                        <i class="display-1 img-fluid material-symbols-outlined">
+                                                            diversity_2
+                                                        </i>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2">
+                                                    <h3 class="mb-0 text-center">
+                                                        عمل الفريق
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </router-link>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
@@ -327,6 +348,12 @@ export default {
                 "eligible_admin",
                 "super_reviewer",
                 "reviewer",
+            ]);
+        },
+        isSuper_teamLeader() {
+            return UserInfoService.hasRoles(this.user, [
+                "super_auditer",
+                "super_reviewer",
             ]);
         },
     },

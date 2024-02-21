@@ -338,10 +338,16 @@ export const COUNTRIES = {
 };
 
 export const TERMINATION_REASONS = {
-  withdrawn: "منسحب",
+  withdrawn: "غير فعال - منسحب",
   excluded: "مستبعد",
   "emptying the group": "غير فعال - تفريغ الفريق",
   reassignment: "غير فعال - اعادة تعيين اداري",
+  leader_upgrade: "غير فعال - ترقية قائد",
+  supervisor_upgrade: "غير فعال - ترقية مراقب",
+  transfer_ambassador: "غير فعال - نقل سفير",
+  transfer_leader: "غير فعال - نقل قائد",
+  supervisor_change: "غير فعال - تبديل مراقب",
+  supervisor_withdrawn: "غير فعال - انسحاب مراقب",
 };
 
 export const EXCEPTION_STATUS = {
@@ -368,4 +374,14 @@ export const POST_TYPES = {
   announcement: "اعلان",
   discussion: "النقاش المنهجي",
   "friday-thesis": "اطروحة الجمعة",
+};
+
+export const ELIGIBLE_STATUS = {
+  ready: "جاهز للتسليم",
+  audit: "بانتظار التقييم",
+  audited: "تم التقييم",
+  rejected: "مرفوض",
+  review: "بانتظار المراجعة",
+  accept: "مقبول",
+  retard:'تم الاعادة للموثق'
 };

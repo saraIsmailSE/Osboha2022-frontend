@@ -5,10 +5,17 @@
         احصائيات
         {{ statistics.group.name }}
       </h2>
+      <div class="form-group mt-3">
+        <select class="form-select" v-model="week_id">
+          <option value="-1">اختر الأسبوع</option>
+          <option v-for="week in statistics.weeks" :key="week.id" :value="week.id">{{ week.title }}</option>
+        </select>
+      </div>
+
       <Marks :statistics="statistics.total_statistics" :week_title="this.statistics.week.title"
         :number_of_users="(statistics.users_in_group - statistics.total.freezed)" />
 
-      <MembersReading :ReadingData="statistics.ambassadors_reading" />
+      <MembersReading :ReadingData="statistics.ambassadors_reading" :groupLeader="statistics.group_leader" />
 
 
       <MostRead :most_read="statistics.most_read"
@@ -27,7 +34,7 @@ import Achievement from "@/components/group/statistics/Achievement.vue";
 import ThseseAndQuotes from "@/components/group/statistics/ThseseAndQuotes.vue";
 import GroupMonth from "@/components/group/statistics/GroupMonth.vue";
 import GroupService from "@/API/services/group.service";
-
+import { watchEffect } from "vue";
 import MembersReading from "@/components/group/statistics/ReadingList";
 
 export default {
@@ -41,15 +48,22 @@ export default {
     MembersReading,
   },
   async created() {
-    this.statistics = await GroupService.statistics(
-      this.$route.params.group_id,
-      this.$route.params.week_id
-    );
+    watchEffect(async () => {
+      if (this.week_id) {
+        this.statistics = null;
+        this.statistics = await GroupService.statistics(
+          this.$route.params.group_id,
+          this.week_id
+        );
+      }
+    });
+
   },
 
   data() {
     return {
       statistics: null,
+      week_id: this.$route.params.week_id
     };
   },
   computed: {
