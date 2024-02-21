@@ -119,7 +119,7 @@ export default {
     clickOutside: vClickOutside.directive,
   },
 
-  inject: ["question"],
+  inject: ["question", "updateKeyword"],
   computed: {
     auth() {
       return this.$store.getters.getUser;
@@ -173,9 +173,7 @@ export default {
       }
       this.loadingAssign = true;
       try {
-        const response = await GeneralConversationService.assignToParent(
-          this.question.id,
-        );
+        await GeneralConversationService.assignToParent(this.question.id);
 
         this.toggleToast("تم تعيين التحويل للمشرف", "success");
 
@@ -199,8 +197,7 @@ export default {
         this.toggleToast("تم نقل التحويل للنقاش", "success");
 
         setTimeout(() => {
-          this.$router.push({ query: { keyword: "discussion-questions" } });
-          location.reload();
+          this.updateKeyword("discussion-questions");
         }, 1000);
       } catch (error) {
         this.toggleToast(getErrorMessage(error), "error");
@@ -219,8 +216,7 @@ export default {
         this.toggleToast("تم نقل التحويل للأسئلة", "success");
 
         setTimeout(() => {
-          this.$router.replace({ query: { keyword: "my-questions" } });
-          location.reload();
+          this.updateKeyword("my-questions");
         }, 1000);
       } catch (error) {
         this.toggleToast(getErrorMessage(error), "error");

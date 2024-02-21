@@ -97,6 +97,7 @@ export default {
     return {
       addNewAnswer: this.addNewAnswer,
       filterQuestions: this.filterQuestions,
+      updateKeyword: this.updateKeyword,
     };
   },
   async created() {
@@ -174,7 +175,13 @@ export default {
     },
 
     addNewQuestion(question) {
-      this.questions.unshift(question);
+      //if tab is not my-questions, or my-active-questions, add the question to the top of the list
+      //else, navigate to the my-questions tab
+      if (this.keyword === "my-questions" || this.keyword === "") {
+        this.questions.unshift(question);
+      } else {
+        this.keyword = "my-questions";
+      }
     },
 
     addNewAnswer(answer) {
@@ -263,6 +270,10 @@ export default {
       this.questionId = null;
       this.questions = [];
       this.getQuestions();
+    },
+
+    updateKeyword(keyword) {
+      this.keyword = keyword;
     },
   },
 };
