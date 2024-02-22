@@ -6,6 +6,10 @@
             </div>
         </div>
         <div class="card-body row d-flex justify-content-center">
+            <router-link :to="{ name: 'group.group-members', params: { group_id: group_id } }"
+                class="btn btn-primary d-block mt-3 col-5 me-1 ">
+                المشاركون
+            </router-link>
             <router-link :to="{
                 name: 'group.marathon-ambassadors-reading',
                 params: { group_id: group_id, week_id: week.id },
