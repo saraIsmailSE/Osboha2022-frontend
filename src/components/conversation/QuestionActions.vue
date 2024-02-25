@@ -178,7 +178,7 @@ export default {
         this.toggleToast("تم تعيين التحويل للمشرف", "success");
 
         setTimeout(() => {
-          location.reload();
+          this.updateKeyword("my-assigned-to-parent-questions");
         }, 1000);
       } catch (error) {
         this.toggleToast(getErrorMessage(error), "error");

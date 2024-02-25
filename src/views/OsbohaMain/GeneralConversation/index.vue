@@ -28,7 +28,7 @@
         <div class="card-body">
           <div class="blog-description">
             <div class="col-lg-12 mb-3">
-              <FilterQuestion v-if="!questionId" />
+              <FilterQuestion v-if="!questionId" :loadingQuestions="loading" />
               <button
                 v-else
                 class="bg-primary rounded badge text-white border-0 ms-1 me-1"
@@ -193,6 +193,8 @@ export default {
     },
 
     async getQuestions() {
+      if (this.loading) return;
+
       this.loading = true;
 
       try {
@@ -236,6 +238,12 @@ export default {
             response = await GeneralConversationService.getAllQuestions(
               this.page,
             );
+          } else if (this.keyword === "my-assigned-to-parent-questions") {
+            //get my assigned to parent questions
+            response =
+              await GeneralConversationService.getMyAssignedToParentQuestions(
+                this.page,
+              );
           } else {
             return;
           }

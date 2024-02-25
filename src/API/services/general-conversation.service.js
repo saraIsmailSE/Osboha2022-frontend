@@ -114,6 +114,17 @@ class GeneralConversation {
     }
   }
 
+  async getMyAssignedToParentQuestions(page) {
+    try {
+      const questions = await api.get(
+        `${this.prefix}/questions/my-assigned-to-parent-questions?page=${page}`,
+      );
+      return questions.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   async solveQuestion(questionId) {
     try {
       const response = await api.put(
