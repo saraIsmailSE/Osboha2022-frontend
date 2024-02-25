@@ -39,7 +39,7 @@
                 <td v-else-if="thesis.max_length > 0">أطروحة</td>
                 <td v-else-if="thesis.total_screenshots > 0">اقتباسات</td>
                 <td v-else>قراءة فقط</td>
-                <td>{{ format_date(thesis.updated_at) }}</td>
+                <td>{{ format_date(thesis.created_at) }}</td>
                 <td v-if="thesis.status && thesis.status == 'accepted'">
                   <span class="rounded-pill badge bg-primary px-2">مقبول </span>
                 </td>

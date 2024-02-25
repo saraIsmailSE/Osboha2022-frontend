@@ -34,7 +34,7 @@
                 <td v-else-if="thesis.max_length > 0">أطروحة</td>
                 <td v-else-if="thesis.total_screenshots > 0">اقتباسات</td>
                 <td v-else>قراءة فقط</td>
-                <td>{{ format_date(thesis.updated_at) }}</td>
+                <td>{{ format_date(thesis.created_at) }}</td>
                 <td>{{ BOOK_TYPES[thesis.book.type.type] }}</td>
                 <td>
                   <router-link :to="{

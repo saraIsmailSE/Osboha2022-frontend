@@ -21,6 +21,36 @@
             }">
               اضافة مجموعة
             </router-link>
+            <div class="masonary-menu filter-button-group">
+              <nav>
+                <div className="nav nav-tabs justify-content-start" id="portfolio-tab" role="tablist">
+                  <button :className="`nav-link ${retrieveType == 'all' ? 'active' : ''}`" id="nav-all-tab"
+                    data-bs-toggle="tab" data-bs-target="#nav-all" type="button" role="tab" aria-controls="nav-all"
+                    aria-selected="true" @click="loadGroups('all')">الكل</button>
+
+                  <button :className="`nav-link ${retrieveType == 'advising' ? 'active' : ''}`" id="nav-trending-tab"
+                    data-bs-toggle="tab" data-bs-target="#nav-trending" type="button" role="tab"
+                    aria-controls="nav-trending" aria-selected="false" @click="loadGroups('advising')">
+                    توجيه
+                  </button>
+
+                  <button :className="`nav-link ${retrieveType == 'supervising' ? 'active' : ''}`"
+                    id="nav-popularity-tab" data-bs-toggle="tab" data-bs-target="#nav-popularity" type="button" role="tab"
+                    aria-controls="nav-popularity" aria-selected="false" @click="loadGroups('supervising')">
+                    رقابة
+                  </button>
+
+                  <button :className="`nav-link ${retrieveType == 'followup' ? 'active' : ''}`"
+                    id="nav-featured-tab" data-bs-toggle="tab" data-bs-target="#nav-featured" type="button" role="tab"
+                    aria-controls="nav-featured" aria-selected="false"
+                    @click="loadGroups('followup')">
+                  متابعة
+                </button>
+
+                </div>
+              </nav>
+
+            </div>
 
 
             <div class="table-responsive" v-if="groups && groups.length > 0">
@@ -87,7 +117,7 @@ import GroupService from "@/API/services/group.service";
 import helper from "@/utilities/helper";
 import UserInfoService from "@/Services/userInfoService";
 import axios from "axios";
-import { ARABIC_ROLES,GROUP_TYPE } from "@/utilities/constants";
+import { ARABIC_ROLES, GROUP_TYPE } from "@/utilities/constants";
 
 export default {
   name: "List",
@@ -103,7 +133,7 @@ export default {
   },
 
   async mounted() {
-    this.loadGroups();
+    this.loadGroups(this.retrieveType);
     window.addEventListener("scroll", this.handleScroll);
   },
   beforeUnmount() {
@@ -168,7 +198,9 @@ export default {
       tableHTML += '</table>';
       return tableHTML;
     },
-    async loadGroups() {
+    async loadGroups(retrieveType) {
+      this.groups= [];
+
       if (this.pendingRequest) {
         return;
       }
@@ -188,7 +220,7 @@ export default {
         let response;
         response = await GroupService.getAll(this.searchModel,
           this.page,
-          this.retrieveType,
+          retrieveType,
           this.cancelToken
         );
         if (response.statusCode !== 200) {
@@ -235,7 +267,7 @@ export default {
      */
     handleScroll() {
       if (this.hasMoreToLoad && this.isAtBottomOfPage()) {
-        this.loadGroups();
+        this.loadGroups(this.retrieveType);
       }
     },
     debounce(func, wait) {

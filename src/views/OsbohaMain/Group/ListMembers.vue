@@ -22,13 +22,14 @@
                 ARABIC_ROLES[user.pivot.user_type]
               }}</span>
             </div>
-            <div v-if="allowedTodelete" class="d-flex justify-content-end flex-grow-1 ms-3">
+            <div v-if="advisorAndAbove" class="d-flex justify-content-end flex-grow-1 ms-3">
               <span role="button" @click="showList(index)" class="material-symbols-outlined">
                 more_horiz
               </span>
               <div :class="`dropdown-menu dropdown-menu-right ${controlList[index] ? 'show' : ''
                 }`" aria-labelledby="dropdownMenuButton">
-                <a role="button" class="dropdown-item d-flex align-items-center" @click="deleteMember(user.pivot.id)">
+                <a v-if="allowedTodelete" role="button" class="dropdown-item d-flex align-items-center"
+                  @click="deleteMember(user.pivot.id)">
                   <span class="material-symbols-outlined me-2 md-18">
                     delete
                   </span>
@@ -222,6 +223,13 @@ export default {
       return UserInfoService.hasRoles(this.user, [
         "admin",
         "consultant",
+      ]);
+    },
+    advisorAndAbove() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "consultant",
+        "advisor"
       ]);
     }
   },

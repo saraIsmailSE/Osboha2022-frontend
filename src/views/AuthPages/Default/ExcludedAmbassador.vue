@@ -16,7 +16,8 @@
                             <h4 class="text-center mt-3 mb-3"> {{ message }}</h4>
                         </div>
                         <div class="d-inline-block w-100 text-center">
-                            <button @click="returnToTeam()" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
+                            <button @click="returnToTeam()" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto"
+                                :disabled="loader">
                                 عودة إلى الفريق
                             </button>
                         </div>
@@ -61,7 +62,7 @@ export default {
 
             if (response) {
                 this.message = response
-                if(response == 'تم التعديل بنجاح'){
+                if (response == 'تم التعديل بنجاح') {
                     this.$router.push({ name: 'osboha.list' })
                 }
 

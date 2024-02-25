@@ -18,7 +18,7 @@
                             <h4 class="text-center mt-3 mb-3"> {{ message }}</h4>
                         </div>
                         <div class="d-flex w-100 text-center p-2">
-                            <button @click="returnToTeam()" class="btn d-block btn-primary mt-3 mb-3 w-75 ms-1 me-1">
+                            <button @click="returnToTeam()" class="btn d-block btn-primary mt-3 mb-3 w-75 ms-1 me-1" :disabled="loader">
                                 عودة إلى الفريق
                             </button>
                             <a href="https://www.messenger.com/t/117840717971244/" target="_blank" class="btn d-block btn-success mt-3 mb-3 w-75 ms-1 me-1">

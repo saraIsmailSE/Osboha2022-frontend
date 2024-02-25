@@ -12,6 +12,7 @@ export default {
   formatDateToWritten(dateToConvert) {
     if (dateToConvert === null || dateToConvert === "") return null;
     return formatDistanceToNow(new Date(dateToConvert), {
+      timeZone: "Asia/Riyadh",
       addSuffix: true,
       locale: ar,
     });
@@ -24,6 +25,7 @@ export default {
    */
   formatFullDate(dateToConvert, withTime = true) {
     return new Date(dateToConvert).toLocaleString("ar", {
+      timeZone: "Asia/Riyadh",
       weekday: "long",
       year: "numeric",
       month: "long",
@@ -35,7 +37,7 @@ export default {
   },
 
   formatDayInArabic(dateToConvert, withTime = false) {
-    const options = { weekday: "long" };
+    const options = { timeZone: "Asia/Riyadh", weekday: "long" };
     if (withTime) {
       options.day = "numeric";
     }
