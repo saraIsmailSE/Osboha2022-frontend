@@ -22,7 +22,7 @@
           />
         </div>
       </div>
-      <div class="col-12 bg-white pt-2">
+      <div class="col-12 bg-white pt-2" v-if="weekDays?.length > 0">
         <div class="sign-in-from">
           <form class="mt-2" @submit.prevent="submit()">
             <div
@@ -31,6 +31,12 @@
               :key="day.date"
               :id="day.date"
             >
+              <input type="hidden" v-model="day.week_id" />
+              <div class="col-12" v-if="startWeekTitle !== day.week_title">
+                <h4 class="text-center bg-primary my-2 text-white py-1">
+                  {{ (startWeekTitle = day.week_title) }}
+                </h4>
+              </div>
               <div class="col-sm-12 col-md-6">
                 <div class="form-group">
                   <label
@@ -115,7 +121,7 @@ export default {
   },
   async created() {
     await this.getWorkingHours();
-    this.fillWeekDays();
+    // this.fillWeekDays();
   },
 
   data() {
@@ -123,11 +129,11 @@ export default {
       message: "",
       variant: "success",
       loader: false,
-      form: [],
       workingHours: [],
       loadingStats: false,
       weekDays: [],
-      startDate: null,
+      days: [],
+      startWeekTitle: "",
     };
   },
   watch: {
@@ -139,27 +145,23 @@ export default {
         this.variant === "success" ? 3000 : 5000,
       );
     },
+    days() {
+      this.fillWeekDays();
+    },
   },
   methods: {
-    async submit(index) {
+    async submit() {
       this.messages = "";
 
       this.loader = true;
 
-      //loop through week days and add working hours
-      for (let i = 0; i < this.weekDays.length; i++) {
-        const { minutes, date } = this.weekDays[i];
-        this.form.push({ minutes, date });
-      }
-
       try {
-        const response = await WorkingHourService.addWorkingHours(this.form);
+        await WorkingHourService.addWorkingHours(this.weekDays);
 
         this.message = "تم إدخال الدقائق بنجاح";
         this.variant = "success";
 
-        this.form = [];
-        // this.weekDays = [];
+        this.weekDays = [];
         this.getWorkingHours();
       } catch (error) {
         this.message = "حدث خطأ أثناء إدخال الدقائق";
@@ -168,6 +170,7 @@ export default {
         this.loader = false;
       }
     },
+
     async getWorkingHours() {
       if (this.loading) return;
 
@@ -177,26 +180,16 @@ export default {
         const response = await WorkingHourService.getWorkingHours();
 
         this.workingHours = response.data?.workingHours || [];
-        this.startDate = new Date(response.data?.startDate);
+        this.days = response.data?.days || [];
       } catch (error) {
         helper.toggleErrorToast();
       } finally {
         this.loadingStats = false;
       }
     },
+
     fillWeekDays() {
-      //fill week days as following
-      // [ {"name" : "الأجد" , "date" : "31-12-2024"} , {...} ]
-      //where sunday is the $store.state.week_start_date
-
-      if (!this.startDate) return;
-
-      const weekDays = [];
-      // this.startDate.setDate(this.startDate.getDate() + 1); //add one day to start from sunday
-      const endDate = new Date(this.$store.state.main_timer);
-      endDate.setDate(endDate.getDate() - 1); //remove one day to end on saturday
-
-      const daysOfWeek = [
+      const arabicWeekDays = [
         "الأحد",
         "الاثنين",
         "الثلاثاء",
@@ -206,33 +199,15 @@ export default {
         "السبت",
       ];
 
-      let currentDate = this.startDate;
+      this.days?.forEach((day) => {
+        const date = new Date(day.date);
+        const dayName = arabicWeekDays[date.getDay()];
 
-      while (currentDate < endDate) {
-        const dayName = daysOfWeek[currentDate.getDay()];
-        const formattedDate = currentDate.toLocaleDateString("en-US", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        });
-
-        //find if there is already a working hours for this date
-        const isFound = this.workingHours.find(
-          (item) =>
-            new Date(item.date).toLocaleDateString() ===
-            currentDate.toLocaleDateString(),
-        );
-
-        weekDays.push({
+        this.weekDays.push({
           name: dayName,
-          date: formattedDate,
-          minutes: isFound ? isFound.minutes : 0,
+          ...day,
         });
-
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-
-      this.weekDays = weekDays;
+      });
     },
 
     changeMinutes(index, value) {
