@@ -194,7 +194,7 @@ export default {
       const weekDays = [];
       // this.startDate.setDate(this.startDate.getDate() + 1); //add one day to start from sunday
       const endDate = new Date(this.$store.state.main_timer);
-      // endDate.setDate(endDate.getDate() - 1); //remove one day to end on saturday
+      endDate.setDate(endDate.getDate() - 1); //remove one day to end on saturday
 
       const daysOfWeek = [
         "الأحد",
