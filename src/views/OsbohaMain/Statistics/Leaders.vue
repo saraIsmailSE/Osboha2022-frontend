@@ -26,13 +26,12 @@
             </div>
 
             <div class="card-body" v-if="statistics">
-                <FollowupTeamsStatistics :teamData=statistics  :supervisor_followup_team=supervisor_followup_team />
+                <FollowupTeamsStatistics :teamData=statistics  :supervisor_followup_team=supervisor_followup_team :generalAvg="generalAvg"/>
 
             </div>
             <div class="card-body" v-if="leadersReading">
                 <MembersReading :ReadingData="leadersReading" :headTitle="'القادة'" :usetType="'القائد'" />
             </div>
-
             <h4 @click="$router.go(-1)" class="text-center mb-3" v-if="supervisorGroup" role="button">
                 <span class="align-middle material-symbols-outlined">
                     keyboard_return
@@ -59,6 +58,7 @@ export default {
         this.leadersReading = response.leaders_reading;
         this.supervisorGroup = response.supervisor_group;
         this.supervisor_followup_team=response.supervisor_own_followup_team
+        this.generalAvg=response.week_general_avg;
         this.loding = false;
 
     },
@@ -72,17 +72,12 @@ export default {
             supervisor_followup_team:null,
             leadersReading: null,
             supervisorGroup: null,
-            loding: false
+            loding: false,
+            generalAvg:0,
 
         }
     },
     computed: {
-        generalAvg() {
-            // Calculate the sum of all week_avg values
-            const sum = this.statistics.reduce((accumulator, item) => accumulator + parseFloat(item.week_avg), 0);
-            // Calculate the average
-            return Math.round(sum / this.statistics.length).toFixed(2);
-        },
         totalWithdraw() {
             return this.statistics.reduce((accumulator, item) => accumulator + parseFloat(item.ambassadors_withdraw_in_group), 0);
         },

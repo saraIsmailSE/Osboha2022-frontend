@@ -55,7 +55,7 @@
                                     <span> {{ statistics_data.number_of_leaders }} </span>
                                 </td>
                                 <td class="align-middle text-center">
-                                    <span> {{ (Math.round(statistics_data.week_avg * 100) / 100).toFixed(2) }} </span>
+                                    <span> {{ (Math.round(statistics_data.week_avg )).toFixed(2) }} </span>
                                 </td>
                                 <td class="align-middle text-center">
                                     <router-link :to="{

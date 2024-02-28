@@ -7,7 +7,7 @@
     </li>
 
     <!-- ###### Control Groups ###### -->
-    <li class="nav-item last-element">
+    <li class="nav-item">
         <router-link :class="checkActive('control.groups') ? 'active nav-link' : 'nav-link'
             " aria-current="page" :to="{
         name: 'control.groups',
@@ -73,9 +73,3 @@ export default {
     },
 };
 </script>
-
-<style>
-.last-element {
-    margin-bottom: 50%;
-}
-</style>

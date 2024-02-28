@@ -63,7 +63,7 @@
                                         <span> {{ supervisor_team.number_of_leaders }} </span>
                                     </td>
                                     <td class="align-middle text-center">
-                                        <span> {{ (Math.round(supervisor_team.week_avg * 100) / 100).toFixed(2) }} </span>
+                                        <span> {{ (Math.round(supervisor_team.week_avg)).toFixed(2) }} </span>
                                     </td>
                                     <td class="align-middle text-center">
                                         <router-link :to="{

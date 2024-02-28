@@ -22,7 +22,7 @@
                             <span> {{ leader.number_ambassadors }} </span>
                         </td>
                         <td class="align-middle text-center">
-                            <span> {{ parseFloat(leader.week_avg.toFixed(2)) }} </span>
+                            <span> {{ Math.round(leader.week_avg).toFixed(2) }} </span>
                         </td>
                     </tr>
                     <tr v-if="supervisor_followup_team" class="supervisor_team">
@@ -36,13 +36,15 @@
                             <span> {{ supervisor_followup_team.number_ambassadors }} </span>
                         </td>
                         <td class="align-middle text-center">
-                            <span> {{ parseFloat(supervisor_followup_team.week_avg.toFixed(2)) }} </span>
+                            <span>
+                                {{ Math.round(supervisor_followup_team.week_avg).toFixed(2) }}
+                            </span>
                         </td>
                     </tr>
                 </tbody>
                 <tr class="">
                     <td class="align-middle text-center" colspan="4">
-                        <span>المعدل العام : {{ generalAvg }} </span>
+                        <span>المعدل العام : {{ Math.round(generalAvg).toFixed(2) }} </span>
                     </td>
                 </tr>
 
@@ -265,6 +267,9 @@ export default {
         },
         supervisor_followup_team: {
             type: Object,
+        },
+        generalAvg: {
+            type: Number
         }
     },
     data() {
@@ -274,16 +279,7 @@ export default {
     },
 
     computed: {
-        generalAvg() {
-            // Calculate the sum of all week_avg values
-            let sum = this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.week_avg.toFixed(2)), 0);
-            // Calculate the average
-            if (this.supervisor_followup_team) {
-                sum += parseFloat(this.supervisor_followup_team.week_avg);
-                return Math.round(sum / (this.teamDataTofilter.length + 1)).toFixed(2);
-            }
-            return Math.round(sum / this.teamDataTofilter.length).toFixed(2);
-        },
+
         totalWithdraw() {
             const followupTeams_totalWithdraw = this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.ambassadors_withdraw_in_group), 0);
             if (this.supervisor_followup_team) {

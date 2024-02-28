@@ -133,6 +133,10 @@
     <!-- ###### Group Control ###### -->
 
     <ControlGroups v-if="advisorAndAbove" />
+
+    <li class="nav-item last-element">
+      <img src="@/assets/images/logo.png" class="img-fluid rounded w-50" alt="blog-img" />
+    </li>
   </ul>
   <!-- Sidebar Menu End -->
 </template>
@@ -264,5 +268,8 @@ export default {
 <style>
 .last-element {
   margin-bottom: 50%;
+  display: flex;
+  justify-content: center;
+  opacity: 0.5;
 }
 </style>

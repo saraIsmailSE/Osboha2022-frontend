@@ -223,6 +223,7 @@ export default {
       return UserInfoService.hasRoles(this.user, [
         "admin",
         "consultant",
+        "marathon_coordinator"
       ]);
     },
     advisorAndAbove() {
