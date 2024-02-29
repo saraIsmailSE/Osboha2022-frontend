@@ -12,6 +12,12 @@ class UserService {
     const response = await api.get(`users/search-by-email/${email}`);
     return response.data.data;
   }
+
+  async searchByName(name) {
+    const response = await api.get(`users/search-by-name/${name}`);
+    return response.data.data;
+  }
+  
   async listInChargeOf() {
     try {
       const response = await api.get("users/list-in-charge-of");

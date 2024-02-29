@@ -159,6 +159,12 @@ const userChildRoute = (prop, mode = false) => [
     component: () => import("../views/AuthPages/Default/SearchForUser"),
   },
   {
+    path: "name_search",
+    name: prop + ".name_search",
+    meta: { auth: true, name: "Search for user by Name" },
+    component: () => import("../views/AuthPages/Default/SearchForUserByName"),
+  },
+  {
     path: "exception-search",
     name: prop + ".exception-search",
     meta: { auth: true, name: "Search for User Exception" },
