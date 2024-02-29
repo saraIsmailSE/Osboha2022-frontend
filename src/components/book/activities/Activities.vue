@@ -50,15 +50,13 @@
                       v-if="(!graded && activity.comments.length > 0)" :disabled="(graded || expired)">
                       قبول
                     </button>
-                    <button v-else-if="(graded && activity.comments.length > 0)" class="btn btn-info" :disabled="graded">
-                      تم التقييم
+                    <button v-else-if="(graded && activity.comments.length > 0)" class="btn btn-info"
+                      :disabled="!graded || expired" @click="handleActivity(false)">
+                      رفض
                     </button>
                     <button v-else class="btn btn-secondary" :disabled="activity.comments.length == 0">
                       لم يشارك
                     </button>
-                    <!-- <button v-else class="btn btn-info" @click="handleActivity(false)" :disabled="(!graded || expired)">
-                      رفض
-                    </button> -->
                   </template>
                 </td>
               </tr>
@@ -180,11 +178,11 @@ export default {
                   this.ambassador_id,
                   this.week.id,
                 );
-              // else
-              //   response = await MarkService.rejectSupport(
-              //     this.ambassador_id,
-              //     this.week.id,
-              //   );
+              else
+                response = await MarkService.unsetActivityMark(
+                  this.ambassador_id,
+                  this.week.id,
+                );
 
               if (response.statusCode === 200) {
                 const statusText = status ? "قبول" : "رفض";

@@ -87,6 +87,7 @@ export default {
       ambassador_name: "",
       ARABIC_ROLES,
       currentIndex: -1,
+      group:null
     };
   },
   methods: {
@@ -96,6 +97,7 @@ export default {
         this.$route.params.group_id
       );
       this.users = response.users;
+      this.group = response;
     },
     showList(index) {
       this.controlList.fill(false);
@@ -105,7 +107,6 @@ export default {
       this.controlList.fill(false);
     },
     async createFriendship(friend_id) {
-      console.log(friend_id)
       const response = await FriendServices.create(friend_id);
     },
     async deleteMember(user_group_id) {

@@ -15,7 +15,7 @@ class UserBooks {
   //All Free
   async getAllFree(page, user_id) {
     try {
-      const books = await api.get(`user-books/free-books/${user_id}/${page}`);
+      const books = await api.get(`user-books/free-books/${user_id}?page=` + page);
       return books.data.data;
     } catch (error) {
       return error;

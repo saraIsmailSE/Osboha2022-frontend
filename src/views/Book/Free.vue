@@ -52,40 +52,22 @@
                 <BookCard v-for="bookInfo in books" :key="bookInfo.id" :cardInfo="bookInfo" :isProfile="true" />
             </div>
             <div class="text-center mt-3" v-if="books && books.length > 0">
-                <nav aria-label="...">
-                    <ul class="pagination">
-                        <li class="page-item disabled">
-                            <router-link class="page-link" :to="{ name: 'osboha.book', query: { page: page - 1 } }"
-                                rel="prev" v-if="page != 1">
-                                السابق
-                            </router-link>
-                        </li>
-                        <li class="page-item active" aria-current="page">
-                            <router-link class="page-link" :to="{ name: 'osboha.book', query: { page: page } }">
-                                {{ page }}
-                            </router-link>
-                        </li>
-                        <li class="page-item">
-                            <router-link class=" page-link" :to="{ name: 'osboha.book', query: { page: page + 1 } }"
-                                rel="next" v-if="hasNextPage">
-                                التالي
-                            </router-link>
-                        </li>
-                    </ul>
-                </nav>
+                <Pagination :page="current" :total="totalBooks" :perPage="booksPerPage" :routeName="`book.free-book`" />
+
             </div>
         </template>
     </main>
 </template>
 <script>
 import BookCard from "@/components/book/BookCard.vue";
+import Pagination from "@/components/common/Pagination";
 import userBookService from "@/API/services/user-books.service";
 import { watchEffect } from "vue";
 import helper from "@/utilities/helper";
 
 export default {
     name: "Free Book",
-    components: { BookCard },
+    components: { BookCard, Pagination },
     props: ["page"],
     created() {
         watchEffect(() => {
@@ -122,6 +104,7 @@ export default {
         //get all books
         async getBooks(page) {
             this.empty = "";
+            this.books = [];
             this.loading = true;
             try {
                 const response = await userBookService.getAllFree(page, this.$route.params.user_id);
@@ -140,9 +123,6 @@ export default {
         },
     },
     computed: {
-        hasNextPage() {
-            return this.page < this.totalPages;
-        },
         totalPages() {
             return Math.ceil(this.totalBooks / this.booksPerPage);
         },
@@ -156,26 +136,3 @@ export default {
     },
 };
 </script>
-  
-<style scoped>
-.pagination {
-    display: flex;
-    width: 290px;
-    padding: 0;
-}
-
-.pagination a {
-    flex: 1;
-    text-decoration: none;
-    color: #2c3e50;
-}
-
-#page-prev {
-    text-align: left;
-}
-
-#page-next {
-    text-align: right;
-}
-</style>
-  

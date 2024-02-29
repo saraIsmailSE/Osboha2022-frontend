@@ -64,7 +64,6 @@ export default new Vuex.Store({
       formData.append("password", credentials.password);
       formData.append("gender", credentials.gender);
       return api.post("register", formData).then((response) => {
-        console.log(response.data);
         localStorage.setItem("osboha__token", response.data.data.token);
         localStorage.setItem(
           "osboha__user",
@@ -80,7 +79,6 @@ export default new Vuex.Store({
       // });
     },
     login({ commit }, user_info) {
-      console.log("🚀 ~ login ~ user_info:", user_info)
       localStorage.setItem("osboha__token", user_info.token);
       localStorage.setItem("osboha__user", JSON.stringify(user_info.user));
       commit("SET_USER_DATA", user_info.user);

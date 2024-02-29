@@ -49,6 +49,8 @@ export const GROUP_TYPE = {
   consultation: "فريق الاستشارة",
   Administration: "الإدارة العليا",
   marathon: "مارثون",
+  advanced_followup: "فريق متابعة متقدم",
+  sophisticated_followup: "فريق متابعة متطور",
 };
 
 export const DAYS = {
@@ -348,6 +350,7 @@ export const TERMINATION_REASONS = {
   transfer_leader: "غير فعال - نقل قائد",
   supervisor_change: "غير فعال - تبديل مراقب",
   supervisor_withdrawn: "غير فعال - انسحاب مراقب",
+  advisor_change: '"غير فعال - تبديل موجه"',
 };
 
 export const EXCEPTION_STATUS = {
@@ -383,5 +386,5 @@ export const ELIGIBLE_STATUS = {
   rejected: "مرفوض",
   review: "بانتظار المراجعة",
   accept: "مقبول",
-  retard:'تم الاعادة للموثق'
+  retard: "تم الاعادة للموثق",
 };

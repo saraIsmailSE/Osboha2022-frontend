@@ -1,38 +1,32 @@
 <template>
-    <div class="row">
-        <div class="col-xxl-12">
-            <div class="basic-pagination mt-30">
-                <ul class="d-flex align-items-center">
-                    <li class="prev" v-if="page != 1">
-                        <router-link :to="{
-                            name: routeName,
-                            query: { page: page - 1 }
-                        }">
-                            Prev
-                            <i class="fas fa-chevron-circle-right"></i>
-                        </router-link>
-                    </li>
-                    <li class="active">
-                        <router-link :to="{
-                            name: routeName,
-                            query: { page: page }
-                        }">
-                            <span>{{ page }}</span>
-                        </router-link>
-                    </li>
-                    <li class="next" v-if="hasNextPage">
-                        <router-link :to="{
-                            name: routeName,
-                            query: { page: page + 1 }
-                        }">
-                            Next
-                            <i class="fas fa-chevron-circle-left"></i>
-                        </router-link>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <nav aria-label="...">
+        <ul class="pagination">
+            <li class="page-item ">
+                <router-link class="page-link" :to="{
+                    name: routeName,
+                    query: { page: page - 1 }
+                }" rel="prev" v-if="page != 1">
+                    السابق
+                </router-link>
+            </li>
+            <li class="page-item active" aria-current="page">
+                <router-link class="page-link" :to="{
+                    name: routeName,
+                    query: { page: page }
+                }">
+                    {{ page }}
+                </router-link>
+            </li>
+            <li class="page-item">
+                <router-link class=" page-link" :to="{
+                    name: routeName,
+                    query: { page: page + 1 }
+                }" rel="next" v-if="hasNextPage">
+                    التالي
+                </router-link>
+            </li>
+        </ul>
+    </nav>
 </template>
 
 <script>
@@ -69,4 +63,24 @@ export default {
     }
 };
 </script>
+<style scoped>
+.pagination {
+    display: flex;
+    width: 290px;
+    padding: 0;
+}
 
+.pagination a {
+    flex: 1;
+    text-decoration: none;
+    color: #2c3e50;
+}
+
+#page-prev {
+    text-align: left;
+}
+
+#page-next {
+    text-align: right;
+}
+</style>
