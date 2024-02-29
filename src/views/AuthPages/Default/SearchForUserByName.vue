@@ -45,17 +45,18 @@
                     </tr>
                 </tbody>
             </table>
-           
+
         </div>
         <div class="col-sm-12 text-center" v-if="loader">
-            <img :src="require('@/assets/images/page-img/page-load-loader.gif')" alt="loader" style="height: 100px" />
+            <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
         </div>
         <div class="col-sm-12" v-if="message">
             <iq-card class="iq-card">
                 <h3 class="text-center mt-2">{{ message }}</h3>
                 <div class="iq-card-body p-0">
                     <div class="image-block text-center mt-3">
-                        <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
+                        <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader"
+                            style="height: 100px" />
                     </div>
                 </div>
             </iq-card>
@@ -68,14 +69,14 @@ import userService from "@/API/services/user.service";
 import useVuelidate from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
 
- 
+
 export default {
     name: "Search For User",
     setup() {
         return { v$: useVuelidate() }
     },
     components: {
-       
+
     },
     data() {
         return {
@@ -123,4 +124,3 @@ export default {
     margin-bottom: 0;
 }
 </style>
-  
