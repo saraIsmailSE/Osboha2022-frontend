@@ -23,24 +23,35 @@
                   />
                 </td>
               </tr>
-              <tr v-if="empty">
+              <tr v-else-if="empty">
                 <td colspan="2" class="text-center">لا يوجد ساعات عمل</td>
               </tr>
-              <tr v-for="item in workingHours" :key="item.id">
-                <td>{{ formatFullDate(item.date, false) }}</td>
+              <template
+                v-else
+                v-for="item in objectToArray(groupedWorking)"
+                :key="item.key"
+              >
+                <tr class="bg-primary text-white">
+                  <td colspan="2" class="text-center">
+                    <strong>{{ item.key }}</strong>
+                  </td>
+                </tr>
 
-                <td>{{ item.minutes + " دقيقة" }}</td>
-              </tr>
-              <tr v-if="workingHours.length > 0">
-                <td>
-                  <strong>المجموع</strong>
-                </td>
-                <td>
-                  <strong>
-                    {{ total }}
-                  </strong>
-                </td>
-              </tr>
+                <tr v-for="workingHour in item.value" :key="workingHour.id">
+                  <td>{{ formatFullDate(workingHour.date, false) }}</td>
+                  <td>{{ workingHour.minutes + " دقيقة" }}</td>
+                </tr>
+                <tr v-if="item.value?.length > 0">
+                  <td>
+                    <strong>المجموع</strong>
+                  </td>
+                  <td>
+                    <strong>
+                      {{ totalByWeek(item.key) + " دقيقة" }}
+                    </strong>
+                  </td>
+                </tr>
+              </template>
             </tbody>
           </table>
           <hr />
@@ -54,6 +65,11 @@
 import helper from "@/utilities/helper";
 export default {
   name: "WorkingHoursList",
+  data() {
+    return {
+      startWeekTitle: "",
+    };
+  },
   props: {
     workingHours: {
       type: Array,
@@ -66,6 +82,9 @@ export default {
   },
   methods: {
     ...helper,
+    totalByWeek(weekTitle) {
+      return this.groupedWorking[weekTitle].reduce((a, b) => a + b.minutes, 0);
+    },
   },
   computed: {
     empty() {
@@ -73,6 +92,16 @@ export default {
     },
     total() {
       return this.workingHours?.reduce((a, b) => a + b.minutes, 0) + " دقيقة";
+    },
+    groupedWorking() {
+      return this.workingHours.reduce((acc, item) => {
+        const weekTitle = item.week.title;
+        if (!acc[weekTitle]) {
+          acc[weekTitle] = [];
+        }
+        acc[weekTitle].push(item);
+        return acc;
+      }, {});
     },
   },
 };
