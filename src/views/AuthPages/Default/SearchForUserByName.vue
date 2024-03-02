@@ -15,16 +15,16 @@
                 بحث
             </button>
         </form>
-        <div class="col-sm-12" v-if="users">
-            <table class="table">
-                <thead class="table-light">
+        <div class="table-responsive" v-if="users">
+            <table id="datatable" class="table table-striped table-bordered">
+                <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">الاسم</th>
                         <th scope="col">الايميل</th>
                         <th scope="col">المسؤول عنه</th>
                         <th scope="col">عدد المسؤولين عنهم</th>
-                        <th scope="col">المجموعة الموجود فيها كسفير</th>
+                        <th scope="col">فريق المتابعة</th>
 
                     </tr>
                 </thead>
@@ -55,8 +55,7 @@
                 <h3 class="text-center mt-2">{{ message }}</h3>
                 <div class="iq-card-body p-0">
                     <div class="image-block text-center mt-3">
-                        <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader"
-                            style="height: 100px" />
+                        <img src="@/assets/images/main/reader.png" class="img-fluid rounded w-75" alt="blog-img">
                     </div>
                 </div>
             </iq-card>
@@ -112,9 +111,9 @@ export default {
                 else {
                     this.message = 'المستخدم غير موجود';
                 }
-                this.loader = false;
 
             }
+            this.loader = false;
         },
     },
 };

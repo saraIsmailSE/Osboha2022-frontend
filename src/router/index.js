@@ -159,8 +159,8 @@ const userChildRoute = (prop, mode = false) => [
     component: () => import("../views/AuthPages/Default/SearchForUser"),
   },
   {
-    path: "name_search",
-    name: prop + ".name_search",
+    path: "search-by-name",
+    name: prop + ".search-by-name",
     meta: { auth: true, name: "Search for user by Name" },
     component: () => import("../views/AuthPages/Default/SearchForUserByName"),
   },
@@ -235,6 +235,82 @@ const userChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMain/User/PrivacySetting"),
   },
 ];
+
+const ramadanChildRoute = (prop, mode = false) => [
+  {
+    path: "",
+    name: prop + ".index",
+    meta: { auth: true, name: "Index" },
+    component: () => import("../views/OsbohaRamadan/index"),
+  },
+  {
+    path: "hadith",
+    name: prop + ".hadith",
+    meta: { auth: true, name: "hadith" },
+    component: () => import("../views/OsbohaRamadan/Hadith"),
+  },
+  {
+    path: "fill-hadith/:day",
+    name: prop + ".fill-hadith",
+    meta: { auth: true, name: "fill hadith" },
+    component: () => import("../views/OsbohaRamadan/FillHadith"),
+  },
+  {
+    path: "quran",
+    name: prop + ".quran",
+    meta: { auth: true, name: "quran" },
+    component: () => import("../views/OsbohaRamadan/Quran"),
+  },
+  {
+    path: "fill-quran/:day",
+    name: prop + ".fill-quran",
+    meta: { auth: true, name: "fill quran" },
+    component: () => import("../views/OsbohaRamadan/FillQuran"),
+  },
+  {
+    path: "questions",
+    name: prop + ".questions",
+    meta: { auth: true, name: "questions" },
+    component: () => import("../views/OsbohaRamadan/Questions"),
+  },
+  {
+    path: "fill-questions/:day",
+    name: prop + ".fill-questions",
+    meta: { auth: true, name: "fill questions" },
+    component: () => import("../views/OsbohaRamadan/FillQuestions"),
+  },
+  {
+    path: "question/:id",
+    name: prop + ".listQuestion",
+    meta: { auth: true, name: "list Question" },
+    component: () => import("../views/OsbohaRamadan/ListQuestion"),
+  },
+  {
+    path: "night-prayer",
+    name: prop + ".night-prayer",
+    meta: { auth: true, name: "Night Prayer" },
+    component: () => import("../views/OsbohaRamadan/NightPrayer"),
+  },
+  {
+    path: "fill-night-prayer/:day",
+    name: prop + ".fill-night-prayer",
+    meta: { auth: true, name: "Fill Night Prayer" },
+    component: () => import("../views/OsbohaRamadan/FillNightPrayer"),
+  },
+  {
+    path: "golden-day",
+    name: prop + ".golden-day",
+    meta: { auth: true, name: "Golden Day" },
+    component: () => import("../views/OsbohaRamadan/GoldenDay"),
+  },
+  {
+    path: "golden-day/:day",
+    name: prop + ".fill-golden-day",
+    meta: { auth: true, name: "Fill Golden Day" },
+    component: () => import("../views/OsbohaRamadan/FillGoldenDay"),
+  },
+];
+
 const statisticsChildRoute = (prop, mode = false) => [
   {
     path: "weekly/:week_id",
@@ -956,6 +1032,13 @@ const routes = [
     component: () => import("../layouts/Default"),
     meta: { auth: true },
     children: generalConversationChildRoute("general-conversation"),
+  },
+  {
+    path: "/ramadan",
+    name: "ramadan",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: ramadanChildRoute("ramadan"),
   },
 
   /* ########## Start Eligible Routes ########## */

@@ -31,19 +31,40 @@
                             <div class="d-flex align-items-center justify-content-center">
                                 <div class="border rounded d-flex align-items-center justify-content-center">
                                     <i class="display-1 img-fluid material-symbols-outlined">
-                                        search
+                                        alternate_email
                                     </i>
                                 </div>
                             </div>
                             <div class="mt-2">
                                 <h3 class="mb-0 text-center">
-                                    بحث عن سفير
+                                    بحث بالايميل
                                 </h3>
                             </div>
                         </div>
                     </router-link>
                 </div>
-            </div>            <div class="col-6 col-md-6 col-lg-6">
+            </div>
+            <div class="col-6 col-md-6 col-lg-6">
+                <div class="card">
+                    <router-link :to="{ name: 'user.search-by-name', }">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <div class="border rounded d-flex align-items-center justify-content-center">
+                                    <i class="display-1 img-fluid material-symbols-outlined">
+                                        id_card
+                                    </i>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <h3 class="mb-0 text-center">
+                                    بحث بالاسم
+                                </h3>
+                            </div>
+                        </div>
+                    </router-link>
+                </div>
+            </div>
+            <div class="col-6 col-md-6 col-lg-6">
                 <div class="card">
                     <router-link :to="{ name: 'user.exception-search', }">
                         <div class="card-body">
