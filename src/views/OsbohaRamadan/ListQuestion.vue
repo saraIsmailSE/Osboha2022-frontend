@@ -115,28 +115,6 @@ export default {
 };
 </script>
 
-<style scoped>
-@font-face {
-    font-family: HacenSamra;
-    src: url('@/assets/fonts/HacenSamra.ttf');
-}
-
-h1,
-h2,
-h4,
-h5,
-p {
-    font-family: HacenSamra, Arial, sans-serif;
-    color: #471809;
-}
-
-.ramadan-card {
-    background: #f8f9fa;
-}
-
-.ramadan-btn {
-    background: #b17658;
-    color: #f8f9fa;
-
-}
+<style >
+@import './css/ramadan.css';
 </style>

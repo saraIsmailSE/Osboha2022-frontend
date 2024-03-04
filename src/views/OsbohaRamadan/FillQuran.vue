@@ -10,11 +10,27 @@
                 <h2 class="text-center mt-1 mb-3">1 ~ رمضان </h2>
 
                 <div class="col-12 pt-2">
+                    <div class="alert alert-warning p-1 m-2 text-center" role="alert">
+                        <h6>
+                            توضيحات هامة للمهمة
+                            <span class="material-symbols-outlined align-middle">
+                                report
+                            </span>
+
+                        </h6>
+                        <small>
+                            الحد الأعلى من التلاوة اليوم في موقعنا هي (١٢) جزءً من كتاب الله وذلك للحث على تخصيص وقت
+                            للتدبر والتفسير
+                        </small>
+
+
+                    </div>
+
                     <div class="sign-in-from">
                         <form class="mt-2" @submit.prevent="onSubmit()">
                             <div class="form-group">
-                                <select v-model="v$.form.no_of_parts.$model" class="form-select" data-trigger name="role"
-                                    id="role">
+                                <select v-model="v$.form.no_of_parts.$model" class="form-select" data-trigger
+                                    name="role" id="role">
                                     <option value="0" selected>عدد الأجزاء المقروءة</option>
                                     <option v-for="index in 12" :key="index" :value="index">
                                         {{ index }}
@@ -26,13 +42,14 @@
                             </div>
                             <div class="form-group text-center" v-if="message">
                                 <small :style="{
-                                    color: messageVariant === 'success' ? 'green' : 'red',
-                                }">
+                            color: messageVariant === 'success' ? 'green' : 'red',
+                        }">
                                     {{ message }}
                                 </small>
                             </div>
                             <div class="col-sm-12 text-center" v-if="loader">
-                                <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 100px" />
+                                <img src="@/assets/images/gif/page-load-loader.gif" alt="loader"
+                                    style="height: 100px" />
                             </div>
                             <div class="d-inline-block w-100" v-else>
                                 <button type="submit" class="btn ramadan-btn float-end" :disabled="loader">
@@ -71,7 +88,8 @@
                         </h5>
 
                         <p class="text-center h5">
-                            لكل قارئ للقرآن حسنة في كل حرف، والحسنة بعشرة أمثالها إلى سبعمائة ضعف، فلا تقبل أن يسبقك الآخرين
+                            لكل قارئ للقرآن حسنة في كل حرف، والحسنة بعشرة أمثالها إلى سبعمائة ضعف، فلا تقبل أن يسبقك
+                            الآخرين
                             في الأجر والطاعة
                         </p>
                     </div>
@@ -152,36 +170,6 @@ export default {
 };
 </script>
 
-<style scoped>
-@font-face {
-    font-family: HacenSamra;
-    src: url('@/assets/fonts/HacenSamra.ttf');
-}
-
-h1,
-h2,
-h4,
-h5,
-p {
-    font-family: HacenSamra, Arial, sans-serif;
-    color: #471809;
-}
-
-.ramadan-card {
-    background: #f8f9fa;
-}
-
-.statistics-card {
-    background: #FDEEEC;
-    border-top: none;
-    border-right: solid #471809;
-    border-bottom: solid #471809;
-    border-left: solid #471809;
-}
-
-.ramadan-btn {
-    background: #b17658;
-    color: #f8f9fa;
-
-}
+<style>
+@import './css/ramadan.css';
 </style>

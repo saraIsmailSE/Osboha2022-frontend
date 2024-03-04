@@ -244,6 +244,12 @@ const ramadanChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaRamadan/index"),
   },
   {
+    path: "correctors",
+    name: prop + ".correctors-index",
+    meta: { auth: true, name: "Correctors Index" },
+    component: () => import("../views/OsbohaRamadan/Correctors/index"),
+  },
+  {
     path: "hadith",
     name: prop + ".hadith",
     meta: { auth: true, name: "hadith" },
@@ -255,6 +261,20 @@ const ramadanChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "fill hadith" },
     component: () => import("../views/OsbohaRamadan/FillHadith"),
   },
+
+  {
+    path: "correctors-hadith-list",
+    name: prop + ".correctors-hadith-list",
+    meta: { auth: true, name: "Correctors Hadith List" },
+    component: () => import("../views/OsbohaRamadan/Correctors/HadithList"),
+  },
+  {
+    path: "correct-hadith/:hadith_memorization_id",
+    name: prop + ".correct-hadith",
+    meta: { auth: true, name: "Corrector One Hadith" },
+    component: () => import("../views/OsbohaRamadan/Correctors/ListOneHadith"),
+  },
+
   {
     path: "quran",
     name: prop + ".quran",
@@ -273,6 +293,19 @@ const ramadanChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "questions" },
     component: () => import("../views/OsbohaRamadan/Questions"),
   },
+  {
+    path: "correctors-questions-list",
+    name: prop + ".correctors-questions-list",
+    meta: { auth: true, name: "Correctors Questions List" },
+    component: () => import("../views/OsbohaRamadan/Correctors/QuestionsList"),
+  },
+  {
+    path: "correct-question/:question_answer_id",
+    name: prop + ".correct-question",
+    meta: { auth: true, name: "Corrector One Question" },
+    component: () => import("../views/OsbohaRamadan/Correctors/ListOneQuestion"),
+  },
+
   {
     path: "fill-questions/:day",
     name: prop + ".fill-questions",

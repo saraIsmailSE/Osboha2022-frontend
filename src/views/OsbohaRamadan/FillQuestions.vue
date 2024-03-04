@@ -12,15 +12,17 @@
                 <div class="col-12 pt-2 text-center">
                     <div class="row">
                         <div class="col-6 col-md-6 col-lg-6">
-                            <router-link :to="{ name: 'ramadan.listQuestion',  params: { id: 1 }}">
-                                <img src="@/assets/images/ramadan/question_on.png" alt="ramadan-footer" class="img-fluid" />
+                            <router-link :to="{ name: 'ramadan.listQuestion', params: { id: 1 } }">
+                                <img src="@/assets/images/ramadan/question_on.png" alt="ramadan-footer"
+                                    class="img-fluid" />
                                 <h4 class="text-center">السؤال الأول</h4>
 
                             </router-link>
                         </div>
                         <div class="col-6 col-md-6 col-lg-6">
                             <router-link :to="{ name: 'ramadan.listQuestion', params: { id: 2 } }">
-                                <img src="@/assets/images/ramadan/question_on.png" alt="ramadan-footer" class="img-fluid" />
+                                <img src="@/assets/images/ramadan/question_on.png" alt="ramadan-footer"
+                                    class="img-fluid" />
                                 <h4 class="text-center">السؤال الثاني</h4>
 
                             </router-link>
@@ -64,19 +66,19 @@
                             اجابتك للسؤال الأول
                             <span class="material-symbols-outlined align-middle accepted">verified</span>
 
-                            <p class="text-center"> الاجابة </p>
+                            <p class=" ramada-p text-center"> الاجابة </p>
                         </h4>
 
                         <h4 class="text-center">
                             اجابتك للسؤال الثاني
                             <span class="material-symbols-outlined align-middle rejected">dangerous</span>
 
-                            <p class="text-center"> الاجابة </p>
+                            <p class=" ramada-p text-center"> الاجابة </p>
                         </h4>
                         <hr>
                         <h5 class="text-center">
                             نقاطك لـ (1) رمضان
-                            <p class="text-center display-3"> 1</p>
+                            <p class=" ramada-p text-center display-3"> 1</p>
                         </h5>
                     </div>
                 </div>
@@ -156,39 +158,11 @@ export default {
 };
 </script>
 
+<style>
+@import './css/ramadan.css';
+</style>
+
 <style scoped>
-@font-face {
-    font-family: HacenSamra;
-    src: url('@/assets/fonts/HacenSamra.ttf');
-}
-
-h1,
-h2,
-h4,
-h5,
-p {
-    font-family: HacenSamra, Arial, sans-serif;
-    color: #471809;
-}
-
-.ramadan-card {
-    background: #f8f9fa;
-}
-
-.statistics-card {
-    background: #FDEEEC;
-    border-top: none;
-    border-right: solid #471809;
-    border-bottom: solid #471809;
-    border-left: solid #471809;
-}
-
-.ramadan-btn {
-    background: #b17658;
-    color: #f8f9fa;
-
-}
-
 .material-symbols-outlined {
     font-variation-settings:
         'FILL' 0,
@@ -197,10 +171,4 @@ p {
         'opsz' 24
 }
 
-.accepted {
-    color: #3e9069;
-}
-.rejected {
-    color: darkred;
-}
 </style>

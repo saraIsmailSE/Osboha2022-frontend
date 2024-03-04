@@ -56,46 +56,6 @@ export default {
     },
 };
 </script>
-
-<style scoped>
-@font-face {
-    font-family: HacenSamra;
-    src: url('@/assets/fonts/HacenSamra.ttf');
-}
-
-h1,
-h2,
-h4,
-h5,
-p {
-    font-family: HacenSamra, Arial, sans-serif;
-    color: #471809;
-}
-
-.ramadan-card {
-    background: #f8f9fa;
-}
-
-.statistics-card {
-    background: #FDEEEC;
-    border-top: none;
-    border-right: solid #471809;
-    border-bottom: solid #471809;
-    border-left: solid #471809;
-}
-
-.ramadan-btn {
-    background: #b17658;
-    color: #f8f9fa;
-
-}
-
-.material-symbols-outlined {
-    color: #471809;
-    font-variation-settings:
-        'FILL' 0,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 24
-}
+<style >
+@import './css/ramadan.css';
 </style>
