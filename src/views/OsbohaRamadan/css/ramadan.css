@@ -21,6 +21,11 @@ p {
     background: #f8f9fa;
 }
 
+.disabled-link {
+    color: #ccc; /* Set the color to a muted or grayed-out color */
+    pointer-events: none; /* Disable pointer events to prevent clicking */
+    text-decoration: none; /* Remove underline or other decorations */
+}
 
 .statistics-card {
     background: #FDEEEC;

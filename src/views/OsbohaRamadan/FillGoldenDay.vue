@@ -2,12 +2,12 @@
     <div>
         <ramadanHeader />
 
-        <div class="col-sm-12 mt-3">
+        <div class="col-sm-12 mt-3" v-if="current_day">
             <iq-card class="iq-card ramadan-card">
                 <div class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto ramadan-card">
                     <h1 class="text-center mt-3 mb-3">اليوم الذهبي</h1>
                 </div>
-                <h2 class="text-center mt-1 mb-3">1 ~ رمضان </h2>
+                <h2 class="text-center mt-1 mb-3">{{ current_day.day }} ~ رمضان </h2>
                 <div class="col-12 pt-2">
                     <div class="row justify-content-center mt-0 mb-3 " ref="formContainer">
                         <ul id="progressbar">
@@ -62,7 +62,8 @@
                                             <input type="radio" id="no" value="0" :name="TASK_ONE[0].name" class="w-25"
                                                 v-model="goldenForm.sunan_al_rawatib" :disabled="isDisabled" />
                                             <label for="no">لا</label>
-                                            <input type="radio" id="no_by_reason"  :value="TASK_ONE[0].points" :name="TASK_ONE[0].name" class="w-25"
+                                            <input type="radio" id="no_by_reason" :value="TASK_ONE[0].points"
+                                                :name="TASK_ONE[0].name" class="w-25"
                                                 v-model="goldenForm.sunan_al_rawatib" :disabled="isDisabled" />
                                             <label for="no_by_reason">عذر شرعي</label>
                                         </div>
@@ -148,8 +149,9 @@
                                             <input type="radio" id="no" value="0" :name="TASK_ONE[3].name" class="w-25"
                                                 v-model="goldenForm.duha_prayer" :disabled="isDisabled" />
                                             <label for="no">لا</label>
-                                            <input type="radio" id="no_by_reason"  :value="TASK_ONE[3].points" :name="TASK_ONE[3].name" class="w-25"
-                                                v-model="goldenForm.duha_prayer" :disabled="isDisabled" />
+                                            <input type="radio" id="no_by_reason" :value="TASK_ONE[3].points"
+                                                :name="TASK_ONE[3].name" class="w-25" v-model="goldenForm.duha_prayer"
+                                                :disabled="isDisabled" />
                                             <label for="no_by_reason">عذر شرعي</label>
 
                                         </div>
@@ -184,7 +186,7 @@
 
 
 
-                                        <!-- Shaf_and_witr -->
+                                        <!-- shaf_and_witr -->
 
                                         <h6 class="mb-2 text-start h5">
                                             {{ TASK_ONE[5].head_title }}
@@ -202,26 +204,27 @@
 
                                         <div class="radio-group mt-3 d-flex">
                                             <input type="radio" id="yes" :name="TASK_ONE[5].name" class="w-25"
-                                                :value="TASK_ONE[5].points" v-model="goldenForm.Shaf_and_witr"
+                                                :value="TASK_ONE[5].points" v-model="goldenForm.shaf_and_witr"
                                                 :disabled="isDisabled" />
                                             <label for="yes">الشفع والوتر</label>
 
                                             <input type="radio" id="only_shaf" :value="TASK_ONE[5].points - 1"
-                                                :name="TASK_ONE[5].name" class="w-25" v-model="goldenForm.Shaf_and_witr"
+                                                :name="TASK_ONE[5].name" class="w-25" v-model="goldenForm.shaf_and_witr"
                                                 :disabled="isDisabled" />
                                             <label for="only_shaf">الشفع فقط</label>
 
                                             <input type="radio" id="only_witr" :name="TASK_ONE[5].name" class="w-25"
-                                                :value="TASK_ONE[5].points - 1" v-model="goldenForm.Shaf_and_witr"
+                                                :value="TASK_ONE[5].points - 1" v-model="goldenForm.shaf_and_witr"
                                                 :disabled="isDisabled" />
                                             <label for="only_witr">الوتر فقط</label>
 
                                             <input type="radio" id="no" value="0" :name="TASK_ONE[5].name" class="w-25"
-                                                v-model="goldenForm.Shaf_and_witr" :disabled="isDisabled" />
+                                                v-model="goldenForm.shaf_and_witr" :disabled="isDisabled" />
                                             <label for="no">لم أصلي</label>
 
-                                            <input type="radio" id="no_by_reason"  :value="TASK_ONE[5].points" :name="TASK_ONE[5].name" class="w-25"
-                                                v-model="goldenForm.Shaf_and_witr" :disabled="isDisabled" />
+                                            <input type="radio" id="no_by_reason" :value="TASK_ONE[5].points"
+                                                :name="TASK_ONE[5].name" class="w-25" v-model="goldenForm.shaf_and_witr"
+                                                :disabled="isDisabled" />
                                             <label for="no_by_reason">عذر شرعي</label>
 
                                         </div>
@@ -422,7 +425,7 @@
                                     </div>
                                     <div class="d-inline-block w-100">
                                         <button type="button" class="ms-3 btn ramadan-btn float-end"
-                                            @click="submitForm()">
+                                            @click="submitForm()" :disabled="isDisabled">
                                             اعتماد
                                         </button>
                                         <button type="button" class="btn ramadan-btn previous float-end"
@@ -440,39 +443,44 @@
 
             <statisticsHeader />
 
-            <iq-card class="iq-card statistics-card">
+            <iq-card class="iq-card statistics-card" v-if="statistics">
                 <div class="col-12 pt-2">
                     <div class="sign-in-from">
                         <h4 class="text-center">
                             عدد الذين أنجزوا يومًا ذهبيًا معنا في شهر رمضان
-                            <p class=" ramada-p text-center display-3"> 1</p>
+                            <p class=" ramada-p text-center display-3"> {{ statistics.distinct_users_30 }}</p>
                         </h4>
 
                         <h4 class="text-center">
                             عدد الذين أتموا عدد (5) أيام رمضانية ذهبية معنا حتى اللحظة
-                            <p class=" ramada-p text-center display-3"> 1 </p>
+                            <p class=" ramada-p text-center display-3"> {{ statistics.users_completed_5_golden_days }}
+                            </p>
                         </h4>
 
                         <h4 class="text-center">
                             عدد الذين أتموا عدد (10) أيام رمضانية ذهبية معنا حتى اللحظة
-                            <p class=" ramada-p text-center display-3"> 1</p>
+                            <p class=" ramada-p text-center display-3"> {{ statistics.users_completed_10_golden_days }}
+                            </p>
                         </h4>
 
                         <h4 class="text-center">
                             عدد الذين أتموا عدد (20) أيام رمضانية ذهبية معنا حتى اللحظة
-                            <p class=" ramada-p text-center display-3"> 1</p>
+                            <p class=" ramada-p text-center display-3"> {{ statistics.users_completed_20_golden_days }}
+                            </p>
                         </h4>
 
 
                         <hr>
                         <div class="row">
                             <h5 class="text-center col-6">
-                                نقاطك ل، (1) رمضان
-                                <p class=" ramada-p text-center display-3"> 1</p>
+                                نقاطك ل، ({{ current_day.day }}) رمضان
+                                <p class=" ramada-p text-center display-3">
+                                    {{ statistics.auth_specific_ramadan_day_points }}</p>
+                                نقـطة
                             </h5>
                             <h5 class="text-center col-6">
                                 أتممت
-                                <p class=" ramada-p text-center display-3"> 1</p>
+                                <p class=" ramada-p text-center display-3"> {{ statistics.auth_golden_days }}</p>
                                 يوماً ذهبيا
                             </h5>
 
@@ -492,6 +500,8 @@ import statisticsHeader from "@/components/ramadan/statistics-header";
 import helper from "@/utilities/helper";
 import { TASK_ONE, TASK_TWO, TASK_THREE } from "@/utilities/ramadanConstants";
 import TaskNotes from '@/components/ramadan/task-notes.vue';
+import ramadanDaysService from "@/API/RamadanServices/ramadanDays.service";
+import goldenDaysServices from "@/API/RamadanServices/goldenDays.service";
 
 export default {
     name: "Golden Day",
@@ -504,11 +514,15 @@ export default {
         TaskNotes,
     },
     async created() {
+        this.current_day = await ramadanDaysService.current();
+        this.statistics = await goldenDaysServices.statistics(this.current_day.id)
     },
     data() {
         return {
+            current_day: null,
             loader: false,
             currentStep: 0,
+            statistics: [],
             steps: [
                 { title: 'الجانب الديني' },
                 { title: 'الجانب الصحي' },
@@ -519,13 +533,13 @@ export default {
             TASK_THREE,
             goldenForm: {
                 //step1
-                ramadan_day_id: 0,
+                ramadan_day_id: this.$route.params.day,
                 sunan_al_rawatib: 0,
                 tasbeeh: 0,
                 istighfar: 0,
                 duha_prayer: 0,
                 morning_evening_dhikr: 0,
-                Shaf_and_witr: 0,
+                shaf_and_witr: 0,
                 //step2
                 suhoor: 0,
                 drink_water: 0,
@@ -576,7 +590,8 @@ export default {
 
         async submitForm() {
             try {
-                console.log('test');
+
+                const response = await goldenDaysServices.store(this.goldenForm);
 
             } catch (error) {
                 helper.toggleToast(
@@ -589,13 +604,23 @@ export default {
             }
         },
     },
+    computed: {
+        isDisabled() {
+            if (this.current_day) {
+                return this.goldenForm.ramadan_day_id != this.current_day.day
+            }
+            else {
+                return false;
+            }
+        }
+    }
 };
 </script>
 
 <style>
 @import './css/ramadan.css';
-
 </style>
+
 <style scoped>
 .material-symbols-outlined {
     color: #471809;
