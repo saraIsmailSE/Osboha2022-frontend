@@ -42,7 +42,6 @@ export default {
         return {
             loader: false,
             current_day:null,
-
             days: []
         };
     },

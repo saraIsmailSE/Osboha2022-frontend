@@ -30,7 +30,7 @@
                         <form class="mt-2" @submit.prevent="onSubmit()">
                             <div class="form-group">
                                 <select v-model="v$.form.no_of_parts.$model" class="form-select" data-trigger
-                                    name="role" id="role">
+                                    name="no_of_parts" id="no_of_parts" :disabled="isDisabled">
                                     <option value="0" selected>عدد الأجزاء المقروءة</option>
                                     <option v-for="index in 12" :key="index" :value="index">
                                         {{ index }}
@@ -40,16 +40,15 @@
                                     يرجى اختيار عدد الأجزاء
                                 </small>
                             </div>
-                            <div class="form-group text-center" v-if="message">
-                                <small :style="{
-                            color: messageVariant === 'success' ? 'green' : 'red',
-                        }">
-                                    {{ message }}
-                                </small>
-                            </div>
                             <div class="col-sm-12 text-center" v-if="loader">
                                 <img src="@/assets/images/gif/page-load-loader.gif" alt="loader"
                                     style="height: 100px" />
+                            </div>
+
+                            <div class="alert alert-danger p-1 m-2 text-center" role="alert" v-if="isDisabled">
+                                <h6 class="text-center">
+                                    المهمة غير متاحة
+                                </h6>
                             </div>
                             <div class="d-inline-block w-100" v-else>
                                 <button type="submit" class="btn ramadan-btn float-end" :disabled="loader">
@@ -105,7 +104,11 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import ramadanHeader from "@/components/ramadan/ramadan-header";
 import statisticsHeader from "@/components/ramadan/statistics-header";
+import ramadanDaysService from "@/API/RamadanServices/ramadanDays.service";
+import quranWirdServicesServices from "@/API/RamadanServices/quranWird.service";
+import helper from "@/utilities/helper";
 const greaterThanZero = (value) => value > 0;
+
 
 export default {
     name: "Ramadan Quran",
@@ -118,11 +121,17 @@ export default {
     },
 
     async created() {
+        this.current_day = await ramadanDaysService.current();
+        const response = await quranWirdServicesServices.show(this.form.ramadan_day_id);
+        this.setForm(response);
     },
     data() {
         return {
+            current_day: null,
             loader: false,
+            statistics: [],
             form: {
+                ramadan_day_id: this.$route.params.day,
                 no_of_parts: 0,
             },
             message: "",
@@ -152,21 +161,46 @@ export default {
         },
     },
     methods: {
+        async setForm(quran_wird) {
+            if (quran_wird) {
+                this.form.no_of_parts = quran_wird.no_of_parts ? quran_wird.no_of_parts : 0;
+            }
+        },
+
         async onSubmit() {
             this.v$.$validate();
             if (!this.v$.$error) {
                 this.loader = true;
                 try {
-                    this.message = "";
+
+                    const response = await quranWirdServicesServices.store(this.form);
+                    this.setForm(response);
+                    helper.toggleToast(
+                        "تم الاعتماد",
+                        "success"
+                    );
                 } catch (error) {
-                    this.message = "حدث خطأ, يرجى المحاولة لاحقاً";
-                    this.messageVariant = "danger";
+                    helper.toggleToast(
+                        "حدث خطأ أثناء التحديث, حاول مرة أخرى",
+                        "error"
+                    );
                 } finally {
                     this.loader = false;
                 }
             }
         },
     },
+    computed: {
+        isDisabled() {
+            if (this.current_day) {
+                return this.form.ramadan_day_id != this.current_day.day
+            }
+            else {
+                return false;
+            }
+        }
+    }
+
 };
 </script>
 

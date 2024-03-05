@@ -1,8 +1,8 @@
 import { api } from "../Intercepter";
 
-class GoldenDaysServices {
+class QuranWirdServices {
     constructor() {
-        this.prefix = "ramadan-golden-day";
+        this.prefix = "ramadan-quran-wird";
     }
 
     async store(form) {
@@ -32,4 +32,4 @@ class GoldenDaysServices {
         }
     }
 }
-export default new GoldenDaysServices();
+export default new QuranWirdServices();
