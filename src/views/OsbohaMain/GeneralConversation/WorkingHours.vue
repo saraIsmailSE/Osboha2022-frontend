@@ -172,14 +172,13 @@ export default {
     },
 
     async getWorkingHours() {
-      if (this.loading) return;
+      if (this.loadingStats) return;
 
-      this.empty = false;
       this.loadingStats = true;
       try {
         const response = await WorkingHourService.getWorkingHours();
 
-        this.workingHours = response.data?.workingHours || [];
+        this.workingHours = response.data?.workingHoursList || [];
         this.days = response.data?.days || [];
       } catch (error) {
         helper.toggleErrorToast();
@@ -221,9 +220,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.vuejs3-datepicker #calendar-div {
-  width: 100% !important;
-}
-</style>

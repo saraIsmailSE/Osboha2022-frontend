@@ -28,7 +28,7 @@
               </tr>
               <template
                 v-else
-                v-for="item in objectToArray(groupedWorking)"
+                v-for="item in objectToArray(workingHours)"
                 :key="item.key"
               >
                 <tr class="bg-primary text-white">
@@ -37,17 +37,20 @@
                   </td>
                 </tr>
 
-                <tr v-for="workingHour in item.value" :key="workingHour.id">
+                <tr
+                  v-for="workingHour in item.value?.workingHours"
+                  :key="workingHour.id"
+                >
                   <td>{{ formatFullDate(workingHour.date, false) }}</td>
                   <td>{{ workingHour.minutes + " دقيقة" }}</td>
                 </tr>
-                <tr v-if="item.value?.length > 0">
+                <tr v-if="item.value?.workingHours?.length > 0">
                   <td>
                     <strong>المجموع</strong>
                   </td>
                   <td>
                     <strong>
-                      {{ totalByWeek(item.key) + " دقيقة" }}
+                      {{ item.value?.totalMinutes + " دقيقة" }}
                     </strong>
                   </td>
                 </tr>
@@ -72,8 +75,8 @@ export default {
   },
   props: {
     workingHours: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => ({}),
     },
     loading: {
       type: Boolean,
@@ -82,26 +85,10 @@ export default {
   },
   methods: {
     ...helper,
-    totalByWeek(weekTitle) {
-      return this.groupedWorking[weekTitle].reduce((a, b) => a + b.minutes, 0);
-    },
   },
   computed: {
     empty() {
-      return this.workingHours?.length === 0 && !this.loading;
-    },
-    total() {
-      return this.workingHours?.reduce((a, b) => a + b.minutes, 0) + " دقيقة";
-    },
-    groupedWorking() {
-      return this.workingHours.reduce((acc, item) => {
-        const weekTitle = item.week.title;
-        if (!acc[weekTitle]) {
-          acc[weekTitle] = [];
-        }
-        acc[weekTitle].push(item);
-        return acc;
-      }, {});
+      return Object.keys(this.workingHours).length === 0 && !this.loading;
     },
   },
 };
