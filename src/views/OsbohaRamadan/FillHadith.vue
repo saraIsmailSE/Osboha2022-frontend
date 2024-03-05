@@ -22,7 +22,8 @@
                             <div class="form-group">
                                 <label for="role">المرة الأولى</label>
                                 <textarea name="hadith_1" class="form-control" id="hadith_1" rows="5"
-                                    required="required" v-model="form.hadith_1" @paste="handlePaste"></textarea>
+                                    required="required" v-model="form.hadith_1" @paste="handlePaste"
+                                    :disabled="isDisabled"></textarea>
                                 <small style="color: red" v-if="v$.form.hadith_1.$error">
                                     الاجابة مطلوبة
                                 </small>
@@ -31,10 +32,18 @@
                             <div class="form-group">
                                 <label for="role">المرة الثانية</label>
                                 <textarea name="hadith_2" class="form-control" id="hadith_2" rows="5"
-                                    required="required" v-model="form.hadith_2" @paste="handlePaste"></textarea>
-                                <small style="color: red" v-if="v$.form.hadith_2.$error">
-                                    الاجابة مطلوبة
-                                </small>
+                                    required="required" v-model="form.hadith_2" @paste="handlePaste"
+                                    :disabled="isDisabled"></textarea>
+
+                                <div v-if="v$.form.hadith_2.$error">
+                                    <small style="color: red" v-if="v$.form.hadith_2.required.$invalid">
+                                        الاجابة مطلوبة
+                                    </small>
+                                    <br />
+                                    <small style="color: red" v-if="v$.form.hadith_2.sameAsHadith1.$invalid">
+                                        يجب أن تكون الاجابة مطابقة لكتابتك للحديث الأول
+                                    </small>
+                                </div>
                             </div>
                             <div class="form-group text-center" v-if="message">
                                 <small :style="{
@@ -47,6 +56,11 @@
                                 <img src="@/assets/images/gif/page-load-loader.gif" alt="loader"
                                     style="height: 100px" />
                             </div>
+                            <div class="alert alert-danger p-1 m-2 text-center" role="alert" v-if="isDisabled">
+                                <h6 class="text-center">
+                                    قمت بتسليم هذا الحديث
+                                </h6>
+                            </div>
                             <div class="d-inline-block w-100" v-else>
                                 <button type="submit" class="btn ramadan-btn float-end" :disabled="loader">
                                     وثق حفظك
@@ -55,11 +69,12 @@
                         </form>
                     </div>
                     <hr />
-                    <h4 class="mb-2 p-2">
-                        تصحيح الحديث
-                        <small class="badge bg-success">بحاجة لاعادة</small>
+                    <h4 class="mb-2 p-2" v-if="hadith_memorizations">
+                        {{ hadith_memorizations.reviews }}
+                        <small class="badge bg-success">{{ ACTIVITIES_STATUS[hadith_memorizations.status] }}</small>
 
-                        <form class="mt-2" @submit.prevent="onSubmit()">
+                        <form class="mt-2" @submit.prevent="onSubmit()"
+                            v-if="hadith_memorizations && hadith_memorizations.status == 'redo'">
                             <div class="form-group">
                                 <label for="role">أعد كتابة الحديث هنا</label>
                                 <textarea name="hadith_redo" class="form-control" id="hadith_redo" rows="5"
@@ -144,10 +159,10 @@
 
 <script>
 import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { required, requiredIf, sameAs } from "@vuelidate/validators";
 import ramadanHeader from "@/components/ramadan/ramadan-header";
 import statisticsHeader from "@/components/ramadan/statistics-header";
-
+import { ACTIVITIES_STATUS } from "@/utilities/constants";
 export default {
     name: "Ramadan Night Prayer",
     setup() {
@@ -163,6 +178,12 @@ export default {
     data() {
         return {
             loader: false,
+            ACTIVITIES_STATUS,
+            // hadith_memorizations: null,
+            hadith_memorizations: {
+                status: 'redo',
+                reviews: 'test'
+            },
             form: {
                 hadith_1: '',
                 hadith_2: '',
@@ -176,14 +197,21 @@ export default {
         return {
             form: {
                 hadith_1: {
-                    required,
+                    required: requiredIf(function () {
+                        return (!this.hadith_memorizations || (this.hadith_memorizations.status == 'pending'))
+                    })
                 },
                 hadith_2: {
                     required,
+                    sameAsHadith1: sameAs(this.form.hadith_1)
                 },
                 hadith_redo: {
+                    required: requiredIf(function () {
+                        return (this.hadith_memorizations && (this.hadith_memorizations.status == 'redo'))
+                    })
 
-                }
+                },
+
             },
         };
     },
@@ -202,7 +230,6 @@ export default {
     methods: {
         handlePaste(event) {
             // Prevent the default paste behavior
-            console.log("🚀 ~ handlePaste ~ preventDefault:", ' NOT ALLOWED')
             event.preventDefault();
         },
 
@@ -221,9 +248,20 @@ export default {
             }
         },
     },
+    computed: {
+        isDisabled() {
+            if (this.hadith_memorizations) {
+                return this.hadith_memorizations.status != 'pending'
+            }
+            else {
+                return false;
+            }
+        }
+    }
+
 };
 </script>
 
-<style >
+<style>
 @import './css/ramadan.css';
 </style>

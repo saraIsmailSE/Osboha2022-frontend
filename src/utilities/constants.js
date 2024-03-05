@@ -19,6 +19,12 @@ export const ARABIC_ROLES = {
   marathon_verification_supervisor: "مسؤول تدقيق مارثون أصبوحة",
   marathon_supervisor: "مسؤول في مارثون أصبوحة",
   marathon_ambassador: "سفير مشارك في مارثون أصبوحة",
+  ramadan_coordinator: "مسؤول فعاليات رمضان",
+  ramadan_hadith_corrector:"مُصحح  مسابقة حديث",
+  ramadan_fiqh_corrector:"مًصحح مسابقة فقه",
+  ramadan_tafseer_corrector:"مُصحح مسابقة تفسير",
+  ramadan_vedio_corrector:"مُصحح مسابقة التثقيف بالفيديو",
+
 };
 
 export const LANUAGES = {
@@ -387,4 +393,13 @@ export const ELIGIBLE_STATUS = {
   review: "بانتظار المراجعة",
   accept: "مقبول",
   retard: "تم الاعادة للموثق",
+};
+
+/*########## RMADAN ##########*/
+
+export const ACTIVITIES_STATUS = {
+  pending: "مرحلة التصحيح",
+  accepted: "مقبول",
+  redo: "بحاجة لاعادة",
+  rejected: "مرفوض",
 };

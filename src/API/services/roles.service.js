@@ -30,6 +30,15 @@ class RolesService {
       handleError(error);
     }
   }
+  async getRamadanRoles() {
+    try {
+      const response = await api.get(`${this.prefix}/get-ramadan-roles`);
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   async assignRoleV2(formData) {
     try {
       const response = await api.post(

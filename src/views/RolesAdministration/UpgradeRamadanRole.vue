@@ -1,6 +1,6 @@
 <template>
     <div class="col-sm-12 mt-3">
-        <assignRole :roles="roles" :upgradeType="'مارثون أصبوحة'" :imagePath="'images/main/marathon.png'" />
+        <assignRole :roles="roles" :upgradeType="'فريق رمضان'"/>
     </div>
 </template>
 
@@ -15,7 +15,7 @@ export default {
         assignRole,
     },
     async created() {
-        this.roles = await rolesService.getMarathonRoles();
+        this.roles = await rolesService.getRamadanRoles();
     },
     data() {
         return {

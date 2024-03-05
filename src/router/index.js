@@ -408,6 +408,12 @@ const rolesChildRoute = (prop, mode = false) => [
     component: () => import("../views/RolesAdministration/UpgradeMarathonRole"),
   },
   {
+    path: "/upgrade-ramadan-role",
+    name: prop + ".upgradeRamadanRole",
+    meta: { auth: true, name: "Upgrade Ramadan Role" },
+    component: () => import("../views/RolesAdministration/UpgradeRamadanRole"),
+  },
+  {
     path: "/change-advising-team",
     name: prop + ".changeAdvisingTeam",
     meta: { auth: true, name: "Change Advising Team" },
