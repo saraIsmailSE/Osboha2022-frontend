@@ -26,11 +26,7 @@
               <tr v-else-if="empty">
                 <td colspan="2" class="text-center">لا يوجد ساعات عمل</td>
               </tr>
-              <template
-                v-else
-                v-for="item in objectToArray(workingHours)"
-                :key="item.key"
-              >
+              <template v-else v-for="item in workingHours" :key="item.key">
                 <tr class="bg-primary text-white">
                   <td colspan="2" class="text-center">
                     <strong>{{ item.key }}</strong>
@@ -75,8 +71,8 @@ export default {
   },
   props: {
     workingHours: {
-      type: Object,
-      default: () => ({}),
+      type: Array,
+      default: () => [],
     },
     loading: {
       type: Boolean,

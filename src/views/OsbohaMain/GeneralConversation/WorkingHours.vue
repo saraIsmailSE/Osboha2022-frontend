@@ -150,6 +150,7 @@ export default {
     },
   },
   methods: {
+    ...helper,
     async submit() {
       this.messages = "";
 
@@ -178,10 +179,10 @@ export default {
       try {
         const response = await WorkingHourService.getWorkingHours();
 
-        this.workingHours = response.data?.workingHoursList || [];
+        this.workingHours = this.objectToArray(response.data?.workingHoursList);
         this.days = response.data?.days || [];
       } catch (error) {
-        helper.toggleErrorToast();
+        this.toggleErrorToast();
       } finally {
         this.loadingStats = false;
       }
