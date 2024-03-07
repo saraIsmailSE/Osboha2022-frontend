@@ -18,17 +18,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr v-for="memorizedHadith in memorizedHadiths" :key="memorizedHadith.id">
                                     <td>
-                                        33
+                                        {{memorizedHadith.hadith.hadith_title}}
                                     </td>
                                     <td>
-                                        الاسم
+                                        {{memorizedHadith.user.name}}
                                     </td>
                                     <td>
                                         <router-link :to="{
                                             name: 'ramadan.correct-hadith',
-                                            params: { hadith_memorization_id: 1 },
+                                            params: { hadith_memorization_id: memorizedHadith.id },
                                         }">
                                             <i role="button" class="material-symbols-outlined md-18 me-1 text-primary">
                                                 visibility
@@ -50,6 +50,7 @@
 <script>
 import UserInfoService from "@/Services/userInfoService";
 import ramadanHeader from "@/components/ramadan/ramadan-header";
+import HadithMemorizationServices from "@/API/RamadanServices/hadithMemorization.service";
 
 export default {
     name: 'Ramadan Index',
@@ -57,9 +58,11 @@ export default {
         ramadanHeader,
     },
     async created() {
+        this.memorizedHadiths = await HadithMemorizationServices.getMemorizedHadiths();
     },
     data() {
         return {
+            memorizedHadiths:[]
         };
     },
     methods: {

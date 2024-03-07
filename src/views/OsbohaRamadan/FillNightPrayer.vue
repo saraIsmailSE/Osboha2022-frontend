@@ -36,8 +36,7 @@
                                     name="no_of_rakaat" id="no_of_rakaat" :disabled="isDisabled">
                                     <option value="" selected>يرجى التحديد</option>
                                     <option value="3">ركعتان</option>
-                                    <option value="5">أربع ركعات</option>
-                                    <option value="5">أكثر من 4 ركعات</option>
+                                    <option value="5">أربع ركعات أو اكثر</option>
                                     <option value="0">لم أصلي</option>
                                 </select>
                                 <small style="color: red" v-if="v$.form.no_of_rakaat.$error">
