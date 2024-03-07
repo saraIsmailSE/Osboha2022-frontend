@@ -8,7 +8,7 @@
                 </template>
 
                 <template v-slot:body>
-                    <div class="table-responsive">
+                    <div class="table-responsive" v-if="memorizedHadiths.length > 0">
                         <table id="datatable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
@@ -20,16 +20,16 @@
                             <tbody>
                                 <tr v-for="memorizedHadith in memorizedHadiths" :key="memorizedHadith.id">
                                     <td>
-                                        {{memorizedHadith.hadith.hadith_title}}
+                                        {{ memorizedHadith.hadith.hadith_title }}
                                     </td>
                                     <td>
-                                        {{memorizedHadith.user.name}}
+                                        {{ memorizedHadith.user.name }}
                                     </td>
                                     <td>
                                         <router-link :to="{
-                                            name: 'ramadan.correct-hadith',
-                                            params: { hadith_memorization_id: memorizedHadith.id },
-                                        }">
+                        name: 'ramadan.correct-hadith',
+                        params: { hadith_memorization_id: memorizedHadith.id },
+                    }">
                                             <i role="button" class="material-symbols-outlined md-18 me-1 text-primary">
                                                 visibility
                                             </i>
@@ -39,6 +39,10 @@
 
                             </tbody>
                         </table>
+                    </div>
+
+                    <div class="table-responsive" v-else>
+                        <h4 class="text-center"> لا يوجد أحاديث </h4>
                     </div>
                 </template>
             </iq-card>
@@ -62,7 +66,7 @@ export default {
     },
     data() {
         return {
-            memorizedHadiths:[]
+            memorizedHadiths: []
         };
     },
     methods: {

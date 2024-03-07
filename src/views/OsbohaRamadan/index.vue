@@ -2,17 +2,29 @@
     <div>
         <ramadanHeader />
         <div class="col-12">
-            <div class="row">
+            <div class="row d-flex justify-content-center">
+
+                <div class="col-6 col-md-6 col-lg-6">
+                    <router-link :to="{ name: 'ramadan.telegram-channels', }">
+                        <img src="@/assets/images/ramadan/ramadan-2024_telegram.png" alt="ramadan-footer"
+                            class="img-fluid" />
+                    </router-link>
+                </div>
 
 
                 <div class="col-6 col-md-6 col-lg-6">
+                    <router-link :to="{ name: 'book.ramadan', }">
+                        <img src="@/assets/images/ramadan/ramadan-2024_books.png" alt="ramadan-footer" class="img-fluid" />
+                    </router-link>
+                </div>
+                <div class="col-6 col-md-6 col-lg-6 mt-5">
                     <router-link :to="{ name: 'ramadan.hadith', }">
                         <img src="@/assets/images/ramadan/ramadan-2024-01.png" alt="ramadan-footer" class="img-fluid" />
                     </router-link>
                 </div>
 
 
-                <div class="col-6 col-md-6 col-lg-6">
+                <div class="col-6 col-md-6 col-lg-6 mt-5">
                     <router-link :to="{ name: 'ramadan.quran', }">
                         <img src="@/assets/images/ramadan/ramadan-2024-03.png" alt="ramadan-footer" class="img-fluid" />
                     </router-link>
@@ -53,6 +65,7 @@
 
     </div>
 </template>
+
 <script>
 import UserInfoService from "@/Services/userInfoService";
 import ramadanHeader from "@/components/ramadan/ramadan-header";

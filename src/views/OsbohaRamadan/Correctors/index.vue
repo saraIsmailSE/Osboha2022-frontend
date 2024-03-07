@@ -7,13 +7,13 @@
 
                 <div class="col-6 col-md-6 col-lg-6">
                     <router-link :to="{ name: 'ramadan.correctors-hadith-list', }">
-                        <img src="@/assets/images/ramadan/ramadan-2024-01.png" alt="ramadan-footer" class="img-fluid" />
+                        <img src="@/assets/images/ramadan/ramadan-2024_correct_hadiths.png" alt="ramadan-footer" class="img-fluid" />
                     </router-link>
                 </div>
 
-                <div class="col-6 col-md-6 col-lg-6 mt-5 mb-3">
+                <div class="col-6 col-md-6 col-lg-6">
                     <router-link :to="{ name: 'ramadan.correctors-questions-list', }">
-                        <img src="@/assets/images/ramadan/ramadan-2024-05.png" alt="ramadan-footer" class="img-fluid" />
+                        <img src="@/assets/images/ramadan/ramadan-2024_correct_questions.png" alt="ramadan-footer" class="img-fluid" />
                     </router-link>
                 </div>
 
