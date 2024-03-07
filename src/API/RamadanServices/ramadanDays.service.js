@@ -29,6 +29,14 @@ class RamadanServices {
             return error;
         }
     }
+    async dayById(id) {
+        try {
+            const response = await api.get(`${this.prefix}/day-by-id/${id}`);
+            return response.data.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 export default new RamadanServices();

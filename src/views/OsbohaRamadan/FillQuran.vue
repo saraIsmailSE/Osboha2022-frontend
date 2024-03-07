@@ -7,7 +7,7 @@
                 <div class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto ramadan-card">
                     <h1 class="text-center mt-3 mb-3">ورد القرآن الكريم</h1>
                 </div>
-                <h2 class="text-center mt-1 mb-3">1 ~ رمضان </h2>
+                <h2 class="text-center mt-1 mb-3" v-if="ramadan_day">{{ramadan_day.day}} ~ رمضان </h2>
 
                 <div class="col-12 pt-2">
                     <div class="alert alert-warning p-1 m-2 text-center" role="alert">
@@ -62,28 +62,28 @@
 
             <statisticsHeader />
 
-            <iq-card class="iq-card statistics-card">
+            <iq-card class="iq-card statistics-card" v-if="ramadan_day">
                 <div class="col-12 pt-2">
                     <div class="sign-in-from">
                         <h4 class="text-center">
-                            عدد الذين أتموا جزءًا واحدًا خلال يوم (1) رمضان
+                            عدد الذين أتموا جزءًا واحدًا خلال يوم ({{ ramadan_day.day }}) رمضان
 
-                            <p class="text-center display-3"> 1</p>
+                            <p class="text-center display-3"> {{ statistics.num_users_read_one_juzu }}</p>
                         </h4>
 
                         <h4 class="text-center">
-                            عدد الذين أتموا أكثر من جزء واحدً خلال يوم (1) رمضان
-                            <p class="text-center display-3"> 1</p>
+                            عدد الذين أتموا أكثر من جزء واحدً خلال يوم ({{ ramadan_day.day }}) رمضان
+                            <p class="text-center display-3"> {{ statistics.num_users_read_more_than_one_juzu }}</p>
                         </h4>
 
                         <h4 class="text-center">
-                            عدد الذين أتموا خمسة أجزاء فأكثر خلال يوم (1) رمضان
-                            <p class="text-center display-3"> 1</p>
+                            عدد الذين أتموا خمسة أجزاء فأكثر خلال يوم ({{ ramadan_day.day }}) رمضان
+                            <p class="text-center display-3"> {{ statistics.num_users_read_five_juzu_or_more }}</p>
                         </h4>
                         <hr>
                         <h5 class="text-center">
-                            نقاطك لـ (1) رمضان
-                            <p class="text-center display-3"> 1</p>
+                            نقاطك لـ ({{ ramadan_day.day }}) رمضان
+                            <p class="text-center display-3"> {{ authPoints }}</p>
                         </h5>
 
                         <p class="text-center h5">
@@ -122,12 +122,14 @@ export default {
 
     async created() {
         this.current_day = await ramadanDaysService.current();
+        this.ramadan_day = await ramadanDaysService.dayById(this.form.ramadan_day_id)
         const response = await quranWirdServicesServices.show(this.form.ramadan_day_id);
         this.setForm(response);
     },
     data() {
         return {
             current_day: null,
+            ramadan_day: null,
             loader: false,
             statistics: [],
             form: {
@@ -165,6 +167,9 @@ export default {
             if (quran_wird) {
                 this.form.no_of_parts = quran_wird.no_of_parts ? quran_wird.no_of_parts : 0;
             }
+            //get new statistics
+            this.statistics = await quranWirdServicesServices.statistics(this.ramadan_day.id);
+
         },
 
         async onSubmit() {
@@ -198,6 +203,20 @@ export default {
             else {
                 return false;
             }
+        },
+        authPoints() {
+            let points = 0;
+            if (this.statistics.auth_specific_ramadan_day_wird) {
+                points += 2
+                if (this.statistics.auth_specific_ramadan_day_wird.no_of_parts == 2 || this.statistics.auth_specific_ramadan_day_wird.no_of_parts == 3) {
+                    points += 2
+                }
+                else if (this.statistics.auth_specific_ramadan_day_wird.no_of_parts > 3) {
+                    points += 4
+                }
+
+            }
+            return points;
         }
     }
 
