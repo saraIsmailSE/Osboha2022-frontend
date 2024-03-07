@@ -251,7 +251,7 @@ export default {
                     this.v$.form.$reset();
                 } catch (error) {
                     helper.toggleToast(
-                        "حدث خطأ أثناء التحديث, حاول مرة أخرى",
+                        "حدث خطأ أثناء التوثيق, حاول مرة أخرى",
                         "error"
                     );
                     console.log(error);
@@ -267,7 +267,6 @@ export default {
             const localTime = now.toLocaleString("en-US", { timeZone: "Asia/Riyadh" });
             const currentDateTime = new Date(localTime);
             const targetDateTime = new Date(this.hadith.ramadan_day.created_at);
-            targetDateTime.setHours(targetDateTime.getHours() + 4);
 
 
             // Check if current_day.is_active is 1
