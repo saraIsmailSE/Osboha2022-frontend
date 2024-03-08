@@ -28,6 +28,7 @@
 
                                     {{ question.question }}
                                 </h4>
+
                                 <div class="alert alert-danger p-1 m-2 text-center" role="alert" v-if="answered">
                                     <h6 class="text-center">
                                         أجبت مسبقاً عن هذا السؤال
