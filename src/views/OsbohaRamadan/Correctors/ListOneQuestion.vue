@@ -4,17 +4,32 @@
 
         <div class="col-sm-12 mt-3" v-if="answer">
             <iq-card class="iq-card ramadan-card">
-                <div class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto ramadan-card">
-                    <h1 class="text-center mt-3 mb-3" v-if="answer.ramadan_question">
-                        السؤال {{ answer.ramadan_question.title }}
-                        <small class="badge bg-warning">{{ answer.ramadan_question.category }}</small>
+                <div class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto ramadan-card"
+                    v-if="answer.ramadan_question">
 
+                    <h1 class="text-center mt-3 mb-3" v-if="answer.ramadan_question.category == 'التثقيف بالفيديو'">
+                        {{ answer.ramadan_question.title }}
+                    </h1>
+                    <h1 class="text-center mt-3 mb-3" v-else>
+                        سؤال الـ{{ answer.ramadan_question.category }}
+                        {{ answer.ramadan_question.title }}
                     </h1>
 
                 </div>
-                <h6 class=" h5 text-center mt-2">
+                <h6 class=" h5 text-center mt-2" style="direction: rtl;">
+                    <small class="badge" :class="`${categoryClasses[answer.ramadan_question.category]}`">
+                        {{ answer.ramadan_question.category }}
+                    </small>
                     {{ answer.ramadan_question.question }}
                 </h6>
+                <div class="form-group d-flex justify-content-center mt-3"
+                    v-if="answer.ramadan_question.category == 'التثقيف بالفيديو'">
+                    <iframe width="420" height="345" :src="`${answer.ramadan_question.link}`" frameborder="0"
+                        allowfullscreen>
+                    </iframe>
+
+                </div>
+
                 <hr />
 
                 <div class="col-12 pt-2">
@@ -132,6 +147,12 @@ export default {
                 status: '',
                 reviews: '',
             },
+            categoryClasses: {
+                'التثقيف بالفيديو': 'bg-success',
+                'فقه': 'bg-warning',
+                'تفسير': 'bg-info',
+
+            }
         };
     },
     validations() {
