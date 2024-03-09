@@ -9,13 +9,13 @@
                 </div>
                 <h2 class="text-center mt-1 mb-3">{{ hadith.ramadan_day.day }} ~ رمضان </h2>
 
-                <div v-if="isHadithActive">
+                <div v-if="isHadithActive" class="text-center">
                     <img :src="imagePath(hadith.image)" alt="ramadan-footer" class="img-fluid p-2"
-                        v-if="(!form.hadith_1 && !form.hadith_2) || !form.hadith_redo || isAccepted" />
+                        v-if="(!form.hadith_1 && !form.hadith_2) || (!form.hadith_redo && hadith.memorization.length > 0) || isAccepted" />
                     <img src="@/assets/images/ramadan/night-prayer.png" alt="ramadan-footer" class="img-fluid" v-else />
 
                     <p class=" ramada-p h5 text-center mt-2 p-2"
-                        v-if="(!form.hadith_1 && !form.hadith_2) || !form.hadith_redo || isAccepted">
+                        v-if="(!form.hadith_1 && !form.hadith_2) || (!form.hadith_redo && hadith.memorization.length > 0) || isAccepted">
                         {{ hadith.hadith }}
                     </p>
                     <div class="col-12 pt-2">
@@ -113,21 +113,21 @@
                     <div class="sign-in-from">
                         <h4 class="text-center">
                             عدد الذين يقومون بحفظ الأحاديث معنا في شهر رمضان
-                            <p class=" ramada-p text-center display-3"> {{statistics.usersCount}}</p>
+                            <p class=" ramada-p text-center display-3"> {{ statistics.usersCount }}</p>
                         </h4>
 
                         <h4 class="text-center">
                             عدد الذين أتموا حفظ (5) من أحاديث النبيﷺ حتى اللحظة
-                            <p class=" ramada-p text-center display-3"> {{statistics.usersCount5}}</p>
+                            <p class=" ramada-p text-center display-3"> {{ statistics.usersCount5 }}</p>
                         </h4>
 
                         <h4 class="text-center">
                             عدد الذين أتموا حفظ (15) من أحاديث النبي ﷺ حتى اللحظة
-                            <p class=" ramada-p text-center display-3"> {{statistics.usersCount15}}</p>
+                            <p class=" ramada-p text-center display-3"> {{ statistics.usersCount15 }}</p>
                         </h4>
                         <h4 class="text-center">
                             عدد الذين أتموا حفظ (25) من أحاديث النبي ﷺ حتى اللحظة
-                            <p class=" ramada-p text-center display-3"> {{statistics.usersCount25}}</p>
+                            <p class=" ramada-p text-center display-3"> {{ statistics.usersCount25 }}</p>
                         </h4>
 
                         <hr>
@@ -232,6 +232,7 @@ export default {
                 this.form.hadith_1 = hadith.memorization[0].hadith_memorize;
                 this.form.hadith_2 = hadith.memorization[0].hadith_memorize;
             }
+
             //get new statistics
             this.statistics = await hadithMemorizationService.statistics();
 
@@ -243,7 +244,9 @@ export default {
                 try {
 
                     const response = await HadithMemorizationServices.store(this.form, this.submitType);
-                    this.setHadithForm(response);
+                    this.hadith.memorization[0]= response;
+                    // this.form.hadith_2 = hadith.memorization[0].hadith_memorize;
+
                     helper.toggleToast(
                         "تم التوثيق",
                         "success"
