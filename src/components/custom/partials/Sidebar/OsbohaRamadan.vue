@@ -5,14 +5,24 @@
             <span class="mini-icon" data-bs-toggle="tooltip" title="Social" data-bs-placement="right">-</span>
         </a>
     </li>
-    <!-- ###### ADD MEMBERS  ###### -->
+    <!-- ###### ADD COORRECTORS  ###### -->
     <li class="nav-item">
-        <router-link :class="checkActive('book.ramadan') ? 'active nav-link' : 'nav-link'
+        <router-link :class="checkActive('roles.upgradeRamadanRole') ? 'active nav-link' : 'nav-link'
             " aria-current="page" :to="{
-        name: 'book.ramadan',
-    }">
-            <i class="icon material-symbols-outlined"> book_5 </i>
-            <span class="item-name">الكتب</span>
+        name: 'roles.upgradeRamadanRole',
+    }" v-if="isRamadanCoordinator || isAdmin">
+            <i class="icon material-symbols-outlined"> manage_accounts </i>
+            <span class="item-name">تحكم العضويات</span>
+        </router-link>
+    </li>
+    <!-- ###### ADD COORRECTORS  ###### -->
+    <li class="nav-item">
+        <router-link :class="checkActive('ramadan.correctors-index') ? 'active nav-link' : 'nav-link'
+            " aria-current="page" :to="{
+        name: 'ramadan.correctors-index',
+    }" v-if="isRamadanCorrector">
+            <i class="icon material-symbols-outlined"> rule </i>
+            <span class="item-name">تصحيح الفعاليات</span>
         </router-link>
     </li>
 </template>
@@ -26,18 +36,20 @@ export default {
         user() {
             return this.$store.getters.getUser;
         },
-        isMarathonCoordinator() {
-            return UserInfoService.hasRole(this.user, "marathon_coordinator");
+        isRamadanCoordinator() {
+            return UserInfoService.hasRole(this.user, "ramadan_coordinator");
         },
         isAdmin() {
             return UserInfoService.hasRole(this.user, "admin");
         },
-        isMarathonAdministrator() {
+        isRamadanCorrector() {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
-                "marathon_coordinator",
-                'marathon_verification_supervisor',
-                "marathon_supervisor",
+                "ramadan_coordinator",
+                "ramadan_hadith_corrector",
+                "ramadan_fiqh_corrector",
+                'ramadan_tafseer_corrector',
+                "ramadan_vedio_corrector",
             ]);
         },
     },
