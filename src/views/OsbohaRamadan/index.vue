@@ -52,11 +52,11 @@
                 </div>
 
 
-                <div class="col-6 col-md-6 col-lg-6 mt-5 mb-3">
+                <!-- <div class="col-6 col-md-6 col-lg-6 mt-5 mb-3">
                     <router-link :to="{ name: 'roles.upgradeEligibleRole', }">
                         <img src="@/assets/images/ramadan/ramadan-2024-06.png" alt="ramadan-footer" class="img-fluid" />
                     </router-link>
-                </div>
+                </div> -->
 
             </div>
         </div>

@@ -5,20 +5,30 @@
             <span class="mini-icon" data-bs-toggle="tooltip" title="Social" data-bs-placement="right">-</span>
         </a>
     </li>
+    <!-- ######  ACTIVITES  ###### -->
+    <li class="nav-item">
+        <router-link :class="checkActive('ramadan.index') ? 'active nav-link' : 'nav-link'
+        " aria-current="page" :to="{
+        name: 'ramadan.index',
+    }" v-if="isRamadanCorrector">
+            <i class="icon material-symbols-outlined"> clear_night </i>
+            <span class="item-name">فعاليات رمضان</span>
+        </router-link>
+    </li>
     <!-- ###### ADD COORRECTORS  ###### -->
     <li class="nav-item">
         <router-link :class="checkActive('roles.upgradeRamadanRole') ? 'active nav-link' : 'nav-link'
-            " aria-current="page" :to="{
+        " aria-current="page" :to="{
         name: 'roles.upgradeRamadanRole',
     }" v-if="isRamadanCoordinator || isAdmin">
             <i class="icon material-symbols-outlined"> manage_accounts </i>
             <span class="item-name">تحكم العضويات</span>
         </router-link>
     </li>
-    <!-- ###### ADD COORRECTORS  ###### -->
+    <!-- ######  COORRECTORS AREA  ###### -->
     <li class="nav-item">
         <router-link :class="checkActive('ramadan.correctors-index') ? 'active nav-link' : 'nav-link'
-            " aria-current="page" :to="{
+        " aria-current="page" :to="{
         name: 'ramadan.correctors-index',
     }" v-if="isRamadanCorrector">
             <i class="icon material-symbols-outlined"> rule </i>

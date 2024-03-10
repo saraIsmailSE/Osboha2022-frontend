@@ -99,7 +99,7 @@ export default {
 </script>
 <style scoped>
 .right-sidebar-exception {
-    top: 13.5rem !important;
+    top: 17.5rem !important;
 }
 
 .toggel-btn {

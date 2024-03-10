@@ -115,7 +115,7 @@
     <OsbohaMarathon v-if="inMarathon" />
 
     <!-- ###### Osboha Ramadan ###### -->
-    <OsbohaRamadan v-if="isRamadanCorrector" />
+    <OsbohaRamadan />
 
     <!-- ###### Audit Marks ###### -->
     <AuditMarks v-if="isAdvisor || isSupervisor" />

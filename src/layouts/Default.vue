@@ -9,11 +9,7 @@
   <div class="main-content">
     <div class="position-relative">
       <template v-for="(option, index) in breadcrumboptions" :key="index">
-        <breadcrumb
-          :img="option.img"
-          :title="option.title"
-          v-show="this.$route.meta.name === option.title"
-        />
+        <breadcrumb :img="option.img" :title="option.title" v-show="this.$route.meta.name === option.title" />
       </template>
     </div>
     <div id="content-page" class="content-page">
@@ -30,6 +26,7 @@
     <!-- <DefaultRightSidebar/> -->
 
     <div v-if="sessionData">
+      <Ramadan />
       <CurrentReading
         :book_in_progress="sessionData.book_in_progress"
         :progress="sessionData.progress"
@@ -45,6 +42,7 @@ import DefaultSidebar from "../components/custom/partials/Sidebar/DefaultSidebar
 import DefaultHeader from "../components/custom/partials/Header/DefaultHeader";
 import DefaultFooter from "../components/custom/partials/Footer/DefaultFooter";
 import CurrentReading from "@/components/custom/partials/Sidebar/LeftSidebar/CurrentReading";
+import Ramadan from "@/components/custom/partials/Sidebar/LeftSidebar/Ramadan";
 import ReadingTeam from "@/components/custom/partials/Sidebar/LeftSidebar/ReadingTeam";
 import Timer from "@/components/custom/partials/Sidebar/LeftSidebar/Timer.vue";
 import LastException from "@/components/custom/partials/Sidebar/LeftSidebar/LastException";
@@ -68,6 +66,7 @@ export default {
     Timer,
     LastException,
     CurrentReading,
+    Ramadan,
     ReadingTeam,
     Breadcrumb,
   },

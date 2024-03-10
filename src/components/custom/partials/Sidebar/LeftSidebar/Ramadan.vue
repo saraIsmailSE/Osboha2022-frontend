@@ -5,68 +5,44 @@
         <div class="card-body p-0">
           <div class="media-height p-2" data-scrollbar="init">
             <div class="card d-flex align-items-center mb-4">
-              <img src="@/assets/images/main/current_book.png" class="card-img-top" alt="current reading" />
 
-              <h5 class="card-title mt-3">املأ مخزون ثقافتك</h5>
-              <div id="carouselExampleCaptions" class="carousel slide w-100" data-bs-ride="false" v-if="book_in_progress">
+              <div id="carouselExampleCaptions" class="carousel slide w-100" data-bs-ride="false">
                 <div class="carousel-inner w-75 m-4">
-                  <div class="carousel-item" v-for="(book, index) in book_in_progress" :key="index"
+                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide="prev">
+                    <span class="carousel-btn material-symbols-outlined carousel-control-prev-icon" aria-hidden="true">
+                      arrow_back_ios
+                    </span>
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide="next">
+                    <span class="carousel-btn material-symbols-outlined carousel-control-next-icon" aria-hidden="true">
+                      arrow_forward_ios
+                    </span>
+                    <span class="visually-hidden">Next</span>
+                  </button>
+
+                  <div class="carousel-item" v-for="(data, index) in ramadanData" :key="index"
                     :class="(index == 0) ? 'active' : ''">
 
-                    <div class="progress mb-3">
-                      <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" aria-valuenow="90"
-                        aria-valuemin="0" aria-valuemax="100" :style="`width: ${Math.trunc(progress[index])}%;`"></div>
+                    <div class=" text-center mb-3">
+                      <img :src="data.image" class="w-50" alt="ramadan data" />
                     </div>
 
-                    <p class="card-text h3">
-                      {{ book.name }}
-                      <router-link class="btn btn-primary w-100 mt-2" :to="{
-                        name: 'book.book-details',
-                        params: { book_id: book.id },
-                      }">
-                        متابعة
-                      </router-link>
-                    </p>
-                  </div>
-                  <div class="carousel-item">
-                    <p class="card-text h3">
-                      <span class="material-symbols-outlined text-center display-5 w-100"> ac_unit </span>
-
-                      <router-link class="btn btn-primary w-100 mt-2 " style="background-color: #223E7F;" :to="{
-                        name: 'user.requestexception',
-                        params: { user_id: user.id },
-                      }
-                        ">
-                        طلب اجازة
+                    <p class="card-text h3 text-center">
+                      {{ data.title }}
+                      <router-link class="btn ramadan-btn w-100 mt-2" :to="{ name: data.route_to, }">
+                        عرض
                       </router-link>
                     </p>
                   </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
-                  data-bs-slide="prev">
-                  <span class="carousel-btn material-symbols-outlined carousel-control-prev-icon" aria-hidden="true">
-                    arrow_back_ios
-                  </span>
-                  <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
-                  data-bs-slide="next">
-                  <span class="carousel-btn material-symbols-outlined carousel-control-next-icon" aria-hidden="true">
-                    arrow_forward_ios
-                  </span>
-                  <span class="visually-hidden">Next</span>
-                </button>
-              </div>
-              <div class="card-body w-100" v-else>
-                <h4 class="card-title">لا يوجد كتب</h4>
-                <router-link class="btn btn-primary w-100" :to="{ name: 'osboha.book' }">
-                  ابدأ الأن
-                </router-link>
               </div>
             </div>
           </div>
-          <div class="right-sidebar-toggle bg-primary text-white mt-3 d-flex" @click="toggleMini">
-            <span class="material-symbols-outlined"> auto_stories </span>
+          <div class="right-sidebar-toggle text-white mt-3 d-flex toggel-btn" @click="toggleMini">
+            <img src="@/assets/images/ramadan/ramadan_btn.png" class="w-50" alt="ramadan" />
           </div>
         </div>
       </div>
@@ -83,20 +59,48 @@ export default {
   },
   created() {
   },
-  props: {
-    book_in_progress: {
-      type: [Object],
-      default: () => { },
-    },
-    progress: {
-      type: [Number],
-      default: null,
-    },
-  },
   data() {
     return {
       miniClass: "right-sidebar",
       rightSideBarMini: true,
+      ramadanData: [
+        {
+          route_to: "book.ramadan",
+          title: "الكتب الرمضانية",
+          image: require("@/assets/images/ramadan/ramadan-2024_books.png")
+        },
+        {
+          route_to: "ramadan.quran",
+          title: "وِرد القرآن الكريم",
+          image: require("@/assets/images/ramadan/ramadan-2024-03.png")
+        },
+        {
+          route_to: "ramadan.night-prayer",
+          title: "قيام الليل",
+          image: require("@/assets/images/ramadan/ramadan-2024-02.png")
+        },
+        {
+          route_to: "ramadan.hadith",
+          title: "مسابقة الحديث الشريف",
+          image: require("@/assets/images/ramadan/ramadan-2024-01.png")
+        },
+        {
+          route_to: "ramadan.questions",
+          title: "اسئلة رمضان",
+          image: require("@/assets/images/ramadan/ramadan-2024-04.png")
+        },
+        {
+          route_to: "ramadan.golden-day",
+          title: "اليوم الذهبي",
+          image: require("@/assets/images/ramadan/ramadan-2024-05.png")
+        },
+        {
+          route_to: "ramadan.telegram-channels",
+          title: "قنوات أصبوحة الرمضانية",
+          image: require("@/assets/images/ramadan/ramadan-2024_telegram.png")
+        }
+      ],
+
     };
   },
   methods: {
@@ -134,7 +138,18 @@ export default {
   background-color: #278036 !important;
 }
 
+.toggel-btn {
+  margin-right: -3.5rem !important;
+  background-color: #FCD2BE;
+}
+
 .carousel-btn {
   color: #1d1a55;
+}
+
+.ramadan-btn {
+  background: #b17658;
+  color: #f8f9fa;
+
 }
 </style>

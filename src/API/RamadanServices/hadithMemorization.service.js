@@ -43,9 +43,9 @@ class HadithMemorizationServices {
             return error;
         }
     }
-    async statistics() {
+    async statistics(ramadan_day_id) {
         try {
-            const response = await api.get(`${this.prefix}/statistics`);
+            const response = await api.get(`${this.prefix}/statistics/${ramadan_day_id}`);
             return response.data.data;
         } catch (error) {
             return error;

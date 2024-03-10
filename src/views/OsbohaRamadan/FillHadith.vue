@@ -214,7 +214,7 @@
             <hr />
             <div class="row">
               <h5 class="text-center col-6">
-                نقاطك ل، ({{ current_day?.day }}) رمضان
+                نقاطك ل، ({{ hadith.ramadan_day.day }}) رمضان
                 <p class="ramada-p text-center display-3">
                   {{ statistics.userPoints }}
                 </p>
@@ -316,7 +316,7 @@ export default {
       }
 
       //get new statistics
-      this.statistics = await hadithMemorizationService.statistics();
+      this.statistics = await hadithMemorizationService.statistics(this.hadith.ramadan_day_id);
     },
     async onSubmit() {
       this.v$.$validate();

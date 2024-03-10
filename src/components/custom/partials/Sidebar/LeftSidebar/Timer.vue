@@ -137,7 +137,7 @@ export default {
 </script>
 <style scoped>
 .right-sidebar-team {
-  top: 10.5rem !important;
+  top: 14.5rem !important;
 }
 
 .toggel-btn {
