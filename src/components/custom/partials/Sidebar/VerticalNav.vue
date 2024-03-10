@@ -17,11 +17,11 @@
     <!-- ###### Profile ###### -->
     <li class="nav-item">
       <router-link :class="checkActive('user.profile') ? 'active nav-link' : 'nav-link'" :to="{
-        name: 'user.profile',
-        params: {
-          user_id: user?.id,
-        },
-      }">
+    name: 'user.profile',
+    params: {
+      user_id: user?.id,
+    },
+  }">
         <i class="icon material-symbols-outlined"> person </i>
         <span class="user.profile">الملف الشخصي</span>
       </router-link>
@@ -29,7 +29,7 @@
     <!-- ###### Friends Requests ###### -->
     <li class="nav-item">
       <router-link :class="checkActive('user.friendsRequests') ? 'active nav-link' : 'nav-link'
-        " :to="{
+    " :to="{
     name: 'user.friendsRequests',
     params: {
       user_id: user?.id,
@@ -42,7 +42,7 @@
     <!-- ###### Statistics ###### -->
     <li class="nav-item">
       <router-link :class="checkActive('statistics.byWeek') ? 'active nav-link' : 'nav-link'
-        " aria-current="page" :to="{ name: 'statistics.byWeek', params: { week_id: 1 } }">
+    " aria-current="page" :to="{ name: 'statistics.byWeek', params: { week_id: 1 } }">
         <i class="icon material-symbols-outlined"> monitoring </i>
         <span class="item-name">احصائيات الأسبوع</span>
       </router-link>
@@ -66,11 +66,11 @@
     </li>
     <li class="nav-item">
       <router-link :class="checkActive('book.free-book') ? 'active nav-link' : 'nav-link'" aria-current="page" :to="{
-        name: 'book.free-book',
-        params: {
-          user_id: user?.id,
-        },
-      }">
+    name: 'book.free-book',
+    params: {
+      user_id: user?.id,
+    },
+  }">
         <i class="icon material-symbols-outlined"> local_library </i>
         <span class="item-name">الكتاب الحر</span>
       </router-link>
@@ -85,7 +85,7 @@
     <!-- ###### Announcements ###### -->
     <li class="nav-item">
       <router-link :class="checkActive('osboha.announcement') ? 'active nav-link' : 'nav-link'
-        " aria-current="page" :to="{ name: 'osboha.announcement' }">
+    " aria-current="page" :to="{ name: 'osboha.announcement' }">
         <i class="icon material-symbols-outlined"> announcement </i>
         <span class="item-name">الإعلانات</span>
       </router-link>
@@ -115,7 +115,7 @@
     <OsbohaMarathon v-if="inMarathon" />
 
     <!-- ###### Osboha Ramadan ###### -->
-    <OsbohaRamadan v-if="isAdmin" />
+    <OsbohaRamadan v-if="isRamadanCorrector" />
 
     <!-- ###### Audit Marks ###### -->
     <AuditMarks v-if="isAdvisor || isSupervisor" />
@@ -229,6 +229,16 @@ export default {
         'marathon_verification_supervisor',
         "marathon_supervisor",
         "marathon_ambassador",
+      ]);
+    },
+    isRamadanCorrector() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "ramadan_coordinator",
+        "ramadan_hadith_corrector",
+        "ramadan_fiqh_corrector",
+        'ramadan_tafseer_corrector',
+        "ramadan_vedio_corrector",
       ]);
     },
   },

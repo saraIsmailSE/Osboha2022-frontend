@@ -205,18 +205,10 @@
                                                 :value="TASK_ONE[5].points" v-model="goldenForm.shaf_and_witr"
                                                 :disabled="isDisabled" />
                                             <label for="yes">الشفع والوتر</label>
-
-                                            <input type="radio" id="only_shaf" :value="TASK_ONE[5].points - 1"
-                                                :name="TASK_ONE[5].name" class="w-25"
-                                                @click="goldenForm.shaf_and_witr = TASK_ONE[5].points - 1"
+                                            <input type="radio" id="only_shaf" :value="(TASK_ONE[5].points - 1)"
+                                                :name="TASK_ONE[5].name" class="w-25" v-model="goldenForm.shaf_and_witr"
                                                 :disabled="isDisabled" />
-                                            <label for="only_shaf">الشفع فقط</label>
-
-                                            <input type="radio" id="only_witr" :name="TASK_ONE[5].name" class="w-25"
-                                                :value="TASK_ONE[5].points - 1"
-                                                @click="goldenForm.shaf_and_witr = TASK_ONE[5].points - 1"
-                                                :disabled="isDisabled" />
-                                            <label for="only_witr">الوتر فقط</label>
+                                            <label for="only_shaf">الشفع فقط أو الوتر فقط</label>
 
                                             <input type="radio" id="no" value="0" :name="TASK_ONE[5].name" class="w-25"
                                                 v-model="goldenForm.shaf_and_witr" :disabled="isDisabled" />

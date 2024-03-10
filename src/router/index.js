@@ -250,13 +250,19 @@ const ramadanChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaRamadan/Correctors/index"),
   },
   {
+    path: "telegram-channels",
+    name: prop + ".telegram-channels",
+    meta: { auth: true, name: "Telegram channels" },
+    component: () => import("../views/OsbohaRamadan/TelegramChannels"),
+  },
+  {
     path: "hadith",
     name: prop + ".hadith",
     meta: { auth: true, name: "hadith" },
     component: () => import("../views/OsbohaRamadan/Hadith"),
   },
   {
-    path: "fill-hadith/:day",
+    path: "fill-hadith/:hadith_id",
     name: prop + ".fill-hadith",
     meta: { auth: true, name: "fill hadith" },
     component: () => import("../views/OsbohaRamadan/FillHadith"),

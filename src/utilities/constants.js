@@ -403,3 +403,4 @@ export const ACTIVITIES_STATUS = {
   redo: "بحاجة لاعادة",
   rejected: "مرفوض",
 };
+

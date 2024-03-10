@@ -2,53 +2,60 @@
     <div>
         <ramadanHeader />
 
-        <div class="col-sm-12 mt-3">
+        <div class="col-sm-12 mt-3" v-if="memorizedHadith">
             <iq-card class="iq-card ramadan-card">
                 <div class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto ramadan-card">
-                    <h1 class="text-center mt-3 mb-3">عنوان الحديث</h1>
+                    <h1 class="text-center mt-3 mb-3">الحديث {{ memorizedHadith.hadith.hadith_title }}</h1>
+                </div>
+                <div>
+                    <img :src="imagePath(memorizedHadith.hadith.image)" alt="ramadan-footer" class="img-fluid p-2" />
+                    <p class=" ramada-p h5 text-center mt-2 p-2">
+                        {{ memorizedHadith.hadith.hadith }}
+                    </p>
+
                 </div>
                 <hr />
 
                 <div class="col-12 pt-2">
                     <h4 class="mb-2 p-2">
-                        اسم المشارك
-                        <small class="badge bg-warning">بحاجة لمراجعة</small>
+                        {{ memorizedHadith.user.name }}
+                        <small class="badge bg-warning">{{ ACTIVITIES_STATUS[memorizedHadith.status] }}</small>
 
                     </h4>
                     <h6 class="mb-2 p-2">
-                        المشاركة
+                        {{ memorizedHadith.hadith_memorize }}
                     </h6>
 
                 </div>
 
-                <template v-slot:headerTitle>
+                <template v-slot:headerTitle v-if="memorizedHadith.reviewer">
                     <h4 class="card-title">تم التصحيح </h4>
                 </template>
 
-                <template v-slot:body>
+                <template v-slot:body v-if="memorizedHadith.reviewer">
                     <TimeLine :items="[
-                        {
-                            color: 'primary',
-                            title: `الحالة ~ اسم المصحح`,
-                            description: 'الملاحظات ',
-                            child: {
-                                type: 'img',
-                                items: [
-                                ]
-                            }
-                        },
+            {
+                color: 'primary',
+                title: `${ACTIVITIES_STATUS[memorizedHadith.status]}  ~ ${memorizedHadith.reviewer.name}`,
+                description: `${memorizedHadith.reviews}`,
+                child: {
+                    type: 'img',
+                    items: [
+                    ]
+                }
+            },
 
-                    ]" />
+        ]" />
                 </template>
 
-                <div class="sign-in-from">
+                <div class="sign-in-from" v-if="memorizedHadith.status == 'pending'">
 
                     <form class="mt-2" @submit.prevent="onSubmit()">
                         <div class="form-group">
                             <label for="status">الاجراء</label>
                             <select v-model="v$.form.status.$model" class="form-select" data-trigger name="status"
                                 id="status">
-                                <option value="0" selected>اختر الاجراء</option>
+                                <option value="" selected>اختر الاجراء</option>
                                 <option value="accepted">مقبول</option>
                                 <option value="redo">بحاجة لاعادة</option>
                             </select>
@@ -64,13 +71,6 @@
                                 الاجابة مطلوبة
                             </small>
 
-                        </div>
-                        <div class="form-group text-center" v-if="message">
-                            <small :style="{
-                        color: messageVariant === 'success' ? 'green' : 'red',
-                    }">
-                                {{ message }}
-                            </small>
                         </div>
                         <div class="col-sm-12 text-center" v-if="loader">
                             <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 100px" />
@@ -102,7 +102,10 @@
 <script>
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import helper from "@/utilities/helper";
 import ramadanHeader from "@/components/ramadan/ramadan-header";
+import HadithMemorizationServices from "@/API/RamadanServices/hadithMemorization.service";
+import { ACTIVITIES_STATUS } from "@/utilities/constants";
 
 export default {
     name: "Ramadan Night Prayer",
@@ -114,16 +117,18 @@ export default {
     },
 
     async created() {
+        this.memorizedHadith = await HadithMemorizationServices.show(this.form.hadith_memorization_id);
     },
     data() {
         return {
             loader: false,
+            memorizedHadith: null,
             form: {
-                status: 0,
+                hadith_memorization_id: this.$route.params.hadith_memorization_id,
+                status: '',
                 reviews: '',
             },
-            message: "",
-            messageVariant: "",
+            ACTIVITIES_STATUS,
         };
     },
     validations() {
@@ -138,34 +143,29 @@ export default {
             },
         };
     },
-    watch: {
-        message: function (val) {
-            if (val) {
-                setTimeout(
-                    () => {
-                        this.message = "";
-                    },
-                    this.messageVariant === "success" ? 2000 : 5000,
-                );
-            }
-        },
-    },
     methods: {
-        handlePaste(event) {
-            // Prevent the default paste behavior
-            console.log("🚀 ~ handlePaste ~ preventDefault:", ' NOT ALLOWED')
-            event.preventDefault();
+        imagePath(imageName) {
+            return require(`@/assets/images/ramadan/${imageName}`);
         },
-
         async onSubmit() {
             this.v$.$validate();
             if (!this.v$.$error) {
                 this.loader = true;
                 try {
-                    this.message = "";
+                    const response = await HadithMemorizationServices.correct(this.form);
+                    this.memorizedHadith = response;
+                    helper.toggleToast(
+                        "تم التصحيح",
+                        "success"
+                    );
+                    this.v$.form.$reset();
+
                 } catch (error) {
-                    this.message = "حدث خطأ, يرجى المحاولة لاحقاً";
-                    this.messageVariant = "danger";
+                    helper.toggleToast(
+                        "حدث خطأ أثناء التحديث, حاول مرة أخرى",
+                        "error"
+                    );
+                    console.log(error);
                 } finally {
                     this.loader = false;
                 }

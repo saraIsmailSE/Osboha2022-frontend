@@ -8,7 +8,7 @@
                 </template>
 
                 <template v-slot:body>
-                    <div class="table-responsive">
+                    <div class="table-responsive" v-if="memorizedHadiths.length > 0">
                         <table id="datatable" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
@@ -18,18 +18,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr v-for="memorizedHadith in memorizedHadiths" :key="memorizedHadith.id">
                                     <td>
-                                        33
+                                        {{ memorizedHadith.hadith.hadith_title }}
                                     </td>
                                     <td>
-                                        الاسم
+                                        {{ memorizedHadith.user.name }}
                                     </td>
                                     <td>
                                         <router-link :to="{
-                                            name: 'ramadan.correct-hadith',
-                                            params: { hadith_memorization_id: 1 },
-                                        }">
+                        name: 'ramadan.correct-hadith',
+                        params: { hadith_memorization_id: memorizedHadith.id },
+                    }">
                                             <i role="button" class="material-symbols-outlined md-18 me-1 text-primary">
                                                 visibility
                                             </i>
@@ -39,6 +39,10 @@
 
                             </tbody>
                         </table>
+                    </div>
+
+                    <div class="table-responsive" v-else>
+                        <h4 class="text-center"> لا يوجد أحاديث </h4>
                     </div>
                 </template>
             </iq-card>
@@ -50,6 +54,7 @@
 <script>
 import UserInfoService from "@/Services/userInfoService";
 import ramadanHeader from "@/components/ramadan/ramadan-header";
+import HadithMemorizationServices from "@/API/RamadanServices/hadithMemorization.service";
 
 export default {
     name: 'Ramadan Index',
@@ -57,9 +62,11 @@ export default {
         ramadanHeader,
     },
     async created() {
+        this.memorizedHadiths = await HadithMemorizationServices.getMemorizedHadiths();
     },
     data() {
         return {
+            memorizedHadiths: []
         };
     },
     methods: {
