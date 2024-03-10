@@ -187,27 +187,27 @@
             <h4 class="text-center">
               عدد الذين يقومون بحفظ الأحاديث معنا في شهر رمضان
               <p class="ramada-p text-center display-3">
-                {{ statistics.usersCount }}
+                {{ statistics.usersCount ? statistics.usersCount : 0 }}
               </p>
             </h4>
 
             <h4 class="text-center">
               عدد الذين أتموا حفظ (5) من أحاديث النبيﷺ حتى اللحظة
               <p class="ramada-p text-center display-3">
-                {{ statistics.usersCount5 }}
+                {{ statistics.usersCount5 ? statistics.usersCount5 : 0 }}
               </p>
             </h4>
 
             <h4 class="text-center">
               عدد الذين أتموا حفظ (15) من أحاديث النبي ﷺ حتى اللحظة
               <p class="ramada-p text-center display-3">
-                {{ statistics.usersCount15 }}
+                {{ statistics.usersCount15 ? statistics.usersCount15 : 0 }}
               </p>
             </h4>
             <h4 class="text-center">
               عدد الذين أتموا حفظ (25) من أحاديث النبي ﷺ حتى اللحظة
               <p class="ramada-p text-center display-3">
-                {{ statistics.usersCount25 }}
+                {{ statistics.usersCount25 ? statistics.usersCount25 : 0 }}
               </p>
             </h4>
 
@@ -216,13 +216,13 @@
               <h5 class="text-center col-6">
                 نقاطك ل، ({{ hadith.ramadan_day.day }}) رمضان
                 <p class="ramada-p text-center display-3">
-                  {{ statistics.userPoints }}
+                  {{ statistics.userPoints ? statistics.userPoints : 0 }}
                 </p>
               </h5>
               <h5 class="text-center col-6">
                 أتممت حفظ
                 <p class="ramada-p text-center display-3">
-                  {{ statistics.memorizedHadithsCount }}
+                  {{ statistics.memorizedHadithsCount ? statistics.memorizedHadithsCount : 0 }}
                 </p>
               </h5>
             </div>

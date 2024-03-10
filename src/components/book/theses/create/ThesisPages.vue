@@ -21,7 +21,7 @@
 
     <template v-else>
       <small style="color: red" v-if="v$.thesisForm.pagesCount.$invalid">
-        <span v-if="isRamadanBook"> * الحد الأدنى لكتب رمضان 10 صفحات </span>
+        <span v-if="isRamadanBook"> * الحد الأدنى لكتب رمضان 15 صفحة </span>
         <span v-else-if="isTafseerBook">
           * الحد الأدنى لكتب التفسير 2 صفحات
         </span>

@@ -69,7 +69,7 @@
                         <hr>
                         <h5 class="text-center" v-if="questions.length > 0">
                             نقاطك لـ ({{ questions[0].ramadan_day_id }}) رمضان
-                            <p class=" ramada-p text-center display-3"> {{ authPoints }}</p>
+                            <p class=" ramada-p text-center display-3"> {{ authPoints ? authPoints : 0 }}</p>
                         </h5>
                     </div>
                 </div>

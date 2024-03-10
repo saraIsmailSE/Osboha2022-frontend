@@ -82,28 +82,28 @@
                     <div class="sign-in-from">
                         <h4 class="text-center">
                             عدد الذين أتموا عدد (5) أيام قيام الليل معنا حتى اللحظة
-                            <p class=" ramada-p text-center display-3"> {{ statistics.distinct_users_5_night }}</p>
+                            <p class=" ramada-p text-center display-3"> {{ statistics.distinct_users_5_night ? statistics.distinct_users_5_night : 0 }}</p>
                         </h4>
 
                         <h4 class="text-center">
                             عدد الذين أتموا عدد (10) أيام قيام الليل معنا حتى اللحظة
-                            <p class=" ramada-p text-center display-3"> {{ statistics.distinct_users_10_night }}</p>
+                            <p class=" ramada-p text-center display-3"> {{ statistics.distinct_users_10_night ? statistics.distinct_users_10_night : 0 }}</p>
                         </h4>
 
                         <h4 class="text-center">
                             عدد الذين أتموا عدد (20) أيام قيام الليل معنا حتى اللحظة
-                            <p class=" ramada-p text-center display-3"> {{ statistics.distinct_users_20_night }}</p>
+                            <p class=" ramada-p text-center display-3"> {{ statistics.distinct_users_20_night ? statistics.distinct_users_20_night : 0 }}</p>
                         </h4>
                         <hr>
                         <div class="row">
                             <h5 class="text-center col-6">
                                 نقاطك لـ ({{ form.ramadan_day_id }}) رمضان
                                 <p class=" ramada-p text-center display-3">
-                                    {{ statistics.auth_specific_ramadan_day_points }}</p>
+                                    {{ statistics.auth_specific_ramadan_day_points ? statistics.auth_specific_ramadan_day_points: 0 }}</p>
                             </h5>
                             <h5 class="text-center col-6">
                                 أتممت قيام
-                                <p class=" ramada-p text-center display-3"> {{ statistics.auth_complete_nights }}</p>
+                                <p class=" ramada-p text-center display-3"> {{ statistics.auth_complete_nights ? statistics.auth_complete_nights : 0 }}</p>
                             </h5>
 
                         </div>
