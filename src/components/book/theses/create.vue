@@ -13,6 +13,7 @@
         @changeTypeOfThesis="changeTypeOfThesis"
         :book="book"
         v-model="v$.thesisForm.typeOfThesis.$model"
+        :isRamadanActive="isRamadanActive"
       />
 
       <!-- الصفحات -->
@@ -23,6 +24,7 @@
         :lastThesis="lastThesis"
         v-model:startPage="v$.thesisForm.start_page.$model"
         v-model:endPage="v$.thesisForm.end_page.$model"
+        :isRamadanActive="isRamadanActive"
       />
 
       <!-- الأطروحة -->
@@ -102,6 +104,10 @@ export default {
       type: Object,
       default: null,
     },
+    isRamadanActive: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup() {
     return {
@@ -140,10 +146,10 @@ export default {
         : "تم إضافة الأطروحة بنجاح";
     },
     isRamadanBook() {
-      return this.book?.type?.type === "ramadan";
+      return this.book?.type?.type === "ramadan" && this.isRamadanActive;
     },
     isTafseerBook() {
-      return this.book?.type?.type === "tafseer";
+      return this.book?.type?.type === "tafseer" && this.isRamadanActive;
     },
   },
   watch: {

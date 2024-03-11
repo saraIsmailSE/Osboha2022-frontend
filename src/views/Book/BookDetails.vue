@@ -178,7 +178,11 @@
                     </a>
                   </model-header>
                   <model-body>
-                    <createThesis :book="book?.book" :thesisToEdit="comment" />
+                    <createThesis
+                      :book="book?.book"
+                      :thesisToEdit="comment"
+                      :isRamadanActive="book?.isRamadanActive"
+                    />
                   </model-body>
                 </modal>
               </div>
@@ -265,6 +269,7 @@
           :lastThesis="book?.last_thesis"
           @closeModel="closeModel"
           @addThesis="addThesis"
+          :isRamadanActive="book?.isRamadanActive"
         />
       </model-body>
     </modal>

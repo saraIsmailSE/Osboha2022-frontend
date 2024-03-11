@@ -10,27 +10,48 @@
     <div v-if="empty" class="alert alert-danger">{{ empty }}</div>
 
     <div class="col-sm-12 text-center" v-if="loading && books.length <= 0">
-      <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
+      <img
+        :src="require('@/assets/images/gif/page-load-loader.gif')"
+        alt="loader"
+        style="height: 100px"
+      />
     </div>
 
     <template v-else>
       <div class="d-grid gap-3 d-grid-template-1fr-19">
-        <BookCard v-for="bookInfo in books" :key="bookInfo.id" :cardInfo="bookInfo" @updateUserBook="updateUserBook" />
+        <BookCard
+          v-for="bookInfo in books"
+          :key="bookInfo.id"
+          :cardInfo="bookInfo"
+          @updateUserBook="updateUserBook"
+          :isRamadanActive="isRamadanActive"
+        />
       </div>
       <div class="text-center mt-3">
         <ul class="pagination w-100">
-          <router-link class="page-item page-link" :to="{ name: 'book.ramadan', query: { page: page - 1 } }" rel="prev"
-            v-if="page != 1">
+          <router-link
+            class="page-item page-link"
+            :to="{ name: 'book.ramadan', query: { page: page - 1 } }"
+            rel="prev"
+            v-if="page != 1"
+          >
             السابق
           </router-link>
           <li class="page-item page-link" :class="checkActive(page)">
-            <router-link class="page-item page-link" :to="{ name: 'book.ramadan', query: { page: page } }">
+            <router-link
+              class="page-item page-link"
+              :to="{ name: 'book.ramadan', query: { page: page } }"
+            >
               {{ page }}
             </router-link>
           </li>
 
-          <router-link class="page-item page-link" :to="{ name: 'book.ramadan', query: { page: page + 1 } }" rel="next"
-            v-if="hasNextPage">
+          <router-link
+            class="page-item page-link"
+            :to="{ name: 'book.ramadan', query: { page: page + 1 } }"
+            rel="next"
+            v-if="hasNextPage"
+          >
             التالي
           </router-link>
         </ul>
@@ -78,6 +99,7 @@ export default {
       selectedSection: 0,
       lastSelectedSection: 0,
       loading: false,
+      isRamadanActive: false,
       sections: [
         { section_id: 0, section: "الكل", active: true },
         { section_id: 1, section: "بسيط", level: "simple", active: false },
@@ -103,6 +125,7 @@ export default {
         const response = await bookService.getAllRamadan(page);
         this.books = response.books;
         this.totalBooks = response.total;
+        this.isRamadanActive = response.isRamadanActive;
         this.current = this.page;
       } catch (e) {
         helper.toggleToast("حدث خطأ ما, يرجى المحاولة مرة أخرى", "error");

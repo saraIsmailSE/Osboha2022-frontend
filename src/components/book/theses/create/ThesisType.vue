@@ -36,12 +36,21 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  isRamadanActive: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 });
 
 const emit = defineEmits(["update:modelValue", "changeTypeOfThesis"]);
 
-const isRamadanBook = computed(() => props.book?.type.type === "ramadan");
-const isTafseerBook = computed(() => props.book?.type.type === "tafseer");
+const isRamadanBook = computed(
+  () => props.book?.type.type === "ramadan" && props.isRamadanActive,
+);
+const isTafseerBook = computed(
+  () => props.book?.type.type === "tafseer" && props.isRamadanActive,
+);
 
 const proxyValue = computed({
   get() {
