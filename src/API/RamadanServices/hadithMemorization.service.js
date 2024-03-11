@@ -24,7 +24,7 @@ class HadithMemorizationServices {
             formData.append("hadith", hadith);
             formData.append("redo", redo);
 
-            const response = await api.post(`${this.prefix}/`, formData, {
+            const response = await api.post(`${this.prefix}`, formData, {
                 headers: { "Content-type": "multipart/form-data" },
             });
             return response.data.data;

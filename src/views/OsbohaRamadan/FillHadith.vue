@@ -4,9 +4,7 @@
 
     <div class="col-sm-12 mt-3" v-if="hadith">
       <iq-card class="iq-card ramadan-card">
-        <div
-          class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto ramadan-card"
-        >
+        <div class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto ramadan-card">
           <h1 class="text-center mt-3 mb-3">
             الحديث {{ hadith.hadith_title }}
           </h1>
@@ -16,31 +14,16 @@
         </h2>
 
         <div v-if="isHadithActive" class="text-center">
-          <img
-            :src="imagePath(hadith.image)"
-            alt="ramadan-footer"
-            class="img-fluid p-2"
-            v-if="
-              (!form.hadith_1 && !form.hadith_2) ||
-              (!form.hadith_redo && hadith.memorization.length > 0) ||
-              isAccepted
-            "
-          />
-          <img
-            src="@/assets/images/ramadan/night-prayer.png"
-            alt="ramadan-footer"
-            class="img-fluid"
-            v-else
-          />
+          <img :src="imagePath(hadith.image)" alt="ramadan-footer" class="img-fluid p-2" v-if="(!form.hadith_1 && !form.hadith_2) ||
+      (!form.hadith_redo && hadith.memorization.length > 0) ||
+      isAccepted
+      " />
+          <img src="@/assets/images/ramadan/night-prayer.png" alt="ramadan-footer" class="img-fluid" v-else />
 
-          <p
-            class="ramada-p h5 text-center mt-2 p-2"
-            v-if="
-              (!form.hadith_1 && !form.hadith_2) ||
-              (!form.hadith_redo && hadith.memorization.length > 0) ||
-              isAccepted
-            "
-          >
+          <p class="ramada-p h5 text-center mt-2 p-2" v-if="(!form.hadith_1 && !form.hadith_2) ||
+      (!form.hadith_redo && hadith.memorization.length > 0) ||
+      isAccepted
+      ">
             {{ hadith.hadith }}
           </p>
           <div class="col-12 pt-2">
@@ -48,72 +31,35 @@
               <form class="mt-2" @submit.prevent="onSubmit()">
                 <div class="form-group">
                   <label for="role">المرة الأولى</label>
-                  <textarea
-                    name="hadith_1"
-                    class="form-control"
-                    id="hadith_1"
-                    rows="5"
-                    required="required"
-                    v-model="form.hadith_1"
-                    @paste="handlePaste"
-                    :disabled="isDisabled"
-                  ></textarea>
+                  <textarea name="hadith_1" class="form-control" id="hadith_1" rows="5" required="required"
+                    v-model="form.hadith_1" @paste="handlePaste" :disabled="isDisabled"></textarea>
                   <small style="color: red" v-if="v$.form.hadith_1.$error">
                     الاجابة مطلوبة
                   </small>
                 </div>
                 <div class="form-group">
                   <label for="role">المرة الثانية</label>
-                  <textarea
-                    name="hadith_2"
-                    class="form-control"
-                    id="hadith_2"
-                    rows="5"
-                    required="required"
-                    v-model="form.hadith_2"
-                    @paste="handlePaste"
-                    :disabled="isDisabled"
-                  ></textarea>
+                  <textarea name="hadith_2" class="form-control" id="hadith_2" rows="5" required="required"
+                    v-model="form.hadith_2" @paste="handlePaste" :disabled="isDisabled"></textarea>
 
                   <div v-if="v$.form.hadith_2.$error">
-                    <small
-                      style="color: red"
-                      v-if="v$.form.hadith_2.required.$invalid"
-                    >
+                    <small style="color: red" v-if="v$.form.hadith_2.required.$invalid">
                       الاجابة مطلوبة
                     </small>
                     <br />
-                    <small
-                      style="color: red"
-                      v-if="v$.form.hadith_2.sameAsHadith1.$invalid"
-                    >
+                    <small style="color: red" v-if="v$.form.hadith_2.sameAsHadith1.$invalid">
                       يجب أن تكون الاجابة مطابقة لكتابتك للحديث الأول
                     </small>
                   </div>
                 </div>
-                <div
-                  class="col-sm-12 text-center"
-                  v-if="loader && submitType == 'normal'"
-                >
-                  <img
-                    src="@/assets/images/gif/page-load-loader.gif"
-                    alt="loader"
-                    style="height: 100px"
-                  />
+                <div class="col-sm-12 text-center" v-if="loader && submitType == 'normal'">
+                  <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 100px" />
                 </div>
-                <div
-                  class="alert alert-danger p-1 m-2 text-center"
-                  role="alert"
-                  v-if="isDisabled"
-                >
+                <div class="alert alert-danger p-1 m-2 text-center" role="alert" v-if="isDisabled">
                   <h6 class="text-center">قمت بتسليم هذا الحديث</h6>
                 </div>
                 <div class="d-inline-block w-100" v-else>
-                  <button
-                    type="submit"
-                    class="btn ramadan-btn float-end"
-                    :disabled="loader"
-                  >
+                  <button type="submit" class="btn ramadan-btn float-end" :disabled="loader">
                     وثق حفظك
                   </button>
                 </div>
@@ -127,45 +73,23 @@
               <p>حالة اجابتك</p>
               {{ hadith.memorization[0].reviews }}
               <small class="badge bg-success">{{
-                ACTIVITIES_STATUS[hadith.memorization[0].status]
-              }}</small>
+      ACTIVITIES_STATUS[hadith.memorization[0].status]
+    }}</small>
 
-              <form
-                class="mt-2"
-                @submit.prevent="onSubmit()"
-                v-if="hadith.memorization[0].status == 'redo'"
-              >
+              <form class="mt-2" @submit.prevent="onSubmit()" v-if="hadith.memorization[0].status == 'redo'">
                 <div class="form-group">
                   <label for="role">أعد كتابة الحديث هنا</label>
-                  <textarea
-                    name="hadith_redo"
-                    class="form-control"
-                    id="hadith_redo"
-                    rows="5"
-                    required="required"
-                    v-model="form.hadith_redo"
-                    @paste="handlePaste"
-                  ></textarea>
+                  <textarea name="hadith_redo" class="form-control" id="hadith_redo" rows="5" required="required"
+                    v-model="form.hadith_redo" @paste="handlePaste"></textarea>
                   <small style="color: red" v-if="v$.form.hadith_redo.$error">
                     الاجابة مطلوبة
                   </small>
                 </div>
-                <div
-                  class="col-sm-12 text-center"
-                  v-if="loader && submitType == 'redo'"
-                >
-                  <img
-                    src="@/assets/images/gif/page-load-loader.gif"
-                    alt="loader"
-                    style="height: 100px"
-                  />
+                <div class="col-sm-12 text-center" v-if="loader && submitType == 'redo'">
+                  <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 100px" />
                 </div>
                 <div class="d-inline-block w-100" v-else>
-                  <button
-                    type="submit"
-                    class="btn ramadan-btn float-end"
-                    :disabled="loader"
-                  >
+                  <button type="submit" class="btn ramadan-btn float-end" :disabled="loader">
                     وثق اعادة حفظك
                   </button>
                 </div>
@@ -251,8 +175,18 @@ import HadithMemorizationServices from "@/API/RamadanServices/hadithMemorization
 import ramadanDaysService from "@/API/RamadanServices/ramadanDays.service";
 import hadithMemorizationService from "../../API/RamadanServices/hadithMemorization.service";
 
+
+// Function to remove Arabic diacritics
+function removeArabicDiacritics(str) {
+  var replacedStr = str.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+
+  return replacedStr.replace(
+    /([\u064B-\u0652])/g,
+    ''
+  );
+}
 export default {
-  name: "Ramadan Night Prayer",
+  name: "Ramadan Fill Hadith",
   setup() {
     return { v$: useVuelidate() };
   },
@@ -291,7 +225,11 @@ export default {
         },
         hadith_2: {
           required,
-          sameAsHadith1: sameAs(this.form.hadith_1),
+          sameAsHadith1(value) {
+            const hadith1 = removeArabicDiacritics(this.form.hadith_1);
+            const hadith2 = removeArabicDiacritics(value);
+            return hadith1 === hadith2;
+          }
         },
         hadith_redo: {
           required: requiredIf(function () {
