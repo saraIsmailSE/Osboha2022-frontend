@@ -7,7 +7,7 @@
                 <div class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto ramadan-card">
                     <h1 class="text-center mt-3 mb-3">ورد القرآن الكريم</h1>
                 </div>
-                <h2 class="text-center mt-1 mb-3" v-if="ramadan_day">{{ramadan_day.day}} ~ رمضان </h2>
+                <h2 class="text-center mt-1 mb-3" v-if="ramadan_day">{{ ramadan_day.day }} ~ رمضان </h2>
 
                 <div class="col-12 pt-2">
                     <div class="alert alert-warning p-1 m-2 text-center" role="alert">
@@ -58,6 +58,15 @@
                         </form>
                     </div>
                 </div>
+                <div class="d-inline-block w-100 text-center col-12">
+                    <router-link :to="{ name: 'ramadan.quran' }" class="d-block mt-3 mb-3 w-75 mx-auto">
+                        <span class="back-btn display-6">عودة</span>
+                        <span class="align-middle material-symbols-outlined diplay-6">
+                            keyboard_return
+                        </span>
+                    </router-link>
+                </div>
+
             </iq-card>
 
             <statisticsHeader />

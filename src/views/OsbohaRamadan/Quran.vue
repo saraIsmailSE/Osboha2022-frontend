@@ -19,6 +19,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="d-inline-block w-100 text-center col-12">
+                    <router-link :to="{ name: 'ramadan.index' }" class="d-block mt-3 mb-3 w-75 mx-auto">
+                        <span class="back-btn display-6">عودة</span>
+                        <span class="align-middle material-symbols-outlined diplay-6">
+                            keyboard_return
+                        </span>
+                    </router-link>
+                </div>
+
             </iq-card>
         </div>
 

@@ -73,6 +73,16 @@
                         </form>
                     </div>
                 </div>
+
+                <div class="d-inline-block w-100 text-center col-12">
+                    <router-link :to="{ name: 'ramadan.night-prayer' }" class="d-block mt-3 mb-3 w-75 mx-auto">
+                        <span class="back-btn display-6">عودة</span>
+                        <span class="align-middle material-symbols-outlined diplay-6">
+                            keyboard_return
+                        </span>
+                    </router-link>
+                </div>
+
             </iq-card>
 
             <statisticsHeader />
@@ -82,28 +92,33 @@
                     <div class="sign-in-from">
                         <h4 class="text-center">
                             عدد الذين أتموا عدد (5) أيام قيام الليل معنا حتى اللحظة
-                            <p class=" ramada-p text-center display-3"> {{ statistics.distinct_users_5_night ? statistics.distinct_users_5_night : 0 }}</p>
+                            <p class=" ramada-p text-center display-3"> {{ statistics.distinct_users_5_night ?
+                    statistics.distinct_users_5_night : 0 }}</p>
                         </h4>
 
                         <h4 class="text-center">
                             عدد الذين أتموا عدد (10) أيام قيام الليل معنا حتى اللحظة
-                            <p class=" ramada-p text-center display-3"> {{ statistics.distinct_users_10_night ? statistics.distinct_users_10_night : 0 }}</p>
+                            <p class=" ramada-p text-center display-3"> {{ statistics.distinct_users_10_night ?
+                    statistics.distinct_users_10_night : 0 }}</p>
                         </h4>
 
                         <h4 class="text-center">
                             عدد الذين أتموا عدد (20) أيام قيام الليل معنا حتى اللحظة
-                            <p class=" ramada-p text-center display-3"> {{ statistics.distinct_users_20_night ? statistics.distinct_users_20_night : 0 }}</p>
+                            <p class=" ramada-p text-center display-3"> {{ statistics.distinct_users_20_night ?
+                    statistics.distinct_users_20_night : 0 }}</p>
                         </h4>
                         <hr>
                         <div class="row">
                             <h5 class="text-center col-6">
                                 نقاطك لـ ({{ form.ramadan_day_id }}) رمضان
                                 <p class=" ramada-p text-center display-3">
-                                    {{ statistics.auth_specific_ramadan_day_points ? statistics.auth_specific_ramadan_day_points: 0 }}</p>
+                                    {{ statistics.auth_specific_ramadan_day_points ?
+                                    statistics.auth_specific_ramadan_day_points: 0 }}</p>
                             </h5>
                             <h5 class="text-center col-6">
                                 أتممت قيام
-                                <p class=" ramada-p text-center display-3"> {{ statistics.auth_complete_nights ? statistics.auth_complete_nights : 0 }}</p>
+                                <p class=" ramada-p text-center display-3"> {{ statistics.auth_complete_nights ?
+                                    statistics.auth_complete_nights : 0 }}</p>
                             </h5>
 
                         </div>
