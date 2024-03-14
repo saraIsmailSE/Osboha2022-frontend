@@ -15,7 +15,7 @@
 
           <!--Activities-->
           <Activities :expired="expired" :activities="activities" :graded="graded" :week="week" :can_edit="can_edit"
-            @updateMark="updateMark" v-if="SupervisorAndAbove" />
+            @updateMark="updateMark" />
 
           <div class="col-12" v-if="!expired && can_edit">
             <div class="card card-block card-stretch card-height blog">
@@ -29,9 +29,9 @@
           <div class="d-flex align-items-center mt-3 row" v-if="can_edit">
             <div class="d-inline-block w-100 text-center col-12">
               <router-link v-if="group && week" :to="{
-                name: 'group.ambassadors-reading',
-                params: { group_id: group.id, week_id: week.id },
-              }" class="d-block mt-3 mb-3 w-75 mx-auto">
+        name: 'group.ambassadors-reading',
+        params: { group_id: group.id, week_id: week.id },
+      }" class="d-block mt-3 mb-3 w-75 mx-auto">
                 <span>إنجازات الفريق</span>
                 <span class="align-middle material-symbols-outlined">
                   keyboard_return

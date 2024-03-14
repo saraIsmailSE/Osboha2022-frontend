@@ -9,19 +9,23 @@ class HadithMemorizationServices {
     {
         try {
             let hadith = "";
+            let hadith_2 = "";
             let redo= 0;
             const formData = new FormData();
 
 
             if(submit_type == 'redo'){
                 hadith = form.hadith_redo
+                hadith_2 = form.hadith_redo
                 redo=1;
             }
             else{
                 hadith = form.hadith_1
+                hadith_2 = form.hadith_2
             }
             formData.append("ramadan_hadiths_id", form.ramadan_hadiths_id);
-            formData.append("hadith", hadith);
+            formData.append("hadith_memorize", hadith);
+            formData.append("hadith_memorize_2", hadith_2);
             formData.append("redo", redo);
 
             const response = await api.post(`${this.prefix}`, formData, {
