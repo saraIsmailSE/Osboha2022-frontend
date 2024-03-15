@@ -9,7 +9,9 @@
         <span> x </span>
       </div>
       <img :src="previewUrl.url" v-if="previewUrl.type.includes('image')" />
-      <video :src="previewUrl.url" v-else autoplay />
+      <video autoplay muted v-else>
+        <source :src="previewUrl.url" type="video/mp4" />
+      </video>
     </div>
   </div>
 </template>

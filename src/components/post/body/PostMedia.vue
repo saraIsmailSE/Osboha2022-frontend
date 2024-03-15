@@ -1,20 +1,34 @@
 <template>
   <div class="user-post" v-if="slicedMedia">
     <div class="row g-2">
-      <div class="position-relative" :class="col" v-for="(image, index) in slicedMedia" :key="image.path"
-        @click.prevent="showPostMedia(index)">
+      <div
+        class="position-relative"
+        :class="col"
+        v-for="(image, index) in slicedMedia"
+        :key="image.path"
+        @click.prevent="showPostMedia(index)"
+      >
+        <img
+          :src="image.path"
+          alt="post-image"
+          class="rounded w-100 h-100 post-image"
+          style="object-fit: cover"
+          v-if="image.type == 'image'"
+        />
 
-        <img :src="image.path" alt="post-image" class="rounded w-100 h-100 post-image" style="object-fit: cover"
-          v-if="image.type == 'image'" />
-
-        <video class="w-75" controls v-if="image.type == 'vedio'">
-          <source :src="image.path" type="video/mp4">
+        <video class="w-75" controls v-if="image.type == 'video'">
+          <source :src="image.path" type="video/mp4" />
         </video>
 
         <!--overlay over last image-->
-        <div class="overlay" v-if="post.media?.length > slicedMedia.length &&
-    index === slicedMedia.length - 1
-    " role="button">
+        <div
+          class="overlay"
+          v-if="
+            post.media?.length > slicedMedia.length &&
+            index === slicedMedia.length - 1
+          "
+          role="button"
+        >
           <span class="material-symbols-outlined"> add </span>
           <span> {{ post.media?.length - slicedMedia.length }} </span>
           <span class="ms-1"> المزيد</span>
@@ -36,6 +50,13 @@ export default {
   },
   inject: ["post"],
   // emits: ["showPostMedia"],
+  data() {
+    return {
+      showControls: false,
+      isPlaying: false,
+    };
+  },
+
   computed: {
     col() {
       return this.post.media.length > 1 ? "col-6" : "col-12";
