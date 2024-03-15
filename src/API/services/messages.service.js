@@ -73,7 +73,7 @@ class MessageService {
 
   async unreadMessages() {
     try {
-      const response = await api.get(`/messages/unread-messages/`);
+      const response = await api.get(`/messages/unread-messages`);
       return response.data;
     } catch (error) {
       handleError();

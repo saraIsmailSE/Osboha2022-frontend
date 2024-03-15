@@ -30,9 +30,12 @@ class CommentService {
 
   async getPostComments(post_id, page, user_id = "") {
     try {
-      const comments = await api.get(
-        `/comments/post/${post_id}/${user_id}?page=${page}`
-      );
+      let path = `/comments/post/${post_id}?page=${page}`;
+      if (user_id) {
+        path = `/comments/post/${post_id}/${user_id}?page=${page}`;
+      }
+
+      const comments = await api.get(path);
       return comments.data;
     } catch (error) {
       handleError(error);
