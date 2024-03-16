@@ -53,7 +53,18 @@
                     :src="media.path"
                     class="d-block h-100 img-fluid"
                     :alt="`Post Image ${index + 1}`"
+                    v-if="media.type == 'image'"
                   />
+                </a>
+
+                <a :href="media.path" target="_blank">
+                  <video
+                    class="d-block h-100 img-fluid"
+                    controls
+                    v-if="media.type == 'video'"
+                  >
+                    <source :src="media.path" type="video/mp4" />
+                  </video>
                 </a>
               </div>
             </div>

@@ -1,25 +1,45 @@
 <template>
   <div>
-    <iq-card id="post-modal-data" body-class="iq-card iq-card-block iq-card-stretch iq-card-height">
+    <iq-card
+      id="post-modal-data"
+      body-class="iq-card iq-card-block iq-card-stretch iq-card-height"
+    >
       <template v-slot:headerTitle>
         <h4 class="card-title">منشور جديد</h4>
       </template>
       <template v-slot:body>
         <div class="d-flex align-items-center">
-          <BaseAvatar :profileImg="auth?.user_profile?.profile_picture" :profile_id="auth?.user_profile?.id"
-            :title="auth?.name" :gender="auth?.gender" avatarClass="avatar-60 rounded-circle" />
+          <BaseAvatar
+            :profileImg="auth?.user_profile?.profile_picture"
+            :profile_id="auth?.user_profile?.id"
+            :title="auth?.name"
+            :gender="auth?.gender"
+            avatarClass="avatar-60 rounded-circle"
+          />
           <!-- <div class="user-img">
             <img class="avatar-60 rounded-circle" :src="profile_picture" />
           </div> -->
           <form class="post-text ml-3 w-100">
-            <input type="text" placeholder="ماذا تريد أن تكتب..." class="rounded form-control" style="border: none"
-              @click.prevent="showModal(postModal)" />
+            <input
+              type="text"
+              placeholder="ماذا تريد أن تكتب..."
+              class="rounded form-control"
+              style="border: none"
+              @click.prevent="showModal(postModal)"
+            />
           </form>
         </div>
       </template>
     </iq-card>
-    <modal ref="postModalRef" id="postModal" dialogClass="modal-lg modal-dialog-centered modal-dialog-scrollable"
-      tabindex="-1" title="Create Post" aria-labelledby="modalsLabel" :aria-hidden="true">
+    <modal
+      ref="postModalRef"
+      id="postModal"
+      dialogClass="modal-lg modal-dialog-centered modal-dialog-scrollable"
+      tabindex="-1"
+      title="Create Post"
+      aria-labelledby="modalsLabel"
+      :aria-hidden="true"
+    >
       <model-header>
         <h5 class="modal-title" id="modalsLabel">منشور جديد</h5>
         <a href="#" class="lh-1" @click.prevent="hideModal(postModal)">
@@ -28,10 +48,12 @@
       </model-header>
       <model-body class="post-modal-body">
         <div class="d-flex align-items-start">
-          <PostUser :post="{
-            user: auth,
-            taggedFriends: selectedFriends,
-          }" />
+          <PostUser
+            :post="{
+              user: auth,
+              taggedFriends: selectedFriends,
+            }"
+          />
         </div>
         <div>
           <form class="post-text ml-3 w-100">
@@ -39,34 +61,55 @@
               id="editor"
               placeholder="ماذا تريد أن تكتب..."
               class="rounded form-control"
-              style="border: none; direction: rtl;"
+              style="border: none; direction: rtl"
               v-model.trim="post.body"
               ref="bodyRef"
             >
             </textarea>
 
-            <input type="file" @change="previewMedia($event)" multiple accept="image/*" class="d-none" ref="fileRef" />
+            <input
+              type="file"
+              @change="previewMedia($event)"
+              multiple
+              accept="image/*,video/*"
+              class="d-none"
+              ref="fileRef"
+            />
           </form>
         </div>
-        <PostPoll :showPoll="showPoll" :pollOptions="pollOptions" @closePoll="showPoll = false"
-          @addPollOption="addPollOption" @removePollOption="removePollOption"
-          @checkSimilarPollOptions="checkSimilarPollOptions" />
+        <PostPoll
+          :showPoll="showPoll"
+          :pollOptions="pollOptions"
+          @closePoll="showPoll = false"
+          @addPollOption="addPollOption"
+          @removePollOption="removePollOption"
+          @checkSimilarPollOptions="checkSimilarPollOptions"
+        />
         <hr />
         <ul class="post-opt-block d-flex list-inline m-0 p-0 flex-wrap">
           <li class="me-2 mb-2">
-            <button class="btn btn-soft-primary d-flex align-items-center" @click="openFilePicker">
+            <button
+              class="btn btn-soft-primary d-flex align-items-center"
+              @click="openFilePicker"
+            >
               <span class="material-symbols-outlined me-2">photo_camera</span>
               صورة/فيديو
             </button>
           </li>
           <li class="me-2 mb-2">
-            <button class="btn btn-soft-primary d-flex align-items-center" @click.prevent="showModal(friendsListModal)">
+            <button
+              class="btn btn-soft-primary d-flex align-items-center"
+              @click.prevent="showModal(friendsListModal)"
+            >
               <span class="material-symbols-outlined me-2">person_add</span>
               إشارة إلى صديق
             </button>
           </li>
           <li class="me-2 mb-2">
-            <button class="btn btn-soft-primary d-flex align-items-center" @click.prevent="openPoll">
+            <button
+              class="btn btn-soft-primary d-flex align-items-center"
+              @click.prevent="openPoll"
+            >
               <span class="material-symbols-outlined me-2">poll</span>
               إضافة استعلام
             </button>
@@ -82,20 +125,38 @@
           ملاحظة: نص المنشور مطلوب مع الاستعلام, والخيارات لا يمكن أن تكون أقل
           من 2 ولا تزيد عن 10
         </div>
-        <div class="w-100 text-center py-1" style="color: red" v-if="errorMessage">
+        <div
+          class="w-100 text-center py-1"
+          style="color: red"
+          v-if="errorMessage"
+        >
           {{ errorMessage }}
         </div>
         <div class="col-sm-12 text-center" v-if="loader">
-          <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
+          <img
+            :src="require('@/assets/images/gif/page-load-loader.gif')"
+            alt="loader"
+            style="height: 100px"
+          />
         </div>
-        <button v-else class="btn btn-primary btn-block my-3 w-100 flex-grow-1" @click="addNewPost()"
-          :disabled="!allowPosting">
+        <button
+          v-else
+          class="btn btn-primary btn-block my-3 w-100 flex-grow-1"
+          @click="addNewPost()"
+          :disabled="!allowPosting"
+        >
           نشـــر
         </button>
       </model-footer>
     </modal>
-    <modal ref="friendsListModalRef" id="friendsListModal" tabindex="-1" aria-labelledby="friendsModalLabel"
-      :aria-hidden="true" dialogClass="modal-lg modal-dialog-centered">
+    <modal
+      ref="friendsListModalRef"
+      id="friendsListModal"
+      tabindex="-1"
+      aria-labelledby="friendsModalLabel"
+      :aria-hidden="true"
+      dialogClass="modal-lg modal-dialog-centered"
+    >
       <model-header>
         <h5 class="modal-title" id="friendsModalLabel">إشارة إلى صديق</h5>
         <a href="#" class="lh-1" @click.prevent="hideModal(friendsListModal)">
@@ -108,15 +169,27 @@
             <a class="search-link" href="#">
               <span class="material-symbols-outlined">search</span>
             </a>
-            <input type="text" class="text search-input form-control bg-soft-primary" placeholder="ابحث هنا..."
-              v-model.trim="searchQuery" @keyup="searchFriends" />
+            <input
+              type="text"
+              class="text search-input form-control bg-soft-primary"
+              placeholder="ابحث هنا..."
+              v-model.trim="searchQuery"
+              @keyup="searchFriends"
+            />
           </form>
-          <a href="#" class="btn btn-primary ms-2" @click.prevent="hideModal(friendsListModal)">
+          <a
+            href="#"
+            class="btn btn-primary ms-2"
+            @click.prevent="hideModal(friendsListModal)"
+          >
             اعتماد
           </a>
         </div>
         <hr />
-        <FriendsList :friends="friends" :handleCheckboxChange="handleCheckboxChange" />
+        <FriendsList
+          :friends="friends"
+          :handleCheckboxChange="handleCheckboxChange"
+        />
       </model-body>
     </modal>
   </div>
@@ -226,9 +299,7 @@ export default {
       });
     },
   },
-  async created() {
-
-  },
+  async created() {},
 
   async mounted() {
     this.postModal = new Modal(this.$refs.postModalRef.$el);
@@ -236,7 +307,7 @@ export default {
   },
   methods: {
     onChange(data) {
-      this.post.body = data
+      this.post.body = data;
       console.log(data);
     },
     openFilePicker() {
@@ -291,7 +362,7 @@ export default {
       } else {
         this.post.tags = this.post.tags.filter((tag) => tag !== parseInt(id));
         this.selectedFriends = this.selectedFriends.filter(
-          (selectedFriend) => selectedFriend.id !== parseInt(id)
+          (selectedFriend) => selectedFriend.id !== parseInt(id),
         );
       }
     },
@@ -309,7 +380,7 @@ export default {
     checkSimilarPollOptions(id) {
       const option = this.pollOptions.find((opt) => opt.id === id);
       const similarOption = this.pollOptions.find(
-        (opt) => opt.value === option.value && opt.id !== id
+        (opt) => opt.value === option.value && opt.id !== id,
       );
       if (similarOption) {
         option.value = "";
@@ -357,7 +428,7 @@ export default {
         this.postModal.hide();
         helper.toggleToast(
           post.message ? post.message : "تم النشر بنجاح",
-          "success"
+          "success",
         );
       } catch (err) {
         console.log("[AddPost error]", err);
@@ -381,7 +452,7 @@ export default {
       //unchecked all checkboxes
       this.$nextTick(() => {
         const checkboxes = document.querySelectorAll(
-          ".friends-list input[type=checkbox]"
+          ".friends-list input[type=checkbox]",
         );
         checkboxes.forEach((checkbox) => {
           checkbox.checked = false;
