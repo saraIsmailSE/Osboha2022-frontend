@@ -34,6 +34,8 @@ class GeneralConversation {
     if (answer.is_discussion)
       formData.append("is_discussion", parseInt(answer.is_discussion));
     else formData.append("is_discussion", 0);
+    if (answer.discussion_type)
+      formData.append("discussion_type", answer.discussion_type);
 
     if (answer.media && answer.media.length > 0) {
       answer.media.forEach((element) => {
@@ -103,10 +105,12 @@ class GeneralConversation {
     }
   }
 
-  async getDiscussionQuestions(page) {
+  async getDiscussionQuestions(page, type = "") {
     try {
       const questions = await api.get(
-        `${this.prefix}/questions/discussion-questions?page=${page}`,
+        `${this.prefix}/questions/discussion-questions?page=${page}${
+          type ? `&type=${type}` : ""
+        }`,
       );
       return questions.data;
     } catch (error) {
@@ -147,10 +151,10 @@ class GeneralConversation {
     }
   }
 
-  async moveToDiscussion(questionId) {
+  async moveToDiscussion(questionId, type) {
     try {
       const response = await api.put(
-        `${this.prefix}/questions/${questionId}/move-to-discussion`,
+        `${this.prefix}/questions/${questionId}/move-to-discussion?type=${type}`,
       );
       return response.data;
     } catch (error) {

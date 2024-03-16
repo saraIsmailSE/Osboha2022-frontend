@@ -94,6 +94,7 @@ export default {
         question_id: this.question_id,
         is_discussion:
           this.$route.query?.keyword === "discussion-questions" ? 1 : 0,
+        discussion_type: this.$route.query?.discussion_type || "",
       },
     };
   },

@@ -67,24 +67,80 @@
       <span v-else> رفع إلى المسؤول </span>
     </button>
 
-    <button
-      v-if="consultantAndAbove && question.status === 'open'"
-      class="bg-info rounded badge text-white border-0 ms-1 me-1"
-      @click="moveToDiscussion"
+    <tooltip
+      tag="span"
+      class="text-muted small"
+      tooltipPlacement="bottom"
+      data-bs-toggle="tooltip"
+      title="بين المؤسس وجميع المستشارين والموجهين"
     >
-      <img
-        v-if="loadingDiscussion"
-        :src="require('@/assets/images/gif/page-load-loader.gif')"
-        alt="loader"
-        style="height: 20px"
-      />
-      <span v-else> نقاش </span>
-    </button>
+      <button
+        v-if="consultantAndAbove && question.status === 'open'"
+        class="bg-info rounded badge text-white border-0 ms-1 me-1"
+        @click="moveToDiscussion('public')"
+        :disabled="loadingDiscussion"
+      >
+        <img
+          v-if="loadingDiscussion"
+          :src="require('@/assets/images/gif/page-load-loader.gif')"
+          alt="loader"
+          style="height: 20px"
+        />
+        <span v-else> نقاش عام </span>
+      </button>
+    </tooltip>
+
+    <tooltip
+      tag="span"
+      class="text-muted small"
+      tooltipPlacement="bottom"
+      data-bs-toggle="tooltip"
+      title="بين المستشار وموجهيه"
+    >
+      <button
+        v-if="consultantAndAbove && question.status === 'open'"
+        class="bg-black rounded badge text-white border-0 ms-1 me-1"
+        @click="moveToDiscussion('private')"
+        :disabled="loadingDiscussion"
+      >
+        <img
+          v-if="loadingDiscussion"
+          :src="require('@/assets/images/gif/page-load-loader.gif')"
+          alt="loader"
+          style="height: 20px"
+        />
+        <span v-else> نقاش خاص </span>
+      </button>
+    </tooltip>
+
+    <tooltip
+      tag="span"
+      class="text-muted small"
+      tooltipPlacement="bottom"
+      data-bs-toggle="tooltip"
+      title="بين المؤسس وجميع المستشارين"
+    >
+      <button
+        v-if="consultantAndAbove && question.status === 'open'"
+        class="bg-gray rounded badge text-white border-0 ms-1 me-1"
+        @click="moveToDiscussion('administrative')"
+        :disabled="loadingDiscussion"
+      >
+        <img
+          v-if="loadingDiscussion"
+          :src="require('@/assets/images/gif/page-load-loader.gif')"
+          alt="loader"
+          style="height: 20px"
+        />
+        <span v-else> نقاش إداري </span>
+      </button>
+    </tooltip>
 
     <button
       v-if="consultantAndAbove && question.status === 'discussion'"
       class="bg-info rounded badge text-white border-0 ms-1 me-1"
       @click="moveToQuestions"
+      :disabled="loadingDiscussion"
     >
       <img
         v-if="loadingDiscussion"
@@ -119,7 +175,7 @@ export default {
     clickOutside: vClickOutside.directive,
   },
 
-  inject: ["question", "updateKeyword"],
+  inject: ["question", "updateQueryParams"],
   computed: {
     auth() {
       return this.$store.getters.getUser;
@@ -178,7 +234,9 @@ export default {
         this.toggleToast("تم تعيين التحويل للمشرف", "success");
 
         setTimeout(() => {
-          this.updateKeyword("my-assigned-to-parent-questions");
+          this.updateQueryParams({
+            keyword: "my-assigned-to-parent-questions",
+          });
         }, 1000);
       } catch (error) {
         this.toggleToast(getErrorMessage(error), "error");
@@ -187,17 +245,30 @@ export default {
       }
     },
 
-    async moveToDiscussion() {
+    async moveToDiscussion(type) {
       if (this.loadingDiscussion) {
         return;
       }
       this.loadingDiscussion = true;
+
+      const types = {
+        public: "نقاش العام",
+        private: "نقاش الخاص",
+        administrative: "نقاش الإداري",
+      };
+
       try {
-        await GeneralConversationService.moveToDiscussion(this.question.id);
-        this.toggleToast("تم نقل التحويل للنقاش", "success");
+        await GeneralConversationService.moveToDiscussion(
+          this.question.id,
+          type,
+        );
+        this.toggleToast("تم نقل التحويل لل" + types[type], "success");
 
         setTimeout(() => {
-          this.updateKeyword("discussion-questions");
+          this.updateQueryParams({
+            keyword: "discussion-questions",
+            discussion_type: type,
+          });
         }, 1000);
       } catch (error) {
         this.toggleToast(getErrorMessage(error), "error");
@@ -216,7 +287,7 @@ export default {
         this.toggleToast("تم نقل التحويل للأسئلة", "success");
 
         setTimeout(() => {
-          this.updateKeyword("my-questions");
+          this.updateQueryParams({ keyword: "my-questions" });
         }, 1000);
       } catch (error) {
         this.toggleToast(getErrorMessage(error), "error");

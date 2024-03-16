@@ -97,19 +97,18 @@ export default {
     return {
       addNewAnswer: this.addNewAnswer,
       filterQuestions: this.filterQuestions,
-      updateKeyword: this.updateKeyword,
+      updateQueryParams: this.updateQueryParams,
     };
   },
   async created() {
-    //get the keyword from the query parameter
-    const queryKeyword = this.$route.query.keyword;
+    const queryParams = this.$route.query;
 
-    if (!queryKeyword) {
-      //add query parameter to the url
-      this.$router.push({ query: { keyword: this.keyword } });
+    if (!queryParams.keyword) {
+      this.$router.push({ query: this.queryParams });
     } else {
-      this.keyword = queryKeyword;
+      this.queryParams = { ...this.queryParams, ...queryParams };
     }
+
     await this.checkUserPermission();
     await this.getQuestions();
   },
@@ -118,11 +117,15 @@ export default {
       questions: [],
       loading: false,
       emptyMessage: "",
-      keyword: "my-questions",
       loadingClose: false,
       hasMore: false,
       page: 1,
       questionId: this.$route.params.questionId || null,
+      discussion_type: "",
+      queryParams: {
+        keyword: "my-questions",
+        discussion_type: "",
+      },
     };
   },
   computed: {
@@ -130,7 +133,7 @@ export default {
       return this.$store.getters.getUser;
     },
     title() {
-      switch (this.keyword) {
+      switch (this.queryParams.keyword) {
         case "my-questions":
         case "":
           return "تحويلاتي";
@@ -138,8 +141,14 @@ export default {
           return "تحويلاتي الفعالة";
         case "my-late-questions":
           return "تحويلات متأخرة";
-        case "discussion-questions":
-          return "النقاش الإداري";
+        case "discussion-questions": {
+          if (this.queryParams.discussion_type === "private") {
+            return "النقاش الخاص";
+          } else if (this.queryParams.discussion_type === "administrative") {
+            return "النقاش الإداري";
+          }
+          return "النقاش العام";
+        }
         case "all":
           return "كافة التحويل العام";
         default:
@@ -148,14 +157,16 @@ export default {
     },
   },
   watch: {
-    keyword: function (val) {
-      //add query parameter to the url
-      this.emptyMessage = "";
-      this.page = 1;
-      this.hasMore = false;
-      this.questions = [];
-      this.getQuestions();
-      this.$router.push({ query: { keyword: val } });
+    queryParams: {
+      handler(val) {
+        this.emptyMessage = "";
+        this.page = 1;
+        this.hasMore = false;
+        this.questions = [];
+        this.getQuestions();
+        this.$router.push({ query: val });
+      },
+      deep: true,
     },
   },
   methods: {
@@ -177,10 +188,13 @@ export default {
     addNewQuestion(question) {
       //if tab is not my-questions, or my-active-questions, add the question to the top of the list
       //else, navigate to the my-questions tab
-      if (this.keyword === "my-questions" || this.keyword === "") {
+      if (
+        this.queryParams.keyword === "my-questions" ||
+        this.queryParams.keyword === ""
+      ) {
         this.questions.unshift(question);
       } else {
-        this.keyword = "my-questions";
+        this.queryParams = { ...this.queryParams, keyword: "my-questions" };
       }
     },
 
@@ -213,32 +227,34 @@ export default {
           this.hasMore = false;
           return;
         } else {
-          if (this.keyword === "my-questions" || this.keyword === "") {
+          const { keyword, discussion_type } = this.queryParams;
+          if (keyword === "my-questions" || keyword === "") {
             //get my questions
             response = await GeneralConversationService.getMyQuestions(
               this.page,
             );
-          } else if (this.keyword === "my-active-questions") {
+          } else if (keyword === "my-active-questions") {
             //get my active questions
             response = await GeneralConversationService.getMyActiveQuestions(
               this.page,
             );
-          } else if (this.keyword === "my-late-questions") {
+          } else if (keyword === "my-late-questions") {
             //get my late questions
             response = await GeneralConversationService.getMyLateQuestions(
               this.page,
             );
-          } else if (this.keyword === "discussion-questions") {
+          } else if (keyword === "discussion-questions") {
             //get discussion questions
             response = await GeneralConversationService.getDiscussionQuestions(
               this.page,
+              discussion_type,
             );
-          } else if (this.keyword === "all") {
+          } else if (keyword === "all") {
             //get all questions
             response = await GeneralConversationService.getAllQuestions(
               this.page,
             );
-          } else if (this.keyword === "my-assigned-to-parent-questions") {
+          } else if (keyword === "my-assigned-to-parent-questions") {
             //get my assigned to parent questions
             response =
               await GeneralConversationService.getMyAssignedToParentQuestions(
@@ -263,8 +279,12 @@ export default {
       }
     },
 
-    async filterQuestions(key) {
-      this.keyword = key;
+    async filterQuestions(key, type = "") {
+      this.queryParams = {
+        ...this.queryParams,
+        keyword: key,
+        discussion_type: type,
+      };
     },
 
     async loadMore() {
@@ -280,8 +300,8 @@ export default {
       this.getQuestions();
     },
 
-    updateKeyword(keyword) {
-      this.keyword = keyword;
+    updateQueryParams(params) {
+      this.queryParams = { ...this.queryParams, ...params };
     },
   },
 };
