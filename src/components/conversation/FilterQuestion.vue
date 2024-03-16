@@ -16,40 +16,106 @@
       تحويلاتي فعالة
     </button>
 
-    <button
-      class="bg-secondary rounded badge text-white border-0"
-      @click="filterQuestions('my-assigned-to-parent-questions')"
-      :disabled="loadingQuestions"
-      v-if="!isAdmin"
+    <tooltip
+      tag="span"
+      class="text-muted small"
+      tooltipPlacement="bottom"
+      data-bs-toggle="tooltip"
+      title="تحويلات رفعتها للمسؤول عني"
     >
-      تحويلاتي مرفوعة
-    </button>
+      <button
+        class="bg-secondary rounded badge text-white border-0"
+        @click="filterQuestions('my-assigned-to-parent-questions')"
+        :disabled="loadingQuestions"
+        v-if="!isAdmin"
+      >
+        تحويلاتي مرفوعة
+      </button>
+    </tooltip>
 
-    <button
-      class="bg-danger rounded badge text-white border-0"
-      @click="filterQuestions('my-late-questions')"
-      :disabled="loadingQuestions"
+    <tooltip
+      tag="span"
+      class="text-muted small"
+      tooltipPlacement="bottom"
+      data-bs-toggle="tooltip"
+      title="تحويلات متأخرة لدي"
     >
-      تحويلات متأخرة
-    </button>
+      <button
+        class="bg-danger rounded badge text-white border-0"
+        @click="filterQuestions('my-late-questions')"
+        :disabled="loadingQuestions"
+      >
+        تحويلات متأخرة
+      </button>
+    </tooltip>
 
-    <button
-      v-if="consultantAndAbove"
-      class="bg-info rounded badge text-white border-0"
-      @click="filterQuestions('discussion-questions')"
-      :disabled="loadingQuestions"
+    <tooltip
+      tag="span"
+      class="text-muted small"
+      tooltipPlacement="bottom"
+      data-bs-toggle="tooltip"
+      title="بين المؤسس وجميع المستشارين والموجهين"
     >
-      نقاش إداري
-    </button>
+      <button
+        v-if="advisorAndAbove"
+        class="bg-info rounded badge text-white border-0"
+        @click="filterQuestions('discussion-questions', 'public')"
+        :disabled="loadingQuestions"
+      >
+        نقاش عام
+      </button>
+    </tooltip>
 
-    <button
-      v-if="advisorAndAbove"
-      class="bg-warning rounded badge text-white border-0"
-      @click="filterQuestions('all')"
-      :disabled="loadingQuestions"
+    <tooltip
+      tag="span"
+      class="text-muted small"
+      tooltipPlacement="bottom"
+      data-bs-toggle="tooltip"
+      title="بين المستشار وموجهيه"
     >
-      كافة التحويل العام
-    </button>
+      <button
+        v-if="consultantOrAdvisor"
+        class="bg-black rounded badge text-white border-0"
+        @click="filterQuestions('discussion-questions', 'private')"
+        :disabled="loadingQuestions"
+      >
+        نقاش خاص
+      </button>
+    </tooltip>
+
+    <tooltip
+      tag="span"
+      class="text-muted small"
+      tooltipPlacement="bottom"
+      data-bs-toggle="tooltip"
+      title="بين المؤسس وجميع المستشارين"
+    >
+      <button
+        v-if="consultantAndAbove"
+        class="bg-gray rounded badge text-white border-0"
+        @click="filterQuestions('discussion-questions', 'administrative')"
+        :disabled="loadingQuestions"
+      >
+        نقاش إداري
+      </button>
+    </tooltip>
+
+    <tooltip
+      tag="span"
+      class="text-muted small"
+      tooltipPlacement="bottom"
+      data-bs-toggle="tooltip"
+      title="تحويلات متأخرة لدى المسؤول عنهم"
+    >
+      <button
+        v-if="advisorAndAbove"
+        class="bg-warning rounded badge text-white border-0"
+        @click="filterQuestions('all')"
+        :disabled="loadingQuestions"
+      >
+        كافة التحويل العام
+      </button>
+    </tooltip>
   </div>
 </template>
 <script>
@@ -80,6 +146,9 @@ export default {
         "consultant",
         "advisor",
       ]);
+    },
+    consultantOrAdvisor() {
+      return userInfoService.hasRoles(this.auth, ["consultant", "advisor"]);
     },
   },
 };
