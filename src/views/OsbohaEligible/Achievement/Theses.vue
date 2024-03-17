@@ -8,16 +8,17 @@
               <strong> عنوان </strong>
             </h3>
             <video class="w-75" controls preload="metadata">
-              <source src="@/assets/videos/eligible_videos/theses.mp4#t=5.0" type="video/mp4">
+              <source
+                src="@/assets/videos/eligible_videos/theses.mp4#t=5.0"
+                type="video/mp4"
+              />
               Your browser does not support the video tag.
             </video>
           </div>
           <div class="user-detail text-center mb-3">
             <div class="profile-detail mt-1">
               <br />
-              <h3 class="" v-if="book">
-                {{ book.name }} - قسم الأطروحات
-              </h3>
+              <h3 class="" v-if="book">{{ book.name }} - قسم الأطروحات</h3>
             </div>
           </div>
         </div>
@@ -25,10 +26,21 @@
       <iq-card class="iq-card">
         <div class="iq-card-body p-0">
           <div class="user-tabing">
-            <tab-nav :pills="true" id="pills-tab"
-              class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
-              <tab-nav-items class="w-100 p-0" :active="true" id="pills-feed-tab" href="#theses_container"
-                ariaControls="pills-home" role="tab" :ariaSelected="true" title="المرحلة الأولى - الأطروحات" />
+            <tab-nav
+              :pills="true"
+              id="pills-tab"
+              class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0"
+            >
+              <tab-nav-items
+                class="w-100 p-0"
+                :active="true"
+                id="pills-feed-tab"
+                href="#theses_container"
+                ariaControls="pills-home"
+                role="tab"
+                :ariaSelected="true"
+                title="المرحلة الأولى - الأطروحات"
+              />
             </tab-nav>
           </div>
         </div>
@@ -37,19 +49,34 @@
     <div class="col-sm-12">
       <div class="tab-content">
         <!-- START STAGE ONE -->
-        <tab-content-item :active="true" id="theses_container" aria-labelled-by="pills-feed-tab">
+        <tab-content-item
+          :active="true"
+          id="theses_container"
+          aria-labelled-by="pills-feed-tab"
+        >
           <div class="iq-card-body p-0">
             <div class="row">
               <div class="col-12">
                 <div id="post-modal-data" class="iq-card" v-if="user_book">
-                  <CreateThesis :pagesStartingRange="pagesStartingRange" @add-thesis="addThesis" :book="book"
-                    :noOfthesis="theses.length" :user_book_id="user_book.id" v-if="(theses.length < 12 && !status && auditable) ||
+                  <CreateThesis
+                    :pagesStartingRange="pagesStartingRange"
+                    @add-thesis="addThesis"
+                    :book="book"
+                    :noOfthesis="theses.length"
+                    :user_book_id="user_book.id"
+                    v-if="
+                      (theses.length < 12 && !status && auditable) ||
                       theses.length == 0 ||
                       theses.length < 8
-                      " />
+                    "
+                  />
                 </div>
 
-                <alert v-if="insertSuccessful" variant="primary" className="d-flex align-items-center text-center">
+                <alert
+                  v-if="insertSuccessful"
+                  variant="primary"
+                  className="d-flex align-items-center text-center"
+                >
                   <template v-slot>
                     <div>
                       <h5 class="card-title">تمت الاضافة بنجاح</h5>
@@ -57,7 +84,7 @@
                   </template>
                 </alert>
               </div>
-              <div class="col-12" v-if="theses.length>0">
+              <div class="col-12" v-if="theses.length > 0">
                 <iq-card>
                   <template v-slot:headerTitle>
                     <h4 class="card-title">الأطروحات</h4>
@@ -65,18 +92,32 @@
                   <template v-slot:body>
                     <form id="form-wizard1" class="text-center mt-3">
                       <ul id="top-tab-list" class="p-0 row list-inline">
-                        <li v-for="(thesis, index) in theses" :key="index" :class="checkActive(index, index + 1)"
-                          class="col-2 mb-2 text-start" @click="changeTab(index + 1)" id="account">
+                        <li
+                          v-for="(thesis, index) in theses"
+                          :key="index"
+                          :class="checkActive(index, index + 1)"
+                          class="col-2 mb-2 text-start"
+                          @click="changeTab(index + 1)"
+                          id="account"
+                        >
                           <a href="javascript:void(0);">
                             <span> {{ index + 1 }}</span>
                           </a>
                         </li>
                       </ul>
                       <!-- fieldsets -->
-                      <fieldset v-for="(thesis, index) in theses" :key="index"
-                        :class="current == index + 1 ? 'd-block' : 'd-none'">
-                        <ThesisDisplay :thesis="thesis" :number="index" :title="thesisTitle" :book="book"
-                          @onNext="changeTab" />
+                      <fieldset
+                        v-for="(thesis, index) in theses"
+                        :key="index"
+                        :class="current == index + 1 ? 'd-block' : 'd-none'"
+                      >
+                        <ThesisDisplay
+                          :thesis="thesis"
+                          :number="index"
+                          :title="thesisTitle"
+                          :book="book"
+                          @onNext="changeTab"
+                        />
                       </fieldset>
                     </form>
                   </template>
@@ -85,11 +126,17 @@
               <div class="col-12">
                 <iq-card>
                   <template v-slot:body>
-                    <button v-if="theses.length >= 8 && auditable" class="btn btn-primary d-block w-100 mb-3"
-                      @click="reviewThesisStatus">
+                    <button
+                      v-if="theses.length >= 8 && auditable"
+                      class="btn btn-primary d-block w-100 mb-3"
+                      @click="reviewThesisStatus"
+                    >
                       اعتماد
                     </button>
-                    <button class="btn btn-success d-block w-100" @click="back()">
+                    <button
+                      class="btn btn-success d-block w-100"
+                      @click="back()"
+                    >
                       عودة لصفحة الانجاز
                     </button>
                   </template>
@@ -147,17 +194,15 @@ export default {
         return false;
       });
       if (this.theses.length > 0) {
-        this.pagesStartingRange = + this.theses[this.theses.length - 1].ending_page
-        this.book.end_page = this.book.end_page - this.pagesStartingRange;
-
+        this.pagesStartingRange =
+          +this.theses[this.theses.length - 1].ending_page + 1;
+      } else {
+        this.pagesStartingRange = this.book.start_page;
       }
-
-
     },
     addThesis(thesis) {
       this.theses.push(thesis);
-      this.pagesStartingRange = parseInt(thesis.ending_page)
-      this.book.end_page = this.book.end_page - this.pagesStartingRange;
+      this.pagesStartingRange = parseInt(thesis.ending_page) + 1;
 
       // this.user_book_info[0].value++;
       this.auditable = true;

@@ -1,53 +1,117 @@
 <template>
   <div>
-    <iq-card id="post-modal-data" body-class="iq-card iq-card-block iq-card-stretch iq-card-height">
+    <iq-card
+      id="post-modal-data"
+      body-class="iq-card iq-card-block iq-card-stretch iq-card-height"
+    >
       <template v-slot:headerTitle>
         <h4 class="card-title">إضافة الأطروحة {{ noOfthesis + 1 }}</h4>
       </template>
       <template v-slot:body>
         <div class="d-flex align-items-center">
-          <form @submit.prevent="submit" class="post-text ml-3 w-100 row" v-if="book">
+          <form
+            @submit.prevent="submit"
+            class="post-text ml-3 w-100 row"
+            v-if="book"
+          >
+            <!--Start page-->
             <div class="form-group col-6">
-              <select class="form-select" data-trigger name="choices-single-default" id="choices-single-default"
-                v-model="v$.thesis.pageStart.$model">
+              <select
+                class="form-select"
+                data-trigger
+                name="choices-single-default"
+                id="choices-single-default"
+                v-model="v$.thesis.pageStart.$model"
+              >
                 <option value="">اختر صفحة البداية</option>
-                <option v-for="(i, index) in bookPages" :key="index" :value="i">
-                  {{ i + pagesStartingRange }}
+                <option v-for="page in pages" :key="page" :value="page">
+                  {{ page }}
                 </option>
               </select>
-              <small style="color: red" v-if="v$.thesis.pageStart.$error"> قم بادخال صفحة البداية</small>
+              <div class="help-block" v-if="v$.thesis.pageStart.$error">
+                <small
+                  style="color: red"
+                  v-if="v$.thesis.pageStart.required.$invalid"
+                  >الرجاء اختيار صفحة البداية</small
+                >
+                <small
+                  style="color: red"
+                  v-if="
+                    !v$.thesis.pageStart.required.$invalid &&
+                    v$.thesis.pageStart.between.$invalid
+                  "
+                >
+                  صفحة البداية يجب ان تكون اقل من صفحة النهاية
+                </small>
+              </div>
             </div>
+
+            <!--End page-->
             <div class="form-group col-6">
-              <select class="form-select" data-trigger name="choices-single-default" id="choices-single-default"
-                v-model="v$.thesis.pageEnd.$model">
+              <select
+                class="form-select"
+                data-trigger
+                name="choices-single-default"
+                id="choices-single-default"
+                v-model="v$.thesis.pageEnd.$model"
+              >
                 <option value="">اختر صفحة النهاية</option>
-                <option v-for="(i, index) in bookPages" :key="index" :value="i">
-                  {{ i + pagesStartingRange }}
+                <option v-for="page in bookPagesEnd" :key="page" :value="page">
+                  {{ page }}
                 </option>
               </select>
-              <small style="color: red" v-if="v$.thesis.pageEnd.$error">{{
-                pageError ? pageError : " قم بادخال صفحة النهاية"
-              }}</small>
+              <div class="help-block" v-if="v$.thesis.pageEnd.$error">
+                <small
+                  style="color: red"
+                  v-if="v$.thesis.pageEnd.required.$invalid"
+                  >الرجاء اختيار صفحة النهاية</small
+                >
+                <small
+                  style="color: red"
+                  v-if="
+                    !v$.thesis.pageEnd.required.$invalid &&
+                    v$.thesis.pageEnd.between.$invalid
+                  "
+                >
+                  صفحة النهاية يجب ان تكون اكبر من صفحة البداية
+                </small>
+              </div>
             </div>
+
+            <!--Thesis body-->
             <div class="form-group">
               <label class="form-label" for="thesisBody">الأطروحة</label>
-              <textarea rows="5" placeholder="... اكتب أطروحة عدد حروفها بين 500 و 4800" class="rounded form-control" id="thesisBody"
-                v-model="v$.thesis.text.$model"></textarea>
+              <textarea
+                rows="5"
+                placeholder="... اكتب أطروحة عدد حروفها بين 500 و 4800"
+                class="rounded form-control"
+                id="thesisBody"
+                v-model="v$.thesis.text.$model"
+              ></textarea>
               <p style="color: red" v-if="v$.thesis.text.$error">
                 لطفًا قم بكتابة اطروحة عدد حروفها بين 500 و 4800 خالية من الرموز
                 التعبيرية (emojis)
               </p>
             </div>
 
+            <!--Label-->
             <div class="form-group">
               <label class="form-label">
-
-                ✅ تذكر أن عليك أن تكون منتجًا، اكتب أطروحة تحتوي على مقدمة وفكرة وخاتمة. تناقش فيها ما انتفعت به في هذه
-                الصفحات. استخدامك للكثير من الاقتباسات و السعي لتلخيص الأفكار فقط سيعرض أطروحتك للرفض من فريق التدقيق
-                والتقييم. ليبدع قلمك هنا في ترجمة أفكارك. مساحتك هنا من (8-12) أطروحة.
+                ✅ تذكر أن عليك أن تكون منتجًا، اكتب أطروحة تحتوي على مقدمة
+                وفكرة وخاتمة. تناقش فيها ما انتفعت به في هذه الصفحات. استخدامك
+                للكثير من الاقتباسات و السعي لتلخيص الأفكار فقط سيعرض أطروحتك
+                للرفض من فريق التدقيق والتقييم. ليبدع قلمك هنا في ترجمة أفكارك.
+                مساحتك هنا من (8-12) أطروحة.
               </label>
             </div>
-            <input type="submit" value="إضافة" href="javascript:void(0);" class="btn btn-primary d-block mt-3" />
+
+            <!--Submit button-->
+            <input
+              type="submit"
+              value="إضافة"
+              href="javascript:void(0);"
+              class="btn btn-primary d-block mt-3"
+            />
           </form>
         </div>
         <hr />
@@ -112,34 +176,39 @@ export default {
         },
         pageStart: {
           required,
+          between: (value) => parseInt(value) < parseInt(this.thesis.pageEnd),
         },
         pageEnd: {
           required,
-          valdiatePages: this.validatePages,
+          between: (value) => parseInt(value) > parseInt(this.thesis.pageStart),
         },
       },
     };
   },
-  methods: {
+  computed: {
+    pages() {
+      const all = [];
+      const start = this.pagesStartingRange;
 
-    validatePages() {
-      const error =
-        parseInt(this.thesis.pageStart) < parseInt(this.thesis.pageEnd);
-      if (!error)
-        this.pageError = "يجب ان تكون صفحة البداية اقل من صفحة النهاية";
-      else this.pageError = "";
+      for (let i = start; i <= this.book.end_page; i++) {
+        all.push(i);
+      }
 
-      return error;
+      return all;
     },
+
+    bookPagesEnd() {
+      return this.pages.filter((page) => page > this.thesis.pageStart);
+    },
+  },
+  methods: {
     async submit() {
       this.thesis.text = this.removeEmojis(this.thesis.text);
       this.v$.$touch();
       if (!this.v$.thesis.$invalid) {
-        this.thesis.pageStart = this.thesis.pageStart + this.pagesStartingRange;
-        this.thesis.pageEnd = this.thesis.pageEnd + this.pagesStartingRange;
         const thesis = await thesisServices.createThesis(
           this.thesis,
-          this.user_book_id
+          this.user_book_id,
         );
         this.thesis.text = "";
         this.thesis.pageEnd = "";
