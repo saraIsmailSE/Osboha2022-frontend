@@ -627,13 +627,13 @@ export default {
     },
     computed: {
         isDisabled() {
-            return false;
-            // if (this.current_day) {
-            //     return this.goldenForm.ramadan_day_id != this.current_day.day
-            // }
-            // else {
-            //     return false;
-            // }
+            if (this.current_day) {
+                // return this.goldenForm.ramadan_day_id != this.current_day.day
+                return this.goldenForm.ramadan_day_id > this.current_day.day
+            }
+            else {
+                return false;
+            }
         }
     }
 };

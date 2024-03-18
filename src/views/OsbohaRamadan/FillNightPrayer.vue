@@ -118,7 +118,7 @@
                             <h5 class="text-center col-6">
                                 أتممت قيام
                                 <p class=" ramada-p text-center display-3"> {{ statistics.auth_complete_nights ?
-                    statistics.auth_complete_nights : 0 }}</p>
+                                    statistics.auth_complete_nights : 0 }}</p>
                             </h5>
 
                         </div>
@@ -238,7 +238,8 @@ export default {
     computed: {
         isDisabled() {
             if (this.current_day) {
-                return this.form.ramadan_day_id != this.current_day.day
+                return this.form.ramadan_day_id > this.current_day.day
+                //return this.form.ramadan_day_id != this.current_day.day
             }
             else {
                 return false;

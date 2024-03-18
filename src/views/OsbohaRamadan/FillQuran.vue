@@ -90,10 +90,17 @@
                             <p class="text-center display-3"> {{ statistics.num_users_read_five_juzu_or_more }}</p>
                         </h4>
                         <hr>
-                        <h5 class="text-center">
-                            نقاطك لـ ({{ ramadan_day.day }}) رمضان
-                            <p class="text-center display-3"> {{ authPoints }}</p>
-                        </h5>
+                        <div class="row">
+                            <h5 class="text-center col-6">
+                                نقاطك لـ ({{ ramadan_day.day }}) رمضان
+                                <p class="text-center display-3"> {{ authPoints }}</p>
+                            </h5>
+                            <h5 class="text-center col-6">
+                                أتممت
+                                <p class="text-center display-6" style="direction: rtl;"> {{ totalParts }}</p>
+                            </h5>
+
+                        </div>
 
                         <p class="text-center h5">
                             لكل قارئ للقرآن حسنة في كل حرف، والحسنة بعشرة أمثالها إلى سبعمائة ضعف، فلا تقبل أن يسبقك
@@ -226,9 +233,22 @@ export default {
 
             }
             return points;
+        },
+        totalParts() {
+            const totalParts = this.statistics.auth_total_no_of_parts
+            const khutmaCount = Math.floor(totalParts / 30);
+            const remainingParts = totalParts % 30;
+            console.log("🚀 ~ totalParts ~ remainingParts:", remainingParts)
+
+            if (khutmaCount === 0) {
+                return `${totalParts} جزء`;
+            } else if (remainingParts === 0) {
+                return `${khutmaCount} ختمة`;
+            } else {
+                return `${khutmaCount} ختمة و ${remainingParts} اجزاء`;
+            }
         }
     }
-
 };
 </script>
 

@@ -12,16 +12,15 @@
         <h2 class="text-center mt-1 mb-3">
           {{ hadith.ramadan_day.day }} ~ رمضان
         </h2>
-
         <div v-if="isHadithActive" class="text-center">
           <img :src="imagePath(hadith.image)" alt="ramadan-footer" class="img-fluid p-2" v-if="(!form.hadith_1 && !form.hadith_2) ||
-      (!form.hadith_redo && hadith.memorization.length > 0) ||
+      (!form.hadith_redo && (hadith.memorization.length > 0 && !hadith.memorization.status == 'pending')) ||
       isAccepted
       " />
           <img src="@/assets/images/ramadan/night-prayer.png" alt="ramadan-footer" class="img-fluid" v-else />
 
           <p class="ramada-p h5 text-center mt-2 p-2" v-if="(!form.hadith_1 && !form.hadith_2) ||
-      (!form.hadith_redo && hadith.memorization.length > 0) ||
+      (!form.hadith_redo && (hadith.memorization.length > 0 && !hadith.memorization.status == 'pending')) ||
       isAccepted
       ">
             {{ hadith.hadith }}
@@ -352,10 +351,10 @@ p {
 }
 
 .ramada-p {
-    font-size: 25px;
-    line-height: 40px;
-    font-family: HacenSamra, Arial, sans-serif;
-    color: #471809;
+  font-size: 25px;
+  line-height: 40px;
+  font-family: HacenSamra, Arial, sans-serif;
+  color: #471809;
 }
 
 .ramadan-card {
