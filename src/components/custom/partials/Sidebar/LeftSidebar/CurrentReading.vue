@@ -8,7 +8,7 @@
               <img src="@/assets/images/main/current_book.png" class="card-img-top" alt="current reading" />
 
               <h5 class="card-title mt-3">املأ مخزون ثقافتك</h5>
-              <div id="carouselExampleCaptions" class="carousel slide w-100" data-bs-ride="false"
+              <div id="currebtReading" class="carousel slide w-100" data-bs-ride="false"
                 v-if="book_in_progress">
                 <div class="carousel-inner w-75 m-4">
                   <div class="carousel-item" v-for="(book, index) in book_in_progress" :key="index"
@@ -43,14 +43,14 @@
                     </p>
                   </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                <button class="carousel-control-prev" type="button" data-bs-target="#currebtReading"
                   data-bs-slide="prev">
                   <span class="carousel-btn material-symbols-outlined carousel-control-prev-icon" aria-hidden="true">
                     arrow_back_ios
                   </span>
                   <span class="visually-hidden">Previous</span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                <button class="carousel-control-next" type="button" data-bs-target="#currebtReading"
                   data-bs-slide="next">
                   <span class="carousel-btn material-symbols-outlined carousel-control-next-icon" aria-hidden="true">
                     arrow_forward_ios

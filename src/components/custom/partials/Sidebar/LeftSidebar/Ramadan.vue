@@ -6,16 +6,16 @@
           <div class="media-height p-2" data-scrollbar="init">
             <div class="card d-flex align-items-center mb-4">
 
-              <div id="carouselExampleCaptions" class="carousel slide w-100" data-bs-ride="false">
+              <div id="ramadanCarousel" class="carousel slide w-100" data-bs-ride="false">
                 <div class="carousel-inner w-75 m-4">
-                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                  <button class="carousel-control-prev" type="button" data-bs-target="#ramadanCarousel"
                     data-bs-slide="prev">
                     <span class="carousel-btn material-symbols-outlined carousel-control-prev-icon" aria-hidden="true">
                       arrow_back_ios
                     </span>
                     <span class="visually-hidden">Previous</span>
                   </button>
-                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                  <button class="carousel-control-next" type="button" data-bs-target="#ramadanCarousel"
                     data-bs-slide="next">
                     <span class="carousel-btn material-symbols-outlined carousel-control-next-icon" aria-hidden="true">
                       arrow_forward_ios
