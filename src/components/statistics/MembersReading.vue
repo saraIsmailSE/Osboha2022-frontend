@@ -19,7 +19,7 @@
             <tbody v-for="mark in ReadingDataTofilter.sort((a, b) => b.total_pages - a.total_pages)" :key="mark.id">
                 <tr class="d-flex justify-content-around">
                     <td class="align-middle text-center">
-                        <span> {{ mark.user.name }} </span>
+                        <span> {{ mark.name }} </span>
                     </td>
                     <td class="align-middle text-center">
                         <span> {{ mark.total_pages }} </span>
