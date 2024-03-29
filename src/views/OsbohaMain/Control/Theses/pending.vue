@@ -45,7 +45,6 @@ export default {
     name: "Pending Theses",
     async created() {
         this.theses = await AuditMarkService.pendingTheses(this.$route.params.supervisor_id);
-        console.log("🚀 ~ file: pending.vue:81 ~ created ~ this.theses:", this.theses)
     },
     data() {
         return {

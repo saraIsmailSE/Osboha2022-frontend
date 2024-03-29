@@ -3,6 +3,10 @@ import { customHandleError } from "../../utilities/errors";
 import { api } from "../Intercepter";
 
 class UserService {
+  constructor() {
+    this.prefix = "users";
+  }
+
   async getUnactive() {
     const users = await api.get(`users/list/un-active`);
     return users;
@@ -17,7 +21,7 @@ class UserService {
     const response = await api.get(`users/search-by-name/${name}`);
     return response.data.data;
   }
-  
+
   async listInChargeOf() {
     try {
       const response = await api.get("users/list-in-charge-of");
@@ -95,6 +99,17 @@ class UserService {
   async acceptEligibleUser(id) {
     const user = api.patch(`users/allow-to-eligible/${id}`);
     return user;
+  }
+
+  async retrieveNestedUsers(parent_id) {
+    try {
+      const response = await api.get(
+        `${this.prefix}/retrieve-nested-users/${parent_id}`,
+      );
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
   }
 }
 

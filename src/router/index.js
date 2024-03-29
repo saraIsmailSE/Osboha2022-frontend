@@ -109,6 +109,11 @@ const authchildRoutes = (prop, mode) => [
     component: () => import("../views/AuthPages/Default/SignUp"),
   },
   {
+    path: "new_signup",
+    name: prop + ".new-signup",
+    component: () => import("../views/AuthPages/Default/new_signup"),
+  },
+  {
     path: "forgot-password",
     name: prop + ".forgot-password",
     component: () => import("../views/AuthPages/Default/ForgotPassword.vue"),
@@ -177,6 +182,13 @@ const userChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Assign To Parent" },
     component: () =>
       import("../views/OsbohaMain/Control/Ambassador/assignToParent"),
+  },
+  {
+    path: "retrieve-nested-users/:parent_id",
+    name: prop + ".retrieve-nested-users",
+    meta: { auth: true, name: "Retrieve Nested Users" },
+    component: () =>
+      import("../views/OsbohaMain/Control/UsersTree"),
   },
   {
     path: "profile/:user_id",

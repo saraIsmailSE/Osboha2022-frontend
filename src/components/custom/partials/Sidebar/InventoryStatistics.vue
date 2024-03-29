@@ -6,12 +6,32 @@
         </a>
     </li>
 
+
+    <!-- ###### User Tree ###### -->
+    <li class="nav-item" v-if="isAdmin">
+        <router-link :class="checkActive('user.retrieve-nested-users')
+        ? 'active nav-link'
+        : 'nav-link'
+        " aria-current="page" :to="{
+        name: 'user.retrieve-nested-users',
+        params: {
+            parent_id: user?.id,
+        },
+
+    }">
+            <i class="icon material-symbols-outlined"> supervisor_account </i>
+            <span class="item-name">المسؤول عنهم  </span>
+        </router-link>
+    </li>
+
+
+
     <!-- ###### ADMIN statistics ###### -->
     <li class="nav-item" v-if="isAdmin">
         <router-link :class="checkActive('statistics.consultants')
-            ? 'active nav-link'
-            : 'nav-link'
-            " aria-current="page" :to="{
+        ? 'active nav-link'
+        : 'nav-link'
+        " aria-current="page" :to="{
         name: 'statistics.consultants',
         params: {
             admin_id: user?.id,
@@ -26,9 +46,9 @@
     <!-- ###### consultant statistics ###### -->
     <li class="nav-item" v-if="isConsultant">
         <router-link :class="checkActive('statistics.advisors')
-            ? 'active nav-link'
-            : 'nav-link'
-            " aria-current="page" :to="{
+        ? 'active nav-link'
+        : 'nav-link'
+        " aria-current="page" :to="{
         name: 'statistics.advisors',
         params: {
             consultant_id: user?.id,
@@ -42,9 +62,9 @@
     <!-- ###### Advisor Audit ###### -->
     <li class="nav-item" v-if="isAdvisor">
         <router-link :class="checkActive('statistics.supervisors')
-            ? 'active nav-link'
-            : 'nav-link'
-            " aria-current="page" :to="{
+        ? 'active nav-link'
+        : 'nav-link'
+        " aria-current="page" :to="{
         name: 'statistics.supervisors',
         params: {
             advisor_id: user?.id,
@@ -59,9 +79,9 @@
     <!-- ###### SUPERVISOR statistics ###### -->
     <li class="nav-item" v-if="isSupervisor">
         <router-link :class="checkActive('statistics.Leaders')
-            ? 'active nav-link'
-            : 'nav-link'
-            " aria-current="page" :to="{
+        ? 'active nav-link'
+        : 'nav-link'
+        " aria-current="page" :to="{
         name: 'statistics.Leaders',
         params: {
             supervisor_id: user?.id,
