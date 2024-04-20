@@ -1,5 +1,6 @@
 <template>
-    <div :class="`right-sidebar-mini ${miniClass} data-scrollbar right-sidebar-exception`" v-click-outside="onClickOutside">
+    <div :class="`right-sidebar-mini ${miniClass} data-scrollbar right-sidebar-exception`"
+        v-click-outside="onClickOutside">
         <div class="right-sidebar-panel p-0">
             <div class="card shadow-none">
                 <div class="card-body p-0">
@@ -98,8 +99,11 @@ export default {
 };
 </script>
 <style scoped>
-.right-sidebar-exception {
+/* .right-sidebar-exception {
     top: 17.5rem !important;
+} */
+.right-sidebar-exception {
+    top: 13.5rem !important;
 }
 
 .toggel-btn {

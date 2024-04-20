@@ -1,5 +1,5 @@
 <template>
-    <div :class="`right-sidebar-mini ${miniClass} data-scrollbar right-sidebar-team`"  v-click-outside="onClickOutside">
+    <div :class="`right-sidebar-mini ${miniClass} data-scrollbar right-sidebar-team`" v-click-outside="onClickOutside">
         <div class="right-sidebar-panel p-0">
             <div class="card shadow-none">
                 <div class="card-body p-0">
@@ -81,9 +81,13 @@ export default {
 }
 </script>
 <style scoped>
-.right-sidebar-team {
+/* .right-sidebar-team {
     top: 11.5rem !important;
+} */
+.right-sidebar-team {
+    top: 7.5rem !important;
 }
+
 
 .toggel-btn {
     background-color: #192e35;

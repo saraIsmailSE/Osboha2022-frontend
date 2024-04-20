@@ -1,35 +1,19 @@
 <template>
-  <div
-    :class="`right-sidebar-mini ${miniClass} data-scrollbar right-sidebar-team`"  v-click-outside="onClickOutside"
-  >
+  <div :class="`right-sidebar-mini ${miniClass} data-scrollbar right-sidebar-team`" v-click-outside="onClickOutside">
     <div class="right-sidebar-panel p-0">
       <div class="card shadow-none">
         <div class="card-body p-0">
           <div class="media-height p-2" data-scrollbar="init">
             <div class="card d-flex align-items-center mb-4">
-              <img
-                src="@/assets/images/main/left-timer.png"
-                class="card-img-top"
-                alt="current reading"
-              />
-              <div
-                class="card-body row d-flex justify-content-center card-shadow"
-                v-if="timer && !timer.is_vacation"
-              >
+              <img src="@/assets/images/main/left-timer.png" class="card-img-top" alt="current reading" />
+              <div class="card-body row d-flex justify-content-center card-shadow" v-if="timer && !timer.is_vacation">
                 <h4 class="card-title" style="direction: rtl">
                   الأسبوع:
                   {{ timer.title }}
                 </h4>
 
-                <vue-countdown
-                  :time="time"
-                  v-slot="{ days, hours, minutes, seconds }"
-                  @end="onCountdownEnd"
-                >
-                  <table
-                    class="text-center w-100"
-                    style="direction: rtl !important"
-                  >
+                <vue-countdown :time="time" v-slot="{ days, hours, minutes, seconds }" @end="onCountdownEnd">
+                  <table class="text-center w-100" style="direction: rtl !important">
                     <thead>
                       <tr class="font-weight-bold display-6 border-bottom">
                         <th>{{ seconds }}</th>
@@ -50,10 +34,7 @@
                 </vue-countdown>
               </div>
 
-              <div
-                class="card-body row d-flex justify-content-center card-shadow"
-                v-else
-              >
+              <div class="card-body row d-flex justify-content-center card-shadow" v-else>
                 <h4 class="card-title" style="direction: rtl">
                   الأسبوع:
                   {{ timer.title }}
@@ -62,10 +43,7 @@
               </div>
             </div>
           </div>
-          <div
-            class="right-sidebar-toggle text-white mt-3 d-flex toggel-btn"
-            @click="toggleMini"
-          >
+          <div class="right-sidebar-toggle text-white mt-3 d-flex toggel-btn" @click="toggleMini">
             <span class="material-symbols-outlined"> acute </span>
           </div>
         </div>
@@ -124,7 +102,7 @@ export default {
       this.rightSideBarMini = true;
       const body = document.querySelector("body");
       this.miniClass = "right-sidebar";
-        body.classList.add("right-sidebar-close");
+      body.classList.add("right-sidebar-close");
     },
 
   },
@@ -136,8 +114,11 @@ export default {
 };
 </script>
 <style scoped>
-.right-sidebar-team {
+/* .right-sidebar-team {
   top: 14.5rem !important;
+} */
+.right-sidebar-team {
+  top: 10.5rem !important;
 }
 
 .toggel-btn {

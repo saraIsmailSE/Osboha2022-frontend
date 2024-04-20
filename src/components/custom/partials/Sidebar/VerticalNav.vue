@@ -17,11 +17,11 @@
     <!-- ###### Profile ###### -->
     <li class="nav-item">
       <router-link :class="checkActive('user.profile') ? 'active nav-link' : 'nav-link'" :to="{
-    name: 'user.profile',
-    params: {
-      user_id: user?.id,
-    },
-  }">
+        name: 'user.profile',
+        params: {
+          user_id: user?.id,
+        },
+      }">
         <i class="icon material-symbols-outlined"> person </i>
         <span class="user.profile">الملف الشخصي</span>
       </router-link>
@@ -29,12 +29,12 @@
     <!-- ###### Friends Requests ###### -->
     <li class="nav-item">
       <router-link :class="checkActive('user.friendsRequests') ? 'active nav-link' : 'nav-link'
-    " :to="{
-    name: 'user.friendsRequests',
-    params: {
-      user_id: user?.id,
-    },
-  }">
+        " :to="{
+      name: 'user.friendsRequests',
+      params: {
+        user_id: user?.id,
+      },
+    }">
         <i class="icon material-symbols-outlined"> diversity_1 </i>
         <span class="user.profile">طلبات الصداقة</span>
       </router-link>
@@ -42,7 +42,7 @@
     <!-- ###### Statistics ###### -->
     <li class="nav-item">
       <router-link :class="checkActive('statistics.byWeek') ? 'active nav-link' : 'nav-link'
-    " aria-current="page" :to="{ name: 'statistics.byWeek', params: { week_id: 1 } }">
+        " aria-current="page" :to="{ name: 'statistics.byWeek', params: { week_id: 1 } }">
         <i class="icon material-symbols-outlined"> monitoring </i>
         <span class="item-name">احصائيات الأسبوع</span>
       </router-link>
@@ -66,11 +66,11 @@
     </li>
     <li class="nav-item">
       <router-link :class="checkActive('book.free-book') ? 'active nav-link' : 'nav-link'" aria-current="page" :to="{
-    name: 'book.free-book',
-    params: {
-      user_id: user?.id,
-    },
-  }">
+        name: 'book.free-book',
+        params: {
+          user_id: user?.id,
+        },
+      }">
         <i class="icon material-symbols-outlined"> local_library </i>
         <span class="item-name">الكتاب الحر</span>
       </router-link>
@@ -85,7 +85,7 @@
     <!-- ###### Announcements ###### -->
     <li class="nav-item">
       <router-link :class="checkActive('osboha.announcement') ? 'active nav-link' : 'nav-link'
-    " aria-current="page" :to="{ name: 'osboha.announcement' }">
+        " aria-current="page" :to="{ name: 'osboha.announcement' }">
         <i class="icon material-symbols-outlined"> announcement </i>
         <span class="item-name">الإعلانات</span>
       </router-link>
@@ -115,7 +115,7 @@
     <OsbohaMarathon v-if="inMarathon" />
 
     <!-- ###### Osboha Ramadan ###### -->
-    <OsbohaRamadan />
+    <!-- <OsbohaRamadan /> -->
 
     <!-- ###### Audit Marks ###### -->
     <AuditMarks v-if="isAdvisor || isSupervisor" />
@@ -151,7 +151,7 @@ import InventoryStatistics from './InventoryStatistics'
 import AuditMarks from './AuditMarks'
 import Exceptions from './Exceptions'
 import OsbohaMarathon from './OsbohaMarathon'
-import OsbohaRamadan from "./OsbohaRamadan";
+// import OsbohaRamadan from "./OsbohaRamadan";
 export default {
   name: "DefaultSidebar",
   components: {
@@ -162,7 +162,7 @@ export default {
     AuditMarks,
     Exceptions,
     OsbohaMarathon,
-    OsbohaRamadan
+    // OsbohaRamadan
   },
   computed: {
     user() {

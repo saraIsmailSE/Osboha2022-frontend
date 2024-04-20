@@ -135,9 +135,9 @@ export default {
   background-color: #278036 !important;
 }
 
-.right-sidebar-current-reading {
+/* .right-sidebar-current-reading {
   top: 8.5rem !important;
-}
+} */
 
 
 .carousel-btn {
