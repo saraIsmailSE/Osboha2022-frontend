@@ -11,15 +11,18 @@
                             </div>
                             <h2 class="text-center mt-3 mb-3">قانون الكتاب الحر</h2>
                             <h4 class="text-center mt-3 mb-3" style="direction: rtl;">
-                                تحرص أصبوحة 180 على رعاية نوعية الكتب وجودتها لكل قارئ. ولأجل ذلك نوفر منهج أصبوحة 180 الذي
-                                يتم اختياره بعناية لك. ونوفر بجانبه الفرصة للقارئ المتمرس أن يقرأ كتبًا من خارج منهج أصبوحة
+                                تحرص أصبوحة 180 على رعاية نوعية الكتب وجودتها لكل قارئ. ولأجل ذلك نوفر منهج أصبوحة 180
+                                الذي
+                                يتم اختياره بعناية لك. ونوفر بجانبه الفرصة للقارئ المتمرس أن يقرأ كتبًا من خارج منهج
+                                أصبوحة
                                 180 بنظام (الكتاب الحر) وذلك ضمن الشروط التالية:
                                 <br />
                                 ١) 🟢يسمح لك بقراءة كتاب حر واحد، مقابل إنهاء قراءة كتابين من منهج أصبوحة 180.
                                 <br />
                                 .
                                 <br />
-                                ٢) 🟢يسمح لك بالقراءة على التوازي بين كتب منهج أصبوحة 180 والكتاب الحر الذي تختاره وذلك بشكل
+                                ٢) 🟢يسمح لك بالقراءة على التوازي بين كتب منهج أصبوحة 180 والكتاب الحر الذي تختاره وذلك
+                                بشكل
                                 أسبوعي.
                                 <br /><br />
                                 🔸شرط ذلك أن تقوم "بداية" بتسليم قراءتك الأسبوعية ل (18) صفحة كحد أدنى وما يقابلها من
@@ -70,6 +73,7 @@ export default {
     components: { BookCard, Pagination },
     props: ["page"],
     created() {
+        this.fireAlert()
         watchEffect(() => {
             this.getBooks(this.page);
         });
@@ -108,7 +112,6 @@ export default {
             this.loading = true;
             try {
                 const response = await userBookService.getAllFree(page, this.$route.params.user_id);
-                console.log(response)
                 this.books = response.books;
                 this.totalBooks = response.total;
                 this.can_add_books = response.can_add_books;
@@ -121,6 +124,30 @@ export default {
                 this.loading = false;
             }
         },
+        fireAlert() {
+            const swalWithBootstrapButtons = this.$swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-outline-primary btn-lg ms-2 text-white",
+                },
+                buttonsStyling: false,
+            });
+
+            swalWithBootstrapButtons
+                .fire({
+                    title: "🔥 تنبيه",
+                    text: `انتهت هدية المشروع لكم بمنح (٤) اشهر من السماح بقراءة الكتاب الحر بلا شروط. نبدأ منذ اليوم العودة لقوانين الكتاب الحر.`,
+                    imageUrl: require('@/assets/images/main/current_book.png'),
+                    imageAlt: 'A tall image',
+                    showConfirmButton: true,
+                    confirmButtonText: "حسنــا ",
+                    showClass: {
+                        popup: "animate__animated animate__zoomIn",
+                    },
+                    hideClass: {
+                        popup: "animate__animated animate__zoomOut",
+                    },
+                })
+        }
     },
     computed: {
         totalPages() {

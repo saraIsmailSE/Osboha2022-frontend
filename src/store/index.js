@@ -78,6 +78,23 @@ export default new Vuex.Store({
       // //   commit("SET_REACTIONS", reactions.data.data);
       // });
     },
+    new_register({ commit }, credentials) {
+      let formData = new FormData();
+      formData.append("name", credentials.name);
+      formData.append("last_name", credentials.last_name);
+      formData.append("email", credentials.email);
+      formData.append("password", credentials.password);
+      formData.append("gender", credentials.gender);
+      return api.post("new_register", formData).then((response) => {
+        localStorage.setItem("osboha__token", response.data.data.token);
+        localStorage.setItem(
+          "osboha__user",
+          JSON.stringify(response.data.data.user),
+        );
+        commit("SET_USER_DATA", response.data.data.user);
+        commit("SET_TOKEN", response.data.data.token);
+      });
+    },
     login({ commit }, user_info) {
       localStorage.setItem("osboha__token", user_info.token);
       localStorage.setItem("osboha__user", JSON.stringify(user_info.user));

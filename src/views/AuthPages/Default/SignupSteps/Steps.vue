@@ -46,8 +46,6 @@ export default {
         step,
     },
     async created() {
-        console.log("🚀 ~ created ~ created:", this.STEPS)
-
     },
     data() {
         return {

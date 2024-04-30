@@ -114,6 +114,11 @@ const authchildRoutes = (prop, mode) => [
     component: () => import("../views/AuthPages/Default/new_signup"),
   },
   {
+    path: "new_signup_idea",
+    name: prop + ".new-signup-idea",
+    component: () => import("../views/AuthPages/SignUpNewIdea"),
+  },
+  {
     path: "forgot-password",
     name: prop + ".forgot-password",
     component: () => import("../views/AuthPages/Default/ForgotPassword.vue"),
@@ -187,8 +192,7 @@ const userChildRoute = (prop, mode = false) => [
     path: "retrieve-nested-users/:parent_id",
     name: prop + ".retrieve-nested-users",
     meta: { auth: true, name: "Retrieve Nested Users" },
-    component: () =>
-      import("../views/OsbohaMain/Control/UsersTree"),
+    component: () => import("../views/OsbohaMain/Control/UsersTree"),
   },
   {
     path: "profile/:user_id",
@@ -321,7 +325,8 @@ const ramadanChildRoute = (prop, mode = false) => [
     path: "correct-question/:question_answer_id",
     name: prop + ".correct-question",
     meta: { auth: true, name: "Corrector One Question" },
-    component: () => import("../views/OsbohaRamadan/Correctors/ListOneQuestion"),
+    component: () =>
+      import("../views/OsbohaRamadan/Correctors/ListOneQuestion"),
   },
 
   {
