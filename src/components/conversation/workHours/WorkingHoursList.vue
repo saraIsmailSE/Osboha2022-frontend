@@ -23,34 +23,22 @@
                   />
                 </td>
               </tr>
-              <tr v-else-if="empty">
-                <td colspan="2" class="text-center">لا يوجد ساعات عمل</td>
-              </tr>
-              <template v-else v-for="item in workingHours" :key="item.key">
-                <tr class="bg-primary text-white">
-                  <td colspan="2" class="text-center">
-                    <strong>{{ item.key }}</strong>
-                  </td>
-                </tr>
 
-                <tr
-                  v-for="workingHour in item.value?.workingHours"
-                  :key="workingHour.id"
-                >
-                  <td>{{ formatFullDate(workingHour.date, false) }}</td>
-                  <td>{{ workingHour.minutes + " دقيقة" }}</td>
-                </tr>
-                <tr v-if="item.value?.workingHours?.length > 0">
-                  <td>
-                    <strong>المجموع</strong>
-                  </td>
-                  <td>
-                    <strong>
-                      {{ item.value?.totalMinutes + " دقيقة" }}
-                    </strong>
-                  </td>
-                </tr>
-              </template>
+              <tr v-for="item in workingHours" :key="item.key">
+                <td>{{ formatFullDate(item.date, false) }}</td>
+                <td>{{ item.minutes + " دقيقة" }}</td>
+              </tr>
+
+              <tr v-if="workingHours?.length > 0">
+                <td>
+                  <strong>المجموع</strong>
+                </td>
+                <td>
+                  <strong>
+                    {{ totalMinutes + " دقيقة" }}
+                  </strong>
+                </td>
+              </tr>
             </tbody>
           </table>
           <hr />
@@ -64,11 +52,7 @@
 import helper from "@/utilities/helper";
 export default {
   name: "WorkingHoursList",
-  data() {
-    return {
-      startWeekTitle: "",
-    };
-  },
+
   props: {
     workingHours: {
       type: Array,
@@ -79,13 +63,17 @@ export default {
       default: false,
     },
   },
+  computed: {
+    totalMinutes() {
+      let total = 0;
+      this.workingHours.forEach((item) => {
+        total += item.minutes;
+      });
+      return total;
+    },
+  },
   methods: {
     ...helper,
-  },
-  computed: {
-    empty() {
-      return Object.keys(this.workingHours).length === 0 && !this.loading;
-    },
   },
 };
 </script>

@@ -17,9 +17,9 @@ class WorkingHour {
     }
   }
 
-  async getWorkingHours() {
+  async getWorkingHours(weekId) {
     try {
-      const response = await api.get(`${this.prefix}`);
+      const response = await api.get(`${this.prefix}?week=${weekId}`);
       return response.data;
     } catch (error) {
       handleError(error);
