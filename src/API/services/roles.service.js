@@ -30,6 +30,15 @@ class RolesService {
       handleError(error);
     }
   }
+  async getSpecialCareRoles() {
+    try {
+      const response = await api.get(`${this.prefix}/get-special-care-roles`);
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   async getRamadanRoles() {
     try {
       const response = await api.get(`${this.prefix}/get-ramadan-roles`);

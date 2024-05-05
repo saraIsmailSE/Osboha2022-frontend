@@ -386,6 +386,26 @@ class GroupService {
       return error;
     }
   }
+  async getSpecialCareleaders(page) {
+    try {
+      const users = await api.get(
+        `/group/list-special-care-leaders?page=${page}`,
+      );
+      return users.data;
+    } catch (error) {
+      return error;
+    }
+  }
+  async currentAmbassadorsCount(id) {
+    try {
+      const group = await api.get(
+        `/group/current-ambassadors-count/${id}`,
+      );
+      return group.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
 }
 
 export default new GroupService();

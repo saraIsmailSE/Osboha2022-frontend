@@ -21,7 +21,7 @@
             }">
               اضافة مجموعة
             </router-link>
-            <div class="masonary-menu filter-button-group">
+            <div class="masonary-menu filter-button-group" v-if="retrieveType == 'all'">
               <nav>
                 <div className="nav nav-tabs justify-content-start" id="portfolio-tab" role="tablist">
                   <button :className="`nav-link ${retrieveType == 'all' ? 'active' : ''}`" id="nav-all-tab"

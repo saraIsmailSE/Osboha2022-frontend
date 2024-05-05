@@ -45,6 +45,14 @@ class UserGroup {
       handleError(error);
     }
   }
+  async membersByMonth(group_id, month_filter) {
+    try {
+      const response = await api.get(`${this.prefix}/members-by-month/${group_id}/${month_filter}`);
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  }
 }
 
 export default new UserGroup();

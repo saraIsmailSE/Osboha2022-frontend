@@ -76,6 +76,9 @@ export default {
     if (this.$route.params.add_type == 'marathon') {
       this.roles = await rolesService.getMarathonRoles();
     }
+    else if (this.$route.params.add_type == 'special_care') {
+      this.roles = await rolesService.getSpecialCareRoles();
+    }
     else {
       const roles = await api.get(`get-roles/1`);
       this.roles = roles.data.data;

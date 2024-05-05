@@ -5,13 +5,12 @@
     </span>
 
     <router-link :to="{ name: story.route }" class="story" :style="`background-image: url(${story.backgroundImg});`"
-      v-for="story in stories.slice(currentStoryIndex, currentStoryIndex + 2)" :key="story.route">
+      v-for="story in stories.slice(currentStoryIndex, currentStoryIndex + 2)" :key="story.route" id="stories">
     </router-link>
     <span class="material-symbols-outlined story-next" role="button" @click="nextStory"
       v-if="currentStoryIndex + 2 < totalStories">
       arrow_circle_left
     </span>
-
     <div class="col-12 row m-0 p-0 mt-2">
       <div class="col-sm-12">
         <tab-content id="pills-tabContent-2">
@@ -28,6 +27,9 @@
         </tab-content-item>
       </tab-content>
     </div>
+
+    <v-tour name="osbohaTour" :steps="steps" :options="tourOptions"></v-tour>
+
   </div>
 </template>
 <script>
@@ -41,9 +43,13 @@ import knowAboutOsboha2 from '@/assets/images/main/know-about-osboha-2.png'
 import latestBook from '@/assets/images/main/latest-book.png'
 import latestAnnouncement from '@/assets/images/main/latest-announcement.png'
 import topUsers from '@/assets/images/main/top-users.png'
-
 export default {
   name: "Osboha App",
+  mounted() {
+    if (this.$route.params.tour) {
+      window.tours["osbohaTour"].start();
+    }
+  },
   components: { AddPost, LazyLoadedPosts },
   data() {
     return {
@@ -54,7 +60,56 @@ export default {
       latestBook,
       topUsers,
       latestAnnouncement,
-      currentStoryIndex: 0
+      currentStoryIndex: 0,
+      tourOptions: {
+        useKeyboardNavigation: false,
+        enabledButtons: {
+          buttonSkip: false
+        },
+        enableScrolling: false,
+        labels: {
+          buttonPrevious: 'السابق',
+          buttonNext: 'التالي',
+          buttonStop: 'انهاء'
+        },
+      },
+      steps: [
+        {
+          target: "#header",
+          step: {
+            offset: 100, // Any valid Popper.js placement. See https://popper.js.org/popper-documentation.html#Popper.placements
+          },
+          header: {
+            title: "Header",
+          },
+          content: `Discover <strong>HEADER</strong>!`,
+        },
+        {
+          target: "#sidebar-toggle",
+          step: {
+            offset: 100, // Any valid Popper.js placement. See https://popper.js.org/popper-documentation.html#Popper.placements
+          },
+          header: {
+            title: "sidebar-toggle",
+          },
+          content: `Discover <strong>sidebar-toggle</strong>!`,
+        },
+        {
+          target: "#stories",
+          step: {
+            offset: 100, // Any valid Popper.js placement. See https://popper.js.org/popper-documentation.html#Popper.placements
+          },
+          header: {
+            title: "Stories",
+          },
+          content: `Discover <strong>stories</strong>!`,
+          params: {
+            highlight: true,
+          }
+
+        },
+      ],
+
 
 
     };
