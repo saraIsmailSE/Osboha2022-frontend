@@ -47,13 +47,11 @@
   <li class="nav-item" v-if="advisorAndAbove">
     <router-link
       :class="
-        checkActive('general-conversation.workingHours')
-          ? 'active nav-link'
-          : 'nav-link'
+        checkActive('working-hours.index') ? 'active nav-link' : 'nav-link'
       "
       aria-current="page"
       :to="{
-        name: 'general-conversation.workingHours',
+        name: 'working-hours.index',
       }"
     >
       <i class="icon material-symbols-outlined"> more_time </i>
@@ -63,13 +61,11 @@
   <li class="nav-item" v-if="advisorAndAbove">
     <router-link
       :class="
-        checkActive('general-conversation.workingHoursStats')
-          ? 'active nav-link'
-          : 'nav-link'
+        checkActive('working-hours.statistics') ? 'active nav-link' : 'nav-link'
       "
       aria-current="page"
       :to="{
-        name: 'general-conversation.workingHoursStats',
+        name: 'working-hours.statistics',
       }"
     >
       <i class="icon material-symbols-outlined"> hourglass_top </i>

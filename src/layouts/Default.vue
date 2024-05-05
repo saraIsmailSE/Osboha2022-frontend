@@ -9,7 +9,11 @@
   <div class="main-content">
     <div class="position-relative">
       <template v-for="(option, index) in breadcrumboptions" :key="index">
-        <breadcrumb :img="option.img" :title="option.title" v-show="this.$route.meta.name === option.title" />
+        <breadcrumb
+          :img="option.img"
+          :title="option.title"
+          v-show="this.$route.meta.name === option.title"
+        />
       </template>
     </div>
     <div id="content-page" class="content-page">
@@ -32,7 +36,10 @@
       />
       <ReadingTeam :reading_team="sessionData.reading_team" />
       <Timer :timer="sessionData.timer" />
-      <LastException :lastException="sessionData.last_exception" v-if="sessionData.last_exception" />
+      <LastException
+        :lastException="sessionData.last_exception"
+        v-if="sessionData.last_exception"
+      />
     </div>
   </div>
 </template>
@@ -163,12 +170,7 @@ export default {
         }
       }
 
-      this.$store.commit("SET_MAIN_TIMER", this.sessionData?.timer?.main_timer);
-      this.$store.commit(
-        "SET_WEEK_START_DATE",
-        this.sessionData?.timer?.created_at,
-      );
-      this.$store.commit("SET_WEEK_TITLE", this.sessionData?.timer?.title);
+      this.$store.commit("SET_CURRENT_WEEK", this.sessionData?.timer);
     },
   },
 };
