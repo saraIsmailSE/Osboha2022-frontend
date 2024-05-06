@@ -16,9 +16,7 @@ export default new Vuex.Store({
     isNewUser: true,
     reactions: [],
     unreadNotifications: 0,
-    week_start_date: null,
-    main_timer: null,
-    week_title: null,
+    current_week: null,
   },
   mutations: {
     SET_USER_DATA(state, userData) {
@@ -46,14 +44,8 @@ export default new Vuex.Store({
       state.user.allowed_to_eligible = value;
       localStorage.setItem("osboha__user", JSON.stringify(state.user));
     },
-    SET_MAIN_TIMER(state, timer) {
-      state.main_timer = timer;
-    },
-    SET_WEEK_START_DATE(state, date) {
-      state.week_start_date = date;
-    },
-    SET_WEEK_TITLE(state, title) {
-      state.week_title = title;
+    SET_CURRENT_WEEK(state, week) {
+      state.current_week = week;
     },
   },
   actions: {

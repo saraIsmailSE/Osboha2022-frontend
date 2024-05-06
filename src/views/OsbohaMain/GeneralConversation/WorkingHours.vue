@@ -22,87 +22,72 @@
           />
         </div>
       </div>
-      <div class="col-12 bg-white pt-2" v-if="weekDays?.length > 0">
-        <div class="sign-in-from">
-          <form class="mt-2" @submit.prevent="submit()">
-            <div
-              class="row"
-              v-for="(day, index) in weekDays"
-              :key="day.date"
-              :id="day.date"
-            >
-              <input type="hidden" v-model="day.week_id" />
-              <div class="col-12" v-if="startWeekTitle !== day.week_title">
-                <h4 class="text-center bg-primary my-2 text-white py-1">
-                  {{ (startWeekTitle = day.week_title) }}
-                </h4>
-              </div>
-              <div class="col-sm-12 col-md-6">
-                <div class="form-group">
-                  <label
-                    for="hours"
-                    class="d-block mb-1"
-                    style="font-weight: bold"
-                    >اليوم/التاريخ</label
-                  >
-                  <div class="input-group">
-                    <span class="text-primary me-2" style="font-weight: bold">{{
-                      day.name
-                    }}</span>
-                    <input
-                      type="string"
-                      v-model="day.date"
-                      :disabled="true"
-                      class="form-control mb-0"
-                      id="date"
-                      placeholder="ادخل التاريخ"
-                    />
-                  </div>
-                </div>
-              </div>
 
-              <div class="col-sm-12 col-md-6">
-                <div class="form-group">
-                  <label
-                    class="d-block mb-1"
-                    for="minutes"
-                    style="font-weight: bold"
-                    >الدقائق</label
-                  >
-                  <input
-                    :value="day.minutes"
-                    type="number"
-                    class="form-control mb-0"
-                    id="minutes"
-                    placeholder="ادخل عدد الدقائق"
-                    :disabled="loader"
-                    @change="changeMinutes(index, $event.target.value)"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12 d-flex justify-content-end align-items-center">
-                <button
-                  type="submit"
-                  class="btn btn-primary me-2"
-                  style="height: fit-content"
-                  :disabled="loader"
-                >
-                  حفظ
-                </button>
-              </div>
-            </div>
-
-            <div class="form-group text-center" v-if="message">
-              <small :class="`text-${variant}`">
-                {{ message }}
-              </small>
-            </div>
-            <hr />
-          </form>
+      <!-- week form  -->
+      <div class="row my-2 px-4 w-100">
+        <div class="col-sm-12 col-md-6" v-for="week in weeks" :key="week.id">
+          <div class="form-check form-check-inline">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="date"
+              :id="week.id"
+              :value="week.id"
+              v-model="selectedWeekId"
+            />
+            <label class="form-check-label" :for="week.id">
+              <span class="bold text-primary">
+                {{
+                  `${
+                    parseInt(week.id) ===
+                    parseInt($store.state.current_week?.id)
+                      ? "الأسبوع الحالي: "
+                      : "الأسبوع السابق: "
+                  }`
+                }}
+              </span>
+              <span>
+                {{ week.title }}
+              </span>
+            </label>
+          </div>
         </div>
       </div>
+
+      <!-- header  -->
+      <div class="col-12 my-2" v-if="selectedWeekData">
+        <h3
+          class="bold text-primary text-center d-flex justify-content-center align-items-center gap-2"
+        >
+          <span class="material-symbols-outlined"> atr </span>
+          {{
+            `${isCurrentWeek ? "الأسبوع الحالي" : "الأسبوع السابق"}: ${
+              selectedWeekData?.title
+            }`
+          }}
+          <span class="material-symbols-outlined"> atr </span>
+        </h3>
+      </div>
+
+      <!-- Loading state -->
+      <div
+        class="col-12 d-flex justify-content-center align-items-center"
+        v-if="loadingStats"
+        style="height: 680px"
+      >
+        <img
+          :src="require('@/assets/images/gif/page-load-loader.gif')"
+          alt="loader"
+          style="height: 100px"
+        />
+      </div>
+
+      <!-- days form -->
+      <DaysForm
+        :weekDays="weekDays"
+        @changeMinutes="changeMinutes"
+        @getWorkingHours="getWorkingHours"
+      />
     </iq-card>
 
     <WorkingHoursList :workingHours="workingHours" :loading="loadingStats" />
@@ -113,74 +98,77 @@
 import WorkingHourService from "@/API/services/working-hour.service";
 import WorkingHoursList from "@/components/conversation/workHours/WorkingHoursList.vue";
 import helper from "@/utilities/helper";
+import DaysForm from "@/components/conversation/workHours/DaysForm.vue";
 
 export default {
   name: "WorkingHours",
   components: {
     WorkingHoursList,
+    DaysForm,
   },
   async created() {
+    const queryParams = this.$route.query;
+
+    if (!queryParams.week) {
+      this.$router.push({
+        query: { week: this.$store.state.current_week?.id },
+      });
+    } else {
+      this.selectedWeekId = queryParams.week;
+    }
+
     await this.getWorkingHours();
-    // this.fillWeekDays();
+    this.fillWeekDays();
   },
 
   data() {
     return {
-      message: "",
-      variant: "success",
-      loader: false,
+      weeks: [],
       workingHours: [],
       loadingStats: false,
       weekDays: [],
-      days: [],
-      startWeekTitle: "",
+      selectedWeekId: "",
     };
   },
   watch: {
-    message() {
-      setTimeout(
-        () => {
-          this.message = "";
-        },
-        this.variant === "success" ? 3000 : 5000,
+    async selectedWeekId() {
+      this.$router.push({ query: { week: this.selectedWeekId } });
+      this.weekDays = [];
+      this.workingHours = [];
+      await this.getWorkingHours();
+    },
+    workingHours() {
+      this.fillWeekDays();
+    },
+  },
+  computed: {
+    selectedWeekData() {
+      return this.weeks.find(
+        (week) => parseInt(week.id) === parseInt(this.selectedWeekId),
       );
     },
-    days() {
-      this.fillWeekDays();
+    isCurrentWeek() {
+      return (
+        parseInt(this.selectedWeekId) ===
+        parseInt(this.$store.state.current_week?.id)
+      );
     },
   },
   methods: {
     ...helper,
-    async submit() {
-      this.messages = "";
-
-      this.loader = true;
-
-      try {
-        await WorkingHourService.addWorkingHours(this.weekDays);
-
-        this.message = "تم إدخال الدقائق بنجاح";
-        this.variant = "success";
-
-        this.weekDays = [];
-        this.getWorkingHours();
-      } catch (error) {
-        this.message = "حدث خطأ أثناء إدخال الدقائق";
-        this.variant = "danger";
-      } finally {
-        this.loader = false;
-      }
-    },
 
     async getWorkingHours() {
       if (this.loadingStats) return;
 
+      this.weekDays = [];
       this.loadingStats = true;
       try {
-        const response = await WorkingHourService.getWorkingHours();
+        const response = await WorkingHourService.getWorkingHours(
+          this.selectedWeekId,
+        );
 
-        this.workingHours = this.objectToArray(response.data?.workingHoursList);
-        this.days = response.data?.days || [];
+        this.workingHours = response.data?.workingHours;
+        this.weeks = response.data?.weeks;
       } catch (error) {
         this.toggleErrorToast();
       } finally {
@@ -189,6 +177,8 @@ export default {
     },
 
     fillWeekDays() {
+      this.weekDays = [];
+
       const arabicWeekDays = [
         "الأحد",
         "الاثنين",
@@ -199,15 +189,47 @@ export default {
         "السبت",
       ];
 
-      this.days?.forEach((day) => {
-        const date = new Date(day.date);
-        const dayName = arabicWeekDays[date.getDay()];
+      //get date part only
+      const startDate = new Date(this.selectedWeekData?.created_at);
+      const endDate = new Date(this.selectedWeekData?.main_timer);
+      const options = {
+        timeZone: "Asia/Riyadh",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      };
+
+      let countSundays = 0;
+      while (startDate < endDate) {
+        //check if sunday is repeated, skip it
+        if (startDate.getDay() === 0) {
+          console.log(countSundays);
+          if (countSundays > 0) {
+            startDate.setDate(startDate.getDate() + 1);
+            continue;
+          }
+          countSundays++;
+        }
+
+        //format date to be mm/dd/yyyy
+        const date = startDate.toLocaleDateString("en-US", options);
+        //get the day name in arabic
+        const dayName = arabicWeekDays[startDate.getDay()];
+        //get the minutes for the day
+        const minutes = this.workingHours.find(
+          (wh) => wh.date === date,
+        )?.minutes;
 
         this.weekDays.push({
           name: dayName,
-          ...day,
+          //format the date to be dd-mm-yyyy
+          date: startDate.toLocaleDateString("en-CA", options),
+          minutes: minutes ?? 0,
+          week_id: this.selectedWeekId,
         });
-      });
+
+        startDate.setDate(startDate.getDate() + 1);
+      }
     },
 
     changeMinutes(index, value) {
@@ -221,3 +243,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.bold {
+  font-weight: bold;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 700,
+    "GRAD" 0,
+    "opsz" 24;
+}
+</style>

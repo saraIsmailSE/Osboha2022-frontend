@@ -679,17 +679,20 @@ const generalConversationChildRoute = (prop, mode = false) => [
     component: () =>
       import("../views/OsbohaMain/GeneralConversation/Statistics"),
   },
+];
+
+const workingHoursChildRoute = (prop, mode = false) => [
   {
-    path: "working-hours",
-    name: prop + ".workingHours",
-    meta: { auth: true, name: "General Conversation Working Hours" },
+    path: "",
+    name: prop + ".index",
+    meta: { auth: true, name: "Working Hours" },
     component: () =>
       import("../views/OsbohaMain/GeneralConversation/WorkingHours"),
   },
   {
-    path: "working-hours-stats",
-    name: prop + ".workingHoursStats",
-    meta: { auth: true, name: "General Conversation Working Hours Stats" },
+    path: "statistics",
+    name: prop + ".statistics",
+    meta: { auth: true, name: "Working Hours Stats" },
     component: () =>
       import("../views/OsbohaMain/GeneralConversation/WorkingHoursStats"),
   },
@@ -1141,6 +1144,13 @@ const routes = [
     component: () => import("../layouts/Default"),
     meta: { auth: true },
     children: generalConversationChildRoute("general-conversation"),
+  },
+  {
+    path: "/working-hours",
+    name: "working-hours",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: workingHoursChildRoute("working-hours"),
   },
   {
     path: "/ramadan",
