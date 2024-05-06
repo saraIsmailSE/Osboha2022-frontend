@@ -13,7 +13,7 @@
 
                 <!-- LAST REQUEST -->
                 <h4 class="card-title" v-if="last_request"> الطلب الأخير</h4>
-                <ambassadors-request-details v-if="last_request" :last_request="last_request" />
+                <ambassadors-request-details v-if="last_request" :request="last_request" />
 
                 <div class="d-flex align-items-center mt-3" v-if="numberToRequest > 0">
                     <form @submit.prevent="submitException" class="post-text ml-3 w-100 row">
