@@ -25,6 +25,7 @@ export const ARABIC_ROLES = {
   ramadan_tafseer_corrector: "مُصحح مسابقة تفسير",
   ramadan_vedio_corrector: "مُصحح مسابقة التثقيف بالفيديو",
   special_care_coordinator: "مسؤول عام لأفرقة الرعاية الخاصة",
+  special_care_supervisor: "مراقب رعاية خاصة",
   special_care_leader: "قائد رعاية خاصة",
 };
 

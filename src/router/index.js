@@ -648,6 +648,13 @@ const ambassadorsRequestChildRoute = (prop, mode = false) => [
     component: () =>
       import("../views/OsbohaMain/Group/AmbassadorsRequest/RequestDetails"),
   },
+  {
+    path: "update-request/:request_id",
+    name: prop + ".update-request",
+    meta: { auth: true, name: "Update Requests" },
+    component: () =>
+      import("../views/OsbohaMain/Group/AmbassadorsRequest/UpdateRequest"),
+  },
 ];
 
 const exceptionChildRoute = (prop, mode = false) => [
@@ -1235,6 +1242,9 @@ router.beforeEach((to, from, next) => {
   if (to.meta.auth && !loggedIn()) {
     return next("/auth/signin");
   } else {
+    if (to.path === "/") {
+      next("/home"); // Redirect to '/home' [new route]
+    }
     next();
   }
 });

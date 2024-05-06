@@ -54,7 +54,8 @@
                     </table>
                 </tab-content-item>
                 <tab-content-item :active="false" id="pills-profile-fill" aria-labelled-by="pills-profile-tab-fill">
-                    <table id="datatable" class="table table-striped table-bordered" v-if="request.ambassadors.length > 0">
+                    <table id="datatable" class="table table-striped table-bordered"
+                        v-if="request.ambassadors && request.ambassadors.length > 0">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -82,14 +83,31 @@
                     <h4 v-else>لا يوجد</h4>
                 </tab-content-item>
             </tab-content>
+            <div v-if="(request.ambassadors && request.ambassadors.length == 0) || !request.ambassadors">
+                <router-link :to="{
+                    name: 'ambassadors-request.update-request',
+                    params: { request_id: request.id },
+                }">
+                    <span class="material-symbols-outlined ms-2 me-2" role="button">
+                        edit
+                    </span>
+                </router-link> <span class="material-symbols-outlined ms-2 me-2" role="button" @click="deleteRequest()">
+                    delete
+                </span>
+            </div>
         </template>
     </iq-card>
 </template>
 <script>
 import { GENDER } from "@/utilities/constants";
+import AmbassadorsRequest from '@/API/services/ambassadors-request.service';
+import helper from "@/utilities/helper";
 
 export default {
     name: "Ambassador Request Details",
+    created() {
+        this.group_id = this.request.group_id
+    },
     props: {
         request: {
             type: [Object],
@@ -99,7 +117,32 @@ export default {
     data() {
         return {
             GENDER,
+            group_id: 0,
         };
+    },
+    methods: {
+        async deleteRequest() {
+
+            try {
+                const response = await AmbassadorsRequest.delete(this.request.id);
+                helper.toggleToast(
+                    "تم الحذف",
+                    "success"
+                );
+                this.$emit('request-deleted')
+                this.$router.push({
+                    name: 'group.requestAmbassadors',
+                    params: { group_id: this.group_id },
+                })
+            }
+            catch (error) {
+                helper.toggleToast(
+                    "حدث خطأ أثناء الحذف, حاول مرة أخرى",
+                    "error"
+                );
+                console.log(error);
+            }
+        }
     },
 };
 </script>

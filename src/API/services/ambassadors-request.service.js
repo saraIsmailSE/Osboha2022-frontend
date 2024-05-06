@@ -14,10 +14,19 @@ class AmbassadorsRequest {
         }
     }
 
-
     async create(ambassador_request) {
         try {
             const response = await api.post(`${this.prefix}/create`, ambassador_request, {
+                headers: { "Content-type": "multipart/form-data" },
+            });
+            return response.data.data;
+        } catch (error) {
+            return error;
+        }
+    }
+    async update(ambassador_request) {
+        try {
+            const response = await api.post(`${this.prefix}/update`, ambassador_request, {
                 headers: { "Content-type": "multipart/form-data" },
             });
             return response.data.data;
@@ -59,6 +68,14 @@ class AmbassadorsRequest {
             `${this.prefix}/list-requests/${retrieveType}/${is_done}/${name}?page=${page}`,
             );
             return await groups.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async delete(request_id) {
+        try {
+            return await api.delete(`${this.prefix}/delete/${request_id}`);
         } catch (error) {
             return error;
         }

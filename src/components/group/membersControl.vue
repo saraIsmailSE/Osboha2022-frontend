@@ -8,10 +8,11 @@
 
     <div :class="`dropdown-menu dropdown-menu-right ${show ? 'show' : ''}`" aria-labelledby="dropdownMenuButton"
       style="">
-      <router-link v-if="groupCategory == 'special_care'" class="dropdown-item d-flex align-items-center" :to="{
-        name: 'group.requestAmbassadors',
-        params: { group_id: group_id },
-      }">
+      <router-link v-if="groupCategory == 'special_care' && allowedToRequestMembers"
+        class="dropdown-item d-flex align-items-center" :to="{
+          name: 'group.requestAmbassadors',
+          params: { group_id: group_id },
+        }">
         <span class="material-symbols-outlined me-2 md-18">
           diversity_1
         </span>
@@ -219,6 +220,13 @@ export default {
         "advisor",
         "marathon_coordinator",
         "marathon_verification_supervisor",
+      ]);
+    },
+    allowedToRequestMembers() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "special_care_coordinator",
+        "special_care_supervisor",
       ]);
     },
     supervisorAndAbove() {

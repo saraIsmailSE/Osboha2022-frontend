@@ -1,25 +1,23 @@
 <template>
     <div class="col-sm-12 mt-3 text-center">
-        <iq-card class="iq-card" v-if="group">
+        <iq-card class="iq-card">
             <div class="iq-card-header-toolbar d-flex align-items-center mx-auto">
                 <h3 class="text-center mt-3 mb-3">
-                    طلب سفراء - {{ group.name }}
+                    طلب رقم - {{ requestForm.request_id }}
                 </h3>
             </div>
+
+
+
             <div class="iq-card-body p-3">
                 <div class="image-block text-center">
                     <img src="@/assets/images/main/request_amb.png" class="img-fluid rounded w-50" alt="blog-img">
                 </div>
-
-                <!-- LAST REQUEST -->
-                <h4 class="card-title" v-if="last_request"> الطلب الأخير</h4>
-                <ambassadors-request-details v-if="last_request" :request="last_request"  @request-deleted="requestDeleted"/>
-
-                <div class="d-flex align-items-center mt-3" v-if="numberToRequest > 0">
-                    <form @submit.prevent="submitException" class="post-text ml-3 w-100 row">
+                <div class="d-flex align-items-center mt-3">
+                    <form @submit.prevent="updateRequest" class="post-text ml-3 w-100 row">
                         <div class="form-group col-12">
                             <h4>جنس القائد</h4>
-                            <select :disabled="message" v-model="v$.requestForm.leader_gender.$model"
+                            <select :disabled="!allowedToUpdate" v-model="v$.requestForm.leader_gender.$model"
                                 class="form-select mt-2" data-trigger name="leader_gender" id="leader_gender">
                                 <option value='' selected>اختر جنس القائد</option>
                                 <option value='female'>أنثى</option>
@@ -30,7 +28,7 @@
                         </div>
                         <div class="form-group col-12">
                             <h4>جنس السفراء</h4>
-                            <select :disabled="message" v-model="v$.requestForm.ambassadors_gender.$model"
+                            <select :disabled="!allowedToUpdate" v-model="v$.requestForm.ambassadors_gender.$model"
                                 class="form-select mt-2" data-trigger name="ambassadors_gender" id="ambassadors_gender">
                                 <option value='' selected>اختر جنس السفراء</option>
                                 <option value='any'>لا فرق</option>
@@ -43,7 +41,7 @@
                         <div class="form-group">
                             <h4>العدد المطلوب</h4>
                             <div class="form-group row">
-                                <select :disabled="message" v-model="v$.requestForm.members_num.$model"
+                                <select :disabled="!allowedToUpdate" v-model="v$.requestForm.members_num.$model"
                                     class="form-select mt-2" data-trigger name="members_num" id="eceptionType">
                                     <option value=0 selected>اختر عدد السفراء</option>
                                     <option v-for="index in numberToRequest" :key="index" :value=index>{{ index }}
@@ -55,11 +53,15 @@
                             </small>
                         </div>
                         <hr>
+                        <div class="alert alert-danger p-1 m-2 text-center" role="alert" v-if="!allowedToUpdate">
+                            <h6 class="text-center">تم توزيع سفراء لهذا الطلب - لا يمكنك تعديله</h6>
+                        </div>
+
                         <div class="form-group">
 
-                            <button type="submit" :disabled="message"
+                            <button type="submit" :disabled="!allowedToUpdate"
                                 class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
-                                طلب
+                                تعديل
                             </button>
                         </div>
 
@@ -69,66 +71,53 @@
                         <h4 class="text-center mt-3 mb-3" v-if="message"> {{ message }}</h4>
                     </form>
                 </div>
-                <div class="alert alert-danger p-1 m-2 text-center" role="alert" v-else>
-                    <h6 class="text-center">
-                        لا يمكنك طلب سفراء
-                    </h6>
-                </div>
-                <div class="d-flex align-items-center mt-3 row">
-                    <div class="d-inline-block w-100 text-center col-12">
-                        <a role="button" @click="back()" class=" d-block mt-3 mb-3 w-75 mx-auto">
-                            <span>عودة للمجموعة</span>
-                            <span class="align-middle material-symbols-outlined">
-                                keyboard_return
-                            </span>
-                        </a>
 
-                    </div>
-                </div>
             </div>
         </iq-card>
-        <div class="col-sm-12 text-center" v-else>
-            <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
-        </div>
 
     </div>
 </template>
 <script>
-import useVuelidate from "@vuelidate/core";
 import AmbassadorsRequest from '@/API/services/ambassadors-request.service';
+import useVuelidate from "@vuelidate/core";
 import helper from "@/utilities/helper";
 import GroupService from "@/API/services/group.service";
 import { required } from "@vuelidate/validators";
-import AmbassadorsRequestDetails from '@/components/group/AmbassadorsRequestDetails';
-const greaterThanZero = (value) => value > 0;
 
 export default {
-    name: "New Ambassador Request",
-    async created() {
-        this.group = await GroupService.currentAmbassadorsCount(this.$route.params.group_id);
-        this.last_request = await AmbassadorsRequest.latestGroupRequest(this.$route.params.group_id);
-    },
-
-    components: {
-        AmbassadorsRequestDetails,
-    },
+    name: "Update Request",
     setup() {
         return {
             v$: useVuelidate()
         };
     },
+    async created() {
+        const response = await AmbassadorsRequest.show(this.$route.params.request_id);
+        if (response.ambassadors.length == 0) {
+            this.group = await GroupService.currentAmbassadorsCount(response.group.id);
+            this.allowedToUpdate = true;
+            this.requestForm.ambassadors_gender = response.ambassadors_gender ? response.ambassadors_gender : '';
+            this.requestForm.leader_gender = response.leader_gender ? response.leader_gender : '';
+            this.requestForm.members_num = response.members_num ? response.members_num : 0;
+        }
+        else {
+            this.allowedToUpdate = false;
+        }
+
+    },
     data() {
         return {
+            allowedToUpdate: false,
             group: null,
+            message: null,
             loader: false,
             requestForm: {
                 leader_gender: '',
                 ambassadors_gender: '',
                 members_num: 0,
-                group_id: this.$route.params.group_id,
+                request_id: this.$route.params.request_id,
             },
             last_request: null,
-            message: null,
 
         };
     },
@@ -143,55 +132,47 @@ export default {
                 },
                 members_num: {
                     required,
-                    maxValue: greaterThanZero,
                 }
             }
         };
     },
     methods: {
-        requestDeleted(){
-            this.last_request=null;
-            this.message = null;
-        },
-        async submitException() {
+        async updateRequest() {
             this.v$.$touch();
             if (!this.v$.requestForm.$invalid) {
                 this.message = "";
                 this.loader = true;
                 try {
-                    const response = await AmbassadorsRequest.create(this.requestForm);
+                    const response = await AmbassadorsRequest.update(this.requestForm);
                     this.last_request = response;
                     this.loader = false;
                     helper.toggleToast(
-                        "تم الانشاء",
+                        "تم التحديث",
                         "success"
                     );
                     this.message = 'تم رفع الطلب - رقم الطلب هو: ' + response.id;
-                    this.requestForm.ambassadors_gender='';
-                    this.requestForm.leader_gender='';
-                    this.requestForm.numberToRequest=0;
-
                     this.v$.requestForm.$reset()
-
+                    setTimeout(() => {
+                        this.$router.push({
+                            name: 'ambassadors-request.request-details',
+                            params: { request_id: this.requestForm.request_id },
+                        })
+                            ;
+                    }, 3000);
                 }
                 catch (error) {
                     helper.toggleToast(
-                        "حدث خطأ أثناء الانشاء, حاول مرة أخرى",
+                        "حدث خطأ أثناء التحديث, حاول مرة أخرى",
                         "error"
                     );
                     console.log(error);
                 }
             }
         },
-        back() {
-            this.$router.push({ name: 'group.group-detail' })
-        }
     },
+
     computed: {
         numberToRequest() {
-            if (this.last_request && this.last_request.is_done == 0) {
-                return 0;
-            }
             if (this.group) {
                 var maximum_to_request;
                 if (this.group.type.type == 'special_care') {
@@ -216,6 +197,5 @@ export default {
             return 0;
         },
     },
-
 };
 </script>

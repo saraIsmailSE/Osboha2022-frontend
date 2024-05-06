@@ -107,7 +107,6 @@ export default {
 
       try {
         const response = await AuthService.login(this.form)
-        console.log("🚀 ~ submit func ~ response:", response)
         if (response.status == 200) {
           this.$store.dispatch("login", response.data.data);
           this.errorMessage = "";
