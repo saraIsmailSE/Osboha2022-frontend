@@ -13,8 +13,8 @@
           <form @submit.prevent="submitException" class="post-text ml-3 w-100 row">
             <div class="form-group col-12">
               <h4>نوع الاجازة</h4>
-              <select :disabled="message" v-model="v$.exceptionForm.type_id.$model" class="form-select mt-2" data-trigger
-                name="type_id" id="eceptionType">
+              <select :disabled="message" v-model="v$.exceptionForm.type_id.$model" class="form-select mt-2"
+                data-trigger name="type_id" id="eceptionType">
                 <option value="0" selected>اختر نوع الاجازة</option>
                 <option v-for="(type, index) in exceptionTypes" :key="index" :value="type.id">
                   {{ type.type }}
@@ -23,6 +23,17 @@
               <small class="d-block text-start mt-1" style="color: red" v-if="v$.exceptionForm.type_id.$error">
                 * يرجى اختيار نوع الاجازة</small>
             </div>
+
+            <!-- <div class="align-items-center mt-3" v-if="exceptionForm.type_id == 6 && !social_media.facebook">
+              <h4>Please add one account at least</h4>
+              <div class="form-group col-12">
+                <input type="text" class="form-control mt-2" name="facebook" id="facebook"
+                  v-model="socialMediaForm.facebook" placeholder="فيسبوك" />
+                <input type="text" class="form-control mt-2" name="instagram" id="instagram"
+                  v-model="socialMediaForm.instagram" placeholder="انستغرام" />
+              </div>
+            </div> -->
+
 
             <div class="form-group col-12" v-if="isAdmin && v$.exceptionForm.type_id.$model == 5">
               <h4>تاريخ انتهاء الاجازة</h4>
@@ -84,8 +95,7 @@
               <div class="form-group row">
                 <textarea :disabled="message" rows="5" placeholder="سبب طلب الاجازة"
                   class="rounded form-control mt-2 col-12" id="exceptionReason" v-model="v$.exceptionForm.reason.$model"
-                  name="reason">
-                </textarea>
+                  name="reason"></textarea>
                 <p class="mb-0">
                   <span :class="{ 'text-danger': v$.exceptionForm.reason.$error }">
                     {{ v$.exceptionForm.reason.$model.length }}
@@ -130,6 +140,7 @@ import exceptionService from "@/API/services/user-exception.service";
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, maxLength, requiredIf } from "@vuelidate/validators";
 import UserInfoService from "@/Services/userInfoService";
+import SocialMedia from "@/API/services/social-media.service";
 
 const greaterThanZero = (value) => value > 0;
 
@@ -137,6 +148,10 @@ export default {
   name: "New Exception",
   async created() {
     this.exceptionTypes = await exceptionTypeService.getAllExceptionTypes();
+    // this.social_media = await SocialMedia.getByUserId(
+    //   this.$route.params.user_id
+    // );
+
   },
   components: {},
   setup() {
@@ -145,6 +160,11 @@ export default {
   data() {
     return {
       loader: false,
+      socialMediaForm: {
+        facebook: "",
+        instagram: "",
+        twitter: "",
+      },
       exceptionForm: {
         reason: "",
         type_id: 0,
@@ -220,6 +240,20 @@ export default {
     },
     uploadFile() {
       this.exceptionForm.exam_media = this.$refs.exam_media.files[0];
+    },
+    /**
+ * update profile socialmedia.
+ */
+    async submitSociaMedia() {
+      this.socialMediaMessage = "";
+      this.loader = true;
+      try {
+        const response = await SocialMedia.add(this.socialMediaForm);
+        this.loader = false;
+        this.socialMediaMessage = response;
+      } catch (error) {
+        console.log(error);
+      }
     },
     back() {
       this.$router.push({
