@@ -3,21 +3,13 @@
     <nav class="nav navbar navbar-expand-lg navbar-light iq-navbar p-lg-0">
       <div class="container-fluid p-auto">
         <div class="d-flex align-items-center gap-3">
-          <router-link
-            :to="{ name: 'osboha.list' }"
-            class="d-flex align-items-center gap-2 iq-header-logo"
-          >
+          <router-link :to="{ name: 'osboha.list' }" class="d-flex align-items-center gap-2 iq-header-logo">
             <!-- logo -->
           </router-link>
           <h3 class="logo-title d-none d-sm-block" data-setting="app_name">
             أصبوحة 180
           </h3>
-          <a
-            class="sidebar-toggle"
-            @click="toggleSidebar"
-            data-toggle="sidebar"
-            data-active="true"
-          >
+          <a class="sidebar-toggle" @click="toggleSidebar" data-toggle="sidebar" data-active="true">
             <div class="icon material-symbols-outlined iq-burger-menu">
               menu
             </div>
@@ -25,66 +17,46 @@
         </div>
         <div class="social-media">
           <p class="mb-0 d-flex">
-            <i
-              role="button"
-              @click="logout"
+            <i role="button" @click="logout"
               class="d-flex align-items-center justify-content-center ms-2 me-2 position-relative material-symbols-outlined"
-              style="-webkit-transform: scaleX(-1); transform: scaleX(-1)"
-            >
+              style="-webkit-transform: scaleX(-1); transform: scaleX(-1)">
               logout
             </i>
             <ThemeScheme />
 
-            <router-link
-              :to="{
-                name: 'user.friendsRequests',
-                params: {
-                  user_id: user.id,
-                },
-              }"
-              class="d-flex align-items-center justify-content-center ms-2 me-2 position-relative"
-            >
+            <router-link :to="{
+              name: 'user.friendsRequests',
+              params: {
+                user_id: user.id,
+              },
+            }" class="d-flex align-items-center justify-content-center ms-2 me-2 position-relative">
               <i class="material-symbols-outlined">group</i>
-              <span
-                v-if="friendRequest.length > 0"
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info"
-              >
+              <span v-if="friendRequest.length > 0"
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
                 {{ friendRequest.length }}
               </span>
             </router-link>
-            <router-link
-              :to="{ name: 'osboha.notification' }"
-              class="d-flex align-items-center justify-content-center ms-2 me-2 position-relative"
-            >
+            <router-link :to="{ name: 'osboha.notification' }"
+              class="d-flex align-items-center justify-content-center ms-2 me-2 position-relative">
               <i class="material-symbols-outlined">notifications</i>
-              <span
-                v-if="unread > 0"
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info"
-              >
+              <span v-if="unread > 0"
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
                 {{ unread }}
                 <span class="visually-hidden">unread messages</span>
               </span>
             </router-link>
-            <router-link
-              v-if="advisorAndAbove"
-              :to="{
-                name: 'chat.index',
-              }"
-              class="d-flex align-items-center justify-content-center ms-2 me-2 position-relative"
-            >
+            <router-link v-if="advisorAndAbove" :to="{
+              name: 'chat.index',
+            }" class="d-flex align-items-center justify-content-center ms-2 me-2 position-relative">
               <i class="material-symbols-outlined">forum</i>
-              <span
-                v-if="unreadMessages"
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info"
-              >
+              <span v-if="unreadMessages"
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
                 {{ unreadMessages }}
               </span>
             </router-link>
 
-            <router-link
-              :to="{ name: 'osboha.list' }"
-              class="d-flex align-items-center justify-content-center ms-2 me-2"
-            >
+            <router-link :to="{ name: 'osboha.list' }"
+              class="d-flex align-items-center justify-content-center ms-2 me-2">
               <i class="material-symbols-outlined">home</i>
             </router-link>
           </p>
@@ -145,19 +117,24 @@ export default {
     this.unreadMessages = await MessageService.unreadMessages();
     this.unread_notifications = await notificationsServices.listUnreadNotification();
 
-    // Initialize Pusher
-    // const pusher = new Pusher('0098112dc7c6ed8e4777', {
-    //   cluster: 'ap2',
-    //   encrypted: true,
-    // });
+    //Initialize Pusher
+    const pusher = new Pusher('0098112dc7c6ed8e4777180', {
+      cluster: 'mt1',
+      wsHost: window.location.hostname,
+      wsPort: 6001,
+      forceTLS: false,
+      encrypted: true,
+    });
 
-    // const channel = pusher.subscribe('rooms-channel.' + this.user.id);
-    // // Listen for 'new-message' events
-    // channel.bind('new-messages', (response) => {
-    //   if (response) {
-    //     this.unreadMessages = response.unreadMessages;
-    //   }
-    // });
+    const channel = pusher.subscribe('rooms-channel.' + this.user.id);
+    // Listen for 'new-message' events
+    channel.bind('new-messages', (response) => {
+      console.log("🚀 ~ channel.bind ~ channel.bind:",response)
+
+      if (response) {
+        this.unreadMessages = response.unreadMessages;
+      }
+    });
   },
 
   data() {
