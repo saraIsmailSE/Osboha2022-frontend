@@ -82,8 +82,11 @@
                     <div id="container06" class="style3 container default">
                         <div class="wrapper">
                             <div class="inner">
-                                <h2 id="text11" class="style5">Nisl sed ultricies</h2>
-                                <p id="text12" class="style6">Diam dignissim lectus eu ornare volutpat orci.</p>
+                                <h3 id="text11" class="text-center">لُطفًا نحتاج منك تسجيل معلوماتك</h3>
+                                <p id="text12" class="style6"> حيث سيخصص لك قائدًا
+                                    لقراءتك يتابع تقدمك، وبجداول مريحة، أضف إلى ذلك دورات وورشات عمل تطور منك.
+
+                                </p>
                                 <form id="form01" class="style1" @submit.prevent="onSubmit()">
                                     <div class="inner">
                                         <div class="field">
@@ -336,6 +339,7 @@ body {
 body:before {
     content: '';
     display: block;
+    font-family: 'Tajawal', sans-serif;
     background-attachment: scroll;
     height: var(--background-height);
     left: 0;
@@ -801,7 +805,6 @@ p.style5 {
     text-transform: uppercase;
     color: #1D1A55;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.4rem;
     width: calc(100% + 0.4rem);
     font-size: 1.375em;
     line-height: 1.5;
@@ -836,7 +839,6 @@ p.style6 {
     text-align: center;
     color: #1D1A55;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.05rem;
     width: calc(100% + 0.05rem);
     font-size: 1em;
     line-height: 1.75;
@@ -871,7 +873,6 @@ p.style7 {
     text-align: center;
     color: #1D1A55;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.05rem;
     width: calc(100% + 0.05rem);
     font-size: 0.875em;
     line-height: 1.75;
@@ -903,7 +904,6 @@ p.style7 span.p:nth-child(n + 2) {
     cursor: default;
     display: flex;
     justify-content: var(--flex-alignment);
-    letter-spacing: 0;
     padding: 0;
 }
 
@@ -935,7 +935,6 @@ p.style7 span.p:nth-child(n + 2) {
     padding: 0 0.5rem;
     vertical-align: middle;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.1rem;
     padding-left: calc(0.1rem + 0.5rem);
     font-size: 1em;
     font-weight: 400;
@@ -969,7 +968,6 @@ p.style7 span.p:nth-child(n + 2) {
     padding: 0 0.5rem;
     vertical-align: middle;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.1rem;
     padding-left: calc(0.1rem + 0.5rem);
     font-size: 1em;
     font-weight: 400;
@@ -2417,6 +2415,7 @@ form .field button>svg {
 }
 
 form input[type="text"],
+form input[type="password"],
 form input[type="email"],
 form input[type="tel"],
 form input[type="number"],
@@ -2682,7 +2681,6 @@ form.style1 .file,
 form.style1 .date {
     font-size: 1em;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.05rem;
     padding-left: calc(0.05rem + 1.1375rem);
     font-weight: 300;
     border-radius: 0rem;
@@ -2796,7 +2794,6 @@ form.style1 p {
     font-size: 1em;
     line-height: 1.5;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.05rem;
     padding-left: 0.05rem;
     font-weight: 300;
     color: #3A3939;
@@ -2810,7 +2807,6 @@ form.style1 .actions button {
     padding: 0 0.5rem;
     font-size: 1em;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.1rem;
     padding-left: calc(0.1rem + 0.5rem);
     font-weight: 400;
     border-radius: 2rem;
@@ -2958,7 +2954,6 @@ form.style1 .date[data-value=""]:before {
     h2.style3,
     h3.style3,
     p.style3 {
-        letter-spacing: 0.35rem;
         width: calc(100% + 0.35rem);
         font-size: 2em;
         line-height: 1;
@@ -2968,7 +2963,6 @@ form.style1 .date[data-value=""]:before {
     h2.style1,
     h3.style1,
     p.style1 {
-        letter-spacing: 0.35rem;
         width: calc(100% + 0.35rem);
         font-size: 1.75em;
         line-height: 1.5;
@@ -2978,7 +2972,6 @@ form.style1 .date[data-value=""]:before {
     h2.style2,
     h3.style2,
     p.style2 {
-        letter-spacing: 0.04375rem;
         width: calc(100% + 0.04375rem);
         font-size: 1em;
         line-height: 1.75;
@@ -2988,7 +2981,6 @@ form.style1 .date[data-value=""]:before {
     h2.style4,
     h3.style4,
     p.style4 {
-        letter-spacing: 0.196875rem;
         width: calc(100% + 0.196875rem);
         font-size: 1em;
         line-height: 1.5;
@@ -2998,7 +2990,6 @@ form.style1 .date[data-value=""]:before {
     h2.style5,
     h3.style5,
     p.style5 {
-        letter-spacing: 0.35rem;
         width: calc(100% + 0.35rem);
         font-size: 1.375em;
         line-height: 1.5;
@@ -3008,7 +2999,6 @@ form.style1 .date[data-value=""]:before {
     h2.style6,
     h3.style6,
     p.style6 {
-        letter-spacing: 0.04375rem;
         width: calc(100% + 0.04375rem);
         font-size: 1em;
         line-height: 1.75;
@@ -3018,7 +3008,6 @@ form.style1 .date[data-value=""]:before {
     h2.style7,
     h3.style7,
     p.style7 {
-        letter-spacing: 0.04375rem;
         width: calc(100% + 0.04375rem);
         font-size: 1em;
         line-height: 1.75;
@@ -3029,7 +3018,6 @@ form.style1 .date[data-value=""]:before {
     }
 
     .buttons.style2 li a {
-        letter-spacing: 0.1rem;
         padding-left: calc(0.1rem + 0.5rem);
         font-size: 1em;
     }
@@ -3039,7 +3027,6 @@ form.style1 .date[data-value=""]:before {
     }
 
     .buttons.style1 li a {
-        letter-spacing: 0.1rem;
         padding-left: calc(0.1rem + 0.5rem);
         font-size: 1em;
     }
@@ -3049,7 +3036,6 @@ form.style1 .date[data-value=""]:before {
     }
 
     .buttons.style4 li a {
-        letter-spacing: 0.1rem;
         padding-left: calc(0.1rem + 0.5rem);
         font-size: 1em;
     }

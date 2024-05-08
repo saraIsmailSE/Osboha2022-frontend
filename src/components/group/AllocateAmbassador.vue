@@ -1,8 +1,8 @@
 <template>
     <div>
-        <h2 class="mb-2 text-center">حتى يتم توزيعك لفريق</h2>
-        <h5 class="text-center m-auto w-75">
-            اختر جنس القائد المسؤول عنك </h5>
+        <h3 class="text-center m-auto w-75">
+            نقوم الآن بتجهيز فريق القراءة المناسب لك لاستقبالك بكل حُب، لطفًا اختر جنس القائد المسؤول عنك.
+        </h3>
 
         <div class="container mt-3">
             <div class="radio-tile-group">
