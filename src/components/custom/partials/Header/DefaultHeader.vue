@@ -9,8 +9,8 @@
           <h3 class="logo-title d-none d-sm-block" data-setting="app_name">
             أصبوحة 180
           </h3>
-          <a id="sidebar-toggle" class="sidebar-toggle" @click="toggleSidebar" data-toggle="sidebar" data-active="true">
-            <div class="icon material-symbols-outlined iq-burger-menu" id="toggelBtn">
+          <a class="sidebar-toggle" @click="toggleSidebar" data-toggle="sidebar" data-active="true">
+            <div class="icon material-symbols-outlined iq-burger-menu">
               menu
             </div>
           </a>
@@ -45,7 +45,7 @@
                 <span class="visually-hidden">unread messages</span>
               </span>
             </router-link>
-            <router-link v-if="advisorAndAbove" :to="{
+            <router-link v-if="LeaderAndAbove" :to="{
               name: 'chat.index',
             }" class="d-flex align-items-center justify-content-center ms-2 me-2 position-relative">
               <i class="material-symbols-outlined">forum</i>
@@ -117,19 +117,27 @@ export default {
     this.unreadMessages = await MessageService.unreadMessages();
     this.unread_notifications = await notificationsServices.listUnreadNotification();
 
-    // Initialize Pusher
-    // const pusher = new Pusher('0098112dc7c6ed8e4777', {
-    //   cluster: 'ap2',
-    //   encrypted: true,
-    // });
+    //Initialize Pusher
+    const pusher = new Pusher('0098112dc7c6ed8e4777180', {
+      cluster: 'mt1',
+      wsHost: window.location.hostname,
+      wsPort: 6001,
+      forceTLS: false,
+      encrypted: true,
+    });
+    console.log("🚀 ~ created ~ pusher:", pusher)
 
-    // const channel = pusher.subscribe('rooms-channel.' + this.user.id);
-    // // Listen for 'new-message' events
-    // channel.bind('new-messages', (response) => {
-    //   if (response) {
-    //     this.unreadMessages = response.unreadMessages;
-    //   }
-    // });
+
+    const channel = pusher.subscribe('rooms-channel.' + this.user.id);
+    console.log("🚀 ~ created ~ channel:", channel)
+    // Listen for 'new-message' events
+    channel.bind('new-messages', (response) => {
+      console.log("🚀 ~ channel.bind ~ channel.bind:", response)
+
+      if (response) {
+        this.unreadMessages = response.unreadMessages;
+      }
+    });
   },
 
   data() {
@@ -150,11 +158,12 @@ export default {
       //return this.$store.state.unreadNotifications;
       return this.unread_notifications.length;
     },
-    advisorAndAbove() {
+    LeaderAndAbove() {
       return UserInfoService.hasRoles(this.user, [
         "admin",
         "consultant",
         "advisor",
+        "leader",
       ]);
     },
   },
