@@ -45,7 +45,7 @@
                 <span class="visually-hidden">unread messages</span>
               </span>
             </router-link>
-            <router-link v-if="advisorAndAbove" :to="{
+            <router-link v-if="LeaderAndAbove" :to="{
               name: 'chat.index',
             }" class="d-flex align-items-center justify-content-center ms-2 me-2 position-relative">
               <i class="material-symbols-outlined">forum</i>
@@ -125,11 +125,14 @@ export default {
       forceTLS: false,
       encrypted: true,
     });
+    console.log("🚀 ~ created ~ pusher:", pusher)
+
 
     const channel = pusher.subscribe('rooms-channel.' + this.user.id);
+    console.log("🚀 ~ created ~ channel:", channel)
     // Listen for 'new-message' events
     channel.bind('new-messages', (response) => {
-      console.log("🚀 ~ channel.bind ~ channel.bind:",response)
+      console.log("🚀 ~ channel.bind ~ channel.bind:", response)
 
       if (response) {
         this.unreadMessages = response.unreadMessages;
@@ -155,11 +158,12 @@ export default {
       //return this.$store.state.unreadNotifications;
       return this.unread_notifications.length;
     },
-    advisorAndAbove() {
+    LeaderAndAbove() {
       return UserInfoService.hasRoles(this.user, [
         "admin",
         "consultant",
         "advisor",
+        "leader",
       ]);
     },
   },
