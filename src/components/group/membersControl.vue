@@ -208,9 +208,10 @@ export default {
         "consultant",
         "advisor",
         "supervisor",
-        "leader",
         "marathon_coordinator",
         "marathon_verification_supervisor",
+        "special_care_coordinator",
+        "special_care_supervisor",
       ]);
     },
     allowedToEdit() {

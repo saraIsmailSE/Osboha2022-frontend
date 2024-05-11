@@ -8,13 +8,15 @@
                             <div class="inner">
                                 <img src="@/assets/images/main/osboha_logo_500.png" class="img-fluid " alt="blog-img" />
                                 <hr id="divider01" class="style3">
-                                <p id="text14" class="style4">Lorem ipsum dolor</p>
+                                <p id="text14" class="style4">
+                                    بانضمامك إلينا؛ فأنتَ محاط بصحبة وعَت معنى أهمية ورسالة «إقرأ».
+                                </p>
                             </div>
                         </div>
                     </div>
                     <ul id="buttons02" class="style1 buttons">
                         <li>
-                            <a href="#start" class="button n01">Start</a>
+                            <a href="#start" class="button n01">ابدأ</a>
                         </li>
                     </ul>
                     <hr id="divider03" class="style1">
@@ -22,34 +24,50 @@
                         data-scroll-speed="3" class="style7 container default full screen">
                         <div class="wrapper">
                             <div class="inner">
-                                <h2 id="text01" class="style1 text-center">Enim at Accumsan</h2>
-                                <p id="text02" class="style2">Vitae dui ante eleifend accumsan ut at mus Adipiscing.
-                                    Aenean condimentum, augue ut leo accumsan enim augue col tempus viverra cubilia
-                                    consequat.</p>
-                                <ul id="buttons01" class="style2 buttons">
-                                    <li>
-                                        <a href="#continue" class="button n01">Continue</a>
-                                    </li>
-                                </ul>
+                                <h2 id="text01" class="style1 text-center">
+                                    لأن التعليم المدرسي/الجامعي ليس كافيًا لصناعة إنسان مختلف،
+                                    نقدم لك أفضل تعليم مجانًا عن طريق القراءة المنهجية التي تعطيك أفضل نسخة من ذاتك خلال
+                                    أشهر.
+
+                                </h2>
                             </div>
                         </div>
                     </div>
                     <hr id="divider04" class="style1">
 
-                    <container-right-image />
+                    <div class="wrapper style1 container columns">
+                        <div class="row ">
+                            <div class="col-md-6 col-sm-12">
+                                <span class="frame deferred">
+                                    <img src="@/assets/images/signup/about_us.png" class="w-100" alt="" />
+                                </span>
+                            </div>
+                            <div class="col-md-6 col-sm-12 mt-5 mb-5">
+                                <h2>
+                                    من نحن
+                                </h2>
+                                <p>
+                                    المشروع الأكبر عربيا لصناعة القراء عن طريق استثمار
+                                    القراءة المنهجية ونواتجها لصناعة
+                                    مجتمع واع قادر على الوصول للنهضة وتحقيق التنمية مستعينين بالتكنولوجيا الحديثة
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
 
                     <hr id="divider02" class="style1">
                     <div class="wrapper style1 container columns">
                         <div class="row inner pe-0 ps-0">
                             <div class="col-md-6 col-sm-12 mt-5 mb-5">
-                                <h2 id="text07" class="style5">
-                                    <span class="p">
-                                        Lorem ipsum<br />dolor sit amet
-                                    </span>
+                                <h2>
+                                    من نحن
                                 </h2>
-                                <p id="text08" class="style6">Tortor faucibus ullamcorper nec tempus purus sed
-                                    penatibus. Lacinia pellentesque eleifend vitae est elit tristique velit tempus
-                                    etiam.</p>
+                                <p id="text08" class="style6">
+                                    المشروع الأكبر عربيا لصناعة القراء عن طريق استثمار القراءة المنهجية ونواتجها لصناعة
+                                    مجتمع واع قادر على الوصول للنهضة وتحقيق التنمية مستعينين بالتكنولوجيا الحديثة
+
+                                </p>
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <span class="frame deferred">
@@ -106,7 +124,6 @@
                                             <p class="mt-2" style="color: red" v-if="v$.form.last_name.$error">
                                                 الاسم الاخير مطلوب
                                             </p>
-
                                         </div>
 
                                         <div class="field">
@@ -140,6 +157,28 @@
 
                                         </div>
 
+                                        <!-- <div class="field">
+                                            <label for="form01-email"> كيف تحب أن نتواصل معك؟ </label>
+                                            <select v-model="v$.form.gender.$model" class="form-select" data-trigger
+                                                name="gender" id="gender">
+                                                <option value="" selected>اختر طريقة التواصل</option>
+                                                <option value="facebook">فيسبوك</option>
+                                                <option value="instgram">انستغرام</option>
+                                            </select>
+                                            <small p class="mt-2" style="color: red" v-if="v$.form.gender.$error">اختر
+                                                جنسك</small>
+
+                                        </div>
+                                        <div class="field">
+                                            <label for="form01-email">ادخل رابط حسابك</label>
+                                            <input type="text" name="last_name" id="form01-last_name"
+                                                placeholder="رابط حسابك" maxlength="128"
+                                                v-model="v$.form.last_name.$model" />
+                                            <p class="mt-2" style="color: red" v-if="v$.form.last_name.$error">
+                                                الاسم الاخير مطلوب
+                                            </p>
+                                        </div>
+                                        -->
                                         <div class="actions">
                                             <button type="submit" class="btn btn-primary" @click="onSubmit()"
                                                 :disabled="loader">تسجيل</button>
@@ -194,10 +233,9 @@
 import useVuelidate from "@vuelidate/core";
 import { required, email, minLength, requiredIf } from "@vuelidate/validators";
 import Gallery01 from '@/components/common/Gallery01.vue';
-import ContainerRightImage from '@/components/common/ContainerRightImage.vue';
 
 export default {
-    components: { Gallery01, ContainerRightImage },
+    components: { Gallery01 },
     name: 'ComplexComponent',
     setup() {
         return { v$: useVuelidate() };
