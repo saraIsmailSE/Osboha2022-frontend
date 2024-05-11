@@ -81,6 +81,16 @@ class AmbassadorsRequest {
         }
     }
 
+    async statistics(timeFrame) {
+        try {
+            const response= await api.get(`${this.prefix}/statistics/${timeFrame}`);
+            return response.data.data;
+
+        } catch (error) {
+            return error;
+        }
+    }
+
 }
 
 export default new AmbassadorsRequest()

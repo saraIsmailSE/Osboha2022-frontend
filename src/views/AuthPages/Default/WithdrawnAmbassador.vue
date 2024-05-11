@@ -94,7 +94,8 @@ export default {
                 threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
                 if (updatedAt < threeMonthsAgo) {
                     //The record was updated more than three months ago.
-                    this.paragraph = `no team or leader`;
+                    // this.paragraph = `no team or leader`;
+                    this.paragraph = '';
                     return true;
                 } else {
                     return false;

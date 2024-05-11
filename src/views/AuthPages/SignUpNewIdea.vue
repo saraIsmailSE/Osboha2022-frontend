@@ -263,7 +263,7 @@ export default {
                 try {
                     this.loader = true;
                     this.regError = "";
-                    await this.$store.dispatch("register", {
+                    await this.$store.dispatch("new_register", {
                         email: this.form.email,
                         password: this.form.password,
                         name: this.form.name,

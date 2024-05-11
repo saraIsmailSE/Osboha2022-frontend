@@ -75,6 +75,22 @@ export default {
       },
       steps: [
         {
+          target: "#LeftSidebar",
+          step: {
+            offset: 100, // Any valid Popper.js placement. See https://popper.js.org/popper-documentation.html#Popper.placements
+          },
+          header: {
+            title: "Stories",
+          },
+          content: `Discover <strong>stories</strong>!`,
+          params: {
+            highlight: true,
+            classes: 'custom-step' // Adding custom class
+          },
+          class: 'custom-step' // Adding custom class
+
+        },
+        {
           target: "#header",
           step: {
             offset: 100, // Any valid Popper.js placement. See https://popper.js.org/popper-documentation.html#Popper.placements
@@ -239,5 +255,11 @@ export default {
   height: fit-content;
   display: block;
   align-self: self-end;
+}
+
+.custom-step  {
+  background-color:red;
+  border-radius: 10px;
+  padding: 20px;
 }
 </style>

@@ -29,7 +29,7 @@
     <DefaultFooter />
     <!-- <DefaultRightSidebar/> -->
 
-    <div v-if="sessionData">
+    <div v-if="sessionData" >
       <CurrentReading :book_in_progress="sessionData.book_in_progress" :progress="sessionData.progress" id="quick_access" />
       <ReadingTeam :reading_team="sessionData.reading_team" />
       <Timer :timer="sessionData.timer" />

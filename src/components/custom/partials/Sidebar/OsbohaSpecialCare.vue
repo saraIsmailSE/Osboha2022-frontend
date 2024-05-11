@@ -35,6 +35,15 @@
             <span class="item-name">الطلبات</span>
         </router-link>
     </li>
+    <li class="nav-item">
+        <router-link :class="checkActive('ambassadors-request.statistics') ? 'active nav-link' : 'nav-link'
+            " aria-current="page" :to="{
+                name: 'ambassadors-request.statistics',
+            }">
+            <i class="icon material-symbols-outlined"> monitoring </i>
+            <span class="item-name">احصائيات</span>
+        </router-link>
+    </li>
 </template>
 <script>
 export default {

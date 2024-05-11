@@ -642,6 +642,13 @@ const ambassadorsRequestChildRoute = (prop, mode = false) => [
       import("../views/OsbohaMain/Group/AmbassadorsRequest/ListRequests"),
   },
   {
+    path: "statistics",
+    name: prop + ".statistics",
+    meta: { auth: true, name: "Statistics" },
+    component: () =>
+      import("../views/OsbohaMain/Group/AmbassadorsRequest/Statistics"),
+  },
+  {
     path: "request-details/:request_id",
     name: prop + ".request-details",
     meta: { auth: true, name: "Requests Details" },
