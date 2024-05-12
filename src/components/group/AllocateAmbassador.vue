@@ -111,10 +111,10 @@ export default {
                 const response = await AmbassadorsRequest.allocateAmbassador(this.leader_gender, this.user.id);
                 switch (response.message) {
                     case 'no group found':
-                        this.message = `لا يوجد فريق متاح حاليًا حسب طلبك، لكن تم تسجيل طلبك. سيتم مراسلتك عبر بريدك الإلكتروني فور تخصيص فريق لمتابعة قرائتك.ابق بالقرب`
+                        this.message = `لا يوجد فريق متاح حاليًا حسب طلبك، لكن تم تسجيل طلبك. سيتم مراسلتك عبر بريدك الإلكتروني فور تخصيص فريق لمتابعة قراءتك.ابق بالقرب`
                         break;
                     case 'group without leader':
-                        this.message = `لا يوجد فريق متاح حاليًا حسب طلبك، لكن تم تسجيل طلبك. سيتم مراسلتك عبر بريدك الإلكتروني فور تخصيص فريق لمتابعة قرائتك.ابق بالقرب`
+                        this.message = `لا يوجد فريق متاح حاليًا حسب طلبك، لكن تم تسجيل طلبك. سيتم مراسلتك عبر بريدك الإلكتروني فور تخصيص فريق لمتابعة قراءتك.ابق بالقرب`
                         break;
                     case 'done successfully':
                         this.message = 'تم توزيعك لفريق ' + response.group.name + ' سيتم نقلك للصفحة الرئيسية '

@@ -61,18 +61,18 @@
                         <div class="row inner pe-0 ps-0">
                             <div class="col-md-6 col-sm-12 mt-5 mb-5">
                                 <h2>
-                                    من نحن
+                                    فكرة مشروعنا
                                 </h2>
                                 <p id="text08" class="style6">
-                                    المشروع الأكبر عربيا لصناعة القراء عن طريق استثمار القراءة المنهجية ونواتجها لصناعة
-                                    مجتمع واع قادر على الوصول للنهضة وتحقيق التنمية مستعينين بالتكنولوجيا الحديثة
-
+                                    مشروعنا يقوم على التعليم المستمر من خلال القراءة المنهجية لتطوير الفكر والمهارات.
+                                    تبدأ مهمة السفير الأسبوعية يوم الأحد وتنتهي يوم السبت بعلامة كاملة تصل إلى 100%.
+                                    نركز على الاستمرارية في التعلم بدلاً من عدد الصفحات، مع دعم من قائد مُدرّب لمتابعتك
+                                    وتشجيعك. نوفر أنشطة وتكريمات لتحفيزك.
                                 </p>
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <span class="frame deferred">
-                                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjAiIHk9IjAiIHZpZXdCb3g9IjAgMCAxNTYwIDE1MTYiIHdpZHRoPSIxNTYwIiBoZWlnaHQ9IjE1MTYiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxyZWN0IGZpbGw9IiM3MzcyNzQiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiLz48L3N2Zz4%3D"
-                                        class="w-100" alt="" />
+                                    <img src="@/assets/images/signup/character_6.png" class="w-100" alt="" />
                                 </span>
                             </div>
 
@@ -83,10 +83,13 @@
                     <div id="container05" class="style2 container default">
                         <div class="wrapper">
                             <div class="inner">
-                                <h2 id="text09" class="style5">Magnis parturient</h2>
+                                <h2 id="text09" class="style5"> كيف تنال علامة القراءة الكاملة ؟</h2>
                                 <p id="text10" class="style6">
                                     <span class="p text-center">
-                                        Justo phasellus et aenean dignissim<br />placerat cubilia purus lectus.
+                                        بكل بساطة تقرأ
+                                        <strong style="color:#278036 "> 30 </strong>
+                                        صفحة أسبوعياً بإمكانك قراءتها كاملة خلال يوم واحد أو تقوم بتقسيمها على أيام
+                                        الأسبوع
                                     </span>
                                 </p>
                             </div>

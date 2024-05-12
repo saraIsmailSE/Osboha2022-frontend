@@ -77,48 +77,53 @@ export default {
         {
           target: "#LeftSidebar",
           step: {
-            offset: 100, // Any valid Popper.js placement. See https://popper.js.org/popper-documentation.html#Popper.placements
+            offset: 100,
           },
           header: {
-            title: "Stories",
+            title: "قائمة الوصول السريع",
           },
-          content: `Discover <strong>stories</strong>!`,
+          content: `<strong>الكتب الأخيرة:</strong> تجد هنا في الأيقونة الأولى آخر الكتب التي قرأتها.
+          <br/>
+          <strong>فريق المتابعة: </strong> في الأيقونة الثانية فريق المتابعة الذي يشرف على قراءتك.
+          <br/>
+          <strong>مؤقت الأسبوع: </strong> في الأيقونة الثالثة مؤقت الأسبوع.`,
           params: {
             highlight: true,
-            classes: 'custom-step' // Adding custom class
           },
-          class: 'custom-step' // Adding custom class
-
         },
         {
           target: "#header",
           step: {
-            offset: 100, // Any valid Popper.js placement. See https://popper.js.org/popper-documentation.html#Popper.placements
+            offset: 100,
           },
           header: {
-            title: "Header",
+            title: "الشريط الرئيسي",
           },
-          content: `Discover <strong>HEADER</strong>!`,
+          content: `تجد هنا أيقونة الإشعارات، حيث يمكنك متابعة التنبيهات الجديدة.
+          <br/>
+          تحتوي الأيقونة بجانب الإشعارات على خيار تفعيل الوضع الليلي لتغيير خلفية الموقع إلى اللون الداكن.`,
         },
         {
           target: "#sidebar-toggle",
           step: {
-            offset: 100, // Any valid Popper.js placement. See https://popper.js.org/popper-documentation.html#Popper.placements
+            offset: 100,
           },
           header: {
-            title: "sidebar-toggle",
+            title: "القائمة الرئيسية",
           },
-          content: `Discover <strong>sidebar-toggle</strong>!`,
+          content: `هذه القائمة تحتوي على مجموعة من الخيارات التي تتيح للمستخدم التنقل والوصول السريع إلى مختلف أقسام الموقع`,
         },
         {
           target: "#stories",
           step: {
-            offset: 100, // Any valid Popper.js placement. See https://popper.js.org/popper-documentation.html#Popper.placements
+            offset: 100,
           },
           header: {
-            title: "Stories",
+            title: "صفحات مميزة",
           },
-          content: `Discover <strong>stories</strong>!`,
+          content: `هنا يمكنك مشاهدة اخر اخبار المشروع وعرض الأعضاء المتميزين بإنجازاتهم ومساهماتهم، بالاضافة الى الكتب التي تم إضافتها مؤخراً
+          <br/>
+          يمكنك التنقل بسهولة بين البطاقات المختلفة باستخدام أزرار التنقل الجانبية`,
           params: {
             highlight: true,
           }
@@ -255,11 +260,5 @@ export default {
   height: fit-content;
   display: block;
   align-self: self-end;
-}
-
-.custom-step  {
-  background-color:red;
-  border-radius: 10px;
-  padding: 20px;
 }
 </style>
