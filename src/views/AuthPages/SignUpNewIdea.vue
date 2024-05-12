@@ -8,13 +8,15 @@
                             <div class="inner">
                                 <img src="@/assets/images/main/osboha_logo_500.png" class="img-fluid " alt="blog-img" />
                                 <hr id="divider01" class="style3">
-                                <p id="text14" class="style4">Lorem ipsum dolor</p>
+                                <p id="text14" class="style4">
+                                    بانضمامك إلينا؛ فأنتَ محاط بصحبة وعَت معنى أهمية ورسالة «إقرأ».
+                                </p>
                             </div>
                         </div>
                     </div>
                     <ul id="buttons02" class="style1 buttons">
                         <li>
-                            <a href="#start" class="button n01">Start</a>
+                            <a href="#start" class="button n01">ابدأ</a>
                         </li>
                     </ul>
                     <hr id="divider03" class="style1">
@@ -22,39 +24,55 @@
                         data-scroll-speed="3" class="style7 container default full screen">
                         <div class="wrapper">
                             <div class="inner">
-                                <h2 id="text01" class="style1 text-center">Enim at Accumsan</h2>
-                                <p id="text02" class="style2">Vitae dui ante eleifend accumsan ut at mus Adipiscing.
-                                    Aenean condimentum, augue ut leo accumsan enim augue col tempus viverra cubilia
-                                    consequat.</p>
-                                <ul id="buttons01" class="style2 buttons">
-                                    <li>
-                                        <a href="#continue" class="button n01">Continue</a>
-                                    </li>
-                                </ul>
+                                <h2 id="text01" class="style1 text-center">
+                                    لأن التعليم المدرسي/الجامعي ليس كافيًا لصناعة إنسان مختلف،
+                                    نقدم لك أفضل تعليم مجانًا عن طريق القراءة المنهجية التي تعطيك أفضل نسخة من ذاتك خلال
+                                    أشهر.
+
+                                </h2>
                             </div>
                         </div>
                     </div>
                     <hr id="divider04" class="style1">
 
-                    <container-right-image />
+                    <div class="wrapper style1 container columns">
+                        <div class="row ">
+                            <div class="col-md-6 col-sm-12">
+                                <span class="frame deferred">
+                                    <img src="@/assets/images/signup/about_us.png" class="w-100" alt="" />
+                                </span>
+                            </div>
+                            <div class="col-md-6 col-sm-12 mt-5 mb-5">
+                                <h2>
+                                    من نحن
+                                </h2>
+                                <p>
+                                    المشروع الأكبر عربيا لصناعة القراء عن طريق استثمار
+                                    القراءة المنهجية ونواتجها لصناعة
+                                    مجتمع واع قادر على الوصول للنهضة وتحقيق التنمية مستعينين بالتكنولوجيا الحديثة
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
 
                     <hr id="divider02" class="style1">
                     <div class="wrapper style1 container columns">
                         <div class="row inner pe-0 ps-0">
                             <div class="col-md-6 col-sm-12 mt-5 mb-5">
-                                <h2 id="text07" class="style5">
-                                    <span class="p">
-                                        Lorem ipsum<br />dolor sit amet
-                                    </span>
+                                <h2>
+                                    فكرة مشروعنا
                                 </h2>
-                                <p id="text08" class="style6">Tortor faucibus ullamcorper nec tempus purus sed
-                                    penatibus. Lacinia pellentesque eleifend vitae est elit tristique velit tempus
-                                    etiam.</p>
+                                <p id="text08" class="style6">
+                                    مشروعنا يقوم على التعليم المستمر من خلال القراءة المنهجية لتطوير الفكر والمهارات.
+                                    تبدأ مهمة السفير الأسبوعية يوم الأحد وتنتهي يوم السبت بعلامة كاملة تصل إلى 100%.
+                                    نركز على الاستمرارية في التعلم بدلاً من عدد الصفحات، مع دعم من قائد مُدرّب لمتابعتك
+                                    وتشجيعك. نوفر أنشطة وتكريمات لتحفيزك.
+                                </p>
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <span class="frame deferred">
-                                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjAiIHk9IjAiIHZpZXdCb3g9IjAgMCAxNTYwIDE1MTYiIHdpZHRoPSIxNTYwIiBoZWlnaHQ9IjE1MTYiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjxyZWN0IGZpbGw9IiM3MzcyNzQiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiLz48L3N2Zz4%3D"
-                                        class="w-100" alt="" />
+                                    <img src="@/assets/images/signup/character_6.png" class="w-100" alt="" />
                                 </span>
                             </div>
 
@@ -65,10 +83,13 @@
                     <div id="container05" class="style2 container default">
                         <div class="wrapper">
                             <div class="inner">
-                                <h2 id="text09" class="style5">Magnis parturient</h2>
+                                <h2 id="text09" class="style5"> كيف تنال علامة القراءة الكاملة ؟</h2>
                                 <p id="text10" class="style6">
                                     <span class="p text-center">
-                                        Justo phasellus et aenean dignissim<br />placerat cubilia purus lectus.
+                                        بكل بساطة تقرأ
+                                        <strong style="color:#278036 "> 30 </strong>
+                                        صفحة أسبوعياً بإمكانك قراءتها كاملة خلال يوم واحد أو تقوم بتقسيمها على أيام
+                                        الأسبوع
                                     </span>
                                 </p>
                             </div>
@@ -82,8 +103,11 @@
                     <div id="container06" class="style3 container default">
                         <div class="wrapper">
                             <div class="inner">
-                                <h2 id="text11" class="style5">Nisl sed ultricies</h2>
-                                <p id="text12" class="style6">Diam dignissim lectus eu ornare volutpat orci.</p>
+                                <h3 id="text11" class="text-center">لُطفًا نحتاج منك تسجيل معلوماتك</h3>
+                                <p id="text12" class="style6"> حيث سيخصص لك قائدًا
+                                    لقراءتك يتابع تقدمك، وبجداول مريحة، أضف إلى ذلك دورات وورشات عمل تطور منك.
+
+                                </p>
                                 <form id="form01" class="style1" @submit.prevent="onSubmit()">
                                     <div class="inner">
                                         <div class="field">
@@ -103,7 +127,6 @@
                                             <p class="mt-2" style="color: red" v-if="v$.form.last_name.$error">
                                                 الاسم الاخير مطلوب
                                             </p>
-
                                         </div>
 
                                         <div class="field">
@@ -137,6 +160,28 @@
 
                                         </div>
 
+                                        <!-- <div class="field">
+                                            <label for="form01-email"> كيف تحب أن نتواصل معك؟ </label>
+                                            <select v-model="v$.form.gender.$model" class="form-select" data-trigger
+                                                name="gender" id="gender">
+                                                <option value="" selected>اختر طريقة التواصل</option>
+                                                <option value="facebook">فيسبوك</option>
+                                                <option value="instgram">انستغرام</option>
+                                            </select>
+                                            <small p class="mt-2" style="color: red" v-if="v$.form.gender.$error">اختر
+                                                جنسك</small>
+
+                                        </div>
+                                        <div class="field">
+                                            <label for="form01-email">ادخل رابط حسابك</label>
+                                            <input type="text" name="last_name" id="form01-last_name"
+                                                placeholder="رابط حسابك" maxlength="128"
+                                                v-model="v$.form.last_name.$model" />
+                                            <p class="mt-2" style="color: red" v-if="v$.form.last_name.$error">
+                                                الاسم الاخير مطلوب
+                                            </p>
+                                        </div>
+                                        -->
                                         <div class="actions">
                                             <button type="submit" class="btn btn-primary" @click="onSubmit()"
                                                 :disabled="loader">تسجيل</button>
@@ -191,10 +236,9 @@
 import useVuelidate from "@vuelidate/core";
 import { required, email, minLength, requiredIf } from "@vuelidate/validators";
 import Gallery01 from '@/components/common/Gallery01.vue';
-import ContainerRightImage from '@/components/common/ContainerRightImage.vue';
 
 export default {
-    components: { Gallery01, ContainerRightImage },
+    components: { Gallery01 },
     name: 'ComplexComponent',
     setup() {
         return { v$: useVuelidate() };
@@ -222,7 +266,7 @@ export default {
                 try {
                     this.loader = true;
                     this.regError = "";
-                    await this.$store.dispatch("register", {
+                    await this.$store.dispatch("new_register", {
                         email: this.form.email,
                         password: this.form.password,
                         name: this.form.name,
@@ -336,6 +380,7 @@ body {
 body:before {
     content: '';
     display: block;
+    font-family: 'Tajawal', sans-serif;
     background-attachment: scroll;
     height: var(--background-height);
     left: 0;
@@ -801,7 +846,6 @@ p.style5 {
     text-transform: uppercase;
     color: #1D1A55;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.4rem;
     width: calc(100% + 0.4rem);
     font-size: 1.375em;
     line-height: 1.5;
@@ -836,7 +880,6 @@ p.style6 {
     text-align: center;
     color: #1D1A55;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.05rem;
     width: calc(100% + 0.05rem);
     font-size: 1em;
     line-height: 1.75;
@@ -871,7 +914,6 @@ p.style7 {
     text-align: center;
     color: #1D1A55;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.05rem;
     width: calc(100% + 0.05rem);
     font-size: 0.875em;
     line-height: 1.75;
@@ -903,7 +945,6 @@ p.style7 span.p:nth-child(n + 2) {
     cursor: default;
     display: flex;
     justify-content: var(--flex-alignment);
-    letter-spacing: 0;
     padding: 0;
 }
 
@@ -935,7 +976,6 @@ p.style7 span.p:nth-child(n + 2) {
     padding: 0 0.5rem;
     vertical-align: middle;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.1rem;
     padding-left: calc(0.1rem + 0.5rem);
     font-size: 1em;
     font-weight: 400;
@@ -969,7 +1009,6 @@ p.style7 span.p:nth-child(n + 2) {
     padding: 0 0.5rem;
     vertical-align: middle;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.1rem;
     padding-left: calc(0.1rem + 0.5rem);
     font-size: 1em;
     font-weight: 400;
@@ -2417,6 +2456,7 @@ form .field button>svg {
 }
 
 form input[type="text"],
+form input[type="password"],
 form input[type="email"],
 form input[type="tel"],
 form input[type="number"],
@@ -2682,7 +2722,6 @@ form.style1 .file,
 form.style1 .date {
     font-size: 1em;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.05rem;
     padding-left: calc(0.05rem + 1.1375rem);
     font-weight: 300;
     border-radius: 0rem;
@@ -2796,7 +2835,6 @@ form.style1 p {
     font-size: 1em;
     line-height: 1.5;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.05rem;
     padding-left: 0.05rem;
     font-weight: 300;
     color: #3A3939;
@@ -2810,7 +2848,6 @@ form.style1 .actions button {
     padding: 0 0.5rem;
     font-size: 1em;
     font-family: 'Tajawal', sans-serif;
-    letter-spacing: 0.1rem;
     padding-left: calc(0.1rem + 0.5rem);
     font-weight: 400;
     border-radius: 2rem;
@@ -2958,7 +2995,6 @@ form.style1 .date[data-value=""]:before {
     h2.style3,
     h3.style3,
     p.style3 {
-        letter-spacing: 0.35rem;
         width: calc(100% + 0.35rem);
         font-size: 2em;
         line-height: 1;
@@ -2968,7 +3004,6 @@ form.style1 .date[data-value=""]:before {
     h2.style1,
     h3.style1,
     p.style1 {
-        letter-spacing: 0.35rem;
         width: calc(100% + 0.35rem);
         font-size: 1.75em;
         line-height: 1.5;
@@ -2978,7 +3013,6 @@ form.style1 .date[data-value=""]:before {
     h2.style2,
     h3.style2,
     p.style2 {
-        letter-spacing: 0.04375rem;
         width: calc(100% + 0.04375rem);
         font-size: 1em;
         line-height: 1.75;
@@ -2988,7 +3022,6 @@ form.style1 .date[data-value=""]:before {
     h2.style4,
     h3.style4,
     p.style4 {
-        letter-spacing: 0.196875rem;
         width: calc(100% + 0.196875rem);
         font-size: 1em;
         line-height: 1.5;
@@ -2998,7 +3031,6 @@ form.style1 .date[data-value=""]:before {
     h2.style5,
     h3.style5,
     p.style5 {
-        letter-spacing: 0.35rem;
         width: calc(100% + 0.35rem);
         font-size: 1.375em;
         line-height: 1.5;
@@ -3008,7 +3040,6 @@ form.style1 .date[data-value=""]:before {
     h2.style6,
     h3.style6,
     p.style6 {
-        letter-spacing: 0.04375rem;
         width: calc(100% + 0.04375rem);
         font-size: 1em;
         line-height: 1.75;
@@ -3018,7 +3049,6 @@ form.style1 .date[data-value=""]:before {
     h2.style7,
     h3.style7,
     p.style7 {
-        letter-spacing: 0.04375rem;
         width: calc(100% + 0.04375rem);
         font-size: 1em;
         line-height: 1.75;
@@ -3029,7 +3059,6 @@ form.style1 .date[data-value=""]:before {
     }
 
     .buttons.style2 li a {
-        letter-spacing: 0.1rem;
         padding-left: calc(0.1rem + 0.5rem);
         font-size: 1em;
     }
@@ -3039,7 +3068,6 @@ form.style1 .date[data-value=""]:before {
     }
 
     .buttons.style1 li a {
-        letter-spacing: 0.1rem;
         padding-left: calc(0.1rem + 0.5rem);
         font-size: 1em;
     }
@@ -3049,7 +3077,6 @@ form.style1 .date[data-value=""]:before {
     }
 
     .buttons.style4 li a {
-        letter-spacing: 0.1rem;
         padding-left: calc(0.1rem + 0.5rem);
         font-size: 1em;
     }

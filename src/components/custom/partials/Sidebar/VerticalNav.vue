@@ -30,11 +30,11 @@
     <li class="nav-item">
       <router-link :class="checkActive('user.friendsRequests') ? 'active nav-link' : 'nav-link'
         " :to="{
-      name: 'user.friendsRequests',
-      params: {
-        user_id: user?.id,
-      },
-    }">
+          name: 'user.friendsRequests',
+          params: {
+            user_id: user?.id,
+          },
+        }">
         <i class="icon material-symbols-outlined"> diversity_1 </i>
         <span class="user.profile">طلبات الصداقة</span>
       </router-link>
@@ -114,6 +114,9 @@
     <!-- ###### Osboha Marathon ###### -->
     <OsbohaMarathon v-if="inMarathon" />
 
+    <!-- ###### Osboha Speacial Care ###### -->
+    <OsbohaSpecialCare v-if="inSpecialCare" />
+
     <!-- ###### Osboha Ramadan ###### -->
     <!-- <OsbohaRamadan /> -->
 
@@ -151,9 +154,15 @@ import InventoryStatistics from './InventoryStatistics'
 import AuditMarks from './AuditMarks'
 import Exceptions from './Exceptions'
 import OsbohaMarathon from './OsbohaMarathon'
+import OsbohaSpecialCare from './OsbohaSpecialCare'
 // import OsbohaRamadan from "./OsbohaRamadan";
+import vClickOutside from "click-outside-vue3";
+
 export default {
   name: "DefaultSidebar",
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
   components: {
     ControlGroups,
     GeneralConversation,
@@ -162,6 +171,7 @@ export default {
     AuditMarks,
     Exceptions,
     OsbohaMarathon,
+    OsbohaSpecialCare,
     // OsbohaRamadan
   },
   computed: {
@@ -231,6 +241,12 @@ export default {
         "marathon_ambassador",
       ]);
     },
+    inSpecialCare() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "special_care_coordinator",
+      ]);
+    },
     isRamadanCorrector() {
       return UserInfoService.hasRoles(this.user, [
         "admin",
@@ -245,8 +261,9 @@ export default {
   setup() {
     const store = useStore();
     const sidebarType = computed(() => store.getters["setting/sidebar_type"]);
+    // const isSidebarOpen = computed(() => !sidebarType.value.includes("sidebar-mini"));
+
     const toggleSidebar = () => {
-      // Code Here
       if (sidebarType.value.includes("sidebar-mini")) {
         store.dispatch(
           "setting/sidebar_type",
@@ -259,7 +276,20 @@ export default {
         ]);
       }
     };
+
+    // const handleClickOutside = (event) => {
+    //   if (event.target.id === 'toggelBtn') {
+    //     return;
+    //   }
+
+    //   if (isSidebarOpen.value) {
+    //     store.dispatch("setting/sidebar_type", [...sidebarType.value, "sidebar-mini"]);
+    //   }
+    // };
+
     return {
+      // handleClickOutside,
+      // isSidebarOpen,
       store,
       sidebarType,
       toggleSidebar,

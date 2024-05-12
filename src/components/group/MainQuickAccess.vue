@@ -42,11 +42,19 @@
                 v-if="authInGroup && authInGroup.user_type != 'ambassador'">الاجازات
             </router-link>
 
+            <router-link :to="{
+                name: 'group.new-ambassadors',
+                params: { group_id: group_id },
+            }" class="btn btn-primary d-block mt-3 col-5 me-1"
+                v-if="authInGroup && authInGroup.user_type != 'ambassador'">
+                السفراء الجدد
+            </router-link>
+
             <router-link :to="{ name: 'group.auditMarks', params: { group_id: group_id } }"
                 class="btn btn-primary d-block mt-3 col-5 me-1" v-if="authInGroup &&
                     authInGroup.user_type != 'ambassador' &&
                     group.type.type == 'followup'
-                    ">
+                ">
                 تدقيق العلامات
             </router-link>
 
@@ -56,10 +64,10 @@
                     supervisor_id: supervisorOfTheGroup.id,
                 },
             }" class="btn btn-primary d-block mt-3 col-5 me-1" v-if="authInGroup &&
-    authInGroup.user_type != 'ambassador' &&
-    group.type.type == 'supervising' &&
-    supervisorOfTheGroup
-    ">
+                authInGroup.user_type != 'ambassador' &&
+                group.type.type == 'supervising' &&
+                supervisorOfTheGroup
+            ">
                 احصائيات القادة
             </router-link>
 

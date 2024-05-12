@@ -60,8 +60,6 @@
     </li>
 </template>
 <script>
-import { useStore } from "vuex";
-import { computed } from "vue";
 import UserInfoService from "@/Services/userInfoService";
 export default {
     name: "Audit Marks",
@@ -76,29 +74,6 @@ export default {
             return UserInfoService.hasRole(this.user, "supervisor");
         },
     },
-    setup() {
-        const store = useStore();
-        const sidebarType = computed(() => store.getters["setting/sidebar_type"]);
-        const toggleSidebar = () => {
-            // Code Here
-            if (sidebarType.value.includes("sidebar-mini")) {
-                store.dispatch(
-                    "setting/sidebar_type",
-                    sidebarType.value.filter((item) => item !== "sidebar-mini"),
-                );
-            } else {
-                store.dispatch("setting/sidebar_type", [
-                    ...sidebarType.value,
-                    "sidebar-mini",
-                ]);
-            }
-        };
-        return {
-            store,
-            sidebarType,
-            toggleSidebar,
-        };
-    },
     methods: {
         checkActive(route) {
             if (this.$route.name === route) {
@@ -108,4 +83,3 @@ export default {
     },
 };
 </script>
-  

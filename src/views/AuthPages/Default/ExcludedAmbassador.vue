@@ -7,7 +7,7 @@
                     <div>
                         <h2 class="mb-2 text-center">تم استبعادك</h2>
                         <h5 class="text-center m-auto w-75">
-                            بسبب عدم التزامك بالقراءة طيلة الأسابيع الماضية
+                            {{ paragraph }}
                         </h5>
                         <div class="col-sm-12 text-center" v-if="loader">
                             <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 100px;">
@@ -15,7 +15,9 @@
                         <div class="alert alert-danger m-2 p-2" role="alert" v-if="message">
                             <h4 class="text-center mt-3 mb-3"> {{ message }}</h4>
                         </div>
-                        <div class="d-inline-block w-100 text-center">
+                        <allocate-ambassador v-if="reallocate" />
+
+                        <div class="d-inline-block w-100 text-center" v-else>
                             <button @click="returnToTeam()" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto"
                                 :disabled="loader">
                                 عودة إلى الفريق
@@ -42,11 +44,19 @@
 </template>
 <script>
 import Auth from '@/API/services/auth.service'
+import AmbassadorsRequest from '@/API/services/ambassadors-request.service';
+import AllocateAmbassador from '@/components/group/AllocateAmbassador.vue';
 
 export default {
     name: "Excluded Ambassador",
+    components: { AllocateAmbassador },
+    async created() {
+        this.latest_ambassador_recored = await AmbassadorsRequest.checkAmbassador(this.user.id);
+        this.reallocate = this.checkReallocate()
+    },
     data() {
         return {
+            paragraph: `بسبب عدم التزامك بالقراءة طيلة الأسابيع الماضية`,
             message: "",
             loader: false,
         };
@@ -72,8 +82,30 @@ export default {
             }
 
             this.loader = false;
+        },
+        checkReallocate() {
+            if (this.latest_ambassador_recored) {
 
+                const updatedAt = new Date(this.latest_ambassador_recored.updated_at);
+                const threeMonthsAgo = new Date();
+                threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+                if (updatedAt < threeMonthsAgo) {
+                    //The record was updated more than three months ago.
+                    // this.paragraph = `no team or leader`;
+                    this.paragraph = '';
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            return true;
         }
+
     },
+    computed: {
+        user() {
+            return this.$store.getters.getUser;
+        },
+    }
 };
 </script>

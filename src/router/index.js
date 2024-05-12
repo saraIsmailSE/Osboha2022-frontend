@@ -15,7 +15,7 @@ const authGuard = (to, from, next) => {
 
 const childRoutes = (prop, mode) => [
   {
-    path: "",
+    path: "/home/:tour?",
     name: prop + ".list",
     meta: { auth: true, name: "osboha App" },
     component: () => import("../views/Apps/Osboha/OsbohaApp"),
@@ -431,6 +431,13 @@ const rolesChildRoute = (prop, mode = false) => [
     component: () => import("../views/RolesAdministration/UpgradeMarathonRole"),
   },
   {
+    path: "/upgrade-special-care-role",
+    name: prop + ".upgradeSpecialCareRole",
+    meta: { auth: true, name: "Upgrade Special Care Role" },
+    component: () =>
+      import("../views/RolesAdministration/UpgradeSpecialCareRole"),
+  },
+  {
     path: "/upgrade-ramadan-role",
     name: prop + ".upgradeRamadanRole",
     meta: { auth: true, name: "Upgrade Ramadan Role" },
@@ -451,10 +458,17 @@ const groupChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMain/Group/Marathon/ListGroups"),
   },
   {
+    path: "special-cares-groups",
+    name: prop + ".listSpecialCareGroups",
+    meta: { auth: true, name: "List Special Care Groups" },
+    component: () => import("../views/OsbohaMain/Group/SpecialCare/ListGroups"),
+  },
+  {
     path: "request-ambassadors/:group_id",
     name: prop + ".requestAmbassadors",
     meta: { auth: true, name: "Request AmbFgrassadors" },
-    component: () => import("../views/OsbohaMain/Group/Ambassadors/Request"),
+    component: () =>
+      import("../views/OsbohaMain/Group/AmbassadorsRequest/Request"),
   },
   {
     path: "group-detail/:group_id",
@@ -600,14 +614,53 @@ const groupChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Group" },
     component: () => import("../views/OsbohaMain/Group/AddGroup"),
   },
+  {
+    path: "new-ambassadors/:group_id",
+    name: prop + ".new-ambassadors",
+    meta: { auth: true, name: "nNew Ambassadors" },
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
+    component: () =>
+      import("../views/OsbohaMain/Group/AmbassadorsRequest/ListNew"),
+  },
 ];
 
 const marathonChildRoute = (prop, mode = false) => [
   {
     path: "list-participants",
     name: prop + ".participants",
-    meta: { auth: true, name: "List Exception" },
+    meta: { auth: true, name: "List Participants" },
     component: () => import("../views/OsbohaMarathon/Participants"),
+  },
+];
+
+const ambassadorsRequestChildRoute = (prop, mode = false) => [
+  {
+    path: "list-requests",
+    name: prop + ".list-requests",
+    meta: { auth: true, name: "List Requests" },
+    component: () =>
+      import("../views/OsbohaMain/Group/AmbassadorsRequest/ListRequests"),
+  },
+  {
+    path: "statistics",
+    name: prop + ".statistics",
+    meta: { auth: true, name: "Statistics" },
+    component: () =>
+      import("../views/OsbohaMain/Group/AmbassadorsRequest/Statistics"),
+  },
+  {
+    path: "request-details/:request_id",
+    name: prop + ".request-details",
+    meta: { auth: true, name: "Requests Details" },
+    component: () =>
+      import("../views/OsbohaMain/Group/AmbassadorsRequest/RequestDetails"),
+  },
+  {
+    path: "update-request/:request_id",
+    name: prop + ".update-request",
+    meta: { auth: true, name: "Update Requests" },
+    component: () =>
+      import("../views/OsbohaMain/Group/AmbassadorsRequest/UpdateRequest"),
   },
 ];
 
@@ -1043,6 +1096,14 @@ const routes = [
     children: marathonChildRoute("marathon"),
   },
   {
+    path: "/ambassadors-request",
+    name: "ambassadors-request",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: ambassadorsRequestChildRoute("ambassadors-request"),
+  },
+
+  {
     path: "/statistics",
     name: "statistics",
     component: () => import("../layouts/Default"),
@@ -1188,6 +1249,9 @@ router.beforeEach((to, from, next) => {
   if (to.meta.auth && !loggedIn()) {
     return next("/auth/signin");
   } else {
+    if (to.path === "/") {
+      next("/home"); // Redirect to '/home' [new route]
+    }
     next();
   }
 });

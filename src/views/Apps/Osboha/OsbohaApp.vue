@@ -5,13 +5,12 @@
     </span>
 
     <router-link :to="{ name: story.route }" class="story" :style="`background-image: url(${story.backgroundImg});`"
-      v-for="story in stories.slice(currentStoryIndex, currentStoryIndex + 2)" :key="story.route">
+      v-for="story in stories.slice(currentStoryIndex, currentStoryIndex + 2)" :key="story.route" id="stories">
     </router-link>
     <span class="material-symbols-outlined story-next" role="button" @click="nextStory"
       v-if="currentStoryIndex + 2 < totalStories">
       arrow_circle_left
     </span>
-
     <div class="col-12 row m-0 p-0 mt-2">
       <div class="col-sm-12">
         <tab-content id="pills-tabContent-2">
@@ -28,6 +27,9 @@
         </tab-content-item>
       </tab-content>
     </div>
+
+    <v-tour name="osbohaTour" :steps="steps" :options="tourOptions"></v-tour>
+
   </div>
 </template>
 <script>
@@ -41,9 +43,13 @@ import knowAboutOsboha2 from '@/assets/images/main/know-about-osboha-2.png'
 import latestBook from '@/assets/images/main/latest-book.png'
 import latestAnnouncement from '@/assets/images/main/latest-announcement.png'
 import topUsers from '@/assets/images/main/top-users.png'
-
 export default {
   name: "Osboha App",
+  mounted() {
+    if (this.$route.params.tour) {
+      window.tours["osbohaTour"].start();
+    }
+  },
   components: { AddPost, LazyLoadedPosts },
   data() {
     return {
@@ -54,7 +60,77 @@ export default {
       latestBook,
       topUsers,
       latestAnnouncement,
-      currentStoryIndex: 0
+      currentStoryIndex: 0,
+      tourOptions: {
+        useKeyboardNavigation: false,
+        enabledButtons: {
+          buttonSkip: false
+        },
+        enableScrolling: false,
+        labels: {
+          buttonPrevious: 'السابق',
+          buttonNext: 'التالي',
+          buttonStop: 'انهاء'
+        },
+      },
+      steps: [
+        {
+          target: "#LeftSidebar",
+          step: {
+            offset: 100,
+          },
+          header: {
+            title: "قائمة الوصول السريع",
+          },
+          content: `<strong>الكتب الأخيرة:</strong> تجد هنا في الأيقونة الأولى آخر الكتب التي قرأتها.
+          <br/>
+          <strong>فريق المتابعة: </strong> في الأيقونة الثانية فريق المتابعة الذي يشرف على قراءتك.
+          <br/>
+          <strong>مؤقت الأسبوع: </strong> في الأيقونة الثالثة مؤقت الأسبوع.`,
+          params: {
+            highlight: true,
+          },
+        },
+        {
+          target: "#header",
+          step: {
+            offset: 100,
+          },
+          header: {
+            title: "الشريط الرئيسي",
+          },
+          content: `تجد هنا أيقونة الإشعارات، حيث يمكنك متابعة التنبيهات الجديدة.
+          <br/>
+          تحتوي الأيقونة بجانب الإشعارات على خيار تفعيل الوضع الليلي لتغيير خلفية الموقع إلى اللون الداكن.`,
+        },
+        {
+          target: "#sidebar-toggle",
+          step: {
+            offset: 100,
+          },
+          header: {
+            title: "القائمة الرئيسية",
+          },
+          content: `هذه القائمة تحتوي على مجموعة من الخيارات التي تتيح للمستخدم التنقل والوصول السريع إلى مختلف أقسام الموقع`,
+        },
+        {
+          target: "#stories",
+          step: {
+            offset: 100,
+          },
+          header: {
+            title: "صفحات مميزة",
+          },
+          content: `هنا يمكنك مشاهدة اخر اخبار المشروع وعرض الأعضاء المتميزين بإنجازاتهم ومساهماتهم، بالاضافة الى الكتب التي تم إضافتها مؤخراً
+          <br/>
+          يمكنك التنقل بسهولة بين البطاقات المختلفة باستخدام أزرار التنقل الجانبية`,
+          params: {
+            highlight: true,
+          }
+
+        },
+      ],
+
 
 
     };

@@ -9,8 +9,8 @@
           <h3 class="logo-title d-none d-sm-block" data-setting="app_name">
             أصبوحة 180
           </h3>
-          <a class="sidebar-toggle" @click="toggleSidebar" data-toggle="sidebar" data-active="true">
-            <div class="icon material-symbols-outlined iq-burger-menu">
+          <a id="sidebar-toggle" class="sidebar-toggle" @click="toggleSidebar" data-toggle="sidebar" data-active="true">
+            <div class="icon material-symbols-outlined iq-burger-menu" id="toggelBtn">
               menu
             </div>
           </a>

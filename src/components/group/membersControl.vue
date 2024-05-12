@@ -1,81 +1,53 @@
 <template>
-  <div
-    class="d-flex align-items-center mt-3 col-6"
-    v-if="(authInGroup && authInGroup.user_type != 'ambassador') || isAdmin"
-    v-click-outside="onClickOutside"
-  >
-    <div
-      class="d-inline-block w-100 text-center"
-      @click="show = !show"
-      role="button"
-    >
+  <div class="d-flex align-items-center mt-3 col-6"
+    v-if="(authInGroup && authInGroup.user_type != 'ambassador') || isAdmin" v-click-outside="onClickOutside">
+    <div class="d-inline-block w-100 text-center" @click="show = !show" role="button">
       <span class="align-middle material-symbols-outlined"> settings </span>
       <span>اعدادت المجموعة</span>
     </div>
 
-    <div
-      :class="`dropdown-menu dropdown-menu-right ${show ? 'show' : ''}`"
-      aria-labelledby="dropdownMenuButton"
-      style=""
-    >
-      <!-- <router-link v-if="groupType == 'فريق متابعة'" class="dropdown-item d-flex align-items-center" :to="{
+    <div :class="`dropdown-menu dropdown-menu-right ${show ? 'show' : ''}`" aria-labelledby="dropdownMenuButton"
+      style="">
+      <router-link v-if="groupCategory == 'special_care' && allowedToRequestMembers"
+        class="dropdown-item d-flex align-items-center" :to="{
           name: 'group.requestAmbassadors',
           params: { group_id: group_id },
         }">
-          <span class="material-symbols-outlined me-2 md-18">
-            diversity_1
-          </span>
-          طلب سفراء
-        </router-link> -->
+        <span class="material-symbols-outlined me-2 md-18">
+          diversity_1
+        </span>
+        طلب سفراء
+      </router-link>
 
-      <router-link
-        class="dropdown-item d-flex align-items-center"
-        :to="{
-          name: 'group.addMemeber',
-          params: { add_type: groupCategory, group_id: group_id },
-        }"
-        v-if="allowedToAddMembers"
-      >
+      <router-link class="dropdown-item d-flex align-items-center" :to="{
+        name: 'group.addMemeber',
+        params: { add_type: groupCategory, group_id: group_id },
+      }" v-if="allowedToAddMembers">
         <span class="material-symbols-outlined me-2 md-18"> person_add </span>
         اضافه عضو
       </router-link>
-      <router-link
-        v-if="allowedToEdit"
-        class="dropdown-item d-flex align-items-center"
-        :to="{
-          name: 'group.update',
-          params: { group_id: group_id },
-        }"
-      >
+      <router-link v-if="allowedToEdit" class="dropdown-item d-flex align-items-center" :to="{
+        name: 'group.update',
+        params: { group_id: group_id },
+      }">
         <span class="material-symbols-outlined me-2 md-18"> edit </span>
         تعديل
       </router-link>
-      <router-link
-        v-if="group.type.type == 'followup' && advisorAndAbove"
-        class="dropdown-item d-flex align-items-center"
-        :to="{
+      <router-link v-if="group.type.type == 'followup' && advisorAndAbove"
+        class="dropdown-item d-flex align-items-center" :to="{
           name: 'control.leadersSwap',
           params: { group_id: group_id },
-        }"
-      >
+        }">
         <span class="material-symbols-outlined me-2 md-18"> edit </span>
         تبديل القائد
       </router-link>
-      <a
-        role="button"
-        v-if="advisorAndAbove && hasSupportLeader"
-        class="dropdown-item d-flex align-items-center"
-        @click="deleteSupportLeader(supportLeader?.pivot.id)"
-      >
+      <a role="button" v-if="advisorAndAbove && hasSupportLeader" class="dropdown-item d-flex align-items-center"
+        @click="deleteSupportLeader(supportLeader?.pivot.id)">
         <span class="material-symbols-outlined me-2 md-18"> delete </span>
         حذف قائد الدعم
       </a>
-      <a
-        role="button"
-        v-if="isAdmin || isConsultant"
-        class="dropdown-item d-flex align-items-center"
-        @click="deleteGroup(group_id)"
-      >
+      <a role="button" v-if="isAdmin || isConsultant" class="dropdown-item d-flex align-items-center"
+        @click="deleteGroup(group_id)">
         <span class="material-symbols-outlined me-2 md-18"> delete </span>
         حذف
       </a>
@@ -95,8 +67,13 @@ export default {
     clickOutside: vClickOutside.directive,
   },
   created() {
-    if (this.group.type.type == "marathon") {
-      this.groupCategory = "marathon";
+    switch (this.group.type.type) {
+      case "marathon":
+        this.groupCategory = "marathon";
+        break;
+      case "special_care":
+        this.groupCategory = "special_care";
+        break;
     }
   },
   props: {
@@ -231,9 +208,10 @@ export default {
         "consultant",
         "advisor",
         "supervisor",
-        "leader",
         "marathon_coordinator",
         "marathon_verification_supervisor",
+        "special_care_coordinator",
+        "special_care_supervisor",
       ]);
     },
     allowedToEdit() {
@@ -243,6 +221,13 @@ export default {
         "advisor",
         "marathon_coordinator",
         "marathon_verification_supervisor",
+      ]);
+    },
+    allowedToRequestMembers() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "special_care_coordinator",
+        "special_care_supervisor",
       ]);
     },
     supervisorAndAbove() {

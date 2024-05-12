@@ -20,16 +20,23 @@ export const ARABIC_ROLES = {
   marathon_supervisor: "مسؤول في مارثون أصبوحة",
   marathon_ambassador: "سفير مشارك في مارثون أصبوحة",
   ramadan_coordinator: "مسؤول فعاليات رمضان",
-  ramadan_hadith_corrector:"مُصحح  مسابقة حديث",
-  ramadan_fiqh_corrector:"مًصحح مسابقة فقه",
-  ramadan_tafseer_corrector:"مُصحح مسابقة تفسير",
-  ramadan_vedio_corrector:"مُصحح مسابقة التثقيف بالفيديو",
-
+  ramadan_hadith_corrector: "مُصحح  مسابقة حديث",
+  ramadan_fiqh_corrector: "مًصحح مسابقة فقه",
+  ramadan_tafseer_corrector: "مُصحح مسابقة تفسير",
+  ramadan_vedio_corrector: "مُصحح مسابقة التثقيف بالفيديو",
+  special_care_coordinator: "مسؤول عام لأفرقة الرعاية الخاصة",
+  special_care_supervisor: "مراقب رعاية خاصة",
+  special_care_leader: "قائد رعاية خاصة",
 };
 
 export const LANUAGES = {
   arabic: "اللغة العربية",
   english: "اللغة الانجليزية",
+};
+export const GENDER = {
+  female: "أنثى",
+  male: "ذكر",
+  any: "لا فرق",
 };
 
 export const BOOK_TYPES = {
@@ -57,6 +64,7 @@ export const GROUP_TYPE = {
   marathon: "مارثون",
   advanced_followup: "فريق متابعة متقدم",
   sophisticated_followup: "فريق متابعة متطور",
+  special_care: "فريق رعاية خاصة",
 };
 
 export const DAYS = {
@@ -403,4 +411,3 @@ export const ACTIVITIES_STATUS = {
   redo: "بحاجة لاعادة",
   rejected: "مرفوض",
 };
-

@@ -18,14 +18,16 @@ import "vue3-toastify/dist/index.css";
 import GlobalComponent from "./utilities/_globals";
 import progressBar from "./utilities/progress-bar";
 import "nprogress/nprogress.css";
-import VueCookies from 'vue3-cookies'
-
+import VueCookies from "vue3-cookies";
 
 //import { VueQueryPlugin } from "@tanstack/vue-query";
 
 import setupInterceptors from "@/Services/setupInterceptors";
 
-import './registerServiceWorker';
+import "./registerServiceWorker";
+
+import VueTour from "v3-tour";
+import "v3-tour/dist/vue-tour.css";
 
 setupInterceptors(store);
 
@@ -39,6 +41,9 @@ app.use(fontawsome);
 app.use(GlobalComponent);
 app.use(VueCookies);
 // app.use(VueQueryPlugin);
+app.use(VueTour);
+window.tours = app.config.globalProperties.$tours;
+
 app.use(Vue3Toasity, {
   autoClose: 3000,
   limit: 3,
@@ -61,90 +66,90 @@ app.component("loader", require("./components/custom/loader/Loader").default);
 app.component("alert", require("./components/bootstrap/alert/alert").default);
 app.component(
   "carousel",
-  require("./components/bootstrap/carousel/carousel").default
+  require("./components/bootstrap/carousel/carousel").default,
 );
 app.component(
   "carouselItems",
-  require("./components/bootstrap/carousel/carouselItems").default
+  require("./components/bootstrap/carousel/carouselItems").default,
 );
 app.component("toast", require("./components/bootstrap/toasts/toast").default);
 app.component(
   "toast-header",
-  require("./components/bootstrap/toasts/toast-header").default
+  require("./components/bootstrap/toasts/toast-header").default,
 );
 app.component(
   "toast-body",
-  require("./components/bootstrap/toasts/toast-body").default
+  require("./components/bootstrap/toasts/toast-body").default,
 );
 app.component(
   "progressbar",
-  require("./components/bootstrap/Progressbar/progressbar").default
+  require("./components/bootstrap/Progressbar/progressbar").default,
 );
 app.component(
   "popover",
-  require("./components/bootstrap/popover/popover").default
+  require("./components/bootstrap/popover/popover").default,
 );
 app.component(
   "tooltip",
-  require("./components/bootstrap/tooltip/tooltip").default
+  require("./components/bootstrap/tooltip/tooltip").default,
 );
 // app.component('Lottie', require('./components/socialapp/lottie/Lottie').default)
 app.component("tab-nav", require("./components/bootstrap/tab/tab-nav").default);
 app.component(
   "tab-nav-items",
-  require("./components/bootstrap/tab/tab-nav-items").default
+  require("./components/bootstrap/tab/tab-nav-items").default,
 );
 app.component(
   "tab-content",
-  require("./components/bootstrap/tab/tab-content").default
+  require("./components/bootstrap/tab/tab-content").default,
 );
 app.component(
   "tab-content-item",
-  require("./components/bootstrap/tab/tab-content-item").default
+  require("./components/bootstrap/tab/tab-content-item").default,
 );
 app.component(
   "TimeLine",
-  require("./components/custom/timeline/TimeLine").default
+  require("./components/custom/timeline/TimeLine").default,
 );
 app.component(
   "dropdown",
-  require("./components/bootstrap/dropdown/dropdown").default
+  require("./components/bootstrap/dropdown/dropdown").default,
 );
 app.component(
   "dropdown-items",
-  require("./components/bootstrap/dropdown/dropdown-items").default
+  require("./components/bootstrap/dropdown/dropdown-items").default,
 );
 app.component(
   "collapse",
-  require("./components/bootstrap/collapse/collapse").default
+  require("./components/bootstrap/collapse/collapse").default,
 );
 app.component(
   "collapse-content",
-  require("./components/bootstrap/collapse/collapse-content").default
+  require("./components/bootstrap/collapse/collapse-content").default,
 );
 app.component("modal", require("./components/bootstrap/modal/modal").default);
 app.component(
   "model-header",
-  require("./components/bootstrap/modal/model-header").default
+  require("./components/bootstrap/modal/model-header").default,
 );
 app.component(
   "model-body",
-  require("./components/bootstrap/modal/model-body").default
+  require("./components/bootstrap/modal/model-body").default,
 );
 app.component(
   "model-footer",
-  require("./components/bootstrap/modal/model-footer").default
+  require("./components/bootstrap/modal/model-footer").default,
 );
 app.component(
   "offcanvas",
-  require("./components/bootstrap/offcanvas/offcanvas").default
+  require("./components/bootstrap/offcanvas/offcanvas").default,
 );
 app.component(
   "offcanvas-header",
-  require("./components/bootstrap/offcanvas/offcanvas-header").default
+  require("./components/bootstrap/offcanvas/offcanvas-header").default,
 );
 app.component(
   "offcanvas-body",
-  require("./components/bootstrap/offcanvas/offcanvas-body").default
+  require("./components/bootstrap/offcanvas/offcanvas-body").default,
 );
 export { app };

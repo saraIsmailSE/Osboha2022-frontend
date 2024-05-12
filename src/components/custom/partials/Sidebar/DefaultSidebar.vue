@@ -1,13 +1,8 @@
 <template>
-  <aside
-    :class="`sidebar sidebar-default ${sidebarMenuStyle} ${sidebarType.join(
-      ' '
-    )}`"
-    id="first-tour"
-    data-toggle="main-sidebar"
-    data-sidebar="responsive"
-  >
-    <div class="sidebar-body pt-0 data-scrollbar">
+  <aside :class="`sidebar sidebar-default ${sidebarMenuStyle} ${sidebarType.join(
+    ' '
+  )}`" id="first-tour" data-toggle="main-sidebar" data-sidebar="responsive">
+    <div class="sidebar-body pt-0 data-scrollbar"  v-click-outside="handleClickOutside">
       <div class="sidebar-list">
         <vertical-nav />
       </div>
@@ -20,15 +15,21 @@ import VerticalNav from "./VerticalNav.vue";
 import { onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import Scrollbar from "smooth-scrollbar";
+import vClickOutside from "click-outside-vue3";
+
 export default {
   name: "DefaultSidebar",
   components: { VerticalNav },
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
   created() {
     this.toggleSidebar();
   },
   setup() {
     const store = useStore();
     const sidebarType = computed(() => store.getters["setting/sidebar_type"]);
+    const isSidebarOpen = computed(() => !sidebarType.value.includes("sidebar-mini"));
     const sidebarMenuStyle = computed(
       () => store.getters["setting/sidebar_menu_style"]
     );
@@ -46,6 +47,16 @@ export default {
         ]);
       }
     };
+    const handleClickOutside = (event) => {
+      if (event.target.id === 'toggelBtn') {
+        return;
+      }
+
+      if (isSidebarOpen.value) {
+        store.dispatch("setting/sidebar_type", [...sidebarType.value, "sidebar-mini"]);
+      }
+    };
+
     onMounted(() => {
       Scrollbar.init(document.querySelector(".data-scrollbar"), {
         continuousScrolling: false,
@@ -82,7 +93,7 @@ export default {
         resizePlugins();
       });
     });
-    return { sidebarType, sidebarMenuStyle, toggleSidebar };
+    return { sidebarType, sidebarMenuStyle, toggleSidebar, handleClickOutside,isSidebarOpen };
   },
 };
 </script>

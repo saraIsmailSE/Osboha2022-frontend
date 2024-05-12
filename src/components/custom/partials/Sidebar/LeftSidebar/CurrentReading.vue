@@ -1,15 +1,15 @@
 <template>
-  <div :class="`right-sidebar-mini  ${miniClass} data-scrollbar right-sidebar-current-reading`" v-click-outside="onClickOutside">
+  <div :class="`right-sidebar-mini  ${miniClass} data-scrollbar right-sidebar-current-reading`"
+    v-click-outside="onClickOutside">
     <div class="right-sidebar-panel p-0">
-      <div class="card shadow-none">
+      <div class="card shadow-none" id="LeftSidebar">
         <div class="card-body p-0">
           <div class="media-height p-2" data-scrollbar="init">
             <div class="card d-flex align-items-center mb-4">
               <img src="@/assets/images/main/current_book.png" class="card-img-top" alt="current reading" />
 
               <h5 class="card-title mt-3">املأ مخزون ثقافتك</h5>
-              <div id="currebtReading" class="carousel slide w-100" data-bs-ride="false"
-                v-if="book_in_progress">
+              <div id="currebtReading" class="carousel slide w-100" data-bs-ride="false" v-if="book_in_progress">
                 <div class="carousel-inner w-75 m-4">
                   <div class="carousel-item" v-for="(book, index) in book_in_progress" :key="index"
                     :class="(index == 0) ? 'active' : ''">
@@ -22,9 +22,9 @@
                     <p class="card-text h3">
                       {{ book.name }}
                       <router-link class="btn btn-primary w-100 mt-2" :to="{
-    name: 'book.book-details',
-    params: { book_id: book.id },
-  }">
+                        name: 'book.book-details',
+                        params: { book_id: book.id },
+                      }">
                         متابعة
                       </router-link>
                     </p>
@@ -34,10 +34,10 @@
                       <span class="material-symbols-outlined text-center display-5 w-100"> ac_unit </span>
 
                       <router-link class="btn btn-primary w-100 mt-2 " style="background-color: #223E7F;" :to="{
-    name: 'user.requestexception',
-    params: { user_id: user.id },
-  }
-    ">
+                        name: 'user.requestexception',
+                        params: { user_id: user.id },
+                      }
+                        ">
                         طلب اجازة
                       </router-link>
                     </p>

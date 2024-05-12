@@ -4,43 +4,43 @@
             <ul>
                 <li>
                     <span class="frame">
-                        <img src="https://i.pinimg.com/564x/14/71/d6/1471d61510a9664d89f7e2f1b3aad021.jpg"
+                        <img src="@/assets/images/signup/galary/galary-1.png"
                             alt="Untitled" />
                     </span>
                 </li>
                 <li>
                     <span class="frame">
-                        <img src="https://i.pinimg.com/564x/f7/ba/54/f7ba544af0946dd8ef78ad73867a7c8a.jpg"
+                        <img src="@/assets/images/signup/galary/galary-2.png"
                             alt="Untitled" />
                     </span>
                 </li>
                 <li>
                     <span class="frame">
-                        <img src="https://i.pinimg.com/564x/30/09/b4/3009b48e096ef33e13a36b7bcd6017d0.jpg"
+                        <img src="@/assets/images/signup/galary/galary-3.png"
                             alt="Untitled" />
                     </span>
                 </li>
                 <li>
                     <span class="frame">
-                        <img src="https://i.pinimg.com/564x/92/1d/80/921d802998a890ea0ad02b8af77d8144.jpg"
+                        <img src="@/assets/images/signup/galary/galary-4.png"
                             alt="Untitled" />
                     </span>
                 </li>
                 <li>
                     <span class="frame">
-                        <img src="https://i.pinimg.com/564x/b8/50/72/b85072d28b31955e96ae04ebf61b4676.jpg"
+                        <img src="@/assets/images/signup/galary/galary-5.png"
                             alt="Untitled" />
                     </span>
                 </li>
                 <li>
                     <span class="frame">
-                        <img src="https://i.pinimg.com/564x/80/44/a7/8044a7274a603e2593400691912fb683.jpg"
+                        <img src="@/assets/images/signup/galary/galary-7.png"
                             alt="Untitled" />
                     </span>
                 </li>
                 <li>
                     <span class="frame deferred">
-                        <img src="https://i.pinimg.com/564x/42/1c/b6/421cb6a31da74b35653a98125e5d882c.jpg"
+                        <img src="@/assets/images/signup/galary/galary-8.png"
                             alt="Untitled" />
                     </span>
                 </li>
