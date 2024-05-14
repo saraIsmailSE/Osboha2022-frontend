@@ -617,10 +617,18 @@ const groupChildRoute = (prop, mode = false) => [
   {
     path: "new-ambassadors/:group_id",
     name: prop + ".new-ambassadors",
-    meta: { auth: true, name: "nNew Ambassadors" },
+    meta: { auth: true, name: "New Ambassadors" },
     props: (route) => ({ page: parseInt(route.query.page) || 1 }),
     component: () =>
       import("../views/OsbohaMain/Group/AmbassadorsRequest/ListNew"),
+  },
+
+  {
+    path: "team-discharge/:group_id",
+    name: prop + ".team-discharge",
+    meta: { auth: true, name: "Team Discharge" },
+    component: () =>
+      import("../views/OsbohaMain/Group/TeamDischarge"),
   },
 ];
 
