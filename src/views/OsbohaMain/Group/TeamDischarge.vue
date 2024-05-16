@@ -15,7 +15,7 @@
                         </span>
 
                     </h3>
-
+                    <h5 v-if="groupAdministrators.length == 0"> لا يوجد</h5>
                     <div class="col-4 col-md-4 col-lg-4 mt-2 mb-3" v-for="administrator in groupAdministrators"
                         :key="administrator.id">
                         <div class="d-flex">
@@ -56,21 +56,38 @@
 
             </div>
             <hr />
-            <div class="iq-card-body p-4" v-if="ambassadors">
+            <div class="iq-card-body p-4">
                 <h3 v-if="group.type.type == 'followup'">سفراء المجموعة</h3>
                 <h3 v-if="group.type.type == 'supervising'">القادة في المجموعة</h3>
                 <h3 v-if="group.type.type == 'advising'">المراقبين في المجموعة</h3>
-                <div class="row d-flex justify-content-center">
-                    <div class="col-4 col-md-4 col-lg-4 mt-2 mb-3" v-for="ambassador in ambassadors"
-                        :key="ambassador.id">
-                        <input class="form-check-input me-2" type="checkbox" :value="`${ambassador.email}`"
-                            :id="`${ambassador.id}`" @change="toggleSelection(ambassador.email)">
-                        <label class="form-check-label" :for="`${ambassador.id}`">
-                            {{ ambassador.name }}
-                        </label>
+                <div class="row" v-if="ambassadors.length > 0">
+                    <div class="d-flex mt-2 mb-3">
+                        <input class="form-check-input me-2" type="checkbox" value="selectAll" id="all"
+                            @change="selectAllAmbassador()">
+                            <p class="form-check-label h5" for="all" v-if="selectedAmbassadors.length == 0">
+                            تحديد الكل
+                        </p>
+                        <p class="form-check-label h5" for="all" v-if="selectedAmbassadors.length > 0">
+                            الغاء تحديد الكل
+                        </p>
+                    </div>
+                    <div class="row d-flex justify-content-center">
 
+                        <div class="col-4 col-md-4 col-lg-4 mt-2 mb-3" v-for="ambassador in ambassadors"
+                            :key="ambassador.id">
+                            <input class="form-check-input me-2" type="checkbox" :value="`${ambassador.email}`"
+                                :id="`${ambassador.id}`" @change="toggleSelection(ambassador.email)"
+                                :checked="allSelected">
+                            <label class="form-check-label" :for="`${ambassador.id}`">
+                                {{ ambassador.name }}
+                            </label>
+
+                        </div>
                     </div>
                 </div>
+
+                <h5 v-else> لا يوجد</h5>
+
                 <transfer-ambassadors v-if="group.type.type == 'followup' && selectedAmbassadors.length > 0"
                     :selectedAmbassadors="selectedAmbassadors" />
                 <transfer-leaders v-if="group.type.type == 'supervising' && selectedAmbassadors.length > 0"
@@ -78,7 +95,6 @@
                 <transfer-supervisors v-if="group.type.type == 'advising' && selectedAmbassadors.length > 0"
                     :selectedSupervisors="selectedAmbassadors" />
             </div>
-
             <DischargeForm v-if="allowedToDischarge" />
 
             <router-link class="mb-3 mt-3 text-center d-block w-100" :to="{
@@ -124,6 +140,7 @@ export default {
             group: null,
             users: null,
             types: [],
+            allSelected: false,
             groupAdministrators: [],
             selectedAmbassadors: [],
             GROUP_TYPE,
@@ -175,48 +192,53 @@ export default {
             }
         },
         toggleSelection(email) {
-            switch (this.group.type.type) {
-                case "followup":
-                    var ambassador_index = this.selectedAmbassadors.findIndex(item => item.ambassador_email === email);
-                    if (ambassador_index === -1) {
-                        this.selectedAmbassadors.push({ ambassador_email: email });
-                    } else {
-                        this.selectedAmbassadors.splice(ambassador_index, 1);
-                    }
-                    break;
-                case "supervising":
-                    var leader_index = this.selectedAmbassadors.findIndex(item => item.leader_email === email);
-                    if (leader_index === -1) {
-                        this.selectedAmbassadors.push({ leader_email: email });
-                    } else {
-                        this.selectedAmbassadors.splice(leader_index, 1);
-                    }
-                    break;
-                case "advising":
-                    var supervisor_index = this.selectedAmbassadors.findIndex(item => item.supervisor_email === email);
-                    if (supervisor_index === -1) {
-                        this.selectedAmbassadors.push({ supervisor_email: email });
-                    } else {
-                        this.selectedAmbassadors.splice(supervisor_index, 1);
-                    }
-                    break;
+            const index = this.selectedAmbassadors.findIndex(item => item[this.typeKey] === email);
+            if (index === -1) {
+                const newItem = {};
+                newItem[this.typeKey] = email;
+                this.selectedAmbassadors.push(newItem);
+            } else {
+                this.selectedAmbassadors.splice(index, 1);
             }
-        }
-
+        },
+        selectAllAmbassador() {
+            if (this.selectedAmbassadors.length > 0) {
+                this.selectedAmbassadors = [];
+                this.allSelected = false;
+            } else {
+                this.selectedAmbassadors = this.ambassadors.map(ambassador => {
+                    let obj = {};
+                    obj[this.typeKey] = ambassador.email;
+                    return obj;
+                });
+                this.allSelected = true;
+            }
+        },
     },
     computed: {
         ambassadors() {
             if (this.users) {
                 return this.users.filter(user => user.pivot.user_type === 'ambassador');
             }
-            return null;
+            return [];
         },
         allowedToDischarge() {
-            if (!this.ambassadors) {
+            if (!this.ambassadors.length > 0) {
                 return true
             }
             return false;
         },
+        typeKey() {
+            switch (this.group.type.type) {
+                case "supervising":
+                    return 'leader_email';
+
+                case "advising":
+                    return 'supervisor_email';
+                default:
+                    return 'ambassador_email'
+            }
+        }
     },
 };
 </script>
