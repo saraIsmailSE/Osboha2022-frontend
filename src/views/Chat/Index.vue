@@ -68,7 +68,8 @@ import helper from "@/utilities/helper";
 import MessageService from "@/API/services/messages.service";
 import UserService from "@/API/services/user.service";
 import { watchEffect } from "vue";
-import Pusher from "pusher-js";
+import { connectToServer } from "@/utilities/websocket";
+
 
 register();
 
@@ -80,41 +81,32 @@ export default {
   async created() {
     this.unreadMessages = await MessageService.unreadMessages();
 
-    //Initialize Pusher
-    const pusher = new Pusher('0098112dc7c6ed8e4777180', {
-      cluster: 'mt1',
-      wsHost: window.location.hostname,
-      wsPort: 6001,
-      forceTLS: false,
-      encrypted: true,
-    });
-
-    const channel = pusher.subscribe('rooms-channel.' + this.user.id);
-    // Listen for 'new-message' events
-    channel.bind('new-messages', (response) => {
+    window.Echo = this.connectToServer();
+    const channel = window.Echo.channel('rooms-channel.' + this.user.id);
+    channel.listen('.new-messages', (response) => {
       if (response) {
         this.rooms = response.rooms;
         this.roomsLoaded = true;
         this.unreadMessages = response.unreadMessages;
       }
-
     });
 
     watchEffect(() => {
       // Subscribe to the 'chat' channel
       if (this.selectedRoom) {
         if (this.selectedRoom.roomId != this.currentRoomId) {
-          pusher.unsubscribe('single-room-channel.' + this.currentRoomId);
+          window.Echo.leaveChannel('single-room-channel.' + this.currentRoomId);
           this.currentRoomId = this.selectedRoom.roomId;
         }
-        const channel = pusher.subscribe('single-room-channel.' + this.currentRoomId);
+        const channel = window.Echo.channel('single-room-channel.' + this.currentRoomId);
         // Listen for 'new-message' events
-        channel.bind('new-message', (response) => {
+        channel.listen('.new-message', (response) => {
           if (!this.displayedMessageIds.includes(response.message._id)) {
             this.messages = [...this.messages, response.message];
             this.displayedMessageIds.push(response.message._id);
           }
         });
+
       }
 
     });
@@ -170,6 +162,7 @@ export default {
     },
   },
   methods: {
+    connectToServer,
     resetRooms() {
       this.loadingRooms = true;
       this.roomsLoaded = true;
@@ -436,13 +429,6 @@ export default {
         lastMessageDate: null,
         isFake: true,
       };
-
-      console.log("🚀 ~ file: index.vue:477 ~ createFakeRoom ~ room", room);
-      console.log(
-        "🚀 ~ file: index.vue:477 ~ createFakeRoom ~ rooms",
-        this.rooms
-      );
-
       this.rooms = [...(this.rooms || []), room];
       this.selectedRoom = room;
     },
