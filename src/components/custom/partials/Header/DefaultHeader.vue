@@ -70,7 +70,7 @@ import { useStore } from "vuex";
 import { computed } from "vue";
 import Pusher from "pusher-js";
 import notificationsServices from "@/API/services/notifications.service";
-import helper from "@/utilities/helper";
+import {connectToServer} from "@/utilities/websocket";
 import FriendServices from "@/API/services/friend.service";
 import MessageService from "@/API/services/messages.service";
 import UserInfoService from "@/Services/userInfoService";
@@ -117,29 +117,19 @@ export default {
     this.unreadMessages = await MessageService.unreadMessages();
     this.unread_notifications = await notificationsServices.listUnreadNotification();
 
-    //Initialize Pusher
-    const pusher = new Pusher('0098112dc7c6ed8e4777180', {
-      cluster: 'mt1',
-      wsHost: window.location.hostname,
-      wsPort: 6001,
-      forceTLS: false,
-      encrypted: true,
-    });
-    console.log("🚀 ~ created ~ pusher:", pusher)
 
+    window.Pusher = require('pusher-js');
 
-    const channel = pusher.subscribe('rooms-channel.' + this.user.id);
-    console.log("🚀 ~ created ~ channel:", channel)
-    // Listen for 'new-message' events
-    channel.bind('new-messages', (response) => {
-      console.log("🚀 ~ channel.bind ~ channel.bind:", response)
+    window.Echo = this.connectToServer();
 
-      if (response) {
-        this.unreadMessages = response.unreadMessages;
+    const channel = window.Echo.channel('rooms-channel.' + this.user.id);
+
+    channel.listen('.new-messages', (data) => {
+      if (data) {
+        this.unreadMessages = data.unreadMessages;
       }
     });
   },
-
   data() {
     return {
       unreadMessages: 0,
@@ -175,6 +165,7 @@ export default {
   },
 
   methods: {
+    connectToServer,
     logout() {
       this.$store.dispatch("logout");
     },
