@@ -10,7 +10,7 @@ export function connectToServer() {
         wsHost: process.env.VUE_APP_WEBSOCKET_BASE_URL,
         wsPort: 6001,
         wssPort: 6001,
-        forceTLS: true,
+        forceTLS: false,
         disableStats: true,
         authEndpoint: `${process.env.VUE_APP_WEBSOCKET_BASE_URL}broadcasting/auth`,
         auth: {

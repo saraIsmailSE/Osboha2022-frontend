@@ -68,7 +68,6 @@ import helper from "@/utilities/helper";
 import MessageService from "@/API/services/messages.service";
 import UserService from "@/API/services/user.service";
 import { watchEffect } from "vue";
-import { connectToServer } from "@/utilities/websocket";
 
 
 register();
@@ -81,8 +80,7 @@ export default {
   async created() {
     this.unreadMessages = await MessageService.unreadMessages();
 
-    window.Echo = this.connectToServer();
-    const channel = window.Echo.channel('rooms-channel.' + this.user.id);
+    const channel = this.Echo.channel('rooms-channel.' + this.user.id);
     channel.listen('.new-messages', (response) => {
       if (response) {
         this.rooms = response.rooms;
@@ -95,10 +93,10 @@ export default {
       // Subscribe to the 'chat' channel
       if (this.selectedRoom) {
         if (this.selectedRoom.roomId != this.currentRoomId) {
-          window.Echo.leaveChannel('single-room-channel.' + this.currentRoomId);
+          this.Echo.leaveChannel('single-room-channel.' + this.currentRoomId);
           this.currentRoomId = this.selectedRoom.roomId;
         }
-        const channel = window.Echo.channel('single-room-channel.' + this.currentRoomId);
+        const channel = this.Echo.channel('single-room-channel.' + this.currentRoomId);
         // Listen for 'new-message' events
         channel.listen('.new-message', (response) => {
           if (!this.displayedMessageIds.includes(response.message._id)) {
@@ -160,9 +158,11 @@ export default {
     user() {
       return this.$store.getters.getUser;
     },
+    Echo() {
+      return this.$store.getters.getEcho;
+    },
   },
   methods: {
-    connectToServer,
     resetRooms() {
       this.loadingRooms = true;
       this.roomsLoaded = true;

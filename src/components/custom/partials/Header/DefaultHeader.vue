@@ -45,7 +45,7 @@
                 <span class="visually-hidden">unread messages</span>
               </span>
             </router-link>
-            <router-link v-if="LeaderAndAbove" :to="{
+            <router-link :to="{
               name: 'chat.index',
             }" class="d-flex align-items-center justify-content-center ms-2 me-2 position-relative">
               <i class="material-symbols-outlined">forum</i>
@@ -68,12 +68,9 @@
 <script>
 import { useStore } from "vuex";
 import { computed } from "vue";
-import Pusher from "pusher-js";
 import notificationsServices from "@/API/services/notifications.service";
-import {connectToServer} from "@/utilities/websocket";
 import FriendServices from "@/API/services/friend.service";
 import MessageService from "@/API/services/messages.service";
-import UserInfoService from "@/Services/userInfoService";
 import ThemeScheme from "../../setting/sections/ThemeScheme.vue";
 
 export default {
@@ -117,12 +114,7 @@ export default {
     this.unreadMessages = await MessageService.unreadMessages();
     this.unread_notifications = await notificationsServices.listUnreadNotification();
 
-
-    window.Pusher = require('pusher-js');
-
-    window.Echo = this.connectToServer();
-
-    const channel = window.Echo.channel('rooms-channel.' + this.user.id);
+    const channel = this.Echo.channel('rooms-channel.' + this.user.id);
 
     channel.listen('.new-messages', (data) => {
       if (data) {
@@ -143,18 +135,13 @@ export default {
     user() {
       return this.$store.getters.getUser;
     },
+    Echo() {
+      return this.$store.getters.getEcho;
+    },
     unread() {
       //by asmaa
       //return this.$store.state.unreadNotifications;
       return this.unread_notifications.length;
-    },
-    LeaderAndAbove() {
-      return UserInfoService.hasRoles(this.user, [
-        "admin",
-        "consultant",
-        "advisor",
-        "leader",
-      ]);
     },
   },
   mounted() {
@@ -165,7 +152,6 @@ export default {
   },
 
   methods: {
-    connectToServer,
     logout() {
       this.$store.dispatch("logout");
     },
