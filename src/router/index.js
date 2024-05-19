@@ -449,6 +449,12 @@ const rolesChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "Change Advising Team" },
     component: () => import("../views/RolesAdministration/ChangeAdvisingTeam"),
   },
+  {
+    path: "/remove-secondary-role",
+    name: prop + ".removeSecondaryRole",
+    meta: { auth: true, name: "Remove Secondary Role" },
+    component: () => import("../views/RolesAdministration/RemoveSecondaryRole"),
+  },
 ];
 const groupChildRoute = (prop, mode = false) => [
   {
