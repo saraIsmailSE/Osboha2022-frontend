@@ -114,7 +114,7 @@ const authchildRoutes = (prop, mode) => [
     component: () => import("../views/AuthPages/Default/new_signup"),
   },
   {
-    path: "new_signup_idea",
+    path: "osboha180-signup",
     name: prop + ".new-signup-idea",
     component: () => import("../views/AuthPages/SignUpNewIdea"),
   },

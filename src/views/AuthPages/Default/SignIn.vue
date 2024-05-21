@@ -62,7 +62,7 @@
           </div>
           <div class="sign-info">
             <span class="dark-color d-inline-block line-height-2">لا تملك حساب؟
-              <router-link :to="{ name: 'auth.sign-up' }">
+              <router-link :to="{ name: 'auth.new-signup-idea' }">
                 سجل الأن
               </router-link></span>
           </div>
