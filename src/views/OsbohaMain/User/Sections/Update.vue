@@ -57,7 +57,8 @@
             <div class="image-block text-center">
               <img :src="official_document_image_src" class="img-fluid rounded w-50" alt="official_document"
                 v-if="official_document_image_src != ''" />
-              <img src="@/assets/images/main/stage2.png" class="img-fluid rounded w-50" alt="official_document" v-else />
+              <img src="@/assets/images/main/stage2.png" class="img-fluid rounded w-50" alt="official_document"
+                v-else />
             </div>
             <p class="mt-2 text-center">
               قم برفع وثيقة رسمية للتمكن من توثيق الكتب
@@ -195,117 +196,43 @@
         </div>
       </div>
     </iq-card>
-    <iq-card class="iq-card">
-      <div class="iq-card-header-toolbar d-flex align-items-center mx-auto">
-        <h3 class="text-center mt-3 mb-3">مواقع التواصل الاجتماعي</h3>
+
+    <!-- ########## update social media ########## -->
+    <update-social-media />
+
+    <!-- ########## reset email ########## -->
+    <reset-email />
+
+    <div class="d-flex align-items-center mt-3 row">
+      <div class="d-inline-block w-100 text-center col-12">
+        <a role="button" @click="back()" class="d-block mt-3 mb-3 w-75 mx-auto">
+          <span>عودة للملف الشخصي</span>
+          <span class="align-middle material-symbols-outlined">
+            keyboard_return
+          </span>
+        </a>
       </div>
-      <div class="iq-card-body p-3">
-        <div class="image-block text-center">
-          <img src="@/assets/images/main/social-media.png" class="img-fluid rounded w-50" alt="profile-img" />
-        </div>
+    </div>
 
-        <div class="d-flex align-items-center mt-3">
-          <form @submit.prevent="submitSociaMedia" class="post-text ml-3 w-100 row">
-            <div class="form-group col-12">
-              <input type="text" class="form-control mt-2" name="facebook" id="facebook"
-                v-model="socialMediaForm.facebook" placeholder="فيسبوك" />
-              <input type="text" class="form-control mt-2" name="instagram" id="instagram"
-                v-model="socialMediaForm.instagram" placeholder="انستغرام" />
-              <input type="text" class="form-control mt-2" name="twitter" id="twitter" v-model="socialMediaForm.twitter"
-                placeholder="تويتر" />
-            </div>
-            <hr />
-            <div class="form-group">
-              <button type="submit" :disabled="socialMediaMessage" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
-                تعديل
-              </button>
-            </div>
 
-            <div class="col-sm-12 text-center" v-if="loader">
-              <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 100px" />
-            </div>
-            <h4 class="text-center mt-3 mb-3" v-if="message">
-              {{ socialMediaMessage }}
-            </h4>
-          </form>
-        </div>
-        <div class="d-flex align-items-center mt-3 row">
-          <div class="d-inline-block w-100 text-center col-12">
-            <a role="button" @click="back()" class="d-block mt-3 mb-3 w-75 mx-auto">
-              <span>عودة للملف الشخصي</span>
-              <span class="align-middle material-symbols-outlined">
-                keyboard_return
-              </span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </iq-card>
-
-    <iq-card class="iq-card">
-      <div class="iq-card-header-toolbar d-flex align-items-center mx-auto">
-        <h3 class="text-center mt-3 mb-3">
-          اعادة تعيين البريد الالكتروني
-        </h3>
-      </div>
-      <div class="iq-card-body p-3">
-        <div class="image-block text-center">
-          <img src="@/assets/images/main/no-friend-req.png" class="img-fluid rounded w-50" alt="profile-img" />
-        </div>
-
-        <div class="d-flex align-items-center mt-3">
-          <form class="mt-4 w-100" @submit.prevent="resetEmail">
-            <div class="m-auto alert alert-warning w-75 mb-2" role="alert">
-              الايميل المسجل به: {{ user.email }}
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="email">ادخل بريدك الالكتروني الجديد</label>
-              <input type="email" class="form-control mb-0 w-75 mx-auto" id="email" placeholder="  ادخل بريدك الالكتروني "
-                v-model="v$.resetEmailForm.email.$model">
-              <p class="p-2 text-center" style="color:red" v-if="v$.resetEmailForm.email.$error">قم بادخال بريدك
-                الالكتروني</p>
-            </div>
-            <div class="col-sm-12 text-center" v-if="loader">
-              <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 100px;">
-            </div>
-            <h4 class="text-center mt-3 mb-3" v-if="resetEmailMsg"> {{ resetEmailMsg }}</h4>
-            <div class="d-inline-block w-100 text-center">
-              <button type="submit" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
-                تعيين
-              </button>
-            </div>
-          </form>
-
-        </div>
-        <div class="d-flex align-items-center mt-3 row">
-          <div class="d-inline-block w-100 text-center col-12">
-            <a role="button" @click="back()" class="d-block mt-3 mb-3 w-75 mx-auto">
-              <span>عودة للملف الشخصي</span>
-              <span class="align-middle material-symbols-outlined">
-                keyboard_return
-              </span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </iq-card>
   </div>
 </template>
 <script>
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, maxLength, email } from "@vuelidate/validators";
 import UserProfile from "@/API/services/user-profile.service";
-import SocialMedia from "@/API/services/social-media.service";
 import profileImagesService from "@/API/services/profile.images.service";
 import UserServices from "@/API/services/user.service";
 import Auth from '@/API/services/auth.service'
 import { COUNTRIES } from "@/utilities/constants";
 import UserInfoService from "@/Services/userInfoService";
+import UpdateSocialMedia from '@/components/user/UpdateSocialMedia';
+import ResetEmail from '@/components/user/ResetEmail';
 
 
 export default {
   name: "update profile",
+  components: { UpdateSocialMedia, ResetEmail },
   async created() {
 
     if ((this.user.allowed_to_eligible == 0 || this.user.allowed_to_eligible == 2)) {
@@ -328,23 +255,12 @@ export default {
       this.infoForm.fav_writer = this.profileInfo.fav_writer;
       this.infoForm.fav_section = this.profileInfo.fav_section;
     }
-    const social_media = await SocialMedia.getByUserId(
-      this.$route.params.user_id
-    );
-    if (social_media) {
-      this.socialMediaForm.facebook = social_media.facebook;
-      this.socialMediaForm.instagram = social_media.instagram;
-      this.socialMediaForm.twitter = social_media.twitter;
-    }
   },
   setup() {
     return { v$: useVuelidate() };
   },
   data() {
     return {
-      resetEmailForm: {
-        email: '',
-      },
       loader: false,
       profileInfo: null,
       profilePictureForm: {
@@ -367,15 +283,8 @@ export default {
         fav_quote: "",
         fav_section: "",
       },
-      socialMediaForm: {
-        facebook: "",
-        instagram: "",
-        twitter: "",
-      },
       sections: [],
       message: null,
-      socialMediaMessage: null,
-      resetEmailMsg: '',
       ofiicilaDocUploded: false,
       official_document_image_src: '',
     };
@@ -396,13 +305,6 @@ export default {
           maxLength: maxLength(300),
         },
       },
-      resetEmailForm: {
-        email: {
-          required,
-          email
-        },
-      },
-
     };
   },
   methods: {
@@ -423,39 +325,6 @@ export default {
         } catch (error) {
           console.log(error);
         }
-      }
-    },
-    /**
-     * update profile socialmedia.
-     */
-    async submitSociaMedia() {
-      this.socialMediaMessage = "";
-      this.loader = true;
-      try {
-        const response = await SocialMedia.add(this.socialMediaForm);
-        this.loader = false;
-        this.socialMediaMessage = response;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-
-    async resetEmail() {
-      this.v$.$touch()
-      if (!this.v$.resetEmailForm.$invalid) {
-        this.resetEmailMsg = "";
-        this.loader = true;
-        const response = await Auth.resetEmail(this.resetEmailForm.email)
-        console.log(response)
-        if (response == 'Reset Successfully!') {
-          this.resetEmailMsg = " تم التعيين - تفقد بريدك الالكتروني وقم بتسجيل الدخول مرة أخرى"
-          setTimeout(this.logout, 10000);
-        }
-        else {
-          this.resetEmailMsg = " حدث خطأ"
-        }
-        this.loader = false;
       }
     },
     /**
