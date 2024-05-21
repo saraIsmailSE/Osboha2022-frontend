@@ -128,6 +128,18 @@ class ExceptionService {
     );
     return response.data.data;
   }
+
+  async assignToParent(exception_id) {
+    try {
+      const response = await api.put(
+        `userexception/${exception_id}/assign-to-parent`,
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
 }
 
 export default new ExceptionService();
