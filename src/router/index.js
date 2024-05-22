@@ -413,35 +413,28 @@ const statisticsChildRoute = (prop, mode = false) => [
 ];
 const rolesChildRoute = (prop, mode = false) => [
   {
+    path: "/roles-control/:type",
+    name: prop + ".rolesControl",
+    meta: { auth: true, name: "Roles Control" },
+    component: () => import("../views/RolesAdministration/RolesControl"),
+  },
+  {
+    path: "/upgrade-user/:type",
+    name: prop + ".upgradeUser",
+    meta: { auth: true, name: "Users Upgrade" },
+    component: () => import("../views/RolesAdministration/Upgrade"),
+  },
+  {
+    path: "/downgrade-user/:type",
+    name: prop + ".downgradeUser",
+    meta: { auth: true, name: "Users Downgrade" },
+    component: () => import("../views/RolesAdministration/Downgrade"),
+  },
+  {
     path: "/assign-role",
     name: prop + ".assignRole",
     meta: { auth: true, name: "Assign Role" },
     component: () => import("../views/RolesAdministration/AssignRole"),
-  },
-  {
-    path: "/upgrade-eligible-role",
-    name: prop + ".upgradeEligibleRole",
-    meta: { auth: true, name: "Upgrade Eligible Role" },
-    component: () => import("../views/RolesAdministration/UpgradeEligibleRole"),
-  },
-  {
-    path: "/upgrade-marathon-role",
-    name: prop + ".upgradeMarathonRole",
-    meta: { auth: true, name: "Upgrade Marathon Role" },
-    component: () => import("../views/RolesAdministration/UpgradeMarathonRole"),
-  },
-  {
-    path: "/upgrade-special-care-role",
-    name: prop + ".upgradeSpecialCareRole",
-    meta: { auth: true, name: "Upgrade Special Care Role" },
-    component: () =>
-      import("../views/RolesAdministration/UpgradeSpecialCareRole"),
-  },
-  {
-    path: "/upgrade-ramadan-role",
-    name: prop + ".upgradeRamadanRole",
-    meta: { auth: true, name: "Upgrade Ramadan Role" },
-    component: () => import("../views/RolesAdministration/UpgradeRamadanRole"),
   },
   {
     path: "/change-advising-team",

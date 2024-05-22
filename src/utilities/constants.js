@@ -67,6 +67,12 @@ export const GROUP_TYPE = {
   special_care: "فريق رعاية خاصة",
 };
 
+export const ROLESTYPES = {
+  marathon: "مارثون أصبوحة",
+  ramadan: "رمضان أصبوحة",
+  specialCare: "الرعاية الخاصة",
+  eligible: "توثيق الكتب",
+};
 export const DAYS = {
   Sunday: "الأحد",
   Monday: "الاثنين",

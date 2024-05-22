@@ -324,7 +324,6 @@ export default {
     },
     methods: {
         async onSubmit() {
-            console.log("🚀 ~ onSubmit ~ onSubmit:")
             this.v$.$touch();
 
             if (!this.v$.form.$invalid) {

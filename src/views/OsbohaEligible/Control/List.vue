@@ -37,7 +37,13 @@
                                 </div>
                                 <div class="col-6 col-md-6 col-lg-6">
                                     <div class="card">
-                                        <router-link :to="{ name: 'roles.upgradeEligibleRole', }">
+                                        <router-link :to="{
+                                            name: 'roles.rolesControl',
+                                            params: {
+                                                type: 'eligible',
+                                            },
+
+                                        }">
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center justify-content-center">
                                                     <div
@@ -49,7 +55,7 @@
                                                 </div>
                                                 <div class="mt-2">
                                                     <h3 class="mb-0 text-center">
-                                                        ترقية مراجع
+                                                        تحكم العضويات
                                                     </h3>
                                                 </div>
                                             </div>
