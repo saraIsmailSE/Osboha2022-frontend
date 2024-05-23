@@ -97,6 +97,7 @@
       height="calc(100vh - 20px)"
       :current-user-id="currentUserId"
       :rooms="rooms"
+      :room-id="currentRoomId"
       :loading-rooms="roomsLoading"
       :rooms-loaded="roomsLoaded"
       :messages="messages"
@@ -124,8 +125,16 @@ import { watchEffect } from "vue";
 register();
 
 export default {
-  mounted() {
-    this.loadRooms();
+  async mounted() {
+    await this.loadRooms();
+
+    //open a new room if user_id is passed in the query params
+    const queryParams = this.$route.query;
+    if (queryParams.user_id) {
+      this.loadUserRoom(queryParams.user_id);
+    } else {
+      this.selectedRoom = this.rooms[0];
+    }
   },
 
   async created() {
@@ -265,6 +274,8 @@ export default {
     },
 
     fetchMessages({ room, options = {} }) {
+      if (Object.keys(room).length === 0) return;
+
       this.options = options;
       if (options.reset) {
         this.resetMessages();
@@ -276,6 +287,11 @@ export default {
       }
 
       this.selectedRoom = room;
+
+      if (room?.isFake) {
+        this.messagesLoaded = true;
+        return;
+      }
 
       MessageService.listRoomMessages(room.roomId, this.messagesPage)
         .then((response) => {
@@ -422,7 +438,7 @@ export default {
     },
 
     openNewRoom(user) {
-      this.addRoomUsername = user.name;
+      this.addRoomUsername = user?.name;
       this.showDropdown = false;
 
       //check room if exists
@@ -430,12 +446,12 @@ export default {
         this.rooms?.length > 0
           ? this.rooms.find((room) => {
               //check first user
-              if (room.users[0]._id === user.id) {
+              if (parseInt(room.users[0]._id) === parseInt(user.id)) {
                 return true;
               }
 
               //check second user
-              if (room.users[1]._id === user.id) {
+              if (parseInt(room.users[1]._id) === parseInt(user.id)) {
                 return true;
               }
 
@@ -486,6 +502,20 @@ export default {
 
     openFile({ file }) {
       window.open(file.file.url, "_blank");
+    },
+
+    async loadUserRoom(user_id) {
+      this.roomsLoading = true;
+      this.roomsLoaded = false;
+      try {
+        const user = await UserService.getInfo(user_id);
+        this.openNewRoom(user);
+      } catch (error) {
+        helper.toggleErrorToast();
+      } finally {
+        this.roomsLoading = false;
+        this.roomsLoaded = true;
+      }
     },
   },
 };
