@@ -26,12 +26,14 @@
             </div>
           </div>
 
+          <!-- <Note :mark_id="mark.id"/> -->
+
           <div class="d-flex align-items-center mt-3 row" v-if="can_edit">
             <div class="d-inline-block w-100 text-center col-12">
               <router-link v-if="group && week" :to="{
-        name: 'group.ambassadors-reading',
-        params: { group_id: group.id, week_id: week.id },
-      }" class="d-block mt-3 mb-3 w-75 mx-auto">
+                name: 'group.ambassadors-reading',
+                params: { group_id: group.id, week_id: week.id },
+              }" class="d-block mt-3 mb-3 w-75 mx-auto">
                 <span>إنجازات الفريق</span>
                 <span class="align-middle material-symbols-outlined">
                   keyboard_return
@@ -52,6 +54,7 @@ import CountDown from "@/components/timer/Countdown.vue";
 import Support from "@/components/book/support/Support.vue";
 import Activities from "@/components/book/activities/Activities";
 import OtherActions from "@/components/group/OtherActions";
+// import Note from "@/components/group/audit/Note";
 import helper from "@/utilities/helper";
 import UserInfoService from "@/Services/userInfoService";
 
@@ -64,6 +67,7 @@ export default {
     Support,
     Activities,
     OtherActions,
+    // Note,
   },
   data() {
     return {

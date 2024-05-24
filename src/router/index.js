@@ -632,6 +632,16 @@ const marathonChildRoute = (prop, mode = false) => [
   },
 ];
 
+const withdrawnsTeamChildRoute = (prop, mode = false) => [
+  {
+    path: "list-ambassadros",
+    name: prop + ".list-ambassadros",
+    meta: { auth: true, name: "List Ambassadors" },
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
+    component: () => import("../views/OsbohaWithdrawnAmbassadors/ListAmbassadors"),
+  },
+];
+
 const ambassadorsRequestChildRoute = (prop, mode = false) => [
   {
     path: "list-requests",
@@ -1093,6 +1103,13 @@ const routes = [
     component: () => import("../layouts/Default"),
     meta: { auth: true },
     children: marathonChildRoute("marathon"),
+  },
+  {
+    path: "/withdrawns-team",
+    name: "withdrawns-team",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: withdrawnsTeamChildRoute("withdrawns-team"),
   },
   {
     path: "/ambassadors-request",

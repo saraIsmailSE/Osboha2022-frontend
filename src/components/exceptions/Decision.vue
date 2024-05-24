@@ -216,7 +216,10 @@ export default {
             return userInfoService.hasRole(this.auth, "admin");
         },
         isAssigneeAdmin() {
-            return userInfoService.hasRole(this.exception.current_assignee.assignee, "admin");
+            if (this.exception.current_assignee) {
+                return userInfoService.hasRole(this.exception.current_assignee.assignee, "admin");
+            }
+            return false
         },
         advisorAndAbove() {
             return userInfoService.hasRoles(this.auth, [

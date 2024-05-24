@@ -87,6 +87,10 @@ export default {
       case 'eligible':
         this.roles = await rolesService.getEligibleRoles();
         break;
+      case 'WithdrawnsTeam':
+        this.roles = await rolesService.getWithdrawnsTeamRoles();
+        break;
+
     }
   },
   data() {

@@ -39,6 +39,15 @@ class RolesService {
     }
   }
 
+  async getWithdrawnsTeamRoles() {
+    try {
+      const response = await api.get(`${this.prefix}/get-withdrawns-team-roles`);
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   async getRamadanRoles() {
     try {
       const response = await api.get(`${this.prefix}/get-ramadan-roles`);

@@ -21,13 +21,16 @@ export default {
                 this.roles = await rolesService.getSpecialCareRoles();
                 break;
             case 'marathon':
-            this.roles = await rolesService.getMarathonRoles();
+                this.roles = await rolesService.getMarathonRoles();
                 break;
             case 'ramadan':
                 this.roles = await rolesService.getRamadanRoles();
                 break;
             case 'eligible':
                 this.roles = await rolesService.getEligibleRoles();
+                break;
+            case 'WithdrawnsTeam':
+                this.roles = await rolesService.getWithdrawnsTeamRoles();
                 break;
         }
     },

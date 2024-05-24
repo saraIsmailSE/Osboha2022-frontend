@@ -1,17 +1,10 @@
 <template>
   <div class="col-sm-12 text-center" v-if="loadingClose">
-    <img
-      :src="require('@/assets/images/gif/page-load-loader.gif')"
-      alt="loader"
-      style="height: 100px"
-    />
+    <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
   </div>
   <div class="row" v-else>
     <div class="col-sm-12">
-      <div
-        class="card position-relative inner-page-bg bg-primary mb-2"
-        style="height: 80px"
-      >
+      <div class="card position-relative inner-page-bg bg-primary mb-2" style="height: 80px">
         <div class="inner-page-title">
           <h2 class="text-white">التحويل العام</h2>
         </div>
@@ -29,45 +22,28 @@
           <div class="blog-description">
             <div class="col-lg-12 mb-3">
               <FilterQuestion v-if="!questionId" :loadingQuestions="loading" />
-              <button
-                v-else
-                class="bg-primary rounded badge text-white border-0 ms-1 me-1"
-                @click="backToQuestions"
-              >
+              <button v-else class="bg-primary rounded badge text-white border-0 ms-1 me-1" @click="backToQuestions">
                 عودة للتحويل العام
               </button>
             </div>
-            <div
-              class="d-flex align-items-center justify-content-start"
-              v-if="emptyMessage"
-            >
+            <div class="d-flex align-items-center justify-content-start" v-if="emptyMessage">
               <div class="me-2">
-                <font-awesome-icon
-                  :icon="['fas', 'circle-exclamation']"
-                  size="xl"
-                />
+                <font-awesome-icon :icon="['fas', 'circle-exclamation']" size="xl" />
               </div>
               <div>{{ emptyMessage }}</div>
             </div>
+            <list-exceptions :exception_type="'exceptional_freez'" :exceptions="exceptions"
+              v-else-if="exceptions.length > 0" />
 
             <Questions v-else :questions="questions" />
 
             <div class="col-sm-12 text-center" v-if="loading">
-              <img
-                :src="require('@/assets/images/gif/page-load-loader.gif')"
-                alt="loader"
-                style="height: 100px"
-              />
+              <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
             </div>
 
             <div class="col-12" v-if="hasMore && questions.length > 0">
               <div class="card card-block card-stretch card-height blog">
-                <button
-                  type="button"
-                  class="btn btn-primary d-block w-100"
-                  @click="loadMore"
-                  :disabled="loading"
-                >
+                <button type="button" class="btn btn-primary d-block w-100" @click="loadMore" :disabled="loading">
                   تحميل المزيد من الأسئلة
                 </button>
               </div>
@@ -85,12 +61,14 @@ import GeneralConversationService from "@/API/services/general-conversation.serv
 import Questions from "@/components/conversation/Questions.vue";
 import FilterQuestion from "@/components/conversation/FilterQuestion.vue";
 import helper from "@/utilities/helper";
+import ListExceptions from "@/components/exceptions/ListExceptions";
 
 export default {
   name: "GeneralConversation",
   components: {
     AddQuestion,
     Questions,
+    ListExceptions,
     FilterQuestion,
   },
   provide() {
@@ -115,6 +93,7 @@ export default {
   data() {
     return {
       questions: [],
+      exceptions: [],
       loading: false,
       emptyMessage: "",
       loadingClose: false,
@@ -151,6 +130,9 @@ export default {
         }
         case "all":
           return "كافة التحويل العام";
+        case "exceptional-freez":
+          return "التجميد الاستثنائي";
+
         default:
           return null;
       }
@@ -210,6 +192,7 @@ export default {
       if (this.loading) return;
 
       this.loading = true;
+      this.exceptions = [];
 
       try {
         let response;
@@ -260,6 +243,13 @@ export default {
               await GeneralConversationService.getMyAssignedToParentQuestions(
                 this.page,
               );
+          } else if (keyword === "exceptional-freez") {
+            //get exceptional freez assigned to user
+            response =
+              await GeneralConversationService.getMyAssignedExceptionalFreez(
+                this.page,
+              );
+
           } else {
             return;
           }
@@ -268,8 +258,12 @@ export default {
             this.emptyMessage = response.message;
             return;
           }
-
-          this.questions = [...this.questions, ...response.data?.questions];
+          if (response.data.type == 'exceptional-freez') {
+            this.exceptions = response.data?.exceptions.data;
+          }
+          else {
+            this.questions = [...this.questions, ...response.data?.questions];
+          }
           this.hasMore = response.data.has_more_pages;
         }
       } catch (error) {

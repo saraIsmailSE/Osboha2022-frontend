@@ -129,6 +129,17 @@ class GeneralConversation {
     }
   }
 
+  async getMyAssignedExceptionalFreez(page) {
+    try {
+      const exceptions = await api.get(
+        `${this.prefix}/exceptional-freez?page=${page}`,
+      );
+      return exceptions.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   async solveQuestion(questionId) {
     try {
       const response = await api.put(
