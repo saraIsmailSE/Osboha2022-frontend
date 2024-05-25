@@ -101,7 +101,7 @@ export default {
         case "open": {
           return "لم يتم الحل";
         }
-        case "solved":
+        case "solved": 
           return this.formatFullDate(this.question.closed_at);
         case "discussion": {
           return "مفتوح للنقاش";
