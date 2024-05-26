@@ -7,7 +7,8 @@ export const ARABIC_ROLES = {
   advisor: "موجه",
   consultant: "مستشار",
   admin: "ادارة",
-  book_quality_team: "جودة الكتب",
+  book_quality_team: "عضو في فريق جودة الكتب",
+  book_quality_team_coordinator: "مسؤول فريق جودة الكتب",
   support_leader: "قائد دعم",
   eligible_admin: "مسؤول توثيق الكتب",
   reviewer: "مراجع توثيق",
@@ -74,7 +75,7 @@ export const ROLESTYPES = {
   ramadan: "رمضان أصبوحة",
   specialCare: "الرعاية الخاصة",
   eligible: "توثيق الكتب",
-  WithdrawnsTeam:"التواصل مع المنسحبين",
+  WithdrawnsTeam: "التواصل مع المنسحبين",
 };
 export const DAYS = {
   Sunday: "الأحد",

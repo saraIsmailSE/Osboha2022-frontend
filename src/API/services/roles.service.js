@@ -48,6 +48,15 @@ class RolesService {
     }
   }
 
+  async getBooksTeamRoles() {
+    try {
+      const response = await api.get(`${this.prefix}/get-books-team-roles`);
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   async getRamadanRoles() {
     try {
       const response = await api.get(`${this.prefix}/get-ramadan-roles`);

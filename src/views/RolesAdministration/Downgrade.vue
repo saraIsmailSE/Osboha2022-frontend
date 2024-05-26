@@ -90,6 +90,9 @@ export default {
       case 'WithdrawnsTeam':
         this.roles = await rolesService.getWithdrawnsTeamRoles();
         break;
+      case 'booksTeam':
+        this.roles = await rolesService.getBooksTeamRoles();
+        break;
 
     }
   },

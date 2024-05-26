@@ -56,32 +56,7 @@
         <span class="item-name">المجموعات </span>
       </router-link>
     </li>
-    <!-- ###### Books ###### -->
-    <li class="nav-item">
-      <router-link :class="checkActive('osboha.book') ? 'active nav-link' : 'nav-link'" aria-current="page"
-        :to="{ name: 'osboha.book' }">
-        <i class="icon material-symbols-outlined"> auto_stories </i>
-        <span class="item-name">الكتب</span>
-      </router-link>
-    </li>
-    <li class="nav-item">
-      <router-link :class="checkActive('book.free-book') ? 'active nav-link' : 'nav-link'" aria-current="page" :to="{
-        name: 'book.free-book',
-        params: {
-          user_id: user?.id,
-        },
-      }">
-        <i class="icon material-symbols-outlined"> local_library </i>
-        <span class="item-name">الكتاب الحر</span>
-      </router-link>
-    </li>
-    <li class="nav-item" v-if="isAdmin || inBooksTeam">
-      <router-link :class="checkActive('book.create') ? 'active nav-link' : 'nav-link'" aria-current="page"
-        :to="{ name: 'book.create' }">
-        <i class="icon material-symbols-outlined"> book </i>
-        <span class="item-name">اضافة كتاب</span>
-      </router-link>
-    </li>
+
     <!-- ###### Announcements ###### -->
     <li class="nav-item">
       <router-link :class="checkActive('osboha.announcement') ? 'active nav-link' : 'nav-link'
@@ -107,6 +82,9 @@
         <span class="item-name">أطروحة الجمعة</span>
       </router-link>
     </li>
+
+    <!-- ###### Books ###### -->
+    <Books />
 
     <!-- ###### Osboha Eligible ###### -->
     <OsbohaEligible />
@@ -160,6 +138,7 @@ import Exceptions from './Exceptions'
 import OsbohaMarathon from './OsbohaMarathon'
 import OsbohaSpecialCare from './OsbohaSpecialCare'
 import OsbohaWithdrawnAmbassadors from './OsbohaWithdrawnAmbassadors';
+import Books from './Books';
 // import OsbohaRamadan from "./OsbohaRamadan";
 import vClickOutside from "click-outside-vue3";
 
@@ -178,6 +157,7 @@ export default {
     OsbohaMarathon,
     OsbohaSpecialCare,
     OsbohaWithdrawnAmbassadors,
+    Books,
     // OsbohaRamadan
   },
   computed: {
@@ -216,10 +196,6 @@ export default {
         "advisor",
         "supervisor",
       ]);
-    },
-
-    inBooksTeam() {
-      return UserInfoService.hasRole(this.user, "book_quality_team");
     },
     isAdmin() {
       return UserInfoService.hasRole(this.user, "admin");
