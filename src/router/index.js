@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useCookies } from "vue3-cookies";
 
 //check if user is logged in
 const loggedIn = () =>
@@ -162,6 +163,12 @@ const authchildRoutes = (prop, mode) => [
 ];
 
 const userChildRoute = (prop, mode = false) => [
+  {
+    path: "should-update-info",
+    name: prop + ".should-update-info",
+    meta: { auth: true, name: "User Should Update Info" },
+    component: () => import("../views/OsbohaMain/User/ShouldUpdateInfo"),
+  },
   {
     path: "search",
     name: prop + ".search",
@@ -638,7 +645,8 @@ const withdrawnsTeamChildRoute = (prop, mode = false) => [
     name: prop + ".list-ambassadros",
     meta: { auth: true, name: "List Ambassadors" },
     props: (route) => ({ page: parseInt(route.query.page) || 1 }),
-    component: () => import("../views/OsbohaWithdrawnAmbassadors/ListAmbassadors"),
+    component: () =>
+      import("../views/OsbohaWithdrawnAmbassadors/ListAmbassadors"),
   },
 ];
 
@@ -1265,6 +1273,12 @@ router.beforeEach((to, from, next) => {
   if (to.meta.auth && !loggedIn()) {
     return next("/auth/signin");
   } else {
+    // const { cookies } = useCookies();
+    // const shouldUpdateInfo = cookies.get("should-update-info");
+    // if (!shouldUpdateInfo && to.name !== "user.should-update-info") {
+    //   console.log("🚀 ~ router.beforeEach ~ shouldUpdateInfo:", shouldUpdateInfo)
+    //   next({ name: "user.should-update-info" });
+    // }
     if (to.path === "/") {
       next("/home"); // Redirect to '/home' [new route]
     }
