@@ -114,7 +114,7 @@ const authchildRoutes = (prop, mode) => [
     component: () => import("../views/AuthPages/Default/new_signup"),
   },
   {
-    path: "new_signup_idea",
+    path: "osboha180-signup",
     name: prop + ".new-signup-idea",
     component: () => import("../views/AuthPages/SignUpNewIdea"),
   },
@@ -413,41 +413,40 @@ const statisticsChildRoute = (prop, mode = false) => [
 ];
 const rolesChildRoute = (prop, mode = false) => [
   {
+    path: "/roles-control/:type",
+    name: prop + ".rolesControl",
+    meta: { auth: true, name: "Roles Control" },
+    component: () => import("../views/RolesAdministration/RolesControl"),
+  },
+  {
+    path: "/upgrade-user/:type",
+    name: prop + ".upgradeUser",
+    meta: { auth: true, name: "Users Upgrade" },
+    component: () => import("../views/RolesAdministration/Upgrade"),
+  },
+  {
+    path: "/downgrade-user/:type",
+    name: prop + ".downgradeUser",
+    meta: { auth: true, name: "Users Downgrade" },
+    component: () => import("../views/RolesAdministration/Downgrade"),
+  },
+  {
     path: "/assign-role",
     name: prop + ".assignRole",
     meta: { auth: true, name: "Assign Role" },
     component: () => import("../views/RolesAdministration/AssignRole"),
   },
   {
-    path: "/upgrade-eligible-role",
-    name: prop + ".upgradeEligibleRole",
-    meta: { auth: true, name: "Upgrade Eligible Role" },
-    component: () => import("../views/RolesAdministration/UpgradeEligibleRole"),
-  },
-  {
-    path: "/upgrade-marathon-role",
-    name: prop + ".upgradeMarathonRole",
-    meta: { auth: true, name: "Upgrade Marathon Role" },
-    component: () => import("../views/RolesAdministration/UpgradeMarathonRole"),
-  },
-  {
-    path: "/upgrade-special-care-role",
-    name: prop + ".upgradeSpecialCareRole",
-    meta: { auth: true, name: "Upgrade Special Care Role" },
-    component: () =>
-      import("../views/RolesAdministration/UpgradeSpecialCareRole"),
-  },
-  {
-    path: "/upgrade-ramadan-role",
-    name: prop + ".upgradeRamadanRole",
-    meta: { auth: true, name: "Upgrade Ramadan Role" },
-    component: () => import("../views/RolesAdministration/UpgradeRamadanRole"),
-  },
-  {
     path: "/change-advising-team",
     name: prop + ".changeAdvisingTeam",
     meta: { auth: true, name: "Change Advising Team" },
     component: () => import("../views/RolesAdministration/ChangeAdvisingTeam"),
+  },
+  {
+    path: "/remove-secondary-role",
+    name: prop + ".removeSecondaryRole",
+    meta: { auth: true, name: "Remove Secondary Role" },
+    component: () => import("../views/RolesAdministration/RemoveSecondaryRole"),
   },
 ];
 const groupChildRoute = (prop, mode = false) => [
@@ -638,6 +637,16 @@ const marathonChildRoute = (prop, mode = false) => [
     name: prop + ".participants",
     meta: { auth: true, name: "List Participants" },
     component: () => import("../views/OsbohaMarathon/Participants"),
+  },
+];
+
+const withdrawnsTeamChildRoute = (prop, mode = false) => [
+  {
+    path: "list-ambassadros",
+    name: prop + ".list-ambassadros",
+    meta: { auth: true, name: "List Ambassadors" },
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
+    component: () => import("../views/OsbohaWithdrawnAmbassadors/ListAmbassadors"),
   },
 ];
 
@@ -1102,6 +1111,13 @@ const routes = [
     component: () => import("../layouts/Default"),
     meta: { auth: true },
     children: marathonChildRoute("marathon"),
+  },
+  {
+    path: "/withdrawns-team",
+    name: "withdrawns-team",
+    component: () => import("../layouts/Default"),
+    meta: { auth: true },
+    children: withdrawnsTeamChildRoute("withdrawns-team"),
   },
   {
     path: "/ambassadors-request",

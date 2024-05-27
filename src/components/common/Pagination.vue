@@ -32,6 +32,8 @@
 <script>
 export default {
     name: 'PaginationArea',
+    created(){
+    },
     props: {
         page: {
             type: [Number],

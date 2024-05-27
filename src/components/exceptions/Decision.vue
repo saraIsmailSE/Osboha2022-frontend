@@ -3,11 +3,13 @@
         <h3 class="text-center mt-3 mb-3">الاجراء المناسب</h3>
 
         <div v-if="exception.status == 'pending'">
+
             <div class="form-group text-start ms-3" v-if="exception.type.type != 'انسحاب مؤقت'">
                 <h4 class="mt-3 mb-3">اختر الأسبوع</h4>
                 <div class="form-check form-check-inline" v-for="week in weeks" :key="week.id">
                     <input class="form-check-input" type="radio" name="weeks" id="currentWeek" v-model="selectedWeek"
-                        :value="`${week.id}`" @change="() => { selectedWeekError = ''; selectedWeekTitle = week.title }" />
+                        :value="`${week.id}`"
+                        @change="() => { selectedWeekError = ''; selectedWeekTitle = week.title }" />
                     <label class="form-check-label fs-4" for="currentWeek">{{ week.title }}</label>
                 </div>
 
@@ -44,7 +46,8 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="submit" :disabled="message" class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
+                        <button type="submit" :disabled="message"
+                            class="btn d-block btn-primary mt-3 mb-3 w-75 mx-auto">
                             اعتماد
                         </button>
                     </div>
@@ -61,7 +64,7 @@
                 authInGroup &&
                 (authInGroup.user_type == 'admin' || authInGroup.user_type == 'consultant' ||
                     authInGroup.user_type == 'advisor')
-                ">
+            ">
                 <form @submit.prevent="submitDecision" class="post-text m-auto w-100 row">
                     <div class="form-group col-12">
                         <select class="form-select" v-model="v$.decideForm.decision.$model"
@@ -89,6 +92,16 @@
                             * ملاحظاتك مطلوبة
                         </small>
                     </div>
+                    <div class="form-group col-12">
+                        <button
+                            v-if="(exception.assignees.length == 0 || (exception.current_assignee.assignee_id === auth.id)) && !isAssigneeAdmin"
+                            class="bg-dark rounded badge text-white border-0 ms-1 me-3 float-end"
+                            @click="assignToParent">
+                            <img v-if="loadingAssign" :src="require('@/assets/images/gif/page-load-loader.gif')"
+                                alt="loader" style="height: 20px" />
+                            <span v-else> رفع إلى المسؤول </span>
+                        </button>
+                    </div>
 
                     <div class="form-group">
                         <button type="submit" :disabled="message" class="btn d-block btn-primary mt-3 w-75 mx-auto">
@@ -108,7 +121,7 @@
                 authInGroup &&
                 (authInGroup.user_type == 'admin' || authInGroup.user_type == 'consultant' ||
                     authInGroup.user_type == 'advisor')
-                ">
+            ">
                 <form @submit.prevent="submitDecision" class="post-text m-auto w-100 row">
                     <div class="form-group col-12">
                         <select class="form-select" v-model="v$.decideForm.decision.$model" :disabled="message">
@@ -159,6 +172,8 @@ import exceptionService from "@/API/services/user-exception.service";
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, maxLength } from "@vuelidate/validators";
 import helper from "@/utilities/helper";
+import { getErrorMessage } from "@/utilities/errors";
+import userInfoService from "@/Services/userInfoService";
 
 const greaterThanMinusOne = (value) => value > -1;
 
@@ -174,7 +189,7 @@ export default {
     },
     created() {
         if (this.exception.type.type == 'انسحاب مؤقت') {
-            this.selectedWeek =this.weeks[0].id
+            this.selectedWeek = this.weeks[0].id
         }
 
     },
@@ -190,11 +205,28 @@ export default {
             selectedWeek: null,
             selectedWeekError: "",
             selectedWeekTitle: '',
+            loadingAssign: false,
         };
     },
     computed: {
         auth() {
             return this.$store.getters.getUser;
+        },
+        isAuthAdmin() {
+            return userInfoService.hasRole(this.auth, "admin");
+        },
+        isAssigneeAdmin() {
+            if (this.exception.current_assignee) {
+                return userInfoService.hasRole(this.exception.current_assignee.assignee, "admin");
+            }
+            return false
+        },
+        advisorAndAbove() {
+            return userInfoService.hasRoles(this.auth, [
+                "admin",
+                "consultant",
+                "advisor",
+            ]);
         },
     },
     validations() {
@@ -241,6 +273,25 @@ export default {
                 this.selectedWeekError = "يجب اختيار الأسبوع";
             }
         },
+        async assignToParent() {
+            if (this.loadingAssign) {
+                return;
+            }
+            this.loadingAssign = true;
+            try {
+                await exceptionService.assignToParent(this.exception.id);
+
+                this.toggleToast("تم تعيين التحويل للمشرف", "success");
+
+                this.$emit("update_exception");
+            } catch (error) {
+                this.toggleToast(getErrorMessage(error), "error");
+            } finally {
+                this.loadingAssign = false;
+            }
+        },
+
+
     },
 };
 </script>

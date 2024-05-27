@@ -117,6 +117,10 @@
     <!-- ###### Osboha Speacial Care ###### -->
     <OsbohaSpecialCare v-if="inSpecialCare" />
 
+
+    <!-- ###### Osboha  Withdrawn Ambassadors ###### -->
+    <OsbohaWithdrawnAmbassadors v-if="inWithdrawnsTeam" />
+
     <!-- ###### Osboha Ramadan ###### -->
     <!-- <OsbohaRamadan /> -->
 
@@ -155,6 +159,7 @@ import AuditMarks from './AuditMarks'
 import Exceptions from './Exceptions'
 import OsbohaMarathon from './OsbohaMarathon'
 import OsbohaSpecialCare from './OsbohaSpecialCare'
+import OsbohaWithdrawnAmbassadors from './OsbohaWithdrawnAmbassadors';
 // import OsbohaRamadan from "./OsbohaRamadan";
 import vClickOutside from "click-outside-vue3";
 
@@ -172,6 +177,7 @@ export default {
     Exceptions,
     OsbohaMarathon,
     OsbohaSpecialCare,
+    OsbohaWithdrawnAmbassadors,
     // OsbohaRamadan
   },
   computed: {
@@ -245,6 +251,13 @@ export default {
       return UserInfoService.hasRoles(this.user, [
         "admin",
         "special_care_coordinator",
+      ]);
+    },
+    inWithdrawnsTeam() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        'coordinator_of_withdrawns_team',
+        'member_of_withdrawns_team',
       ]);
     },
     isRamadanCorrector() {

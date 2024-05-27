@@ -27,6 +27,8 @@ export const ARABIC_ROLES = {
   special_care_coordinator: "مسؤول عام لأفرقة الرعاية الخاصة",
   special_care_supervisor: "مراقب رعاية خاصة",
   special_care_leader: "قائد رعاية خاصة",
+  coordinator_of_withdrawns_team: "مسؤول فريق المنسحبين",
+  member_of_withdrawns_team: "عضو في فريق المنسحبين",
 };
 
 export const LANUAGES = {
@@ -67,6 +69,13 @@ export const GROUP_TYPE = {
   special_care: "فريق رعاية خاصة",
 };
 
+export const ROLESTYPES = {
+  marathon: "مارثون أصبوحة",
+  ramadan: "رمضان أصبوحة",
+  specialCare: "الرعاية الخاصة",
+  eligible: "توثيق الكتب",
+  WithdrawnsTeam:"التواصل مع المنسحبين",
+};
 export const DAYS = {
   Sunday: "الأحد",
   Monday: "الاثنين",

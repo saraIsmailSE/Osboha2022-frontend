@@ -50,7 +50,9 @@ export default {
     name: "Withdrawn Ambassador",
     components: { AllocateAmbassador },
     async created() {
-        this.latest_ambassador_recored = await AmbassadorsRequest.checkAmbassador(this.user.id);
+        const response = await AmbassadorsRequest.checkAmbassador(this.user.id);
+        this.latest_ambassador_recored = response.user_group;
+        this.latest_leader = response.leader;
         this.reallocate = this.checkReallocate()
     },
     data() {
@@ -61,6 +63,7 @@ export default {
             message: "",
             loader: false,
             latest_ambassador_recored: null,
+            latest_leader: null,
             reallocate: false,
         };
     },
@@ -87,8 +90,7 @@ export default {
 
         },
         checkReallocate() {
-            if (this.latest_ambassador_recored) {
-
+            if (this.latest_ambassador_recored && this.latest_leader) {
                 const updatedAt = new Date(this.latest_ambassador_recored.updated_at);
                 const threeMonthsAgo = new Date();
                 threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);

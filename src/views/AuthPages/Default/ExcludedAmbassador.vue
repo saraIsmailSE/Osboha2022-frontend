@@ -15,6 +15,7 @@
                         <div class="alert alert-danger m-2 p-2" role="alert" v-if="message">
                             <h4 class="text-center mt-3 mb-3"> {{ message }}</h4>
                         </div>
+
                         <allocate-ambassador v-if="reallocate" />
 
                         <div class="d-inline-block w-100 text-center" v-else>
@@ -51,14 +52,19 @@ export default {
     name: "Excluded Ambassador",
     components: { AllocateAmbassador },
     async created() {
-        this.latest_ambassador_recored = await AmbassadorsRequest.checkAmbassador(this.user.id);
+        const response = await AmbassadorsRequest.checkAmbassador(this.user.id);
+        this.latest_ambassador_recored = response.user_group;
+        this.latest_leader = response.leader;
         this.reallocate = this.checkReallocate()
     },
     data() {
         return {
             paragraph: `بسبب عدم التزامك بالقراءة طيلة الأسابيع الماضية`,
             message: "",
+            latest_ambassador_recored: null,
+            latest_leader: null,
             loader: false,
+            reallocate: false,
         };
     },
     methods: {
@@ -84,7 +90,7 @@ export default {
             this.loader = false;
         },
         checkReallocate() {
-            if (this.latest_ambassador_recored) {
+            if (this.latest_ambassador_recored && this.latest_leader) {
 
                 const updatedAt = new Date(this.latest_ambassador_recored.updated_at);
                 const threeMonthsAgo = new Date();
@@ -97,6 +103,7 @@ export default {
                 } else {
                     return false;
                 }
+
             }
             return true;
         }

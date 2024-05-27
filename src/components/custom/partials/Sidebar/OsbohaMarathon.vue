@@ -7,10 +7,14 @@
     </li>
     <!-- ###### ADD MEMBERS  ###### -->
     <li class="nav-item">
-        <router-link :class="checkActive('roles.upgradeMarathonRole') ? 'active nav-link' : 'nav-link'
+        <router-link :class="checkActive('roles.rolesControl') ? 'active nav-link' : 'nav-link'
             " aria-current="page" :to="{
-        name: 'roles.upgradeMarathonRole',
-    }" v-if="isMarathonCoordinator || isAdmin">
+                name: 'roles.rolesControl',
+                params: {
+                    type: 'marathon',
+                },
+
+            }" v-if="isMarathonCoordinator || isAdmin">
             <i class="icon material-symbols-outlined"> sprint </i>
             <span class="item-name">تحكم العضويات</span>
         </router-link>
@@ -20,8 +24,8 @@
     <li class="nav-item">
         <router-link :class="checkActive('group.listMarathonGroups') ? 'active nav-link' : 'nav-link'
             " aria-current="page" :to="{
-        name: 'group.listMarathonGroups',
-    }" v-if="isMarathonAdministrator">
+                name: 'group.listMarathonGroups',
+            }" v-if="isMarathonAdministrator">
             <i class="icon material-symbols-outlined"> groups </i>
             <span class="item-name">أفرقة المارثون</span>
         </router-link>
@@ -29,8 +33,8 @@
     <li class="nav-item">
         <router-link :class="checkActive('marathon.participants') ? 'active nav-link' : 'nav-link'
             " aria-current="page" :to="{
-        name: 'marathon.participants',
-    }" v-if="isMarathonAdministrator">
+                name: 'marathon.participants',
+            }" v-if="isMarathonAdministrator">
             <i class="icon material-symbols-outlined"> group </i>
             <span class="item-name">المشاركون</span>
         </router-link>

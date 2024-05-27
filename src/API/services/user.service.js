@@ -22,6 +22,13 @@ class UserService {
     return response.data.data;
   }
 
+  async getUsersOnHoldByMonthAndGender(page, month, gender) {
+    const response = await api.get(
+      `users/get-users-on-hold/${month}/${gender}?page=${page}`,
+    );
+    return response.data;
+  }
+
   async listInChargeOf() {
     try {
       const response = await api.get("users/list-in-charge-of");

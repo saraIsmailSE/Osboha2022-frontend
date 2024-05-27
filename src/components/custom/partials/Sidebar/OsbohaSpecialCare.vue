@@ -7,9 +7,13 @@
     </li>
     <!-- ###### ADD MEMBERS  ###### -->
     <li class="nav-item">
-        <router-link :class="checkActive('roles.upgradeSpecialCareRole') ? 'active nav-link' : 'nav-link'
+        <router-link :class="checkActive('roles.rolesControl') ? 'active nav-link' : 'nav-link'
             " aria-current="page" :to="{
-                name: 'roles.upgradeSpecialCareRole',
+                name: 'roles.rolesControl',
+                params: {
+                    type: 'specialCare',
+                },
+
             }">
             <i class="icon material-symbols-outlined"> digital_wellbeing </i>
             <span class="item-name">تحكم العضويات</span>

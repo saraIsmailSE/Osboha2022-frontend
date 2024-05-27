@@ -39,6 +39,15 @@ class RolesService {
     }
   }
 
+  async getWithdrawnsTeamRoles() {
+    try {
+      const response = await api.get(`${this.prefix}/get-withdrawns-team-roles`);
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
   async getRamadanRoles() {
     try {
       const response = await api.get(`${this.prefix}/get-ramadan-roles`);
@@ -138,6 +147,26 @@ class RolesService {
       return response.data.data;
     } catch (error) {
       return error.response;
+    }
+  }
+  async getSecondaryRolesByRole() {
+    try {
+      const response = await api.get(`${this.prefix}/secondary-roles-by-role`);
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async removeSecondaryRole(formData) {
+    try {
+      const response = await api.post(
+        `${this.prefix}/remove-secondary-role`,
+        formData,
+      );
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
     }
   }
 }

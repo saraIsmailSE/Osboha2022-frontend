@@ -5,6 +5,7 @@
 export default {
   name: "App",
   created() {
+    this.$store.dispatch('initEcho');
     const token = localStorage.getItem("osboha__token");
     const user = localStorage.getItem("osboha__user");
 

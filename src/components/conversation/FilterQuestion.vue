@@ -116,6 +116,22 @@
         كافة التحويل العام
       </button>
     </tooltip>
+    <tooltip
+      tag="span"
+      class="text-muted small"
+      tooltipPlacement="bottom"
+      data-bs-toggle="tooltip"
+      title="التجميد الاستثنائي"
+    >
+      <button
+        v-if="advisorAndAbove"
+        class="bg-freez rounded badge text-white border-0"
+        @click="filterQuestions('exceptional-freez')"
+        :disabled="loadingQuestions"
+      >
+        التجميد الاستثنائي
+      </button>
+    </tooltip>
   </div>
 </template>
 <script>
@@ -157,5 +173,8 @@ export default {
 button:disabled {
   cursor: not-allowed;
   opacity: 0.7;
+}
+.bg-freez{
+  background: #004284;
 }
 </style>
