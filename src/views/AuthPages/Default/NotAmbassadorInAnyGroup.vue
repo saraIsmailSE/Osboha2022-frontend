@@ -21,8 +21,8 @@
             </router-link>
 
           </div>
-
-          <allocate-ambassador v-if="!is_ambassador || (is_ambassador && is_ambassador.termination_reason != null)" />
+          <allocate-ambassador
+            v-if="!is_ambassador.user_group || (is_ambassador.user_group && is_ambassador.user_group.termination_reason != null)" />
 
           <a href="javascript:void(0);" class="d-flex align-items-center m-3" @click="logout">
             <i class="material-symbols-outlined">logout</i>
