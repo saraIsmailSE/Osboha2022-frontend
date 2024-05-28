@@ -10,6 +10,7 @@
         placeholder="أضف تعليق"
         :style="{
           'padding-right': isEdit ? '1rem !important' : '3rem !important',
+          'padding-left': '3rem !important',
         }"
         style="direction: rtl; max-height: 120px; resize: none; overflow: auto"
         :rows="isEdit ? 4 : 1"

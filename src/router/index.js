@@ -638,7 +638,8 @@ const withdrawnsTeamChildRoute = (prop, mode = false) => [
     name: prop + ".list-ambassadros",
     meta: { auth: true, name: "List Ambassadors" },
     props: (route) => ({ page: parseInt(route.query.page) || 1 }),
-    component: () => import("../views/OsbohaWithdrawnAmbassadors/ListAmbassadors"),
+    component: () =>
+      import("../views/OsbohaWithdrawnAmbassadors/ListAmbassadors"),
   },
 ];
 
@@ -709,15 +710,13 @@ const workingHoursChildRoute = (prop, mode = false) => [
     path: "",
     name: prop + ".index",
     meta: { auth: true, name: "Working Hours" },
-    component: () =>
-      import("../views/OsbohaMain/GeneralConversation/WorkingHours"),
+    component: () => import("../views/OsbohaMain/WorkingHours/index"),
   },
   {
     path: "statistics",
     name: prop + ".statistics",
     meta: { auth: true, name: "Working Hours Stats" },
-    component: () =>
-      import("../views/OsbohaMain/GeneralConversation/WorkingHoursStats"),
+    component: () => import("../views/OsbohaMain/WorkingHours/statistics"),
   },
 ];
 
