@@ -717,15 +717,13 @@ const workingHoursChildRoute = (prop, mode = false) => [
     path: "",
     name: prop + ".index",
     meta: { auth: true, name: "Working Hours" },
-    component: () =>
-      import("../views/OsbohaMain/GeneralConversation/WorkingHours"),
+    component: () => import("../views/OsbohaMain/WorkingHours/index"),
   },
   {
     path: "statistics",
     name: prop + ".statistics",
     meta: { auth: true, name: "Working Hours Stats" },
-    component: () =>
-      import("../views/OsbohaMain/GeneralConversation/WorkingHoursStats"),
+    component: () => import("../views/OsbohaMain/WorkingHours/statistics"),
   },
 ];
 
