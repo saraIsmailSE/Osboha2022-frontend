@@ -132,8 +132,7 @@
                                     <div class="card card-block card-stretch card-height">
                                         <div class="card-header">
                                             <h4>
-                                                انجاز السفير خلال لأسابيع الأربعة الماضبة 
-                                                <!-- {{ statistics.group.name }} -->
+                                                خلال الأسابيع الأربعة الماضية <span class="text-primary"> {{ user.name }} </span>  انجاز السفير
                                             </h4>
                                             <!-- <div class="form-group mt-3">
                                                 <select class="form-select" v-model="week_id">
@@ -156,142 +155,106 @@
                                                         <th scope="col">الدعم</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    <tr class="d-flex justify-content-around full-mark">
+                                                <tbody v-for="(item, index) in ambassadorMarks" :key="index">
+                                                    <tr class="d-flex justify-content-around"
+                                                            :class="`${ambassadorMarks[index].is_freezed ? 'freeze' : markClass(Math.round(ambassadorMarks[index].out_of_100))} `">
                                                         <td class="align-middle text-center">
-                                                            <span> الأول من مايو</span>
+                                                            <span>{{ ambassadorMarks[index].week.title }}</span>
                                                         </td>
                                                         <td class="align-middle text-center">
-                                                            <span> 100 </span>
+                                                            <span> {{ Math.round(ambassadorMarks[index].out_of_100) }} </span>
                                                         </td>
                                                         <td class="align-middle text-center">
-                                                            <span> 30 </span>
+                                                            <span> {{ ambassadorMarks[index].total_pages }} </span>
                                                         </td>
                                                         <td class="align-middle text-center">
-                                                            <span>
-                                                                أطروحة 
+                                                            <span v-if="ambassadorMarks[index].total_thesis > 0 && ambassadorMarks[index].total_screenshot > 0">
+                                                                أطروحة واقتباسات
                                                             </span>
+                                                            <span v-else-if="ambassadorMarks[index].total_thesis > 0">أطروحة</span>
+                                                            <span v-else-if="ambassadorMarks[index].total_screenshot > 0">اقتباس</span>
+                                                            <span v-else-if="ambassadorMarks[index].total_pages == 0">لا يوجد </span>
+                                                            <spanb v-else>قراءة فقط</spanb>
+                                                            <br/>
+                                                            <button
+                                                                v-if="ambassadorMarks[index].total_thesis > 0" 
+                                                                type="button"
+                                                                @click="toggleInfo(index)"
+                                                                class="mb-3 btn bg-white text-dark border-dark w-100 d-flex justify-content-between"
+                                                            >
+                                                            {{ currentIndex === index ? "اخفاء" : "عرض" }}
+                                                            <span class="material-symbols-outlined">
+                                                                {{ currentIndex === index ? "visibility_off" : "visibility" }}
+                                                            </span>   
+                                                            </button>
                                                         </td>
                                                         <td class="align-middle text-center">
-                                                            <span> 2 </span>
+                                                            <span> {{ ambassadorMarks[index].total_thesis }} </span>
                                                         </td>
 
                                                         <td class="align-middle text-center">
-                                                            <span> 5 </span>
+                                                            <span> {{ ambassadorMarks[index].total_screenshot }} </span>
                                                         </td>
 
                                                         <td class="align-middle text-center">
-                                                            <span class="support material-symbols-outlined">
+                                                            <span class="support material-symbols-outlined" v-if="ambassadorMarks[index].support != 0">
                                                                 task_alt
+                                                            </span>
+                                                            <span class="no-support material-symbols-outlined" v-else>
+                                                                close
                                                             </span>
                                                         </td>
                                                     </tr>
-
-                                                </tbody>
-                                                <tbody>
-                                                    <tr class="d-flex justify-content-around">
-                                                        <td class="align-middle text-center">
-                                                            <span> الرابع من أبريل</span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 100 </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 30 </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span>
-                                                                أطروحة 
-                                                            </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 2 </span>
-                                                        </td>
-
-                                                        <td class="align-middle text-center">
-                                                            <span> 5 </span>
-                                                        </td>
-
-                                                        <td class="align-middle text-center">
-                                                            <span class="support material-symbols-outlined">
-                                                                task_alt
-                                                            </span>
-                                                        </td>
-
-
-                                                    </tr>
-
-                                                </tbody>
-                                                <tbody>
-                                                    <tr class="d-flex justify-content-around freeze">
-                                                        <td class="align-middle text-center">
-                                                            <span> الثالث من أبريل</span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 0 </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 0 </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span>
-                                                                - 
-                                                            </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 0 </span>
-                                                        </td>
-
-                                                        <td class="align-middle text-center">
-                                                            <span> 0 </span>
-                                                        </td>
-
-                                                        <td class="align-middle text-center">
-                                                            <span class="support material-symbols-outlined">
-                                                                task_alt
-                                                            </span>
-                                                        </td>
-
-
-                                                    </tr>
-
-                                                </tbody>
-                                                <tbody>
-                                                    <tr class="d-flex justify-content-around incomplete">
-                                                        <td class="align-middle text-center">
-                                                            <span> الثاني من أبريل</span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 90 </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 30 </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span>
-                                                                اقتباس 
-                                                            </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span>  </span>
-                                                        </td>
-
-                                                        <td class="align-middle text-center">
-                                                            <span> 5 </span>
-                                                        </td>
-
-                                                        <td class="align-middle text-center">
-                                                            <span class="support material-symbols-outlined">
-                                                                task_alt
-                                                            </span>
-                                                        </td>
-
-
-                                                    </tr>
-
+                                                    <div v-show="show_thesis"> {{ ambassadorMarks[index] }}</div>
                                                 </tbody>
                                                 
+                                                <div v-if="currentIndex !== null" class="blog-description">
+                                                    <h3>الإنجاز</h3>
+                                                <div  class="row">
+                                                    <div  class="row">
+                                                    <div  class="col-6 form-group">
+                                                        <label  class="form-control-plaintext">
+                                                        صفحة البداية: {{ theses[currentIndex].start_page }}
+                                                        </label>
+                                                    </div>
+                                                    <div  class="col-6 form-group">
+                                                        <label  class="form-control-plaintext">
+                                                        صفحة النهاية: {{  theses[currentIndex].end_page }}
+                                                        </label>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                <h6 > الصفحات المنجزة: {{ ambassadorMarks[currentIndex].total_pages }} </h6>
+                                                <p  style="white-space: pre-wrap; direction: rtl;">
+                                                    تأثرت أوروبا بأفكار مسيحية عميقة جذبتها منذ الطفولة في المدارس
+                                                    الابتدائية خلال العصور الوسطى، ورغم نضوجها، تظل هذه التجارب الطفولية
+                                                    حية في عقل الأوروبي. وبالرغم من أن بعض المناطق تحررت من تأثيرات
+                                                    العصور الوسطى، مثل إنجلترا، إلا أن الأفكار الدينية ما زالت سادة في
+                                                    أوروبا، حيث يظل الاختيار بين مملكة الرب ومملكة الأرض. تقسم المسيحية
+                                                    تاريخ العالم الغربي إلى عصور متناقضة، لكن هذا التقسيم لا ينطبق
+                                                    بالضرورة على إنجلترا، التي بحثت عن طريق ثالث.
+                                                </p>
+                                                <!-- <div
+                                                    
+                                                    class="d-flex flex-wrap align-items-center comment-activity"
+                                                >
+                                                    <span
+                                                    
+                                                    type="button"
+                                                    id="example-tooltip"
+                                                    class="text-muted small"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom"
+                                                    data-bs-html="false"
+                                                    data-bs-original-title="السبت، 4 مايو 2024 في 2:22 ص"
+                                                    >
+                                                    
+                                                    منذ 21 يوم
+                                                    </span>
+                                                </div> -->
+                                                </div>
                                             </table>
+
                                             <hr />
 
                                         </div>
@@ -336,10 +299,20 @@ export default {
         groups: {
             type: [Object],
             required: true,
-        }
+        },
+        ambassadorMarks: {
+            type: [Object],
+            required: true,
+        },
+        theses: {
+            type: [Object],
+            required: true,
+        },
     },
     data() {
         return {
+            show_thesis: false,
+            currentIndex: null,
             ARABIC_ROLES,
             TERMINATION_REASONS
         };
@@ -350,11 +323,51 @@ export default {
                 return moment(String(value)).format("MM/DD/YYYY");
             }
         },
+
+        toggleInfo(index) {
+            this.currentIndex = this.currentIndex === index ? null : index;
+        },
+
+        /**
+         * return mark color class.
+         *  @param  mark
+         * @return class
+         */
+        markClass(mark) {
+            switch (mark) {
+                case -1:
+                    return "freeze";
+                case 100:
+                    return "full-mark";
+
+                case 0:
+                    return "zero-mark";
+
+                default:
+                    return "incomplete";
+            }
+        },
     },
 
 };
 </script>
 <style scoped>
+
+td {
+    width: calc(100% / 8);
+}
+
+.no-support {
+    vertical-align: -webkit-baseline-middle;
+    color: darkred;
+    font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
+}
+
+.support {
+    vertical-align: -webkit-baseline-middle;
+    color: #278036;
+    font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
+}
 .freeze {
     --bs-bg-opacity: 1;
     background-color: #F4FAFF !important;

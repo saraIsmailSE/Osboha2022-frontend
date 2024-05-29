@@ -17,6 +17,11 @@ class UserService {
     return response.data.data;
   }
 
+  async fourWeeksMarks(email) {
+    const response = await api.get(`users/get_ambassador_marks_four_week/${email}`);
+    return response.data.data;
+  }
+
   async searchByName(name) {
     const response = await api.get(`users/search-by-name/${name}`);
     return response.data.data;
