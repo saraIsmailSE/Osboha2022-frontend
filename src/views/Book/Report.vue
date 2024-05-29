@@ -94,7 +94,7 @@
               <h4>صورة المخالفة (اختياري
                 )</h4>
               <input class="form-control mt-2" type="file" name="report_media" id="report_media" ref="report_media"
-                accept="image/*" @change="uploadFile" />
+                multiple accept="image/*" @change="uploadFile" />
             </div>
 
             <p class="text-center my-2" style="color: red" v-if="message">
@@ -171,7 +171,7 @@ export default {
       ],
       reportForm: {
         book_id: this.$route.params.book_id,
-        report_media: null,
+        report_media: [],
         violation_type: "",
         description: "",
         violated_pages: [{ number: 0 }],
@@ -226,7 +226,10 @@ export default {
       this.reportForm.violated_pages.splice(index, 1);
     },
     uploadFile(event) {
-      this.reportForm.report_media = event.target.files[0];
+      const { files } = event.target;
+      for (let i = 0; i < files.length; i++) {
+        this.reportForm.report_media.push(files[i]);
+      }
     },
 
     async onSubmit() {

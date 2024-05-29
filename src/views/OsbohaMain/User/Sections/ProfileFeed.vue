@@ -229,7 +229,7 @@
                       </h6>
                       <h6 class="mt-2" style="direction: rtl !important" v-else>
                         {{ exception.type.type }} ||
-                        {{ exception_status[exception.status] }}
+                        {{ STATUS[exception.status] }}
                       </h6>
                     </router-link>
                   </li>
@@ -310,7 +310,7 @@ export default {
       show_media: true,
       show_certificates: true,
       user_id: this.$route.params.user_id,
-      exception_status: {
+      STATUS: {
         pending: "قيد المراجعة",
         accepted: "مقبول",
         rejected: "مرفوض",

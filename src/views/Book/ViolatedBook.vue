@@ -5,7 +5,13 @@
                 <iq-card>
                     <template v-slot:headerTitle>
                         <h4 class="card-title">
-                            {{ report.book?.name }}
+                            <router-link :to="{
+                                name: 'book.book-details',
+                                params: { book_id: report.book?.id },
+                            }" data-toggle="tooltip" data-placement="top" :title="report.book?.name">
+                                {{ report.book?.name }}
+                            </router-link>
+
                             <span class="bg-danger rounded badge text-white border-0 ms-1 me-1">
                                 كتاب مخالف
                             </span>
@@ -84,6 +90,19 @@
                         </div>
 
                         <div class="text-center m-auto">
+                            <h4 class="mt-3 mb-3" style="direction: rtl;">
+                                حالة المخالفة
+                                <span class="badge" :class="STATUS_CLASS[report.status]">
+                                    {{ STATUS[report.status] }}
+                                </span>
+
+                            </h4>
+                            <p v-if="report.status != 'pending'" style="direction: rtl;">
+                                ملاحظات المراجع:
+                                {{ report.reviewer_note }}
+                            </p>
+                        </div>
+                        <div class="text-center m-auto">
                             <h4 class="mt-3 mb-3">
                                 وصف المخالفة
                             </h4>
@@ -97,9 +116,11 @@
                                 صورة المخالفة
                             </h4>
 
-                            <img class="img-fluid w-75" v-for="m in report.media" :key="m.id" :src="showMedia(m.id)" />
+                            <img class="img-fluid w-75 mt-1" v-for="m in report.media" :key="m.id" :src="showMedia(m.id)" />
                         </div>
 
+
+                        <violated-book-acvtion :report="report" @update_report="updateReport" v-if="inBooksTeam" />
 
                         <div class="col-sm-12 text-center" v-if="loading">
                             <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader"
@@ -123,18 +144,19 @@
     </div>
 </template>
 <script>
-import reportservice from "@/API/services/book.service";
-import helper from "@/utilities/helper";
+import bookService from "@/API/services/book.service";
+import { STATUS, STATUS_CLASS } from "@/utilities/constants";
+import UserInfoService from "@/Services/userInfoService";
 import moment from 'moment';
 import mediaService from "@/API/services/media.services";
-
+import ViolatedBookAcvtion from '@/components/book/ViolatedBookAcvtion'
 export default {
     name: "Violated Book Report",
-
+    components: { ViolatedBookAcvtion },
     async created() {
         try {
             this.loading = true;
-            this.report = await reportservice.getReport(this.$route.params.report_id);
+            this.getReport();
 
         } catch (e) {
             this.emptyMessage = "لا يوجد معلومات";
@@ -148,6 +170,8 @@ export default {
             report: null,
             loading: false,
             emptyMessage: "",
+            STATUS,
+            STATUS_CLASS,
 
         };
     },
@@ -164,12 +188,26 @@ export default {
         showMedia(id) {
             return mediaService.show(id);
         },
+        async getReport() {
+            this.report = await bookService.getReport(this.$route.params.report_id);
+        },
+        updateReport() {
+            this.getReport();
+        }
 
     },
     computed: {
         user() {
             return this.$store.getters.getUser;
         },
+        inBooksTeam() {
+            return UserInfoService.hasRoles(this.user, [
+                "admin",
+                'book_quality_team_coordinator',
+                'book_quality_team',
+            ]);
+        },
+
     }
 };
 

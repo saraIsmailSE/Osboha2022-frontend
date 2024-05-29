@@ -8,7 +8,7 @@
         <div class="card card-block card-stretch card-height blog blog-detail">
           <div class="card-body">
             <div class="position-absolute start-0" v-if="book?.book">
-              <span role="button" @click="download(book?.book?.link)"
+              <span role="button" @click="download(book?.book?.link)" v-if="book?.book.is_active"
                 class="material-symbols-outlined align-middle display-5 me-1s">
                 download
               </span>
@@ -26,12 +26,11 @@
                 delete
               </span>
             </div>
-
             <router-link :to="{
               name: 'book.report',
               params: { book_id: book?.book?.id },
-            }" class="btn btn-danger display-5">
-              <span class=" material-symbols-outlined align-middle" v-if="!loading">
+            }" class="btn btn-danger display-5" v-if="!loading && book?.book.is_active">
+              <span class=" material-symbols-outlined align-middle">
                 warning
               </span>
               ابلاغ مخالف
@@ -44,6 +43,7 @@
               <h2 class="mb-3 pb-3 border-bottom text-center">
                 {{ book?.book?.name }}
               </h2>
+              <p v-if="!book?.book.is_active" class="badge bg-danger">هذا الكتاب تم حذفه من المنهج</p>
               <div class="blog-meta d-flex align-items-center mb-3 position-right-side flex-wrap">
                 <div class="date me-4 d-flex align-items-center">
                   <i class="material-symbols-outlined pe-2 md-18 text-primary">calendar_month</i>تاريخ الاضافة {{
@@ -81,9 +81,10 @@
         </div>
       </div>
       <div class="col-lg-12">
+
         <div class="card card-block card-stretch card-height blog">
           <button type="submit" class="btn btn-primary d-block w-100" data-bs-toggle="modal" data-bs-target="#modals"
-            :disabled="!(book?.book?.allow_comments && eligibleToWriteThesis)">
+            :disabled="shouldDisableButton">
             كتابة أطروحة
           </button>
         </div>
@@ -219,6 +220,7 @@ export default {
     watchEffect(async () => {
       if (this.$route.params.book_id) {
         await this.init();
+
       }
     });
   },
@@ -523,6 +525,18 @@ export default {
     canBeDeleted() {
       return this.totalTheses <= 0;
     },
+    shouldDisableButton() {
+      const allowComments = this.book?.book?.allow_comments;
+      const eligibleToWriteThesis = this.eligibleToWriteThesis;
+      const lastThesis = this.book?.last_thesis;
+
+      if (allowComments === 0) {
+        return !lastThesis;
+      }
+
+      return !eligibleToWriteThesis;
+    }
+
   },
 };
 </script>

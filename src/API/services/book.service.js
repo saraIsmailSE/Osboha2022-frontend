@@ -20,8 +20,11 @@ class BookService {
       formData.append("book_id", reportData.book_id);
       formData.append("violation_type", reportData.violation_type);
       formData.append("description", reportData.description);
-      formData.append("report_media", reportData.report_media);
-
+      if (reportData.report_media.length > 0) {
+        for (let i = 0; i < reportData.report_media.length; i++) {
+          formData.append(`report_media[${i}]`, reportData.report_media[i]);
+        }
+      }
       // Append violated pages
       reportData.violated_pages.forEach((page, index) => {
         formData.append(`violated_pages[${index}][number]`, page.number);
@@ -51,6 +54,19 @@ class BookService {
       handleError(error);
     }
   }
+
+  async updateReportStatus(report_id, action) {
+    try {
+      const response = await api.post(`/books/update-report`, action, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+
+      return response.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
   async getAll(page) {
     try {
       const books = await api.get(`books?page=` + page);
