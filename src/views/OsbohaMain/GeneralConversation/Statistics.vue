@@ -19,77 +19,16 @@
 
             <div class="col-12" v-else>
               <div class="row">
-                <div class="col-12 row">
-                  <div class="col-sm-12 col-md-6">
-                    <div class="form-check form-check-inline">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="type"
-                        id="by_week"
-                        value="week"
-                        v-model="type"
-                      />
-                      <label class="form-check-label" for="by_week"
-                        >حسب الأسبوع</label
-                      >
-                    </div>
-                  </div>
+                <StatsFilterType v-model="type" />
 
-                  <div class="col-sm-12 col-md-6">
-                    <div class="form-check form-check-inline">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="type"
-                        id="by_month"
-                        value="month"
-                        v-model="type"
-                      />
-                      <label class="form-check-label" for="by_month"
-                        >حسب الشهر</label
-                      >
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-12 row mt-3 ms-3" v-if="type">
-                  <template v-if="type == 'week'">
-                    <div
-                      class="col-sm-12 col-md-6"
-                      v-for="week in weeks"
-                      :key="week.id"
-                    >
-                      <div class="form-check form-check-inline">
-                        <input
-                          class="form-check-input"
-                          type="radio"
-                          name="date"
-                          :id="week.id"
-                          :value="week.id"
-                          v-model="selectedWeek"
-                        />
-                        <label class="form-check-label" :for="week.id">
-                          {{ week.title }}
-                        </label>
-                      </div>
-                    </div>
-                  </template>
-                  <template v-else-if="type == 'month'">
-                    <div class="form-group col-12">
-                      <select class="form-select" v-model="selectedMonthYear">
-                        <option value="">اختر شهر</option>
-                        <option
-                          v-for="month in months"
-                          :key="month.date"
-                          :value="month.date"
-                        >
-                          {{ month.title }}
-                        </option>
-                      </select>
-                    </div>
-                  </template>
-                </div>
+                <StatsDateFilter
+                  v-if="type"
+                  v-model:week="selectedWeek"
+                  v-model:monthYear="selectedMonthYear"
+                  :weeks="weeks"
+                  :months="months"
+                  :type="type"
+                />
 
                 <div class="col-12 col-md-12 col-lg-12 mt-3">
                   <div class="card">
@@ -112,166 +51,21 @@
                       <div class="mt-2">
                         <div class="card-body">
                           <div class="blog-description">
+                            <template v-if="isAdmin">
+                              <h3 class="mb-2 bold">المسؤول</h3>
+                              <StatsTable
+                                :statistics="adminStatistics"
+                                :showTotals="false"
+                                appendClass="mb-4"
+                              />
+                            </template>
+
                             <h3 class="mb-2 bold" v-if="isAdmin">المستشارين</h3>
-                            <table class="table w-100 table-bordered">
-                              <thead>
-                                <tr class="py-3">
-                                  <th scope="col">الاسم</th>
-                                  <th scope="col">التحويلات</th>
-                                  <th scope="col">التحويلات الفعالة</th>
-                                  <th scope="col">التحويلات المجابة بعد 12س</th>
-                                  <th scope="col">التحويلات المجابة</th>
-                                  <th scope="col">التحويلات المرفوعة</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr
-                                  v-for="statistic in statistics"
-                                  :key="statistic.id"
-                                >
-                                  <td>{{ statistic.user.name }}</td>
-                                  <td>{{ statistic.total_questions }}</td>
-                                  <td>
-                                    {{ statistic.total_active_questions }}
-                                  </td>
-                                  <td>
-                                    {{
-                                      statistic.total_solved_questions_after_12_hrs
-                                    }}
-                                  </td>
-                                  <td>
-                                    {{ statistic.total_solved_questions }}
-                                  </td>
-                                  <td>
-                                    {{
-                                      statistic.total_questions_assigned_to_parent
-                                    }}
-                                  </td>
-                                </tr>
-                                <tr v-if="statistics.length">
-                                  <td>
-                                    <strong>المجموع</strong>
-                                  </td>
-                                  <td>
-                                    <strong>
-                                      {{ totals.total_questions }}
-                                    </strong>
-                                  </td>
-                                  <td>
-                                    <strong>
-                                      {{ totals.total_active_questions }}
-                                    </strong>
-                                  </td>
-                                  <td>
-                                    <strong>
-                                      {{
-                                        totals.total_solved_questions_after_12_hrs
-                                      }}
-                                    </strong>
-                                  </td>
-                                  <td>
-                                    <strong>
-                                      {{ totals.total_solved_questions }}
-                                    </strong>
-                                  </td>
-                                  <td>
-                                    <strong>
-                                      {{
-                                        totals.total_questions_assigned_to_parent
-                                      }}
-                                    </strong>
-                                  </td>
-                                </tr>
-                                <tr v-else>
-                                  <td colspan="6" class="text-center">
-                                    لا يوجد إحصائيات
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
+                            <StatsTable :statistics="statistics" />
 
                             <template v-if="isAdmin">
-                              <h3 class="mb-2 mt-4 bold" v-if="isAdmin">
-                                الموجهين
-                              </h3>
-                              <table class="table w-100 table-bordered">
-                                <thead>
-                                  <tr class="py-3">
-                                    <th scope="col">الاسم</th>
-                                    <th scope="col">التحويلات</th>
-                                    <th scope="col">التحويلات الفعالة</th>
-                                    <th scope="col">
-                                      التحويلات المجابة بعد 12س
-                                    </th>
-                                    <th scope="col">التحويلات المجابة</th>
-                                    <th scope="col">التحويلات المرفوعة</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr
-                                    v-for="statistic in advisorsStatistics"
-                                    :key="statistic.id"
-                                  >
-                                    <td>{{ statistic.user.name }}</td>
-                                    <td>{{ statistic.total_questions }}</td>
-                                    <td>
-                                      {{ statistic.total_active_questions }}
-                                    </td>
-                                    <td>
-                                      {{
-                                        statistic.total_solved_questions_after_12_hrs
-                                      }}
-                                    </td>
-                                    <td>
-                                      {{ statistic.total_solved_questions }}
-                                    </td>
-                                    <td>
-                                      {{
-                                        statistic.total_questions_assigned_to_parent
-                                      }}
-                                    </td>
-                                  </tr>
-                                  <tr v-if="advisorsStatistics.length">
-                                    <td>
-                                      <strong>المجموع</strong>
-                                    </td>
-                                    <td>
-                                      <strong>
-                                        {{ totals.total_questions }}
-                                      </strong>
-                                    </td>
-                                    <td>
-                                      <strong>
-                                        {{ totals.total_active_questions }}
-                                      </strong>
-                                    </td>
-                                    <td>
-                                      <strong>
-                                        {{
-                                          totals.total_solved_questions_after_12_hrs
-                                        }}
-                                      </strong>
-                                    </td>
-                                    <td>
-                                      <strong>
-                                        {{ totals.total_solved_questions }}
-                                      </strong>
-                                    </td>
-                                    <td>
-                                      <strong>
-                                        {{
-                                          totals.total_questions_assigned_to_parent
-                                        }}
-                                      </strong>
-                                    </td>
-                                  </tr>
-                                  <tr v-else>
-                                    <td colspan="6" class="text-center">
-                                      لا يوجد إحصائيات
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
+                              <h3 class="mb-2 mt-4 bold">الموجهين</h3>
+                              <StatsTable :statistics="advisorsStatistics" />
                             </template>
                           </div>
                         </div>
@@ -291,8 +85,17 @@
 import GeneralConversationService from "@/API/services/general-conversation.service";
 import helper from "@/utilities/helper";
 import userInfoService from "@/Services/userInfoService";
+import StatsFilterType from "@/components/conversation/statistics/StatsFilterType.vue";
+import StatsDateFilter from "@/components/conversation/statistics/StatsDateFilter.vue";
+import StatsTable from "@/components/conversation/statistics/StatsTable.vue";
+
 export default {
   name: "GeneralConversationStatistics",
+  components: {
+    StatsFilterType,
+    StatsDateFilter,
+    StatsTable,
+  },
   async created() {
     await this.getStatistics();
   },
@@ -307,6 +110,7 @@ export default {
       type: "week",
       monthTitle: null,
       advisorsStatistics: [],
+      adminStatistics: [],
     };
   },
   computed: {
@@ -315,25 +119,11 @@ export default {
     },
 
     totals() {
-      const totals = {
-        total_questions: 0,
-        total_active_questions: 0,
-        total_solved_questions_after_12_hrs: 0,
-        total_solved_questions: 0,
-        total_questions_assigned_to_parent: 0,
-      };
+      return this.getTotals(this.statistics);
+    },
 
-      this.statistics.forEach((statistic) => {
-        totals.total_questions += statistic.total_questions;
-        totals.total_active_questions += statistic.total_active_questions;
-        totals.total_solved_questions_after_12_hrs +=
-          statistic.total_solved_questions_after_12_hrs;
-        totals.total_solved_questions += statistic.total_solved_questions;
-        totals.total_questions_assigned_to_parent +=
-          statistic.total_questions_assigned_to_parent;
-      });
-
-      return totals;
+    advisorsTotals() {
+      return this.getTotals(this.advisorsStatistics);
     },
 
     auth() {
@@ -381,12 +171,36 @@ export default {
         this.selectedMonthYear = this.type === "month" ? data.selectedDate : "";
         this.statistics = data.statistics;
         this.advisorsStatistics = data.advisorsStatistics;
+        this.adminStatistics = data.adminStatistics;
         this.monthTitle = data.monthTitle;
       } catch (error) {
         this.toggleErrorToast();
       } finally {
         this.loading = false;
       }
+    },
+
+    getTotals(statistics) {
+      const totals = {
+        total_questions: 0,
+        total_active_questions: 0,
+        total_late_questions: 0,
+        total_solved_questions: 0,
+        total_questions_assigned_to_parent: 0,
+      };
+
+      if (!statistics || statistics.length == 0) return totals;
+
+      statistics.forEach((stats) => {
+        totals.total_questions += stats.total_questions;
+        totals.total_active_questions += stats.total_active_questions;
+        totals.total_late_questions += stats.total_late_questions;
+        totals.total_solved_questions += stats.total_solved_questions;
+        totals.total_questions_assigned_to_parent +=
+          stats.total_questions_assigned_to_parent;
+      });
+
+      return totals;
     },
   },
 };

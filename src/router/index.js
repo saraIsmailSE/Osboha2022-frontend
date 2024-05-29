@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useCookies } from "vue3-cookies";
 
 //check if user is logged in
 const loggedIn = () =>
@@ -162,6 +163,12 @@ const authchildRoutes = (prop, mode) => [
 ];
 
 const userChildRoute = (prop, mode = false) => [
+  {
+    path: "should-update-info",
+    name: prop + ".should-update-info",
+    meta: { auth: true, name: "User Should Update Info" },
+    component: () => import("../views/OsbohaMain/User/ShouldUpdateInfo"),
+  },
   {
     path: "search",
     name: prop + ".search",
@@ -710,15 +717,13 @@ const workingHoursChildRoute = (prop, mode = false) => [
     path: "",
     name: prop + ".index",
     meta: { auth: true, name: "Working Hours" },
-    component: () =>
-      import("../views/OsbohaMain/GeneralConversation/WorkingHours"),
+    component: () => import("../views/OsbohaMain/WorkingHours/index"),
   },
   {
     path: "statistics",
     name: prop + ".statistics",
     meta: { auth: true, name: "Working Hours Stats" },
-    component: () =>
-      import("../views/OsbohaMain/GeneralConversation/WorkingHoursStats"),
+    component: () => import("../views/OsbohaMain/WorkingHours/statistics"),
   },
 ];
 
@@ -1285,6 +1290,11 @@ router.beforeEach((to, from, next) => {
   if (to.meta.auth && !loggedIn()) {
     return next("/auth/signin");
   } else {
+    const { cookies } = useCookies();
+    const shouldUpdateInfo = cookies.get("should-update-info");
+    if (!shouldUpdateInfo && to.name !== "user.should-update-info") {
+      next({ name: "user.should-update-info" });
+    }
     if (to.path === "/") {
       next("/home"); // Redirect to '/home' [new route]
     }

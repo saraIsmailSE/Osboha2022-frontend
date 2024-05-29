@@ -10,6 +10,7 @@
         placeholder="أضف إجابة"
         :style="{
           'padding-right': '3rem !important',
+          'padding-left': '3rem !important',
         }"
         style="direction: rtl; max-height: 120px; resize: none; overflow: auto"
         :rows="1"
@@ -36,6 +37,7 @@
           multiple
           @change="uploadImages"
           accept="image/*"
+          :disabled="loading"
         />
         <span
           role="button"
@@ -69,7 +71,6 @@ export default {
   components: {
     ImagePreviewer,
   },
-  emits: ["add-answer"],
   inject: {
     addNewAnswer: {
       default: () => () => {},
