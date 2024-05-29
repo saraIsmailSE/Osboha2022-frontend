@@ -1271,12 +1271,11 @@ router.beforeEach((to, from, next) => {
   if (to.meta.auth && !loggedIn()) {
     return next("/auth/signin");
   } else {
-    // const { cookies } = useCookies();
-    // const shouldUpdateInfo = cookies.get("should-update-info");
-    // if (!shouldUpdateInfo && to.name !== "user.should-update-info") {
-    //   console.log("🚀 ~ router.beforeEach ~ shouldUpdateInfo:", shouldUpdateInfo)
-    //   next({ name: "user.should-update-info" });
-    // }
+    const { cookies } = useCookies();
+    const shouldUpdateInfo = cookies.get("should-update-info");
+    if (!shouldUpdateInfo && to.name !== "user.should-update-info") {
+      next({ name: "user.should-update-info" });
+    }
     if (to.path === "/") {
       next("/home"); // Redirect to '/home' [new route]
     }

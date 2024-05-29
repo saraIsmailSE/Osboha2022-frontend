@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="d-flex align-items-center mt-3">
-                    <form @submit.prevent="submitProfileInfo" class="post-text ml-3 w-100 row">
+                    <form @submit.prevent="submitInfo" class="post-text ml-3 w-100 row">
                         <h2 style="direction: rtl;"> مرحبا {{ user.name }}</h2>
                         <div class="form-group col-12">
 
@@ -19,25 +19,37 @@
                                 لتحسين المظهر العام للمنصة، نرجو منك إدخال اسم حسابك بحيث يتكون من مقطعين.
                                 <mark class="p-0 ps-2 pe-2" style="background: #fcdbe0!important">هذا الاسم سيظهر
                                     للمستخدمين الآخرين</mark>
+                                <p style="direction: rtl;" class="mt-1">
+                                    ⚠ لو كان اسمك الحالي من شقين ( مثال أحمد الشمري ) أعد إدخاله هنا كما هو
+                                </p>
+
                             </h4>
                             <div class="form-group row">
                                 <input type="text" class="form-control mt-2" name="name" id="name"
-                                    v-model="infoForm.name" placeholder="الاسم الأول" />
+                                    v-model="infoForm.name" placeholder="أحمد"
+                                    @change="() => { infoForm.name = infoForm.name.replace(/\s/g, '') }" />
+                                <small style="color: red" v-if="v$.infoForm.name.$error">
+                                    الاسم الأول مطلوب
+                                </small>
+
                             </div>
                             <div class="form-group row">
                                 <input type="text" class="form-control mt-2" name="last_name" id="last_name"
-                                    v-model="infoForm.last_name" placeholder="الاسم الاخير" />
+                                    v-model="infoForm.last_name" placeholder="الشمري"
+                                    @change="() => { infoForm.name = infoForm.name.replace(/\s/g, '') }" />
+                                <small style="color: red" v-if="v$.infoForm.name.$error">
+                                    الاسم الاخير مطلوب
+                                </small>
                             </div>
                         </div>
                         <div class="form-group col-12">
 
                             <h4>
-                                لضمان التواصل الفعال معك، يرجى إدخال حسابك في أحد المواقع التالية (يمكنك إدخال حسابين أو
-                                أكثر).
-                                <mark class="p-0 ps-2 pe-2" style="background: #fcdbe0!important">يرجى العلم أن هذه
-                                    المعلومات ستكون مرئية
-                                    لأصدقائك في المنصة والمسؤولين عن فريقك
-                                    (القائد، المراقب، الموجه، المستشار، والإدارة)
+                                لضمان التواصل الفعال معك، يرجى إدخال حسابك في أحد المواقع التالية (بامكانك تعبئة أكثر من
+                                رابط واحد).
+                                <mark class="p-0 ps-2 pe-2" style="background: #fcdbe0!important">
+                                    الروابط والمعلومات لن تكون ظاهرة لأي شخص سوى للإدارة المسؤولة عنك للتواصل معك وقت
+                                    الحاجة فقط
                                 </mark>
                             </h4>
 
@@ -59,8 +71,10 @@
                                         </g>
                                     </svg>
                                     <input type="url" class="form-control mt-2 ms-2" name="facebook" id="facebook"
-                                        v-model="infoForm.socialMedia.facebook"
-                                        placeholder="https://www.facebook.com/username" />
+                                        v-model="infoForm.facebook" placeholder="https://www.facebook.com/username" />
+                                    <!-- <small style="color: red" v-if="v$.infoForm.facebook.url">
+                                        يجب أن يكون رابطًا صالحًا
+                                    </small> -->
                                 </div>
 
                                 <div class="d-flex">
@@ -110,9 +124,10 @@
                                         </g>
                                     </svg>
                                     <input type="url" class="form-control mt-2 ms-2" name="instagram" id="instagram"
-                                        v-model="infoForm.socialMedia.instagram"
-                                        placeholder="https://www.instagram.com/username" />
-
+                                        v-model="infoForm.instagram" placeholder="https://www.instagram.com/username" />
+                                    <!-- <small style="color: red" v-if="v$.infoForm.instagram.url">
+                                        يجب أن يكون رابطًا صالحًا
+                                    </small> -->
 
                                 </div>
 
@@ -142,7 +157,7 @@
                                         </g>
                                     </svg>
                                     <input type="text" class="form-control mt-2 ms-2" name="whatsapp" id="whatsapp"
-                                        v-model="infoForm.socialMedia.whatsapp" placeholder="+1234567890" />
+                                        v-model="infoForm.whatsapp" placeholder="+1234567890" />
                                 </div>
 
                                 <!-- TELEGRAM -->
@@ -158,9 +173,17 @@
                                                 d="m5.491 11.74 11.57-4.461c.537-.194 1.006.131.832.943l.001-.001-1.97 9.281c-.146.658-.537.818-1.084.508l-3-2.211-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953z"
                                                 opacity="1" data-original="#ffffff" class=""></path>
                                         </g>
-                                    </svg> <input type="text" class="form-control mt-2 ms-2" name="telegram"
-                                        id="telegram" v-model="infoForm.socialMedia.telegram" placeholder="@username" />
+                                    </svg>
+                                    <input type="text" class="form-control mt-2 ms-2" name="telegram" id="telegram"
+                                        v-model="infoForm.telegram" placeholder="@username" />
                                 </div>
+
+                                <small style="color: red"
+                                    v-if="!(this.infoForm.facebook || this.infoForm.instagram || this.infoForm.whatsapp || this.infoForm.telegram)">
+                                    يجب إدخال رابط واحد على الأقل من الروابط الاجتماعية
+                                </small>
+
+
                             </div>
                         </div>
                         <div class="form-group">
@@ -185,12 +208,9 @@
 </template>
 <script>
 import useVuelidate from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
-import UserProfile from "@/API/services/user-profile.service";
-import profileImagesService from "@/API/services/profile.images.service";
-import UserServices from "@/API/services/user.service";
-import UserInfoService from "@/Services/userInfoService";
-import UpdateSocialMedia from '@/components/user/UpdateSocialMedia';
+import { required, url, requiredIf } from "@vuelidate/validators";
+import UserService from "@/API/services/user.service";
+import helper from "@/utilities/helper";
 
 
 export default {
@@ -206,13 +226,11 @@ export default {
             infoForm: {
                 name: "",
                 last_name: "",
-                socialMedia: {
-                    facebook: '',
-                    instagram: '',
-                    whatsapp: '',
-                    telegram: '',
+                facebook: '',
+                instagram: '',
+                whatsapp: '',
+                telegram: '',
 
-                }
             },
             message: null,
         };
@@ -226,6 +244,12 @@ export default {
                 last_name: {
                     required,
                 },
+                // facebook: {
+                //     url,
+                // },
+                // instagram: {
+                //     url
+                // },
             },
         };
     },
@@ -233,79 +257,37 @@ export default {
         /**
          * update profile Information.
          */
-        async submitProfileInfo() {
+        async submitInfo() {
             this.v$.$touch();
             if (!this.v$.infoForm.$invalid) {
                 this.message = "";
                 this.loader = true;
                 try {
-                    const response = await UserProfile.update(this.infoForm);
+                    const response = await UserService.updateInfo(this.infoForm);
                     this.loader = false;
                     this.profileInfo = response;
-                    this.message = 'تم التعديل بنجاح';
+                    helper.toggleToast("تم التعديل بنجاح", "success");
                     this.v$.infoForm.$reset();
+                    const twoMonthFromNow = new Date();
+                    twoMonthFromNow.setMonth(twoMonthFromNow.getMonth() + 2);
+
+                    this.$cookies.set("should-update-info", true, { expires: twoMonthFromNow });
+                    setTimeout(() => {
+                        this.$router.push({ name: "osboha.list" });
+                    }, 3000);
+
                 } catch (error) {
                     console.log(error);
+                    helper.toggleToast("حدث خطأ، يرجى المحاولة لاحقاً", "error");
+
                 }
             }
-        },
-        /**
-         * get profile picture or cover.
-         *  @param  image size, image name, profile id
-         * @return image url
-         */
-        resolve_porfile_img(size, imageName, profile_id) {
-            return profileImagesService.resolve_porfile_img(
-                size,
-                imageName,
-                profile_id
-            );
-        },
-
-
-
-        /**
-         * get gOfficial Doc.
-         *  @param  user id
-         * @return image url
-         */
-        getOfficialDoc(user_id) {
-            return profileImagesService.getOfficialDoc(user_id);
-        },
-        /**
-         * redirect to user profile.
-         */
-        back() {
-            this.$router.push({
-                name: "user.profile",
-                params: { user_id: this.$route.params.user_id },
-            });
         },
     },
     computed: {
         user() {
             return this.$store.getters.getUser;
         },
-        supervisorAndAbove() {
-            return UserInfoService.hasRoles(this.user, [
-                "admin",
-                "consultant",
-                "advisor",
-                "supervisor",
-            ]);
-        },
-        eligibleTeam() {
-            return UserInfoService.hasRoles(this.user, [
-                "admin",
-                'eligible_admin',
-                'reviewer',
-                'auditor',
-                'user_accept',
-                'super_auditer',
-                'super_reviewer'
-            ]);
-        },
-
     },
 };
 

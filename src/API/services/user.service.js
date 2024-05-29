@@ -73,6 +73,18 @@ class UserService {
       customHandleError(error, "UserGroupService.AddMember");
     }
   }
+
+  async updateInfo(info) {
+    try {
+      const response = await api.post(`users/update-info`, info, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      customHandleError(error, "UserGroupService.AddMember");
+    }
+  }
+
   async getInfo(id) {
     try {
       const users = await api.get(`users/info/${id}`);
