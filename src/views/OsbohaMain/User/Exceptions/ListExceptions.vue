@@ -60,7 +60,7 @@
                                             <tbody v-if="exceptions && exceptions.length>0">
                                                 <tr v-for="exception in exceptions" :key="exception.id">
                                                     <td> {{ exception.type.type }}</td>
-                                                    <td> {{ exception_status[exception.status] }}</td>
+                                                    <td> {{ STATUS[exception.status] }}</td>
                                                     <td v-if="exception.end_at"> {{ exception.end_at }}</td>
                                                     <td v-else>------</td>
                                                     <router-link
@@ -77,7 +77,7 @@
                                             <tbody v-else>
                                             <tr colspan="4">
                                                 <td>لا يوجد بيانات لعرضها</td>
-                                            </tr>    
+                                            </tr>
                                             </tbody>
 
                                         </table>
@@ -122,7 +122,7 @@ export default {
             group_title:'',
             week_title:'',
             user_id: this.$route.params.user_id,
-            exception_status:{ 
+            STATUS:{
                 "pending": "قيد المراجعة",
                 "accepted": "مقبول",
                 "rejected":"مرفوض",

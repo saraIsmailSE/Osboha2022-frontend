@@ -52,7 +52,7 @@
     </div>
 </template>
 <script>
-import { EXCEPTION_STATUS, EXCEPTION_TYPES } from "@/utilities/constants";
+import { STATUS, EXCEPTION_TYPES } from "@/utilities/constants";
 
 export default {
     name: "List Exceptions",
@@ -63,7 +63,7 @@ export default {
 
     data() {
         return {
-            EXCEPTION_STATUS,
+            STATUS,
             EXCEPTION_TYPES,
         };
     },

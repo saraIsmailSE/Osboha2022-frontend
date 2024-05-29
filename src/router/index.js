@@ -933,6 +933,25 @@ const bookChildRoute = (prop, mode = false) => [
     component: () => import("../views/Book/Update"),
   },
   {
+    path: "report/:book_id",
+    name: prop + ".report",
+    meta: { auth: true, name: "Book Report" },
+    component: () => import("../views/Book/Report"),
+  },
+  {
+    path: "list-violated-books",
+    name: prop + ".list-violated-books",
+    meta: { auth: true, name: "Book Report" },
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
+    component: () => import("../views/Book/violationReports"),
+  },
+  {
+    path: "violated-book/:report_id",
+    name: prop + ".violated-book",
+    meta: { auth: true, name: "Violated Book" },
+    component: () => import("../views/Book/ViolatedBook"),
+  },
+  {
     path: "create",
     name: prop + ".create",
     meta: { auth: true, name: "Book Create" },

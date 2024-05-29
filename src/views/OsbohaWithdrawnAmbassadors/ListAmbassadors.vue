@@ -293,37 +293,3 @@ export default {
 
 
 </script>
-
-<style lang="scss" scoped>
-.inputs {
-    position: relative;
-}
-
-.form-control {
-    text-indent: 15px;
-    border: none;
-    height: 45px;
-    border-radius: 0px;
-    border-bottom: 1px solid #eee;
-}
-
-.form-control:focus {
-    color: #495057;
-    background-color: #fff;
-    border-color: #eee;
-    outline: 0;
-    box-shadow: none;
-    border-bottom: 1px solid blue;
-}
-
-.form-control:focus {
-    color: blue;
-}
-
-.inputs i {
-    position: absolute;
-    top: 14px;
-    left: 4px;
-    color: #b8b9bc;
-}
-</style>

@@ -8,55 +8,46 @@
         <div class="card card-block card-stretch card-height blog blog-detail">
           <div class="card-body">
             <div class="position-absolute start-0" v-if="book?.book">
-              <span
-                role="button"
-                @click="download(book?.book?.link)"
-                class="material-symbols-outlined align-middle display-5 me-1s"
-              >
+              <span role="button" @click="download(book?.book?.link)" v-if="book?.book.is_active"
+                class="material-symbols-outlined align-middle display-5 me-1s">
                 download
               </span>
-              <router-link
-                class="material-symbols-outlined align-middle display-5 me-2"
-                :to="{
-                  name: 'book.update',
-                  params: { book_id: book?.book?.id },
-                }"
-                v-if="isAdmin || inBooksTeam || book_owner"
-              >
+              <router-link class="material-symbols-outlined align-middle display-5 me-2" :to="{
+                name: 'book.update',
+                params: { book_id: book?.book?.id },
+              }" v-if="isAdmin || inBooksTeam || book_owner">
                 edit
               </router-link>
-              <span
-                role="button"
-                class="material-symbols-outlined align-middle display-5 me-3"
-                v-if="
-                  !loading &&
-                  ((canBeDeleted && inBooksTeam) ||
-                    (canBeDeleted && book_owner))
-                "
-                @click="deleteBook(book?.book?.id)"
-              >
+              <span role="button" class="material-symbols-outlined align-middle display-5 me-3" v-if="
+                !loading &&
+                ((canBeDeleted && inBooksTeam) ||
+                  (canBeDeleted && book_owner))
+              " @click="deleteBook(book?.book?.id)">
                 delete
               </span>
             </div>
-
+            <router-link :to="{
+              name: 'book.report',
+              params: { book_id: book?.book?.id },
+            }" class="btn btn-danger display-5" v-if="!loading && book?.book.is_active">
+              <span class=" material-symbols-outlined align-middle">
+                warning
+              </span>
+              ابلاغ مخالف
+            </router-link>
             <div class="image-block text-center mt-3">
-              <img
-                :src="resolve_img_url(book?.book?.media?.path ?? '')"
-                class="img-fluid rounded w-25"
-                alt="blog-img"
-              />
+              <img :src="resolve_img_url(book?.book?.media?.path ?? '')" class="img-fluid rounded w-25"
+                alt="blog-img" />
             </div>
             <div class="blog-description mt-3 text-center">
               <h2 class="mb-3 pb-3 border-bottom text-center">
                 {{ book?.book?.name }}
               </h2>
-              <div
-                class="blog-meta d-flex align-items-center mb-3 position-right-side flex-wrap"
-              >
+              <p v-if="!book?.book.is_active" class="badge bg-danger">هذا الكتاب تم حذفه من المنهج</p>
+              <div class="blog-meta d-flex align-items-center mb-3 position-right-side flex-wrap">
                 <div class="date me-4 d-flex align-items-center">
-                  <i class="material-symbols-outlined pe-2 md-18 text-primary"
-                    >calendar_month</i
-                  >تاريخ الاضافة {{ formattedDate }}
+                  <i class="material-symbols-outlined pe-2 md-18 text-primary">calendar_month</i>تاريخ الاضافة {{
+                    formattedDate }}
                 </div>
                 <div class="like me-4 d-flex align-items-center">
                   <i class="material-symbols-outlined pe-2 md-18 text-primary">
@@ -73,45 +64,27 @@
                 </div>
                 <div class="comments me-4 d-flex align-items-center">
                   <i class="material-symbols-outlined pe-2 md-18 text-primary">
-                    comment </i
-                  >{{ book?.theses_count }} أطروحة
+                    comment </i>{{ book?.theses_count }} أطروحة
                 </div>
                 <div class="comments me-4 d-flex align-items-center">
                   <i class="material-symbols-outlined pe-2 md-18 text-primary">
-                    mode_comment </i
-                  >{{ book?.comments_count }} تعليق
+                    mode_comment </i>{{ book?.comments_count }} تعليق
                 </div>
               </div>
               <div class="text-center" v-if="shortBriefText">
                 {{ shortBriefText }}
-                <a
-                  role="button"
-                  class="load-btn"
-                  v-on:click="loadMoreBriefText"
-                  v-if="isMore"
-                  >...قراءة المزيد</a
-                >
-                <a
-                  role="button"
-                  class="load-btn"
-                  v-on:click="loadLessBriefText"
-                  v-if="isLess"
-                  >قراءة أقل</a
-                >
+                <a role="button" class="load-btn" v-on:click="loadMoreBriefText" v-if="isMore">...قراءة المزيد</a>
+                <a role="button" class="load-btn" v-on:click="loadLessBriefText" v-if="isLess">قراءة أقل</a>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="col-lg-12">
+
         <div class="card card-block card-stretch card-height blog">
-          <button
-            type="submit"
-            class="btn btn-primary d-block w-100"
-            data-bs-toggle="modal"
-            data-bs-target="#modals"
-            :disabled="!(book?.book?.allow_comments && eligibleToWriteThesis)"
-          >
+          <button type="submit" class="btn btn-primary d-block w-100" data-bs-toggle="modal" data-bs-target="#modals"
+            :disabled="shouldDisableButton">
             كتابة أطروحة
           </button>
         </div>
@@ -126,73 +99,41 @@
           <div class="card-body">
             <div class="row" v-if="theses.length">
               <!-- display theses -->
-              <div
-                class="col-lg-12"
-                v-for="comment in theses"
-                :key="comment.id"
-              >
+              <div class="col-lg-12" v-for="comment in theses" :key="comment.id">
                 <div class="card card-block card-stretch card-height blog">
                   <div class="card-body">
-                    <Comment
-                      :allowComment="book?.book?.allow_comments"
-                      :comment="comment"
-                      :totalThesisPages="
-                        comment.thesis
-                          ? comment.thesis.end_page -
-                              comment.thesis.start_page >
-                            0
-                            ? comment.thesis.end_page -
-                              comment.thesis.start_page +
-                              1
-                            : 0
-                          : 0
-                      "
-                      @addComment="addComment"
-                      @editComment="editComment"
-                      @reactToComment="reactToComment"
-                    />
+                    <Comment :allowComment="book?.book?.allow_comments" :comment="comment" :totalThesisPages="comment.thesis
+                      ? comment.thesis.end_page -
+                        comment.thesis.start_page >
+                        0
+                        ? comment.thesis.end_page -
+                        comment.thesis.start_page +
+                        1
+                        : 0
+                      : 0
+                      " @addComment="addComment" @editComment="editComment" @reactToComment="reactToComment" />
                   </div>
                 </div>
 
-                <modal
-                  :id="`editThesis-${
-                    comment.type.trim() === 'screenshot'
-                      ? comment.comment_id
-                      : comment.id
-                  }`"
-                  ref="editThesisRef"
-                  dialogClass="modal-dialog-centered modal-dialog-scrollable"
-                  tabindex="-1"
-                  aria-labelledby="editThesis"
-                  :aria-hidden="false"
-                >
+                <modal :id="`editThesis-${comment.type.trim() === 'screenshot'
+                  ? comment.comment_id
+                  : comment.id
+                  }`" ref="editThesisRef" dialogClass="modal-dialog-centered modal-dialog-scrollable" tabindex="-1"
+                  aria-labelledby="editThesis" :aria-hidden="false">
                   <model-header>
                     <h5 class="modal-title" id="modalsLabel">تعديل الأطروحة</h5>
-                    <a
-                      href="javascript:void(0);"
-                      class="lh-1"
-                      data-bs-dismiss="modal"
-                      ref="editCloseBtn"
-                    >
+                    <a href="javascript:void(0);" class="lh-1" data-bs-dismiss="modal" ref="editCloseBtn">
                       <span class="material-symbols-outlined">close</span>
                     </a>
                   </model-header>
                   <model-body>
-                    <createThesis
-                      :book="book?.book"
-                      :thesisToEdit="comment"
-                      :isRamadanActive="book?.isRamadanActive"
-                    />
+                    <createThesis :book="book?.book" :thesisToEdit="comment" :isRamadanActive="book?.isRamadanActive" />
                   </model-body>
                 </modal>
               </div>
 
               <div class="col-sm-12 text-center" v-if="loading">
-                <img
-                  :src="require('@/assets/images/gif/page-load-loader.gif')"
-                  alt="loader"
-                  style="height: 100px"
-                />
+                <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
               </div>
 
               <!-- <div class="col-lg-12">
@@ -203,13 +144,8 @@
               <!--Load more thesis-->
               <div class="col-lg-12">
                 <div class="card card-block card-stretch card-height blog">
-                  <button
-                    type="button"
-                    class="btn btn-primary d-block w-100"
-                    v-if="hasMoreTheses"
-                    @click="loadMoreTheses"
-                    :disabled="loading"
-                  >
+                  <button type="button" class="btn btn-primary d-block w-100" v-if="hasMoreTheses"
+                    @click="loadMoreTheses" :disabled="loading">
                     تحميل المزيد
                   </button>
                 </div>
@@ -217,11 +153,7 @@
             </div>
             <div class="row" v-else>
               <div class="col-sm-12 text-center" v-if="loading">
-                <img
-                  :src="require('@/assets/images/gif/page-load-loader.gif')"
-                  alt="loader"
-                  style="height: 100px"
-                />
+                <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
               </div>
               <div class="col-lg-12" v-else>
                 <div class="text-center d-flex align-items-center">
@@ -242,35 +174,19 @@
         </div>
       </div>
     </div>
-    <modal
-      id="modals"
-      ref="modals"
-      dialogClass="modal-dialog-centered modal-dialog-scrollable"
-      tabindex="-1"
-      aria-labelledby="modalsLabel"
-      :aria-hidden="false"
-    >
+    <modal id="modals" ref="modals" dialogClass="modal-dialog-centered modal-dialog-scrollable" tabindex="-1"
+      aria-labelledby="modalsLabel" :aria-hidden="false">
       <model-header>
         <h5 class="modal-title" id="modalsLabel">
           {{ book?.book?.name }} || أطروحة جديدة
         </h5>
-        <a
-          href="javascript:void(0);"
-          class="lh-1"
-          data-bs-dismiss="modal"
-          ref="closeBtn"
-        >
+        <a href="javascript:void(0);" class="lh-1" data-bs-dismiss="modal" ref="closeBtn">
           <span class="material-symbols-outlined">close</span>
         </a>
       </model-header>
       <model-body>
-        <createThesis
-          :book="book?.book"
-          :lastThesis="book?.last_thesis"
-          @closeModel="closeModel"
-          @addThesis="addThesis"
-          :isRamadanActive="book?.isRamadanActive"
-        />
+        <createThesis :book="book?.book" :lastThesis="book?.last_thesis" @closeModel="closeModel" @addThesis="addThesis"
+          :isRamadanActive="book?.isRamadanActive" />
       </model-body>
     </modal>
   </main>
@@ -304,6 +220,7 @@ export default {
     watchEffect(async () => {
       if (this.$route.params.book_id) {
         await this.init();
+
       }
     });
   },
@@ -608,6 +525,18 @@ export default {
     canBeDeleted() {
       return this.totalTheses <= 0;
     },
+    shouldDisableButton() {
+      const allowComments = this.book?.book?.allow_comments;
+      const eligibleToWriteThesis = this.eligibleToWriteThesis;
+      const lastThesis = this.book?.last_thesis;
+
+      if (allowComments === 0) {
+        return !lastThesis;
+      }
+
+      return !eligibleToWriteThesis;
+    }
+
   },
 };
 </script>

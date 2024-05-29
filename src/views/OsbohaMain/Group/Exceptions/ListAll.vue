@@ -55,7 +55,7 @@
                         >
                           <td>{{ exception.user.name }}</td>
                           <td>{{ exception.type.type }}</td>
-                          <td>{{ EXCEPTION_STATUS[exception.status] }}</td>
+                          <td>{{ STATUS[exception.status] }}</td>
                           <td v-if="exception.end_at">
                             {{ exception.end_at }}
                           </td>
@@ -115,7 +115,7 @@
 </template>
 <script>
 import GroupService from "@/API/services/group.service";
-import { EXCEPTION_STATUS} from "@/utilities/constants";
+import { STATUS} from "@/utilities/constants";
 export default {
   name: "List Exceptions",
   async created() {
@@ -135,7 +135,7 @@ export default {
       group_title: "",
       week_title: "",
       group_id: this.$route.params.group_id,
-      EXCEPTION_STATUS,
+      STATUS,
             length: 10,
     };
   },

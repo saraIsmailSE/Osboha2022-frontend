@@ -20,7 +20,7 @@
           <h4 class="mb-2">
 
             <p class="m-auto">
-              <span class="badge" :class="EXCEPTION_STATUS_CLASS[exception.status]">{{ EXCEPTION_STATUS[exception.status]
+              <span class="badge" :class="STATUS_CLASS[exception.status]">{{ STATUS[exception.status]
               }}
               </span>
             </p>
@@ -74,7 +74,7 @@ import Decision from './Decision';
 import Reviewer from './Reviewer';
 import helper from "@/utilities/helper";
 import mediaService from "@/API/services/media.services";
-import { EXCEPTION_STATUS, EXCEPTION_STATUS_CLASS } from "@/utilities/constants";
+import { STATUS, STATUS_CLASS } from "@/utilities/constants";
 
 const greaterThanMinusOne = (value) => value > -1;
 
@@ -101,8 +101,8 @@ export default {
       selectedWeek: null,
       selectedWeekError: "",
       selectedWeekTitle: '',
-      EXCEPTION_STATUS_CLASS,
-      EXCEPTION_STATUS,
+      STATUS_CLASS,
+      STATUS,
     };
   },
   computed: {
