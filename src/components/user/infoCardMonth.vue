@@ -5,10 +5,10 @@
                 <div class="card" style="border-radius: 15px">
                     <div class="card-body text-center">
                         <div class="mt-3 mb-3">
-                            <BaseAvatar :profileImg="user.user_profile.profile_picture" :profile_id="user.user_profile.id"
-                                :title="user.gender" :gender="user.gender" avatarClass="avatar-130 img-fluid rounded-circle"
-                                containerClass="profile-img" :imageStyle="{ border: '4px solid #1d1a55' }"
-                                dimensions="150x150" />
+                            <BaseAvatar :profileImg="user.user_profile.profile_picture"
+                                :profile_id="user.user_profile.id" :title="user.gender" :gender="user.gender"
+                                avatarClass="avatar-130 img-fluid rounded-circle" containerClass="profile-img"
+                                :imageStyle="{ border: '4px solid #1d1a55' }" dimensions="150x150" />
                         </div>
                         <router-link :to="{
                             name: 'user.profile',
@@ -33,7 +33,7 @@
                                 <li v-for="(role, index) in roles" :key="index" class="text-center pe-2">
                                     <span class="rounded-pill badge bg-primary px-2">{{
                                         ARABIC_ROLES[role]
-                                    }}</span>
+                                        }}</span>
                                 </li>
 
                                 <li v-if="user.is_excluded" class="text-center pe-2">
@@ -88,14 +88,22 @@
                         </div>
 
                         <div class="inline-block mt-3">
-                            <h5>
-                                موجود في المجموعات
-                                <span class="material-symbols-outlined align-middle me-1">
-                                    diversity_3
-                                </span>
+                            <button type="button"
+                                @click="() => { show_groups = !show_groups; show_marks = false; thesesToShow = null }"
+                                class="mb-3 btn bg-white text-dark border-dark w-100 d-flex justify-content-between">
+                                <h5>
+                                    موجود في المجموعات
+                                    <span class="material-symbols-outlined align-middle me-1">
+                                        diversity_3
+                                    </span>
 
-                            </h5>
-                            <table class="table inline-grid w-100">
+                                </h5>
+                                <span class="material-symbols-outlined">
+                                    {{ show_groups ? "visibility_off" : "visibility" }}
+                                </span>
+                            </button>
+
+                            <table class="table inline-grid w-100" v-show="show_groups">
                                 <thead>
                                     <tr class="d-flex justify-content-around">
                                         <th scope="col">المجموعة</th>
@@ -103,8 +111,8 @@
                                         <th scope="col"> حالته</th>
                                     </tr>
                                 </thead>
-                                <tbody v-for="group in groups" :key="group.id">
-                                    <tr class="d-flex justify-content-around">
+                                <tbody>
+                                    <tr class="d-flex justify-content-around" v-for="group in groups" :key="group.id">
 
                                         <td scope="col" class="align-middle text-center w-25">
                                             <router-link class="text-center" :to="{
@@ -127,177 +135,78 @@
                             </table>
                             <hr />
 
-                            <iq-card class="iq-card">
-                                <div class="col-12">
-                                    <div class="card card-block card-stretch card-height">
-                                        <div class="card-header">
-                                            <h4>
-                                                انجاز السفير خلال لأسابيع الأربعة الماضبة 
-                                                <!-- {{ statistics.group.name }} -->
-                                            </h4>
-                                            <!-- <div class="form-group mt-3">
-                                                <select class="form-select" v-model="week_id">
-                                                <option value="-1">اختر الأسبوع</option>
-                                                <option v-for="week in statistics.weeks" :key="week.id" :value="week.id">{{ week.title }}</option>
-                                                </select>
-                                            </div> -->
-                                        </div>
-                                        <div class="card-body">
-                                            <!--  -->
-                                            <table class="table inline-grid w-100">
-                                                <thead>
-                                                    <tr class="d-flex justify-content-around">
-                                                        <th scope="col">الأسبوع</th>
-                                                        <th scope="col"> العلامة من 100</th>
-                                                        <th scope="col"> الصفحات</th>
-                                                        <th scope="col"> الانجاز</th>
-                                                        <th scope="col">الاطروحات</th>
-                                                        <th scope="col">الاقتباسات</th>
-                                                        <th scope="col">الدعم</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr class="d-flex justify-content-around full-mark">
-                                                        <td class="align-middle text-center">
-                                                            <span> الأول من مايو</span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 100 </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 30 </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span>
-                                                                أطروحة 
-                                                            </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 2 </span>
-                                                        </td>
+                            <button type="button"
+                                @click="() => { show_marks = !show_marks; show_groups = false; thesesToShow = null }"
+                                class="mb-3 btn bg-white text-dark border-dark w-100 d-flex justify-content-between">
+                                <h5>
+                                    انجاز السفير خلال لأسابيع الأربعة الماضبة
+                                    <span class="material-symbols-outlined align-middle me-1">
+                                        query_stats
+                                    </span>
 
-                                                        <td class="align-middle text-center">
-                                                            <span> 5 </span>
-                                                        </td>
+                                </h5>
+                                <span class="material-symbols-outlined">
+                                    {{ show_marks ? "visibility_off" : "visibility" }}
+                                </span>
+                            </button>
+                            <table class="table inline-grid w-100" v-show="show_marks">
+                                <thead>
+                                    <tr class="">
+                                        <td scope="col">الأسبوع</td>
+                                        <td scope="col" colspan="3">العلامة من 100</td>
+                                        <td scope="col">الصفحات</td>
+                                        <td scope="col">الاطروحات</td>
+                                        <td scope="col">الاقتباسات</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr :class="`${mark.is_freezed ? 'freeze' : markClass(mark.reading_mark + mark.writing_mark + mark.support)} `"
+                                        v-for="mark in marks" :key="mark.id">
+                                        <td class="align-middle text-center">
+                                            <span> {{ mark.week.title }}</span>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <span> القراءة
+                                                <br />
+                                                {{ mark.reading_mark }}
+                                            </span>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <span>
+                                                الكتابة
+                                                <br />
+                                                {{ mark.writing_mark }}
+                                            </span>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <span>
+                                                اعرف مشروعك
+                                                <br />
+                                                {{ mark.support ? mark.support : 0 }}
+                                            </span>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <span> {{ mark.total_pages }} </span>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <span> {{ mark.total_thesis }} </span>
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <span> {{ mark.total_screenshot }} </span>
+                                        </td>
 
-                                                        <td class="align-middle text-center">
-                                                            <span class="support material-symbols-outlined">
-                                                                task_alt
-                                                            </span>
-                                                        </td>
-                                                    </tr>
+                                        <td class="align-middle text-center">
+                                            <span class="support material-symbols-outlined" role="button"
+                                                @click="setThesesToShow(mark.thesis)">
+                                                {{ mark.reading_mark + mark.writing_mark + mark.support > 0 ?
+                                                    "visibility" : "visibility_off" }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <mark-theses :theses="thesesToShow" v-if="thesesToShow" />
 
-                                                </tbody>
-                                                <tbody>
-                                                    <tr class="d-flex justify-content-around">
-                                                        <td class="align-middle text-center">
-                                                            <span> الرابع من أبريل</span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 100 </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 30 </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span>
-                                                                أطروحة 
-                                                            </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 2 </span>
-                                                        </td>
-
-                                                        <td class="align-middle text-center">
-                                                            <span> 5 </span>
-                                                        </td>
-
-                                                        <td class="align-middle text-center">
-                                                            <span class="support material-symbols-outlined">
-                                                                task_alt
-                                                            </span>
-                                                        </td>
-
-
-                                                    </tr>
-
-                                                </tbody>
-                                                <tbody>
-                                                    <tr class="d-flex justify-content-around freeze">
-                                                        <td class="align-middle text-center">
-                                                            <span> الثالث من أبريل</span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 0 </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 0 </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span>
-                                                                - 
-                                                            </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 0 </span>
-                                                        </td>
-
-                                                        <td class="align-middle text-center">
-                                                            <span> 0 </span>
-                                                        </td>
-
-                                                        <td class="align-middle text-center">
-                                                            <span class="support material-symbols-outlined">
-                                                                task_alt
-                                                            </span>
-                                                        </td>
-
-
-                                                    </tr>
-
-                                                </tbody>
-                                                <tbody>
-                                                    <tr class="d-flex justify-content-around incomplete">
-                                                        <td class="align-middle text-center">
-                                                            <span> الثاني من أبريل</span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 90 </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span> 30 </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span>
-                                                                اقتباس 
-                                                            </span>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <span>  </span>
-                                                        </td>
-
-                                                        <td class="align-middle text-center">
-                                                            <span> 5 </span>
-                                                        </td>
-
-                                                        <td class="align-middle text-center">
-                                                            <span class="support material-symbols-outlined">
-                                                                task_alt
-                                                            </span>
-                                                        </td>
-
-
-                                                    </tr>
-
-                                                </tbody>
-                                                
-                                            </table>
-                                            <hr />
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </iq-card>
                         </div>
                     </div>
                 </div>
@@ -308,10 +217,12 @@
 <script>
 import { ARABIC_ROLES, TERMINATION_REASONS } from "@/utilities/constants";
 import moment from "moment";
+import MarkTheses from './Achevment/MarkTheses.vue';
 
 export default {
     name: "Information Card",
     components: {
+        MarkTheses
     },
     created() {
     },
@@ -336,12 +247,19 @@ export default {
         groups: {
             type: [Object],
             required: true,
+        },
+        marks: {
+            type: [Object],
+            required: true,
         }
     },
     data() {
         return {
             ARABIC_ROLES,
-            TERMINATION_REASONS
+            TERMINATION_REASONS,
+            show_groups: false,
+            show_marks: false,
+            thesesToShow: null,
         };
     },
     methods: {
@@ -350,6 +268,29 @@ export default {
                 return moment(String(value)).format("MM/DD/YYYY");
             }
         },
+
+        /**
+         * return mark color class.
+         *  @param  mark
+         * @return class
+         */
+        markClass(mark) {
+            switch (mark) {
+                case -1:
+                    return "freeze";
+                case 100:
+                    return "full-mark";
+
+                case 0:
+                    return "zero-mark";
+
+                default:
+                    return "incomplete";
+            }
+        },
+        setThesesToShow(theses) {
+            this.thesesToShow = theses;
+        }
     },
 
 };
