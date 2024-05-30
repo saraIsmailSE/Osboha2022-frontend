@@ -21,7 +21,7 @@
 
             <p class="m-auto">
               <span class="badge" :class="STATUS_CLASS[exception.status]">{{ STATUS[exception.status]
-              }}
+                }}
               </span>
             </p>
           </h4>
@@ -35,7 +35,7 @@
 
           <div v-if="exception.type.type == 'نظام امتحانات - شهري' ||
             exception.type.type == 'نظام امتحانات - فصلي'
-            ">
+          ">
             <h4 class="mb-2">جدول الامتحانات</h4>
 
             <img class="img-fluid w-75" v-if="exception.media" :src="showMedia(exception.media.id)" />
@@ -49,8 +49,11 @@
 
         </div>
 
-        <Decision :exception="exception" :authInGroup="authInGroup" :weeks="weeks"  @update_exception="updateException"/>
+        <Decision :exception="exception" :authInGroup="authInGroup" :weeks="weeks"
+          @update_exception="updateException" />
 
+        <!-- START NOTES -->
+        <Note />
         <CancelException :exception="exception" @update_exception="updateException" />
 
         <div class="d-flex align-items-center mt-3 row">
@@ -71,6 +74,7 @@
 import LastExceptions from "./LastExceptions"
 import CancelException from './CancelException';
 import Decision from './Decision';
+import Note from './Note';
 import Reviewer from './Reviewer';
 import helper from "@/utilities/helper";
 import mediaService from "@/API/services/media.services";
@@ -84,6 +88,7 @@ export default {
     LastExceptions,
     CancelException,
     Decision,
+    Note,
     Reviewer,
   },
   props: {
