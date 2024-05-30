@@ -33,7 +33,7 @@
     <small>
       <span class="align-middle material-symbols-outlined"> person_check </span>
       <span style="font-weight: bold">المسؤول</span>
-      {{ question.assignee.name }}
+      {{ question.assignee.name + " " + question.assignee.last_name }}
     </small>
 
     <template v-if="question.management_teams">

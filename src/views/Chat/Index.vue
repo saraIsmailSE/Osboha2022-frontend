@@ -1,38 +1,22 @@
 <template>
   <div>
     <div class="iq-top-navbar mt-2">
-      <nav
-        class="nmt-4 av navbar navbar-expand-lg navbar-light iq-navbar p-lg-0"
-      >
+      <nav class="nmt-4 av navbar navbar-expand-lg navbar-light iq-navbar p-lg-0">
         <div class="container-fluid p-auto">
           <router-link :to="{ name: 'osboha.list' }" class="navbar-brand p-0">
-            <img
-              src="@/assets/images/main/osboha-logo.png"
-              alt="logo"
-              class=""
-            />
+            <img src="@/assets/images/main/osboha-logo.png" alt="logo" class="" />
           </router-link>
           <div class="social-media">
             <p class="mb-0 d-flex">
-              <i
-                class="d-flex align-items-center justify-content-center ms-2 me-3 position-relative"
-              >
+              <i class="d-flex align-items-center justify-content-center ms-2 me-3 position-relative">
                 <i class="material-symbols-outlined">chat_bubble</i>
-                <span
-                  v-if="unreadMessages"
-                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info"
-                >
+                <span v-if="unreadMessages"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
                   {{ unreadMessages }}
                 </span>
               </i>
-              <i
-                class="d-flex align-items-center justify-content-center ms-2 me-1 position-relative"
-              >
-                <router-link
-                  :to="{ name: 'osboha.list' }"
-                  class="material-symbols-outlined"
-                  >home</router-link
-                >
+              <i class="d-flex align-items-center justify-content-center ms-2 me-1 position-relative">
+                <router-link :to="{ name: 'osboha.list' }" class="material-symbols-outlined">home</router-link>
               </i>
             </p>
           </div>
@@ -43,13 +27,8 @@
       <form class="add-room-form" @submit.prevent="createRoom">
         <div class="searchable-dropdown" :class="{ active: showDropdown }">
           <div class="search-input" :class="{ active: showCloseBtn }">
-            <input
-              v-model="addRoomUsername"
-              type="text"
-              placeholder="البحث عن اسم"
-              @focus="showCloseBtn = true"
-              @input="searchUsers"
-            />
+            <input v-model="addRoomUsername" type="text" placeholder="البحث عن اسم" @focus="showCloseBtn = true"
+              @input="searchUsers" />
             <button class="button-cancel" @click="closeSearch">
               <span class="material-symbols-outlined">close</span>
             </button>
@@ -58,59 +37,29 @@
             <div v-if="showEmpty" class="dropdown-list-item">
               <span>لا يوجد نتائج</span>
             </div>
-            <div
-              class="dropdown-list-item text-center justify-content-center"
-              v-if="fetchingUsers"
-            >
-              <img
-                src="@/assets/images/gif/page-load-loader.gif"
-                alt="loader"
-                style="height: 50px"
-              />
+            <div class="dropdown-list-item text-center justify-content-center" v-if="fetchingUsers">
+              <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 50px" />
             </div>
-            <div
-              class="dropdown-list-item"
-              v-for="user in users"
-              :key="user.id"
-              @click="openNewRoom(user)"
-            >
+            <div class="dropdown-list-item" v-for="user in users" :key="user.id" @click="openNewRoom(user)">
               <!-- <div class="user-avatar">
                 {{ user.name?.charAt(0).toUpperCase() }}
               </div> -->
-              <BaseAvatar
-                :profileImg="user?.profile.profile_picture"
-                :profile_id="user?.profile.id"
-                :title="user?.name"
-                :gender="user?.gender"
-                avatarClass="rounded-circle avatar-40"
-              />
+              <BaseAvatar :profileImg="user?.profile.profile_picture" :profile_id="user?.profile.id" :title="user?.name"
+                :gender="user?.gender" avatarClass="rounded-circle avatar-40" />
 
               <!-- <img :src="user.profilePicture" alt="profile-img" /> -->
-              <span class="me-2">{{ user.name }}</span>
+              <span class="me-2">{{ user.name + " " + user.last_name }}</span>
             </div>
           </div>
         </div>
       </form>
     </div>
-    <vue-advanced-chat
-      dir="ltr"
-      height="calc(100vh - 20px)"
-      :current-user-id="currentUserId"
-      :rooms="rooms"
-      :room-id="currentRoomId"
-      :loading-rooms="roomsLoading"
-      :rooms-loaded="roomsLoaded"
-      :messages="messages"
-      :messages-loaded="messagesLoaded"
-      :show-audio="false"
-      :show-reaction-emojis="false"
-      :message-actions="JSON.stringify(messageActions)"
-      @fetch-messages="fetchMessages($event.detail[0])"
-      @send-message="sendMessage($event.detail[0])"
-      @delete-message="deleteMessage($event.detail[0])"
-      @add-room="addRoom($event.detail[0])"
-      @open-file="openFile($event.detail[0])"
-    />
+    <vue-advanced-chat dir="ltr" height="calc(100vh - 20px)" :current-user-id="currentUserId" :rooms="rooms"
+      :room-id="currentRoomId" :loading-rooms="roomsLoading" :rooms-loaded="roomsLoaded" :messages="messages"
+      :messages-loaded="messagesLoaded" :show-audio="false" :show-reaction-emojis="false"
+      :message-actions="JSON.stringify(messageActions)" @fetch-messages="fetchMessages($event.detail[0])"
+      @send-message="sendMessage($event.detail[0])" @delete-message="deleteMessage($event.detail[0])"
+      @add-room="addRoom($event.detail[0])" @open-file="openFile($event.detail[0])" />
     <!-- @fetch-more-rooms="fetchMoreRooms" -->
   </div>
 </template>
@@ -335,10 +284,10 @@ export default {
       try {
         const newMessage = this.selectedRoom.isFake
           ? {
-              ...message,
-              roomId: null,
-              receiver_id: this.selectedRoom.users[1]._id,
-            }
+            ...message,
+            roomId: null,
+            receiver_id: this.selectedRoom.users[1]._id,
+          }
           : message;
 
         const response = await MessageService.create(newMessage);
@@ -445,18 +394,18 @@ export default {
       const room =
         this.rooms?.length > 0
           ? this.rooms.find((room) => {
-              //check first user
-              if (parseInt(room.users[0]._id) === parseInt(user.id)) {
-                return true;
-              }
+            //check first user
+            if (parseInt(room.users[0]._id) === parseInt(user.id)) {
+              return true;
+            }
 
-              //check second user
-              if (parseInt(room.users[1]._id) === parseInt(user.id)) {
-                return true;
-              }
+            //check second user
+            if (parseInt(room.users[1]._id) === parseInt(user.id)) {
+              return true;
+            }
 
-              return false;
-            })
+            return false;
+          })
           : null;
 
       this.addNewRoom = false;

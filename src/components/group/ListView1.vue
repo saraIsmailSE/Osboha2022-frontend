@@ -30,16 +30,16 @@
 <script>
 export default {
   name: 'ListView1',
-     props: {
-      groups: { type: Object },
-   },
-mounted() {
+  props: {
+    groups: { type: Object },
+  },
+  mounted() {
   },
   components: {
   },
   data() {
     return {
-     
+
     }
   }
 }

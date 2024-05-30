@@ -10,7 +10,7 @@
                     avatarClass="rounded-circle avatar-40" containerClass="flex-shrink-0" />
                 <div class="flex-grow-1 ms-3" @click="hideList">
                     <router-link :to="{ name: 'user.profile', params: { user_id: member.user.id } }">
-                        <h5>{{ member.user.name }}</h5>
+                        <h5>{{ member.user.name + " " + member.user.last_name }}</h5>
                     </router-link>
                     <small>{{ formatDateToWritten(member.updated_at) }}</small>
                     <br>

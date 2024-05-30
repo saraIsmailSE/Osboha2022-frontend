@@ -268,10 +268,9 @@ export default {
                     this.profileInfo = response;
                     helper.toggleToast("تم التعديل بنجاح", "success");
                     this.v$.infoForm.$reset();
-                    const twoMonthFromNow = new Date();
-                    twoMonthFromNow.setMonth(twoMonthFromNow.getMonth() + 2);
 
-                    this.$cookies.set("should-update-info", true, { expires: twoMonthFromNow });
+                    this.$cookies.set("should-update-info", true, 60 * 60 * 24 * 60);
+
                     setTimeout(() => {
                         this.$router.push({ name: "osboha.list" });
                     }, 3000);

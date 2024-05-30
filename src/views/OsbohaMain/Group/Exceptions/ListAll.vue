@@ -53,7 +53,7 @@
                           v-for="exception in exceptions.slice(0, length)"
                           :key="exception.id"
                         >
-                          <td>{{ exception.user.name }}</td>
+                          <td>{{ exception.user.name + " " + exception.user.last_name }}</td>
                           <td>{{ exception.type.type }}</td>
                           <td>{{ STATUS[exception.status] }}</td>
                           <td v-if="exception.end_at">

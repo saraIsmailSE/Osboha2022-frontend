@@ -14,7 +14,7 @@
                             name: 'user.profile',
                             params: { user_id: user.id },
                         }">
-                            <h2 class="mb-2 text-center">{{ user.name }}</h2>
+                            <h2 class="mb-2 text-center">{{ user.name + " " + user.last_name }}</h2>
                         </router-link>
                         <p class="text-center mb-4" style="direction: rtl">
                             فريق المتابعة

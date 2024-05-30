@@ -11,7 +11,7 @@
               :profile_id="exception.user.user_profile.id" :dimensions="'512x512'" :title="exception.user?.name"
               :gender="exception.user?.gender" avatarClass="avatar-130 img-fluid" containerClass="flex-shrink-0" />
             <h4 class="text-center mt-3 mb-3">
-              {{ exception.user.name }}
+              {{ exception.user.name + " " + exception.user.last_name }}
             </h4>
           </div>
         </div>
@@ -21,7 +21,7 @@
 
             <p class="m-auto">
               <span class="badge" :class="STATUS_CLASS[exception.status]">{{ STATUS[exception.status]
-              }}
+                }}
               </span>
             </p>
           </h4>
@@ -35,7 +35,7 @@
 
           <div v-if="exception.type.type == 'نظام امتحانات - شهري' ||
             exception.type.type == 'نظام امتحانات - فصلي'
-            ">
+          ">
             <h4 class="mb-2">جدول الامتحانات</h4>
 
             <img class="img-fluid w-75" v-if="exception.media" :src="showMedia(exception.media.id)" />
@@ -49,7 +49,8 @@
 
         </div>
 
-        <Decision :exception="exception" :authInGroup="authInGroup" :weeks="weeks"  @update_exception="updateException"/>
+        <Decision :exception="exception" :authInGroup="authInGroup" :weeks="weeks"
+          @update_exception="updateException" />
 
         <CancelException :exception="exception" @update_exception="updateException" />
 
