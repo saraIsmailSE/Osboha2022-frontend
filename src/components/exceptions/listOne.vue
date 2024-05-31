@@ -16,42 +16,32 @@
           </div>
         </div>
 
-        <div class="iq-card-body ps-3 pe-3 mt-1">
-          <h4 class="mb-2">
+        <ExceptionDetails :exception="exception" :last_freez="last_freez" :last_exam="last_exam"
+          :last_exceptional_freez="last_exceptional_freez" />
+        <hr />
 
-            <p class="m-auto">
-              <span class="badge" :class="STATUS_CLASS[exception.status]">{{ STATUS[exception.status]
-                }}
+        <div class="p-2">
+          <button type="button" @click="() => { show_marks = !show_marks; }"
+            class="mb-3 btn bg-white text-dark border-dark w-100 d-flex justify-content-between">
+            <h5>
+              انجاز السفير خلال لأسابيع الأربعة الماضبة
+              <span class="material-symbols-outlined align-middle me-1">
+                query_stats
               </span>
-            </p>
-          </h4>
-          <p class="m-auto">
-            تاريخ الطلب: {{ formatFullDate(exception.created_at) }}
-          </p>
-          <h4 class="mb-2">السبب</h4>
-          <p class="m-auto">{{ exception.reason }}</p>
-          <h4 class="mb-2">المدة المطلوبة</h4>
-          <p class="m-auto">{{ exception.desired_duration }}</p>
 
-          <div v-if="exception.type.type == 'نظام امتحانات - شهري' ||
-            exception.type.type == 'نظام امتحانات - فصلي'
-          ">
-            <h4 class="mb-2">جدول الامتحانات</h4>
-
-            <img class="img-fluid w-75" v-if="exception.media" :src="showMedia(exception.media.id)" />
-            <p class="m-auto" v-else>لا يوجد جدول ثابت للامتحانات</p>
-          </div>
-
-          <Reviewer :exception="exception" />
-
-          <LastExceptions :last_freez="last_freez" :last_exam="last_exam"
-            :last_exceptional_freez="last_exceptional_freez" />
-
+            </h5>
+            <span class="material-symbols-outlined">
+              {{ show_marks ? "visibility_off" : "visibility" }}
+            </span>
+          </button>
+          <Marks v-if="show_marks" :marks="ambassadorMarks" />
         </div>
 
         <Decision :exception="exception" :authInGroup="authInGroup" :weeks="weeks"
           @update_exception="updateException" />
 
+        <!-- START NOTES -->
+        <Note v-if="allowedToAddNotes" />
         <CancelException :exception="exception" @update_exception="updateException" />
 
         <div class="d-flex align-items-center mt-3 row">
@@ -69,23 +59,22 @@
   </div>
 </template>
 <script>
-import LastExceptions from "./LastExceptions"
 import CancelException from './CancelException';
+import ExceptionDetails from './ExceptionDetails';
 import Decision from './Decision';
-import Reviewer from './Reviewer';
+import Note from './Note';
+import Marks from '@/components/user/Achevment/4WeeksMarks.vue';
 import helper from "@/utilities/helper";
-import mediaService from "@/API/services/media.services";
-import { STATUS, STATUS_CLASS } from "@/utilities/constants";
 
-const greaterThanMinusOne = (value) => value > -1;
 
 export default {
   name: "List One Exception",
   components: {
-    LastExceptions,
+    ExceptionDetails,
     CancelException,
+    Marks,
     Decision,
-    Reviewer,
+    Note,
   },
   props: {
     exception: { type: Object },
@@ -94,6 +83,7 @@ export default {
     last_exceptional_freez: { type: Object },
     authInGroup: { type: Object },
     weeks: { type: Object },
+    ambassadorMarks: { type: Object }
   },
   data() {
     return {
@@ -102,28 +92,23 @@ export default {
       selectedWeek: null,
       selectedWeekError: "",
       selectedWeekTitle: '',
-      STATUS_CLASS,
-      STATUS,
+      show_marks: false,
     };
   },
   computed: {
     auth() {
       return this.$store.getters.getUser;
     },
+    allowedToAddNotes() {
+      const groupAdministrators = ['admin', 'consultant', 'advisor', 'supervisor', 'leader']
+      return groupAdministrators.includes(this.authInGroup.user_type)
+    }
   },
 
   methods: {
     ...helper,
     updateException() {
       this.$emit("update_exception");
-    },
-    /**
-     * get exam media.
-     * @param  {int} media id,
-     * @return image url
-     */
-    showMedia(id) {
-      return mediaService.show(id);
     },
   },
 };

@@ -1,6 +1,6 @@
 import { handleError } from "vue";
 import { customHandleError } from "../../utilities/errors";
-import { api } from "../Intercepter";
+import { api, handelErrors } from "../Intercepter";
 
 class ExceptionService {
   async create(exception) {
@@ -137,6 +137,54 @@ class ExceptionService {
       return response.data;
     } catch (error) {
       console.log(error);
+      return error;
+    }
+  }
+  /**
+   * Add Note.
+   *  @param  noteForm
+   * @return response
+   */
+  async addNote(noteForm) {
+    try {
+      const response = await api
+        .post(`userexception/add-note`, noteForm, {
+          headers: { "Content-type": "multipart/form-data" },
+        })
+        .catch((error) => {
+          if (error.response) {
+            handelErrors(error.response.status);
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log("Error", error.message);
+          }
+        });
+      return response.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  /**
+   * get notes for specific audit.
+   * @return response
+   */
+  async getNotes(user_exception_id) {
+    try {
+      const response = await api
+        .get(`userexception/get-notes/${user_exception_id}`)
+        .catch((error) => {
+          if (error.response) {
+            handelErrors(error.response.status);
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log("Error", error.message);
+          }
+        });
+      return response.data.data;
+    } catch (error) {
       return error;
     }
   }
