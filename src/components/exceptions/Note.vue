@@ -1,10 +1,20 @@
 <template>
     <div class="col-12 p-3">
         <div class="card">
-            <div class="card-header" style="background:#cae0cd;">
-                <h4 class="card-title"> ملاحظات حول طلب التجميد </h4>
+            <div class="card-header d-flex justify-content-between" style="background:#cae0cd;" role="button"
+                @click="() => { show_notes = !show_notes; }">
+                <h4>
+                    ملاحظات حول طلب التجميد
+                    <span class="material-symbols-outlined align-middle me-1">
+                        contact_support
+                    </span>
+
+                </h4>
+                <span class="material-symbols-outlined">
+                    {{ show_notes ? "visibility_off" : "visibility" }}
+                </span>
             </div>
-            <div class="card-content">
+            <div class="card-content" v-show="show_notes">
                 <div class="card-body">
                     <div class="row rounded-lg overflow-hidden shadow">
                         <!-- NOtes Box-->
@@ -88,7 +98,8 @@ export default {
             noteForm: {
                 body: '',
                 user_exception_id: this.$route.params.exception_id,
-            }
+            },
+            show_notes: false,
         };
     },
     validations() {

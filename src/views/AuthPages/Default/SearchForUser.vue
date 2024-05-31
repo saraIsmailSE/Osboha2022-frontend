@@ -16,7 +16,7 @@
             </button>
         </form>
         <div class="col-sm-12" v-if="user">
-            <InfoCardMonth :user="user" :followup_team="followup_team" :roles="roles" :in_charge_of="in_charge_of" :groups="groups" :marks="ambassadorMarks" />
+            <InfoCard :user="user" :followup_team="followup_team" :roles="roles" :in_charge_of="in_charge_of" :groups="groups" :marks="ambassadorMarks" />
         </div>
         <div class="col-sm-12 text-center" v-if="loader">
             <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
@@ -37,7 +37,7 @@
 import userService from "@/API/services/user.service";
 import useVuelidate from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
-import InfoCardMonth from "../../../components/user/infoCardMonth.vue";
+import InfoCard from "@/components/user/infoCard.vue";
 
 
 export default {
@@ -46,7 +46,7 @@ export default {
         return { v$: useVuelidate() }
     },
     components: {
-        InfoCardMonth,
+        InfoCard,
     },
     data() {
         return {
