@@ -11,7 +11,7 @@
               :profile_id="exception.user.user_profile.id" :dimensions="'512x512'" :title="exception.user?.name"
               :gender="exception.user?.gender" avatarClass="avatar-130 img-fluid" containerClass="flex-shrink-0" />
             <h4 class="text-center mt-3 mb-3">
-              {{ exception.user.name }}
+              {{ exception.user.name + " " + exception.user.last_name }}
             </h4>
           </div>
         </div>

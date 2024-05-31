@@ -5,16 +5,16 @@
                 <div class="card" style="border-radius: 15px">
                     <div class="card-body text-center">
                         <div class="mt-3 mb-3">
-                            <BaseAvatar :profileImg="user.user_profile.profile_picture" :profile_id="user.user_profile.id"
-                                :title="user.gender" :gender="user.gender" avatarClass="avatar-130 img-fluid rounded-circle"
-                                containerClass="profile-img" :imageStyle="{ border: '4px solid #1d1a55' }"
-                                dimensions="150x150" />
+                            <BaseAvatar :profileImg="user.user_profile.profile_picture"
+                                :profile_id="user.user_profile.id" :title="user.gender" :gender="user.gender"
+                                avatarClass="avatar-130 img-fluid rounded-circle" containerClass="profile-img"
+                                :imageStyle="{ border: '4px solid #1d1a55' }" dimensions="150x150" />
                         </div>
                         <router-link :to="{
                             name: 'user.profile',
                             params: { user_id: user.id },
                         }">
-                            <h2 class="mb-2 text-center">{{ user.name }}</h2>
+                            <h2 class="mb-2 text-center">{{ user.name + " " + user.last_name }}</h2>
                         </router-link>
                         <p class="text-center mb-4" style="direction: rtl">
                             فريق المتابعة
@@ -33,7 +33,7 @@
                                 <li v-for="(role, index) in roles" :key="index" class="text-center pe-2">
                                     <span class="rounded-pill badge bg-primary px-2">{{
                                         ARABIC_ROLES[role]
-                                    }}</span>
+                                        }}</span>
                                 </li>
 
                                 <li v-if="user.is_excluded" class="text-center pe-2">

@@ -53,6 +53,11 @@ const setup = (store) => {
           err.response.data.data == "withdrawn ambassador"
         ) {
           router.push({ path: `/auth/withdrawn_ambassador` });
+        } else if (
+          err.response.status === 400 &&
+          err.response.data.data == "should update info"
+        ) {
+          router.push({ path: `/user/should-update-info` });
         } else if (err.response.status === 504 || err.response.status === 502) {
           router.push({ name: "ServerError" });
         }

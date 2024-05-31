@@ -33,7 +33,7 @@
                                 <li v-for="(role, index) in roles" :key="index" class="text-center pe-2">
                                     <span class="rounded-pill badge bg-primary px-2">{{
                                         ARABIC_ROLES[role]
-                                        }}</span>
+                                    }}</span>
                                 </li>
 
                                 <li v-if="user.is_excluded" class="text-center pe-2">
@@ -80,7 +80,7 @@
                                 </h5>
                                 <ul v-if="in_charge_of.length > 0">
                                     <li style="direction: rtl" class="text-start h5" v-for="user in in_charge_of"
-                                        :key="user.id">{{ user.name }}</li>
+                                        :key="user.id">{{ user.name + " " + user.last_name }}</li>
                                 </ul>
                                 <h4 v-else>لا يوجد</h4>
                             </div>

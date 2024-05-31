@@ -14,7 +14,7 @@
               containerClass="flex-shrink-0" />
             <div class="flex-grow-1 ms-3" @click="hideList">
               <router-link :to="{ name: 'user.profile', params: { user_id: user.id } }">
-                <h5>{{ user.name }}</h5>
+                <h5>{{ user.name + " " + user.last_name }}</h5>
               </router-link>
               <small>{{ formatDateToWritten(user.pivot.updated_at) }}</small>
               <br>
