@@ -234,6 +234,14 @@ class BookService {
       handleError(error);
     }
   }
+  async removeBookFromOsboha(book_id) {
+    try {
+      const response = await api.get(`books/remove-book-from-osboha/${book_id}`);
+      return response.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
 }
 
 export default new BookService();

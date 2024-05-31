@@ -15,7 +15,7 @@
               <router-link class="material-symbols-outlined align-middle display-5 me-2" :to="{
                 name: 'book.update',
                 params: { book_id: book?.book?.id },
-              }" v-if="isAdmin || inBooksTeam || book_owner">
+              }" v-if="(isAdmin || inBooksTeam || book_owner) && book?.book.is_active">
                 edit
               </router-link>
               <span role="button" class="material-symbols-outlined align-middle display-5 me-3" v-if="
@@ -29,7 +29,8 @@
             <router-link :to="{
               name: 'book.report',
               params: { book_id: book?.book?.id },
-            }" class="btn btn-danger display-5" v-if="!loading && book?.book.is_active">
+            }" class="btn btn-danger display-5"
+              v-if="!loading && (book?.book.is_active && book?.book.type.type != 'free')">
               <span class=" material-symbols-outlined align-middle">
                 warning
               </span>

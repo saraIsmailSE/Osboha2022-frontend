@@ -82,9 +82,6 @@ export default {
                 'book_quality_team_coordinator',
             ]);
         },
-
-
-
     },
 };
 </script>
