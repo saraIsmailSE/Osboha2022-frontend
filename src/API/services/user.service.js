@@ -7,6 +7,10 @@ class UserService {
     this.prefix = "users";
   }
 
+  async show(user_id) {
+    const users = await api.get(`users/show/${user_id}`);
+    return users.data.data;
+  }
   async getUnactive() {
     const users = await api.get(`users/list/un-active`);
     return users;
@@ -77,6 +81,16 @@ class UserService {
   async updateInfo(info) {
     try {
       const response = await api.post(`users/update-info`, info, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      customHandleError(error, "UserGroupService.AddMember");
+    }
+  }
+  async updateUserName(UserName) {
+    try {
+      const response = await api.post(`users/update-user-name`, UserName, {
         headers: { "Content-type": "multipart/form-data" },
       });
       return response.data.data;

@@ -44,6 +44,10 @@
         </div>
       </div>
     </iq-card>
+
+
+    <update-user-name />
+
     <iq-card class="iq-card" v-if="(user.allowed_to_eligible == 2 || user.allowed_to_eligible == 0)">
       <div class="iq-card-body p-3">
         <h1 class="text-center">
@@ -227,12 +231,13 @@ import Auth from '@/API/services/auth.service'
 import { COUNTRIES } from "@/utilities/constants";
 import UserInfoService from "@/Services/userInfoService";
 import UpdateSocialMedia from '@/components/user/UpdateSocialMedia';
+import UpdateUserName from '@/components/user/UpdateUserName';
 import ResetEmail from '@/components/user/ResetEmail';
 
 
 export default {
   name: "update profile",
-  components: { UpdateSocialMedia, ResetEmail },
+  components: { UpdateUserName, UpdateSocialMedia, ResetEmail },
   async created() {
 
     if ((this.user.allowed_to_eligible == 0 || this.user.allowed_to_eligible == 2)) {

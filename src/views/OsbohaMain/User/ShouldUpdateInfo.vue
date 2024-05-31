@@ -201,21 +201,32 @@
             </div>
         </iq-card>
 
-        <!-- ########## update social media ########## -->
-        <update-social-media />
-
     </div>
 </template>
 <script>
 import useVuelidate from "@vuelidate/core";
 import { required, url, requiredIf } from "@vuelidate/validators";
 import UserService from "@/API/services/user.service";
+import SocialMedia from "@/API/services/social-media.service";
 import helper from "@/utilities/helper";
 
 
 export default {
     name: "Should Update Info",
     async created() {
+        const userInfo = await UserService.show(this.user.id);
+        if (userInfo) {
+            this.infoForm.name = userInfo.name ? userInfo.name.replace(/\s/g, '') : "";
+            this.infoForm.last_name = userInfo.last_name ? userInfo.last_name.replace(/\s/g, '') : "";
+        }
+        const social_media = await SocialMedia.getByUserId(this.user.id);
+        if (social_media) {
+            this.infoForm.facebook = social_media.facebook;
+            this.infoForm.instagram = social_media.instagram;
+            this.infoForm.whatsapp = social_media.whatsapp;
+            this.infoForm.telegram = social_media.telegram;
+        }
+
     },
     setup() {
         return { v$: useVuelidate() };
@@ -268,9 +279,6 @@ export default {
                     this.profileInfo = response;
                     helper.toggleToast("تم التعديل بنجاح", "success");
                     this.v$.infoForm.$reset();
-
-                    this.$cookies.set("should-update-info", true, 60 * 60 * 24 * 60);
-
                     setTimeout(() => {
                         this.$router.push({ name: "osboha.list" });
                     }, 3000);
