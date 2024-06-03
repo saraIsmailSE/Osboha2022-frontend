@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="col-sm-12 mt-3">
-      <count-down v-if="week" :week="week" :timer_type="'modify_timer'" />
+      <count-down v-if="week && can_edit" :week="week" :timer_type="'modify_timer'" />
       <iq-card class="iq-card" v-if="mark">
         <div class="iq-card-body p-3">
           <AchievementCard :mark="mark" :group="group" />
@@ -26,7 +26,7 @@
             </div>
           </div>
 
-          <!-- <Note :mark_id="mark.id"/> -->
+          <Note :mark_id="mark.id" v-if="mark" />
 
           <div class="d-flex align-items-center mt-3 row" v-if="can_edit">
             <div class="d-inline-block w-100 text-center col-12">
@@ -54,7 +54,7 @@ import CountDown from "@/components/timer/Countdown.vue";
 import Support from "@/components/book/support/Support.vue";
 import Activities from "@/components/book/activities/Activities";
 import OtherActions from "@/components/group/OtherActions";
-// import Note from "@/components/group/audit/Note";
+import Note from "@/components/user/Achievement/Note";
 import helper from "@/utilities/helper";
 import UserInfoService from "@/Services/userInfoService";
 
@@ -67,7 +67,7 @@ export default {
     Support,
     Activities,
     OtherActions,
-    // Note,
+    Note,
   },
   data() {
     return {
@@ -155,7 +155,6 @@ export default {
         "supervisor",
       ]);
     },
-
   },
 };
 </script>

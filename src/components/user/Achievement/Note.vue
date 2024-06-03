@@ -37,8 +37,6 @@
                                                 </p>
                                             </div>
                                         </div>
-
-
                                     </div>
                                     <div class="col-sm-12 text-center" v-if="loader">
                                         <img src="@/assets/images/gif/page-load-loader.gif" alt="loader"
@@ -77,7 +75,7 @@
 <script>
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import AuditMarkService from '@/API/services/audit-marks.service';
+import MarkNotesService from '@/API/services/mark-note.service';
 import helper from "@/utilities/helper";
 
 
@@ -87,15 +85,23 @@ export default {
         return { v$: useVuelidate() };
     },
     async created() {
-        this.notes = await AuditMarkService.getNotes(this.noteForm.mark_for_audit_id);
+        this.noteForm.mark_id = this.mark_id;
+        this.notes = await MarkNotesService.getNotes(this.mark_id);
     },
+    props: {
+        mark_id: {
+            type: [Number],
+            required: true,
+        }
+    },
+
     data() {
         return {
-            notes: null,
+            notes: [],
             loader: false,
             noteForm: {
                 body: '',
-                mark_for_audit_id: this.$route.params.mark_for_audit,
+                mark_id: this.$route.params.mark_for_audit,
             }
         };
     },
@@ -118,7 +124,7 @@ export default {
             if (!this.v$.noteForm.$invalid) {
                 this.loader = true;
                 try {
-                    const response = await AuditMarkService.addNote(this.noteForm);
+                    const response = await MarkNotesService.create(this.noteForm);
                     this.loader = false;
                     this.notes.push(response);
                     this.scrollToEnd();

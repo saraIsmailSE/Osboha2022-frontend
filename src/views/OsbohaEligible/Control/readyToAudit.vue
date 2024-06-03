@@ -7,7 +7,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12" v-if="achevmentsToAudit.length == 0">
+        <div class="col-sm-12" v-if="AchievementsToAudit.length == 0">
             <iq-card class="iq-card">
                 <div class="iq-card-body p-0">
                     <div class="image-block text-center">
@@ -20,7 +20,7 @@
         </div>
         <div class="row" v-else>
 
-            <div class="col-sm-12" v-if="achevmentsToAudit.theses.length != 0">
+            <div class="col-sm-12" v-if="AchievementsToAudit.theses.length != 0">
                 <iq-card>
                     <template v-slot:headerTitle>
                         <h4 class="card-title">أطروحات جاهزة للتدقيق</h4>
@@ -35,7 +35,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="thesis in achevmentsToAudit.theses" :key="thesis.eligible_user_books_id">
+                                    <tr v-for="thesis in AchievementsToAudit.theses" :key="thesis.eligible_user_books_id">
                                         <td class="">
                                             <button class="btn btn-primary"
                                                 @click="listThesis(thesis.eligible_user_books_id)">عـــرض </button>
@@ -54,7 +54,7 @@
                     </template>
                 </iq-card>
             </div>
-            <div class="col-sm-12" v-if="achevmentsToAudit.questions.length != 0">
+            <div class="col-sm-12" v-if="AchievementsToAudit.questions.length != 0">
                 <iq-card>
                     <template v-slot:headerTitle>
                         <h4 class="card-title">أسئلة جاهزة للتدقيق</h4>
@@ -69,7 +69,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="question in achevmentsToAudit.questions"
+                                    <tr v-for="question in AchievementsToAudit.questions"
                                         :key="question.eligible_user_books_id">
                                         <td class="">
                                             <button class="btn btn-primary"
@@ -99,11 +99,11 @@ import userBookServices from '@/API/EligibleServices/userBookServices'
 export default {
     name: 'ReadyToAudit',
     async created() {
-        this.achevmentsToAudit = await this.getReadyToAudit();
+        this.AchievementsToAudit = await this.getReadyToAudit();
     },
     data() {
         return {
-            achevmentsToAudit: [],
+            AchievementsToAudit: [],
         }
     },
     methods: {
