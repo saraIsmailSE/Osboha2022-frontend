@@ -161,7 +161,7 @@
 <script>
 import { ARABIC_ROLES, TERMINATION_REASONS } from "@/utilities/constants";
 import moment from "moment";
-import Marks from './Achevment/4WeeksMarks.vue';
+import Marks from './Achievement/4WeeksMarks.vue';
 
 export default {
     name: "Information Card",

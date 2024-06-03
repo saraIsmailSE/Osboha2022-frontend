@@ -63,7 +63,7 @@ import CancelException from './CancelException';
 import ExceptionDetails from './ExceptionDetails';
 import Decision from './Decision';
 import Note from './Note';
-import Marks from '@/components/user/Achevment/4WeeksMarks.vue';
+import Marks from '@/components/user/Achievement/4WeeksMarks.vue';
 import helper from "@/utilities/helper";
 
 
