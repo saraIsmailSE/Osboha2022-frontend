@@ -1,6 +1,5 @@
 <template>
     <div class="text-center">
-
         <div v-if="report.status == 'pending'">
             <h3 class="text-center mt-3 mb-3">الاجراء المناسب</h3>
             <div class="d-flex align-items-center mt-3">
@@ -45,6 +44,14 @@
             <h5>تم اتخاذ الاجراء مسبقًا</h5>
             <hr />
         </div>
+        <div class="border border-danger w-100 mt-2 mb-3 text-center p-3"
+            v-if="isTeamCoordinator && report.book.is_active">
+            <p class="text-center" v-if="removeMsg">{{ removeMsg }}</p>
+            <button type="button" class="btn btn-danger w-75" :disabled="removeMsg" @click="removeBook()">
+                سحب من المنهج
+            </button>
+        </div>
+
     </div>
 </template>
 <script>
@@ -52,6 +59,7 @@ import bookService from "@/API/services/book.service";
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, maxLength } from "@vuelidate/validators";
 import helper from "@/utilities/helper";
+import UserInfoService from "@/Services/userInfoService";
 
 export default {
     name: "Violated Book Decision",
@@ -110,6 +118,53 @@ export default {
                     console.log(error);
                 }
             }
+        },
+        removeBook() {
+            const swalWithBootstrapButtons = this.$swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-primary btn-lg",
+                    cancelButton: "btn btn-outline-primary btn-lg ms-2",
+                },
+                buttonsStyling: false,
+            });
+            swalWithBootstrapButtons
+                .fire({
+                    title: "ملاحظة هامة",
+                    text: "حذف الكتاب من المنهج لا يعني حذفه بالكامل من المنصة، وإنما يعني أن السفراء ليس لديهم صلاحيات لكتابة أطروحاتهم وقراءته.  فيما يخص السفراء الذين يقرأون الكتاب حاليًا، سيكون بإمكانهم متابعة القراءة دون أي مشاكل.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "سحب من المنهج",
+                    cancelButtonText: "إلغاء",
+                    showClass: {
+                        popup: "animate__animated animate__zoomIn",
+                    },
+                    hideClass: {
+                        popup: "animate__animated animate__zoomOut",
+                    },
+                })
+                .then(async (result) => {
+                    if (result.isConfirmed) {
+                        this.removeMsg = await bookService.removeBookFromOsboha(this.report.book.id);
+                        helper.toggleToast(
+                            "تم سحب الكتاب من المنهج ... سيتم تحويلك إلى صفحة الكتب المخالفة",
+                            "success",
+                        );
+                        setTimeout(() => {
+                            this.$router.push({ name: "book.list-violated-books" });
+                        }, 3000);
+                    }
+                });
+        },
+    },
+    computed: {
+        user() {
+            return this.$store.getters.getUser;
+        },
+        isTeamCoordinator() {
+            return UserInfoService.hasRoles(this.user, [
+                "admin",
+                'book_quality_team_coordinator',
+            ]);
         },
     },
 };
