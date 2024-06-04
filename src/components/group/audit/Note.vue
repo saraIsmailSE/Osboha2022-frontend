@@ -25,7 +25,7 @@
                                                 <div class="rounded py-2 px-3 mb-2"
                                                     :class="[note.from_id == user.id ? 'bg-sender' : 'bg-recipient']">
                                                     <small v-if="note.from_id != user.id" class="font-weight-bold">
-                                                        {{ note.from.name }}
+                                                        {{ note.from.name + " " + note.from.last_name }}
                                                     </small>
 
                                                     <p class="text-small mb-0 text-muted">

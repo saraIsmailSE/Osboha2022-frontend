@@ -14,7 +14,7 @@
                             name: 'user.profile',
                             params: { user_id: user.id },
                         }">
-                            <h2 class="mb-2 text-center">{{ user.name }}</h2>
+                            <h2 class="mb-2 text-center">{{ user.name + " " + user.last_name }}</h2>
                         </router-link>
                         <p class="text-center mb-4" style="direction: rtl">
                             فريق المتابعة
@@ -66,7 +66,7 @@
                                     person_pin
                                 </span>
                                 المسؤول عنه:
-                                <span v-if="user.parent_id">{{ user.parent.name }}</span>
+                                <span v-if="user.parent_id">{{ user.parent.name + " " + user.parent.last_name }}</span>
                                 <span v-else>لا يوجد</span>
                             </h5>
                         </div>

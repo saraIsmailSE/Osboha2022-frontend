@@ -16,7 +16,7 @@
                     <br>
                     <span class="rounded-pill badge lh-1 bg-primary px-2">{{
                         ARABIC_ROLES[member.user_type]
-                    }}</span>
+                        }}</span>
                 </div>
                 <div v-if="advisorAndAbove" class="d-flex justify-content-end flex-grow-1 ms-3">
                     <span role="button" @click="showList(index)" class="material-symbols-outlined">
@@ -192,6 +192,8 @@ export default {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
                 "consultant",
+                "advisor",
+                "special_care_coordinator",
                 "marathon_coordinator"
             ]);
         },
