@@ -236,10 +236,22 @@ class BookService {
   }
   async removeBookFromOsboha(book_id) {
     try {
-      const response = await api.get(`books/remove-book-from-osboha/${book_id}`);
+      const response = await api.get(
+        `books/remove-book-from-osboha/${book_id}`,
+      );
       return response.data.data;
     } catch (error) {
       return error;
+    }
+  }
+  async suggest(book) {
+    try {
+      const response = await api.post(`/books/suggest`, book, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
     }
   }
 }

@@ -233,7 +233,7 @@
                         </tbody>
                         <tr>
                             <td class="align-middle text-center" colspan="4">
-                                <span>العدد الكلي للأعضاء الجدد: {{ totalNewAmbassadros }} </span>
+                                <span>العدد الكلي للأعضاء الجدد: {{ totalNewambassadors }} </span>
                             </td>
                         </tr>
                     </table>
@@ -299,7 +299,7 @@ export default {
         totalOfZeroVarible() {
             return this.advisorStatistics.reduce((accumulator, item) => accumulator + parseFloat(item.number_zero_varible), 0);
         },
-        totalNewAmbassadros() {
+        totalNewambassadors() {
             return this.advisorStatistics.reduce((accumulator, item) => accumulator + parseFloat(item.new_ambassadors), 0);
         },
     }

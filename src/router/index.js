@@ -640,12 +640,19 @@ const marathonChildRoute = (prop, mode = false) => [
 
 const withdrawnsTeamChildRoute = (prop, mode = false) => [
   {
-    path: "list-ambassadros",
-    name: prop + ".list-ambassadros",
+    path: "list-ambassadors",
+    name: prop + ".list-ambassadors",
     meta: { auth: true, name: "List Ambassadors" },
     props: (route) => ({ page: parseInt(route.query.page) || 1 }),
     component: () =>
       import("../views/OsbohaWithdrawnAmbassadors/ListAmbassadors"),
+  },
+  {
+    path: "withdrawn-ambassador/:ambassador_id",
+    name: prop + ".withdrawn-ambassador",
+    meta: { auth: true, name: "Withdrawn Ambassador" },
+    component: () =>
+      import("../views/OsbohaWithdrawnAmbassadors/AmbassadorDetails"),
   },
 ];
 
@@ -980,6 +987,13 @@ const bookChildRoute = (prop, mode = false) => [
     name: prop + ".user-single-thesis",
     meta: { auth: true, name: "UserSingleThesis" },
     component: () => import("../views/Book/BookDetails"),
+  },
+
+  {
+    path: "suggest-book/",
+    name: prop + ".suggest-book",
+    meta: { auth: true, name: "Suggest Book" },
+    component: () => import("../views/Book/SuggestBook"),
   },
 ];
 

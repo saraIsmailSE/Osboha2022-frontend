@@ -89,7 +89,7 @@
                                 </tbody>
                             </table>
                             <Pagination :page="currentPage" :total="totalPages" :perPage="reportsPerPage"
-                                :routeName="`withdrawns-team.list-ambassadros`" />
+                                :routeName="`withdrawns-team.list-ambassadors`" />
                         </div>
 
                         <div v-else>

@@ -144,6 +144,26 @@ class UserService {
       handleError(error);
     }
   }
+  async withdrawnAmbassadorDetails(user_id) {
+    try {
+      const response = await api.get(
+        `${this.prefix}/withdrawn-ambassador-details/${user_id}`,
+      );
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+  async sendEmail(emailForm) {
+    try {
+      const response = await api.post(`${this.prefix}/send-email`, emailForm, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      customHandleError(error, "UserGroupService.AddMember");
+    }
+  }
 }
 
 export default new UserService();
