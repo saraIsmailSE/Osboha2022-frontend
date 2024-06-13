@@ -32,7 +32,7 @@
             <span class="item-name">اضافة كتاب</span>
         </router-link>
     </li>
-    <!-- <li class="nav-item" v-if="inBooksTeam">
+    <!-- <li class="nav-item">
         <router-link :class="checkActive('book.suggest-book') ? 'active nav-link' : 'nav-link'" aria-current="page"
             :to="{ name: 'book.suggest-book' }">
             <i class="icon material-symbols-outlined"> bolt </i>
@@ -47,8 +47,8 @@
         </router-link>
     </li>
     <!-- <li class="nav-item" v-if="inBooksTeam">
-        <router-link :class="checkActive('book.list-violated-books') ? 'active nav-link' : 'nav-link'"
-            aria-current="page" :to="{ name: 'book.list-violated-books' }">
+        <router-link :class="checkActive('book.list-suggested-books') ? 'active nav-link' : 'nav-link'"
+            aria-current="page" :to="{ name: 'book.list-suggested-books' }">
             <i class="icon material-symbols-outlined"> bookmark_star </i>
             <span class="item-name">الكتب المقترحة</span>
         </router-link>

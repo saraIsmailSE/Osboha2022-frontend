@@ -244,16 +244,6 @@ class BookService {
       return error;
     }
   }
-  async suggest(book) {
-    try {
-      const response = await api.post(`/books/suggest`, book, {
-        headers: { "Content-type": "multipart/form-data" },
-      });
-      return response.data.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
 }
 
 export default new BookService();

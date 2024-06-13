@@ -1,12 +1,9 @@
 <template>
     <div class="col-sm-12 mt-3">
         <iq-card class="iq-card">
-            <div class="iq-card-header-toolbar text-center align-items-center mx-auto">
-                <h1 class="text-center mt-3 mb-3">اقترح كتاباً</h1>
-            </div>
             <div class="iq-card-body p-4">
                 <div class="image-block text-center mt-3">
-                    <img class="img-fluid rounded w-75" src="@/assets/images/main/reading_list.png" alt="add-group" />
+                    <img class="img-fluid rounded w-75" src="@/assets/images/main/suggest_a_book.jpg" alt="add-group" />
                 </div>
             </div>
             <div class="col-12 bg-white pt-2">
@@ -15,6 +12,11 @@
                         <strong> ✅ شروط قبول اقتراحك </strong>
                     </h4>
                     <ul>
+                        <li>
+                            يمكنك اقتراح ما يصل إلى 3 كتب في الشهر الواحد. حاليًا، يمكنك اقتراح
+                            <strong> {{ 3 - this.bookSuggestionsCount }}</strong>
+                            كتب.
+                        </li>
                         <li>
                             ان يتوفر رابط تحميل للكتاب
                         </li>
@@ -29,7 +31,7 @@
                     </ul>
                     ⚠️ علماَ أن هناك شروط أخرى يهتم فريق الجودة بالتحقق منها خلال تدقيق ومراجعة الكتاب
                 </div>
-                <div class="sign-in-from">
+                <div class="sign-in-from" v-if="isAllowedToSuggest">
                     <form class="mt-2" @submit.prevent="onSubmit()">
                         <small style="color: red">
                             ⚠️ احرص على تعبئة المعلومات الصحيحة ل مساعدتنا
@@ -57,7 +59,7 @@
                     max-height: 120px;
                     resize: none;
                     overflow: auto;
-                  " :rows="1" ref="bodyRef" />
+                  " :rows="1" ref="bodyRef" @input="autoResize($event)" />
                             <small style="color: red" v-if="v$.bookForm.brief.$error">وصف الكتاب مطلوب</small>
                         </div>
 
@@ -77,9 +79,8 @@
                                 رابط الكتاب
                                 <span class="text-danger">(ان وجد)</span>
                             </h4>
-                            <input type="url" v-model="v$.bookForm.link.$model" class="form-control mb-0 mt-2"
-                                id="bookLink" placeholder="رابط الكتاب " />
-                            <small style="color: red" v-if="v$.bookForm.link.$error">رابط الكتاب مطلوب</small>
+                            <input type="url" v-model="bookForm.link" class="form-control mb-0 mt-2" id="bookLink"
+                                placeholder="رابط الكتاب " />
                         </div>
 
                         <!-- Book Section -->
@@ -128,6 +129,12 @@
                         </div>
                     </form>
                 </div>
+                <div class="alert alert-warning m-auto w-75 text-center mt-3 mb-3" v-else>
+                    <h4 class="text-center">
+                        لقد وصلت إلى الحد الأقصى لعدد الاقتراحات المسموح بها لهذا الشهر
+                    </h4>
+                </div>
+
             </div>
         </iq-card>
     </div>
@@ -135,7 +142,7 @@
 <script>
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import bookService from "@/API/services/book.service";
+import BookSuggestion from "@/API/services/book-suggestion.service";
 import languages from "@/API/services/language.service";
 import sections from "@/API/services/sectionService";
 import { LANUAGES, } from "@/utilities/constants";
@@ -153,21 +160,15 @@ export default {
         this.sections = await sections.getAll();
         this.sections = this.sections.data;
         this.languages = await languages.getAll();
-    },
-    watch: {
-        bookBrief() {
-            this.$refs.bodyRef.style.height = "auto";
-            this.$nextTick(() => {
-                this.$refs.bodyRef.style.height =
-                    this.$refs.bodyRef.scrollHeight + "px";
-            });
-        },
+        this.bookSuggestionsCount = await BookSuggestion.isAllowedToSuggest();
+
     },
     data() {
         return {
             sections: [],
             languages: [],
             LANUAGES,
+            bookSuggestionsCount: 0,
             bookForm: {
                 book_media: null,
                 name: "",
@@ -193,9 +194,6 @@ export default {
                 brief: {
                     required
                 },
-                link: {
-                    required
-                },
                 language_id: {
                     required,
                     maxValue: greaterThanZero,
@@ -208,15 +206,20 @@ export default {
         };
     },
     methods: {
+        autoResize(event) {
+            const textarea = event.target;
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+        },
         async onSubmit() {
             this.v$.$touch();
             if (!this.v$.bookForm.$invalid) {
                 this.loading = true;
                 try {
-                    const newBook = await bookService.suggest(this.bookForm);
+                    const newBook = await BookSuggestion.suggest(this.bookForm);
                     this.message = " تم حفظ الاقتراح - سيتم تحويلك لصفحة الكتاب";
                     setTimeout(() => {
-                        this.$router.push({ name: 'book.book-details', params: { book_id: this.book_id } })
+                        this.$router.push({ name: 'osboha.book', })
                     }, 3000);
                 } catch (error) {
                     this.message = "حصل خطأ - لم يتم حفظ الاقتراح!";
@@ -227,5 +230,14 @@ export default {
             }
         },
     },
+    computed: {
+        isAllowedToSuggest() {
+            if (this.bookSuggestionsCount >= 3) {
+                return false;
+            }
+            return true;
+        }
+    },
+
 };
 </script>

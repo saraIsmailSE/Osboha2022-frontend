@@ -988,12 +988,24 @@ const bookChildRoute = (prop, mode = false) => [
     meta: { auth: true, name: "UserSingleThesis" },
     component: () => import("../views/Book/BookDetails"),
   },
-
   {
     path: "suggest-book/",
     name: prop + ".suggest-book",
     meta: { auth: true, name: "Suggest Book" },
     component: () => import("../views/Book/SuggestBook"),
+  },
+  {
+    path: "list-suggested-books",
+    name: prop + ".list-suggested-books",
+    meta: { auth: true, name: "List Suggested Books" },
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
+    component: () => import("../views/Book/ListSuggestedBooks"),
+  },
+  {
+    path: "suggested-book/:suggestion_id",
+    name: prop + ".suggested-book",
+    meta: { auth: true, name: "Suggested Book" },
+    component: () => import("../views/Book/SuggestedBook"),
   },
 ];
 

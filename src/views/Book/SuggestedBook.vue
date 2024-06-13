@@ -1,65 +1,47 @@
 <template>
     <div ref="listContainer">
         <div class="row">
-            <div class="col-sm-12" v-if="report">
+            <div class="col-sm-12" v-if="book">
                 <iq-card>
-                    <template v-slot:headerTitle>
-                        <h4 class="card-title">
-                            <router-link :to="{
-                                name: 'book.book-details',
-                                params: { book_id: report.book?.id },
-                            }" data-toggle="tooltip" data-placement="top" :title="report.book?.name">
-                                {{ report.book?.name }}
-                            </router-link>
-
-                            <span class="bg-danger rounded badge text-white border-0 ms-1 me-1">
-                                كتاب مخالف
-                            </span>
-                        </h4>
-                    </template>
 
                     <template v-slot:body>
                         <div class="table-responsive">
                             <table id="datatable" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>نوع المخالة</th>
+                                        <th>اسم الكتاب</th>
+                                        <th>اللغة</th>
+                                        <th>فئة الكتاب</th>
                                         <th>اخر تحديث</th>
-                                        <th>الصفحات</th>
-                                        <th>الكتاب</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>
-                                            {{ report.violation_type }}
+                                            {{ book.name }}
                                         </td>
                                         <td>
-                                            {{ getFormatedDate(report.updated_at) }}
-                                        </td>
-                                        <td>
-                                            <ul>
-
-                                                <li class="mt-1" v-for="(page, index) in report.violated_pages"
-                                                    :key="index">
-                                                    <p>
-                                                        {{ page.number }}
-                                                    </p>
-                                                </li>
-                                            </ul>
-
+                                            {{ LANUAGES[book.language.language] }}
 
                                         </td>
-
                                         <td>
-                                            <router-link :to="{
-                                                name: 'book.book-details',
-                                                params: { book_id: report.book?.id },
-                                            }">
+                                            {{ book.section.section }}
+                                        </td>
+                                        <td>
+                                            {{ getFormatedDate(book.updated_at) }}
+                                        </td>
+                                        <td>
+                                            <a v-if="book.link" target="_blank" :href="book.link">
                                                 <span class="material-symbols-outlined">
-                                                    visibility
-                                                </span> </router-link>
+                                                    link
+                                                </span>
+                                            </a>
+                                            <span v-else>
+                                                لا يوجد
+                                            </span>
+
                                         </td>
+
                                     </tr>
 
                                 </tbody>
@@ -70,10 +52,10 @@
                                 <tbody>
                                     <tr class="text-center">
                                         <td>
-                                            تم الإبلاغ من قِبَل
+                                            تم الاقتراح من قِبَل
                                         </td>
                                         <td>
-                                            {{ report.reporter.name + " " + report.reporter.last_name }}
+                                            {{ book.user.name + " " +book.user.last_name }}
                                         </td>
                                     </tr>
                                     <tr class="text-center">
@@ -81,7 +63,7 @@
                                             تم المراجعة من قِبَل
                                         </td>
                                         <td>
-                                            {{ report.reviewer ? report.reviewer.name + " " + report.reviewer.last_name : " تحت المراجعة" }}
+                                            {{ book.reviewer ? book.reviewer.name + " " + book.reviewer.last_name : " تحت المراجعة" }}
                                         </td>
                                     </tr>
 
@@ -91,36 +73,29 @@
 
                         <div class="text-center m-auto">
                             <h4 class="mt-3 mb-3" style="direction: rtl;">
-                                حالة المخالفة
-                                <span class="badge" :class="STATUS_CLASS[report.status]">
-                                    {{ STATUS[report.status] }}
+                                حالة الاقتراح
+                                <span class="badge" :class="STATUS_CLASS[book.status]">
+                                    {{ STATUS[book.status] }}
                                 </span>
 
                             </h4>
-                            <p v-if="report.status != 'pending'" style="direction: rtl;">
+                            <p v-if="book.status != 'pending'" style="direction: rtl;">
                                 ملاحظات المراجع:
-                                {{ report.reviewer_note }}
+                                {{ book.reviewer_note }}
                             </p>
                         </div>
                         <div class="text-center m-auto">
                             <h4 class="mt-3 mb-3">
-                                وصف المخالفة
+                                وصف الكتاب
                             </h4>
 
                             <p>
-                                {{ report.description }}
+                                {{ book.brief }}
                             </p>
                         </div>
-                        <div class="text-center m-auto" v-if="report.media">
-                            <h4 class="mt-3 mb-3">
-                                صورة المخالفة
-                            </h4>
 
-                            <img class="img-fluid w-75 mt-1" v-for="m in report.media" :key="m.id" :src="showMedia(m.id)" />
-                        </div>
-
-
-                        <violated-book-action :report="report" @update_report="updateReport" v-if="inBooksTeam" />
+                        <suggested-book-action :suggestion="book" @update_suggestion="updateSuggestion"
+                            v-if="inBooksTeam" />
 
                         <div class="col-sm-12 text-center" v-if="loading">
                             <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader"
@@ -144,19 +119,21 @@
     </div>
 </template>
 <script>
-import bookService from "@/API/services/book.service";
-import { STATUS, STATUS_CLASS } from "@/utilities/constants";
+import { STATUS, STATUS_CLASS, LANUAGES } from "@/utilities/constants";
 import UserInfoService from "@/Services/userInfoService";
 import moment from 'moment';
-import mediaService from "@/API/services/media.services";
-import ViolatedBookAction from '@/components/book/ViolatedBookAction'
+import BookSuggestion from "@/API/services/book-suggestion.service";
+import SuggestedBookAction from '@/components/book/SuggestedBookAction'
+
 export default {
-    name: "Violated Book Report",
-    components: { ViolatedBookAction },
+    name: "Violated Book book",
+    components: {
+        SuggestedBookAction
+    },
     async created() {
         try {
             this.loading = true;
-            this.getReport();
+            this.getSuggestion();
 
         } catch (e) {
             this.emptyMessage = "لا يوجد معلومات";
@@ -167,11 +144,12 @@ export default {
     },
     data() {
         return {
-            report: null,
+            book: null,
             loading: false,
             emptyMessage: "",
             STATUS,
             STATUS_CLASS,
+            LANUAGES,
 
         };
     },
@@ -180,19 +158,12 @@ export default {
         getFormatedDate(value) {
             return moment(String(value)).format('MM/DD/YYYY hA')
         },
-        /**
-        * get exam media.
-        * @param  {int} media id,
-        * @return image url
-        */
-        showMedia(id) {
-            return mediaService.show(id);
+        async getSuggestion() {
+            this.book = await BookSuggestion.show(this.$route.params.suggestion_id);
+            console.log("🚀 ~ getSuggestion ~ this.book:", this.book)
         },
-        async getReport() {
-            this.report = await bookService.getReport(this.$route.params.report_id);
-        },
-        updateReport() {
-            this.getReport();
+        updateSuggestion() {
+            this.getSuggestion();
         }
 
     },
