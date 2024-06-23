@@ -14,7 +14,7 @@
               containerClass="flex-shrink-0" />
             <div class="flex-grow-1 ms-3" @click="hideList">
               <router-link :to="{ name: 'user.profile', params: { user_id: user.id } }">
-                <h5>{{ user.name }}</h5>
+                <h5>{{ user.name + " " + user.last_name }}</h5>
               </router-link>
               <small>{{ formatDateToWritten(user.pivot.updated_at) }}</small>
               <br>
@@ -22,7 +22,7 @@
                 ARABIC_ROLES[user.pivot.user_type]
               }}</span>
             </div>
-            <div v-if="advisorAndAbove" class="d-flex justify-content-end flex-grow-1 ms-3">
+            <div v-if="allowedToControleMember" class="d-flex justify-content-end flex-grow-1 ms-3">
               <span role="button" @click="showList(index)" class="material-symbols-outlined">
                 more_horiz
               </span>
@@ -35,7 +35,8 @@
                   </span>
                   حذف [مكرر]
                 </a>
-                <a role="button" class="dropdown-item d-flex align-items-center" @click="withdrawnMember(user.pivot.id)">
+                <a role="button" class="dropdown-item d-flex align-items-center " v-if="allowedToWithdrawn"
+                  @click="withdrawnMember(user.pivot.id)">
                   <span class="material-symbols-outlined me-2 md-18">
                     directions_run
                   </span>
@@ -87,7 +88,7 @@ export default {
       ambassador_name: "",
       ARABIC_ROLES,
       currentIndex: -1,
-      group:null
+      group: null
     };
   },
   methods: {
@@ -220,18 +221,31 @@ export default {
         "consultant",
       ]);
     },
+    allowedToControleMember() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        "consultant",
+        "advisor",
+        "special_care_coordinator",
+        "marathon_coordinator"
+      ]);
+    },
     allowedTodelete() {
       return UserInfoService.hasRoles(this.user, [
         "admin",
         "consultant",
+        "advisor",
+        "special_care_coordinator",
         "marathon_coordinator"
       ]);
     },
-    advisorAndAbove() {
+    allowedToWithdrawn() {
       return UserInfoService.hasRoles(this.user, [
         "admin",
         "consultant",
-        "advisor"
+        "advisor",
+        "special_care_coordinator",
+
       ]);
     }
   },

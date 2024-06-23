@@ -31,9 +31,9 @@
                 <tbody>
                     <tr v-for="user in users" :key="user.id">
                         <td scope="col">#</td>
-                        <td scope="col">{{ user.name }}</td>
+                        <td scope="col">{{ user.name + " " + user.last_name }}</td>
                         <td scope="col">{{ user.email }}</td>
-                        <td scope="col" v-if="user.parent_id"> {{ user.parent.name }} </td>
+                        <td scope="col" v-if="user.parent_id"> {{ user.parent.name + " " + user.parent.last_name }} </td>
                         <td scope="col" v-else> لا يوجد </td>
                         <td scope="col">{{ user.children_count }}</td>
                         <div v-if="user.groups.length > 0">

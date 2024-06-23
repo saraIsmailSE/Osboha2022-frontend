@@ -27,7 +27,7 @@
         </span>
 
         <span>
-          {{ parent.name }}
+          {{ parent.name + " " + parent.last_name }}
         </span>
       </div>
     </div>

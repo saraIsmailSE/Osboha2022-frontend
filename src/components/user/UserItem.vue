@@ -5,7 +5,7 @@
                 name: 'user.retrieve-nested-users',
                 params: { parent_id: user.id },
             }">
-                <h4 class="text-center">{{ user.name }}</h4>
+                <h4 class="text-center">{{ user.name + " " + user.last_name }}</h4>
                 <p v-if="childrenCount" class="text-center m-auto p-1">{{ childrenCount }}</p>
             </router-link>
         </div>

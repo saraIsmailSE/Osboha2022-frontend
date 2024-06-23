@@ -22,9 +22,9 @@
 
     <!-- ###### LIST ALL GROUPS  ###### -->
     <li class="nav-item">
-        <router-link :class="checkActive('withdrawns-team.list-ambassadros') ? 'active nav-link' : 'nav-link'
+        <router-link :class="checkActive('withdrawns-team.list-ambassadors') ? 'active nav-link' : 'nav-link'
             " aria-current="page" :to="{
-                name: 'withdrawns-team.list-ambassadros',
+                name: 'withdrawns-team.list-ambassadors',
             }">
             <i class="icon material-symbols-outlined"> supervisor_account </i>
             <span class="item-name">عرض المنسحبين</span>

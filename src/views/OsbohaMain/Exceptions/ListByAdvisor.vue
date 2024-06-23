@@ -23,7 +23,7 @@
 </template>
 <script>
 import exceptionService from "@/API/services/user-exception.service";
-import { EXCEPTION_STATUS, EXCEPTION_TYPES } from "@/utilities/constants";
+import { STATUS, EXCEPTION_TYPES } from "@/utilities/constants";
 import { watchEffect } from "vue";
 import ListExceptions from "@/components/exceptions/ListExceptions";
 
@@ -49,7 +49,7 @@ export default {
       group_title: "",
       week_title: "",
       exception_type: '',
-      EXCEPTION_STATUS,
+      STATUS,
       EXCEPTION_TYPES,
       length: 10,
     };

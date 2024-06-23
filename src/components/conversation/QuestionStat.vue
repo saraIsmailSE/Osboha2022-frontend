@@ -3,7 +3,7 @@
     <small v-if="timer > 0 || question.is_answered_late">
       <span class="align-middle material-symbols-outlined"> timer </span>
       <vue-countdown
-        v-if="timer > 0"
+        v-if="timer > 0 && question.is_answered_late"
         :time="timer"
         v-slot="{ hours, minutes, seconds }"
       >
@@ -11,6 +11,7 @@
           {{ pad(hours) }}:{{ pad(minutes) }}:{{ pad(seconds) }}
         </span>
       </vue-countdown>
+      <span v-else-if="!question.is_answered_late"> تم الرد </span>
       <span v-else class="align-middle text-danger">متأخر</span>
     </small>
 
@@ -32,7 +33,7 @@
     <small>
       <span class="align-middle material-symbols-outlined"> person_check </span>
       <span style="font-weight: bold">المسؤول</span>
-      {{ question.assignee.name }}
+      {{ question.assignee.name + " " + question.assignee.last_name }}
     </small>
 
     <template v-if="question.management_teams">
@@ -75,7 +76,7 @@ export default {
   created() {
     this.startTime = new Date(this.question?.current_assignee_created_at);
     //add 12 hours to the start time
-    this.startTime.setHours(this.startTime.getHours() + 12);
+    this.startTime.setHours(this.startTime.getHours() + 16);
 
     const riyadh = new Date().toLocaleString("en-US", {
       timeZone: "Asia/Riyadh",

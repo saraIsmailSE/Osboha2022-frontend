@@ -5,7 +5,7 @@
 
             <iq-card class="iq-card">
                 <div class="iq-card-header-toolbar d-flex align-items-center mx-auto">
-                    <h3 class="text-center mt-3 mb-3" style=" direction: rtl;" v-if="mark && week">{{ mark.user.name }} -
+                    <h3 class="text-center mt-3 mb-3" style=" direction: rtl;" v-if="mark && week">{{ mark.user.name + " " + mark.user.last_name }} -
                         الأسبوع {{ week.title }}
                     </h3>
                 </div>

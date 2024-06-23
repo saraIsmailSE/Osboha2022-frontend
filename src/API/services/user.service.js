@@ -7,6 +7,10 @@ class UserService {
     this.prefix = "users";
   }
 
+  async show(user_id) {
+    const users = await api.get(`users/show/${user_id}`);
+    return users.data.data;
+  }
   async getUnactive() {
     const users = await api.get(`users/list/un-active`);
     return users;
@@ -73,6 +77,28 @@ class UserService {
       customHandleError(error, "UserGroupService.AddMember");
     }
   }
+
+  async updateInfo(info) {
+    try {
+      const response = await api.post(`users/update-info`, info, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      customHandleError(error, "UserGroupService.AddMember");
+    }
+  }
+  async updateUserName(UserName) {
+    try {
+      const response = await api.post(`users/update-user-name`, UserName, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      customHandleError(error, "UserGroupService.AddMember");
+    }
+  }
+
   async getInfo(id) {
     try {
       const users = await api.get(`users/info/${id}`);
@@ -116,6 +142,26 @@ class UserService {
       return response.data.data;
     } catch (error) {
       handleError(error);
+    }
+  }
+  async withdrawnAmbassadorDetails(user_id) {
+    try {
+      const response = await api.get(
+        `${this.prefix}/withdrawn-ambassador-details/${user_id}`,
+      );
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+  async sendEmail(emailForm) {
+    try {
+      const response = await api.post(`${this.prefix}/send-email`, emailForm, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      customHandleError(error, "UserGroupService.AddMember");
     }
   }
 }

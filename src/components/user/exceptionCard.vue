@@ -14,7 +14,7 @@
                             name: 'user.profile',
                             params: { user_id: user.id },
                         }">
-                            <h2 class="mb-2 text-center">{{ user.name }}</h2>
+                            <h2 class="mb-2 text-center">{{ user.name + " " + user.last_name }}</h2>
                         </router-link>
                         <p class="text-center mb-4" style="direction: rtl">
                             فريق المتابعة
@@ -43,7 +43,7 @@
                                     <tr v-for="exception in exceptions" :key="exception.id">
                                         <td>{{ exception.user.name }}</td>
                                         <td>{{ exception.type.type }}</td>
-                                        <td>{{ EXCEPTION_STATUS[exception.status] }}</td>
+                                        <td>{{ STATUS[exception.status] }}</td>
                                         <td v-if="exception.start_at">
                                             {{ exception.start_at }}
                                         </td>
@@ -68,7 +68,7 @@
     </div>
 </template>
 <script>
-import { EXCEPTION_STATUS} from "@/utilities/constants";
+import { STATUS} from "@/utilities/constants";
 
 export default {
     name: "Information Card",
@@ -93,8 +93,8 @@ export default {
     },
     data() {
         return {
-            EXCEPTION_STATUS
+            STATUS
         };
     },
 };
-</script>  
+</script>

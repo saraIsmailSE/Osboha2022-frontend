@@ -14,6 +14,59 @@ class BookService {
     }
   }
 
+  async report(reportData) {
+    try {
+      const formData = new FormData();
+      formData.append("book_id", reportData.book_id);
+      formData.append("violation_type", reportData.violation_type);
+      formData.append("description", reportData.description);
+      if (reportData.report_media.length > 0) {
+        for (let i = 0; i < reportData.report_media.length; i++) {
+          formData.append(`report_media[${i}]`, reportData.report_media[i]);
+        }
+      }
+      // Append violated pages
+      reportData.violated_pages.forEach((page, index) => {
+        formData.append(`violated_pages[${index}][number]`, page.number);
+      });
+
+      const response = await api.post(`/books/report`, formData, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+  async listReportsByStatus(page, status) {
+    try {
+      const reports = await api.get(`books/reports/${status}?page=` + page);
+      return reports.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+  async getReport(report_id) {
+    try {
+      const reports = await api.get(`books/report/${report_id}`);
+      return reports.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async updateReportStatus(report_id, action) {
+    try {
+      const response = await api.post(`/books/update-report`, action, {
+        headers: { "Content-type": "multipart/form-data" },
+      });
+
+      return response.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
   async getAll(page) {
     try {
       const books = await api.get(`books?page=` + page);
@@ -22,21 +75,17 @@ class BookService {
       handleError(error);
     }
   }
-  async getAllForEligible(page,name) {
+  async getAllForEligible(page, name) {
     try {
-      const books = await api.get(
-        `/books/eligible/?page=${page}&name=${name}`,
-      );
+      const books = await api.get(`/books/eligible/?page=${page}&name=${name}`);
       return books.data.data;
     } catch (error) {
       handleError(error);
     }
   }
-  async getAllRamadan(page,name) {
+  async getAllRamadan(page, name) {
     try {
-      const books = await api.get(
-        `/books/ramadan/?page=${page}&name=${name}`,
-      );
+      const books = await api.get(`/books/ramadan/?page=${page}&name=${name}`);
       return books.data.data;
     } catch (error) {
       handleError(error);
@@ -183,6 +232,16 @@ class BookService {
       return response.data.data;
     } catch (error) {
       handleError(error);
+    }
+  }
+  async removeBookFromOsboha(book_id) {
+    try {
+      const response = await api.get(
+        `books/remove-book-from-osboha/${book_id}`,
+      );
+      return response.data.data;
+    } catch (error) {
+      return error;
     }
   }
 }

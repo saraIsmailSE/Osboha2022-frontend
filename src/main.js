@@ -39,7 +39,8 @@ app.use(BootstrapVue3);
 app.use(VueApexCharts);
 app.use(fontawsome);
 app.use(GlobalComponent);
-app.use(VueCookies);
+app.use(VueCookies, { expires: '60d'})
+
 // app.use(VueQueryPlugin);
 app.use(VueTour);
 window.tours = app.config.globalProperties.$tours;

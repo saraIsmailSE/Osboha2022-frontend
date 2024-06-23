@@ -1,6 +1,7 @@
 <template>
   <listOne :exception="exception" :last_freez="last_freez" :last_exam="last_exam" :weeks="weeks"
-    :last_exceptional_freez="last_exceptional_freez" :authInGroup="authInGroup" @update_exception="updateException" />
+    :last_exceptional_freez="last_exceptional_freez" :authInGroup="authInGroup" :ambassadorMarks="ambassadorMarks"
+    @update_exception="updateException" />
 </template>
 <script>
 import listOne from "@/components/exceptions/listOne";
@@ -23,6 +24,7 @@ export default {
       authInGroup: null,
       exception_id: this.$route.params.exception_id,
       weeks: null,
+      ambassadorMarks: null,
     };
   },
   methods: {
@@ -32,12 +34,12 @@ export default {
     async getException() {
       const response = await exceptionService.getExceptionById(this.exception_id);
       this.exception = response.user_exception;
-      this.weeks= response.weeks
+      this.weeks = response.weeks
       this.last_freez = response.last_freez;
       this.last_exam = response.last_exam;
       this.last_exceptional_freez = response.last_exceptional_freez;
       this.authInGroup = response.authInGroup;
-      
+      this.ambassadorMarks = response.ambassadorMarks
     },
   },
 

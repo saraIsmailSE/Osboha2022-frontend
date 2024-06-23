@@ -49,7 +49,7 @@
                                 مستشار المجموعة
                             </h4>
                             <p class="mb-0">
-                                {{ administrator.name }}
+                                {{ administrator.name + " " + administrator.last_name }}
                             </p>
                         </div>
                     </div>

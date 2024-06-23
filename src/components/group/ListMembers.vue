@@ -10,13 +10,13 @@
                     avatarClass="rounded-circle avatar-40" containerClass="flex-shrink-0" />
                 <div class="flex-grow-1 ms-3" @click="hideList">
                     <router-link :to="{ name: 'user.profile', params: { user_id: member.user.id } }">
-                        <h5>{{ member.user.name }}</h5>
+                        <h5>{{ member.user.name + " " + member.user.last_name }}</h5>
                     </router-link>
                     <small>{{ formatDateToWritten(member.updated_at) }}</small>
                     <br>
                     <span class="rounded-pill badge lh-1 bg-primary px-2">{{
                         ARABIC_ROLES[member.user_type]
-                    }}</span>
+                        }}</span>
                 </div>
                 <div v-if="advisorAndAbove" class="d-flex justify-content-end flex-grow-1 ms-3">
                     <span role="button" @click="showList(index)" class="material-symbols-outlined">
@@ -192,6 +192,8 @@ export default {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
                 "consultant",
+                "advisor",
+                "special_care_coordinator",
                 "marathon_coordinator"
             ]);
         },

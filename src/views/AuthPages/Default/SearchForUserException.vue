@@ -93,16 +93,6 @@ export default {
 
             }
         },
-        // checkActiveQuestions(item, active) {
-        //     let className = ''
-        //     if (this.currentQuestion > item) {
-        //         className = 'active'
-        //     }
-        //     if (this.currentQuestion > active) {
-        //         className = className + ' done'
-        //     }
-        //     return className
-        // },
     },
 };
 </script>
@@ -111,4 +101,3 @@ export default {
     margin-bottom: 0;
 }
 </style>
-  

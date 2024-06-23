@@ -52,7 +52,6 @@
                                         <th>تاريخ الانسحاب</th>
                                         <th>سبب الانسحاب</th>
                                         <th>الجنس</th>
-                                        <th>فريق المتابعة</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -74,31 +73,22 @@
                                         <td>
                                             {{ GENDER[ambassador.gender] }}
                                         </td>
-                                        <td>
-                                            <router-link v-if="ambassador.groups" class="text-center" :to="{
-                                                name: 'group.group-detail',
-                                                params: { group_id: ambassador.groups[0].id },
-                                            }">
-                                                {{ ambassador.groups[0].name }}
-                                            </router-link>
-                                            <spna v-else>لا يوجد</spna>
-                                        </td>
 
-                                        <!-- <td>
+                                        <td>
                                             <router-link class="text-center" :to="{
-                                                name: 'ambassadors-request.request-details',
-                                                params: { request_id: request.id },
+                                                name: 'withdrawns-team.withdrawn-ambassador',
+                                                params: { ambassador_id: ambassador.id },
                                             }">
                                                 <span class="material-symbols-outlined">
                                                     visibility
                                                 </span> </router-link>
-                                        </td> -->
+                                        </td>
                                     </tr>
 
                                 </tbody>
                             </table>
                             <Pagination :page="currentPage" :total="totalPages" :perPage="ambassadorsPerPage"
-                                :routeName="`withdrawns-team.list-ambassadros`" />
+                                :routeName="`withdrawns-team.list-ambassadors`" />
                         </div>
 
                         <div v-else>
@@ -116,6 +106,122 @@
                         </div>
 
                     </template>
+
+                    <div class="col-12" v-if="statistics">
+                        <hr class="w-75 m-auto" />
+                        <div class="row">
+                            <div class="text-center w-100 col-12 col-md-12 col-lg-12">
+                                <div class="card">
+                                    <h3 class="mt-2 card-title text-center"> احصائيات</h3>
+
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div
+                                                class="border rounded avatar-55 d-flex align-items-center justify-content-center">
+                                                <img class="img-fluid" src="@/assets/images/gif/chart.gif" alt="" />
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h3 class="text-center">
+                                                {{ ambassadorsCount }}
+                                            </h3>
+                                            <p class="mb-0 text-center">العدد الكلي</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-6 col-lg-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div
+                                                class="border rounded avatar-55 d-flex align-items-center justify-content-center">
+                                                <img class="img-fluid" src="@/assets/images/gif/done.gif"
+                                                    alt="book-animated" />
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h3 class="text-center">{{ statistics.contact_done }}</h3>
+                                            <p class="mb-0 text-center">تم التواصل معهم</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-6 col-lg-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div
+                                                class="border rounded avatar-55 d-flex align-items-center justify-content-center">
+                                                <img class="img-fluid" src="@/assets/images/gif/error.gif"
+                                                    alt="person-animated" />
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h3 class="text-center">
+                                                {{ ambassadorsCount - statistics.contact_done }}
+                                            </h3>
+                                            <p class="mb-0 text-center">لم يتم التواصل معهم</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-4 col-lg-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div
+                                                class="border rounded avatar-55 d-flex align-items-center justify-content-center">
+                                                <img class="img-fluid" src="@/assets/images/gif/person.gif"
+                                                    alt="write-animated" />
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h3 class="text-center">{{ statistics.consented_to_return }}</h3>
+                                            <p class="mb-0 text-center">وافق على العودة</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-md-4 col-lg-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div
+                                                class="border rounded avatar-55 d-flex align-items-center justify-content-center">
+                                                <img class="img-fluid" src="@/assets/images/gif/red_person.gif"
+                                                    alt="screen-animated" />
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h3 class="text-center">{{ statistics.refused_to_return }}
+                                            </h3>
+                                            <p class="mb-0 text-center">لم يوافق </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-4 col-md-4 col-lg-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div
+                                                class="border rounded avatar-55 d-flex align-items-center justify-content-center">
+                                                <img class="img-fluid" src="@/assets/images/gif/no-entry.gif"
+                                                    alt="screen-animated" />
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <h3 class="text-center">{{ statistics.did_not_respond }}
+                                            </h3>
+                                            <p class="mb-0 text-center"> لم يستجب </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </iq-card>
 
             </div>
@@ -203,6 +309,7 @@ export default {
         return {
             gender: 'both',
             ambassadors: [],
+            statistics: null,
             ambassadorsPerPage: 30,
             GENDER,
             searchModel: "",
@@ -251,6 +358,7 @@ export default {
 
                 this.ambassadors = response.data.ambassadors;
                 this.totalPages = response.data?.total ?? 1;
+                this.statistics = response.data.statistics;
             } catch (error) {
                 console.log(error);
                 helper.toggleToast(
@@ -293,37 +401,3 @@ export default {
 
 
 </script>
-
-<style lang="scss" scoped>
-.inputs {
-    position: relative;
-}
-
-.form-control {
-    text-indent: 15px;
-    border: none;
-    height: 45px;
-    border-radius: 0px;
-    border-bottom: 1px solid #eee;
-}
-
-.form-control:focus {
-    color: #495057;
-    background-color: #fff;
-    border-color: #eee;
-    outline: 0;
-    box-shadow: none;
-    border-bottom: 1px solid blue;
-}
-
-.form-control:focus {
-    color: blue;
-}
-
-.inputs i {
-    position: absolute;
-    top: 14px;
-    left: 4px;
-    color: #b8b9bc;
-}
-</style>

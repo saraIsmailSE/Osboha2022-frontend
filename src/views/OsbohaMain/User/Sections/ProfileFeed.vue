@@ -7,107 +7,6 @@
     <div class="iq-card-body p-0">
       <div class="row">
         <div class="col-lg-4">
-          <!-- LATER -->
-          <!-- ########## START Certificates  ########## -->
-          <!-- <iq-card>
-                        <template v-slot:headerTitle>
-                            <h4 class="card-title">الشهادات</h4>
-                        </template>
-                        <template v-slot:headerAction>
-                            <p class="m-0"><a href="#"> عرض الكل </a></p>
-                        </template>
-                        <template v-slot:body>
-                            <button type="button" @click="show_certificates = !show_certificates"
-                                class="btn bg-white text-dark border-dark w-100 d-flex justify-content-between"
-                                v-if="!show_certificates">
-                                عرض
-                                <span class="material-symbols-outlined">
-                                    visibility
-                                </span>
-                            </button>
-                            <button type="button" @click="show_certificates = !show_certificates"
-                                class=" mb-3 btn bg-white text-dark border-dark w-100 d-flex justify-content-between"
-                                v-if="show_certificates">
-                                اخفاء
-                                <span class="material-symbols-outlined">
-                                    visibility_off
-                                </span>
-                            </button>
-                            <div v-show="show_certificates">
-
-                                <div class="row" v-if="certificates">
-                                    <div class="col-sm-12" v-for="(certificate, index) in certificates" :key="index">
-                                        <div class="book-post position-relative">
-                                            <a href="#">
-                                                <img :src="certificate.img" alt="gallary-image"
-                                                    class="img-fluid rounded"></a>
-                                            <div class="job-icon-position">
-                                                <div
-                                                    class="job-icon bg-primary p-2 d-inline-block rounded-circle material-symbols-outlined text-white">
-                                                    workspace_premium
-                                                </div>
-                                            </div>
-                                            <div class="iq-card-body text-center p-2">
-                                                <h5 class="text-center">{{ certificate.heading }}</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <h4 class="text-center" v-else> لا يوجد</h4>
-                            </div>
-                        </template>
-                    </iq-card> -->
-          <!-- ########## END Certificates  ########## -->
-
-          <!-- ########## START MEDIA ########## -->
-          <!-- <iq-card>
-            <template v-slot:headerTitle>
-              <h4 class="card-title">صور</h4>
-            </template>
-            <template v-slot:headerAction>
-              <p class="m-0"><a href="#">مشاهدة الكل </a></p>
-            </template>
-            <template v-slot:body>
-              <button
-                type="button"
-                @click="show_media = !show_media"
-                class="btn bg-white text-dark border-dark w-100 d-flex justify-content-between"
-                v-if="!show_media"
-              >
-                عرض
-                <span class="material-symbols-outlined"> visibility </span>
-              </button>
-              <button
-                type="button"
-                @click="show_media = !show_media"
-                class="mb-3 btn bg-white text-dark border-dark w-100 d-flex justify-content-between"
-                v-if="show_media"
-              >
-                اخفاء
-                <span class="material-symbols-outlined"> visibility_off </span>
-              </button>
-
-              <div v-show="show_media">
-                <ul
-                  class="profile-img-gallary p-0 m-0 list-unstyled"
-                  v-if="profile_media"
-                >
-                  <li v-for="(media, index) in profile_media" :key="index">
-                    <a data-fslightbox="gallery" :href="media">
-                      <img
-                        :src="media"
-                        alt="gallary-image"
-                        class="img-fluid w-100"
-                      />
-                    </a>
-                  </li>
-                </ul>
-                <h4 class="text-center" v-else>لا يوجد</h4>
-              </div>
-            </template>
-          </iq-card> -->
-          <!-- ########## END MEDIA ########## -->
-
           <!-- ########## START FRIENDS ########## -->
           <iq-card>
             <template v-slot:headerTitle>
@@ -229,7 +128,7 @@
                       </h6>
                       <h6 class="mt-2" style="direction: rtl !important" v-else>
                         {{ exception.type.type }} ||
-                        {{ exception_status[exception.status] }}
+                        {{ STATUS[exception.status] }}
                       </h6>
                     </router-link>
                   </li>
@@ -310,7 +209,7 @@ export default {
       show_media: true,
       show_certificates: true,
       user_id: this.$route.params.user_id,
-      exception_status: {
+      STATUS: {
         pending: "قيد المراجعة",
         accepted: "مقبول",
         rejected: "مرفوض",

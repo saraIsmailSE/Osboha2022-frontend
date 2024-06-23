@@ -31,7 +31,7 @@
                   name: 'user.profile',
                   params: { user_id: request.user.id },
                 }">
-                  <h6>{{ request.user.name }}</h6>
+                  <h6>{{ request.user.name + " " + request.user.last_name }}</h6>
                   <small>{{ formatDateToWritten(request.created_at) }}</small>
                 </router-link>
                 <div class="d-flex align-items-center mt-2 mt-md-0">

@@ -245,7 +245,7 @@
                 </tbody>
                 <tr>
                     <td class="align-middle text-center" colspan="4">
-                        <span>العدد الكلي للأعضاء الجدد: {{ totalNewAmbassadros }} </span>
+                        <span>العدد الكلي للأعضاء الجدد: {{ totalNewambassadors }} </span>
                     </td>
                 </tr>
             </table>
@@ -308,12 +308,12 @@ export default {
             }
             return followupTeams_totalOfZeroVarible
         },
-        totalNewAmbassadros() {
-            const followupTeams_totalNewAmbassadros = this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.new_ambassadors), 0);
+        totalNewambassadors() {
+            const followupTeams_totalNewambassadors = this.teamDataTofilter.reduce((accumulator, item) => accumulator + parseFloat(item.new_ambassadors), 0);
             if (this.supervisor_followup_team) {
-                return followupTeams_totalNewAmbassadros + parseFloat(this.supervisor_followup_team.ambassadors_excluded_in_group);
+                return followupTeams_totalNewambassadors + parseFloat(this.supervisor_followup_team.ambassadors_excluded_in_group);
             }
-            return followupTeams_totalNewAmbassadros
+            return followupTeams_totalNewambassadors
         },
     }
 

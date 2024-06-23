@@ -16,7 +16,7 @@
             </button>
         </form>
         <div class="col-sm-12" v-if="user">
-            <InfoCard :user="user" :followup_team="followup_team" :roles="roles" :in_charge_of="in_charge_of" :groups="groups" />
+            <InfoCard :user="user" :followup_team="followup_team" :roles="roles" :in_charge_of="in_charge_of" :groups="groups" :marks="ambassadorMarks" />
         </div>
         <div class="col-sm-12 text-center" v-if="loader">
             <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
@@ -34,10 +34,10 @@
     </div>
 </template>
 <script>
-import InfoCard from "@/components/user/infoCard";
 import userService from "@/API/services/user.service";
 import useVuelidate from '@vuelidate/core'
 import { required, email } from '@vuelidate/validators'
+import InfoCard from "@/components/user/infoCard.vue";
 
 
 export default {
@@ -52,6 +52,7 @@ export default {
         return {
             user: null,
             groups: null,
+            ambassadorMarks:null,
             roles: null,
             in_charge_of: null,
             followup_team: null,
@@ -90,6 +91,7 @@ export default {
                     this.roles = response.roles
                     this.followup_team = response.followup_team
                     this.in_charge_of = response.in_charge_of
+                    this.ambassadorMarks=response.ambassadorMarks
                 }
                 else {
                     this.message = 'المستخدم غير موجود';
@@ -106,4 +108,3 @@ export default {
     margin-bottom: 0;
 }
 </style>
-  

@@ -11,22 +11,16 @@
         <div class="card-body">
           <div class="row d-flex justify-content-center mb-2">
             <div class="col-6 m-auto d-flex justify-content-end">
-              <BaseAvatar
-                :profileImg="most_read.user.user_profile.profile_picture"
-                :profile_id="most_read.user.user_profile.id"
-                :title="most_read.user.name"
-                :gender="most_read.user.gender"
-                avatarClass="avatar-120 rounded-circle"
-              />
+              <BaseAvatar :profileImg="most_read.user.user_profile.profile_picture"
+                :profile_id="most_read.user.user_profile.id" :title="most_read.user.name"
+                :gender="most_read.user.gender" avatarClass="avatar-120 rounded-circle" />
             </div>
             <div class="col-6 m-auto">
-              <router-link
-                :to="{
-                  name: 'user.profile',
-                  params: { user_id: most_read.user.id },
-                }"
-              >
-                <h3>{{ most_read.user.name }}</h3>
+              <router-link :to="{
+                name: 'user.profile',
+                params: { user_id: most_read.user.id },
+              }">
+                <h3>{{ most_read.user.name + " " + most_read.user.last_name }}</h3>
               </router-link>
               <h5 style="direction: rtl">
                 {{ formatNumber(most_read.max_total_pages) }}

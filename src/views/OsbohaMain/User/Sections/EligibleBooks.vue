@@ -26,7 +26,7 @@
     </div>
     <div class="col-12">
       <div class="tab-content">
-        <!-- LAST ACHEVMENT -->
+        <!-- LAST Achievement -->
         <tab-content-item :active="true" id="last-achev" aria-labelled-by="last-achev">
           <div v-if="last_achievement">
             <div v-if="last_achievement.status == 'rejected'">
@@ -216,9 +216,9 @@
           </div>
 
         </tab-content-item>
-        <!-- END LAST ACHEVMENT -->
+        <!-- END LAST Achievement -->
 
-        <!-- START ACHEVMENTS -->
+        <!-- START AchievementS -->
         <tab-content-item :active="false" id="all-achev" aria-labelled-by="all-achev-tab">
           <div class="row">
             <div class="col-lg-12">
@@ -272,7 +272,7 @@
             </div>
           </div>
         </tab-content-item>
-        <!-- END ACHEVMENTS -->
+        <!-- END AchievementS -->
       </div>
     </div>
   </div>

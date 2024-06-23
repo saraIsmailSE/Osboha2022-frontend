@@ -7,7 +7,8 @@ export const ARABIC_ROLES = {
   advisor: "موجه",
   consultant: "مستشار",
   admin: "ادارة",
-  book_quality_team: "جودة الكتب",
+  book_quality_team: "عضو في فريق جودة الكتب",
+  book_quality_team_coordinator: "مسؤول فريق جودة الكتب",
   support_leader: "قائد دعم",
   eligible_admin: "مسؤول توثيق الكتب",
   reviewer: "مراجع توثيق",
@@ -74,7 +75,7 @@ export const ROLESTYPES = {
   ramadan: "رمضان أصبوحة",
   specialCare: "الرعاية الخاصة",
   eligible: "توثيق الكتب",
-  WithdrawnsTeam:"التواصل مع المنسحبين",
+  WithdrawnsTeam: "التواصل مع المنسحبين",
 };
 export const DAYS = {
   Sunday: "الأحد",
@@ -376,19 +377,21 @@ export const TERMINATION_REASONS = {
   advisor_change: '"غير فعال - تبديل موجه"',
 };
 
-export const EXCEPTION_STATUS = {
+export const STATUS = {
   pending: "قيد المراجعة",
   accepted: "مقبول",
   rejected: "مرفوض",
   cancelled: "ملغي",
   finished: "منتهي",
+  resolved: "تم الحل",
 };
-export const EXCEPTION_STATUS_CLASS = {
+export const STATUS_CLASS = {
   pending: "bg-warning",
   accepted: "bg-primary",
   rejected: "bg-danger",
   cancelled: "bg-success",
   finished: "bg-danger",
+  resolved: "bg-success",
 };
 
 export const POST_TYPES = {
@@ -419,4 +422,12 @@ export const ACTIVITIES_STATUS = {
   accepted: "مقبول",
   redo: "بحاجة لاعادة",
   rejected: "مرفوض",
+};
+
+export const BACK_READER_MESSAGES = {
+  1: `ندرك جميعاً أن الظروف قد تكون صعبة في بعض الأحيان مما تضطرنا للانسحاب، ولكن تذكر أن هذه الفترات هي التي تبني فينا الإصرار والعزيمة 💪.
+
+كلنا نؤمن بأهمية دورك في هذا المشروع ونود أن تعود وتنضم إلينا مرة أخرى حتى نكن سنداً لبعضنا البعض، ونتحدى الظروف ونثبت أن الإيمان بالهدف والعمل من أجله هو ما يميزنا.
+
+عودتك تعني لنا الكثير، فهي ليست مجرد عودة فرد، بل هي إضافة قوية لمشروعنا. فأنت القدوة للكثيرين، ووجودك يعزز من عزيمتنا جميعاً.`,
 };

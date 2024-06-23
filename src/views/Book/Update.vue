@@ -12,7 +12,7 @@
       </div>
       <div class="col-12 bg-white pt-2">
         <h3 class="text-center mb-3">{{ bookForm.name }}</h3>
-        <div class="sign-in-from">
+        <div class="sign-in-from" v-if="is_active">
           <form class="mt-2" @submit.prevent="onSubmit()">
             <!-- Name -->
             <div class="form-group">
@@ -80,8 +80,8 @@
             <!-- Book Type -->
             <div class="form-group">
               <label for="bookType">نوع الكتاب</label>
-              <select v-model="v$.bookForm.type_id.$model" class="form-select" data-trigger name="choices-single-default"
-                id="choices-single-default" :disabled="!shouldfFill">
+              <select v-model="v$.bookForm.type_id.$model" class="form-select" data-trigger
+                name="choices-single-default" id="choices-single-default" :disabled="!shouldfFill">
                 <option value="0" selected>اختر نوع الكتاب</option>
                 <option v-for="(type, index) in types" :key="index" :value="type.id">
                   {{ BOOK_TYPES[type.type] }}
@@ -93,8 +93,8 @@
             <!-- Book Level -->
             <div class="form-group">
               <label for="bookLevel">مستوى الكتاب</label>
-              <select v-model="v$.bookForm.level_id.$model" class="form-select" data-trigger name="choices-single-default"
-                id="choices-single-default">
+              <select v-model="v$.bookForm.level_id.$model" class="form-select" data-trigger
+                name="choices-single-default" id="choices-single-default">
                 <option value="0" selected>اختر مستوى الكتاب</option>
                 <option v-for="(level, index) in bookLevels" :key="index" :value="level.id">
                   {{ level.arabic_level }}
@@ -156,7 +156,18 @@
                 تعديل
               </button>
             </div>
+            <hr />
+            <div class="border border-danger w-100 mt-2 mb-3 text-center p-3"
+              v-if="isTeamCoordinator && is_active && type != 'free'">
+              <p class="text-center" v-if="removeMsg">{{ removeMsg }}</p>
+              <button type="button" class="btn btn-danger w-75" :disabled="removeMsg" @click="removeBook()">
+                سحب من المنهج
+              </button>
+            </div>
           </form>
+        </div>
+        <div class="border border-danger w-75 m-auto mt-2 mb-3 text-center p-2" v-else>
+          <h1 class="bg-danger text-center p-3 text-white">هذا الكتاب تم حذفه من المنهج</h1>
         </div>
       </div>
     </iq-card>
@@ -172,6 +183,7 @@ import bookLevel from "@/API/services/book-level.service";
 import sections from "@/API/services/sectionService";
 import { LANUAGES, BOOK_TYPES } from "@/utilities/constants";
 import UserInfoService from "@/Services/userInfoService";
+import helper from "@/utilities/helper";
 
 const greaterThanZero = (value) => value > 0;
 
@@ -191,11 +203,13 @@ export default {
   },
   watch: {
     bookBrief() {
-      this.$refs.bodyRef.style.height = "auto";
-      this.$nextTick(() => {
-        this.$refs.bodyRef.style.height =
-          this.$refs.bodyRef.scrollHeight + "px";
-      });
+      if (this.$refs.bodyRef.style.height) {
+        this.$refs.bodyRef.style.height = "auto";
+        this.$nextTick(() => {
+          this.$refs.bodyRef.style.height =
+            this.$refs.bodyRef.scrollHeight + "px";
+        });
+      }
     },
   },
   computed: {
@@ -209,7 +223,16 @@ export default {
       return this.$store.getters.getUser;
     },
     inBooksTeam() {
-      return UserInfoService.hasRole(this.user, "book_quality_team");
+      return UserInfoService.hasRoles(this.user, [
+        'book_quality_team_coordinator',
+        'book_quality_team',
+      ]);
+    },
+    isTeamCoordinator() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        'book_quality_team_coordinator',
+      ]);
     },
     isAdmin() {
       return UserInfoService.hasRole(this.user, "admin");
@@ -242,11 +265,14 @@ export default {
       message: "",
       loading: false,
       currentMedia: null,
+      is_active: 1,
+      type: '',
     };
   },
 
   validations() {
     return {
+      removeMsg: '',
       bookForm: {
         name: {
           required,
@@ -331,6 +357,42 @@ export default {
     };
   },
   methods: {
+    removeBook() {
+      const swalWithBootstrapButtons = this.$swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-primary btn-lg",
+          cancelButton: "btn btn-outline-primary btn-lg ms-2",
+        },
+        buttonsStyling: false,
+      });
+      swalWithBootstrapButtons
+        .fire({
+          title: "ملاحظة هامة",
+          text: "حذف الكتاب من المنهج لا يعني حذفه بالكامل من المنصة، وإنما يعني أن السفراء ليس لديهم صلاحيات لكتابة أطروحاتهم وقراءته.  فيما يخص السفراء الذين يقرأون الكتاب حاليًا، سيكون بإمكانهم متابعة القراءة دون أي مشاكل.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "سحب من المنهج",
+          cancelButtonText: "إلغاء",
+          showClass: {
+            popup: "animate__animated animate__zoomIn",
+          },
+          hideClass: {
+            popup: "animate__animated animate__zoomOut",
+          },
+        })
+        .then(async (result) => {
+          if (result.isConfirmed) {
+            this.removeMsg = await bookService.removeBookFromOsboha(this.$route.params.book_id);
+            helper.toggleToast(
+              "تم سحب الكتاب من المنهج ... سيتم تحويلك إلى صفحة الكتب",
+              "success",
+            );
+            setTimeout(() => {
+              this.$router.push({ name: "osboha.book" });
+            }, 3000);
+          }
+        });
+    },
     selectItem(value) {
       if (this.isAdmin || this.inBooksTeam) {
         return value > 0;
@@ -354,6 +416,8 @@ export default {
         this.bookForm.section_id = book.book.section.id;
         this.bookForm.type_id = book.book.type.id;
         this.currentMedia = book.book.media;
+        this.is_active = book.book.is_active;
+        this.type = book.book.type.type
       }
     },
     uploadFile(event) {

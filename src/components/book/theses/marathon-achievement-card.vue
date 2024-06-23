@@ -13,7 +13,7 @@
               name: 'user.profile',
               params: { user_id: mark.user.id },
             }">
-              <h4 class="mb-2 text-center">{{ mark.user.name }}</h4>
+              <h4 class="mb-2 text-center">{{ mark.user.name + " " + mark.user.last_name }}</h4>
             </router-link>
             <p class="text-center mb-4" style="direction: rtl">
               مارثون

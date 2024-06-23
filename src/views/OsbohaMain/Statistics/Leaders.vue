@@ -90,7 +90,7 @@ export default {
         totalOfZeroVarible() {
             return this.statistics.reduce((accumulator, item) => accumulator + parseFloat(item.number_zero_varible), 0);
         },
-        totalNewAmbassadros() {
+        totalNewambassadors() {
             return this.statistics.reduce((accumulator, item) => accumulator + parseFloat(item.new_ambassadors), 0);
         },
         totalPages() {

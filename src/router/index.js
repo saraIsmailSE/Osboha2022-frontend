@@ -163,6 +163,12 @@ const authchildRoutes = (prop, mode) => [
 
 const userChildRoute = (prop, mode = false) => [
   {
+    path: "should-update-info",
+    name: prop + ".should-update-info",
+    meta: { auth: true, name: "User Should Update Info" },
+    component: () => import("../views/OsbohaMain/User/ShouldUpdateInfo"),
+  },
+  {
     path: "search",
     name: prop + ".search",
     meta: { auth: true, name: "User search" },
@@ -642,11 +648,19 @@ const marathonChildRoute = (prop, mode = false) => [
 
 const withdrawnsTeamChildRoute = (prop, mode = false) => [
   {
-    path: "list-ambassadros",
-    name: prop + ".list-ambassadros",
+    path: "list-ambassadors",
+    name: prop + ".list-ambassadors",
     meta: { auth: true, name: "List Ambassadors" },
     props: (route) => ({ page: parseInt(route.query.page) || 1 }),
-    component: () => import("../views/OsbohaWithdrawnAmbassadors/ListAmbassadors"),
+    component: () =>
+      import("../views/OsbohaWithdrawnAmbassadors/ListAmbassadors"),
+  },
+  {
+    path: "withdrawn-ambassador/:ambassador_id",
+    name: prop + ".withdrawn-ambassador",
+    meta: { auth: true, name: "Withdrawn Ambassador" },
+    component: () =>
+      import("../views/OsbohaWithdrawnAmbassadors/AmbassadorDetails"),
   },
 ];
 
@@ -717,15 +731,13 @@ const workingHoursChildRoute = (prop, mode = false) => [
     path: "",
     name: prop + ".index",
     meta: { auth: true, name: "Working Hours" },
-    component: () =>
-      import("../views/OsbohaMain/GeneralConversation/WorkingHours"),
+    component: () => import("../views/OsbohaMain/WorkingHours/index"),
   },
   {
     path: "statistics",
     name: prop + ".statistics",
     meta: { auth: true, name: "Working Hours Stats" },
-    component: () =>
-      import("../views/OsbohaMain/GeneralConversation/WorkingHoursStats"),
+    component: () => import("../views/OsbohaMain/WorkingHours/statistics"),
   },
 ];
 
@@ -935,6 +947,25 @@ const bookChildRoute = (prop, mode = false) => [
     component: () => import("../views/Book/Update"),
   },
   {
+    path: "report/:book_id",
+    name: prop + ".report",
+    meta: { auth: true, name: "Book Report" },
+    component: () => import("../views/Book/Report"),
+  },
+  {
+    path: "list-violated-books",
+    name: prop + ".list-violated-books",
+    meta: { auth: true, name: "Book Report" },
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
+    component: () => import("../views/Book/violationReports"),
+  },
+  {
+    path: "violated-book/:report_id",
+    name: prop + ".violated-book",
+    meta: { auth: true, name: "Violated Book" },
+    component: () => import("../views/Book/ViolatedBook"),
+  },
+  {
     path: "create",
     name: prop + ".create",
     meta: { auth: true, name: "Book Create" },
@@ -964,6 +995,25 @@ const bookChildRoute = (prop, mode = false) => [
     name: prop + ".user-single-thesis",
     meta: { auth: true, name: "UserSingleThesis" },
     component: () => import("../views/Book/BookDetails"),
+  },
+  {
+    path: "suggest-book/",
+    name: prop + ".suggest-book",
+    meta: { auth: true, name: "Suggest Book" },
+    component: () => import("../views/Book/SuggestBook"),
+  },
+  {
+    path: "list-suggested-books",
+    name: prop + ".list-suggested-books",
+    meta: { auth: true, name: "List Suggested Books" },
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
+    component: () => import("../views/Book/ListSuggestedBooks"),
+  },
+  {
+    path: "suggested-book/:suggestion_id",
+    name: prop + ".suggested-book",
+    meta: { auth: true, name: "Suggested Book" },
+    component: () => import("../views/Book/SuggestedBook"),
   },
 ];
 
