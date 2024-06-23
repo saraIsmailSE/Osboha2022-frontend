@@ -89,7 +89,13 @@
                         <h3>
                             ارسال بريد الكتروني
                         </h3>
-                        <send-email :user_id="user.id" />
+                        <div class="row mt-2 mb-2">
+                            <button class="col ms-1 me-1" v-for="(message, index) in BACK_READER_MESSAGES" :key="index"
+                                @click="() => { this.email_body = message }">
+                                رسالة ({{ index }})
+                            </button>
+                        </div>
+                        <send-email :user_id="user.id" :body="email_body" />
                     </div>
                     <div class="row">
                         <hr class="mt-3">
@@ -169,7 +175,7 @@
                                 مراجع الحالة :
                                 <span>
                                     {{ contact_has_been_made.reviewer.name + " " +
-                                    contact_has_been_made.reviewer.last_name}}
+                                        contact_has_been_made.reviewer.last_name }}
                                 </span>
                             </h5>
                         </div>
@@ -188,6 +194,7 @@ import ListSocialMedia from '@/components/user/ListSocialMedia';
 import SendEmail from '@/components/user/SendEmail';
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import { BACK_READER_MESSAGES } from "@/utilities/constants";
 
 const greaterThanZero = (value) => value > 0;
 
@@ -207,6 +214,7 @@ export default {
     },
     data() {
         return {
+            BACK_READER_MESSAGES,
             user: null,
             group: null,
             exception: null,
@@ -216,6 +224,7 @@ export default {
                 contact: "",
                 return: "",
             },
+            email_body: '',
 
         };
     },

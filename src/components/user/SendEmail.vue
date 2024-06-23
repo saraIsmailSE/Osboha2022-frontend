@@ -28,6 +28,7 @@
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, maxLength } from "@vuelidate/validators";
 import ContactsWithWithdrawn from "@/API/services/contacts-with-withdrawn.service";
+import { watch } from 'vue';
 
 export default {
     name: "send email",
@@ -35,6 +36,14 @@ export default {
         return { v$: useVuelidate() };
     },
     created() {
+        watch(
+            () => [this.body],
+            ([newBody]) => {
+                this.emailForm.email_body = newBody;
+            }
+        );
+
+
         this.emailForm.user_id = this.user_id
     },
     props: {
@@ -42,6 +51,10 @@ export default {
             type: [Number],
             required: true,
         },
+        body: {
+            type: [String],
+            default: '',
+        }
     },
 
     data() {
