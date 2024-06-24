@@ -2,8 +2,13 @@
     <div class="col-sm-12 mt-3">
         <iq-card class="iq-card" v-if="group">
             <div class="iq-card-header-toolbar text-center align-items-center mx-auto">
-                <h1 class="text-center mt-3 mb-3" style="direction: rtl;">تفريغ فريق - {{ group.name }}</h1>
-                <h4 class="text-center">{{ GROUP_TYPE[group.type.type] }}</h4>
+                <h1 class="text-center mt-3 mb-3" style="direction: rtl;">تفريغ فريق </h1>
+                <h4 class="text-center">
+                    {{ group.name }} - <small> {{ GROUP_TYPE[group.type.type] }} </small>
+                </h4>
+                <span class="rounded-pill badge bg-danger mt-2 px-2" v-if="!group.is_active">
+                    تم التفريغ
+                </span>
             </div>
             <div class="iq-card-body p-4">
 
@@ -64,7 +69,7 @@
                     <div class="d-flex mt-2 mb-3">
                         <input class="form-check-input me-2" type="checkbox" value="selectAll" id="all"
                             @change="selectAllAmbassador()">
-                            <p class="form-check-label h5" for="all" v-if="selectedAmbassadors.length == 0">
+                        <p class="form-check-label h5" for="all" v-if="selectedAmbassadors.length == 0">
                             تحديد الكل
                         </p>
                         <p class="form-check-label h5" for="all" v-if="selectedAmbassadors.length > 0">
@@ -89,13 +94,13 @@
                 <h5 v-else> لا يوجد</h5>
 
                 <transfer-ambassadors v-if="group.type.type == 'followup' && selectedAmbassadors.length > 0"
-                    :selectedAmbassadors="selectedAmbassadors" />
+                    :selectedAmbassadors="selectedAmbassadors" @ambassadors_transferred="setGroupInfo" />
                 <transfer-leaders v-if="group.type.type == 'supervising' && selectedAmbassadors.length > 0"
                     :selectedLeaders="selectedAmbassadors" />
                 <transfer-supervisors v-if="group.type.type == 'advising' && selectedAmbassadors.length > 0"
                     :selectedSupervisors="selectedAmbassadors" />
             </div>
-            <DischargeForm v-if="allowedToDischarge" />
+            <DischargeForm v-if="allowedToDischarge && group.is_active" @team-discharged="setGroupInfo" />
 
             <router-link class="mb-3 mt-3 text-center d-block w-100" :to="{
                 name: 'group.group-detail',
@@ -128,11 +133,7 @@ export default {
     },
 
     async created() {
-        const response = await GroupService.getById(this.$route.params.group_id);
-        this.group = response.info;
-        this.users = response.info.users
-        this.groupAdministrators = response.info.group_administrators
-
+        this.setGroupInfo()
     },
 
     data() {
@@ -214,6 +215,13 @@ export default {
                 this.allSelected = true;
             }
         },
+        async setGroupInfo() {
+            const response = await GroupService.getById(this.$route.params.group_id);
+            this.group = response.info;
+            this.users = response.info.users
+            this.groupAdministrators = response.info.group_administrators
+
+        }
     },
     computed: {
         ambassadors() {

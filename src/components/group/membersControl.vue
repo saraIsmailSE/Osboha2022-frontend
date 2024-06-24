@@ -51,7 +51,7 @@
         <span class="material-symbols-outlined me-2 md-18"> delete </span>
         حذف
       </a>
-      <router-link v-if="teams_to_discharge.includes(group.type.type) && allowedToDischargeTeam"
+      <router-link v-if="teams_to_discharge.includes(group.type.type) && allowedToDischargeTeam && group.is_active"
         class="dropdown-item d-flex align-items-center" :to="{
           name: 'group.team-discharge',
           params: { group_id: group_id },
@@ -112,8 +112,8 @@ export default {
       group_id: this.$route.params.group_id,
       teams_to_discharge: [
         'followup',
-        'supervising',
-        'special_care',
+        // 'supervising',
+        // 'special_care',
       ],
     };
   },

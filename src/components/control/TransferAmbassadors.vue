@@ -25,7 +25,7 @@
                         صحيح</small>
                 </template>
             </div>
-            <div class="ms-2 mb-2" v-if="selectedAmbassadors.length == 0">
+            <div class="ms-2 mb-2" v-if="selectedAmbassadors.length >= 0">
                 <button type="button" class="btn btn-info" @click="addField">
                     <span class="align-middle material-symbols-outlined">
                         person_add
@@ -34,7 +34,7 @@
                 </button>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" v-if="selectedAmbassadors.length > 0">
                 <label for="leader_email">القائد الجديد</label>
                 <input v-model="v$.form.leader_email.$model" type="email" class="form-control mb-0" id="leader_email"
                     placeholder="ادخل بريد القائد الجديد" />
@@ -53,6 +53,15 @@
                     {{ message }}
                 </small>
             </div>
+
+            <div class="form-group text-center" v-if="not_exists.length > 0">
+                <h4> سفراء غير موجودون </h4>
+                <h5 style="color: red" v-for="ambassador in not_exists" :key="ambassador">
+                    - {{ ambassador }}
+                    <br />
+                </h5>
+            </div>
+
             <div class="col-sm-12 text-center" v-if="loader">
                 <p class="text-center">جاري النقل</p>
                 <img src="@/assets/images/gif/page-load-loader.gif" alt="loader" style="height: 100px" />
@@ -94,6 +103,7 @@ export default {
                 leader_email: '',
             },
             message: "",
+            not_exists: [],
 
         };
     },
@@ -129,14 +139,17 @@ export default {
                 try {
                     this.message = "";
                     const response = await RolesService.transferAmbassador(this.form);
-
-                    this.message = response;
+                    this.not_exists = response.not_exists;
+                    this.message = response.message;
 
                     this.resetForm();
 
                     setTimeout(() => {
                         this.message = "";
-                    }, 1800);
+                    }, 3000);
+
+                    this.$emit('ambassadors_transferred')
+
                 } catch (error) {
                     this.message = "حدث خطأ, يرجى المحاولة لاحقاً";
                 } finally {
