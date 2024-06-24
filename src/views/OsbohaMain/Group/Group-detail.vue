@@ -7,7 +7,11 @@
             <img class="rounded-circle img-fluid avatar-100" src="@/assets/images/main/current_book.png" alt="" />
           </div>
           <div class="info">
-            <h4>{{ group.name }}</h4>
+            <h4>{{ group.name }}
+              <span class="rounded-pill badge bg-danger mt-2 px-2" v-if="!group.is_active">
+                تم التفريغ
+              </span>
+            </h4>
             <p class="mb-0">
               <i class="ri-lock-fill pe-2"></i>{{ GROUP_TYPE[group.type.type] }} .
               {{ group.user_ambassador_count }} سفير

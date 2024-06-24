@@ -170,7 +170,6 @@ export default {
             LANUAGES,
             bookSuggestionsCount: 0,
             bookForm: {
-                book_media: null,
                 name: "",
                 publisher: "",
                 brief: "",

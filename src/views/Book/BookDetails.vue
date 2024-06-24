@@ -36,6 +36,14 @@
               </span>
               ابلاغ مخالف
             </router-link>
+            <!-- <button class="btn btn-info display-5" @click="suggestThisBook()"
+              v-if="!loading && (book_owner && book?.book.type.type == 'free') && !isSuggested">
+              <span class=" material-symbols-outlined align-middle">
+                bolt
+              </span>
+              اقترح للمنهج
+            </button> -->
+
             <div class="image-block text-center mt-3">
               <img :src="resolve_img_url(book?.book?.media?.path ?? '')" class="img-fluid rounded w-25"
                 alt="blog-img" />
@@ -203,6 +211,7 @@ import moment from "moment";
 import helper from "@/utilities/helper";
 import UserInfoService from "@/Services/userInfoService";
 import { watchEffect } from "vue";
+import BookSuggestion from "@/API/services/book-suggestion.service";
 
 export default {
   name: "BookDetails",
@@ -229,6 +238,7 @@ export default {
     return {
       theses: [],
       book: null,
+      isSuggested:false,
       fullBriefText: "",
       shortBriefText: "",
       page: 1,
@@ -266,6 +276,7 @@ export default {
       try {
         const response = await bookService.getById(id);
         this.book = response.data;
+        this.isSuggested = this.book.isSuggested;
         this.fullBriefText = this.book.book?.brief;
         this.shortBriefText = this.fullBriefText?.slice(0, 200);
 
@@ -492,6 +503,27 @@ export default {
           }
         });
     },
+    async suggestThisBook() {
+      let bookForm = new FormData();
+      bookForm.append("name", this.book?.book?.name);
+      bookForm.append("publisher", this.book?.book?.publisher);
+      bookForm.append("brief", this.book?.book?.brief);
+      bookForm.append("link", this.book?.book?.link);
+      bookForm.append("section_id", this.book?.book?.section.id);
+      bookForm.append("language_id", this.book?.book?.language.id);
+
+      const suggestion = await BookSuggestion.suggest(bookForm).then(async (response) => {
+        helper.toggleToast(
+          "تم حفظ الاقتراح ",
+          "success",
+        );
+        this.isSuggested=true;
+      })
+        .catch((error) => {
+          helper.toggleToast("حصل خطأ - لم يتم حفظ الاقتراح!", "danger");
+          console.log(error);
+        });
+    }
   },
   computed: {
     formattedDate() {

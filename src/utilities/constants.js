@@ -366,7 +366,7 @@ export const COUNTRIES = {
 export const TERMINATION_REASONS = {
   withdrawn: "غير فعال - منسحب",
   excluded: "مستبعد",
-  "emptying the group": "غير فعال - تفريغ الفريق",
+  "team_discharge": "غير فعال - تفريغ الفريق",
   reassignment: "غير فعال - اعادة تعيين اداري",
   leader_upgrade: "غير فعال - ترقية قائد",
   supervisor_upgrade: "غير فعال - ترقية مراقب",

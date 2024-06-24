@@ -4,10 +4,10 @@
             <div class="col-md-12 col-xl-12 mt-3 mb-3">
                 <div class="card" style="border-radius: 15px">
                     <div class="card-body text-center">
-                        <BasicInfo :user="user" :roles="roles" :in_charge_of="in_charge_of" />
+                        <BasicInfo :user="user" :roles="roles" :in_charge_of="in_charge_of"
+                            :followup_team="followup_team" />
                         <div class="inline-block mt-3">
-                            <button type="button"
-                                @click="() => { show_groups = !show_groups; show_marks = false; }"
+                            <button type="button" @click="() => { show_groups = !show_groups; show_marks = false; }"
                                 class="mb-3 btn bg-white text-dark border-dark w-100 d-flex justify-content-between">
                                 <h5>
                                     موجود في المجموعات
@@ -25,8 +25,7 @@
 
                             <hr />
 
-                            <button type="button"
-                                @click="() => { show_marks = !show_marks; show_groups = false; }"
+                            <button type="button" @click="() => { show_marks = !show_marks; show_groups = false; }"
                                 class="mb-3 btn bg-white text-dark border-dark w-100 d-flex justify-content-between">
                                 <h5>
                                     انجاز السفير خلال لأسابيع الأربعة الماضبة
