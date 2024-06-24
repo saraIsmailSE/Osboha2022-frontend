@@ -1,19 +1,11 @@
 <template>
     <div class="col-sm-12 mt-3">
         <iq-card class="iq-card">
-            <div class="iq-card-header-toolbar text-center align-items-center mx-auto">
-                <h1 class="text-center mt-3">تبديل القادة</h1>
-                <h4 class="text-center mt-1 mb-3">في فريق الرقابة نفسه</h4>
-            </div>
             <div class="iq-card-body p-4">
                 <div class="image-block text-center">
-                    <img src="@/assets/images/main/supervisors-swap.png" class="img-fluid rounded w-75" alt="blog-img" />
+                    <img src="@/assets/images/main/change_leader.jpg" class="img-fluid rounded w-75" alt="تبديل القادة" />
                 </div>
             </div>
-
-
-
-
 
             <div class="col-12 bg-white pt-2">
 

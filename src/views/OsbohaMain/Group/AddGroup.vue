@@ -1,12 +1,9 @@
 <template>
   <div class="col-sm-12 mt-3">
     <iq-card class="iq-card">
-      <div class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto">
-        <h1 class="text-center mt-3 mb-3">اضافة مجموعة</h1>
-      </div>
       <div class="iq-card-body p-4">
         <div class="image-block text-center">
-          <img class="img-fluid rounded w-75" src="@/assets/images/main/request_amb.png" alt="add-group" />
+          <img class="img-fluid rounded w-75" src="@/assets/images/main/create_new_group.jpg" alt="اضافة مجموعة" />
         </div>
       </div>
       <div class="col-12 bg-white pt-2">
@@ -21,8 +18,8 @@
             </div>
             <div class="form-group">
               <label for="groupType">نوع المجموعة</label>
-              <select v-model="v$.groupForm.type_id.$model" class="form-select" data-trigger name="choices-single-default"
-                id="choices-single-default">
+              <select v-model="v$.groupForm.type_id.$model" class="form-select" data-trigger
+                name="choices-single-default" id="choices-single-default">
                 <option value="0" selected>اختر نوع المجموعة</option>
                 <option v-for="(type, index) in types" :key="index" :value="type.id">
                   {{ GROUP_TYPE[type.type] }}

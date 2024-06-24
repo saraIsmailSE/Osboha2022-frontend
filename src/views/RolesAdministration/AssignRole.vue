@@ -1,17 +1,12 @@
 <template>
   <div class="col-sm-12 mt-3">
     <iq-card class="iq-card">
-      <div
-        class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto"
-      >
-        <h1 class="text-center mt-3 mb-3">ترقية</h1>
-      </div>
       <div class="iq-card-body p-4">
         <div class="image-block text-center">
           <img
-            src="@/assets/images/main/upgrade-user.png"
+            src="@/assets/images/main/upgrade.jpg"
             class="img-fluid rounded w-75"
-            alt="blog-img"
+            alt="ترقية"
           />
         </div>
       </div>

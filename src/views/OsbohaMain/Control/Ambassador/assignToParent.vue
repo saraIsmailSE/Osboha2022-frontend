@@ -1,13 +1,10 @@
 <template>
     <div class="col-sm-12 mt-3">
         <iq-card class="iq-card">
-            <div class="iq-card-header-toolbar d-flex text-center align-items-center mx-auto">
-                <h1 class="text-center mt-3 mb-3">تعيين مسؤول عنه</h1>
-            </div>
             <div class="iq-card-body p-4">
                 <div class="image-block text-center">
-                    <img src="@/assets/images/main/assign-administrator.png" class="img-fluid rounded w-75"
-                        alt="blog-img" />
+                    <img src="@/assets/images/main/assign_to_parent.jpg" class="img-fluid rounded w-75"
+                        alt="تعيين مسؤول عنه" />
                 </div>
             </div>
             <div class="col-12 bg-white pt-2">
