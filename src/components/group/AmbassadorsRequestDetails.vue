@@ -67,7 +67,7 @@
                         <tbody>
                             <tr v-for="(ambassador, index) in request.ambassadors" :key="ambassador.id">
                                 <td scope="col">{{ index + 1 }}</td>
-                                <td scope="col">{{ ambassador.name }}</td>
+                                <td scope="col">{{ ambassador.name + " " + ambassador.last_name }}</td>
                                 <td scope="col">{{ GENDER[ambassador.gender] }}</td>
                                 <td>
                                     <router-link :to="{ name: 'user.profile', params: { user_id: ambassador.id } }">

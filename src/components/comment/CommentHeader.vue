@@ -14,7 +14,7 @@
         class="author-name hover-undelined"
         @click.prevent="sendToProfile(comment.user.id)"
       >
-        {{ comment.user?.name }}
+        {{ comment.user?.name + " " + comment.user?.last_name }}
       </h5>
       <div class="mt-1" v-if="comment.user?.roles?.length > 0">
         <span

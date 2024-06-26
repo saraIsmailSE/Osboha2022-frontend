@@ -16,17 +16,18 @@
       <span class="text-muted text-sm ms-1" style="font-size: 0.7rem" v-if="!comment.body && !comment.media">قراءة
         فقط</span>
     </h6>
-    <!-- <h6>     
+    <!-- <h6>
       <rate :rate="5" />
     </h6> -->
     <CreateComment v-if="showEditBox" :isEdit="true" ref="commentEditRef" :comment="comment" @editComment="editComment"
       @cancelEdit="cancelEdit" />
     <template v-else>
-      <p v-if="comment.body" style="white-space: pre-wrap; direction: rtl">
-        {{ briefBody }}
+      <div class="mt-3" v-if="comment.body">
+        <p style="white-space: pre-wrap; direction: rtl;" v-html="processText(briefBody)"></p>
         <a class="load-btn" href="#" v-if="comment.body.length > briefBody.length"
           @click.prevent="briefBody = comment.body">عرض المزيد</a>
-      </p>
+      </div>
+
       <div class="image-block mt-3 mb-3" v-if="comment.media" data-bs-toggle="modal"
         :data-bs-target="`#imgModal-${comment.id}`">
         <BaseImage :mediaID="comment.media.id" classes="img-fluid rounded w-50 comment-image" alt="blog-img" />
@@ -59,8 +60,8 @@
       <a role="button" class="load-btn" v-on:click="toggleShowReplies" v-if="hasReplies">
         {{
           showReplies
-          ? `إخفاء ${totalReplies} من الردود`
-          : `عرض ${totalReplies} من الردود`
+            ? `إخفاء ${totalReplies} من الردود`
+            : `عرض ${totalReplies} من الردود`
         }}
       </a>
     </template>
@@ -73,7 +74,8 @@
       </li>
     </ul>
   </div>
-  <CreateComment v-if="showReplyBox" ref="commentReplyRef" :comment="comment" :type="'reply'" @addComment="addComment" />
+  <CreateComment v-if="showReplyBox" ref="commentReplyRef" :comment="comment" :type="'reply'"
+    @addComment="addComment" />
 
   <modal :id="`imgModal-${comment.id}`" dialogClass="modal-dialog-centered modal-lg" tabindex="-1"
     aria-labelledby="displayImageLabel" :aria-hidden="false">
@@ -94,6 +96,7 @@ import imgModal from "@/components/modal/image.vue";
 import CommentHeader from "@/components/comment/CommentHeader.vue";
 import helper from "@/utilities/helper";
 import ReactionService from "@/API/services/reaction.service";
+import { processText } from "@/utilities/formatText";
 
 export default {
   name: "Comment",
@@ -163,6 +166,7 @@ export default {
   },
   methods: {
     ...helper,
+    processText,
     toggleShowReplies() {
       this.showReplies = !this.showReplies;
     },

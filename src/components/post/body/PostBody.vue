@@ -18,7 +18,7 @@
         <input type="radio" :id="option.id" :value="option.id" v-model="choosedOption" class="ms-1 mt-0" @change="vote"
           :disabled="!post.allow_comments" />
         <label :for="option.id" class="form-check-label flex-grow-1 text-truncate ms-2 align-right">{{ option.option
-        }}</label>
+          }}</label>
         <span class="me-2 text-primary bold-600">
           {{ getOptionVotesPercentage(option.id) }}
         </span>
@@ -30,6 +30,7 @@
 <script>
 import VoteService from "@/API/services/vote.service";
 import helper from "@/utilities/helper";
+import { processText } from "@/utilities/formatText";
 
 export default {
   name: "PostBody",
@@ -60,6 +61,7 @@ export default {
     this.shortPostText = this.fullPostText?.slice(0, 200);
   },
   methods: {
+    processText,
     async vote() {
       const voteData = {
         option_id: this.choosedOption,
@@ -122,27 +124,6 @@ export default {
       );
 
       return optionSelectedByUser ? optionSelectedByUser.id : "";
-    },
-    urlifyFn(text) {
-      if (text) {
-        let urlRegex = /(https?:\/\/[^\s]+)/g;
-        return text.replace(urlRegex, function (url) {
-          return '<a href="' + url + '"  target="_blank" direction: rtl;">' + url + '</a>';
-        })
-      }
-    },
-    stylizeHashtags(text) {
-      if (text) {
-        let hashtagRegex = /#([\u0600-\u06FF\w]+)/g;
-        return text.replace(hashtagRegex, function (hashtag) {
-          return '<span style="font-weight: bold; color: #1d1a55;">' + hashtag + '</span>';
-        });
-      }
-    },
-    processText(text) {
-      text = this.urlifyFn(text); // First, turn URLs into hyperlinks
-      text = this.stylizeHashtags(text); // Then, style hashtags
-      return text;
     },
     loadMoreBriefText() {
       this.shortPostText = this.fullPostText;
