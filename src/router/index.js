@@ -979,6 +979,13 @@ const bookChildRoute = (prop, mode = false) => [
     component: () => import("../views/Book/Free"),
   },
   {
+    path: "reading-list/:user_id",
+    name: prop + ".reading-list",
+    meta: { auth: true, name: "Free Book" },
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
+    component: () => import("../views/Book/ReadingList"),
+  },
+  {
     path: "later-books/:user_id",
     name: prop + ".later-books",
     meta: { auth: true, name: "UserBooks" },

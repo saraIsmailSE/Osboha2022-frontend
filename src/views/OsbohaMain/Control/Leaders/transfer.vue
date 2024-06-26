@@ -1,13 +1,9 @@
 <template>
     <div class="col-sm-12 mt-3">
         <iq-card class="iq-card">
-            <div class="iq-card-header-toolbar text-center align-items-center mx-auto">
-                <h1 class="text-center mt-3">نقل قائد</h1>
-                <h4 class="text-center mt-1 mb-3">إلى مراقب جديد</h4>
-            </div>
             <div class="iq-card-body p-4">
                 <div class="image-block text-center">
-                    <img src="@/assets/images/main/supervisors-swap.png" class="img-fluid rounded w-75" alt="blog-img" />
+                    <img src="@/assets/images/main/transfer-leader.jpg" class="img-fluid rounded w-75" alt="نقل قائد" />
                 </div>
             </div>
 
@@ -56,7 +52,8 @@
                             <input v-model="v$.form.newSupervisor.$model" type="email" class="form-control mb-0"
                                 id="newSupervisor" placeholder="ادخل بريد المراقب الجديد" />
                             <template v-if="v$.form.newSupervisor.$error">
-                                <small style="color: red" v-if="v$.form.newSupervisor.required.$invalid">البريد الالكتروني
+                                <small style="color: red" v-if="v$.form.newSupervisor.required.$invalid">البريد
+                                    الالكتروني
                                     للمراقب الجديد
                                     مطلوب</small>
                                 <small style="color: red" v-if="v$.form.newSupervisor.email.$invalid">البريد الالكتروني

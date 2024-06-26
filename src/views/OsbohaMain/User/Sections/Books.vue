@@ -5,7 +5,7 @@
       <hr />
       <div class="row mb-3 d-flex justify-content-between">
         <h4 class="col-6 text-center mt-3 mb-3" v-if="books">
-          العدد الكلي: {{ books.length }}
+          العدد الكلي: {{ totalBooks }}
         </h4>
         <router-link class="col-6" :to="{
           name: 'book.later-books',
@@ -47,10 +47,22 @@
             </span>
           </h4>
         </router-link>
+        <router-link class="col-6" :to="{
+          name: 'book.reading-list',
+          params: {
+            user_id: this.$route.params.user_id,
+          },
+        }">
+          <h4 class="text-center mt-3 mb-3">
+            قائمة القراءة
+            <span class="align-middle material-symbols-outlined later-book">
+              book_5
+            </span>
+          </h4>
+        </router-link>
       </div>
       <div class="d-grid gap-3 d-grid-template-1fr-19" v-if="books && books.length > 0">
-        <BookCard v-for="bookInfo in booksLoaded" :key="bookInfo.id" :cardInfo="bookInfo" :isProfile="true" />
-        <a class="me-3 btn" role="button" @click="loadMore()" v-if="booksLoaded.length > length">عرض المزيد</a>
+        <BookCard v-for="bookInfo in books" :key="bookInfo.id" :cardInfo="bookInfo" :isProfile="true" />
       </div>
       <div class="col-sm-12" v-else>
         <iq-card class="iq-card">
@@ -71,31 +83,43 @@
 <script>
 import BookCard from "@/components/book/BookCard.vue";
 import UserInfoService from "@/Services/userInfoService";
+import userBookService from "@/API/services/user-books.service";
+import helper from "@/utilities/helper";
 
 export default {
   name: "User Book",
   components: { BookCard },
-  props: {
-    books: {
-      type: [Object],
-      required: true,
-    },
+  created() {
+    this.getBooks(this.page);
   },
   data() {
     return {
-      length: 10,
+      books: [],
+      totalBooks: 0,
+      loading: false,
+      empty: '',
+      page:1,
     };
   },
   methods: {
-    loadMore() {
-      if (this.length > this.books.length) return;
-      this.length = this.length + 10;
+    //get all books
+    async getBooks(page) {
+      this.empty = "";
+      this.books = [];
+      this.loading = true;
+      try {
+        const response = await userBookService.getOsbohaUserBooks(page, this.$route.params.user_id,'');
+        this.books = response.books;
+        this.totalBooks = response.total;
+      } catch (e) {
+        helper.toggleToast("حدث خطأ ما, يرجى المحاولة مرة أخرى", "error");
+      } finally {
+        this.loading = false;
+      }
     },
+
   },
   computed: {
-    booksLoaded() {
-      return this.books.slice(0, this.length);
-    },
     isAuth() {
       return this.$store.getters.getUser.id == this.$route.params.user_id;
     },

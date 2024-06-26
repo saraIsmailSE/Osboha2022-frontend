@@ -48,7 +48,7 @@
 
         <!-- ########## START Books ########## -->
         <tab-content-item :active="false" id="profile-books" aria-labelled-by="pills-book-tab">
-          <Books :books="profile.books" />
+          <Books  />
         </tab-content-item>
         <!-- ########## END Books ########## -->
 

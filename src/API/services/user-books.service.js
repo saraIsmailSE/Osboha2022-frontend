@@ -22,6 +22,16 @@ class UserBooks {
     }
   }
 
+  //All Normal And Ramadan
+  async getOsbohaUserBooks(page, user_id,name) {
+    try {
+      const books = await api.get(`user-books/osboha-user-books/${user_id}/${name}?page=` + page);
+      return books.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
   /**
    * Check rules for free book.
    *

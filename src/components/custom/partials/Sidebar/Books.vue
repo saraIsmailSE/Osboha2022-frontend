@@ -25,6 +25,18 @@
             <span class="item-name">الكتاب الحر</span>
         </router-link>
     </li>
+
+    <li class="nav-item">
+        <router-link :class="checkActive('book.reading-list') ? 'active nav-link' : 'nav-link'" aria-current="page" :to="{
+            name: 'book.reading-list',
+            params: {
+                user_id: user?.id,
+            },
+        }">
+            <i class="icon material-symbols-outlined"> book_5 </i>
+            <span class="item-name">قائمة القراءة</span>
+        </router-link>
+    </li>
     <li class="nav-item" v-if="inBooksTeam">
         <router-link :class="checkActive('book.create') ? 'active nav-link' : 'nav-link'" aria-current="page"
             :to="{ name: 'book.create' }">

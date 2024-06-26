@@ -90,8 +90,8 @@
                             ارسال بريد الكتروني
                         </h3>
                         <div class="row mt-2 mb-2">
-                            <button class="col ms-1 me-1" v-for="(message, index) in BACK_READER_MESSAGES" :key="index"
-                                @click="() => { this.email_body = message }">
+                            <button class="col ms-1 me-1" v-for="(back_reader_message, index) in BACK_READER_MESSAGES" :key="index"
+                                @click="() => { this.email_body = back_reader_message }">
                                 رسالة ({{ index }})
                             </button>
                         </div>
@@ -179,10 +179,19 @@
                                 </span>
                             </h5>
                         </div>
-
                     </div>
                 </div>
+                <div class="d-inline-block w-100 text-center col-12">
+                    <router-link :to="{ name: 'withdrawns-team.list-ambassadors' }"
+                        class="d-block mt-3 mb-3 w-75 mx-auto">
+                        <span class="back-btn ">عودة</span>
+                        <span class="align-middle material-symbols-outlined diplay-6">
+                            keyboard_return
+                        </span>
+                    </router-link>
+                </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -196,7 +205,6 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { BACK_READER_MESSAGES } from "@/utilities/constants";
 
-const greaterThanZero = (value) => value > 0;
 
 export default {
     components: { ListSocialMedia, SendEmail },
@@ -233,11 +241,9 @@ export default {
             contactForm: {
                 contact: {
                     required,
-                    maxValue: greaterThanZero,
                 },
                 return: {
                     required,
-                    maxValue: greaterThanZero,
                 },
             },
         };

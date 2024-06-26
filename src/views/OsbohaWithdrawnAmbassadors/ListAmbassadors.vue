@@ -52,6 +52,7 @@
                                         <th>تاريخ الانسحاب</th>
                                         <th>سبب الانسحاب</th>
                                         <th>الجنس</th>
+                                        <th>الحالة</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -73,7 +74,11 @@
                                         <td>
                                             {{ GENDER[ambassador.gender] }}
                                         </td>
-
+                                        <td>
+                                            <span class="material-symbols-outlined"
+                                                v-if="ambassador.contacts_as_a_withdrawn">check_circle</span>
+                                            <span v-else class="material-symbols-outlined">pending</span>
+                                        </td>
                                         <td>
                                             <router-link class="text-center" :to="{
                                                 name: 'withdrawns-team.withdrawn-ambassador',

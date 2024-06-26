@@ -94,17 +94,6 @@ export default {
         };
     },
     methods: {
-        //check which page is active
-        checkActive(item) {
-            let className = "";
-            if (this.current == item) {
-                className = "active";
-            } else {
-                className = className + " done";
-            }
-            return className;
-        },
-
         //get all books
         async getBooks(page) {
             this.empty = "";
