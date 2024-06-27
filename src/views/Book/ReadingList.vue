@@ -114,7 +114,6 @@ export default {
         //get all books
         async getBooks() {
             this.empty = "";
-            this.books = [];
             this.loading = true;
 
             if (this.searchModel == '' && this.books.length == 0) {
@@ -122,8 +121,9 @@ export default {
             }
             if (this.searchModel != '') {
                 this.currentPage = 1;
-                this.books = []
             }
+            this.books = [];
+
             try {
                 const response = await userBookService.getOsbohaUserBooks(this.currentPage, this.$route.params.user_id, this.searchModel);
                 if (response) {
