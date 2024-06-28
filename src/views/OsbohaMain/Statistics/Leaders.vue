@@ -8,8 +8,8 @@
                 </h4>
             </div>
 
-            <div class="card-header">
-                <h2 v-if="supervisorGroup">
+            <div class="card-header d-flex justify-content-between ms-2 me-2" v-if="supervisorGroup">
+                <h2 class="mt-auto mb-auto" >
                     احصائية القادة
                     ||
                     <router-link :to="{
@@ -21,12 +21,14 @@
                     <span class="material-symbols-outlined align-middle me-1">
                         diversity_1
                     </span>
-
                 </h2>
+                <back-button routeName="group.group-detail" :routeParams="{ group_id: supervisorGroup.id }" />
+
             </div>
 
             <div class="card-body" v-if="statistics">
-                <FollowupTeamsStatistics :teamData=statistics  :supervisor_followup_team=supervisor_followup_team :generalAvg="generalAvg"/>
+                <FollowupTeamsStatistics :teamData=statistics :supervisor_followup_team=supervisor_followup_team
+                    :generalAvg="generalAvg" />
 
             </div>
             <div class="card-body" v-if="leadersReading">
@@ -47,6 +49,7 @@
 import StatisticsService from "@/API/services/statistics.service";
 import FollowupTeamsStatistics from "@/components/statistics/FollowupTeams";
 import MembersReading from "@/components/statistics/MembersReading";
+import BackButton from '@/components/common/BackButton.vue';
 
 export default {
     name: 'Supervisor Statistics',
@@ -57,23 +60,24 @@ export default {
         this.statistics = response.leaders_followup_team;
         this.leadersReading = response.leaders_reading;
         this.supervisorGroup = response.supervisor_group;
-        this.supervisor_followup_team=response.supervisor_own_followup_team
-        this.generalAvg=response.week_general_avg;
+        this.supervisor_followup_team = response.supervisor_own_followup_team
+        this.generalAvg = response.week_general_avg;
         this.loding = false;
 
     },
     components: {
         FollowupTeamsStatistics,
         MembersReading,
+        BackButton,
     },
     data() {
         return {
             statistics: null,
-            supervisor_followup_team:null,
+            supervisor_followup_team: null,
             leadersReading: null,
             supervisorGroup: null,
             loding: false,
-            generalAvg:0,
+            generalAvg: 0,
 
         }
     },

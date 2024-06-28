@@ -53,6 +53,9 @@
           </form>
         </div>
       </div>
+      <div class="d-flex justify-content-end me-2">
+        <back-button routeName="group.group-detail" :routeParams="{ group_id: this.$route.params.group_id }" />
+      </div>
     </iq-card>
   </div>
 </template>
@@ -63,6 +66,7 @@ import { required, maxLength, email } from "@vuelidate/validators";
 import UserGroupService from "@/API/services/user-group.service";
 import { api } from "@/API/Intercepter.js";
 import { ARABIC_ROLES } from "@/utilities/constants";
+import BackButton from '@/components/common/BackButton.vue';
 
 const greaterThanZero = (value) => value > 0;
 
@@ -71,7 +75,7 @@ export default {
   setup() {
     return { v$: useVuelidate() };
   },
-
+  components: { BackButton },
   async created() {
     if (this.$route.params.add_type == 'marathon') {
       this.roles = await rolesService.getMarathonRoles();

@@ -1,8 +1,13 @@
 <template>
     <div class="row p-1">
         <iq-card>
+            <div class="d-flex justify-content-between ms-2 me-2">
+                <h3 class="mt-auto mb-auto">
+                    قائمة السفراء الجدد
+                </h3>
+                <back-button routeName="group.group-detail" :routeParams="{ group_id: this.$route.params.group_id }" />
+            </div>
             <div class="d-flex justify-content-between flex-wrap">
-                <h4 class="card-title mt-3">قائمة السفراء الجدد</h4>
                 <div class="dropdown w-100 mb-3 p-2">
                     <select class="form-select" @change="getMembers()" v-model="monthFilter">
                         <option class="dropdown-item" value="current" selected>
@@ -42,12 +47,14 @@ import helper from "@/utilities/helper";
 import UserInfoService from "@/Services/userInfoService";
 import ListMembers from '@/components/group/ListMembers';
 import Pagination from '@/components/common/Pagination';
+import BackButton from '@/components/common/BackButton.vue';
 
 export default {
     name: "Group New Members",
     components: {
         ListMembers,
         Pagination,
+        BackButton,
     },
     created() {
         this.getMembers()

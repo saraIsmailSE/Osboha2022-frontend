@@ -90,8 +90,8 @@
                             ارسال بريد الكتروني
                         </h3>
                         <div class="row mt-2 mb-2">
-                            <button class="col ms-1 me-1" v-for="(back_reader_message, index) in BACK_READER_MESSAGES" :key="index"
-                                @click="() => { this.email_body = back_reader_message }">
+                            <button class="col ms-1 me-1" v-for="(back_reader_message, index) in BACK_READER_MESSAGES"
+                                :key="index" @click="() => { this.email_body = back_reader_message }">
                                 رسالة ({{ index }})
                             </button>
                         </div>
@@ -103,7 +103,7 @@
                             الحالة بعد التواصل
                         </h3>
                         <form @submit.prevent="updateContactStatus" class="post-text ml-3 w-100 row"
-                            v-if="!contact_has_been_made">
+                            v-if="!contact_has_been_made || editable">
                             <div class="form-group row mt-2">
                                 <select v-model="v$.contactForm.contact.$model" class="form-select" data-trigger
                                     name="contact" id="contact">
@@ -178,6 +178,13 @@
                                         contact_has_been_made.reviewer.last_name }}
                                 </span>
                             </h5>
+                            <span> تم التعديل بتاريخ: {{ format_date(contact_has_been_made.updated_at) }}</span>
+
+                            <div>
+                                <span role="button" class="material-symbols-outlined display-6" @click="allowEdit()">
+                                    edit
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -226,6 +233,7 @@ export default {
             user: null,
             group: null,
             exception: null,
+            editable: false,
             contact_has_been_made: null,
             contactForm: {
                 ambassador_id: this.$route.params.ambassador_id,
@@ -263,6 +271,7 @@ export default {
                     this.contact_has_been_made = await ContactsWithWithdrawn.updateContactStatus(this.contactForm);
                     this.loader = false;
                     this.message = 'تم التعديل بنجاح';
+                    this.editable = false;
                     this.v$.contactForm.$reset();
                 } catch (error) {
                     console.log(error);
@@ -270,6 +279,11 @@ export default {
             }
 
         },
+        allowEdit() {
+            this.editable = true;
+            this.contactForm.contact = this.contact_has_been_made.contact;
+            this.contactForm.return = this.contact_has_been_made.return;
+        }
 
     },
 

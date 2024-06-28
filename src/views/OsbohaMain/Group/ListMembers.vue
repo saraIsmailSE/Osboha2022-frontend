@@ -1,5 +1,6 @@
 <template>
   <div class="row">
+    <back-button routeName="group.group-detail" :routeParams="{ group_id: this.$route.params.group_id }" />
     <iq-card>
       <template v-slot:headerTitle>
         <h4 class="card-title">قائمة الأعضاء</h4>
@@ -28,6 +29,13 @@
               </span>
               <div :class="`dropdown-menu dropdown-menu-right ${controlList[index] ? 'show' : ''
                 }`" aria-labelledby="dropdownMenuButton">
+                <a role="button" class="dropdown-item d-flex align-items-center " v-if="allowedToWithdrawn"
+                  @click="copyToClipboard(user.email)">
+                  <span class="material-symbols-outlined me-2 md-18">
+                    content_copy
+                  </span>
+                  نسخ البريد الالكتروني
+                </a>
                 <a v-if="allowedTodelete" role="button" class="dropdown-item d-flex align-items-center"
                   @click="deleteMember(user.pivot.id)">
                   <span class="material-symbols-outlined me-2 md-18">
@@ -69,14 +77,17 @@ import UserGroup from "@/API/services/user-group.service";
 import vClickOutside from "click-outside-vue3";
 import GroupService from "@/API/services/group.service";
 import { ARABIC_ROLES } from "@/utilities/constants";
+import { copyToClipboard } from "@/utilities/commonFunctions";
 import helper from "@/utilities/helper";
 import UserInfoService from "@/Services/userInfoService";
+import BackButton from '@/components/common/BackButton.vue';
 
 export default {
   name: "GroupMembers",
   directives: {
     clickOutside: vClickOutside.directive,
   },
+  components: { BackButton },
   created() {
     this.getUsers()
   },
@@ -93,6 +104,7 @@ export default {
   },
   methods: {
     ...helper,
+    copyToClipboard,
     async getUsers() {
       const response = await UserGroup.usersByGroupId(
         this.$route.params.group_id

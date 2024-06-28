@@ -29,6 +29,40 @@
         <!-- LAST Achievement -->
         <tab-content-item :active="true" id="last-achev" aria-labelled-by="last-achev">
           <div v-if="last_achievement">
+            <div v-if="last_achievement.status == 'retard'">
+              <iq-card>
+                <template v-slot:body>
+                  <h2>توثيقك بحاجة لاعادة </h2>
+                  <div class="tab-content">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="card card-block card-stretch card-height blog-list">
+                          <div class="card-body">
+                            <div class="row align-items-center">
+                              <div class="col-md-6">
+                                <div class="image-block m-auto text-center">
+                                  <img src="@/assets/images/main/relax.png" class="img-fluid rounded w-50"
+                                    alt="blog-img" />
+                                </div>
+                              </div>
+                              <h5 class="text-center mt-3 mb-3 mx-2">تم اعادة توثيقك للاسباب التالية</h5>
+
+                              <p class="text-center mt-1 mb-3 mx-2">
+                                {{ last_achievement.reviews }}
+                              </p>
+                              <router-link :to="{ name: `achievement.steps`, params: { id: last_achievement.book.id } }"
+                                class="btn btn-primary d-block w-100">
+                                عرض التوثيق
+                              </router-link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </iq-card>
+            </div>
             <div v-if="last_achievement.status == 'rejected'">
               <iq-card>
                 <template v-slot:body>
@@ -91,7 +125,7 @@
                             <h6>التلخيص العام</h6>
                             <small>{{ statistics.general_informations_degree ? statistics.general_informations_degree :
                               0
-                            }}%</small>
+                              }}%</small>
                           </div>
                           <b-progress class="shadow-none w-100 mt-2" style="height: 6px">
                             <progressbar className="bg-primary"
@@ -112,22 +146,6 @@
                           </b-progress>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </template>
-                <template v-slot:body v-else>
-                  <h2>احصائيات</h2>
-                  <div class="col-sm-12">
-                    <div class="iq-card-body p-0">
-                      <div class="image-block text-center">
-                        <img src="@/assets/images/main/team_work.png" class="img-fluid rounded w-50" alt="blog-img">
-                      </div>
-
-                      <h4 class="text-center mt-3 mb-3 mx-2">
-                        وكما تشكل المكعبات قلعة شامخة، تشكل إجابتك علمًا راسخًا يتم تقييمه ويسهل عليك العودة له دائمًا
-                        للتدارس، أكمل تعبئة الأسئلة المطلوبة ضمن الكتاب لتظهر لك صفحة
-                        الاحصائيات الخاصة بطلبك
-                      </h4>
                     </div>
                   </div>
                 </template>
@@ -214,7 +232,6 @@
               </div>
             </iq-card>
           </div>
-
         </tab-content-item>
         <!-- END LAST Achievement -->
 
@@ -234,7 +251,8 @@
                         <div class="col-md-6">
                           <div class="blog-description p-2 text-center">
                             <div class="image-block text-center">
-                              <img src="@/assets/images/main/finished.png" class="img-fluid rounded w-50" alt="blog-img">
+                              <img src="@/assets/images/main/finished.png" class="img-fluid rounded w-50"
+                                alt="blog-img">
                             </div>
 
                             <h3 class="mb-2 text-center">اسم الكتاب: {{ achievement.book.name }} </h3>
@@ -274,13 +292,20 @@
         </tab-content-item>
         <!-- END AchievementS -->
       </div>
+
+      <div class="d-flex justify-content-end">
+        <p></p>
+        <back-button routeName="user.profile" :routeParams="{ user_id: this.$route.params.user_id }" />
+      </div>
     </div>
   </div>
 </template>
 <script>
-import certificateService from '@/API/EligibleServices/certificateServices'
-import userBookServices from '@/API/EligibleServices/userBookServices'
+import certificateService from '@/API/EligibleServices/certificateServices';
+import userBookServices from '@/API/EligibleServices/userBookServices';
+
 export default {
+  components: { BackButton },
   name: "Profile",
   async created() {
     //await this.getStatistics();
@@ -336,6 +361,7 @@ export default {
 <script setup>
 import { ref, reactive } from "vue";
 import "flatpickr/dist/flatpickr.css";
+import BackButton from '../../../../components/common/BackButton.vue';
 const inlineDate = ref("");
 const inlineDatepicker = reactive({
   inline: true,

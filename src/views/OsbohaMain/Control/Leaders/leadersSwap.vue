@@ -3,7 +3,8 @@
         <iq-card class="iq-card">
             <div class="iq-card-body p-4">
                 <div class="image-block text-center">
-                    <img src="@/assets/images/main/change_leader.jpg" class="img-fluid rounded w-75" alt="تبديل القادة" />
+                    <img src="@/assets/images/main/change_leader.jpg" class="img-fluid rounded w-75"
+                        alt="تبديل القادة" />
                 </div>
             </div>
 
@@ -42,8 +43,8 @@
                         <div class="form-group">
                             <!-- ########## New Leader  => if newLeader_currentToAmbassador ########## -->
                             <label for="newLeader">القائد الجديد</label>
-                            <input v-model="v$.form.newLeader.$model" type="email" class="form-control mb-0" id="newLeader"
-                                placeholder="ادخل بريد القائد الجديد" />
+                            <input v-model="v$.form.newLeader.$model" type="email" class="form-control mb-0"
+                                id="newLeader" placeholder="ادخل بريد القائد الجديد" />
                             <template v-if="v$.form.newLeader.$error">
                                 <small style="color: red" v-if="v$.form.newLeader.required.$invalid">البريد الالكتروني
                                     القائد الجديد
@@ -71,6 +72,11 @@
                     </form>
                 </div>
             </div>
+
+            <div class="d-flex justify-content-end me-2">
+                <back-button routeName="group.group-detail" :routeParams="{ group_id: this.$route.params.group_id }" />
+            </div>
+
         </iq-card>
     </div>
 </template>
@@ -79,9 +85,13 @@
 import useVuelidate from "@vuelidate/core";
 import { required, email, requiredIf } from "@vuelidate/validators";
 import RolesService from "@/API/services/roles.service";
+import BackButton from '@/components/common/BackButton.vue';
 
 export default {
     name: "Assign Administrator",
+    components: {
+        BackButton,
+    },
     setup() {
         return { v$: useVuelidate() };
     },

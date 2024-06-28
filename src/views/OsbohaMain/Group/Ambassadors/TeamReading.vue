@@ -1,58 +1,37 @@
 <template>
+  <div class="d-flex justify-content-end">
+    <back-button routeName="group.group-detail" :routeParams="{ group_id: this.$route.params.group_id }" />
+  </div>
+
   <div class="row" v-if="group_users > 0">
     <div class="col-lg-3">
       <StatisticsList :categoryList="categories" />
     </div>
     <div class="col-lg-9">
       <!-- v-if="ambassadorsAchievementList" -->
-      <AmbassadorsAchievement
-        :ambassadorsAchievementList="ambassadorsAchievementList"
-        :group_id="group.id"
-        :week_id="week_id"
-        :group_name="group.name"
-        :group_users="group_users"
-        :most_read="most_read"
-      />
+      <AmbassadorsAchievement :ambassadorsAchievementList="ambassadorsAchievementList" :group_id="group.id"
+        :week_id="week_id" :group_name="group.name" :group_users="group_users" :most_read="most_read" />
     </div>
   </div>
   <div class="row" v-else>
     <iq-card class="iq-card">
       <div class="iq-card-body p-0">
         <div class="image-block text-center">
-          <img
-            src="@/assets/images/main/reader.png"
-            class="img-fluid rounded w-75 mt-3"
-            alt="no-amb"
-          />
+          <img src="@/assets/images/main/reader.png" class="img-fluid rounded w-75 mt-3" alt="no-amb" />
         </div>
         <h4 class="text-center mt-3 mb-3">لا يوجد سفراء في هذه المجموعة</h4>
-        <div class="d-inline-block w-100 text-center col-12">
-          <a
-            role="button"
-            @click="$router.go(-1)"
-            class="d-block mt-3 mb-3 w-75 mx-auto"
-          >
-            <span>عودة</span>
-            <span class="align-middle material-symbols-outlined">
-              keyboard_return
-            </span>
-          </a>
-        </div>
       </div>
     </iq-card>
   </div>
   <div class="row" v-if="support_leader && support_leader?.mark">
     <div class="col-lg-3">
-      <router-link
-        :to="{
-          name: 'group.listOneAmbassadorReading',
-          params: {
-            ambassador_id: support_leader?.mark?.user?.id,
-            week_id: week_id,
-          },
-        }"
-        class="btn btn-primary d-block mt-3"
-      >
+      <router-link :to="{
+        name: 'group.listOneAmbassadorReading',
+        params: {
+          ambassador_id: support_leader?.mark?.user?.id,
+          week_id: week_id,
+        },
+      }" class="btn btn-primary d-block mt-3">
         إنجاز قائد الدعم
       </router-link>
     </div>
@@ -62,6 +41,7 @@
 import StatisticsList from "./StatisticsList.vue";
 import AmbassadorsAchievement from "./Achievement";
 import GroupService from "@/API/services/group.service";
+import BackButton from '@/components/common/BackButton.vue';
 
 export default {
   name: "Team Reading Info",
@@ -85,7 +65,7 @@ export default {
     }
   },
 
-  components: { StatisticsList, AmbassadorsAchievement },
+  components: { StatisticsList, AmbassadorsAchievement, BackButton },
   data() {
     return {
       group_id: this.$route.params.group_id,

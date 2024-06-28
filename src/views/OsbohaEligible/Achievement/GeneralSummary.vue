@@ -4,9 +4,6 @@
             <iq-card>
                 <div class="iq-card-body profile-page p-0">
                     <div class="p-0 text-center">
-                        <h3 class="text-center mt-3">
-                            <strong> عنوان </strong>
-                        </h3>
                         <video class="w-75" controls preload="metadata">
                             <source src="@/assets/videos/eligible_videos/general_informations.mp4#t=5.0" type="video/mp4">
                             Your browser does not support the video tag.

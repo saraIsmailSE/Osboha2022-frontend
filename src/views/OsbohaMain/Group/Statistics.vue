@@ -1,10 +1,13 @@
 <template>
   <iq-card v-if="statistics">
     <template v-slot:body>
-      <h2>
-        احصائيات
-        {{ statistics.group.name }}
-      </h2>
+      <div class="d-flex justify-content-between">
+        <h2 class="mt-auto mb-auto">
+          احصائيات
+          {{ statistics.group.name }}
+        </h2>
+        <back-button routeName="group.group-detail" :routeParams="{ group_id: this.$route.params.group_id }" />
+      </div>
       <div class="form-group mt-3">
         <select class="form-select" v-model="week_id">
           <option value="-1">اختر الأسبوع</option>
@@ -36,6 +39,7 @@ import GroupMonth from "@/components/group/statistics/GroupMonth.vue";
 import GroupService from "@/API/services/group.service";
 import { watchEffect } from "vue";
 import MembersReading from "@/components/group/statistics/ReadingList";
+import BackButton from '@/components/common/BackButton.vue';
 
 export default {
   name: "GroupStatistics",
@@ -46,6 +50,7 @@ export default {
     ThseseAndQuotes,
     GroupMonth,
     MembersReading,
+    BackButton,
   },
   async created() {
     watchEffect(async () => {

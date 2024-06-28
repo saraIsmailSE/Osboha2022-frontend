@@ -20,20 +20,6 @@
                 <a @click="$router.go(-1)" type="submit" class="col-6 btn btn-primary d-block w-75 mx-auto mb-3">
                   عودة
                 </a>
-                <!-- <a
-                  @click="currentAchievement(already_have_one.book_id)"
-                  type="submit"
-                  class="col-6 btn btn-success d-block w-75 mx-auto mb-3"
-                >
-                  العودة لإكمال توثيقك السابق
-                </a>
-                <a
-                  @click="deleteUserBook(already_have_one.book_id)"
-                  type="submit"
-                  class="col-6 btn btn-danger d-block w-75 mx-auto mb-3"
-                >
-                  الغاء التوثيق السابق
-                </a> -->
               </div>
             </div>
           </div>
@@ -134,7 +120,6 @@ export default {
       this.already_have_one = await userBookServices.checkAchievement(
         this.$route.params.id
       );
-      console.log(this.already_have_one)
     },
     async start() {
       try {

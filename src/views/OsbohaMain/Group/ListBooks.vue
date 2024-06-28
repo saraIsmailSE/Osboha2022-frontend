@@ -1,7 +1,12 @@
 <template>
   <iq-card>
     <template v-slot:body>
-      <h2 class="text-center mb-3">كتب يقرؤها الأعضاء</h2>
+      <div class="d-flex justify-content-between ms-2 me-2">
+        <h2 class="mt-auto mb-auto">
+          كتب يقرؤها الأعضاء </h2>
+        <back-button routeName="group.group-detail" :routeParams="{ group_id: this.$route.params.group_id }" />
+      </div>
+
       <hr />
       <h4 class="text-center mt-3 mb-3" v-if="books">
         العدد الكلي: {{ books.length }}
@@ -9,23 +14,13 @@
 
       <template v-if="books && books.length > 0">
         <div class="d-grid gap-3 d-grid-template-1fr-19">
-          <BookCard
-            v-for="bookInfo in booksLoaded"
-            :key="bookInfo.id"
-            :cardInfo="bookInfo"
-            :isAmbassador="false"
-            :isProfile="true"
-          />
+          <BookCard v-for="bookInfo in booksLoaded" :key="bookInfo.id" :cardInfo="bookInfo" :isAmbassador="false"
+            :isProfile="true" />
         </div>
         <div class="row my-2" v-if="books.length > booksLoaded.length">
           <div class="col-12 text-center">
-            <a
-              class="btn"
-              role="button"
-              @click="loadMore()"
-              style="font-weight: 600; font-size: 1.1rem; color: #1f662b"
-              >عرض المزيد</a
-            >
+            <a class="btn" role="button" @click="loadMore()"
+              style="font-weight: 600; font-size: 1.1rem; color: #1f662b">عرض المزيد</a>
           </div>
         </div>
       </template>
@@ -33,11 +28,7 @@
         <iq-card class="iq-card">
           <div class="iq-card-body p-0">
             <div class="image-block text-center">
-              <img
-                src="@/assets/images/main/current_book.png"
-                class="img-fluid rounded w-50"
-                alt="blog-img"
-              />
+              <img src="@/assets/images/main/current_book.png" class="img-fluid rounded w-50" alt="blog-img" />
             </div>
             <h4 class="text-center mt-3 mb-3">لا يوجد كتب</h4>
           </div>
@@ -49,10 +40,11 @@
 <script>
 import BookCard from "@/components/book/BookCard.vue";
 import GroupService from "@/API/services/group.service";
+import BackButton from '@/components/common/BackButton.vue';
 
 export default {
   name: "Group Book",
-  components: { BookCard },
+  components: { BookCard,BackButton },
   async created() {
     try {
       this.books = await GroupService.getBooks(this.$route.params.group_id);
