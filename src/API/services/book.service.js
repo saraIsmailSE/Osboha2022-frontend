@@ -244,6 +244,14 @@ class BookService {
       return error;
     }
   }
+  async isBookExist(searchTerm) {
+    try {
+      const response = await api.get(`books/is-book-exist/${searchTerm}`);
+      return response.data.data;
+    } catch (error) {
+      return error;
+    }
+  }
 }
 
 export default new BookService();

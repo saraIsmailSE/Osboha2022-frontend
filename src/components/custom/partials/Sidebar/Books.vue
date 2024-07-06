@@ -44,27 +44,27 @@
             <span class="item-name">اضافة كتاب</span>
         </router-link>
     </li>
-    <!-- <li class="nav-item">
+    <li class="nav-item">
         <router-link :class="checkActive('book.suggest-book') ? 'active nav-link' : 'nav-link'" aria-current="page"
             :to="{ name: 'book.suggest-book' }">
             <i class="icon material-symbols-outlined"> bolt </i>
             <span class="item-name">اقترح كتاب</span>
         </router-link>
-    </li> -->
-    <li class="nav-item" v-if="inBooksTeam">
+    </li>
+    <li class="nav-item" v-if="isTeamCoordinator">
         <router-link :class="checkActive('book.list-violated-books') ? 'active nav-link' : 'nav-link'"
             aria-current="page" :to="{ name: 'book.list-violated-books' }">
             <i class="icon material-symbols-outlined"> book </i>
             <span class="item-name">الكتب المخالفة</span>
         </router-link>
     </li>
-    <!-- <li class="nav-item" v-if="inBooksTeam">
+    <li class="nav-item" v-if="isTeamCoordinator">
         <router-link :class="checkActive('book.list-suggested-books') ? 'active nav-link' : 'nav-link'"
             aria-current="page" :to="{ name: 'book.list-suggested-books' }">
             <i class="icon material-symbols-outlined"> bookmark_star </i>
             <span class="item-name">الكتب المقترحة</span>
         </router-link>
-    </li> -->
+    </li>
     <li class="nav-item" v-if="isTeamCoordinator">
         <router-link :class="checkActive('roles.rolesControl') ? 'active nav-link' : 'nav-link'
             " aria-current="page" :to="{

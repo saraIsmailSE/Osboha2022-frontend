@@ -105,11 +105,10 @@ export default {
                 this.loader = true;
                 try {
                     const response = await BookSuggestion.updatesuggestionStatus(
-                        this.suggestion.id,
                         this.actionForm,
                     );
                     this.loader = false;
-                    this.message = response;
+                    this.message = 'تم تحديث حالة الاقتراح';
                     helper.toggleToast(this.message, "success");
                     this.$emit("update_suggestion");
 

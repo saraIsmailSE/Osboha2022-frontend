@@ -3,6 +3,7 @@
         <div class="row d-flex justify-content-center align-items-center">
             <div class="col-md-12 col-xl-12 mt-3 mb-3">
                 <div class="card" style="border-radius: 15px">
+
                     <div class="card-body text-center">
                         <BasicInfo :user="user" :roles="roles" :in_charge_of="in_charge_of"
                             :followup_team="followup_team" />
@@ -42,6 +43,20 @@
 
                         </div>
                     </div>
+
+                    <div class="row d-flex justify-content-end align-items-center w-75 m-auto mb-3"
+                        v-if="inWithdrawnsTeam">
+                        <router-link class="btn btn-info display-5 " :to="{
+                            name: 'withdrawns-team.withdrawn-ambassador',
+                            params: { ambassador_id: user.id },
+                        }">
+                            <span class="material-symbols-outlined align-middle">
+                                security_update_good
+                            </span>
+                            تحديث حالة التواصل
+                        </router-link>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -51,6 +66,7 @@
 import Marks from './Achievement/4WeeksMarks.vue';
 import UserGroups from "./UserGroups.vue";
 import BasicInfo from "./BasicInfo.vue";
+import UserInfoService from "@/Services/userInfoService";
 
 export default {
     name: "Information Card",
@@ -93,6 +109,18 @@ export default {
             show_groups: false,
             show_marks: false,
         };
+    },
+    computed: {
+        authUser() {
+            return this.$store.getters.getUser;
+        },
+        inWithdrawnsTeam() {
+            return UserInfoService.hasRoles(this.authUser, [
+                "admin",
+                'coordinator_of_withdrawns_team',
+                'member_of_withdrawns_team',
+            ]);
+        },
     },
 };
 </script>

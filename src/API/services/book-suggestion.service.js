@@ -16,7 +16,7 @@ class BookSuggestion {
         }
     }
 
-    async updateStatus(bookForm) {
+    async updatesuggestionStatus(bookForm) {
         try {
             const response = await api.post(`${this.prefix}/update-status`, bookForm, {
                 headers: { "Content-type": "multipart/form-data" },

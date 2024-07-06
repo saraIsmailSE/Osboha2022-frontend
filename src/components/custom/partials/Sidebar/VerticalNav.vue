@@ -266,16 +266,6 @@ export default {
       }
     };
 
-    // const handleClickOutside = (event) => {
-    //   if (event.target.id === 'toggelBtn') {
-    //     return;
-    //   }
-
-    //   if (isSidebarOpen.value) {
-    //     store.dispatch("setting/sidebar_type", [...sidebarType.value, "sidebar-mini"]);
-    //   }
-    // };
-
     return {
       // handleClickOutside,
       // isSidebarOpen,

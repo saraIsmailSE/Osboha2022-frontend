@@ -36,13 +36,13 @@
               </span>
               ابلاغ مخالف
             </router-link>
-            <!-- <button class="btn btn-info display-5" @click="suggestThisBook()"
-              v-if="!loading && (book_owner && book?.book.type.type == 'free') && !isSuggested">
+            <button class="btn btn-info display-5" @click="suggestThisBook()"
+              v-if="!loading && (book_owner && book?.book.type.type == 'free') && !isSuggested && allowedToSuggest">
               <span class=" material-symbols-outlined align-middle">
                 bolt
               </span>
               اقترح للمنهج
-            </button> -->
+            </button>
 
             <div class="image-block text-center mt-3">
               <img :src="resolve_img_url(book?.book?.media?.path ?? '')" class="img-fluid rounded w-25"
@@ -227,6 +227,7 @@ export default {
   },
   // props: ["id"],
   async created() {
+    this.bookSuggestionsCount = await BookSuggestion.isAllowedToSuggest();
     watchEffect(async () => {
       if (this.$route.params.book_id) {
         await this.init();
@@ -238,7 +239,7 @@ export default {
     return {
       theses: [],
       book: null,
-      isSuggested:false,
+      isSuggested: false,
       fullBriefText: "",
       shortBriefText: "",
       page: 1,
@@ -247,6 +248,7 @@ export default {
       eligibleToWriteThesis: true,
       book_owner: false,
       loadingBook: false,
+      bookSuggestionsCount: 3,
     };
   },
   methods: {
@@ -517,7 +519,7 @@ export default {
           "تم حفظ الاقتراح ",
           "success",
         );
-        this.isSuggested=true;
+        this.isSuggested = true;
       })
         .catch((error) => {
           helper.toggleToast("حصل خطأ - لم يتم حفظ الاقتراح!", "danger");
@@ -568,6 +570,9 @@ export default {
       }
 
       return !eligibleToWriteThesis;
+    },
+    allowedToSuggest() {
+      return this.bookSuggestionsCount < 3;
     }
 
   },

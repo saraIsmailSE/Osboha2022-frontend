@@ -160,7 +160,6 @@ export default {
         },
         async getSuggestion() {
             this.book = await BookSuggestion.show(this.$route.params.suggestion_id);
-            console.log("🚀 ~ getSuggestion ~ this.book:", this.book)
         },
         updateSuggestion() {
             this.getSuggestion();

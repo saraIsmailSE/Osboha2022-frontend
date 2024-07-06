@@ -19,10 +19,12 @@
             <div class="form-group">
               <label for="bookName">* اسم الكتاب</label>
               <input type="text" v-model="v$.bookForm.name.$model" class="form-control mb-0" id="bookName"
-                placeholder=" اسم الكتاب" />
+                placeholder=" اسم الكتاب" @change="checkIsBookExist()" />
               <small style="color: red" v-if="v$.bookForm.name.$error">
                 اسم الكتاب مطلوب</small>
             </div>
+            
+            <available-books :availableBooks="availableBooks" />
 
             <!-- Brief -->
             <div class="form-group">
@@ -86,15 +88,15 @@
             <div class="form-group">
               <label for="bookType">
                 <span v-if="shouldfFill">*</span> نوع الكتاب</label>
-              <select v-model="v$.bookForm.type_id.$model" class="form-select" data-trigger name="choices-single-default"
-                id="choices-single-default" v-if="shouldfFill">
+              <select v-model="v$.bookForm.type_id.$model" class="form-select" data-trigger
+                name="choices-single-default" id="choices-single-default" v-if="shouldfFill">
                 <option value="0" selected>اختر نوع الكتاب</option>
                 <option v-for="(type, index) in types" :key="index" :value="type.id">
                   {{ BOOK_TYPES[type.type] }}
                 </option>
               </select>
-              <select v-model="v$.bookForm.type_id.$model" class="form-select" data-trigger name="choices-single-default"
-                id="choices-single-default" v-else disabled>
+              <select v-model="v$.bookForm.type_id.$model" class="form-select" data-trigger
+                name="choices-single-default" id="choices-single-default" v-else disabled>
                 <option value="0" selected>كتاب حر</option>
               </select>
               <small style="color: red" v-if="v$.bookForm.type_id.$error">نوع الكتاب مطلوب</small>
@@ -104,8 +106,8 @@
             <div class="form-group">
               <label for="bookLevel">
                 <span v-if="shouldfFill">*</span> مستوى الكتاب</label>
-              <select v-model="v$.bookForm.level_id.$model" class="form-select" data-trigger name="choices-single-default"
-                id="choices-single-default">
+              <select v-model="v$.bookForm.level_id.$model" class="form-select" data-trigger
+                name="choices-single-default" id="choices-single-default">
                 <option value="0" selected>اختر مستوى الكتاب</option>
                 <option v-for="(level, index) in bookLevels" :key="index" :value="level.id">
                   {{ level.arabic_level }}
@@ -117,8 +119,8 @@
             <!-- Book Section -->
             <div class="form-group col-12">
               <h4> قسم الكتاب
-                
-                <span v-if="shouldfFill">*</span> 
+
+                <span v-if="shouldfFill">*</span>
               </h4>
               <select class="form-select mt-2" data-trigger name="section" id="section"
                 v-model="v$.bookForm.section_id.$model">
@@ -134,7 +136,8 @@
             <div class="form-group col-12">
               <h4>
                 لغة الكتاب
-                <span v-if="shouldfFill">*</span> </h4>
+                <span v-if="shouldfFill">*</span>
+              </h4>
               <select class="form-select mt-2" data-trigger name="section" id="section"
                 v-model="v$.bookForm.language_id.$model">
                 <option value="0" selected>اختر لغة الكتاب</option>
@@ -190,12 +193,14 @@ import bookLevel from "@/API/services/book-level.service";
 import sections from "@/API/services/sectionService";
 import { LANUAGES, BOOK_TYPES } from "@/utilities/constants";
 import UserInfoService from "@/Services/userInfoService";
+import AvailableBooks from '@/components/book/AvailableBooks.vue';
 
 
 const greaterThanZero = (value) => value > 0;
 
 export default {
   name: "Create Book",
+  components: { AvailableBooks },
   setup() {
     return { v$: useVuelidate() };
   },
@@ -236,6 +241,7 @@ export default {
 
   data() {
     return {
+      availableBooks: [],
       types: [],
       bookLevels: [],
       sections: [],
@@ -349,6 +355,9 @@ export default {
     };
   },
   methods: {
+    async checkIsBookExist() {
+      this.availableBooks = await bookService.isBookExist(this.bookForm.name)
+    },
     selectItem(value) {
       if (this.isAdmin || this.inBooksTeam) {
         return value > 0;

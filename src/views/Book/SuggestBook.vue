@@ -41,10 +41,12 @@
                         <div class="form-group mt-2">
                             <h4>* اسم الكتاب</h4>
                             <input type="text" v-model="v$.bookForm.name.$model" class="form-control mb-0 mt-2"
-                                id="bookName" placeholder=" اسم الكتاب" />
+                                id="bookName" placeholder=" اسم الكتاب" @change="checkIsBookExist()" />
                             <small style="color: red" v-if="v$.bookForm.name.$error">
                                 اسم الكتاب مطلوب</small>
                         </div>
+
+                        <available-books :availableBooks="availableBooks" />
 
                         <!-- Brief -->
                         <div class="form-group">
@@ -58,8 +60,7 @@
                     direction: rtl;
                     max-height: 120px;
                     resize: none;
-                    overflow: auto;
-                  " :rows="1" ref="bodyRef" @input="autoResize($event)" />
+                    overflow: auto;" :rows="1" ref="bodyRef" @input="autoResize($event)" />
                             <small style="color: red" v-if="v$.bookForm.brief.$error">وصف الكتاب مطلوب</small>
                         </div>
 
@@ -143,15 +144,17 @@
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import BookSuggestion from "@/API/services/book-suggestion.service";
+import bookService from "@/API/services/book.service";
 import languages from "@/API/services/language.service";
 import sections from "@/API/services/sectionService";
 import { LANUAGES, } from "@/utilities/constants";
-
+import AvailableBooks from '@/components/book/AvailableBooks.vue';
 
 const greaterThanZero = (value) => value > 0;
 
 export default {
-    name: "Create Book",
+    components: { AvailableBooks },
+    name: "Create Book Suggestion",
     setup() {
         return { v$: useVuelidate() };
     },
@@ -179,6 +182,7 @@ export default {
             },
             message: "",
             loading: false,
+            availableBooks: [],
         };
     },
     validations() {
@@ -209,6 +213,9 @@ export default {
             const textarea = event.target;
             textarea.style.height = 'auto';
             textarea.style.height = textarea.scrollHeight + 'px';
+        },
+        async checkIsBookExist() {
+            this.availableBooks = await bookService.isBookExist(this.bookForm.name)
         },
         async onSubmit() {
             this.v$.$touch();

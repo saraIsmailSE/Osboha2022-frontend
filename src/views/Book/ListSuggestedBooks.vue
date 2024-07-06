@@ -21,7 +21,7 @@
                                         id="nav-accepted-tab" data-bs-toggle="tab" data-bs-target="#nav-accepted"
                                         type="button" role="tab" aria-controls="nav-accepted" aria-selected="false"
                                         @click="() => { this.status = 'accepted'; }">
-                                        تم الحل
+                                        مقبول
                                     </button>
 
                                     <button :className="`nav-link ${status == 'followup' ? 'active' : ''}`"

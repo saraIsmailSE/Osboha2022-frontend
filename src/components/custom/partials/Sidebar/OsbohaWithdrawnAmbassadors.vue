@@ -47,12 +47,10 @@ export default {
         user() {
             return this.$store.getters.getUser;
         },
-
         isWithdrawnsCoordinator() {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
                 'coordinator_of_withdrawns_team',
-                'member_of_withdrawns_team',
             ]);
         },
 
