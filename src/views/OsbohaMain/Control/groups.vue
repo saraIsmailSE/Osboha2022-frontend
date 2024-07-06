@@ -5,7 +5,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="header-title">
-                            <h4 class="card-title">التحكم بالمجموعات - {{ 2 }}</h4>
+                            <h4 class="card-title">التحكم بالمجموعات </h4>
                         </div>
                     </div>
                     <div class="card-body">

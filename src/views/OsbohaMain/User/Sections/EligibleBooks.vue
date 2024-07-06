@@ -295,7 +295,7 @@
 
       <div class="d-flex justify-content-end">
         <p></p>
-        <back-button routeName="user.profile" :routeParams="{ user_id: this.$route.params.user_id }" />
+        <!-- <back-button routeName="user.profile" :routeParams="{ user_id: this.$route.params.user_id }" /> -->
       </div>
     </div>
   </div>
@@ -305,9 +305,12 @@ import certificateService from '@/API/EligibleServices/certificateServices';
 import userBookServices from '@/API/EligibleServices/userBookServices';
 
 export default {
-  components: { BackButton },
+  components: {
+    //BackButton
+    },
   name: "Profile",
   async created() {
+
     //await this.getStatistics();
     await this.getUserCertificates();
     await this.lastAchievement();

@@ -35,17 +35,16 @@
                   </button>
 
                   <button :className="`nav-link ${retrieveType == 'supervising' ? 'active' : ''}`"
-                    id="nav-popularity-tab" data-bs-toggle="tab" data-bs-target="#nav-popularity" type="button" role="tab"
-                    aria-controls="nav-popularity" aria-selected="false" @click="loadGroups('supervising')">
+                    id="nav-popularity-tab" data-bs-toggle="tab" data-bs-target="#nav-popularity" type="button"
+                    role="tab" aria-controls="nav-popularity" aria-selected="false" @click="loadGroups('supervising')">
                     رقابة
                   </button>
 
-                  <button :className="`nav-link ${retrieveType == 'followup' ? 'active' : ''}`"
-                    id="nav-featured-tab" data-bs-toggle="tab" data-bs-target="#nav-featured" type="button" role="tab"
-                    aria-controls="nav-featured" aria-selected="false"
-                    @click="loadGroups('followup')">
-                  متابعة
-                </button>
+                  <button :className="`nav-link ${retrieveType == 'followup' ? 'active' : ''}`" id="nav-featured-tab"
+                    data-bs-toggle="tab" data-bs-target="#nav-featured" type="button" role="tab"
+                    aria-controls="nav-featured" aria-selected="false" @click="loadGroups('followup')">
+                    متابعة
+                  </button>
 
                 </div>
               </nav>
@@ -60,6 +59,7 @@
                     <th>اسم المجموعة</th>
                     <th>نوع المجموعة</th>
                     <th>عدد الاعضاء</th>
+                    <th>حالة المجموعة</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -78,6 +78,14 @@
                     </td>
                     <td>
                       {{ group.users_count }}
+                    </td>
+                    <td>
+                      <span class="rounded-pill badge bg-success mt-2 px-2" v-if="group.is_active">
+                        فعالة
+                      </span>
+                      <span class="rounded-pill badge bg-danger mt-2 px-2" v-else>
+                        تم التفريغ
+                      </span>
                     </td>
 
                     <td v-if="group.group_administrators">
@@ -199,7 +207,7 @@ export default {
       return tableHTML;
     },
     async loadGroups(retrieveType) {
-      this.groups= [];
+      this.groups = [];
 
       if (this.pendingRequest) {
         return;
