@@ -198,6 +198,7 @@ export default {
                 'yesterday': 'أمس',
                 'week': 'الاسبوع الحالي',
                 'month': 'الشهر الحالي',
+                'last_month': 'الشهر الماضي',
             },
         };
     },
