@@ -15,7 +15,9 @@ class UserBooks {
   //All Free
   async getAllFree(page, user_id) {
     try {
-      const books = await api.get(`user-books/free-books/${user_id}?page=` + page);
+      const books = await api.get(
+        `user-books/free-books/${user_id}?page=` + page,
+      );
       return books.data.data;
     } catch (error) {
       return error;
@@ -23,9 +25,11 @@ class UserBooks {
   }
 
   //All Normal And Ramadan
-  async getOsbohaUserBooks(page, user_id,name) {
+  async getOsbohaUserBooks(page, user_id, name) {
     try {
-      const books = await api.get(`user-books/osboha-user-books/${user_id}/${name}?page=` + page);
+      const books = await api.get(
+        `user-books/osboha-user-books/${user_id}/${name}?page=` + page,
+      );
       return books.data.data;
     } catch (error) {
       return error;
@@ -41,7 +45,7 @@ class UserBooks {
   async eligibleToWriteThesis(user_id) {
     try {
       const response = await api.get(
-        `user-books/eligible-to-write-thesis/${user_id}`
+        `user-books/eligible-to-write-thesis/${user_id}`,
       );
       return response.data.data;
     } catch (error) {
@@ -74,6 +78,17 @@ class UserBooks {
       return book.data;
     } catch (error) {
       handleError(error);
+    }
+  }
+
+  async markAsFinished(book_id) {
+    try {
+      const response = await api.post(`/user-books/mark-as-finished`, {
+        book_id,
+      });
+      return response.data.data;
+    } catch (error) {
+      return error;
     }
   }
 }

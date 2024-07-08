@@ -25,6 +25,7 @@
         v-model:startPage="v$.thesisForm.start_page.$model"
         v-model:endPage="v$.thesisForm.end_page.$model"
         :isRamadanActive="isRamadanActive"
+        :pagesCount="numberOfPages"
       />
 
       <!-- الأطروحة -->

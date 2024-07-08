@@ -1,8 +1,6 @@
 <template>
   <div class="row">
-    <div class="form-group">
-      <h5 class="form-label">نوع الأطروحة</h5>
-    </div>
+    <label class="form-label">نوع الأطروحة</label>
     <div class="form-group">
       <select
         class="form-select w-100"
