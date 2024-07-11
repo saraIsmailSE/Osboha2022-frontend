@@ -45,6 +45,14 @@
             ><span class="material-symbols-outlined me-2 md-18"> edit </span></a
           >
           <a
+            class="d-flex align-items-center"
+            href="#"
+            data-bs-toggle="modal"
+            :data-bs-target="`#editRate-${comment.id}`"
+            v-else-if="comment.type === 'review'"
+            ><span class="material-symbols-outlined me-2 md-18"> edit </span></a
+          >
+          <a
             v-else
             class="d-flex align-items-center"
             href="#"
@@ -174,12 +182,16 @@ export default {
     this.confirmationText =
       this.comment.type === "thesis" || this.comment.type === "screenshot"
         ? "سيتم حذف الأطروحة نهائياً, وخصم علامتها!"
-        : "سيتم حذف التعليق نهائياً!";
+        : this.comment.type === "review"
+          ? "سيتم حذف التقييم نهائياً!"
+          : "سيتم حذف التعليق نهائياً!";
 
     this.successText =
       this.comment.type === "thesis" || this.comment.type === "screenshot"
         ? "تم حذف الأطروحة نهائياً, وخصم علامتها!"
-        : "تم حذف التعليق!";
+        : this.comment.type === "review"
+          ? "تم حذف التقييم!"
+          : "تم حذف التعليق!";
   },
   methods: {
     resolve_img_url(path) {
@@ -222,6 +234,7 @@ export default {
             if (result.isConfirmed) {
               this.deleteLoading = true;
               try {
+                console.log("from comment header", this.comment.id);
                 await CommentService.delete(this.comment.id);
                 this.deleteComment(this.comment.id);
 

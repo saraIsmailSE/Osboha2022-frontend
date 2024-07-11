@@ -632,8 +632,7 @@ const groupChildRoute = (prop, mode = false) => [
     path: "team-discharge/:group_id",
     name: prop + ".team-discharge",
     meta: { auth: true, name: "Team Discharge" },
-    component: () =>
-      import("../views/OsbohaMain/Group/TeamDischarge"),
+    component: () => import("../views/OsbohaMain/Group/TeamDischarge"),
   },
 ];
 
@@ -1001,6 +1000,12 @@ const bookChildRoute = (prop, mode = false) => [
     path: "user-single-thesis/:book_id/:thesis_id",
     name: prop + ".user-single-thesis",
     meta: { auth: true, name: "UserSingleThesis" },
+    component: () => import("../views/Book/BookDetails"),
+  },
+  {
+    path: ":book_id/user-rate/:rate_id",
+    name: prop + ".user-rate",
+    meta: { auth: true, name: "UserRate" },
     component: () => import("../views/Book/BookDetails"),
   },
   {
