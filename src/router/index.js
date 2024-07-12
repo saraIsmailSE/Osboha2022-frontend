@@ -632,8 +632,7 @@ const groupChildRoute = (prop, mode = false) => [
     path: "team-discharge/:group_id",
     name: prop + ".team-discharge",
     meta: { auth: true, name: "Team Discharge" },
-    component: () =>
-      import("../views/OsbohaMain/Group/TeamDischarge"),
+    component: () => import("../views/OsbohaMain/Group/TeamDischarge"),
   },
 ];
 
@@ -1021,6 +1020,13 @@ const bookChildRoute = (prop, mode = false) => [
     name: prop + ".suggested-book",
     meta: { auth: true, name: "Suggested Book" },
     component: () => import("../views/Book/SuggestedBook"),
+  },
+  {
+    path: "quality-team-achievements",
+    name: prop + ".quality-team-achievements",
+    meta: { auth: true, name: "List Quality Team Achievements" },
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
+    component: () => import("../views/Book/TeamAchievements"),
   },
 ];
 

@@ -13,53 +13,11 @@ class RolesService {
       handleError(error);
     }
   }
-  async getEligibleRoles() {
+  async getSecondaryRoles(type) {
     try {
-      const response = await api.get(`${this.prefix}/get-eligible-roles`);
-      return response.data.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
-  async getMarathonRoles() {
-    try {
-      const response = await api.get(`${this.prefix}/get-marathon-roles`);
-      return response.data.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
-  async getSpecialCareRoles() {
-    try {
-      const response = await api.get(`${this.prefix}/get-special-care-roles`);
-      return response.data.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
-  async getWithdrawnsTeamRoles() {
-    try {
-      const response = await api.get(`${this.prefix}/get-withdrawns-team-roles`);
-      return response.data.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
-  async getBooksTeamRoles() {
-    try {
-      const response = await api.get(`${this.prefix}/get-books-team-roles`);
-      return response.data.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
-  async getRamadanRoles() {
-    try {
-      const response = await api.get(`${this.prefix}/get-ramadan-roles`);
+      const response = await api.get(
+        `${this.prefix}/get-secondary-roles/${type}`,
+      );
       return response.data.data;
     } catch (error) {
       handleError(error);

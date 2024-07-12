@@ -9,6 +9,7 @@ export const ARABIC_ROLES = {
   admin: "ادارة",
   book_quality_team: "عضو في فريق جودة الكتب",
   book_quality_team_coordinator: "مسؤول فريق جودة الكتب",
+  book_quality_supervisor: "مشرف جودة الكتب",
   support_leader: "قائد دعم",
   eligible_admin: "مسؤول توثيق الكتب",
   reviewer: "مراجع توثيق",
@@ -30,6 +31,8 @@ export const ARABIC_ROLES = {
   special_care_leader: "قائد رعاية خاصة",
   coordinator_of_withdrawns_team: "مسؤول فريق المنسحبين",
   member_of_withdrawns_team: "عضو في فريق المنسحبين",
+  osboha_support_coordinator: "مسؤول دعم أصبوحة",
+  osboha_support_member: "دعم أصبوحة",
 };
 
 export const LANUAGES = {

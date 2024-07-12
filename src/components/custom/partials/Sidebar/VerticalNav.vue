@@ -89,6 +89,9 @@
     <!-- ###### Osboha Eligible ###### -->
     <OsbohaEligible />
 
+    <!-- ###### Osboha Support ###### -->
+    <OsbohaSupport v-if="inSupportTeam" />
+
     <!-- ###### Osboha Marathon ###### -->
     <OsbohaMarathon v-if="inMarathon" />
 
@@ -138,6 +141,7 @@ import Exceptions from './Exceptions'
 import OsbohaMarathon from './OsbohaMarathon'
 import OsbohaSpecialCare from './OsbohaSpecialCare'
 import OsbohaWithdrawnAmbassadors from './OsbohaWithdrawnAmbassadors';
+import OsbohaSupport from './OsbohaSupport';
 import Books from './Books';
 // import OsbohaRamadan from "./OsbohaRamadan";
 import vClickOutside from "click-outside-vue3";
@@ -157,6 +161,7 @@ export default {
     OsbohaMarathon,
     OsbohaSpecialCare,
     OsbohaWithdrawnAmbassadors,
+    OsbohaSupport,
     Books,
     // OsbohaRamadan
   },
@@ -234,6 +239,13 @@ export default {
         "admin",
         'coordinator_of_withdrawns_team',
         'member_of_withdrawns_team',
+      ]);
+    },
+    inSupportTeam() {
+      return UserInfoService.hasRoles(this.user, [
+        "admin",
+        'osboha_support_coordinator',
+        'osboha_support_member',
       ]);
     },
     isRamadanCorrector() {

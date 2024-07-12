@@ -74,27 +74,7 @@ export default {
     return { v$: useVuelidate() };
   },
   async created() {
-    switch (this.type) {
-      case 'specialCare':
-        this.roles = await rolesService.getSpecialCareRoles();
-        break;
-      case 'marathon':
-        this.roles = await rolesService.getMarathonRoles();
-        break;
-      case 'ramadan':
-        this.roles = await rolesService.getRamadanRoles();
-        break;
-      case 'eligible':
-        this.roles = await rolesService.getEligibleRoles();
-        break;
-      case 'WithdrawnsTeam':
-        this.roles = await rolesService.getWithdrawnsTeamRoles();
-        break;
-      case 'booksTeam':
-        this.roles = await rolesService.getBooksTeamRoles();
-        break;
-
-    }
+    this.roles = await rolesService.getSecondaryRoles(this.type);
   },
   data() {
     return {
