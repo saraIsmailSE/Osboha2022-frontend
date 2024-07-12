@@ -150,7 +150,6 @@ export default {
     created() {
         this.currentPage = this.page;
         this.loadreports();
-        console.log("🚀 ~ created ~ this.reportsCount:", this.reportsCount)
         watchEffect(() => {
             this.currentPage = this.page;
         });

@@ -59,7 +59,6 @@ class Marks {
     }
   }
 
-
   /**
    * Accept support done by user (ambassador) and update mark
    * @param  user_id
@@ -115,7 +114,6 @@ class Marks {
     }
   }
 
-
   /**
    * Set support mark for all active users
    * @param  form contain reason
@@ -143,6 +141,15 @@ class Marks {
   async topUsersByWeek() {
     try {
       const response = await api.get(`marks/top-users-by-week`);
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async bookQualityTeamAchievements(week_id) {
+    try {
+      const response = await api.get(`marks/quality_team_achievements/${week_id}`);
       return response.data.data;
     } catch (error) {
       handleError(error);

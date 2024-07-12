@@ -51,14 +51,14 @@
             <span class="item-name">اقترح كتاب</span>
         </router-link>
     </li>
-    <li class="nav-item" v-if="isTeamCoordinator">
+    <li class="nav-item" v-if="isTeamSupervisor">
         <router-link :class="checkActive('book.list-violated-books') ? 'active nav-link' : 'nav-link'"
             aria-current="page" :to="{ name: 'book.list-violated-books' }">
             <i class="icon material-symbols-outlined"> book </i>
             <span class="item-name">الكتب المخالفة</span>
         </router-link>
     </li>
-    <li class="nav-item" v-if="isTeamCoordinator">
+    <li class="nav-item" v-if="isTeamSupervisor">
         <router-link :class="checkActive('book.list-suggested-books') ? 'active nav-link' : 'nav-link'"
             aria-current="page" :to="{ name: 'book.list-suggested-books' }">
             <i class="icon material-symbols-outlined"> bookmark_star </i>
@@ -77,12 +77,21 @@
             <span class="item-name">تحكم العضويات</span>
         </router-link>
     </li>
+    <li class="nav-item" v-if="isTeamCoordinator">
+        <router-link :class="checkActive('book.quality-team-achievements') ? 'active nav-link' : 'nav-link'
+            " aria-current="page" :to="{
+                name: 'book.quality-team-achievements',
+            }">
+            <i class="icon material-symbols-outlined"> person </i>
+            <span class="item-name">انجاز الاعضاء</span>
+        </router-link>
+    </li>
 </template>
 <script>
 import UserInfoService from "@/Services/userInfoService";
 
 export default {
-    name: "Osboha Withdrawn Ambassadors",
+    name: "Osboha Books",
     methods: {
         checkActive(route) {
             if (this.$route.name === route) {
@@ -107,6 +116,13 @@ export default {
                 'book_quality_team_coordinator',
             ]);
         },
+        isTeamSupervisor() {
+            return UserInfoService.hasRoles(this.user, [
+                "admin",
+                'book_quality_team_coordinator',
+                'book_quality_supervisor',
+            ]);
+        }
     },
 };
 </script>
