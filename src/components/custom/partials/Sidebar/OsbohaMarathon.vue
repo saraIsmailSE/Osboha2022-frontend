@@ -15,8 +15,17 @@
                 },
 
             }" v-if="isMarathonCoordinator || isAdmin">
-            <i class="icon material-symbols-outlined"> sprint </i>
+            <i class="icon material-symbols-outlined"> digital_wellbeing </i>
             <span class="item-name">تحكم العضويات</span>
+        </router-link>
+    </li>
+    <li class="nav-item">
+        <router-link :class="checkActive('marathon.setWeeks') ? 'active nav-link' : 'nav-link'
+            " aria-current="page" :to="{
+                name: 'marathon.setWeeks',
+            }" v-if="isMarathonCoordinator || isAdmin">
+            <i class="icon material-symbols-outlined"> sprint </i>
+            <span class="item-name">أسابيع المارثون</span>
         </router-link>
     </li>
 
