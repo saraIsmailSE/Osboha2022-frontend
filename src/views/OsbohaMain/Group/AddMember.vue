@@ -77,17 +77,15 @@ export default {
   },
   components: { BackButton },
   async created() {
-    if (this.$route.params.add_type == 'marathon') {
-      this.roles = await rolesService.getMarathonRoles();
-    }
-    else if (this.$route.params.add_type == 'special_care') {
-      this.roles = await rolesService.getSpecialCareRoles();
-    }
-    else {
+    if (this.$route.params.add_type == 'main') {
       const roles = await api.get(`get-roles/1`);
       this.roles = roles.data.data;
+    }
+    else {
+      this.roles = await rolesService.getSecondaryRoles(this.$route.params.add_type);
 
     }
+
   },
 
   data() {
