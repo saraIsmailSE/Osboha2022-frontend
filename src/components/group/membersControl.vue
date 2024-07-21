@@ -83,7 +83,7 @@ export default {
         this.groupCategory = "marathon";
         break;
       case "special_care":
-        this.groupCategory = "special_care";
+        this.groupCategory = "specialCare";
         break;
     }
   },

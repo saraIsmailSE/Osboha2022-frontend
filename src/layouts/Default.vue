@@ -31,7 +31,7 @@
 
     <div v-if="sessionData">
       <CurrentReading :book_in_progress="sessionData.book_in_progress" :progress="sessionData.progress" id="quick_access" />
-      <ReadingTeam :reading_team="sessionData.reading_team" />
+      <ReadingTeam :reading_team="sessionData.reading_team" :parent="sessionData.parent" />
       <Timer :timer="sessionData.timer" />
       <LastException
         :lastException="sessionData.last_exception"
