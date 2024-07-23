@@ -8,7 +8,7 @@
 
     <div :class="`dropdown-menu dropdown-menu-right ${show ? 'show' : ''}`" aria-labelledby="dropdownMenuButton"
       style="">
-      <router-link v-if="groupCategory == 'special_care' && allowedToRequestMembers"
+      <router-link v-if="groupCategory == 'specialCare' && allowedToRequestMembers"
         class="dropdown-item d-flex align-items-center" :to="{
           name: 'group.requestAmbassadors',
           params: { group_id: group_id },
