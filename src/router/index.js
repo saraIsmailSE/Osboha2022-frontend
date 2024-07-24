@@ -528,8 +528,7 @@ const groupChildRoute = (prop, mode = false) => [
     path: "/group/marathon-ambassadors-reading/:group_id/week/:week_id",
     name: prop + ".marathon-ambassadors-reading",
     meta: { auth: true, name: "Marathon Ambassadors Reading" },
-    component: () =>
-      import("../views/OsbohaMain/Group/Ambassadors/MarathonReading"),
+    component: () => import("../views/OsbohaMarathon/MarathonReading"),
   },
   {
     path: "/group/list-ambassador-reading/:ambassador_id/week/:week_id",
@@ -542,8 +541,7 @@ const groupChildRoute = (prop, mode = false) => [
     path: "/group/list-marathon-ambassador-reading/:ambassador_id/week/:week_id",
     name: prop + ".listOneMarathonReading",
     meta: { auth: true, name: "Ambassador list marathon reading" },
-    component: () =>
-      import("../views/OsbohaMain/Group/Ambassadors/ListMarathonReading"),
+    component: () => import("../views/OsbohaMarathon/ListMarathonReading"),
   },
   {
     path: "/group/list-ambassador-reading/thesis/:thesis_id",
@@ -555,8 +553,7 @@ const groupChildRoute = (prop, mode = false) => [
     path: "/group/list-marathon-ambassador-reading/thesis/:thesis_id",
     name: prop + ".listOneMarathoAmbassadorThesis",
     meta: { auth: true, name: "Marathon Ambassador -  one thesis" },
-    component: () =>
-      import("../views/OsbohaMain/Group/Ambassadors/ListMarathonThesis"),
+    component: () => import("../views/OsbohaMarathon/ListMarathonThesis"),
   },
 
   {
@@ -642,6 +639,18 @@ const marathonChildRoute = (prop, mode = false) => [
     name: prop + ".participants",
     meta: { auth: true, name: "List Participants" },
     component: () => import("../views/OsbohaMarathon/Participants"),
+  },
+  {
+    path: "set-weeks",
+    name: prop + ".setWeeks",
+    meta: { auth: true, name: "Set Marathon Weeks" },
+    component: () => import("../views/OsbohaMarathon/SetWeeks"),
+  },
+  {
+    path: "points-detail/:user_id/:marathon_id",
+    name: prop + ".points-detail",
+    meta: { auth: true, name: "List Marathon Points" },
+    component: () => import("../views/OsbohaMarathon/PointsDetails"),
   },
 ];
 
