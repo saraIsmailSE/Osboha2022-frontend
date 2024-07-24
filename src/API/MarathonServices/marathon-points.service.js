@@ -1,34 +1,38 @@
 import { api } from "../Intercepter";
 
-class HadithMemorizationServices {
+class MarathonPointsServices {
     constructor() {
-        this.prefix = "ramadan-hadith-memorization";
+        this.prefix = "marathon-points";
     }
 
-    async store(form, submit_type)
-    {
+    async getMarathonPoints(user_id, osboha_marthon_id) {
         try {
-            let hadith = "";
-            let hadith_2 = "";
-            let redo= 0;
-            const formData = new FormData();
+            const response = await api.get(`${this.prefix}/get-marathon-points/${user_id}/${osboha_marthon_id}`);
+            return response.data.data;
+        } catch (error) {
+            return error;
+        }
+    }
 
+    async getSpecificMarathonWeekPoints(user_id, osboha_marthon_id,week_id) {
+        try {
+            const response = await api.get(`${this.prefix}/get-specific-marathon-week-points/${user_id}/${osboha_marthon_id}/${week_id}`);
+            return response.data.data;
+        } catch (error) {
+            return error;
+        }
+    }
+    async addBonus(form) {
+        try {
 
-            if(submit_type == 'redo'){
-                hadith = form.hadith_redo
-                hadith_2 = form.hadith_redo
-                redo=1;
-            }
-            else{
-                hadith = form.hadith_1
-                hadith_2 = form.hadith_2
-            }
-            formData.append("ramadan_hadiths_id", form.ramadan_hadiths_id);
-            formData.append("hadith_memorize", hadith);
-            formData.append("hadith_memorize_2", hadith_2);
-            formData.append("redo", redo);
+            let formData = new FormData();
+            formData.append('user_id', form.user_id);
+            formData.append('osboha_marthon_id', form.osboha_marthon_id);
+            formData.append('bonus_type', form.bonus_type);
+            formData.append('amount', form.amount);
+            formData.append('eligible_book_avg', form.eligible_book_avg);
 
-            const response = await api.post(`${this.prefix}`, formData, {
+            const response = await api.post(`${this.prefix}/add-bonus`, formData, {
                 headers: { "Content-type": "multipart/form-data" },
             });
             return response.data.data;
@@ -36,10 +40,14 @@ class HadithMemorizationServices {
             return error;
         }
     }
-    async correct(form)
-    {
+    async subtractPoints(form) {
         try {
-            const response = await api.post(`${this.prefix}/correct`, form, {
+
+            let formData = new FormData();
+            formData.append('user_id', form.user_id);
+            formData.append('osboha_marthon_id', form.osboha_marthon_id);
+            formData.append('bonus_type', form.bonus_type);
+            const response = await api.post(`${this.prefix}/subtract-bonus`, formData, {
                 headers: { "Content-type": "multipart/form-data" },
             });
             return response.data.data;
@@ -47,30 +55,14 @@ class HadithMemorizationServices {
             return error;
         }
     }
-    async statistics(ramadan_day_id) {
-        try {
-            const response = await api.get(`${this.prefix}/statistics/${ramadan_day_id}`);
-            return response.data.data;
-        } catch (error) {
-            return error;
-        }
-    }
-    async show(hadith_memorization_id) {
-        try {
-            const response = await api.get(`${this.prefix}/show/${hadith_memorization_id}`);
-            return response.data.data;
-        } catch (error) {
-            return error;
-        }
-    }
-    async getMemorizedHadiths() {
-        try {
-            const response = await api.get(`${this.prefix}/pending`);
-            return response.data.data;
-        } catch (error) {
-            return error;
-        }
-    }
 
+    async getBonusPoints(user_id, osboha_marthon_id) {
+        try {
+            const response = await api.get(`${this.prefix}/get-points-bonus/${user_id}/${osboha_marthon_id}`);
+            return response.data.data;
+        } catch (error) {
+            return error;
+        }
+    }
 }
-export default new HadithMemorizationServices();
+export default new MarathonPointsServices();

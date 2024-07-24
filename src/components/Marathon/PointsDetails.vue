@@ -2,43 +2,19 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="main-timeline">
-                    <div class="timeline">
-                        <a href="#" class="timeline-content">
+                <div class="main-timeline" v-if="point_details">
+                    <div class="timeline" v-for="(detail, index) in point_details" :key="index">
+                        <div class="timeline-content">
                             <div class="timeline-icon">
-                                <span class="animate-charcter text-center"> 50 </span>
+                                <span class="animate-charcter text-center"> {{totalDailyPoints(detail)}} </span>
                             </div>
-                            <h3 class="title">الأسبوع الأول</h3>
+                            <h3 class="title">{{ MARATHON_WEEKS[index] }}</h3>
                             <div class="description">
-                                <AchèvementsSummury />
+                                <AchèvementsSummury :achèvements="detail" />
                             </div>
-                        </a>
-                    </div>
-                    <div class="timeline">
-                        <a href="#" class="timeline-content">
-                            <div class="timeline-icon">
-                                <span class="animate-charcter text-center"> 50 </span>
-                            </div>
-                            <h3 class="title">الأسبوع الثاني</h3>
-                            <div class="description">
-                                <AchèvementsSummury />
-                            </div>
-
-                        </a>
+                        </div>
                     </div>
 
-                    <div class="timeline">
-                        <a href="#" class="timeline-content">
-                            <div class="timeline-icon">
-                                <span class="animate-charcter text-center"> 50 </span>
-                            </div>
-                            <h3 class="title">الأسبوع الثالث</h3>
-                            <div class="description">
-                                <AchèvementsSummury />
-                            </div>
-
-                        </a>
-                    </div>
 
                 </div>
             </div>
@@ -48,22 +24,30 @@
 </template>
 
 <script>
-import AchèvementsSummury from './AchèvementsSummury.vue';
+import AchèvementsSummury from './AchevementsSummury.vue';
+import { MARATHON_WEEKS } from "@/utilities/constants";
 
 export default {
     components: {
         AchèvementsSummury,
     },
+    props: {
+        point_details: {
+            type: [Object],
+            required: true,
+        },
+    },
     data() {
         return {
-            timelineItems: [
-                { time: '2021', title: 'Event 1', content: 'Description for event 1.' },
-                { time: '2022', title: 'Event 2', content: 'Description for event 2.' },
-                { time: '2023', title: 'Event 3', content: 'Description for event 3.' },
-                { time: '2024', title: 'Event 4', content: 'Description for event 4.' },
-            ],
+            MARATHON_WEEKS,
         };
     },
+    methods: {
+        totalDailyPoints(achevement) {
+            return achevement.reduce((total, achevement) => total + achevement.daily_points, 0);
+        }
+
+    }
 };
 </script>
 

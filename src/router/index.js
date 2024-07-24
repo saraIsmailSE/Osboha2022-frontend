@@ -647,7 +647,7 @@ const marathonChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMarathon/SetWeeks"),
   },
   {
-    path: "points-detail",
+    path: "points-detail/:user_id/:marathon_id",
     name: prop + ".points-detail",
     meta: { auth: true, name: "List Marathon Points" },
     component: () => import("../views/OsbohaMarathon/PointsDetails"),
