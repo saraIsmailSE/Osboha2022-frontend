@@ -1,6 +1,6 @@
 import { api } from "../Intercepter";
 
-class GoldenDaysServices {
+class OsbohaMarathonServices {
     constructor() {
         this.prefix = "osboha-marathon";
     }
@@ -15,6 +15,31 @@ class GoldenDaysServices {
     }
     async show(marathon_id) {
         try {
+            const response = await api.get(`${this.prefix}/show/${marathon_id}`);
+            return response.data.data;
+        } catch (error) {
+            return error;
+        }
+    }
+    async createMarthon(form) {
+        try {
+            let formData = new FormData();
+            formData.append('marathon_title', form.marathon_title);
+            formData.append('marathon_id', form.marathon_id);
+            form.weeks_key.forEach((weekKey, index) => {
+                formData.append(`weeks_key[${index}]`, weekKey);
+            });
+
+            const response = await api.post(`${this.prefix}/create_marthon`, formData, {
+                headers: { "Content-type": "multipart/form-data" },
+            });
+            return response.data.data;
+        } catch (error) {
+            return error;
+        }
+    }
+    async endMarathon(marathon_id) {
+        try {
             const response = await api.get(`${this.prefix}/end-marathon/${marathon_id}`);
             return response.data.data;
         } catch (error) {
@@ -22,4 +47,4 @@ class GoldenDaysServices {
         }
     }
 }
-export default new GoldenDaysServices();
+export default new OsbohaMarathonServices();

@@ -8,12 +8,20 @@
           <MarathonAchievementCard :mark="mark" :group="group" />
 
           <!-- POINTS -->
-          <marathon_points />
+          <div class="p-2">
+            <div class="card-header">
+              <h2>النقاط</h2>
+            </div>
+            <h4 class="mt-2">
+              نقاط الاسبوع - {{ mark.week.title }}
+              <p class="display-6" style="direction: rtl;">{{ points }} - نقطة</p>
+            </h4>
+          </div>
 
-          <div class=" d-flex justify-content-end">
+          <div class=" d-flex justify-content-end" v-if="current_marathon">
             <router-link :to="{
               name: 'marathon.points-detail',
-              params: { user_id: 1, marathon_id: 1 },
+              params: { user_id: this.$route.params.ambassador_id, marathon_id: current_marathon.id },
             }" class="btn btn-primary">
               عرض التفاصيل
             </router-link>
@@ -44,15 +52,15 @@
 </template>
 <script>
 import MarathonAchievementCard from "@/components/book/theses/marathon-achievement-card.vue";
-import marathon_points from "@/components/Marathon/MarathonPointsSummury";
 import marathon_check from "@/components/book/theses/marathon_check.vue";
 import MarkService from "@/API/services/marks.service";
 import helper from "@/utilities/helper";
+import OsbohaMarathon from "@/API/MarathonServices/osboha-marathon.service";
+import MarathonPoints from "@/API/MarathonServices/marathon-points.service";
 
 export default {
   name: "List Marathon Reading",
   components: {
-    marathon_points,
     marathon_check,
     MarathonAchievementCard,
   },
@@ -67,10 +75,16 @@ export default {
       date: null,
       now: null,
       can_edit: true,
+      points: null,
     };
   },
   async created() {
     try {
+      this.current_marathon = await OsbohaMarathon.getCurrentMarathon();
+      if (this.current_marathon) {
+        this.points = await MarathonPoints.getSpecificMarathonWeekPoints(this.$route.params.ambassador_id, this.current_marathon.id, this.$route.params.week_id)
+      }
+
       const response = await MarkService.marathonAmbassadorMark(
         this.$route.params.ambassador_id,
         this.$route.params.week_id,
