@@ -251,8 +251,10 @@ export default {
       this.totalTheses++;
 
       if (
-        this.book.book.userBooks.length > 0 &&
-        this.book.book.userBooks[0].status === "finished"
+        (thesis.user.user_books.length > 0 &&
+          thesis.user.user_books[0].status === "finished") ||
+        (thesis.user.userBooks.length > 0 &&
+          thesis.user.userBooks[0].status === "finished")
       ) {
         helper.toggleToast("تهانينا, لقد أنهيت الكتاب", "success");
       }

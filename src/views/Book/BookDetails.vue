@@ -27,7 +27,7 @@
       <div class="col-md-6 col-sm-12">
         <div class="card card-block card-stretch card-height blog">
           <button
-            type="submit"
+            type="button"
             class="btn btn-dark d-block w-100"
             data-bs-toggle="modal"
             data-bs-target="#rateModal"
@@ -99,13 +99,11 @@
           <ThesesTabContent
             @updateBook="updateBook"
             :active="selectedTab === 'theses'"
-            v-if="selectedTab === 'theses'"
           />
 
           <RatesTabContent
             @updateBook="updateBook"
             :active="selectedTab === 'rates'"
-            v-if="selectedTab === 'rates'"
           />
         </div>
       </div>
