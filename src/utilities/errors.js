@@ -13,6 +13,7 @@ export function customHandleError(error, page = "") {
 
 export const getErrorMessage = (error) => {
   return (
+    error?.response?.data?.data ||
     error?.response?.data?.message ||
     error?.response?.data ||
     error?.message ||

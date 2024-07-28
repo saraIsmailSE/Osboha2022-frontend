@@ -18,7 +18,7 @@
                 <Comment
                   :allowComment="book?.book?.allow_comments"
                   :comment="comment"
-                  :rate="comment.rate?.rate"
+                  :rate="comment?.rate?.rate"
                   @addComment="addComment"
                   @editComment="editComment"
                   @reactToComment="reactToComment"
@@ -99,36 +99,6 @@
       </div>
     </div>
   </tab-content-item>
-  <modal
-    id="rateModal"
-    ref="rateModal"
-    dialogClass="modal-dialog-centered modal-dialog-scrollable"
-    tabindex="-1"
-    aria-labelledby="rateModalLabel"
-    :aria-hidden="false"
-    v-if="!book?.book.userRate"
-  >
-    <model-header>
-      <h5 class="modal-title" id="rateModalLabel">
-        تقييم كتاب {{ book?.book?.name }}
-      </h5>
-      <a
-        href="javascript:void(0);"
-        class="lh-1"
-        data-bs-dismiss="modal"
-        ref="closeBtn"
-      >
-        <span class="material-symbols-outlined">close</span>
-      </a>
-    </model-header>
-    <model-body>
-      <AddRate
-        :book_id="book?.book?.id"
-        @closeModel="closeModel"
-        @addRate="addRate"
-      />
-    </model-body>
-  </modal>
 </template>
 <script>
 import Comment from "@/components/comment/Comment.vue";
@@ -138,7 +108,6 @@ import RateService from "@/API/services/rate.service";
 import UserInfoService from "@/Services/userInfoService";
 
 import helper from "@/utilities/helper";
-import { commentMixin } from "@/mixins/comment.mixin";
 
 export default {
   name: "RatesTabContent",
@@ -146,27 +115,37 @@ export default {
     Comment,
     AddRate,
   },
-  mixins: [commentMixin],
-  provide() {
-    return {
-      deleteComment: this.deleteComment,
-    };
-  },
   inject: ["book"],
   props: {
     active: {
       type: Boolean,
       default: false,
     },
+    rates: {
+      type: Array,
+      default: () => [],
+    },
+    totalRates: {
+      type: Number,
+      default: 0,
+    },
+    page: {
+      type: Number,
+      default: 1,
+    },
+    hasMore: {
+      type: Boolean,
+      default: false,
+    },
+    addComment: Function,
+    editComment: Function,
+    reactToComment: Function,
+    editRate: Function,
   },
-  emits: ["updateBook"],
-
+  emits: ["pushToItems", "updateItemsTotal", "updateItemsPage"],
   data() {
     return {
-      rates: [],
       loading: false,
-      totalRates: 0,
-      page: 1,
     };
   },
   computed: {
@@ -176,14 +155,6 @@ export default {
 
     isAdmin() {
       return UserInfoService.hasRole(this.user, "admin");
-    },
-
-    hasMore() {
-      return (
-        this.rates.length < this.totalRates &&
-        this.totalRates > 0 &&
-        this.rates.length > 0
-      );
     },
   },
   async created() {
@@ -208,11 +179,11 @@ export default {
         }
 
         if (this.$route.params.rate_id) {
-          this.rates.push(response);
-          this.totalRates = 1;
+          this.$emit("pushToItems", response, { spread: false });
+          this.$emit("updateItemsTotal", 1);
         } else {
-          this.rates.push(...response.rates);
-          this.totalRates = response.total;
+          this.$emit("pushToItems", response.rates);
+          this.$emit("updateItemsTotal", response.total);
         }
       } catch (e) {
         helper.toggleToast(
@@ -225,102 +196,11 @@ export default {
     },
 
     async loadMore() {
-      this.page++;
-      await this.getRates(this.page);
-    },
+      this.$emit("updateItemsPage", this.page + 1);
 
-    calculateAverageRate(sum, count) {
-      let avgRate = Math.round(sum / count);
-      avgRate = avgRate > 5 ? 5 : avgRate;
-      return (avgRate * 100) / 5;
-    },
-
-    addRate(item) {
-      this.rates.unshift(item);
-
-      const sum = parseInt(this.book.reviews_sum) + item.rate.rate;
-      const avgRate = this.calculateAverageRate(sum, this.totalRates + 1);
-
-      this.$emit("updateBook", {
-        reviews_count: this.book.reviews_count + 1,
-        reviews_sum: sum,
-        rate: avgRate,
-        userRate: item.rate,
+      this.$nextTick(async () => {
+        await this.getRates(this.page);
       });
-      this.totalRates++;
-    },
-
-    editRate(item) {
-      const foundRate = this.rates?.find((i) => i.id === item.id);
-      if (foundRate) {
-        const sum =
-          parseInt(this.book.reviews_sum) -
-          foundRate.rate.rate +
-          item.rate.rate;
-        const avgRate = this.calculateAverageRate(sum, this.totalRates);
-
-        foundRate.body = item.body;
-        foundRate.rate.rate = item.rate.rate;
-        this.$emit("updateBook", {
-          reviews_sum: sum,
-          rate: avgRate,
-        });
-      }
-    },
-
-    addComment(reply, comment_id) {
-      const options = {
-        itemsKey: "rates",
-        totalItemsKey: "totalRates",
-        incrementTotalItems: false,
-        removeEmitEvent: true,
-      };
-
-      this.$options.mixins[0].methods.addComment.call(
-        this,
-        reply,
-        comment_id,
-        options,
-      );
-    },
-
-    deleteComment(comment_id) {
-      const options = {
-        itemsKey: "rates",
-        totalItemsKey: "totalRates",
-        type: "rate",
-      };
-
-      this.$options.mixins[0].methods.deleteComment.call(
-        this,
-        comment_id,
-        options,
-      );
-    },
-
-    editComment(comment) {
-      const options = {
-        itemsKey: "rates",
-      };
-
-      this.$options.mixins[0].methods.editComment.call(this, comment, options);
-    },
-
-    reactToComment(comment_id, status) {
-      const options = {
-        itemsKey: "rates",
-      };
-
-      this.$options.mixins[0].methods.reactToComment.call(
-        this,
-        comment_id,
-        status,
-        options,
-      );
-    },
-
-    async closeModel() {
-      this.$refs.closeBtn.click();
     },
   },
 };

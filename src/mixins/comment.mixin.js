@@ -16,12 +16,6 @@ export const commentMixin = {
         const comment = this.findComment(this[itemsKey], comment_id);
         comment.replies.push(reply);
       }
-
-      if (options?.removeEmitEvent === true) return;
-
-      this.$emit("updateBook", {
-        comments_count: this.book.comments_count + 1,
-      });
     },
 
     findComment(items, comment_id) {
@@ -80,6 +74,7 @@ export const commentMixin = {
           return;
         }
 
+        //if the type is rate, we don't need to check for replies (no action will be taken)
         if (type === "rate") return;
 
         if (this[itemsKey][i].replies.length > 0) {

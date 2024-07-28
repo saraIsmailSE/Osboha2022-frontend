@@ -45,14 +45,11 @@
       "
     />
 
-    <MarkFinished v-if="!loadingBook && book?.canBeFinished" />
-
     <BookInfo />
   </div>
 </template>
 
 <script>
-import MarkFinished from "@/components/book/details/MarkFinished.vue";
 import SuggestBook from "@/components/book/details/SuggestBook.vue";
 import BookInfo from "@/components/book/details/BookInfo.vue";
 import DeleteBook from "@/components/book/details/DeleteBook.vue";
@@ -64,7 +61,6 @@ import UserInfoService from "@/Services/userInfoService";
 export default {
   name: "BookHeader",
   components: {
-    MarkFinished,
     SuggestBook,
     BookInfo,
     DeleteBook,
