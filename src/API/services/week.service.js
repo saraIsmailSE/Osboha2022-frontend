@@ -16,9 +16,7 @@ class Week {
   }
   async getNextWeekTitles(limit) {
     try {
-      const response = await api.get(
-        `${this.prefix}/get-next-weeks-title/${limit}`,
-      );
+      const response = await api.get(`${this.prefix}/get-next-weeks-title/${limit}`);
       return response.data.data;
     } catch (error) {
       handleError(error);
