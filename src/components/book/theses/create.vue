@@ -326,9 +326,6 @@ export default {
     updateThesisFormByKey({ key, value }) {
       this.thesisForm[key] = value;
     },
-    test() {
-      console.log(this.book);
-    },
   },
   validations() {
     return {

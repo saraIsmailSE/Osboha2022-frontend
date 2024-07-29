@@ -428,12 +428,12 @@ export default {
     },
 
     pushToItems(items, options) {
-      if (options?.spread && options.spread === false) {
+      if (options.spread !== undefined && options.spread === false) {
         this.comments.push(items);
         return;
       }
 
-      if (options?.reset && options.reset === true) {
+      if (options.reset !== undefined && options.reset === true) {
         this.comments = items;
         return;
       }
@@ -494,6 +494,13 @@ export default {
         };
       }
     },
+
+    updateBook(data) {
+      this.book = {
+        ...this.book,
+        ...data,
+      };
+    },
   },
   computed: {
     user() {
@@ -528,8 +535,6 @@ export default {
     },
 
     hasMore() {
-      console.log("🚀 ~ hasMore ~ this.comments.length", this.comments.length);
-      console.log("🚀 ~ hasMore ~ this.totalComments", this.totalComments);
       return (
         this.comments.length < this.totalComments &&
         this.totalComments > 0 &&
@@ -539,8 +544,6 @@ export default {
   },
   watch: {
     selectedTab(val) {
-      console.log("🚀 ~ selectedTab ~ val:", val);
-
       this.comments = [];
       this.totalComments = 0;
       this.commentsPage = 1;
@@ -560,13 +563,6 @@ export default {
       if (this.$route.query.tab) {
         this.selectedTab = this.$route.query.tab;
       }
-    },
-    //print the hasMore value
-    hasMore(val) {
-      console.log("🚀 ~ hasMore ~ val", val);
-    },
-    commentsPage(val) {
-      console.log("🚀 ~ commentsPage ~ val", val);
     },
   },
 };

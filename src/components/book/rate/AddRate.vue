@@ -31,11 +31,11 @@
           v-model="v$.rateForm.body.$model"
           style="direction: rtl"
         ></textarea>
-        <div class="help-block" v-if="v$.rateForm.body.$error">
+        <!-- <div class="help-block" v-if="v$.rateForm.body.$error">
           <small style="color: red" v-if="v$.rateForm.body.requiredIf.$invalid"
             >الرجاء كتابة تعليق</small
           >
-        </div>
+        </div> -->
       </div>
 
       <hr />
@@ -85,7 +85,7 @@ export default {
       loader: false,
       errorMessage: "",
       rateForm: {
-        rate: this.rateToEdit ? this.rateToEdit?.rate?.rate : 0,
+        rate: this.rateToEdit ? this.rateToEdit?.rate?.rate : null,
         body: this.rateToEdit ? this.rateToEdit?.body ?? "" : "",
         book_id: this.book_id,
         rate_id: this.rateToEdit ? this.rateToEdit?.rate?.id : null,
@@ -172,11 +172,11 @@ export default {
   validations() {
     return {
       rateForm: {
-        body: {
-          required: requiredIf(() => !this.rateForm.rate),
-        },
         rate: {
-          required: requiredIf(() => !this.rateForm.body),
+          required,
+        },
+        body: {
+          // required: requiredIf((rateForm) => !rateForm.rateToEdit),
         },
       },
     };

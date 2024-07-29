@@ -1,18 +1,18 @@
 <template>
   <CommentHeader :comment="comment" @triggerEditBox="triggerEditBox" />
   <div class="blog-description">
-      <div class="row" v-if="comment.thesis">
-        <div class="col-6 form-group">
-          <label class="form-control-plaintext"
-            >صفحة البداية: {{ comment.thesis.start_page }}</label
-          >
-        </div>
-        <div class="col-6 form-group">
-          <label class="form-control-plaintext"
-            >صفحة النهاية: {{ comment.thesis.end_page }}</label
-          >
-        </div>
+    <div class="row" v-if="comment.thesis">
+      <div class="col-6 form-group">
+        <label class="form-control-plaintext"
+          >صفحة البداية: {{ comment.thesis.start_page }}</label
+        >
       </div>
+      <div class="col-6 form-group">
+        <label class="form-control-plaintext"
+          >صفحة النهاية: {{ comment.thesis.end_page }}</label
+        >
+      </div>
+    </div>
     <h6 v-if="totalThesisPages > 0">
       الصفحات المنجزة: {{ totalThesisPages }}
       <span
@@ -306,6 +306,18 @@ export default {
       } finally {
         this.pendingRequest = false;
       }
+    },
+  },
+  watch: {
+    comment: {
+      handler() {
+        this.briefBody = this.comment.body
+          ? this.comment.body.length > 200
+            ? this.comment.body.substring(0, 200) + "..."
+            : this.comment.body
+          : "";
+      },
+      deep: true,
     },
   },
 };

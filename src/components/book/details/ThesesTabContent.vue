@@ -213,10 +213,8 @@ export default {
       this.$emit("updateItemsPage", this.page + 1);
 
       this.$nextTick(async () => {
-        console.log("this.page", this.page);
         await this.getTheses(this.page);
       });
-      // await this.getTheses(this.page);
     },
   },
 };
