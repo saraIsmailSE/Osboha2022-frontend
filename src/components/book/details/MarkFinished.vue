@@ -1,7 +1,13 @@
 <template>
-  <button class="btn btn-dark display-5 ms-2" @click="markBookAsFinished()">
+  <button
+    class="btn btn-danger mark-finished-btn"
+    @click="markBookAsFinished()"
+    data-toggle="tooltip"
+    data-placement="bottom"
+    title="إنهاء الكتاب"
+  >
     <span class="material-symbols-outlined align-middle"> task_alt </span>
-    إنهاء الكتاب
+    <!-- <span>إنهاء الكتاب</span> -->
   </button>
 </template>
 <script>
@@ -10,7 +16,13 @@ import helper from "@/utilities/helper";
 
 export default {
   name: "MarkFinished",
-  inject: ["book", "toggleLoadingBook"],
+  props: {
+    book: {
+      type: Object,
+      required: true,
+    },
+  },
+  emits: ["updateLoading"],
   methods: {
     async markBookAsFinished() {
       const swalWithBootstrapButtons = this.$swal.mixin({
@@ -37,10 +49,9 @@ export default {
         })
         .then(async (result) => {
           if (result.isConfirmed) {
-            this.toggleLoadingBook(true);
-
+            this.$emit("updateLoading", true);
             await userBookService
-              .markAsFinished(this.book?.book?.id)
+              .markAsFinished(this.book?.id)
               .then(async (response) => {
                 helper.toggleToast(
                   "تم إنهاء الكتاب, سيتم تحديث الصفحة, يرجى الانتظار",
@@ -55,7 +66,7 @@ export default {
                 console.log(error);
               })
               .finally(() => {
-                this.toggleLoadingBook(false);
+                this.$emit("updateLoading", false);
               });
           }
         });
@@ -63,4 +74,4 @@ export default {
   },
 };
 </script>
-<style></style>
+<style scoped></style>

@@ -78,6 +78,7 @@ import ThesisType from "@/components/book/theses/create/ThesisType.vue";
 import ThesisPages from "@/components/book/theses/create/ThesisPages.vue";
 import ThesisBody from "@/components/book/theses/create/ThesisBody.vue";
 import ThesisScreenshots from "@/components/book/theses/create/ThesisScreenshots.vue";
+import { getErrorMessage } from "@/utilities/errors";
 
 export default {
   name: "CreateThesis",
@@ -251,7 +252,7 @@ export default {
             }, 1800);
           }
         } catch (error) {
-          helper.toggleErrorToast();
+          helper.toggleErrorToast(getErrorMessage(error));
           console.log(error);
         } finally {
           this.loader = false;
@@ -324,9 +325,6 @@ export default {
     },
     updateThesisFormByKey({ key, value }) {
       this.thesisForm[key] = value;
-    },
-    test() {
-      console.log(this.book);
     },
   },
   validations() {

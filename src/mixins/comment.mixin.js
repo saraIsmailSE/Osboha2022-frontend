@@ -16,12 +16,6 @@ export const commentMixin = {
         const comment = this.findComment(this[itemsKey], comment_id);
         comment.replies.push(reply);
       }
-
-      if (options?.removeEmitEvent === true) return;
-
-      this.$emit("updateBook", {
-        comments_count: this.book.comments_count + 1,
-      });
     },
 
     findComment(items, comment_id) {
@@ -57,7 +51,7 @@ export const commentMixin = {
       for (let i = 0; i < this[itemsKey].length; i++) {
         if (this[itemsKey][i].id === comment_id) {
           if (type === "thesis") {
-            this.$emit("updateBook", {
+            this.updateBook({
               comments_count: this.book.comments_count - 1,
               theses_count: this.book.theses_count - 1,
             });
@@ -65,7 +59,7 @@ export const commentMixin = {
           } else if (type === "rate") {
             const sum =
               parseInt(this.book.reviews_sum) - this[itemsKey][i].rate.rate;
-            this.$emit("updateBook", {
+            this.updateBook({
               reviews_count: this.book.reviews_count - 1,
               reviews_sum: sum,
               rate: this.calculateAverageRate(sum, this.totalRates - 1),
@@ -80,13 +74,14 @@ export const commentMixin = {
           return;
         }
 
+        //if the type is rate, we don't need to check for replies (no action will be taken)
         if (type === "rate") return;
 
         if (this[itemsKey][i].replies.length > 0) {
           for (let j = 0; j < this[itemsKey][i].replies.length; j++) {
             if (this[itemsKey][i].replies[j].id === comment_id) {
               if (type === "thesis") {
-                this.$emit("updateBook", {
+                this.updateBook({
                   comments_count: this.book.comments_count - 1,
                 });
               } else if (type === "post") {

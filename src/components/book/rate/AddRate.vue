@@ -31,11 +31,11 @@
           v-model="v$.rateForm.body.$model"
           style="direction: rtl"
         ></textarea>
-        <div class="help-block" v-if="v$.rateForm.body.$error">
+        <!-- <div class="help-block" v-if="v$.rateForm.body.$error">
           <small style="color: red" v-if="v$.rateForm.body.requiredIf.$invalid"
             >الرجاء كتابة تعليق</small
           >
-        </div>
+        </div> -->
       </div>
 
       <hr />
@@ -70,6 +70,7 @@ import useVuelidate from "@vuelidate/core";
 import RateService from "@/API/services/rate.service";
 
 import helper from "@/utilities/helper";
+import { getErrorMessage } from "@/utilities/errors";
 
 export default {
   name: "AddRate",
@@ -84,12 +85,20 @@ export default {
       loader: false,
       errorMessage: "",
       rateForm: {
-        rate: this.rateToEdit ? this.rateToEdit?.rate.rate : 0,
+        rate: this.rateToEdit ? this.rateToEdit?.rate?.rate : null,
         body: this.rateToEdit ? this.rateToEdit?.body ?? "" : "",
         book_id: this.book_id,
-        rate_id: this.rateToEdit ? this.rateToEdit?.rate.id : null,
+        rate_id: this.rateToEdit ? this.rateToEdit?.rate?.id : null,
       },
     };
+  },
+  watch: {
+    book: {
+      handler() {
+        this.rateForm.book_id = this.book_id;
+      },
+      deep: true,
+    },
   },
   props: {
     comment: {
@@ -150,7 +159,8 @@ export default {
             this.$emit("closeModel");
           }, 2000);
         } catch (error) {
-          helper.toggleErrorToast();
+          console.log(error);
+          helper.toggleErrorToast(getErrorMessage(error));
         } finally {
           this.loader = false;
         }
@@ -162,11 +172,11 @@ export default {
   validations() {
     return {
       rateForm: {
-        body: {
-          required: requiredIf(() => !this.rateForm.rate),
-        },
         rate: {
-          required: requiredIf(() => !this.rateForm.body),
+          required,
+        },
+        body: {
+          // required: requiredIf((rateForm) => !rateForm.rateToEdit),
         },
       },
     };

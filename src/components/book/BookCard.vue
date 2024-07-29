@@ -71,7 +71,7 @@
           </ul>
         </div>
         <div class="row" v-if="isProfile">
-          <div class="row d-flex justify-content-center" v-if="isAmbassador">
+          <div class="row" v-if="isAmbassador">
             <div class="col-12">
               <button
                 type="submit"
@@ -82,6 +82,30 @@
                 <span v-if="myProfile"> أطروحاتي </span>
                 <span v-else> أطروحات السفير </span>
               </button>
+            </div>
+            <div class="col-12 mt-2">
+              <div
+                class="d-flex justify-content-between align-items-center gap-1"
+              >
+                <MarkFinished
+                  v-if="cardInfo.can_be_finished"
+                  :book="cardInfo"
+                />
+                <div class="progress flex-grow-1">
+                  <div
+                    class="progress-bar progress-bar-striped bg-info"
+                    role="progressbar"
+                    :aria-valuenow="cardInfo.finished_percentage"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    :style="`width: ${Math.trunc(
+                      cardInfo.finished_percentage,
+                    )}%;`"
+                  >
+                    {{ Math.trunc(cardInfo.finished_percentage) }}%
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="row d-flex justify-content-center" v-else>
@@ -156,6 +180,7 @@
 </template>
 <script>
 import createThesis from "@/components/book/theses/create.vue";
+import MarkFinished from "@/components/book/details/MarkFinished.vue";
 import userBooksService from "@/API/services/user-books.service";
 import helper from "@/utilities/helper";
 
@@ -163,6 +188,7 @@ export default {
   name: "BookCard",
   components: {
     createThesis,
+    MarkFinished,
   },
   props: {
     cardInfo: { type: Object },

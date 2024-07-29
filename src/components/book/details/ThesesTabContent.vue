@@ -82,7 +82,7 @@
               <button
                 type="button"
                 class="btn btn-primary d-block w-100"
-                v-if="hasMoreTheses"
+                v-if="hasMore"
                 @click="loadMoreTheses"
                 :disabled="loading"
               >
@@ -115,55 +115,24 @@
       </div>
     </div>
   </tab-content-item>
-  <modal
-    id="modals"
-    ref="modals"
-    dialogClass="modal-dialog-centered modal-dialog-scrollable"
-    tabindex="-1"
-    aria-labelledby="modalsLabel"
-    :aria-hidden="false"
-  >
-    <model-header>
-      <h5 class="modal-title" id="modalsLabel">
-        {{ book?.book?.name }} || أطروحة جديدة
-      </h5>
-      <a
-        href="javascript:void(0);"
-        class="lh-1"
-        data-bs-dismiss="modal"
-        ref="closeBtn"
-      >
-        <span class="material-symbols-outlined">close</span>
-      </a>
-    </model-header>
-    <model-body>
-      <createThesis
-        :book="book?.book"
-        :lastThesis="book?.last_thesis"
-        @closeModel="closeModel"
-        @addThesis="addThesis"
-        :isRamadanActive="book?.isRamadanActive"
-      />
-    </model-body>
-  </modal>
 </template>
 <script>
-import createThesis from "@/components/book/theses/create.vue";
 import Comment from "@/components/comment/Comment.vue";
+import createThesis from "@/components/book/theses/create.vue";
+
 import thesisService from "@/API/services/thesis.service";
 import helper from "@/utilities/helper";
-import { commentMixin } from "@/mixins/comment.mixin";
+import { watch } from "vue";
 
 export default {
   name: "ThesesTabContent",
   components: {
-    createThesis,
     Comment,
+    createThesis,
   },
-  mixins: [commentMixin],
-  provide() {
+  data() {
     return {
-      deleteComment: this.deleteComment,
+      loading: false,
     };
   },
   inject: ["book"],
@@ -172,30 +141,35 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  emits: ["updateBook"],
-  data() {
-    return {
-      theses: [],
-      loading: false,
-      totalTheses: 0,
-      page: 1,
-    };
-  },
-  computed: {
-    hasMoreTheses() {
-      return (
-        this.theses.length < this.totalTheses &&
-        this.totalTheses > 0 &&
-        this.theses.length > 0
-      );
+    theses: {
+      type: Array,
+      default: () => [],
     },
+    page: {
+      type: Number,
+      default: 1,
+    },
+    hasMore: {
+      type: Boolean,
+      default: false,
+    },
+    addComment: Function,
+    editComment: Function,
+    reactToComment: Function,
   },
+  emits: ["pushToItems", "updateItemsTotal", "updateItemsPage"],
   async created() {
+    // this.$emit("updateItemsPage", 1);
+    // this.$emit("updateItemsTotal", 0);
+    // this.$emit("pushToItems", [], { reset: true });
+
+    // this.$nextTick(async () => {
     if (this.$route.params.book_id) {
       await this.getTheses(this.page);
     }
+    // });
   },
+
   methods: {
     async getTheses(page) {
       if (this.loading || !this.book) return;
@@ -217,8 +191,8 @@ export default {
         }
 
         if (response.statusCode === 200) {
-          this.theses.push(...response.data.theses);
-          this.totalTheses = response.data.total;
+          this.$emit("pushToItems", response.data.theses);
+          this.$emit("updateItemsTotal", response.data.total);
         } else {
           helper.toggleToast(
             "حدث خطأ أثناء تحميل البيانات, الرجاء المحاولة مرة أخرى",
@@ -236,82 +210,11 @@ export default {
     },
 
     async loadMoreTheses() {
-      this.page++;
-      await this.getTheses(this.page);
-    },
+      this.$emit("updateItemsPage", this.page + 1);
 
-    addThesis(thesis) {
-      this.theses.unshift(thesis);
-      this.$emit("updateBook", {
-        theses_count: this.book.theses_count + 1,
-        comments_count: this.book.comments_count + 1,
-        last_thesis: thesis.thesis,
-        userBooks: thesis.user.userBooks || thesis.user.user_books,
+      this.$nextTick(async () => {
+        await this.getTheses(this.page);
       });
-      this.totalTheses++;
-
-      if (
-        (thesis.user.user_books.length > 0 &&
-          thesis.user.user_books[0].status === "finished") ||
-        (thesis.user.userBooks.length > 0 &&
-          thesis.user.userBooks[0].status === "finished")
-      ) {
-        helper.toggleToast("تهانينا, لقد أنهيت الكتاب", "success");
-      }
-    },
-
-    addComment(reply, comment_id) {
-      const options = {
-        itemsKey: "theses",
-        totalItemsKey: "totalTheses",
-        incrementTotalItems: false,
-      };
-
-      this.$options.mixins[0].methods.addComment.call(
-        this,
-        reply,
-        comment_id,
-        options,
-      );
-    },
-
-    deleteComment(comment_id) {
-      const options = {
-        itemsKey: "theses",
-        totalItemsKey: "totalTheses",
-        type: "thesis",
-      };
-
-      this.$options.mixins[0].methods.deleteComment.call(
-        this,
-        comment_id,
-        options,
-      );
-    },
-
-    editComment(comment) {
-      const options = {
-        itemsKey: "theses",
-      };
-
-      this.$options.mixins[0].methods.editComment.call(this, comment, options);
-    },
-
-    reactToComment(comment_id, status) {
-      const options = {
-        itemsKey: "theses",
-      };
-
-      this.$options.mixins[0].methods.reactToComment.call(
-        this,
-        comment_id,
-        status,
-        options,
-      );
-    },
-
-    async closeModel() {
-      this.$refs.closeBtn.click();
     },
   },
 };

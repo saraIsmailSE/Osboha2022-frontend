@@ -1,18 +1,16 @@
 <template>
   <CommentHeader :comment="comment" @triggerEditBox="triggerEditBox" />
   <div class="blog-description">
-    <div class="row">
-      <div class="row" v-if="comment.thesis">
-        <div class="col-6 form-group">
-          <label class="form-control-plaintext"
-            >صفحة البداية: {{ comment.thesis.start_page }}</label
-          >
-        </div>
-        <div class="col-6 form-group">
-          <label class="form-control-plaintext"
-            >صفحة النهاية: {{ comment.thesis.end_page }}</label
-          >
-        </div>
+    <div class="row" v-if="comment.thesis">
+      <div class="col-6 form-group">
+        <label class="form-control-plaintext"
+          >صفحة البداية: {{ comment.thesis.start_page }}</label
+        >
+      </div>
+      <div class="col-6 form-group">
+        <label class="form-control-plaintext"
+          >صفحة النهاية: {{ comment.thesis.end_page }}</label
+        >
       </div>
     </div>
     <h6 v-if="totalThesisPages > 0">
@@ -39,8 +37,8 @@
       <span class="font-size-12 text-warning mt-3" v-if="rate">
         <i
           class="material-symbols-outlined star md-18"
-          v-for="rate in rate"
-          :key="rate"
+          v-for="r in rate"
+          :key="r"
           >star</i
         >
       </span>
@@ -308,6 +306,18 @@ export default {
       } finally {
         this.pendingRequest = false;
       }
+    },
+  },
+  watch: {
+    comment: {
+      handler() {
+        this.briefBody = this.comment.body
+          ? this.comment.body.length > 200
+            ? this.comment.body.substring(0, 200) + "..."
+            : this.comment.body
+          : "";
+      },
+      deep: true,
     },
   },
 };
