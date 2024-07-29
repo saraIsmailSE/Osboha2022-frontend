@@ -366,6 +366,13 @@ export const COUNTRIES = {
   WF: "واليس وفوتونا",
 };
 
+export const MARATHON_WEEKS = {
+  point_week_1: "الأسبوع الأول",
+  point_week_2: "الأسبوع الثاني",
+  point_week_3: "الأسبوع الثالث",
+  point_week_4: "الأسبوع الرابع",
+};
+
 export const TERMINATION_REASONS = {
   withdrawn: "غير فعال - منسحب",
   excluded: "مستبعد",
@@ -378,7 +385,7 @@ export const TERMINATION_REASONS = {
   supervisor_change: "غير فعال - تبديل مراقب",
   supervisor_withdrawn: "غير فعال - انسحاب مراقب",
   advisor_change: '"غير فعال - تبديل موجه"',
-  upgradet_to_advanced_followup:'غير فعال - تم الترقية إلى أفرقة متقدمة'
+  upgradet_to_advanced_followup: "غير فعال - تم الترقية إلى أفرقة متقدمة",
 };
 
 export const STATUS = {
