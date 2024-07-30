@@ -190,16 +190,11 @@ export default {
           );
         }
 
-        if (response.statusCode === 200) {
-          this.$emit("pushToItems", response.data.theses);
-          this.$emit("updateItemsTotal", response.data.total);
-        } else {
-          helper.toggleToast(
-            "حدث خطأ أثناء تحميل البيانات, الرجاء المحاولة مرة أخرى",
-            "error",
-          );
-        }
+        this.$emit("pushToItems", response.data.theses);
+        this.$emit("updateItemsTotal", response.data.total);
       } catch (e) {
+        console.log("🚀 ~ getTheses ~ e:", e);
+
         helper.toggleToast(
           "حدث خطأ أثناء تحميل البيانات, الرجاء المحاولة مرة أخرى",
           "error",

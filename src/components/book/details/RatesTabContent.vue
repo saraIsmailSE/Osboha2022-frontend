@@ -186,6 +186,7 @@ export default {
           this.$emit("updateItemsTotal", response.total);
         }
       } catch (e) {
+        console.log("🚀 ~ getRates ~ e:", e);
         helper.toggleToast(
           "حدث خطأ أثناء تحميل البيانات, الرجاء المحاولة مرة أخرى",
           "error",
