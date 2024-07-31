@@ -112,7 +112,7 @@ export default {
       group_id: this.$route.params.group_id,
       teams_to_discharge: [
         'followup',
-        // 'supervising',
+        'supervising',
         // 'special_care',
       ],
     };

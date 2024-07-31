@@ -51,7 +51,7 @@
                                     ادارة المجموعة
                                 </h4>
                                 <p class="mb-0">
-                                    {{ administrator.name }}
+                                    {{ administrator.name + " " + administrator.last_name }}
                                 </p>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                                 :id="`${ambassador.id}`" @change="toggleSelection(ambassador.email)"
                                 :checked="allSelected">
                             <label class="form-check-label" :for="`${ambassador.id}`">
-                                {{ ambassador.name }}
+                                {{ ambassador.name + " " + ambassador.last_name }}
                             </label>
 
                         </div>
@@ -96,11 +96,14 @@
                 <transfer-ambassadors v-if="group.type.type == 'followup' && selectedAmbassadors.length > 0"
                     :selectedAmbassadors="selectedAmbassadors" @ambassadors_transferred="setGroupInfo" />
                 <transfer-leaders v-if="group.type.type == 'supervising' && selectedAmbassadors.length > 0"
-                    :selectedLeaders="selectedAmbassadors" />
+                    :selectedLeaders="selectedAmbassadors" @leaderss_transferred="setGroupInfo" />
                 <transfer-supervisors v-if="group.type.type == 'advising' && selectedAmbassadors.length > 0"
                     :selectedSupervisors="selectedAmbassadors" />
             </div>
-            <DischargeForm v-if="allowedToDischarge && group.is_active" @team-discharged="setGroupInfo" />
+            <DischargeForm v-if="allowedToDischarge && group.is_active && group.type.type == 'followup'"
+                @team-discharged="setGroupInfo" />
+            <SupervisingDischargeForm v-if="allowedToDischarge && group.is_active && group.type.type == 'supervising'"
+                @team-discharged="setGroupInfo" />
 
             <router-link class="mb-3 mt-3 text-center d-block w-100" :to="{
                 name: 'group.group-detail',
@@ -124,9 +127,10 @@ import TransferAmbassadors from '@/components/control/TransferAmbassadors';
 import TransferLeaders from '@/components/control/TransferLeaders';
 import TransferSupervisors from '@/components/control/TransferSupervisors';
 import DischargeForm from '@/components/group/DischargeForm';
+import SupervisingDischargeForm from '@/components/group/SupervisingDischargeForm';
 
 export default {
-    components: { TransferAmbassadors, TransferLeaders, TransferSupervisors, DischargeForm },
+    components: { TransferAmbassadors, TransferLeaders, TransferSupervisors, DischargeForm, SupervisingDischargeForm },
     name: "Update Group",
     setup() {
         return { v$: useVuelidate() };
