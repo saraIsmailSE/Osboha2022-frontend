@@ -428,12 +428,12 @@ export default {
     },
 
     pushToItems(items, options) {
-      if (options.spread !== undefined && options.spread === false) {
+      if (options?.spread !== undefined && options.spread === false) {
         this.comments.push(items);
         return;
       }
 
-      if (options.reset !== undefined && options.reset === true) {
+      if (options?.reset !== undefined && options.reset === true) {
         this.comments = items;
         return;
       }
