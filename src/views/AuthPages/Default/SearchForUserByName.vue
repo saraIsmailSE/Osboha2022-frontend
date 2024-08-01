@@ -66,7 +66,7 @@
 
 import userService from "@/API/services/user.service";
 import useVuelidate from '@vuelidate/core'
-import { required, email } from '@vuelidate/validators'
+import { required } from '@vuelidate/validators'
 
 
 export default {

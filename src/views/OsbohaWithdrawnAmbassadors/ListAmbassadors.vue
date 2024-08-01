@@ -238,7 +238,7 @@ import UserService from "@/API/services/user.service";
 import helper from "@/utilities/helper";
 import axios from "axios";
 import { GENDER } from "@/utilities/constants";
-import moment from 'moment';
+import { getFormatedDate } from "@/utilities/commonFunctions";
 import Pagination from '@/components/common/Pagination';
 import { watch } from 'vue';
 import { watchEffect } from "vue";
@@ -331,6 +331,7 @@ export default {
     },
 
     methods: {
+        getFormatedDate,
         async loadAmbassadors() {
             if (this.pendingRequest) {
                 return;
@@ -375,11 +376,6 @@ export default {
                 this.pendingRequest = false;
             }
         },
-
-        getFormatedDate(value) {
-            return moment(String(value)).format('MM/DD/YYYY hA')
-        },
-
     },
     computed: {
         user() {

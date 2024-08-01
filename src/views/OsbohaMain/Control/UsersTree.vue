@@ -1,7 +1,7 @@
 <template>
     <div class="tree-container" v-if="rootUser">
         <div class="">
-            <h2 class="text-center">{{ rootUser.name }}</h2>
+            <h2 class="text-center">{{ rootUser.name + " " + rootUser.last_name }}</h2>
         </div>
 
         <hr>

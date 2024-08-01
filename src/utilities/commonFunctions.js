@@ -1,5 +1,6 @@
 import helper from "@/utilities/helper";
 import clipboardCopy from "clipboard-copy";
+import moment from 'moment';
 
 export function copyToClipboard(text) {
     clipboardCopy(text)
@@ -9,4 +10,8 @@ export function copyToClipboard(text) {
     .catch((err) => {
         helper.toggleToast("حصل خطأ - لم يتم النسخ!", "danger");
     });
+}
+
+export function getFormatedDate(date){
+    return moment(String(date)).format('MM/DD/YYYY hA')
 }

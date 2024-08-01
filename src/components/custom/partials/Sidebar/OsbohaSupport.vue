@@ -15,25 +15,30 @@
     </li>
 
     <li class="nav-item">
-        <router-link :class="checkActive('user.search-by-name') ? 'active nav-link' : 'nav-link'" aria-current="page" :to="{
-            name: 'user.search-by-name',
-            params: {
-                user_id: user?.id,
-            },
-        }">
+        <router-link :class="checkActive('user.search-by-name') ? 'active nav-link' : 'nav-link'" aria-current="page"
+            :to="{
+                name: 'user.search-by-name',
+            }">
             <i class="icon material-symbols-outlined"> id_card </i>
             <span class="item-name">بحث بالاسم</span>
         </router-link>
     </li>
     <li class="nav-item">
-        <router-link :class="checkActive('user.exception-search') ? 'active nav-link' : 'nav-link'" aria-current="page" :to="{
-            name: 'user.exception-search',
-            params: {
-                user_id: user?.id,
-            },
-        }">
+        <router-link :class="checkActive('user.exception-search') ? 'active nav-link' : 'nav-link'" aria-current="page"
+            :to="{
+                name: 'user.exception-search',
+            }">
             <i class="icon material-symbols-outlined"> do_not_disturb_on </i>
             <span class="item-name">اعفائات السفير</span>
+        </router-link>
+    </li>
+    <li class="nav-item">
+        <router-link :class="checkActive('user.in-charge-of-search') ? 'active nav-link' : 'nav-link'"
+            aria-current="page" :to="{
+                name: 'user.in-charge-of-search',
+            }">
+            <i class="icon material-symbols-outlined"> supervisor_account </i>
+            <span class="item-name"> المسؤول عنهم</span>
         </router-link>
     </li>
     <li class="nav-item" v-if="isTeamCoordinator">
@@ -65,18 +70,11 @@ export default {
         user() {
             return this.$store.getters.getUser;
         },
-        inBooksTeam() {
-            return UserInfoService.hasRoles(this.user, [
-                "admin",
-                'book_quality_team_coordinator',
-                'book_quality_team',
-            ]);
-        },
         isTeamCoordinator() {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
                 'osboha_support_coordinator',
-                ]);
+            ]);
         },
     },
 };

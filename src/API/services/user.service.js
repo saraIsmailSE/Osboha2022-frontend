@@ -20,6 +20,10 @@ class UserService {
     const response = await api.get(`users/search-by-email/${email}`);
     return response.data.data;
   }
+  async inChargeOfSearch(email,page) {
+    const response = await api.get(`users/in-charge-of-search/${email}?page=${page}`);
+    return response.data;
+  }
 
   async searchByName(name) {
     const response = await api.get(`users/search-by-name/${name}`);

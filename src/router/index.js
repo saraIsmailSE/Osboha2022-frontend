@@ -181,6 +181,13 @@ const userChildRoute = (prop, mode = false) => [
     component: () => import("../views/AuthPages/Default/SearchForUserByName"),
   },
   {
+    path: "in-charge-of-search",
+    name: prop + ".in-charge-of-search",
+    meta: { auth: true, name: "Search for user by Name" },
+    props: (route) => ({ page: parseInt(route.query.page) || 1 }),
+    component: () => import("../views/AuthPages/Default/InChargeOfSearch"),
+  },
+  {
     path: "exception-search",
     name: prop + ".exception-search",
     meta: { auth: true, name: "Search for User Exception" },
