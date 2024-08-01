@@ -7,13 +7,13 @@
         </div>
       </div>
     </div>
-    <form>
-      <input style="margin-bottom: 10px" type="number" class="border border-primary w-100 text search-input form-control"
-        v-model="search" placeholder="ابحث عن توثيق" />
-      <a style="margin-bottom: 10px" @click="getInfo()" type="submit"
-        class="col-6 btn btn-primary d-block w-75 mx-auto mb-3">
+    <form @submit.prevent="getInfo">
+      <input style="margin-bottom: 10px" type="number"
+        class="border border-primary w-100 text search-input form-control" v-model="search"
+        placeholder="ابحث عن توثيق" />
+      <button type="submit" class="col-6 btn btn-primary d-block w-75 mx-auto mb-3">
         بحث
-      </a>
+      </button>
     </form>
     <div class="col-sm-12" v-if="show == 1">
       <iq-card>
@@ -48,7 +48,7 @@
         <template v-slot:body v-if="theses && theses.length > 0">
           <form id="form-wizard1" class="text-center mt-3">
             <ul id="top-tab-list" class="p-0 row list-inline">
-              <li v-for="(thesis, index) in  theses" :key="index" :class="checkActiveThesis(index, index + 1)"
+              <li v-for="(thesis, index) in theses" :key="index" :class="checkActiveThesis(index, index + 1)"
                 class="col-lg-3 col-6  mb-2 text-start" @click="changeThesisTab(index + 1)" id="account">
                 <a href="javascript:void(0);">
                   <span class="material-symbols-outlined align-middle" v-if="thesis.status == 'review'">
@@ -84,7 +84,7 @@
         <template v-slot:body v-if="questions && questions.length > 0">
           <form id="form-wizard1" class="text-center mt-3">
             <ul id="top-tab-list" class="p-0 row list-inline">
-              <li v-for="(question, index) in  questions" :key="index" :class="checkActiveQuestions(index, index + 1)"
+              <li v-for="(question, index) in questions" :key="index" :class="checkActiveQuestions(index, index + 1)"
                 class="col-lg-3 col-6 mb-2 text-start" @click="changeQuestionsTab(index + 1)" id="account">
                 <a href="javascript:void(0);">
                   <!-- <i class="material-symbols-outlined">Rule</i> -->
@@ -93,7 +93,7 @@
               </li>
             </ul>
             <!-- fieldsets -->
-            <fieldset v-for="(question, index) in  questions" :key="index"
+            <fieldset v-for="(question, index) in questions" :key="index"
               :class="currentQuestion == index + 1 ? 'd-block' : 'd-none'">
               <Question :reviewStage="false" :question="question" :userBook='userBook' :index='index'
                 @onNext="changeQuestionsTab" />

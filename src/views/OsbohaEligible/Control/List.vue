@@ -129,7 +129,7 @@
                             <hr />
 
                             <div class="row">
-                                <div class="col-6 col-md-6 col-lg-6">
+                                <div class="col-6 col-md-6 col-lg-6" v-if="isSuper">
                                     <div class="card">
                                         <router-link :to="{ name: 'admin.find-achievement', }">
 
