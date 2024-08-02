@@ -87,22 +87,17 @@
               <div
                 class="d-flex justify-content-between align-items-center gap-1"
               >
-                <MarkFinished
-                  v-if="cardInfo.can_be_finished"
-                  :book="cardInfo"
-                />
+                <MarkFinished v-if="can_be_finished" :book="cardInfo" />
                 <div class="progress flex-grow-1">
                   <div
                     class="progress-bar progress-bar-striped bg-info"
                     role="progressbar"
-                    :aria-valuenow="cardInfo.finished_percentage"
+                    :aria-valuenow="finished_percentage"
                     aria-valuemin="0"
                     aria-valuemax="100"
-                    :style="`width: ${Math.trunc(
-                      cardInfo.finished_percentage,
-                    )}%;`"
+                    :style="`width: ${finished_percentage}%;`"
                   >
-                    {{ Math.trunc(cardInfo.finished_percentage) }}%
+                    {{ finished_percentage }}%
                   </div>
                 </div>
               </div>
@@ -344,6 +339,22 @@ export default {
       return this.cardInfo.language.language.toLowerCase() == "arabic"
         ? "right-direction"
         : "left-direction";
+    },
+
+    finished_percentage() {
+      return this.cardInfo.userBooks?.length > 0 &&
+        this.cardInfo.userBooks[0]?.status === "finished" &&
+        this.cardInfo.finished_percentage <= 0
+        ? 100
+        : Math.trunc(this.cardInfo.finished_percentage);
+    },
+
+    can_be_finished() {
+      return (
+        this.cardInfo.userBooks?.length > 0 &&
+        this.cardInfo.userBooks[0]?.status === "in progress" &&
+        this.cardInfo.finished_percentage >= 85
+      );
     },
   },
 };

@@ -13,14 +13,17 @@
       <div class="col-12 mb-3" v-if="hasFinished">
         <div class="alert alert-info text-center mb-0 py-1 px-2">
           <span class="material-symbols-outlined align-middle"> info </span>
-          <span> لقد أنهيت هذا الكتاب مسبقاً </span>
+          <span v-if="book?.book?.userBooks[0]?.status === 'finished'">
+            لقد أنهيت هذا الكتاب مسبقاً
+          </span>
+          <span v-else>أنهيت هذا الكتاب {{ finishedBookCounterText }} </span>
         </div>
       </div>
 
       <div
         class="col-sm-12"
         :class="{
-          'col-md-6': hasFinished,
+          'col-md-6': hasFinished && book.book.type.type != 'free',
         }"
       >
         <div class="card card-block card-stretch card-height blog">
@@ -37,7 +40,10 @@
         </div>
       </div>
 
-      <div class="col-md-6 col-sm-12" v-if="hasFinished">
+      <div
+        class="col-md-6 col-sm-12"
+        v-if="hasFinished && book.book.type.type != 'free'"
+      >
         <div class="card card-block card-stretch card-height blog">
           <button
             type="button"
@@ -76,7 +82,7 @@
       </div>
 
       <div class="col-lg-12">
-        <iq-card class="iq-card">
+        <iq-card class="iq-card" v-if="book.book.type.type != 'free'">
           <div class="iq-card-body p-0">
             <div class="user-tabing">
               <tab-nav
@@ -136,7 +142,7 @@
             :editComment="editComment"
             :reactToComment="reactToComment"
             :editRate="editRate"
-            v-if="selectedTab === 'rates'"
+            v-if="selectedTab === 'rates' && book.book.type.type != 'free'"
           />
         </div>
       </div>
@@ -540,6 +546,15 @@ export default {
         this.totalComments > 0 &&
         this.comments.length > 0
       );
+    },
+
+    finishedBookCounterText() {
+      const counter = this.hasFinished
+        ? this.book?.book?.userBooks[0]?.counter
+        : 0;
+      const counterText = counter > 1 ? "مرات" : "مرة";
+
+      return `${counter} ${counterText}`;
     },
   },
   watch: {

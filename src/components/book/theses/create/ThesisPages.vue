@@ -92,6 +92,19 @@
           >
         </div>
       </div>
+      <div class="col-sm-12" v-if="startCheckingOverlapPages">
+        <img
+          src="@/assets/images/gif/page-load-loader.gif"
+          alt="loader"
+          style="height: 30px"
+        />
+        <small style="color: red">
+          جاري التحقق من الصفحات, الرجاء الانتظار
+        </small>
+      </div>
+      <small style="color: red" v-if="overlapPages && !loadingOverlapPages">
+        تم قراءة هذه الصفحات من قبل
+      </small>
       <button
         class="btn mb-2 text-primary text-decoration-underline px-2 py-0"
         @click.prevent="toggleShowAllPages"
@@ -106,9 +119,12 @@
 </template>
 <script setup>
 import { ref, computed, inject } from "vue";
+import ThesisService from "@/API/services/thesis.service";
 
 const startOver = ref(false);
 const showAllPages = ref(false);
+const loadingOverlapPages = ref(true);
+const startCheckingOverlapPages = ref(false);
 
 const v$ = inject("v$");
 
@@ -143,9 +159,18 @@ const props = defineProps({
     required: false,
     default: 0,
   },
+  overlapPages: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
 });
 
-const emit = defineEmits(["update:startPage", "update:endPage"]);
+const emit = defineEmits([
+  "update:startPage",
+  "update:endPage",
+  "changeOverlapPagesValue",
+]);
 
 const isRamadanBook = computed(
   () => props?.book.type.type === "ramadan" && props.isRamadanActive,
@@ -219,12 +244,42 @@ const bookPagesEnd = computed(() => {
   return pages.value.filter((page) => page > startPageProxy.value);
 });
 
+const checkOverlapPages = (start_page, end_page) => {
+  loadingOverlapPages.value = true;
+  startCheckingOverlapPages.value = true;
+
+  emit("changeOverlapPagesValue", true);
+
+  ThesisService.checkThesisOverlap({
+    start_page,
+    end_page,
+    book_id: props.book.id,
+    thesis_id: props.thesisToEdit?.thesis.id,
+  })
+    .then((res) => {
+      if (res.data.overlap) {
+        emit("changeOverlapPagesValue", true);
+      } else {
+        emit("changeOverlapPagesValue", false);
+      }
+    })
+    .finally(() => {
+      loadingOverlapPages.value = false;
+      startCheckingOverlapPages.value = false;
+    });
+};
+
 const startPageProxy = computed({
   get() {
     return props.startPage;
   },
   set(value) {
     emit("update:startPage", value);
+
+    //check pages overlap
+    if (value && endPageProxy.value && endPageProxy.value >= value) {
+      checkOverlapPages(value, endPageProxy.value);
+    }
   },
 });
 
@@ -234,6 +289,11 @@ const endPageProxy = computed({
   },
   set(value) {
     emit("update:endPage", value);
+
+    //check pages overlap
+    if (value && startPageProxy.value && value >= startPageProxy.value) {
+      checkOverlapPages(startPageProxy.value, value);
+    }
   },
 });
 

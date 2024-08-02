@@ -50,6 +50,15 @@ class ThesisService {
       handleError(error);
     }
   }
+
+  async checkThesisOverlap(data) {
+    try {
+      const thesis = await api.post(`/theses/check-overlap`, data);
+      return thesis.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
 }
 
 export default new ThesisService();

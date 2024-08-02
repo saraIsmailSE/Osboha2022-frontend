@@ -19,13 +19,15 @@
       <!-- الصفحات -->
       <ThesisPages
         v-if="showPages"
+        v-model:startPage="v$.thesisForm.start_page.$model"
+        v-model:endPage="v$.thesisForm.end_page.$model"
         :book="book"
         :thesisToEdit="thesisToEdit"
         :lastThesis="lastThesis"
-        v-model:startPage="v$.thesisForm.start_page.$model"
-        v-model:endPage="v$.thesisForm.end_page.$model"
         :isRamadanActive="isRamadanActive"
         :pagesCount="numberOfPages"
+        :overlapPages="overlapPages"
+        @changeOverlapPagesValue="changeOverlapPagesValue"
       />
 
       <!-- الأطروحة -->
@@ -61,7 +63,7 @@
         type="submit"
         class="btn btn-primary d-block mt-3"
         v-else
-        :disabled="v$.thesisForm.$invalid"
+        :disabled="v$.thesisForm.$invalid || overlapPages || loader"
       >
         إضافة
       </button>
@@ -136,6 +138,7 @@ export default {
       mediaNoteText: "",
       errorMessage: "",
       filesLimitError: "",
+      overlapPages: true,
     };
   },
   computed: {
@@ -325,6 +328,9 @@ export default {
     },
     updateThesisFormByKey({ key, value }) {
       this.thesisForm[key] = value;
+    },
+    changeOverlapPagesValue(value) {
+      this.overlapPages = value;
     },
   },
   validations() {
