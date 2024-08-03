@@ -15,3 +15,20 @@ export function copyToClipboard(text) {
 export function getFormatedDate(date){
     return moment(String(date)).format('MM/DD/YYYY hA')
 }
+
+export function checkReallocate(latest_ambassador_recored , latest_leader){
+    if (latest_ambassador_recored && latest_leader) {
+
+        const updatedAt = new Date(latest_ambassador_recored.updated_at);
+        const threeMonthsAgo = new Date();
+        threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+        if (updatedAt < threeMonthsAgo) {
+            //The record was updated more than three months ago.
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+    return true;
+}

@@ -90,22 +90,9 @@ export default {
             this.loader = false;
         },
         checkReallocate() {
-            if (this.latest_ambassador_recored && this.latest_leader) {
-
-                const updatedAt = new Date(this.latest_ambassador_recored.updated_at);
-                const threeMonthsAgo = new Date();
-                threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
-                if (updatedAt < threeMonthsAgo) {
-                    //The record was updated more than three months ago.
-                    // this.paragraph = `no team or leader`;
-                    this.paragraph = '';
-                    return true;
-                } else {
-                    return false;
-                }
-
+            if (!this.latest_leader) {
+                return true
             }
-            return true;
         }
 
     },
