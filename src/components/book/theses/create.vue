@@ -245,6 +245,8 @@ export default {
             this.v$.thesisForm.$reset();
             this.changeTypeOfThesis("");
 
+            this.overlapPages = true;
+
             //timer to close the modal
             setTimeout(() => {
               this.$emit("closeModel");
@@ -252,7 +254,7 @@ export default {
           } else {
             setTimeout(() => {
               location.reload();
-            }, 1800);
+            }, 1000);
           }
         } catch (error) {
           helper.toggleErrorToast(getErrorMessage(error));
