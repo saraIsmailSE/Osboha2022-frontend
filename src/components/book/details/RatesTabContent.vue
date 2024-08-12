@@ -91,7 +91,13 @@
               </h5>
               <h5 class="ms-2" v-else>
                 لا يوجد تقييمات
-                <span v-if="$route.params.user_id">لهذا السفير</span>
+                <span
+                  v-if="
+                    $route.params.user_id && $route.name == 'book.user-rate'
+                  "
+                >
+                  >لهذا السفير</span
+                >
               </h5>
             </div>
           </div>

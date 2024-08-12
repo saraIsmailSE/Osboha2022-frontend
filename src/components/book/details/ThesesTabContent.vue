@@ -107,7 +107,10 @@
               </h5>
               <h5 class="ms-2" v-else>
                 لا يوجد أطروحات
-                <span v-if="$route.params.user_id">لهذا السفير</span>
+                <span
+                  v-if="$route.params.user_id && $route.name == 'book.user-theses'"
+                  >لهذا السفير</span
+                >
               </h5>
             </div>
           </div>
