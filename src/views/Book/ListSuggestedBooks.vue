@@ -74,7 +74,7 @@
                                 </tbody>
                             </table>
                             <Pagination :page="currentPage" :total="totalPages" :perPage="booksPerPage"
-                                :routeName="`withdrawns-team.list-ambassadors`" />
+                                :routeName="`book.list-suggested-books`" />
                         </div>
 
                         <div v-else>
