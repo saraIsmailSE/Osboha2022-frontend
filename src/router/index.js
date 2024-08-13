@@ -1019,6 +1019,12 @@ const bookChildRoute = (prop, mode = false) => [
     component: () => import("../views/Book/BookDetails"),
   },
   {
+    path: ":book_id/user-rate/:rate_id",
+    name: prop + ".user-rate",
+    meta: { auth: true, name: "UserRate" },
+    component: () => import("../views/Book/BookDetails"),
+  },
+  {
     path: "suggest-book/",
     name: prop + ".suggest-book",
     meta: { auth: true, name: "Suggest Book" },

@@ -19,12 +19,15 @@
       <!-- الصفحات -->
       <ThesisPages
         v-if="showPages"
+        v-model:startPage="v$.thesisForm.start_page.$model"
+        v-model:endPage="v$.thesisForm.end_page.$model"
         :book="book"
         :thesisToEdit="thesisToEdit"
         :lastThesis="lastThesis"
-        v-model:startPage="v$.thesisForm.start_page.$model"
-        v-model:endPage="v$.thesisForm.end_page.$model"
         :isRamadanActive="isRamadanActive"
+        :pagesCount="numberOfPages"
+        :overlapPages="overlapPages"
+        @changeOverlapPagesValue="changeOverlapPagesValue"
       />
 
       <!-- الأطروحة -->
@@ -60,7 +63,7 @@
         type="submit"
         class="btn btn-primary d-block mt-3"
         v-else
-        :disabled="v$.thesisForm.$invalid"
+        :disabled="v$.thesisForm.$invalid || overlapPages || loader"
       >
         إضافة
       </button>
@@ -77,6 +80,7 @@ import ThesisType from "@/components/book/theses/create/ThesisType.vue";
 import ThesisPages from "@/components/book/theses/create/ThesisPages.vue";
 import ThesisBody from "@/components/book/theses/create/ThesisBody.vue";
 import ThesisScreenshots from "@/components/book/theses/create/ThesisScreenshots.vue";
+import { getErrorMessage } from "@/utilities/errors";
 
 export default {
   name: "CreateThesis",
@@ -134,6 +138,7 @@ export default {
       mediaNoteText: "",
       errorMessage: "",
       filesLimitError: "",
+      overlapPages: true,
     };
   },
   computed: {
@@ -240,6 +245,8 @@ export default {
             this.v$.thesisForm.$reset();
             this.changeTypeOfThesis("");
 
+            this.overlapPages = true;
+
             //timer to close the modal
             setTimeout(() => {
               this.$emit("closeModel");
@@ -247,10 +254,10 @@ export default {
           } else {
             setTimeout(() => {
               location.reload();
-            }, 1800);
+            }, 1000);
           }
         } catch (error) {
-          helper.toggleErrorToast();
+          helper.toggleErrorToast(getErrorMessage(error));
           console.log(error);
         } finally {
           this.loader = false;
@@ -324,8 +331,8 @@ export default {
     updateThesisFormByKey({ key, value }) {
       this.thesisForm[key] = value;
     },
-    test() {
-      console.log(this.book);
+    changeOverlapPagesValue(value) {
+      this.overlapPages = value;
     },
   },
   validations() {

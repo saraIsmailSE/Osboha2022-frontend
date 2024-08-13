@@ -54,11 +54,14 @@
 import commentService from "@/API/services/comment.service";
 import Comment from "@/components/comment/Comment.vue";
 import helper from "@/utilities/helper";
+import { commentMixin } from "@/mixins/comment.mixin";
+
 export default {
   name: "LazyLoadedComments",
   components: {
     Comment,
   },
+  mixins: [commentMixin],
   provide() {
     return {
       deleteComment: this.deleteComment,
@@ -140,7 +143,7 @@ export default {
         const response = await commentService.getPostComments(
           this.post.id,
           this.page,
-          this.userId ?? ""
+          this.userId ?? "",
         );
 
         if (response.statusCode !== 200) {
@@ -160,28 +163,10 @@ export default {
       } catch (error) {
         helper.toggleToast(
           "حدث خطأ أثناء تحميل التعليقات، حاول مرة أخرى",
-          "error"
+          "error",
         );
       } finally {
         this.loading = false;
-      }
-    },
-    /**
-     * @description: find the comment by the comment_id among the comments and replies recursively
-     * @param comments: array of comments
-     * @param comment_id: the id of the comment
-     * @returns {Object} the comment if found, otherwise return null
-     */
-    findComment(comments, comment_id) {
-      for (let i = 0; i < comments.length; i++) {
-        if (comments[i].id === comment_id) {
-          return comments[i];
-        } else if (comments[i].replies.length > 0) {
-          const comment = this.findComment(comments[i].replies, comment_id);
-          if (comment) {
-            return comment;
-          }
-        }
       }
     },
     /**
@@ -208,51 +193,40 @@ export default {
       this.incrementCommentsCount(this.post.id);
     },
 
-    /**
-     * @description delete the comment from the comments array
-     *
-     * @param {int} comment_id: the id of the comment
-     * @returns {void}
-     *
-     */
     deleteComment(comment_id) {
-      for (let i = 0; i < this.comments.length; i++) {
-        if (this.comments[i].id === comment_id) {
-          this.comments.splice(i, 1);
-          this.decrementCommentsCount(this.post.id);
-          return;
-        } else if (this.comments[i].replies.length > 0) {
-          for (let j = 0; j < this.comments[i].replies.length; j++) {
-            if (this.comments[i].replies[j].id === comment_id) {
-              this.comments[i].replies.splice(j, 1);
-              this.decrementCommentsCount(this.post.id);
-              return;
-            }
-          }
-        }
-      }
+      const options = {
+        itemsKey: "comments",
+        type: "post",
+      };
+
+      this.$options.mixins[0].methods.deleteComment.call(
+        this,
+        comment_id,
+        options,
+      );
     },
 
-    /**
-     * @description edit the comment
-     * @param {Object} comment: the comment object
-     * @returns {void}
-     */
     editComment(comment) {
-      let commentToEdit = this.findComment(this.comments, comment.id);
-      commentToEdit.body = comment.body;
-      commentToEdit.media = comment.media;
+      const options = {
+        itemsKey: "comments",
+      };
+
+      this.$options.mixins[0].methods.editComment.call(this, comment, options);
     },
+
     reactToComment(comment_id, status) {
-      let comment = this.findComment(this.comments, comment_id);
-      if (status) {
-        comment.reactions_count++;
-        comment.reacted_by_user = true;
-      } else {
-        comment.reactions_count--;
-        comment.reacted_by_user = false;
-      }
+      const options = {
+        itemsKey: "comments",
+      };
+
+      this.$options.mixins[0].methods.reactToComment.call(
+        this,
+        comment_id,
+        status,
+        options,
+      );
     },
+
     resetData() {
       this.page = 1;
       this.totalPages = 1;

@@ -71,7 +71,7 @@
           </ul>
         </div>
         <div class="row" v-if="isProfile">
-          <div class="row d-flex justify-content-center" v-if="isAmbassador">
+          <div class="row" v-if="isAmbassador">
             <div class="col-12">
               <button
                 type="submit"
@@ -82,6 +82,25 @@
                 <span v-if="myProfile"> أطروحاتي </span>
                 <span v-else> أطروحات السفير </span>
               </button>
+            </div>
+            <div class="col-12 mt-2">
+              <div
+                class="d-flex justify-content-between align-items-center gap-1"
+              >
+                <MarkFinished v-if="can_be_finished" :book="cardInfo" />
+                <div class="progress flex-grow-1">
+                  <div
+                    class="progress-bar progress-bar-striped bg-info"
+                    role="progressbar"
+                    :aria-valuenow="finished_percentage"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    :style="`width: ${finished_percentage}%;`"
+                  >
+                    {{ finished_percentage }}%
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="row d-flex justify-content-center" v-else>
@@ -156,6 +175,7 @@
 </template>
 <script>
 import createThesis from "@/components/book/theses/create.vue";
+import MarkFinished from "@/components/book/details/MarkFinished.vue";
 import userBooksService from "@/API/services/user-books.service";
 import helper from "@/utilities/helper";
 
@@ -163,6 +183,7 @@ export default {
   name: "BookCard",
   components: {
     createThesis,
+    MarkFinished,
   },
   props: {
     cardInfo: { type: Object },
@@ -318,6 +339,22 @@ export default {
       return this.cardInfo.language.language.toLowerCase() == "arabic"
         ? "right-direction"
         : "left-direction";
+    },
+
+    finished_percentage() {
+      return this.cardInfo.userBooks?.length > 0 &&
+        this.cardInfo.userBooks[0]?.status === "finished" &&
+        this.cardInfo.finished_percentage <= 0
+        ? 100
+        : Math.trunc(this.cardInfo.finished_percentage);
+    },
+
+    can_be_finished() {
+      return (
+        this.cardInfo.userBooks?.length > 0 &&
+        this.cardInfo.userBooks[0]?.status === "in progress" &&
+        this.cardInfo.finished_percentage >= 85
+      );
     },
   },
 };

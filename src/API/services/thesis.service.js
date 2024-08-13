@@ -14,7 +14,7 @@ class ThesisService {
   async getBookThesis(book_id, thesis_id) {
     try {
       const thesis = await api.get(
-        `/theses/book/${book_id}/thesis/${thesis_id}`
+        `/theses/book/${book_id}/thesis/${thesis_id}`,
       );
       return thesis.data;
     } catch (error) {
@@ -25,7 +25,7 @@ class ThesisService {
   async getThesesByBookId(id, page, user_id = "") {
     try {
       const theses = await api.get(
-        `/theses/book/${id}/user/${user_id}?page=${page}`
+        `/theses/book/${id}/user/${user_id}?page=${page}`,
       );
       return theses.data;
     } catch (error) {
@@ -45,6 +45,15 @@ class ThesisService {
   async getThesisByWeek(id) {
     try {
       const thesis = await api.get(`/theses/week/${id}`);
+      return thesis.data;
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async checkThesisOverlap(data) {
+    try {
+      const thesis = await api.post(`/theses/check-overlap`, data);
       return thesis.data;
     } catch (error) {
       handleError(error);

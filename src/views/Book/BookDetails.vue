@@ -6,257 +6,285 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="card card-block card-stretch card-height blog blog-detail">
-          <div class="card-body">
-            <div class="position-absolute start-0" v-if="book?.book">
-              <span role="button" @click="download(book?.book?.link)" v-if="book?.book.is_active"
-                class="material-symbols-outlined align-middle display-5 me-1s">
-                download
-              </span>
-              <router-link class="material-symbols-outlined align-middle display-5 me-2" :to="{
-                name: 'book.update',
-                params: { book_id: book?.book?.id },
-              }" v-if="(isAdmin || inBooksTeam || book_owner) && book?.book.is_active">
-                edit
-              </router-link>
-              <span role="button" class="material-symbols-outlined align-middle display-5 me-3" v-if="
-                !loading &&
-                ((canBeDeleted && inBooksTeam) ||
-                  (canBeDeleted && book_owner))
-              " @click="deleteBook(book?.book?.id)">
-                delete
-              </span>
-            </div>
-            <router-link :to="{
-              name: 'book.report',
-              params: { book_id: book?.book?.id },
-            }" class="btn btn-danger display-5"
-              v-if="!loading && (book?.book.is_active && book?.book.type.type != 'free')">
-              <span class=" material-symbols-outlined align-middle">
-                warning
-              </span>
-              ابلاغ مخالف
-            </router-link>
-            <button class="btn btn-info display-5" @click="suggestThisBook()"
-              v-if="!loading && (book_owner && book?.book.type.type == 'free') && !isSuggested && allowedToSuggest">
-              <span class=" material-symbols-outlined align-middle">
-                bolt
-              </span>
-              اقترح للمنهج
-            </button>
-
-            <div class="image-block text-center mt-3">
-              <img :src="resolve_img_url(book?.book?.media?.path ?? '')" class="img-fluid rounded w-25"
-                alt="blog-img" />
-            </div>
-            <div class="blog-description mt-3 text-center">
-              <h2 class="mb-3 pb-3 border-bottom text-center">
-                {{ book?.book?.name }}
-              </h2>
-              <p v-if="!book?.book.is_active" class="badge bg-danger">هذا الكتاب تم حذفه من المنهج</p>
-              <div class="blog-meta d-flex align-items-center mb-3 position-right-side flex-wrap">
-                <div class="date me-4 d-flex align-items-center">
-                  <i class="material-symbols-outlined pe-2 md-18 text-primary">calendar_month</i>تاريخ الاضافة {{
-                    formattedDate }}
-                </div>
-                <div class="like me-4 d-flex align-items-center">
-                  <i class="material-symbols-outlined pe-2 md-18 text-primary">
-                    star
-                  </i>
-                  {{ book?.rate }}% تقييم
-                </div>
-                <div class="comments me-4 d-flex align-items-center">
-                  <i class="material-symbols-outlined pe-2 md-18 text-primary">
-                    book
-                  </i>
-                  عدد الصفحات:
-                  {{ book?.book?.end_page }}
-                </div>
-                <div class="comments me-4 d-flex align-items-center">
-                  <i class="material-symbols-outlined pe-2 md-18 text-primary">
-                    comment </i>{{ book?.theses_count }} أطروحة
-                </div>
-                <div class="comments me-4 d-flex align-items-center">
-                  <i class="material-symbols-outlined pe-2 md-18 text-primary">
-                    mode_comment </i>{{ book?.comments_count }} تعليق
-                </div>
-              </div>
-              <div class="text-center" v-if="shortBriefText">
-                {{ shortBriefText }}
-                <a role="button" class="load-btn" v-on:click="loadMoreBriefText" v-if="isMore">...قراءة المزيد</a>
-                <a role="button" class="load-btn" v-on:click="loadLessBriefText" v-if="isLess">قراءة أقل</a>
-              </div>
-            </div>
-          </div>
+          <BookHeader />
         </div>
       </div>
-      <div class="col-lg-12">
 
+      <div class="col-12 mb-3" v-if="hasFinished">
+        <div class="alert alert-info text-center mb-0 py-1 px-2">
+          <span class="material-symbols-outlined align-middle"> info </span>
+          <span v-if="book?.book?.userBooks[0]?.status === 'finished'">
+            لقد أنهيت هذا الكتاب مسبقاً
+          </span>
+          <span v-else>أنهيت هذا الكتاب {{ finishedBookCounterText }} </span>
+        </div>
+      </div>
+
+      <div
+        class="col-sm-12"
+        :class="{
+          'col-md-6': hasFinished && book.book.type.type != 'free',
+        }"
+      >
         <div class="card card-block card-stretch card-height blog">
-          <button type="submit" class="btn btn-primary d-block w-100" data-bs-toggle="modal" data-bs-target="#modals"
-            :disabled="shouldDisableButton">
+          <button
+            type="submit"
+            class="btn btn-primary d-block w-100"
+            data-bs-toggle="modal"
+            data-bs-target="#thesesModal"
+            @click="this.type = 'thesis'"
+            :disabled="shouldDisableButton"
+          >
             كتابة أطروحة
           </button>
         </div>
       </div>
+
+      <div
+        class="col-md-6 col-sm-12"
+        v-if="hasFinished && book.book.type.type != 'free'"
+      >
+        <div class="card card-block card-stretch card-height blog">
+          <button
+            type="button"
+            class="btn btn-dark d-block w-100"
+            data-bs-toggle="modal"
+            data-bs-target="#rateModal"
+            @click="this.type = 'rate'"
+            :disabled="!book?.book?.allow_comments || book?.userRate"
+            v-if="!book?.userRate"
+          >
+            تقييم الكتاب
+          </button>
+          <router-link
+            :to="{
+              name: 'book.user-rate',
+              params: { rate_id: book?.userRate?.id, book_id: book?.book?.id },
+              query: { tab: 'rates' },
+            }"
+            class="btn btn-dark d-block w-100"
+            v-else-if="book?.userRate && $route.name !== 'book.user-rate'"
+          >
+            عرض تقييمك
+          </router-link>
+          <router-link
+            :to="{
+              name: 'book.book-details',
+              params: { book_id: book?.book?.id },
+              query: { tab: 'rates' },
+            }"
+            class="btn btn-dark d-block w-100"
+            v-else-if="book?.userRate && $route.name === 'book.user-rate'"
+          >
+            عودة للتقييمات
+          </router-link>
+        </div>
+      </div>
+
       <div class="col-lg-12">
-        <div class="card card-block card-stretch card-height blog user-comment">
-          <div class="card-header d-flex justify-content-between">
-            <div class="header-title">
-              <h4 class="card-title">الأطروحات</h4>
+        <iq-card class="iq-card" v-if="book.book.type.type != 'free'">
+          <div class="iq-card-body p-0">
+            <div class="user-tabing">
+              <tab-nav
+                :pills="true"
+                id="pills-tab"
+                class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0"
+              >
+                <tab-nav-items
+                  class="col-sm-6 p-0"
+                  :active="selectedTab === 'theses'"
+                  id="pills-theses-tab"
+                  ariaControls="pills-theses"
+                  role="tab"
+                  :ariaSelected="selectedTab === 'theses'"
+                  title="الأطروحات"
+                  @click="changeTab('theses')"
+                />
+                <tab-nav-items
+                  class="col-sm-6 p-0"
+                  :active="selectedTab === 'rates'"
+                  id="pills-rates-tab"
+                  ariaControls="pills-rates"
+                  role="tab"
+                  :ariaSelected="selectedTab === 'rates'"
+                  title="التقييمات"
+                  @click="changeTab('rates')"
+                />
+              </tab-nav>
             </div>
           </div>
-          <div class="card-body">
-            <div class="row" v-if="theses.length">
-              <!-- display theses -->
-              <div class="col-lg-12" v-for="comment in theses" :key="comment.id">
-                <div class="card card-block card-stretch card-height blog">
-                  <div class="card-body">
-                    <Comment :allowComment="book?.book?.allow_comments" :comment="comment" :totalThesisPages="comment.thesis
-                      ? comment.thesis.end_page -
-                        comment.thesis.start_page >
-                        0
-                        ? comment.thesis.end_page -
-                        comment.thesis.start_page +
-                        1
-                        : 0
-                      : 0
-                      " @addComment="addComment" @editComment="editComment" @reactToComment="reactToComment" />
-                  </div>
-                </div>
+        </iq-card>
 
-                <modal :id="`editThesis-${comment.type.trim() === 'screenshot'
-                  ? comment.comment_id
-                  : comment.id
-                  }`" ref="editThesisRef" dialogClass="modal-dialog-centered modal-dialog-scrollable" tabindex="-1"
-                  aria-labelledby="editThesis" :aria-hidden="false">
-                  <model-header>
-                    <h5 class="modal-title" id="modalsLabel">تعديل الأطروحة</h5>
-                    <a href="javascript:void(0);" class="lh-1" data-bs-dismiss="modal" ref="editCloseBtn">
-                      <span class="material-symbols-outlined">close</span>
-                    </a>
-                  </model-header>
-                  <model-body>
-                    <createThesis :book="book?.book" :thesisToEdit="comment" :isRamadanActive="book?.isRamadanActive" />
-                  </model-body>
-                </modal>
-              </div>
+        <div class="tab-content">
+          <ThesesTabContent
+            :active="selectedTab === 'theses'"
+            :theses="comments"
+            :hasMore="hasMore"
+            :page="commentsPage"
+            @pushToItems="pushToItems"
+            @updateItemsTotal="updateItemsTotal"
+            @updateItemsPage="updateItemsPage"
+            :addComment="addComment"
+            :editComment="editComment"
+            :reactToComment="reactToComment"
+            v-if="selectedTab === 'theses'"
+          />
 
-              <div class="col-sm-12 text-center" v-if="loading">
-                <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
-              </div>
-
-              <!-- <div class="col-lg-12">
-                <div class="card card-block card-stretch card-height blog">
-                  <CreateComment :type="'comment'" @addComment="addComment" />
-                </div>
-              </div> -->
-              <!--Load more thesis-->
-              <div class="col-lg-12">
-                <div class="card card-block card-stretch card-height blog">
-                  <button type="button" class="btn btn-primary d-block w-100" v-if="hasMoreTheses"
-                    @click="loadMoreTheses" :disabled="loading">
-                    تحميل المزيد
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="row" v-else>
-              <div class="col-sm-12 text-center" v-if="loading">
-                <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader" style="height: 100px" />
-              </div>
-              <div class="col-lg-12" v-else>
-                <div class="text-center d-flex align-items-center">
-                  <span class="material-symbols-outlined">
-                    comments_disabled
-                  </span>
-                  <h5 class="ms-2" v-if="$route.params.thesis_id">
-                    لم يتم العثور على هذه الأطروحة
-                  </h5>
-                  <h5 class="ms-2" v-else>
-                    لا يوجد أطروحات
-                    <span v-if="$route.params.user_id">لهذا السفير</span>
-                  </h5>
-                </div>
-              </div>
-            </div>
-          </div>
+          <RatesTabContent
+            :active="selectedTab === 'rates'"
+            :rates="comments"
+            :hasMore="hasMore"
+            :page="commentsPage"
+            @pushToItems="pushToItems"
+            @updateItemsTotal="updateItemsTotal"
+            @updateItemsPage="updateItemsPage"
+            :addComment="addComment"
+            :editComment="editComment"
+            :reactToComment="reactToComment"
+            :editRate="editRate"
+            v-if="selectedTab === 'rates' && book.book.type.type != 'free'"
+          />
         </div>
       </div>
     </div>
-    <modal id="modals" ref="modals" dialogClass="modal-dialog-centered modal-dialog-scrollable" tabindex="-1"
-      aria-labelledby="modalsLabel" :aria-hidden="false">
-      <model-header>
-        <h5 class="modal-title" id="modalsLabel">
-          {{ book?.book?.name }} || أطروحة جديدة
-        </h5>
-        <a href="javascript:void(0);" class="lh-1" data-bs-dismiss="modal" ref="closeBtn">
-          <span class="material-symbols-outlined">close</span>
-        </a>
-      </model-header>
-      <model-body>
-        <createThesis :book="book?.book" :lastThesis="book?.last_thesis" @closeModel="closeModel" @addThesis="addThesis"
-          :isRamadanActive="book?.isRamadanActive" />
-      </model-body>
-    </modal>
   </main>
+
+  <modal
+    id="thesesModal"
+    ref="thesesModal"
+    dialogClass="modal-dialog-centered modal-dialog-scrollable"
+    tabindex="-1"
+    aria-labelledby="thesesModalLabel"
+    :aria-hidden="false"
+  >
+    <model-header>
+      <h5 class="modal-title" id="thesesModalLabel">
+        {{ book?.book?.name }} || أطروحة جديدة
+      </h5>
+      <a
+        href="javascript:void(0);"
+        class="lh-1"
+        data-bs-dismiss="modal"
+        ref="closeThesesModalBtn"
+      >
+        <span class="material-symbols-outlined">close</span>
+      </a>
+    </model-header>
+    <model-body>
+      <createThesis
+        :book="book?.book"
+        :lastThesis="book?.last_thesis"
+        @closeModel="this.$refs.closeThesesModalBtn.click()"
+        @addThesis="addNewComment"
+        :isRamadanActive="book?.isRamadanActive"
+      />
+    </model-body>
+  </modal>
+
+  <modal
+    id="rateModal"
+    ref="rateModal"
+    dialogClass="modal-dialog-centered modal-dialog-scrollable"
+    tabindex="-1"
+    aria-labelledby="rateModalLabel"
+    :aria-hidden="false"
+    v-if="!book?.book.userRate"
+  >
+    <model-header>
+      <h5 class="modal-title" id="rateModalLabel">
+        تقييم كتاب {{ book?.book?.name }}
+      </h5>
+      <a
+        href="javascript:void(0);"
+        class="lh-1"
+        data-bs-dismiss="modal"
+        ref="closeRateModalBtn"
+      >
+        <span class="material-symbols-outlined">close</span>
+      </a>
+    </model-header>
+    <model-body>
+      <AddRate
+        :book_id="book?.book?.id"
+        @closeModel="this.$refs.closeRateModalBtn.click()"
+        @addRate="addRate"
+      />
+    </model-body>
+  </modal>
 </template>
 <script>
-import Comment from "@/components/comment/Comment.vue";
-import CreateComment from "@/components/comment/CreateComment.vue";
+import { watchEffect, computed } from "vue";
+
+import BookHeader from "@/components/book/details/BookHeader.vue";
+import ThesesTabContent from "@/components/book/details/ThesesTabContent.vue";
+import RatesTabContent from "@/components/book/details/RatesTabContent.vue";
 import createThesis from "@/components/book/theses/create.vue";
+import AddRate from "@/components/book/rate/AddRate.vue";
+
 import bookService from "@/API/services/book.service";
 import userBookService from "@/API/services/user-books.service";
-import thesisService from "@/API/services/thesis.service";
-import moment from "moment";
+
 import helper from "@/utilities/helper";
-import UserInfoService from "@/Services/userInfoService";
-import { watchEffect } from "vue";
-import BookSuggestion from "@/API/services/book-suggestion.service";
+
+import { commentMixin } from "@/mixins/comment.mixin";
 
 export default {
   name: "BookDetails",
   components: {
-    Comment,
+    BookHeader,
+    ThesesTabContent,
+    RatesTabContent,
     createThesis,
-    // CreateComment,
+    AddRate,
   },
   provide() {
     return {
+      book: computed(() => this.book),
+      loadingBook: computed(() => this.loadingBook),
+      toggleLoadingBook: this.toggleLoadingBook,
+      toggleSuggestedBook: this.toggleSuggestedBook,
+      isSuggested: computed(() => this.isSuggested),
       deleteComment: this.deleteComment,
     };
   },
-  // props: ["id"],
+  mixins: [commentMixin],
+  data() {
+    return {
+      book: null,
+      isSuggested: false,
+      eligibleToWriteThesis: true,
+      loadingBook: false,
+      selectedTab: "theses",
+      comments: [],
+      commentsPage: 1,
+      totalComments: 0,
+      type: "thesis",
+    };
+  },
   async created() {
-    this.bookSuggestionsCount = await BookSuggestion.isAllowedToSuggest();
+    const queryParam = this.$route.query.tab;
+    if (queryParam) {
+      this.selectedTab = queryParam;
+    }
+
+    if (this.$route.params.rate_id) {
+      this.selectedTab = "rates";
+    }
+
+    this.loadingBook = true;
+
     watchEffect(async () => {
       if (this.$route.params.book_id) {
         await this.init();
-
       }
     });
-  },
-  data() {
-    return {
-      theses: [],
-      book: null,
-      isSuggested: false,
-      fullBriefText: "",
-      shortBriefText: "",
-      page: 1,
-      totalTheses: 0,
-      loading: false,
-      eligibleToWriteThesis: true,
-      book_owner: false,
-      loadingBook: false,
-      bookSuggestionsCount: 3,
-    };
   },
   methods: {
     async init() {
       await this.getBook(this.$route.params.book_id);
-      await this.getTheses(this.page);
       window.addEventListener("popstate", this.popstateEventAction);
     },
+
     popstateEventAction() {
       const body = document.querySelector("body");
       body.removeAttribute("data-bs-overflow");
@@ -269,9 +297,11 @@ export default {
       }
       this.removePopstateEventAction();
     },
+
     removePopstateEventAction() {
       window.removeEventListener("popstate", this.popstateEventAction);
     },
+
     async getBook(id) {
       this.loadingBook = true;
 
@@ -279,14 +309,11 @@ export default {
         const response = await bookService.getById(id);
         this.book = response.data;
         this.isSuggested = this.book.isSuggested;
-        this.fullBriefText = this.book.book?.brief;
-        this.shortBriefText = this.fullBriefText?.slice(0, 200);
 
         //check if free book
         if (response.data.book.type.type == "free") {
           //check if auth user is the owner
           if (response.data.book_owner == this.user.id) {
-            this.book_owner = true;
             // Check rules for free book.
             this.eligibleToWriteThesis =
               await userBookService.eligibleToWriteThesis(this.user.id);
@@ -304,262 +331,188 @@ export default {
       }
     },
 
-    loadMoreBriefText() {
-      this.shortBriefText = this.fullBriefText;
+    toggleLoadingBook(status) {
+      this.loadingBook = status;
     },
-    loadLessBriefText() {
-      this.shortBriefText = this.fullBriefText?.slice(0, 200);
-    },
-    resolve_img_url: function (path) {
-      return path ? path : require("@/assets/images/main/200x200-book.png");
-    },
-    async getTheses(page) {
-      if (this.loading || !this.book) return;
 
-      this.loading = true;
-      try {
-        let response;
-        if (this.$route.params.thesis_id) {
-          response = await thesisService.getBookThesis(
-            this.$route.params.book_id,
-            this.$route.params.thesis_id,
-          );
-        } else {
-          response = await thesisService.getThesesByBookId(
-            this.$route.params.book_id,
-            page,
-            this.$route.params.user_id ?? "",
-          );
-        }
+    toggleSuggestedBook(status) {
+      this.isSuggested = status;
+    },
 
-        if (response.statusCode === 200) {
-          this.theses.push(...response.data.theses);
-          this.totalTheses = response.data.total;
-        } else {
-          helper.toggleToast(
-            "حدث خطأ أثناء تحميل البيانات, الرجاء المحاولة مرة أخرى",
-            "error",
-          );
-        }
-      } catch (e) {
-        helper.toggleToast(
-          "حدث خطأ أثناء تحميل البيانات, الرجاء المحاولة مرة أخرى",
-          "error",
-        );
-      } finally {
-        this.loading = false;
+    changeTab(tab) {
+      this.selectedTab = tab;
+    },
+
+    addNewComment(item) {
+      //check if the active tab is same as type
+      if (this.isTabSameType) {
+        this.comments.unshift(item);
       }
-    },
-    async loadMoreTheses() {
-      this.page++;
-      await this.getTheses(this.page);
-    },
-    async closeModel() {
-      this.$refs.closeBtn.click();
-    },
 
-    addThesis(thesis) {
-      this.theses.unshift(thesis);
-      this.book.theses_count++;
-      this.book.comments_count =
-        this.book.comments_count + thesis.replies.length + 1;
-      this.totalTheses++;
-      this.book.book.userBooks =
-        thesis.user.userBooks || thesis.user.user_books;
-      this.book.last_thesis = thesis.thesis;
+      if (this.type === "thesis") {
+        this.book = {
+          ...this.book,
+          theses_count: this.book.theses_count + 1,
+          comments_count: this.book.comments_count + 1,
+          last_thesis: item.thesis,
+          book: {
+            ...this.book.book,
+            userBooks: item.user.userBooks || item.user.user_books,
+          },
+        };
 
-      if (
-        this.book.book.userBooks.length > 0 &&
-        this.book.book.userBooks[0].status === "finished"
-      ) {
-        helper.toggleToast("تهانينا, لقد أنهيت الكتاب", "success");
-      }
-    },
-    findComment(theses, comment_id) {
-      for (let i = 0; i < theses.length; i++) {
-        if (theses[i].id === comment_id) {
-          return theses[i];
-        } else if (theses[i].replies.length > 0) {
-          const comment = this.findComment(theses[i].replies, comment_id);
-          if (comment) {
-            return comment;
-          }
+        if (
+          (item.user.user_books?.length > 0 &&
+            item.user.user_books[0].status === "finished") ||
+          (item.user.userBooks?.length > 0 &&
+            item.user.userBooks[0].status === "finished")
+        ) {
+          helper.toggleToast("تهانينا, لقد أنهيت الكتاب", "success");
         }
       }
+
+      if (this.isTabSameType) {
+        this.totalComments++;
+      }
     },
+
     addComment(reply, comment_id) {
-      if (!comment_id) {
-        this.theses.push(reply);
-        this.book.comments_count++;
-        this.totalTheses++;
-        return;
-      } else {
-        const comment = this.findComment(this.theses, comment_id);
-        comment.replies.push(reply);
-        this.book.comments_count++;
+      const options = {
+        itemsKey: "comments",
+        totalItemsKey: "totalComments",
+        incrementTotalItems: false,
+      };
+
+      this.$options.mixins[0].methods.addComment.call(
+        this,
+        reply,
+        comment_id,
+        options,
+      );
+
+      if (this.type === "thesis") {
+        this.book = {
+          ...this.book,
+          comments_count: this.book.comments_count + 1,
+        };
       }
     },
+
     deleteComment(comment_id) {
-      for (let i = 0; i < this.theses.length; i++) {
-        if (this.theses[i].id === comment_id) {
-          this.theses.splice(i, 1);
-          this.book.comments_count--;
-          this.totalTheses--;
-          return;
-        } else if (this.theses[i].replies.length > 0) {
-          for (let j = 0; j < this.theses[i].replies.length; j++) {
-            if (this.theses[i].replies[j].id === comment_id) {
-              this.theses[i].replies.splice(j, 1);
-              this.book.comments_count--;
-              return;
-            }
-          }
-        }
-      }
-    },
-    editComment(comment) {
-      let commentToEdit = this.findComment(this.theses, comment.id);
-      commentToEdit.body = comment.body;
-      commentToEdit.media = comment.media;
-    },
-    reactToComment(comment_id, status) {
-      let comment = this.findComment(this.theses, comment_id);
-      if (status) {
-        comment.reactions_count++;
-        comment.reacted_by_user = true;
-      } else {
-        comment.reactions_count--;
-        comment.reacted_by_user = false;
-      }
-    },
-    download(link) {
-      const swalWithBootstrapButtons = this.$swal.mixin({
-        customClass: {
-          confirmButton: "btn btn-primary btn-lg",
-          cancelButton: "btn btn-outline-primary btn-lg ms-2",
-        },
-        buttonsStyling: false,
-      });
-      swalWithBootstrapButtons
-        .fire({
-          title: "ملاحظة هامة",
-          text: "في مشروعنا لن لا نقوم أبدًا بتصوير الكتب المطبوعة ولا نقوم بنسب هذه الكتب للمشروع أو محاولة إخفاء أسماء دور النشر وحقوقها . إنما كل ما نقوم به هو عملية البحث عن هذه الكتب في مواقع الانترنت و إحضار روابط الحصول عليها للاستفادة منها . علمًا أننا لا نقوم بعملية بيع للكتب أو الاستفادة المادية منها مطلقًا ولكننا نؤمن أن من حق دور النشر إيجاد وسائل لمنع تصوير كتبها ووضعها على مواقع الانترنت ولكن أن يتواجد الكتاب على الانترنت مجانًا سواء عن طريق موقع لديه أذن بالنشر ، أو عن طريق كاتب الكتاب أو غيرهم ، ثم لا نقوم بقراءة هذه الكتب ونمنع أنفسنا من العلم فهذا الأمر لن يساهم في عملية ايقاف الكتب الالكترونية إنما سوف يساهم فقط بمنع أنفسنا عن علم مطروح وتقييد أنفسنا بظروف تدفعنا للجهل والتوقف عن التعلم . علمًا أن المشروع يتعهد دومًا بحذف أي كتاب من المنهج إذا لم يناسب وجوده كاتب الكتب أو دار النشر الخاصة بالكتاب ، فبإمكان كل شخص إما قراءة الكتاب مطبوعًا أو الاستفادة من النسخ التي نجمعها من مواقع الكتب المنتشرة مع إخلاء مسؤوليتنا حول إن كانت هذه المواقع لديها أذن بالنشر والتوزيع من عدمه فنترك هذا الأمر لدور النشر . هذا ونسأل الله أن يصلح نوايانا ويجعلها خالصة لوجهه الكريم وتطبيقًا لأمره لنا بالقراءة لأجل التعلم والتفكر . والله أعلم .",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "تحميل",
-          cancelButtonText: "إلغاء",
-          showClass: {
-            popup: "animate__animated animate__zoomIn",
-          },
-          hideClass: {
-            popup: "animate__animated animate__zoomOut",
-          },
-        })
-        .then((result) => {
-          if (result.isConfirmed) {
-            window.open(link, "_blank");
-          }
-        });
-    },
+      const options = {
+        itemsKey: "comments",
+        totalItemsKey: "totalComments",
+        type: this.type,
+      };
 
-    deleteBook(id) {
-      const swalWithBootstrapButtons = this.$swal.mixin({
-        customClass: {
-          confirmButton: "btn btn-primary btn-lg",
-          cancelButton: "btn btn-outline-primary btn-lg ms-2",
-        },
-        buttonsStyling: false,
-      });
-      swalWithBootstrapButtons
-        .fire({
-          title: "هل انت متأكد؟",
-          text: "نعم قم بحذف الكتاب",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "حذف",
-          cancelButtonText: "تراجع",
-          showClass: {
-            popup: "animate__animated animate__zoomIn",
-          },
-          hideClass: {
-            popup: "animate__animated animate__zoomOut",
-          },
-        })
-        .then(async (willDelete) => {
-          if (willDelete.isConfirmed) {
-            const response = await bookService
-              .deleteById(id)
-              .then(async (response) => {
-                helper.toggleToast(
-                  "تم الحذف ... سيتم تحويلك إلى صفحة الكتب",
-                  "success",
-                );
-                setTimeout(() => {
-                  this.$router.push({ name: "osboha.book" });
-                }, 3000);
-              })
-              .catch((error) => {
-                helper.toggleToast("حصل خطأ - لم يتم الحذف!", "danger");
-                console.log(error);
-              });
-          }
-        });
-    },
-    async suggestThisBook() {
-      let bookForm = new FormData();
-      bookForm.append("name", this.book?.book?.name);
-      bookForm.append("publisher", this.book?.book?.publisher);
-      bookForm.append("brief", this.book?.book?.brief);
-      bookForm.append("link", this.book?.book?.link);
-      bookForm.append("section_id", this.book?.book?.section.id);
-      bookForm.append("language_id", this.book?.book?.language.id);
-
-      const suggestion = await BookSuggestion.suggest(bookForm).then(async (response) => {
-        helper.toggleToast(
-          "تم حفظ الاقتراح ",
-          "success",
-        );
-        this.isSuggested = true;
-      })
-        .catch((error) => {
-          helper.toggleToast("حصل خطأ - لم يتم حفظ الاقتراح!", "danger");
-          console.log(error);
-        });
-    }
-  },
-  computed: {
-    formattedDate() {
-      return moment(this.book?.book?.created_at).format("YYYY-MM-DD");
-    },
-    isMore() {
-      return this.shortBriefText?.length < this.fullBriefText?.length;
-    },
-    isLess() {
-      return (
-        this.shortBriefText?.length >= this.fullBriefText?.length &&
-        this.fullBriefText?.length > 200
+      this.$options.mixins[0].methods.deleteComment.call(
+        this,
+        comment_id,
+        options,
       );
     },
+
+    editComment(comment) {
+      const options = {
+        itemsKey: "comments",
+      };
+
+      this.$options.mixins[0].methods.editComment.call(this, comment, options);
+    },
+
+    reactToComment(comment_id, status) {
+      const options = {
+        itemsKey: "comments",
+      };
+
+      this.$options.mixins[0].methods.reactToComment.call(
+        this,
+        comment_id,
+        status,
+        options,
+      );
+    },
+
+    pushToItems(items, options) {
+      if (options?.spread !== undefined && options.spread === false) {
+        this.comments.push(items);
+        return;
+      }
+
+      if (options?.reset !== undefined && options.reset === true) {
+        this.comments = items;
+        return;
+      }
+
+      this.comments.push(...items);
+    },
+
+    updateItemsTotal(total) {
+      this.totalComments = total;
+    },
+
+    updateItemsPage(page) {
+      this.commentsPage = page;
+    },
+
+    calculateAverageRate(sum, count) {
+      let avgRate = Math.round(sum / count);
+      avgRate = avgRate > 5 ? 5 : avgRate;
+      return (avgRate * 100) / 5;
+    },
+
+    addRate(item) {
+      if (this.isTabSameType) {
+        this.comments.unshift(item);
+      }
+
+      const sum = parseInt(this.book.reviews_sum) + item.rate.rate;
+      const avgRate = this.calculateAverageRate(sum, this.totalComments + 1);
+
+      this.book = {
+        ...this.book,
+        reviews_count: this.book.reviews_count + 1,
+        reviews_sum: sum,
+        rate: avgRate,
+        userRate: item.rate,
+      };
+
+      if (this.isTabSameType) {
+        this.totalComments++;
+      }
+    },
+
+    editRate(item) {
+      const foundRate = this.comments?.find((i) => i.id === item.id);
+      if (foundRate) {
+        const sum =
+          parseInt(this.book.reviews_sum) -
+          foundRate.rate.rate +
+          item.rate.rate;
+        const avgRate = this.calculateAverageRate(sum, this.totalComments);
+
+        foundRate.body = item.body;
+        foundRate.rate.rate = item.rate.rate;
+        this.book = {
+          ...this.book,
+          reviews_sum: sum,
+          rate: avgRate,
+        };
+      }
+    },
+
+    updateBook(data) {
+      this.book = {
+        ...this.book,
+        ...data,
+      };
+    },
+  },
+  computed: {
     user() {
       return this.$store.getters.getUser;
     },
-    inBooksTeam() {
-      return UserInfoService.hasRole(this.user, "book_quality_team");
-    },
-    isAdmin() {
-      return UserInfoService.hasRole(this.user, "admin");
-    },
 
-    hasMoreTheses() {
-      return (
-        this.theses.length < this.totalTheses &&
-        this.totalTheses > 0 &&
-        this.theses.length > 0
-      );
-    },
-    canBeDeleted() {
-      return this.totalTheses <= 0;
-    },
     shouldDisableButton() {
       const allowComments = this.book?.book?.allow_comments;
       const eligibleToWriteThesis = this.eligibleToWriteThesis;
@@ -571,10 +524,61 @@ export default {
 
       return !eligibleToWriteThesis;
     },
-    allowedToSuggest() {
-      return this.bookSuggestionsCount < 3;
-    }
 
+    hasFinished() {
+      return (
+        this.book?.book?.userBooks?.length > 0 &&
+        (this.book?.book?.userBooks[0]?.status === "finished" ||
+          this.book?.book?.userBooks[0]?.counter > 0)
+      );
+    },
+
+    isTabSameType() {
+      return (
+        (this.selectedTab === "theses" && this.type === "thesis") ||
+        (this.selectedTab === "rates" && this.type === "rate")
+      );
+    },
+
+    hasMore() {
+      return (
+        this.comments.length < this.totalComments &&
+        this.totalComments > 0 &&
+        this.comments.length > 0
+      );
+    },
+
+    finishedBookCounterText() {
+      const counter = this.hasFinished
+        ? this.book?.book?.userBooks[0]?.counter
+        : 0;
+      const counterText = counter > 1 ? "مرات" : "مرة";
+
+      return `${counter} ${counterText}`;
+    },
+  },
+  watch: {
+    selectedTab(val) {
+      this.comments = [];
+      this.totalComments = 0;
+      this.commentsPage = 1;
+
+      if (val === "theses") {
+        this.type = "thesis";
+      } else {
+        this.type = "rate";
+      }
+    },
+    //watch route change
+    $route(to, from) {
+      this.comments = [];
+      this.totalComments = 0;
+      this.commentsPage = 1;
+
+      if (this.$route.query.tab) {
+        this.selectedTab = this.$route.query.tab;
+      }
+    },
   },
 };
 </script>
