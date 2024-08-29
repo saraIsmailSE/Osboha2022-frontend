@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <h6> الصفحات المنجزة: {{ thesis.end_page - thesis.start_page }} </h6>
+        <h6> الصفحات المنجزة: {{ thesis.end_page - thesis.start_page + 1 }} </h6>
         <p style="white-space: pre-wrap; direction: rtl;">
             {{ thesis.comment.body }}
         </p>

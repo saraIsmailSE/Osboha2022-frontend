@@ -55,7 +55,7 @@ export default {
     async created() {
 
         try {
-            const response = await GroupService.AchievementAsPages(this.group_id, this.week_id);            
+            const response = await GroupService.AchievementAsPages(this.group_id, this.week_id);
             this.group = response.group
             this.group_users = response.group_users
             this.ambassadorsAchievement = response.ambassadors_achievement

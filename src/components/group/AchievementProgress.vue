@@ -5,7 +5,7 @@
     <div class="d-flex align-items-center w-100 row">
       <div class="col-lg-3 col-md-3 col-sm-12 ms-3">
         <h6 class="d-inline-block">
-          <strong>{{ ambassador.name }} </strong>
+          <strong>{{ ambassador.name + " " +ambassador.last_name }} </strong>
         </h6>
       </div>
       <div class="col-lg-5 col-md-5 col-sm-12 form-check mt-2">

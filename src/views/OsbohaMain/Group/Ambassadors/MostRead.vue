@@ -29,7 +29,7 @@
               />
             </div>
 
-            <router-link
+            <!-- <router-link
               :to="{
                 name: 'group.achievementAsPages',
                 params: { group_id: group_id },
@@ -39,7 +39,7 @@
             >
               <i class="material-symbols-outlined md-18 me-1"> patient_list </i>
               عرض الكل
-            </router-link>
+            </router-link> -->
           </div>
           <div v-else>
             <div class="d-block text-center text-danger my-3 py-3">

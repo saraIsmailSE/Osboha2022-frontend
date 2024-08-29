@@ -24,7 +24,7 @@
                 <tr class="d-flex justify-content-around"
                     :class="`${ambassador.is_freezed ? 'freeze' : markClass(ambassador.reading_mark + ambassador.writing_mark + ambassador.support)} `">
                     <td class="align-middle text-center">
-                        <span> {{ getFirstTwoNames(ambassador.name) }} </span>
+                        <span> {{ ambassador.name + " " + ambassador.last_name }} </span>
                         <small class="badge bg-success ms-1 me-1" v-if="groupLeader ==ambassador.id">قائد</small>
                     </td>
                     <td class="align-middle text-center">
