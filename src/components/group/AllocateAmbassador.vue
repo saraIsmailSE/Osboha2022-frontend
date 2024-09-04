@@ -117,16 +117,18 @@ export default {
                         this.message = `لا يوجد فريق متاح حاليًا حسب طلبك، لكن تم تسجيل طلبك. سيتم مراسلتك عبر بريدك الإلكتروني فور تخصيص فريق لمتابعة قراءتك.ابق بالقرب`
                         break;
                     case 'done successfully':
-                        this.message = 'تم توزيعك لفريق ' + response.group.name + ' سيتم نقلك للصفحة الرئيسية '
+                        this.message = 'تم توزيعك لفريق ' + response.group.group.name + ' سيتم نقلك للصفحة الرئيسية '
+                        console.log("🚀 ~ allocateAmbassador ~ response:", response)
+
                         setTimeout(() => {
                             this.$router.push({
-                                name: "osboha.list",
+                                name: "user.should-update-info",
                                 params: {
                                     tour: 1
                                 }
 
                             });
-                        }, 3000);
+                        }, 5000);
 
                         break;
 

@@ -280,7 +280,11 @@ export default {
                     helper.toggleToast("تم التعديل بنجاح", "success");
                     this.v$.infoForm.$reset();
                     setTimeout(() => {
-                        this.$router.push({ name: "osboha.list" });
+                        this.$router.push({
+                            name: "osboha.list", params: {
+                                tour: 1
+                            }
+                        });
                     }, 3000);
 
                 } catch (error) {
