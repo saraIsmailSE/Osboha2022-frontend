@@ -172,8 +172,10 @@ export default {
   created() {
     if (this.thesisToEdit) {
       this.loadThesisToEdit();
+      this.overlapPages = false;
     } else {
       this.thesisForm.book_id = this.book?.id;
+      this.overlapPages = true;
     }
   },
   methods: {
