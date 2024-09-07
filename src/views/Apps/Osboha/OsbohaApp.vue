@@ -146,7 +146,8 @@ export default {
         this.knowAboutOsboha = this.knowAboutOsboha1;
       }
     }
-    //this.fireAlert()
+
+    this.fireAlert()
   },
   methods: {
     addPost(post) {
@@ -162,26 +163,37 @@ export default {
       const swalWithBootstrapButtons = this.$swal.mixin({
         customClass: {
           cancelButton: "btn btn-outline-primary btn-lg ms-2",
+          confirmButton: "btn btn-outline-primary btn-lg ms-2 text-white",
         },
         buttonsStyling: false,
       });
 
       swalWithBootstrapButtons
         .fire({
-          title: "كل (حسبنا الله ونعم الوكيل)إضافية ستشكل فرقًا لأنها متبوعة بوعد من الله",
-          text: `إنما ينصرهم الله هناك، بتضرعكم في محاربكم هنا، تضرعوا إلى الله واسألوه النصر لإخواننا في غزة، يا ذا الجلال والعزة اللهم نسألك نصرا لإخواننا الصابرين المجاهدين في سبيلك، اللهم تقبل شهداءهم، اللهم اشف جرحاهم وثبت خطاهم وأفرغ عليهم صبرا من عندك. 🤲🏻`,
+          title: "مسابقة نِقاشي الأفضل",
+          text: `صَوتُك سيُحدد #النقاش_الأفضل، فكن جزءًا من هذا القرار وأظهر دعمك لجهود الفرق المتميزة 😍`,
           imageUrl: require('@/assets/images/main/alertMsg.jpg'),
           imageAlt: 'A tall image',
-          showConfirmButton: false,
+          showConfirmButton: true,
           showCancelButton: true,
-          cancelButtonText: "حسبنا الله ونعم الوكيل ",
+          confirmButtonText: "صَوت الآن ",
+          cancelButtonText: "تجاهل ",
           showClass: {
             popup: "animate__animated animate__zoomIn",
           },
           hideClass: {
             popup: "animate__animated animate__zoomOut",
           },
-        })
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            this.$router.push({
+              name: "osboha.post", params: {
+                post_id: 41098
+              }
+            });
+          }
+        });
     }
   },
   computed: {
