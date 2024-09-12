@@ -306,6 +306,11 @@ export default {
           return;
         }
         //this.messages = [...this.messages, response.data?.message];
+        if (!this.displayedMessageIds.includes(response.data?.message._id)) {
+            this.messages = [...this.messages, response.data?.message];
+            this.displayedMessageIds.push(response.data?.message._id);
+          }
+
 
         //update last message in rooms
         const roomIndex = this.rooms.findIndex(
