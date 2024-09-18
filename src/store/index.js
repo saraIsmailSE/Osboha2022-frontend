@@ -17,9 +17,9 @@ export default new Vuex.Store({
     token: null,
     isNewUser: true,
     reactions: [],
-    unreadNotifications: 0,
     current_week: null,
     echo: null,
+    unread_notifications: 0,
   },
   mutations: {
     SET_USER_DATA(state, userData) {
@@ -37,7 +37,7 @@ export default new Vuex.Store({
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     },
     SET_UNREAD_NOTIFICATIONS(state, count) {
-      state.unreadNotifications = count;
+      state.unread_notifications = count;
     },
     SET_PROFILE_PICTURE(state, profilePicture) {
       state.user.user_profile.profile_picture = profilePicture;
@@ -113,7 +113,7 @@ export default new Vuex.Store({
     isNewUser({ commit }, isNewUser) {
       commit("IS_NEW_USER", isNewUser);
     },
-    listUnreadNotifications({ commit }) {
+    listunread_notifications({ commit }) {
       return api
         .get(`notifications/un-read`)
         .then(({ data }) => {
@@ -130,7 +130,7 @@ export default new Vuex.Store({
           wsHost: process.env.VUE_APP_WEBSOCKET_BASE_URL,
           wsPort: 6001,
           wssPort: 6001,
-          forceTLS: process.env.VUE_APP_WEBSOCKET_FORCE_TLS === 'true',
+          forceTLS: process.env.VUE_APP_WEBSOCKET_FORCE_TLS === "true",
           disableStats: true,
           authEndpoint: `${process.env.VUE_APP_WEBSOCKET_BASE_URL}/broadcasting/auth`,
           auth: {

@@ -39,9 +39,9 @@
             <router-link :to="{ name: 'osboha.notification' }"
               class="d-flex align-items-center justify-content-center ms-2 me-2 position-relative">
               <i class="material-symbols-outlined">notifications</i>
-              <span v-if="unread > 0"
+              <span v-if="unread_notifications > 0"
                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info">
-                {{ unread }}
+                {{ unread_notifications }}
                 <span class="visually-hidden">unread messages</span>
               </span>
             </router-link>
@@ -72,6 +72,7 @@ import notificationsServices from "@/API/services/notifications.service";
 import FriendServices from "@/API/services/friend.service";
 import MessageService from "@/API/services/messages.service";
 import ThemeScheme from "../../setting/sections/ThemeScheme.vue";
+import helper from "@/utilities/helper";
 
 export default {
   name: "DefaultHeader",
@@ -112,7 +113,10 @@ export default {
   async created() {
     this.friendRequest = await FriendServices.getFriendsRequests();
     this.unreadMessages = await MessageService.unreadMessages();
-    this.unread_notifications = await notificationsServices.listUnreadNotification();
+
+    const notifications = await notificationsServices.listUnreadNotification();
+    let unread_notifications_count = notifications ? notifications.length : 0;
+    this.$store.commit('SET_UNREAD_NOTIFICATIONS', unread_notifications_count);
 
     const channel = this.Echo.channel('rooms-channel.' + this.user.id);
 
@@ -121,12 +125,23 @@ export default {
         this.unreadMessages = data.unreadMessages;
       }
     });
+
+    const NotificationsChannel = this.Echo.channel('notifications-channel.' + this.user.id);
+
+    NotificationsChannel.listen('.new-notifications', async (data) => {
+
+      if (data) {
+        this.$store.commit('SET_UNREAD_NOTIFICATIONS', (this.unread_notifications +1));
+
+        helper.toggleToast(data.message, "notification","top-left");
+      }
+    });
+
   },
   data() {
     return {
       unreadMessages: 0,
       notifications: [],
-      unread_notifications: 0,
       friendRequest: [],
       deferredPrompt: "test",
     };
@@ -138,10 +153,8 @@ export default {
     Echo() {
       return this.$store.getters.getEcho;
     },
-    unread() {
-      //by asmaa
-      //return this.$store.state.unreadNotifications;
-      return this.unread_notifications.length;
+    unread_notifications() {
+      return this.$store.state.unread_notifications;
     },
   },
   mounted() {
@@ -152,6 +165,7 @@ export default {
   },
 
   methods: {
+    ...helper,
     logout() {
       this.$store.dispatch("logout");
     },

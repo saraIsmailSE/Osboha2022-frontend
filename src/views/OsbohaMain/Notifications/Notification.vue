@@ -7,99 +7,49 @@
         <iq-card class="iq-card">
           <div class="iq-card-body p-0">
             <div class="image-block text-center">
-              <img
-                src="@/assets/images/main/no-notifications.png"
-                class="img-fluid rounded w-50"
-                alt="blog-img"
-              />
+              <img src="@/assets/images/main/no-notifications.png" class="img-fluid rounded w-50" alt="blog-img" />
             </div>
 
             <h4 class="text-center mt-3 mb-3">لا يوجد اشعارات</h4>
           </div>
         </iq-card>
       </div>
-
-      <span
-        role="button"
-        class="btn btn-primary mb-3"
-        v-if="unreadCount > 0"
-        style="direction: rtl !important"
-        @click="markAllAsRead()"
-      >
-        <i role="button" class="material-symbols-outlined align-middle">
-          done
-        </i>
-
-        تحديد قراءة الكل
-      </span>
     </div>
-    <div
-      class="col-sm-12"
-      v-for="(notification, index) in notifications"
-      :key="index"
-    >
-      <iq-card
-        :class="[seenClass(notification.read_at), notification.data.type]"
-      >
+    <div class="col-sm-12" v-for="(notification, index) in notifications" :key="index">
+      <iq-card :class="[seenClass(notification.read_at), notification.data.type]">
         <template v-slot:body>
           <div class="notification-list m-0 p-0">
             <div class="d-flex align-items-center justify-content-between">
-              <base-avatar
-                :profileImg="
-                  notification.data.sender.user_profile.profile_picture
-                "
-                :profile_id="notification.data.sender.user_profile.id"
-                :title="notification.data.sender.name"
-                :gender="notification.data.sender.gender"
-                avatarClass="rounded-circle avatar-40"
-              />
+              <base-avatar :profileImg="notification.data.sender.user_profile.profile_picture
+                " :profile_id="notification.data.sender.user_profile.id" :title="notification.data.sender.name"
+                :gender="notification.data.sender.gender" avatarClass="rounded-circle avatar-40" />
               <div class="w-100">
                 <div class="d-flex justify-content-between">
                   <div class="ms-3">
-                    <h6
-                      style="direction: rtl"
-                      :class="{
-                        'text-white': isWhite(notification),
-                      }"
-                    >
+                    <h6 style="direction: rtl" :class="{
+                      'text-white': isWhite(notification),
+                    }">
                       {{ notification.data.message }}
                     </h6>
-                    <tooltip
-                      tag="span"
-                      class="text-muted small"
-                      :class="{
-                        'text-white-50': isWhite(notification),
-                      }"
-                      tooltipPlacement="bottom"
-                      data-bs-toggle="tooltip"
-                      :title="formatFullDate(notification.created_at)"
-                      >{{ formatDateToWritten(notification.created_at) }}
+                    <tooltip tag="span" class="text-muted small" :class="{
+                      'text-white-50': isWhite(notification),
+                    }" tooltipPlacement="bottom" data-bs-toggle="tooltip"
+                      :title="formatFullDate(notification.created_at)">{{ formatDateToWritten(notification.created_at)
+                      }}
                     </tooltip>
                   </div>
 
                   <div class="d-flex align-items-center">
-                    <span
-                      role="button"
-                      class="me-1"
-                      :class="{
-                        'text-white': isWhite(notification),
-                      }"
-                      @click.prevent="
-                        sendToPage(notification.data.path, notification.id)
-                      "
-                      v-if="notification.data.path"
-                    >
+                    <span role="button" class="me-1" :class="{
+                      'text-white': isWhite(notification),
+                    }" @click.prevent="
+                      sendToPage(notification.data.path, notification.id)
+                      " v-if="notification.data.path">
                       عرض
                     </span>
-                    <i
-                      role="button"
-                      class="material-symbols-outlined md-18 me-3"
-                      :class="{
-                        'text-white': isWhite(notification),
-                      }"
-                      v-if="!notification.read_at"
-                      @click="markAsRead(notification.id)"
-                    >
+                    <i role="button" class="material-symbols-outlined md-18 me-3" :class="{
+                      'text-white': isWhite(notification),
+                    }" v-if="!notification.read_at" @click="markAsRead(notification.id)">
                       done
                     </i>
                   </div>
@@ -126,6 +76,10 @@ export default {
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.handleScroll);
+  },
+  beforeRouteLeave(to, from, next) {
+    this.markAllAsRead();
+    next();
   },
   data() {
     return {
@@ -226,7 +180,7 @@ export default {
       this.notifications = response.data;
       this.checkUnread();
       if (this.unreadCount > 0) {
-        this.$store.commit("SET_UNREAD_NOTIFICATIONS", this.unreadCount - 1);
+        this.$store.commit('SET_UNREAD_NOTIFICATIONS', 0);
       }
     },
 

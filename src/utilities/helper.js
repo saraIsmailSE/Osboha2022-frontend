@@ -49,27 +49,42 @@ export default {
    * @param {String} message
    * @param {String} type
    */
-  toggleToast(message, type) {
+  toggleToast(message, type, position = "bottom-center") {
+    /**
+     * position could be "top-left" - "top-right" - "top-center" - "bottom-left" - "bottom-right" - "bottom-center" 
+     */
     let backgroundColor;
+    let icon;
     switch (type) {
       case "success":
         backgroundColor = "#278036";
+        icon = "✅"; // Emoji or custom icon
         break;
       case "error":
         backgroundColor = "#d63031";
+        icon = "❌";
         break;
       case "warning":
         backgroundColor = "#ffc107";
+        icon = "⚠️";
         break;
       case "info":
         backgroundColor = "#17a2b8";
+        icon = "ℹ️";
+        break;
+      case "notification":
+        backgroundColor = "#eb755b";
+        icon = "🔔";
         break;
       default:
         backgroundColor = "#278036";
+        icon = "ℹ️";
         break;
     }
     toast(message, {
       type,
+      position: position,
+      icon,
       toastStyle: {
         "background-color": `${backgroundColor}`,
       },
