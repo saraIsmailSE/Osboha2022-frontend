@@ -184,7 +184,7 @@
                                         <div class="col-sm-12 text-center" v-if="loader">
                                             <img :src="require('@/assets/images/gif/page-load-loader.gif')" alt="loader"
                                                 style="height: 80px" />
-                                                <p>يتم الان تجهيز حسابك</p>
+                                            <p>يتم الان تجهيز حسابك</p>
                                         </div>
 
                                         <div class="actions" v-else>
@@ -287,7 +287,15 @@
                     <div id="container08" class="style4 container default">
                         <div class="wrapper">
                             <div class="inner">
-                                <p id="text13" class="style7">&copy; {{ currentDate }} OSBOHA180</p>
+                                <p id="text13" class="style7">&copy; {{ currentDate }} OSBOHA180
+                                    -
+                                    <router-link :to="{
+                                        name: 'terms-and-conditions',
+                                    }">
+                                        <span> تُطبق الشروط والاحكام</span>
+                                    </router-link>
+
+                                </p>
                             </div>
                         </div>
                     </div>

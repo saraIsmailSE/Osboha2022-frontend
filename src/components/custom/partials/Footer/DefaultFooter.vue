@@ -1,5 +1,5 @@
 <template>
-   <footer class="iq-footer bg-white">
+   <footer class="iq-footer bg-white w-100">
       <div class="container-fluid">
          <div class="row">
             <div class="col-12 d-flex justify-content-center">
@@ -16,10 +16,15 @@
 
          </div>
          <div class="row">
-            <div class="col-lg-6">
-            </div>
-            <div class="col-lg-6 d-flex justify-content-end">
-               <p> &copy; {{ currentDate }} <a href="#">OSBOHA180</a> </p>
+            <div class="d-flex justify-content-center mt-3">
+               <p> &copy; {{ currentDate }} OSBOHA180 -
+                  <router-link :to="{
+                     name: 'terms-and-conditions',
+                  }">
+                     <span> تُطبق الشروط والاحكام</span>
+                  </router-link>
+
+               </p>
             </div>
          </div>
       </div>

@@ -1146,6 +1146,11 @@ const routes = [
   // },
 
   {
+    path: "/terms-and-conditions",
+    name: "terms-and-conditions",
+    component: () => import("../views/Apps/Osboha/TermsAndConditions"),
+  },
+  {
     path: "/",
     name: "osboha",
     component: () => import("../layouts/Default"),
