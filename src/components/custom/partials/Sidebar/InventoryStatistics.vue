@@ -8,7 +8,7 @@
 
 
     <!-- ###### User Tree ###### -->
-    <li class="nav-item" v-if="isAdmin">
+    <li class="nav-item">
         <router-link :class="checkActive('user.retrieve-nested-users')
         ? 'active nav-link'
         : 'nav-link'
