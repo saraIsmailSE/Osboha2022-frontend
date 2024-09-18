@@ -1,19 +1,18 @@
 <template>
     <div class="row">
         <div class="col-sm-12">
-            <div class="card position-relative inner-page-bg bg-primary" style="height: 150px;">
-                <div class="inner-page-title">
-                    <h3 class="text-white"> السياسات والشروط والأحكام </h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12">
             <iq-card>
                 <template v-slot:body>
                     <div class="row p-3 mb-3 mt-3 ms-auto me-auto" style="direction: rtl;">
-                        <h1>
-                            السياسات والشروط والأحكام
-                        </h1>
+                        <div class="d-flex justify-content-between">
+                            <h1>
+                                السياسات والشروط والأحكام
+                            </h1>
+                            <back-button routeName="osboha.list"
+                                :text="`الصفحة الرئيسية`" />
+
+                        </div>
+
                         <hr>
                         <h5>
                             مرحبًا بك في منصة "أصبوحة 180"، المشروع الرائد في عالم القراءة والتعلم. يُرجى قراءة شروط
@@ -154,15 +153,23 @@
                         </h4>
 
                     </div>
+                    <div class="text-center mt-3">
+                        <img src="@/assets/images/logo.png" class="img-fluid rounded" alt="logo-img" />
+                    </div>
+
                 </template>
             </iq-card>
         </div>
     </div>
 </template>
 <script>
+import BackButton from '@/components/common/BackButton.vue';
 
 export default {
     name: 'Terms and Conditions',
+    components: {
+        BackButton,
+    },
     data() {
         return {
 

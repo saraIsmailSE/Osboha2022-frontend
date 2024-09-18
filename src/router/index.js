@@ -15,11 +15,6 @@ const authGuard = (to, from, next) => {
 
 const childRoutes = (prop, mode) => [
   {
-    path: "/terms-and-conditions",
-    name: prop + ".terms-and-conditions",
-    component: () => import("../views/Apps/Osboha/TermsAndConditions"),
-  },
-  {
     path: "/home/:tour?",
     name: prop + ".list",
     meta: { auth: true, name: "osboha App" },
@@ -1150,6 +1145,11 @@ const routes = [
   //   component: () => import("../views/Errors/500-server"),
   // },
 
+  {
+    path: "/terms-and-conditions",
+    name: "terms-and-conditions",
+    component: () => import("../views/Apps/Osboha/TermsAndConditions"),
+  },
   {
     path: "/",
     name: "osboha",
