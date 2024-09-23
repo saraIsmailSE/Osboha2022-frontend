@@ -20,8 +20,10 @@ class UserService {
     const response = await api.get(`users/search-by-email/${email}`);
     return response.data.data;
   }
-  async inChargeOfSearch(email,page) {
-    const response = await api.get(`users/in-charge-of-search/${email}?page=${page}`);
+  async inChargeOfSearch(email, page) {
+    const response = await api.get(
+      `users/in-charge-of-search/${email}?page=${page}`,
+    );
     return response.data;
   }
 
@@ -30,9 +32,9 @@ class UserService {
     return response.data.data;
   }
 
-  async getUsersOnHoldByMonthAndGender(page, month, gender) {
+  async getUsersOnHoldByMonthAndGender(page, contact_status, month, gender) {
     const response = await api.get(
-      `users/get-users-on-hold/${month}/${gender}?page=${page}`,
+      `users/get-users-on-hold/${contact_status}/${month}/${gender}?page=${page}`,
     );
     return response.data;
   }
