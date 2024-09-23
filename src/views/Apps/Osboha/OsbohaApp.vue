@@ -147,7 +147,7 @@ export default {
       }
     }
 
-    //this.fireAlert()
+    this.fireAlert()
   },
   methods: {
     addPost(post) {
@@ -170,13 +170,13 @@ export default {
 
       swalWithBootstrapButtons
         .fire({
-          title: "مسابقة نِقاشي الأفضل",
-          text: `صَوتُك سيُحدد #النقاش_الأفضل، فكن جزءًا من هذا القرار وأظهر دعمك لجهود الفرق المتميزة 😍`,
-          imageUrl: require('@/assets/images/main/alertMsg.jpg'),
+          title: "الجهاد بالكلمة سلاح أيضا في مواجهة الجهل والتطرف ونصرة ديننا",
+          text: `دورة كتابة الأطروحة تفتح لك أبوابها لتمكنك أكثر من هذا السلاح؛ سارع بالانضمام`,
+          imageUrl: require('@/assets/images/main/alertMsg.jpeg'),
           imageAlt: 'A tall image',
           showConfirmButton: true,
           showCancelButton: true,
-          confirmButtonText: "صَوت الآن ",
+          confirmButtonText: "المزيد من التفاصيل ",
           cancelButtonText: "تجاهل ",
           showClass: {
             popup: "animate__animated animate__zoomIn",
@@ -185,11 +185,10 @@ export default {
             popup: "animate__animated animate__zoomOut",
           },
         }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
           if (result.isConfirmed) {
             this.$router.push({
               name: "osboha.post", params: {
-                post_id: 41098
+                post_id: 42400
               }
             });
           }
