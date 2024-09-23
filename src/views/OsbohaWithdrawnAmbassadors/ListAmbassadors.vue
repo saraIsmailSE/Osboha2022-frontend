@@ -4,11 +4,29 @@
             <div class="col-sm-12">
                 <iq-card>
                     <template v-slot:headerTitle>
-                        <h4 class="card-title"> قائمة المنسحبين - {{ ambassadorsCount }}</h4>
+                        <h4 class="card-title"> قائمة المنسحبين لشهر - {{ MONTHS_NUMBERS[month.toString().padStart(2,
+                            '0')] }}</h4>
                     </template>
 
                     <template v-slot:body>
                         <div class="masonary-menu filter-button-group">
+                            <nav class="d-flex justify-content-center">
+                                <div className="nav nav-tabs justify-content-start" id="portfolio-tab" role="tablist">
+
+                                    <button :className="`nav-link ${contact_status == 0 ? 'active' : ''}`"
+                                        id="nav-female-tab" data-bs-toggle="tab" data-bs-target="#nav-female"
+                                        type="button" role="tab" aria-controls="nav-female" aria-selected="false"
+                                        @click="() => { this.contact_status = 0; }">
+                                        لم يتم التواصل
+                                    </button>
+                                    <button :className="`nav-link ${contact_status == 1 ? 'active' : ''}`"
+                                        id="nav-both-tab" data-bs-toggle="tab" data-bs-target="#nav-both" type="button"
+                                        role="tab" aria-controls="nav-both" aria-selected="true"
+                                        @click="() => { this.contact_status = 1; }">
+                                        تم التواصل
+                                    </button>
+                                </div>
+                            </nav>
                             <nav class="d-flex justify-content-center">
                                 <div className="nav nav-tabs justify-content-start" id="portfolio-tab" role="tablist">
                                     <button :className="`nav-link ${gender == 'both' ? 'active' : ''}`"
@@ -17,14 +35,14 @@
                                         @click="() => { this.gender = 'both'; }">
                                         الكل</button>
 
-                                    <button :className="`nav-link ${gender == 'special_care' ? 'active' : ''}`"
+                                    <button :className="`nav-link ${gender == 'female' ? 'active' : ''}`"
                                         id="nav-female-tab" data-bs-toggle="tab" data-bs-target="#nav-female"
                                         type="button" role="tab" aria-controls="nav-female" aria-selected="false"
                                         @click="() => { this.gender = 'female'; }">
                                         إناث
                                     </button>
 
-                                    <button :className="`nav-link ${gender == 'followup' ? 'active' : ''}`"
+                                    <button :className="`nav-link ${gender == 'male' ? 'active' : ''}`"
                                         id="nav-male-tab" data-bs-toggle="tab" data-bs-target="#nav-male" type="button"
                                         role="tab" aria-controls="nav-male" aria-selected="false"
                                         @click="() => { this.gender = 'male'; }">
@@ -128,7 +146,7 @@
                                         </div>
                                         <div class="mt-4">
                                             <h3 class="text-center">
-                                                {{ ambassadorsCount }}
+                                                {{ statistics.total_holds }}
                                             </h3>
                                             <p class="mb-0 text-center">العدد الكلي</p>
                                         </div>
@@ -164,7 +182,7 @@
                                         </div>
                                         <div class="mt-4">
                                             <h3 class="text-center">
-                                                {{ ambassadorsCount - statistics.contact_done }}
+                                                {{ statistics.total_holds - statistics.contact_done }}
                                             </h3>
                                             <p class="mb-0 text-center">لم يتم التواصل معهم</p>
                                         </div>
@@ -237,7 +255,7 @@
 import UserService from "@/API/services/user.service";
 import helper from "@/utilities/helper";
 import axios from "axios";
-import { GENDER } from "@/utilities/constants";
+import { GENDER, MONTHS_NUMBERS } from "@/utilities/constants";
 import { getFormatedDate } from "@/utilities/commonFunctions";
 import Pagination from '@/components/common/Pagination';
 import { watch } from 'vue';
@@ -278,13 +296,13 @@ export default {
 
         watch(
             () => this.currentPage,
-            (newPage) => {
+            () => {
                 this.loadAmbassadors();
             }
         );
         watch(
-            () => [this.month, this.gender],
-            ([newMonth, newGender]) => {
+            () => [this.contact_status, this.month, this.gender],
+            () => {
                 this.currentPage = 1;
                 this.ambassadors = [];
                 this.updatePage(this.currentPage);
@@ -312,11 +330,13 @@ export default {
     },
     data() {
         return {
+            contact_status: 0,
             gender: 'both',
             ambassadors: [],
             statistics: null,
             ambassadorsPerPage: 30,
             GENDER,
+            MONTHS_NUMBERS,
             searchModel: "",
             totalPages: 1,
             currentPage: this.page,
@@ -344,6 +364,7 @@ export default {
             try {
                 let response = await UserService.getUsersOnHoldByMonthAndGender(
                     this.currentPage,
+                    this.contact_status,
                     this.month,
                     this.gender,
                     this.cancelToken
