@@ -344,7 +344,7 @@ export default {
     finished_percentage() {
       return this.cardInfo.userBooks?.length > 0 &&
         this.cardInfo.userBooks[0]?.status === "finished" &&
-        this.cardInfo.finished_percentage <= 0
+        parseInt(this.cardInfo.finished_percentage) <= 0
         ? 100
         : Math.trunc(this.cardInfo.finished_percentage);
     },
