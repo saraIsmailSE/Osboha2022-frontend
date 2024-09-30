@@ -147,7 +147,7 @@ export default {
       }
     }
 
-    this.fireAlert()
+    //this.fireAlert()
   },
   methods: {
     addPost(post) {
