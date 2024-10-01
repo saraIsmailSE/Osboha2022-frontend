@@ -147,7 +147,7 @@ export default {
       }
     }
 
-    //this.fireAlert()
+    this.fireAlert()
   },
   methods: {
     addPost(post) {
@@ -170,9 +170,9 @@ export default {
 
       swalWithBootstrapButtons
         .fire({
-          title: "الجهاد بالكلمة سلاح أيضا في مواجهة الجهل والتطرف ونصرة ديننا",
-          text: `دورة كتابة الأطروحة تفتح لك أبوابها لتمكنك أكثر من هذا السلاح؛ سارع بالانضمام`,
-          imageUrl: require('@/assets/images/main/alertMsg.jpeg'),
+          title: "📝🌹 قلْ لي ما كتبتَ، أقلْ لكَ من أنت",
+          text: `دورة غرد بأطروحتك تفتح لك أبوابها، سارع بالانضمام`,
+          imageUrl: require('@/assets/images/main/alertMsg.jpg'),
           imageAlt: 'A tall image',
           showConfirmButton: true,
           showCancelButton: true,
@@ -188,7 +188,7 @@ export default {
           if (result.isConfirmed) {
             this.$router.push({
               name: "osboha.post", params: {
-                post_id: 42400
+                post_id: 43557
               }
             });
           }

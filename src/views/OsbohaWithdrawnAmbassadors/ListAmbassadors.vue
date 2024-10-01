@@ -406,7 +406,7 @@ export default {
             const months = [];
             const currentDate = new Date();
 
-            for (let i = 0; i < 6; i++) {
+            for (let i = 0; i < 12; i++) {
                 const month = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
                 months.push({
                     year: month.getFullYear(),
