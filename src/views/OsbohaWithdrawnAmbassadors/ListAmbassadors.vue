@@ -56,8 +56,8 @@
                                         :className="`nav-link ${month == monthToShow.month ? 'active' : ''}`"
                                         id="nav-featured-tab" data-bs-toggle="tab" data-bs-target="#nav-featured"
                                         type="button" role="tab" aria-controls="nav-featured" aria-selected="false"
-                                        @click="() => { this.month = monthToShow.month; }">
-                                        {{ monthToShow.month }}
+                                        @click="() => { this.month = monthToShow.month; this.year = monthToShow.year; }">
+                                        {{ monthToShow.month }} / {{ monthToShow.year }}
                                     </button>
                                 </div>
                             </nav>
@@ -86,7 +86,7 @@
                                             {{ getFormatedDate(ambassador.updated_at) }}
                                         </td>
                                         <td>
-                                            {{ ambassador.latest_exception[0] ? ambassador.latest_exception[0].reason
+                                            {{ ambassador.withdrawn_exceptions.length > 0 ? ambassador.withdrawn_exceptions[0].reason
                                                 : 'لا يوجد' }}
                                         </td>
                                         <td>
@@ -325,8 +325,6 @@ export default {
 
         );
 
-
-
     },
     data() {
         return {
@@ -346,7 +344,7 @@ export default {
             emptyMessage: "",
             cancelToken: axios.CancelToken.source(),
             month: 0,
-
+            year:0,
         };
     },
 
@@ -366,6 +364,7 @@ export default {
                     this.currentPage,
                     this.contact_status,
                     this.month,
+                    this.year,
                     this.gender,
                     this.cancelToken
                 );
@@ -383,7 +382,7 @@ export default {
                     return;
                 }
 
-                this.ambassadors = response.data.ambassadors;
+                this.ambassadors = response.data.ambassadors.data;
                 this.totalPages = response.data?.total ?? 1;
                 this.statistics = response.data.statistics;
             } catch (error) {

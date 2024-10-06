@@ -32,9 +32,9 @@ class UserService {
     return response.data.data;
   }
 
-  async getUsersOnHoldByMonthAndGender(page, contact_status, month, gender) {
+  async getUsersOnHoldByMonthAndGender(page, contact_status, month,year, gender) {
     const response = await api.get(
-      `users/get-users-on-hold/${contact_status}/${month}/${gender}?page=${page}`,
+      `users/get-users-on-hold/${contact_status}/${month}/${year}/${gender}?page=${page}`,
     );
     return response.data;
   }
