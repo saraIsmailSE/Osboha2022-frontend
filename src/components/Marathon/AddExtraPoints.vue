@@ -1,12 +1,6 @@
 <template>
     <div class="col-12 bg-white pt-2">
-        <h3>
-            اعتماد نقاط اضافية
-            <span class="material-symbols-outlined align-middle">
-                add_circle
-            </span>
-        </h3>
-        <table class="table table-striped" style="margin-top: 3rem;" v-if="current_bonus_points">
+        <table class="table table-striped" style="margin-top: 1rem;" v-if="shouldShowTable">
             <thead>
                 <tr>
                     <th scope="col">نوع النقاط </th>
@@ -83,7 +77,7 @@
                     <select class="form-select" data-trigger name="choices-single-default" id="choices-single-default"
                         v-model="bonusForm.bonus_type" @change="handleBonusTypeChange">
                         <option value="" selected>اختر ... </option>
-                        <option value="activity" selected>مشاركة في نشاط</option>
+                        <option value="activity" >مشاركة في نشاط</option>
                         <option value="leading_course">دورة القادة</option>
                         <option value="eligible_book">توثيق كتاب </option>
                     </select>
@@ -157,7 +151,6 @@ export default {
             eligible_book_avg: false,
             activities: false,
             message: "",
-            group_id: null,
             loading: false,
         };
     },
@@ -260,5 +253,16 @@ export default {
             },
         };
     },
+    computed: {
+        shouldShowTable() {
+            if (this.current_bonus_points) {
+                return this.current_bonus_points.activity > 0 ||
+                    this.current_bonus_points.leading_course > 0 ||
+                    this.current_bonus_points.eligible_book > 0 ||
+                    this.current_bonus_points.eligible_book_less_VG > 0;
+            }
+            return false;
+        }
+    }
 };
 </script>

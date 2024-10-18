@@ -1,19 +1,33 @@
 <template>
     <div class="p-3">
         <div class="circular-progress-bars row d-flex justify-content-center">
-            <div v-for="(point, index) in basic_points" :key="index"
+            <div v-for="(point, key, index) in basic_points" :key="key"
                 class="circular-progress-bar col-3 col-md-3 col-lg-3 text-center mt-2 mb-3">
                 <svg viewBox="0 0 36 36">
+                    <!-- Full circle (background) -->
                     <path class="circle-bg" d="M18 2.0845
         a 15.9155 15.9155 0 0 1 0 31.831
         a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path class="circle" :stroke-dasharray="(point / 50 * 100) + ', 100'" :class="'point-fill'" d="M18 2.0845
+
+                    <!-- Points circle -->
+                    <path class="circle points" :stroke-dasharray="(point / 50 * 100) + ', 100'" :class="'point-fill'"
+                        d="M18 2.0845
         a 15.9155 15.9155 0 0 1 0 31.831
         a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <text x="18" y="20.35" class="percentage" :transform="'rotate(90 18 18)'">{{ point }}</text>
 
+                    <!-- Violations circle  -->
+                    <path class="circle violations" v-if="getViolationByIndex(index + 1) > 0"
+                        :stroke-dasharray="(getViolationByIndex(index + 1) / 50 * 100) + ', 100'"
+                        :class="'violation-fill'" d="M18 2.0845
+        a 15.9155 15.9155 0 0 1 0 31.831
+        a 15.9155 15.9155 0 0 1 0 -31.831" />
+
+                    <text x="18" y="20.35" class="percentage" :transform="'rotate(90 18 18)'">
+                        {{ Math.max(point - getViolationByIndex(index + 1), 0) }}
+                    </text>
                 </svg>
-                <span>{{ MARATHON_WEEKS[index] }}</span>
+
+                <span>{{ MARATHON_WEEKS[key] }}</span>
             </div>
         </div>
         <div class="row d-flex justify-content-center">
@@ -23,8 +37,14 @@
                 <p class="text-center"> {{ bonus_points }} </p>
             </div>
             <div class="col-6 col-md-6 col-lg-6 text-center mt-2 mb-3">
+                <h4 class="text-center">خصم نقاط</h4>
+                <p class="text-center"> {{ totalViolationPoints }} </p>
+            </div>
+            <div class="col-6 col-md-6 col-lg-6 text-center mt-2 mb-3">
                 <h4 class="text-center">المجموع الكلي</h4>
-                <p class="text-center"> {{ total_points }} </p>
+                <p class="text-center">
+                    {{ total_points }} / 200
+                </p>
             </div>
         </div>
 
@@ -37,6 +57,10 @@ import { MARATHON_WEEKS } from "@/utilities/constants";
 export default {
     props: {
         basic_points: {
+            type: [Object],
+            required: true,
+        },
+        week_violations: {
             type: [Object],
             required: true,
         },
@@ -57,7 +81,17 @@ export default {
         };
     },
     methods: {
+        getViolationByIndex(index) {
+            return this.week_violations[`week_violations_${index}`] || 0;
+        },
+
     },
+    computed: {
+        totalViolationPoints() {
+            return Object.values(this.week_violations).reduce((total, value) => total + value, 0);
+        },
+    }
+
 };
 </script>
 
@@ -126,5 +160,9 @@ export default {
     font-size: 10px;
     text-anchor: middle;
     dominant-baseline: middle;
+}
+
+.circular-progress-bar .circle.violation-fill {
+    stroke: #7d1111;
 }
 </style>

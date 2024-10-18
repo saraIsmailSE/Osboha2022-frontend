@@ -14,8 +14,30 @@
             </div>
             <h4 class="mt-2">
               نقاط الاسبوع - {{ mark.week.title }}
-              <p class="display-6" style="direction: rtl;">{{ points }} - نقطة</p>
+              <p class="display-6" style="direction: rtl;">{{ Math.max(points - violations_points, 0) }} - نقطة</p>
             </h4>
+            <table class="table table-striped" style="margin-top: 1rem;">
+              <thead>
+                <tr>
+                  <th>
+                    نقاط الاسبوع
+                  </th>
+                  <th>
+                    خصم نقاط
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    {{ points }}
+                  </td>
+                  <td>
+                    {{ violations_points }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
           <div class=" d-flex justify-content-end" v-if="current_marathon">
@@ -75,14 +97,20 @@ export default {
       date: null,
       now: null,
       can_edit: true,
-      points: null,
+      points: 0,
+      violations_points: 0,
     };
   },
   async created() {
     try {
       this.current_marathon = await OsbohaMarathon.getCurrentMarathon();
       if (this.current_marathon) {
-        this.points = await MarathonPoints.getSpecificMarathonWeekPoints(this.$route.params.ambassador_id, this.current_marathon.id, this.$route.params.week_id)
+        const response = await MarathonPoints.getSpecificMarathonWeekPoints(this.$route.params.ambassador_id, this.current_marathon.id, this.$route.params.week_id);
+        if (response) {
+          this.points = response.points
+          this.violations_points = response.violations_points
+
+        }
       }
 
       const response = await MarkService.marathonAmbassadorMark(
