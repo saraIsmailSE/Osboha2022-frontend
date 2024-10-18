@@ -3,13 +3,21 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="main-timeline" v-if="point_details">
-                    <div class="timeline" v-for="(detail, index) in point_details" :key="index">
+                    <div class="timeline" v-for="(detail, key, index) in point_details" :key="key">
                         <div class="timeline-content">
                             <div class="timeline-icon">
-                                <span class="animate-charcter text-center"> {{totalDailyPoints(detail)}} </span>
+                                <span class="animate-charcter text-center">
+                                    {{ Math.max(totalDailyPoints(detail) - getViolationByIndex(index + 1), 0) }}
+                                </span>
                             </div>
-                            <h3 class="title">{{ MARATHON_WEEKS[index] }}</h3>
+                            <h3 class="title">{{ MARATHON_WEEKS[key] }}</h3>
                             <div class="description">
+                                <p class="mt-3 mb-1">
+                                    المجموع الكلي للنقاط: {{ totalDailyPoints(detail) }}
+                                </p>
+                                <p>
+                                    خصم نقاط: {{ getViolationByIndex(index + 1) }}
+                                </p>
                                 <AchèvementsSummury :achèvements="detail" />
                             </div>
                         </div>
@@ -36,6 +44,10 @@ export default {
             type: [Object],
             required: true,
         },
+        week_violations: {
+            type: [Object],
+            required: true,
+        },
     },
     data() {
         return {
@@ -45,7 +57,11 @@ export default {
     methods: {
         totalDailyPoints(achevement) {
             return achevement.reduce((total, achevement) => total + achevement.daily_points, 0);
-        }
+        },
+        getViolationByIndex(index) {
+            return this.week_violations[`week_violations_${index}`] || 0;
+        },
+
 
     }
 };

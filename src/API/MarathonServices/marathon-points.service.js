@@ -40,6 +40,26 @@ class MarathonPointsServices {
             return error;
         }
     }
+
+    async pointsDeduction(form) {
+        try {
+
+            let formData = new FormData();
+            formData.append('user_id', form.user_id);
+            formData.append('osboha_marthon_id', form.osboha_marthon_id);
+            formData.append('week_key', form.week_key);
+            formData.append('reason_id', form.reason_id);
+            formData.append('reviewer_note', form.reviewer_note);
+
+            const response = await api.post(`${this.prefix}/points-deduction`, formData, {
+                headers: { "Content-type": "multipart/form-data" },
+            });
+            return response.data.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
     async subtractPoints(form) {
         try {
 
@@ -55,6 +75,14 @@ class MarathonPointsServices {
             return error;
         }
     }
+    async undoPointsDeduction(violation_id) {
+        try {
+            const response = await api.delete(`${this.prefix}/user-violation/${violation_id}`);
+            return response.data.data;
+        } catch (error) {
+            return error;
+        }
+    }
 
     async getBonusPoints(user_id, osboha_marthon_id) {
         try {
@@ -64,5 +92,24 @@ class MarathonPointsServices {
             return error;
         }
     }
+
+    async getMarathonViolations(user_id, osboha_marthon_id) {
+        try {
+            const response = await api.get(`${this.prefix}/get-violations/${user_id}/${osboha_marthon_id}`);
+            return response.data.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async getDeductionReasons() {
+        try {
+            const response = await api.get(`${this.prefix}/get-violations-reasons`);
+            return response.data.data;
+        } catch (error) {
+            return error;
+        }
+    }
+
 }
 export default new MarathonPointsServices();
