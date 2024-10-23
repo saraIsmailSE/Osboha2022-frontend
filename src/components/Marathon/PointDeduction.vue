@@ -42,7 +42,7 @@
                     </select>
                     <small style="color: red" v-if="v$.deductionForm.reason_id.$error">يجب اختيار نوع المخالفة</small>
                 </div>
-                <div class="form-group">
+                <div class="form-group" v-if="current_marathon.marathon_weeks && current_marathon.marathon_weeks.length > 0">
                     <select class="form-select" data-trigger name="choices-single-default" id="choices-single-default"
                         v-model="deductionForm.week_key" @change="handleBonusTypeChange">
                         <option value="0" selected>الاسبوع ... </option>
