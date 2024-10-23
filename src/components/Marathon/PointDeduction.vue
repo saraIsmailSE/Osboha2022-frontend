@@ -1,6 +1,7 @@
 <template>
     <div class="col-12 bg-white pt-2">
-        <table class="table table-striped" style="margin-top: 1rem;" v-if="marathon_violations">
+        <table class="table table-striped" style="margin-top: 1rem;"
+            v-if="marathon_violations && marathon_violations.length > 0">
             <thead>
                 <tr>
                     <th scope="col">#</th>
