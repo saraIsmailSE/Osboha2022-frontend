@@ -35,7 +35,7 @@
             <form class="mt-2" @submit.prevent="onSubmit()" v-if="current_marathon">
                 <div class="form-group">
                     <select class="form-select" data-trigger name="choices-single-default" id="choices-single-default"
-                        v-model="deductionForm.reason_id" @change="handleBonusTypeChange">
+                        v-model="deductionForm.reason_id" >
                         <option value="0" selected>اختر نوع المخالفة ... </option>
                         <option v-for=" reason in deduction_reasons" :key="reason.id" :value="reason.id">
                             {{ reason.reason }} ( {{ reason.points }} )</option>
@@ -44,11 +44,11 @@
                 </div>
                 <div class="form-group" v-if="current_marathon.marathon_weeks && current_marathon.marathon_weeks.length > 0">
                     <select class="form-select" data-trigger name="choices-single-default" id="choices-single-default"
-                        v-model="deductionForm.week_key" @change="handleBonusTypeChange">
+                        v-model="deductionForm.week_key">
                         <option value="0" selected>الاسبوع ... </option>
-                        <option v-for=" marathon_week in current_marathon.marathon_weeks" :key="marathon_week.week.id"
-                            :value="marathon_week.week.week_key">
-                            {{ marathon_week.week.title }}
+                        <option v-for=" marathon_week in current_marathon.marathon_weeks" :key="marathon_week"
+                            :value="marathon_week.week_key">
+                            {{ marathon_week.week_title }}
                         </option>
                     </select>
                     <small style="color: red" v-if="v$.deductionForm.week_key.$error">يجب اختيار الاسبوع</small>

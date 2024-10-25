@@ -26,7 +26,8 @@
                                             certificate.book.name }}</h4>
                                         <h4 class="mb-2 text-center" style="direction: inherit;">رقم التوثيق:{{
                                             certificate.id }}</h4>
-                                        <span role="button" class="  btn-primary material-symbols-outlined fs-3 p-1 me-2"
+                                        <span role="button"
+                                            class="  btn-primary material-symbols-outlined fs-3 p-1 me-2"
                                             @click="acceptCertificate(certificate.id)">
                                             verified
                                         </span>
@@ -34,13 +35,19 @@
                                             @click="rejectCertificate(certificate.id)">
                                             dangerous
                                         </span>
-                                        <span role="button" class="  btn-warning material-symbols-outlined fs-3 p-1 me-2">
+                                        <!-- <span role="button" class="  btn-warning material-symbols-outlined fs-3 p-1 me-2">
                                             swipe_left
-                                        </span>
-                                        <span role="button" class="  btn-light material-symbols-outlined fs-3 p-1 me-2"
+                                        </span> -->
+                                        <span role="button" class=" btn-light material-symbols-outlined fs-3 p-1 me-2"
                                             @click="listCertificate(certificate.id)">
                                             visibility
                                         </span>
+                                        <router-link role="button" target='_blank'
+                                            class=" btn-info material-symbols-outlined fs-3 p-1 me-2"
+                                            :to="{ name: 'chat.index', query: { user_id: certificate.user.id } }">
+                                            forum
+                                        </router-link>
+
                                     </div>
                                 </div>
                             </div>

@@ -102,18 +102,15 @@
               <h4>اسمك الكامل بالعربية</h4>
               <div class="form-group row">
                 <input type="text" class="form-control mt-2" name="first_name_ar" id="first_name_ar"
-                  v-model="infoForm.first_name_ar" placeholder="الاسم الأول"
-                  :disabled="(user.allowed_to_eligible == 1 || user.allowed_to_eligible == 0)" />
+                  v-model="infoForm.first_name_ar" placeholder="الاسم الأول" />
               </div>
               <div class="form-group row">
                 <input type="text" class="form-control mt-2" name="middle_name_ar" id="middle_name_ar"
-                  v-model="infoForm.middle_name_ar" placeholder="الاسم الثاني"
-                  :disabled="(user.allowed_to_eligible == 1 || user.allowed_to_eligible == 0)" />
+                  v-model="infoForm.middle_name_ar" placeholder="الاسم الثاني" />
               </div>
               <div class="form-group row">
                 <input type="text" class="form-control mt-2" name="last_name_ar" id="last_name_ar"
-                  v-model="infoForm.last_name_ar" placeholder="الاسم الأخير"
-                  :disabled="(user.allowed_to_eligible == 1 || user.allowed_to_eligible == 0)" />
+                  v-model="infoForm.last_name_ar" placeholder="الاسم الأخير" />
               </div>
             </div>
             <div class="form-group col-12">

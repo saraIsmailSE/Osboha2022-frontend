@@ -24,6 +24,8 @@
               menu_book
             </span>
           </h4>
+        </template>
+        <template v-slot:body>
           <span class="px-2">
             •
             اسم السفير : {{ userName }}</span>
@@ -38,6 +40,18 @@
           <br>
           <span class="px-2" v-if="generalInformations"> • عدد التلخيصات : 1</span>
           <span class="px-2" v-else> • عدد التلخيصات : 0</span>
+          <hr />
+          <div class="row d-flex justify-content-end align-items-center w-75 m-auto mb-3">
+            <router-link class="btn btn-info display-5 " target="_blank"
+              :to="{ name: 'chat.index', query: { user_id: achievement.user.id } }">
+
+              <span class="material-symbols-outlined align-middle">
+                forum
+              </span>
+              إرسال رسالة
+            </router-link>
+          </div>
+
         </template>
       </iq-card>
       <!-- thesis -->
@@ -329,7 +343,6 @@ export default {
   methods: {
     async getInfo() {
       this.achievement = await userBookService.getFullUserBook(this.search);
-      console.log("🚀 ~ file: FindAchievement.vue:332 ~ getInfo ~ this.achievement:", this.achievement)
       if (this.achievement == 'UserBook does not exist') {
         this.show = 0
       } else {
