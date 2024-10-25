@@ -47,7 +47,6 @@
 
 
     <update-user-name />
-
     <iq-card class="iq-card" v-if="(user.allowed_to_eligible == 2 || user.allowed_to_eligible == 0)">
       <div class="iq-card-body p-3">
         <h1 class="text-center">
@@ -236,6 +235,8 @@ export default {
   name: "update profile",
   components: { UpdateUserName, UpdateSocialMedia, ResetEmail },
   async created() {
+    this.user = await UserServices.getInfo(this.$route.params.user_id)
+
 
     if ((this.user.allowed_to_eligible == 0 || this.user.allowed_to_eligible == 2)) {
       this.official_document_image_src = this.getOfficialDoc(this.user.id);
@@ -263,6 +264,7 @@ export default {
   },
   data() {
     return {
+      user: null,
       loader: false,
       profileInfo: null,
       profilePictureForm: {
@@ -323,6 +325,7 @@ export default {
           this.loader = false;
           this.profileInfo = response;
           this.message = 'تم التعديل بنجاح';
+          this.user = await UserServices.getInfo(this.$route.params.user_id)
           this.v$.infoForm.$reset();
         } catch (error) {
           console.log(error);
@@ -406,31 +409,6 @@ export default {
         params: { user_id: this.$route.params.user_id },
       });
     },
-  },
-  computed: {
-    user() {
-      return this.$store.getters.getUser;
-    },
-    supervisorAndAbove() {
-      return UserInfoService.hasRoles(this.user, [
-        "admin",
-        "consultant",
-        "advisor",
-        "supervisor",
-      ]);
-    },
-    eligibleTeam() {
-      return UserInfoService.hasRoles(this.user, [
-        "admin",
-        'eligible_admin',
-        'reviewer',
-        'auditor',
-        'user_accept',
-        'super_auditer',
-        'super_reviewer'
-      ]);
-    },
-
   },
 };
 
