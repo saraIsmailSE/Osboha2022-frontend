@@ -237,7 +237,6 @@ export default {
   async created() {
     this.user = await UserServices.getInfo(this.$route.params.user_id)
 
-
     if ((this.user.allowed_to_eligible == 0 || this.user.allowed_to_eligible == 2)) {
       this.official_document_image_src = this.getOfficialDoc(this.user.id);
     }

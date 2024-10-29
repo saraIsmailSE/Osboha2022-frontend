@@ -36,7 +36,7 @@
                 <div class="form-group">
                     <select class="form-select" data-trigger name="choices-single-default" id="choices-single-default"
                         v-model="deductionForm.reason_id" >
-                        <option value="0" selected>اختر نوع المخالفة ... </option>
+                        <option value="" selected>اختر نوع المخالفة ... </option>
                         <option v-for=" reason in deduction_reasons" :key="reason.id" :value="reason.id">
                             {{ reason.reason }} ( {{ reason.points }} )</option>
                     </select>
@@ -45,7 +45,7 @@
                 <div class="form-group" v-if="current_marathon.marathon_weeks && current_marathon.marathon_weeks.length > 0">
                     <select class="form-select" data-trigger name="choices-single-default" id="choices-single-default"
                         v-model="deductionForm.week_key">
-                        <option value="0" selected>الاسبوع ... </option>
+                        <option value="" selected>الاسبوع ... </option>
                         <option v-for=" marathon_week in current_marathon.marathon_weeks" :key="marathon_week"
                             :value="marathon_week.week_key">
                             {{ marathon_week.week_title }}
@@ -111,8 +111,8 @@ export default {
             deductionForm: {
                 osboha_marthon_id: this.$route.params.marathon_id,
                 user_id: this.$route.params.user_id,
-                week_key: 0,
-                reason_id: 0,
+                week_key: "",
+                reason_id: '',
                 reviewer_note: "",
             },
             message: "",
@@ -133,8 +133,8 @@ export default {
                     this.deductionForm = {
                         osboha_marthon_id: this.$route.params.marathon_id,
                         user_id: this.$route.params.user_id,
-                        week_key: 0,
-                        reason_id: 0,
+                        week_key: '',
+                        reason_id: '',
                         reviewer_note: "",
                     };
 
