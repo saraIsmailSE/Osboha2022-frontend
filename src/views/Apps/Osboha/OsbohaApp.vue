@@ -147,7 +147,7 @@ export default {
       }
     }
 
-    //this.fireAlert()
+    this.fireAlert()
   },
   methods: {
     addPost(post) {
@@ -170,8 +170,8 @@ export default {
 
       swalWithBootstrapButtons
         .fire({
-          title: "📝🌹 قلْ لي ما كتبتَ، أقلْ لكَ من أنت",
-          text: `دورة غرد بأطروحتك تفتح لك أبوابها، سارع بالانضمام`,
+          title: "كن الحكم في تحدي العقول",
+          text: `إذا كانت لديك خبرة في التحكيم، انضم إلينا الآن وكن جزءًا من بناء جيل مناظر`,
           imageUrl: require('@/assets/images/main/alertMsg.jpg'),
           imageAlt: 'A tall image',
           showConfirmButton: true,
@@ -188,7 +188,7 @@ export default {
           if (result.isConfirmed) {
             this.$router.push({
               name: "osboha.post", params: {
-                post_id: 43557
+                post_id: 45761
               }
             });
           }

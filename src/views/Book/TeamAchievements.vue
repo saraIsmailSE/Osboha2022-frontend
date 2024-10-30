@@ -16,7 +16,6 @@
                                         type="button" role="tab" aria-controls="nav-pending" aria-selected="true"
                                         @click="() => { this.current_week = week; }" v-for="week in weeks"
                                         :key="week.id">
-
                                         {{ week.title }}
                                     </button>
 
@@ -24,6 +23,10 @@
                             </nav>
                         </div>
                         <div class="table-responsive" v-if="achievements">
+                            <div class="alert bg-info" role="alert">
+                                <h3 class="text-center text-white"> العدد الكلي للصفحات: {{ totalTeamReading }}</h3>
+                            </div>
+
                             <table id="datatable" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
@@ -168,7 +171,17 @@ export default {
         user() {
             return this.$store.getters.getUser;
         },
-    }
-};
+
+        totalTeamReading() {
+            if (this.achievements) {
+                return Object.values(this.achievements).reduce((sum, user) => {
+                    return sum + (user.achievement && user.achievement.total_pages ? user.achievement.total_pages : 0);
+                }, 0);
+
+            }
+            return 0;
+        },
+    },
+}
 
 </script>
