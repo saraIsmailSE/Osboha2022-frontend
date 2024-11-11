@@ -170,9 +170,9 @@ export default {
 
       swalWithBootstrapButtons
         .fire({
-          title: "كن الحكم في تحدي العقول",
-          text: `إذا كانت لديك خبرة في التحكيم، انضم إلينا الآن وكن جزءًا من بناء جيل مناظر`,
-          imageUrl: require('@/assets/images/main/alertMsg.jpg'),
+          title: "نظام الحُزَم المعرفية تاج التميز في مشروع أصبوحة 180",
+          text: `انضم للحُزَم المعرفية لخوض تجربة استثنائية في أصبوحة 180`,
+          imageUrl: require('@/assets/images/main/alertMsg.png'),
           imageAlt: 'A tall image',
           showConfirmButton: true,
           showCancelButton: true,
@@ -188,7 +188,7 @@ export default {
           if (result.isConfirmed) {
             this.$router.push({
               name: "osboha.post", params: {
-                post_id: 45761
+                post_id: 46609
               }
             });
           }
