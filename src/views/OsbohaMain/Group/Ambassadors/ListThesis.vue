@@ -94,7 +94,9 @@
               class="form-group row w-75 m-auto"
               v-if="(allowAudit && pending) || (allowAudit && editMode)"
             >
-              <div class="col-12 col-md-6">
+              <div
+                :class="`col-12 col-md-${status === 'rejected_parts' ? 4 : 6}`"
+              >
                 <select class="form-select w-100 mt-2" v-model="status">
                   <option class="bg-white text-dark" value="" selected>
                     الحالة
@@ -105,7 +107,7 @@
                   <option class="bg-white text-dark" value="rejected">
                     خصم علامة الأطروحة كاملة (مع القراءة)
                   </option>
-                  <option class="bg-white text-dark" value="rejected_writing">
+                  <!-- <option class="bg-white text-dark" value="rejected_writing">
                     خصم علامة الأطروحة كاملة (الكتابة فقط)
                   </option>
                   <option
@@ -113,11 +115,32 @@
                     value="accepted_one_thesis"
                   >
                     احتساب علامة أطروحة واحدة
+                  </option> -->
+                  <option class="bg-white text-dark" value="rejected_parts">
+                    خصم حسب عدد الأوراد (الكتابة فقط)
                   </option>
                 </select>
               </div>
 
-              <div class="col-12 col-md-6">
+              <div class="col-12 col-md-4" v-if="status === 'rejected_parts'">
+                <select class="form-select w-100 mt-2" v-model="rejected_parts">
+                  <option class="bg-white text-dark" value="" selected>
+                    عدد الأوراد
+                  </option>
+                  <option
+                    class="bg-white text-dark"
+                    v-for="i in max_allowed_parts"
+                    :key="i"
+                    :value="i"
+                  >
+                    {{ i }}
+                  </option>
+                </select>
+              </div>
+
+              <div
+                :class="`col-12 col-md-${status === 'rejected_parts' ? 4 : 6}`"
+              >
                 <select
                   class="form-select w-100 mt-2"
                   v-model="reason"
@@ -248,7 +271,9 @@ export default {
     this.thesis = response;
     this.week = response.mark?.week;
     this.status = this.thesis.status !== "pending" ? this.thesis.status : "";
+    this.rejected_parts = this.thesis.rejected_parts ?? "";
     this.reason = this.thesis?.modified_theses?.modifier_reason_id ?? "";
+    this.max_allowed_parts = this.thesis?.max_allowed_parts ?? 5;
     this.expired =
       new Date(this.week?.modify_timer) < new Date() &&
       this.SupervisorAndAbove &&
@@ -261,10 +286,12 @@ export default {
       loader: false,
       status: "",
       reason: "",
+      rejected_parts: "",
       week: null,
       expired: false,
       expand: false,
       editMode: false,
+      maxAllowedParts: 5,
     };
   },
   computed: {
@@ -308,12 +335,17 @@ export default {
       } else if (this.thesis.status === "rejected") {
         status = "مرفوض (كامل)";
         className = "bg-danger";
-      } else if (this.thesis.status === "rejected_writing") {
-        status = "مرفوض (بدون القراءة)";
-        className = "bg-danger";
-      } else if (this.thesis.status === "accepted_one_thesis") {
-        status = "مقبول أطروحة واحدة";
-        className = "bg-success";
+      }
+      // else if (this.thesis.status === "rejected_writing") {
+      //   status = "مرفوض (بدون القراءة)";
+      //   className = "bg-danger";
+      // } else if (this.thesis.status === "accepted_one_thesis") {
+      //   status = "مقبول أطروحة واحدة";
+      //   className = "bg-success";
+      // }
+      else if (this.thesis.status === "rejected_parts") {
+        status = "رفض " + this.thesis.rejected_parts + " أوراد";
+        className = "bg-info";
       }
       return { status, className };
     },
@@ -342,7 +374,9 @@ export default {
     message() {
       return this.status !== "accepted" && !this.reason
         ? "لا يمكنك الاعتماد بدون اختيار السبب والحالة في حالة الرفض"
-        : "";
+        : this.status === "rejected_parts" && !this.rejected_parts
+          ? "لا يمكنك الاعتماد بدون اختيار عدد الأوراد في حالة الرفض"
+          : "";
     },
     //extract media recursively from thesis
     media() {
@@ -433,6 +467,7 @@ export default {
                 reason_id: this.reason ? parseInt(this.reason) : null,
                 status: this.status,
                 week_id: this.week.id,
+                rejected_parts: this.rejected_parts,
                 modified_thesis_id: this.thesis.modified_theses?.id,
               });
 
