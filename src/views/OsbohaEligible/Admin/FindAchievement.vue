@@ -54,6 +54,28 @@
 
         </template>
       </iq-card>
+
+      <iq-card>
+        <template v-slot:headerTitle>
+          <h4 class="card-title">الشهادات</h4>
+        </template>
+        <template v-slot:body v-if="certificates && certificates.length > 0">
+          <h5> تم اصدار شهادات عدد {{ certificates.length }}</h5>
+          <ul>
+            <li v-for="(certificate, index) in certificates" :key="index">
+              <p class="mt-3" role="button" @click="listCertificate(certificate.id)">
+                عرض شهادة رقم {{ index + 1 }}
+              </p>
+            </li>
+          </ul>
+
+        </template>
+        <template v-slot:body v-else>
+          <h4 class="card-title">لا يوجد</h4>
+        </template>
+
+      </iq-card>
+
       <!-- thesis -->
       <iq-card>
         <template v-slot:headerTitle>
@@ -329,6 +351,7 @@ export default {
       userName: "",
       cuurentQuotation: [],
       theses: null,
+      certificates: null,
       currentThesis: 1,
       currentThesisCount: 1,
       questions: null,
@@ -341,6 +364,9 @@ export default {
   },
 
   methods: {
+    listCertificate(id) {
+      window.open(`https://platform.osboha180.com/backend/public/api/v1/eligible-certificates/generate-pdf/${id}`, '_blank');
+    },
     async getInfo() {
       this.achievement = await userBookService.getFullUserBook(this.search);
       if (this.achievement == 'UserBook does not exist') {
@@ -349,6 +375,7 @@ export default {
         this.userBook = this.achievement
         this.bookName = this.achievement.book.name;
         this.userName = this.achievement.user.name;
+        this.certificates = this.achievement.certificates;
         this.generalInformations = this.achievement.general_information;
         this.theses = this.achievement.thesises;
         this.questions = this.achievement.questions;
