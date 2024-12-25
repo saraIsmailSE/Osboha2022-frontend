@@ -56,7 +56,7 @@
                                         {{ thesis.user_book.thesises.length }}
                                     </td>
                                     <td class="text-center">
-                                        {{ getFormatedDate(thesis.user_book.updated_at) }}
+                                        {{ getFormatedDate(thesis.user_book.created_at) }}
                                     </td>
                                 </tr>
 
@@ -101,7 +101,7 @@
                                         {{ thesis.user_book.thesises.length }}
                                     </td>
                                     <td>
-                                        {{ getFormatedDate(thesis.updated_at) }}
+                                        {{ getFormatedDate(thesis.created_at) }}
                                     </td>
 
                                 </tr>

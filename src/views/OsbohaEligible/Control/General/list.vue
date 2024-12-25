@@ -12,7 +12,8 @@
             <iq-card class="iq-card">
                 <div class="iq-card-body p-0">
                     <div class="image-block text-center">
-                        <img src="@/assets/images/main/export-congrats.png" class="img-fluid rounded w-50" alt="blog-img">
+                        <img src="@/assets/images/main/export-congrats.png" class="img-fluid rounded w-50"
+                            alt="blog-img">
                     </div>
                     <h4 class="text-center mt-3 mb-3">لا يوجد تلخيصات</h4>
                 </div>
@@ -57,7 +58,7 @@
                                         1
                                     </td>
                                     <td class="text-center">
-                                        {{ getFormatedDate(information.user_book.updated_at) }}
+                                        {{ getFormatedDate(information.user_book.created_at) }}
                                     </td>
 
                                 </tr>
@@ -104,7 +105,7 @@
                                         1
                                     </td>
                                     <td class="text-center">
-                                        {{ getFormatedDate(information.user_book.updated_at) }}
+                                        {{ getFormatedDate(information.user_book.created_at) }}
                                     </td>
                                 </tr>
 

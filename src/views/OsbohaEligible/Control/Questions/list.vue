@@ -58,7 +58,7 @@
                                         {{ question.user_book.questions.length }}
                                     </td>
                                     <td class="text-center">
-                                        {{ getFormatedDate(question.user_book.updated_at) }}
+                                        {{ getFormatedDate(question.user_book.created_at) }}
                                     </td>
 
                                 </tr>
@@ -107,7 +107,7 @@
                                         {{ question.user_book.questions.length }}
                                     </td>
                                     <td class="text-center">
-                                        {{ getFormatedDate(question.user_book.updated_at) }}
+                                        {{ getFormatedDate(question.user_book.created_at) }}
                                     </td>
                                 </tr>
 
