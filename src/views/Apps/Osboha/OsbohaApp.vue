@@ -170,9 +170,11 @@ export default {
 
       swalWithBootstrapButtons
         .fire({
-          title: "نظام الحُزَم المعرفية تاج التميز في مشروع أصبوحة 180",
-          text: `انضم للحُزَم المعرفية لخوض تجربة استثنائية في أصبوحة 180`,
-          imageUrl: require('@/assets/images/main/alertMsg.png'),
+          title: "صوت للمقال الأفضل",
+          text: `صوتك هو البداية للتغيير، ورأيك هو المفتاح للتميز.
+صوّت الآن للمقال الأفضل، وكن أنت من يساهم في إبراز الأفضل!
+`,
+          imageUrl: require('@/assets/images/main/alertMsg.jpeg'),
           imageAlt: 'A tall image',
           showConfirmButton: true,
           showCancelButton: true,
@@ -188,7 +190,7 @@ export default {
           if (result.isConfirmed) {
             this.$router.push({
               name: "osboha.post", params: {
-                post_id: 46609
+                post_id: 48830
               }
             });
           }
