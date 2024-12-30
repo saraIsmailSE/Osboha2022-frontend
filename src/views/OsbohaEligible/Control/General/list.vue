@@ -58,7 +58,7 @@
                                         1
                                     </td>
                                     <td class="text-center">
-                                        {{ getFormatedDate(information.user_book.created_at) }}
+                                        {{ getFormatedDate(information.user_book.updated_at) }}
                                     </td>
 
                                 </tr>
@@ -105,7 +105,7 @@
                                         1
                                     </td>
                                     <td class="text-center">
-                                        {{ getFormatedDate(information.user_book.created_at) }}
+                                        {{ getFormatedDate(information.user_book.updated_at) }}
                                     </td>
                                 </tr>
 
