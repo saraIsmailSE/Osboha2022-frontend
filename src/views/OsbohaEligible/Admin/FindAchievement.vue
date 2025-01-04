@@ -63,7 +63,7 @@
           <h5> تم اصدار شهادات عدد {{ certificates.length }}</h5>
           <ul>
             <li v-for="(certificate, index) in certificates" :key="index">
-              <p class="mt-3" role="button" @click="listCertificate(certificate.id)">
+              <p class="mt-3" role="button" @click="listCertificate(certificate.eligible_user_books_id)">
                 عرض شهادة رقم {{ index + 1 }}
               </p>
             </li>

@@ -147,7 +147,7 @@ export default {
       }
     }
 
-    //this.fireAlert()
+    this.fireAlert()
   },
   methods: {
     addPost(post) {
@@ -170,11 +170,9 @@ export default {
 
       swalWithBootstrapButtons
         .fire({
-          title: "صوت للمقال الأفضل",
-          text: `صوتك هو البداية للتغيير، ورأيك هو المفتاح للتميز.
-صوّت الآن للمقال الأفضل، وكن أنت من يساهم في إبراز الأفضل!
-`,
-          imageUrl: require('@/assets/images/main/alertMsg.jpeg'),
+          title: " هل أنتم مستعدون لتحدي الأفكار؟  ❓",
+          text: `بإصرارك يمكنك أن تكمل الطريق في أي ظرف، فالعظماء لا يستسلمون، بل يجدون راحتهم في التحديات لتحقيق أهدافهم، بإيمانهم القوي بإمكاناتهم`,
+          imageUrl: require('@/assets/images/main/alertMsg.png'),
           imageAlt: 'A tall image',
           showConfirmButton: true,
           showCancelButton: true,
@@ -190,7 +188,7 @@ export default {
           if (result.isConfirmed) {
             this.$router.push({
               name: "osboha.post", params: {
-                post_id: 48830
+                post_id: 50027
               }
             });
           }
