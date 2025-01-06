@@ -470,6 +470,13 @@ const groupChildRoute = (prop, mode = false) => [
     component: () => import("../views/OsbohaMain/Group/Marathon/ListGroups"),
   },
   {
+    path: "marathon-points/:group_id",
+    name: prop + ".marathon-points",
+    meta: { auth: true, name: "List Marathon Groups" },
+    component: () => import("../views/OsbohaMain/Group/Marathon/GroupPoints"),
+  },
+
+  {
     path: "special-cares-groups",
     name: prop + ".listSpecialCareGroups",
     meta: { auth: true, name: "List Special Care Groups" },
