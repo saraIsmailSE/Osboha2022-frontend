@@ -4,9 +4,9 @@
       <div class="col-lg-12">
         <div class="card">
           <div class="card-header">
-            <div class="header-title">
+            <div class="header-title rounded">
               <h4
-                class="card-title bg-primary text-white text-center px-2 py-3"
+                class="card-title bg-primary text-white text-center px-2 py-3 rounded"
               >
                 إحصائيات التحويل العام
               </h4>
@@ -19,26 +19,29 @@
 
             <div class="col-12" v-else>
               <div class="row">
-                <StatsFilterType v-model="type" />
+                <div class="masonary-menu filter-button-group">
+                  <StatsFilterType :type="type" @changeType="changeType" />
 
-                <StatsDateFilter
-                  v-if="type"
-                  v-model:week="selectedWeek"
-                  v-model:monthYear="selectedMonthYear"
-                  :weeks="weeks"
-                  :months="months"
-                  :type="type"
-                />
+                  <StatsDateFilter
+                    v-if="type"
+                    :selectedWeek="selectedWeek"
+                    v-model:monthYear="selectedMonthYear"
+                    :weeks="weeks"
+                    :months="months"
+                    :type="type"
+                    @changeWeek="changeWeek"
+                  />
+                </div>
 
                 <div class="col-12 col-md-12 col-lg-12 mt-3">
                   <div class="card">
-                    <div class="card-title pt-3">
+                    <!-- <div class="card-title pt-3">
                       <h3 class="text-center">
                         {{ monthTitle ?? selectedWeekData?.title }}
                       </h3>
-                    </div>
+                    </div> -->
                     <div class="card-body">
-                      <div class="mt-2" v-if="!statistics.length">
+                      <div class="mt-2" v-if="!statistics?.length">
                         <div
                           class="p-3 d-flex align-items-center justify-content-center"
                         >
@@ -49,26 +52,26 @@
                         </div>
                       </div>
                       <div class="mt-2">
-                        <div class="card-body">
-                          <div class="blog-description">
-                            <template v-if="isAdmin">
-                              <h3 class="mb-2 bold">المسؤول</h3>
-                              <StatsTable
-                                :statistics="adminStatistics"
-                                :showTotals="false"
-                                appendClass="mb-4"
-                              />
-                            </template>
+                        <!-- <div class="card-body"> -->
+                        <div class="blog-description">
+                          <template v-if="isAdmin">
+                            <h3 class="mb-2 bold">المسؤول</h3>
+                            <StatsTable
+                              :statistics="adminStatistics"
+                              :showTotals="false"
+                              appendClass="mb-4"
+                            />
+                          </template>
 
-                            <h3 class="mb-2 bold" v-if="isAdmin">المستشارين</h3>
-                            <StatsTable :statistics="statistics" />
+                          <h3 class="mb-2 bold" v-if="isAdmin">المستشارين</h3>
+                          <StatsTable :statistics="statistics" />
 
-                            <template v-if="isAdmin">
-                              <h3 class="mb-2 mt-4 bold">الموجهين</h3>
-                              <StatsTable :statistics="advisorsStatistics" />
-                            </template>
-                          </div>
+                          <template v-if="isAdmin">
+                            <h3 class="mb-2 mt-4 bold">الموجهين</h3>
+                            <StatsTable :statistics="advisorsStatistics" />
+                          </template>
                         </div>
+                        <!-- </div> -->
                       </div>
                     </div>
                   </div>
@@ -201,6 +204,15 @@ export default {
       });
 
       return totals;
+    },
+
+    changeType(type) {
+      console.log(type);
+      this.type = type;
+    },
+
+    changeWeek(week) {
+      this.selectedWeek = week;
     },
   },
 };

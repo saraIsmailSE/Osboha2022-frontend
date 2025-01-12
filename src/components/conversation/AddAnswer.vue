@@ -26,7 +26,14 @@
           }"
           :disabled="v$.answerData.$invalid || loading"
         >
-          Send
+          <span v-if="loading">
+            <img
+              :src="require('@/assets/images/gif/page-load-loader.gif')"
+              alt="loader"
+              style="height: 30px"
+            />
+          </span>
+          <template v-else> send </template>
         </button>
       </div>
       <div class="comment-attagement d-flex mb-1">
