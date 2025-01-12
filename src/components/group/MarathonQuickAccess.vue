@@ -24,6 +24,13 @@
                 v-if="((authInGroup && authInGroup.user_type != 'marathon_ambassador') || isAdmin) && previous_week">
                 انجاز الأسبوع السابق
             </router-link>
+            <router-link :to="{
+                name: 'group.marathon-points',
+                params: { group_id: group_id },
+            }" class="btn btn-primary d-block mt-3 col-5 me-1"
+                v-if="((authInGroup && authInGroup.user_type != 'marathon_ambassador') || isAdmin)">
+                نقاط المجموعة
+            </router-link>
         </div>
     </div>
 </template>

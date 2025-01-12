@@ -110,6 +110,26 @@ class MarathonPointsServices {
             return error;
         }
     }
+    async GroupMarathonPointsExport(group_id, marathon_id){
+
+        try {
+            const response = await api.get(`${this.prefix}/group-marathon-points-export/${group_id}/${marathon_id}`, {
+                responseType: "blob",});
+            // Create a link element
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", "group-marathon-points-export.xlsx"); // Set the file name
+            document.body.appendChild(link);
+            link.click();
+
+            // Cleanup the link element
+            link.remove();
+        } catch (error) {
+            return error;
+        }
+
+    }
 
 }
 export default new MarathonPointsServices();
