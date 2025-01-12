@@ -13,7 +13,7 @@
           </span>
         </div>
       </div>
-      <div class="iq-card-body p-4">
+      <!-- <div class="iq-card-body p-4">
         <div class="image-block text-center">
           <img
             src="@/assets/images/main/left-timer.png"
@@ -21,19 +21,19 @@
             alt="blog-img"
           />
         </div>
-      </div>
+      </div> -->
 
       <!-- week form  -->
       <div class="row my-2 px-4 w-100">
-        <div class="col-sm-12 col-md-6" v-for="week in weeks" :key="week.id">
-          <div class="form-check form-check-inline">
+        <!-- <div class="col-sm-12 col-md-6" v-for="week in weeks" :key="week.id"> -->
+        <!-- <div class="form-check form-check-inline">
             <input
               class="form-check-input"
               type="radio"
               name="date"
               :id="week.id"
               :value="week.id"
-              v-model="selectedWeekId"
+              v-model="selectedWeek"
             />
             <label class="form-check-label" :for="week.id">
               <span class="bold text-primary">
@@ -50,12 +50,47 @@
                 {{ week.title }}
               </span>
             </label>
+          </div> -->
+
+        <nav class="d-flex justify-content-center mt-2">
+          <div
+            className="nav nav-tabs justify-content-start"
+            id="weeks-tab"
+            role="tablist"
+          >
+            <button
+              v-for="week in weeks"
+              :key="week.id"
+              :className="`nav-link ${selectedWeek == week.id ? 'active' : ''}`"
+              :id="`nav-${week.id}-tab`"
+              data-bs-toggle="tab"
+              :data-bs-target="`#nav-${week.id}`"
+              type="button"
+              role="tab"
+              aria-controls="nav-featured"
+              aria-selected="false"
+              @click="
+                () => {
+                  this.selectedWeek = week.id;
+                }
+              "
+            >
+              {{
+                `${
+                  parseInt(week.id) === parseInt($store.state.current_week?.id)
+                    ? "الأسبوع الحالي: "
+                    : "الأسبوع السابق: "
+                } ${week.title}`
+              }}
+            </button>
           </div>
-        </div>
+        </nav>
+
+        <!-- </div> -->
       </div>
 
       <!-- header  -->
-      <div class="col-12 my-2" v-if="selectedWeekData">
+      <!-- <div class="col-12 my-2" v-if="selectedWeekData">
         <h3
           class="bold text-primary text-center d-flex justify-content-center align-items-center gap-2"
         >
@@ -67,23 +102,24 @@
           }}
           <span class="material-symbols-outlined"> atr </span>
         </h3>
-      </div>
+      </div> -->
 
       <!-- Loading state -->
       <div
         class="col-12 d-flex justify-content-center align-items-center"
         v-if="loadingStats"
-        style="height: 680px"
       >
-        <img
+        <!-- <img
           :src="require('@/assets/images/gif/page-load-loader.gif')"
           alt="loader"
           style="height: 100px"
-        />
+        /> -->
+        <img src="@/assets/images/gif/loader-3.gif" alt="loader" />
       </div>
 
       <!-- days form -->
       <DaysForm
+        v-else
         :weekDays="weekDays"
         @changeMinutes="changeMinutes"
         @getWorkingHours="getWorkingHours"
@@ -114,7 +150,7 @@ export default {
         query: { week: this.$store.state.current_week?.id },
       });
     } else {
-      this.selectedWeekId = queryParams.week;
+      this.selectedWeek = queryParams.week;
     }
 
     await this.getWorkingHours();
@@ -127,12 +163,12 @@ export default {
       workingHours: [],
       loadingStats: false,
       weekDays: [],
-      selectedWeekId: "",
+      selectedWeek: "",
     };
   },
   watch: {
-    async selectedWeekId() {
-      this.$router.push({ query: { week: this.selectedWeekId } });
+    async selectedWeek() {
+      this.$router.push({ query: { week: this.selectedWeek } });
       this.weekDays = [];
       this.workingHours = [];
       await this.getWorkingHours();
@@ -144,12 +180,12 @@ export default {
   computed: {
     selectedWeekData() {
       return this.weeks.find(
-        (week) => parseInt(week.id) === parseInt(this.selectedWeekId),
+        (week) => parseInt(week.id) === parseInt(this.selectedWeek),
       );
     },
     isCurrentWeek() {
       return (
-        parseInt(this.selectedWeekId) ===
+        parseInt(this.selectedWeek) ===
         parseInt(this.$store.state.current_week?.id)
       );
     },
@@ -164,7 +200,7 @@ export default {
       this.loadingStats = true;
       try {
         const response = await WorkingHourService.getWorkingHours(
-          this.selectedWeekId,
+          this.selectedWeek,
         );
 
         this.workingHours = response.data?.workingHours;
@@ -225,7 +261,7 @@ export default {
           //format the date to be dd-mm-yyyy
           date: startDate.toLocaleDateString("en-CA", options),
           minutes: minutes ?? 0,
-          week_id: this.selectedWeekId,
+          week_id: this.selectedWeek,
         });
 
         startDate.setDate(startDate.getDate() + 1);

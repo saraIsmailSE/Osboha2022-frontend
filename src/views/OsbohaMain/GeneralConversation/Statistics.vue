@@ -100,6 +100,22 @@ export default {
     StatsTable,
   },
   async created() {
+    const queryParams = this.$route.query;
+
+    //fill type, week, monthYear
+    if (!queryParams.type) {
+      this.type = "week";
+    } else {
+      this.type = queryParams.type;
+    }
+
+    if (queryParams.week) {
+      this.selectedWeek = queryParams.week;
+    }
+
+    if (queryParams.monthYear) {
+      this.selectedMonthYear = queryParams.monthYear;
+    }
     await this.getStatistics();
   },
   data() {
@@ -140,9 +156,23 @@ export default {
   watch: {
     selectedMonthYear() {
       this.getStatistics();
+      this.$router.push({
+        query: {
+          week: this.selectedWeek,
+          monthYear: this.selectedMonthYear,
+          type: this.type,
+        },
+      });
     },
     selectedWeek() {
       this.getStatistics();
+      this.$router.push({
+        query: {
+          week: this.selectedWeek,
+          monthYear: this.selectedMonthYear,
+          type: this.type,
+        },
+      });
     },
     type() {
       if (this.type == "week") {
@@ -207,7 +237,6 @@ export default {
     },
 
     changeType(type) {
-      console.log(type);
       this.type = type;
     },
 
