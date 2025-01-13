@@ -19,7 +19,7 @@
 
             <div class="col-12" v-else>
               <div class="row">
-                <StatsHeader
+                <!-- <StatsHeader
                   :weeks="weeks"
                   :minutesOfCurrentWeek="minutesOfCurrentWeek"
                 />
@@ -94,15 +94,29 @@
                       </select>
                     </div>
                   </template>
+                </div> -->
+
+                <div class="masonary-menu filter-button-group">
+                  <StatsFilterType :type="type" @changeType="changeType" />
+
+                  <StatsDateFilter
+                    v-if="type"
+                    :selectedWeek="selectedWeek"
+                    v-model:monthYear="selectedMonthYear"
+                    :weeks="weeks"
+                    :months="months"
+                    :type="type"
+                    @changeWeek="changeWeek"
+                  />
                 </div>
 
                 <div class="col-12 col-md-12 col-lg-12 mt-3">
                   <div class="card">
-                    <div class="card-title pt-3">
+                    <!-- <div class="card-title pt-3">
                       <h3 class="text-center">
                         {{ monthTitle ?? selectedWeekData?.title }}
                       </h3>
-                    </div>
+                    </div> -->
                     <div class="card-body">
                       <div
                         class="d-flex align-items-center justify-content-around"
@@ -148,11 +162,36 @@ import helper from "@/utilities/helper";
 import StatsHeader from "@/components/conversation/workHours/StatsHeader.vue";
 import StatsIndicators from "@/components/conversation/workHours/StatsIndicators.vue";
 import StatsTables from "@/components/conversation/workHours/StatsTables.vue";
+import StatsFilterType from "@/components/conversation/statistics/StatsFilterType.vue";
+import StatsDateFilter from "@/components/conversation/statistics/StatsDateFilter.vue";
 
 export default {
   name: "WorkingHoursStats",
-  components: { StatsHeader, StatsIndicators, StatsTables },
+  components: {
+    // StatsHeader,
+    StatsIndicators,
+    StatsTables,
+    StatsFilterType,
+    StatsDateFilter,
+  },
   async created() {
+    const queryParams = this.$route.query;
+
+    //fill type, week, monthYear
+    if (!queryParams.type) {
+      this.type = "week";
+    } else {
+      this.type = queryParams.type;
+    }
+
+    if (queryParams.week) {
+      this.selectedWeek = queryParams.week;
+    }
+
+    if (queryParams.monthYear) {
+      this.selectedMonthYear = queryParams.monthYear;
+    }
+
     await this.getStatistics();
   },
   data() {
@@ -188,9 +227,23 @@ export default {
   watch: {
     selectedMonthYear() {
       this.getStatistics();
+      this.$router.push({
+        query: {
+          week: this.selectedWeek,
+          monthYear: this.selectedMonthYear,
+          type: this.type,
+        },
+      });
     },
     selectedWeek() {
       this.getStatistics();
+      this.$router.push({
+        query: {
+          week: this.selectedWeek,
+          monthYear: this.selectedMonthYear,
+          type: this.type,
+        },
+      });
     },
     type() {
       if (this.type == "week") {
@@ -229,6 +282,14 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+
+    changeType(type) {
+      this.type = type;
+    },
+
+    changeWeek(week) {
+      this.selectedWeek = week;
     },
   },
 };

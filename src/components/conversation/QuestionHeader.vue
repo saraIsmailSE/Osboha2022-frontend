@@ -8,7 +8,7 @@
       avatarClass="rounded-circle avatar-40"
     />
     <div class="ms-3">
-      <h6>{{ question.user.name + " " + question.user.last_name }}</h6>
+      <h6>{{ question.user.name }}</h6>
     </div>
   </div>
   <h2 class="accordion-header" id="heading1">

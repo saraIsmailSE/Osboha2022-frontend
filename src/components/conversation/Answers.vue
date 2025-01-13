@@ -13,7 +13,7 @@
         avatarClass="rounded-circle avatar-40"
       />
       <div class="ms-3">
-        <h6>{{ answer.user.name + " " + answer.user.last_name}}</h6>
+        <h6>{{ answer.user.name }}</h6>
       </div>
     </div>
     <div>
