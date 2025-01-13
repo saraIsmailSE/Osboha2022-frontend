@@ -16,9 +16,9 @@
             <div class="social-links">
               <ul class="social-data-block align-items-center justify-content-center list-inline p-0 m-0"
                 style="display: flex !important">
-                <li v-for="(role, index) in roles" :key="index" class="text-center pe-2">
+                <li v-if="getHighestRole(roles)" class="text-center pe-2">
                   <span class="rounded-pill badge bg-primary px-2">{{
-                    ARABIC_ROLES[role]
+                    ARABIC_ROLES[getHighestRole(roles)]
                     }}</span>
                 </li>
               </ul>
@@ -88,6 +88,7 @@ import profileImagesService from "@/API/services/profile.images.service";
 import FriendServices from "@/API/services/friend.service";
 import helper from "@/utilities/helper";
 import { ARABIC_ROLES } from "@/utilities/constants";
+import { getHighestRole } from "@/utilities/commonFunctions";
 
 export default {
   name: "MainInfo",
@@ -119,6 +120,7 @@ export default {
     };
   },
   methods: {
+    getHighestRole,
     updateProfile() {
       this.$router.push({
         name: "user.profileUpdate",

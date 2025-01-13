@@ -18,12 +18,9 @@
       </h5>
       <div class="mt-1" v-if="comment.user?.roles?.length > 0">
         <span
-          class="badge bg-primary rounded-pill ms-1 px-2"
-          v-for="role in comment.user?.roles"
-          :key="role.name"
-        >
-          {{ ARABIC_ROLES[role.name] }}</span
-        >
+          class="badge bg-primary rounded-pill ms-1 px-2">
+          {{ ARABIC_ROLES[getHighestRole(extractRoleNames(comment.user?.roles))] }}
+          </span>
       </div>
     </div>
     <div
@@ -128,6 +125,7 @@ import UserInfoService from "@/Services/userInfoService";
 import helper from "@/utilities/helper";
 import CommentService from "@/API/services/comment.service";
 import { ARABIC_ROLES } from "@/utilities/constants";
+import { getHighestRole , extractRoleNames } from "@/utilities/commonFunctions";
 
 export default {
   name: "CommentUser",
@@ -194,6 +192,8 @@ export default {
           : "تم حذف التعليق!";
   },
   methods: {
+    getHighestRole,
+    extractRoleNames,
     resolve_img_url(path) {
       return path ? path : require("@/assets/images/avatar/avatar-01.jpg");
     },

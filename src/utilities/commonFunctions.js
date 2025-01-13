@@ -32,3 +32,19 @@ export function checkReallocate(latest_ambassador_recored , latest_leader){
     }
     return true;
 }
+
+export function getHighestRole(roles) {
+    const rolePriority = ["admin", "consultant", "advisor", "supervisor", "leader", "ambassador"];
+
+    for (const priority of rolePriority) {
+        if (roles.includes(priority)) {
+            return priority;
+        }
+    }
+
+    return "ambassador";
+}
+
+export function extractRoleNames(roles) {
+    return roles.map(role => role.name);
+}

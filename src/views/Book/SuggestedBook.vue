@@ -174,7 +174,7 @@ export default {
             return UserInfoService.hasRoles(this.user, [
                 "admin",
                 'book_quality_team_coordinator',
-                'book_quality_team',
+                'book_quality_supervisor',
             ]);
         },
 

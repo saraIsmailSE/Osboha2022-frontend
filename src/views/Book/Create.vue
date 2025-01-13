@@ -23,7 +23,7 @@
               <small style="color: red" v-if="v$.bookForm.name.$error">
                 اسم الكتاب مطلوب</small>
             </div>
-            
+
             <available-books :availableBooks="availableBooks" />
 
             <!-- Brief -->
@@ -232,7 +232,10 @@ export default {
       return this.$store.getters.getUser;
     },
     inBooksTeam() {
-      return UserInfoService.hasRole(this.user, "book_quality_team");
+      return UserInfoService.hasRoles(this.user, [
+        'book_quality_team_coordinator',
+        'book_quality_supervisor',
+      ]);
     },
     isAdmin() {
       return UserInfoService.hasRole(this.user, "admin");

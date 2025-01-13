@@ -56,7 +56,8 @@ export default {
     },
     methods: {
         totalDailyPoints(achevement) {
-            return achevement.reduce((total, achevement) => total + achevement.daily_points, 0);
+            const points= achevement.reduce((total, achevement) => total + achevement.daily_points, 0);
+            return points >= 50 ? 50 : points
         },
         getViolationByIndex(index) {
             return this.week_violations[`week_violations_${index}`] || 0;
