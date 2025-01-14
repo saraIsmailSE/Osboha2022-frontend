@@ -1,21 +1,23 @@
-import { api } from "../Intercepter"
-import tokenService from "./token.service";
+import { handleError } from "vue";
+import { api } from "../Intercepter";
 
 class RoomService {
-    async create(name, type, messages_status){
-        try{
-            const creator_id = tokenService.getUser().id;
-            return api.post('/room/create', {name, type, messages_status, creator_id});
-        }catch(error){
-            return error;
-        }
+  async create(receiver_id) {
+    try {
+      const response = await api.post("/rooms", { receiver_id });
+      return response.data.data;
+    } catch (error) {
+      handleError(error);
     }
+  }
 
-    async addUserToGroup(user_id, group_id){
-        try{
-            return api.post('/group/addUserToRoom', {user_id, group_id})
-        }catch(error){
-            return error;
-        }
+  async addUserToGroup(user_id, group_id) {
+    try {
+      return api.post("/group/addUserToRoom", { user_id, group_id });
+    } catch (error) {
+      return error;
     }
+  }
 }
+
+export default new RoomService();

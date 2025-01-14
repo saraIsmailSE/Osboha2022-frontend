@@ -1,58 +1,65 @@
 <template>
   <div>
-    <ChatHeader :unreadMessages="unreadMessages" />
-    <modal
-      ref="newMessageModalRef"
-      id="newMessageModal"
-      tabindex="-1"
-      aria-labelledby="newMessageModalLabel"
-      :aria-hidden="true"
-      dialogClass="modal-md modal-dialog-centered modal-dialog-scrollable"
-      style="height: 95%; padding-top: 9%"
-    >
-      <model-header>
-        <h4>رسالة جديدة</h4>
-        <a
-          href="javascript:void(0);"
-          class="lh-1"
-          ref="commentModalCloseBtn"
-          @click="closeModal"
-        >
-          <span class="material-symbols-outlined">close</span>
-        </a>
-      </model-header>
-
-      <model-body>
-        <form class="add-room-form" @submit.prevent="createRoom">
-          <div class="input-group search-input">
-            <div class="search-icon btn">
-              <span class="material-symbols-outlined"> search </span>
-            </div>
-
-            <input
-              type="text"
-              class="form-control"
-              placeholder="إلى:"
-              @input="searchUsers"
-              v-model="searchQuery"
+    <div class="iq-top-navbar mt-2">
+      <nav
+        class="nmt-4 av navbar navbar-expand-lg navbar-light iq-navbar p-lg-0"
+      >
+        <div class="container-fluid p-auto">
+          <router-link :to="{ name: 'osboha.list' }" class="navbar-brand p-0">
+            <img
+              src="@/assets/images/main/osboha-logo.png"
+              alt="logo"
+              class=""
             />
-
-            <button
-              class="btn close-icon"
-              type="button"
-              v-if="searchQuery.length > 0"
-              @click="clearSearch"
-            >
-              <span class="material-symbols-outlined"> close </span>
+          </router-link>
+          <div class="social-media">
+            <p class="mb-0 d-flex">
+              <i
+                class="d-flex align-items-center justify-content-center ms-2 me-3 position-relative"
+              >
+                <i class="material-symbols-outlined">chat_bubble</i>
+                <span
+                  v-if="unreadMessages"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info"
+                >
+                  {{ unreadMessages }}
+                </span>
+              </i>
+              <i
+                class="d-flex align-items-center justify-content-center ms-2 me-1 position-relative"
+              >
+                <router-link
+                  :to="{ name: 'osboha.list' }"
+                  class="material-symbols-outlined"
+                  >home</router-link
+                >
+              </i>
+            </p>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div class="new-room" v-if="addNewRoom">
+      <form class="add-room-form" @submit.prevent="createRoom">
+        <div class="searchable-dropdown" :class="{ active: showDropdown }">
+          <div class="search-input" :class="{ active: showCloseBtn }">
+            <input
+              v-model="addRoomUsername"
+              type="text"
+              placeholder="البحث عن اسم"
+              @focus="showCloseBtn = true"
+              @input="searchUsers"
+            />
+            <button class="button-cancel" @click="closeSearch">
+              <span class="material-symbols-outlined">close</span>
             </button>
           </div>
-
-          <div class="mt-2">
+          <div class="dropdown-list">
             <div v-if="showEmpty" class="dropdown-list-item">
               <span>لا يوجد نتائج</span>
             </div>
             <div
-              class="text-center justify-content-center dropdown-list-item"
+              class="dropdown-list-item text-center justify-content-center"
               v-if="fetchingUsers"
             >
               <img
@@ -67,6 +74,9 @@
               :key="user.id"
               @click="openNewRoom(user)"
             >
+              <!-- <div class="user-avatar">
+                {{ user.name?.charAt(0).toUpperCase() }}
+              </div> -->
               <BaseAvatar
                 :profileImg="user?.profile.profile_picture"
                 :profile_id="user?.profile.id"
@@ -74,13 +84,14 @@
                 :gender="user?.gender"
                 avatarClass="rounded-circle avatar-40"
               />
+
+              <!-- <img :src="user.profilePicture" alt="profile-img" /> -->
               <span class="me-2">{{ user.name }}</span>
             </div>
           </div>
-        </form>
-      </model-body>
-    </modal>
-
+        </div>
+      </form>
+    </div>
     <vue-advanced-chat
       dir="ltr"
       height="calc(100vh - 20px)"
@@ -94,7 +105,6 @@
       :show-audio="false"
       :show-reaction-emojis="false"
       :message-actions="JSON.stringify(messageActions)"
-      :load-first-room="true"
       @fetch-messages="fetchMessages($event.detail[0])"
       @send-message="sendMessage($event.detail[0])"
       @delete-message="deleteMessage($event.detail[0])"
@@ -108,32 +118,22 @@
 <script>
 import { register } from "vue-advanced-chat";
 import helper from "@/utilities/helper";
-import ChatHeader from "@/components/chat/header.vue";
 import MessageService from "@/API/services/messages.service";
-import RoomService from "@/API/services/room.service";
 import UserService from "@/API/services/user.service";
 import { watchEffect } from "vue";
-import { Modal } from "bootstrap";
 
 register();
 
 export default {
-  components: { ChatHeader },
   async mounted() {
-    this.newMessageModalRef = new Modal(this.$refs.newMessageModalRef.$el);
-
     await this.loadRooms();
 
     //open a new room if user_id is passed in the query params
     const queryParams = this.$route.query;
     if (queryParams.user_id) {
-      console.log("queryParams", queryParams.user_id);
       this.loadUserRoom(queryParams.user_id);
     } else {
-      console.log("queryParams not found before");
-
       this.selectedRoom = this.rooms[0];
-      console.log("queryParams not found after");
     }
   },
 
@@ -150,7 +150,6 @@ export default {
     });
 
     watchEffect(() => {
-      console.log("selectedRoom before", this.selectedRoom);
       // Subscribe to the 'chat' channel
       if (this.selectedRoom) {
         if (this.selectedRoom.roomId != this.currentRoomId) {
@@ -168,37 +167,17 @@ export default {
           }
         });
       }
-
-      console.log("selectedRoom after", this.selectedRoom);
     });
   },
-  watch: {
-    $route(to, from) {
-      this.newMessageModalRef.hide();
-    },
-    selectedRoom(newVal, old) {
-      console.log("selectedRoom OldVal", old, "selectedRoom newVal", newVal);
 
-      // const user = newVal.users.find((user) => user.id !== this.currentUserId);
-      // this.$router.push({
-      //   query: {
-      //     user_id: user.id,
-      //   },
-      // });
-
-      console.log("Route param", this.$route.query.user_id);
-    },
-    currentRoomId(newVal, old) {
-      console.log("currentRoomId OldVal", old, "currentRoomId newVal", newVal);
-    },
-  },
   data() {
     return {
       unreadMessages: 0,
       pusher: null,
+      addNewRoom: false,
       currentRoomId: 0,
       displayedMessageIds: [],
-      searchQuery: "",
+      addRoomUsername: "",
       roomsLoading: false,
       roomsLoaded: false,
       rooms: [],
@@ -225,11 +204,11 @@ export default {
       ],
       users: [],
       delayTimer: null,
+      showDropdown: false,
+      showCloseBtn: false,
       showEmpty: false,
       fetchingUsers: false,
       options: null,
-      newMessageModalRef: null,
-      createRoomLoading: false,
     };
   },
   computed: {
@@ -295,7 +274,6 @@ export default {
     },
 
     fetchMessages({ room, options = {} }) {
-      console.log("fetchMessages room", room);
       if (Object.keys(room).length === 0) return;
 
       this.options = options;
@@ -308,9 +286,7 @@ export default {
         return;
       }
 
-      console.log("fetchMessages before");
       this.selectedRoom = room;
-      console.log("fetchMessages after");
 
       if (room?.isFake) {
         this.messagesLoaded = true;
@@ -357,10 +333,30 @@ export default {
 
     async sendMessage(message) {
       try {
-        const newMessage = message;
+        const newMessage = this.selectedRoom.isFake
+          ? {
+              ...message,
+              roomId: null,
+              receiver_id: this.selectedRoom.users[1]._id,
+            }
+          : message;
 
         const response = await MessageService.create(newMessage);
 
+        //replace the selected fake room with the created one
+        if (this.selectedRoom.isFake) {
+          const fakeRoomIndex = this.rooms.findIndex(
+            (room) => room.roomId === this.selectedRoom.roomId,
+          );
+          this.rooms[fakeRoomIndex] = response.data?.room;
+          this.rooms = [...this.rooms];
+          this.selectedRoom = response.data?.room;
+
+          this.loadRooms();
+
+          return;
+        }
+        //this.messages = [...this.messages, response.data?.message];
         if (!this.displayedMessageIds.includes(response.data?.message._id)) {
           this.messages = [...this.messages, response.data?.message];
           this.displayedMessageIds.push(response.data?.message._id);
@@ -378,10 +374,7 @@ export default {
 
         this.rooms[roomIndex] = newRoom;
         this.rooms = [...this.rooms];
-
-        console.log("sendMessage before");
         this.selectedRoom = newRoom;
-        console.log("sendMessage after");
       } catch (error) {
         helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
       }
@@ -397,19 +390,17 @@ export default {
     },
 
     addRoom() {
-      this.newMessageModalRef.show();
+      this.addNewRoom = true;
+      //remove fake rooms
+      const filteredRooms = this.rooms?.filter((room) => !room.isFake);
+      this.rooms = filteredRooms;
     },
 
-    clearSearch() {
-      this.searchQuery = "";
-      this.fetchingUsers = false;
-      this.users = [];
-      this.showEmpty = false;
-    },
-
-    closeModal() {
-      this.newMessageModalRef.hide();
-      this.clearSearch();
+    closeSearch() {
+      this.addNewRoom = false;
+      this.addRoomUsername = "";
+      this.showDropdown = false;
+      this.showCloseBtn = false;
     },
 
     async searchUsers() {
@@ -421,26 +412,29 @@ export default {
     },
 
     async fetchUsers() {
-      if (this.searchQuery === "") {
+      if (this.addRoomUsername === "") {
+        this.showDropdown = false;
         return;
       }
 
       if (this.fetchingUsers) return;
 
+      this.showDropdown = true;
       this.fetchingUsers = true;
 
       try {
-        const response = await UserService.searchUsers(this.searchQuery);
+        const response = await UserService.searchUsers(this.addRoomUsername);
         this.users = response.data;
       } catch (error) {
         helper.toggleToast("حدث خطأ ما, حاول مرة أخرى", "error");
       } finally {
-        if (this.users.length === 0 && this.searchQuery !== "") {
+        if (this.users.length === 0 && this.addRoomUsername !== "") {
           this.showEmpty = true;
-        } else if (this.users.length > 0 && this.searchQuery !== "") {
+        } else if (this.users.length > 0 && this.addRoomUsername !== "") {
           this.showEmpty = false;
-        } else if (this.users.length === 0 && this.searchQuery === "") {
+        } else if (this.users.length === 0 && this.addRoomUsername === "") {
           this.showEmpty = false;
+          this.showDropdown = false;
         }
 
         this.fetchingUsers = false;
@@ -448,6 +442,9 @@ export default {
     },
 
     openNewRoom(user) {
+      this.addRoomUsername = user?.name;
+      this.showDropdown = false;
+
       //check room if exists
       const room =
         this.rooms?.length > 0
@@ -466,60 +463,45 @@ export default {
             })
           : null;
 
-      console.log("roomFound", room);
-
+      this.addNewRoom = false;
+      this.addRoomUsername = "";
       if (room) {
-        console.log("openNewRoom found before");
         this.selectedRoom = room;
-        console.log("openNewRoom found after");
         this.fetchMessages({ room });
-        this.closeModal();
         return;
       } else {
-        this.createNewRoom(user);
+        this.selectedRoom = null;
+        this.createFakeRoom(user);
+        return;
       }
-
-      console.log("openNewRoom after");
     },
 
-    async createNewRoom(user) {
-      if (this.createRoomLoading) return;
-
-      this.createRoomLoading = true;
-      this.roomsLoading = true;
-      this.roomsLoaded = false;
-
-      try {
-        const room = await RoomService.create(user.id);
-        // console.log(room);
-        // this.rooms = [...(this.rooms || []), room];
-        // console.log(this.rooms);
-
-        console.log("createNewRoom before");
-
-        this.selectedRoom = room;
-        console.log("createNewRoom after");
-
-        this.closeModal();
-
-        // this.$router.push({
-        //   query: {
-        //     user_id: user.id,
-        //   },
-        // });
-
-        //reload rooms
-        // await this.loadRooms();
-      } catch (error) {
-        helper.toggleToast(
-          "حدث خطأ أثناء إنشاء المحادثة, حاول مرة أخرى",
-          "error",
-        );
-      } finally {
-        this.createRoomLoading = false;
-        this.roomsLoading = false;
-        this.roomsLoaded = true;
-      }
+    createFakeRoom(user) {
+      //create a room object
+      const room = {
+        roomId: helper.generateRandomId(),
+        roomName: user.name,
+        index: new Date().toISOString(),
+        users: [
+          {
+            _id: this.currentUserId,
+            name: this.$store.getters.getUser.name,
+            profilePicture:
+              this.$store.getters.getUser.user_profile.profile_picture,
+          },
+          {
+            _id: user.id.toString(),
+            name: user.name,
+            profilePicture: user.profile?.profile_picture,
+          },
+        ],
+        unreadCount: 0,
+        lastMessage: null,
+        lastMessageDate: null,
+        isFake: true,
+      };
+      this.rooms = [...(this.rooms || []), room];
+      this.selectedRoom = room;
     },
 
     openFile({ file }) {
@@ -554,7 +536,7 @@ export default {
 }
 
 .add-room-form {
-  width: 100%;
+  width: 300px;
 }
 
 .searchable-dropdown {
@@ -563,25 +545,6 @@ export default {
 }
 
 .search-input {
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  max-width: 500px;
-  width: 100%;
-}
-
-.search-input input {
-  border: none;
-  outline: none;
-  width: 100%;
-  padding: 10px 20px;
-  font-size: 16px;
-}
-
-.search-input .btn {
-  border: none;
-}
-
-/* .search-input {
   position: relative;
   width: 100%;
 }
@@ -605,7 +568,7 @@ export default {
   outline: none;
   cursor: pointer;
   display: none;
-} */
+}
 
 .dropdown-list {
   position: absolute;
