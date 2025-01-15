@@ -98,15 +98,18 @@ export default {
         return { v$: useVuelidate() };
     },
     async created() {
-        this.current_marathon = await OsbohaMarathon.getCurrentMarathon();
         this.deduction_reasons = await MarathonPoints.getDeductionReasons();
         this.marathon_violations = await MarathonPoints.getMarathonViolations(this.$route.params.user_id, this.$route.params.marathon_id);
     },
-
+    props: {
+        current_marathon: {
+            type: [Object],
+            required: true,
+        },
+    },
     data() {
         return {
             deduction_reasons: [],
-            current_marathon: null,
             marathon_violations: null,
             deductionForm: {
                 osboha_marthon_id: this.$route.params.marathon_id,

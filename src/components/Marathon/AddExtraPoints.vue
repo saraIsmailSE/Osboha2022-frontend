@@ -1,89 +1,60 @@
 <template>
     <div class="col-12 bg-white pt-2">
-        <table class="table table-striped" style="margin-top: 1rem;" v-if="shouldShowTable">
+        <table class="table table-striped" style="margin-top: 1rem;">
             <thead>
                 <tr>
-                    <th scope="col">نوع النقاط </th>
-                    <th scope="col">مجموع النقاط</th>
+                    <th scope="col">الاسبوع</th>
+                    <th scope="col">مشاركة بالانشطة</th>
+                    <th scope="col">دورة القيادة</th>
+                    <th scope="col">توثيق كتاب جيد جداً فأكثر </th>
+                    <th scope="col"> توثيق كتاب اقل من جيد جداَ</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-if="current_bonus_points.activity">
-                    <td>
-                        <p> مشاركة في نشاط</p>
-                    </td>
-                    <td>
-                        <p> {{ current_bonus_points.activity }}</p>
-                    </td>
+                <tr v-for="(row, index) in current_bonus_points" :key="index">
+                    <td>{{ row.week ? row.week.title : "غير محدد" }}</td>
+                    <td>{{ row.activity || '0' }}</td>
+                    <td>{{ row.leading_course || '0' }}</td>
+                    <td>{{ row.eligible_book || '0' }}</td>
+                    <td>{{ row.eligible_book_less_VG || '0' }}</td>
                     <td>
                         <span class="material-symbols-outlined align-middle" role="button"
-                            @click="subtractPoints('activity')">
+                            @click="subtractPoints(row.id)">
                             arrow_cool_down
                         </span>
                     </td>
-                </tr>
-                <tr v-if="current_bonus_points.leading_course">
-                    <td>
-                        <p> مشاركة في دورة القادة</p>
-                    </td>
-                    <td>
-                        <p> {{ current_bonus_points.leading_course }}</p>
-                    </td>
-                    <td>
-                        <span class="material-symbols-outlined align-middle" role="button"
-                            @click="subtractPoints('leading_course')">
-                            arrow_cool_down
-                        </span>
-                    </td>
-
-                </tr>
-                <tr v-if="current_bonus_points.eligible_book">
-                    <td>
-                        <p> توثيق كتاب جيد جداً فأكثر</p>
-                    </td>
-                    <td>
-                        <p> {{ current_bonus_points.eligible_book }}</p>
-                    </td>
-                    <td>
-                        <span class="material-symbols-outlined align-middle" role="button"
-                            @click="subtractPoints('eligible_book')">
-                            arrow_cool_down
-                        </span>
-                    </td>
-
-                </tr>
-
-                <tr v-if="current_bonus_points.eligible_book_less_VG">
-                    <td>
-                        <p> توثيق كتاب اقل من جيد جداَ</p>
-                    </td>
-                    <td>
-                        <p> {{ current_bonus_points.eligible_book_less_VG }}</p>
-                    </td>
-                    <td>
-                        <span class="material-symbols-outlined align-middle" role="button"
-                            @click="subtractPoints('eligible_book_less_VG')">
-                            arrow_cool_down
-                        </span>
-                    </td>
-
                 </tr>
             </tbody>
         </table>
 
+
         <div class="sign-in-from">
             <form class="mt-2" @submit.prevent="onSubmit()">
                 <div class="form-group">
+
+                    <div class="form-group"
+                        v-if="current_marathon.marathon_weeks && current_marathon.marathon_weeks.length > 0">
+                        <select class="form-select" data-trigger name="choices-single-default"
+                            id="choices-single-default" v-model="bonusForm.week_key">
+                            <option value="" selected>الاسبوع ... </option>
+                            <option v-for=" marathon_week in current_marathon.marathon_weeks" :key="marathon_week"
+                                :value="marathon_week.week_key">
+                                {{ marathon_week.week_title }}
+                            </option>
+                        </select>
+                        <small style="color: red" v-if="v$.bonusForm.week_key.$error">يجب اختيار الاسبوع</small>
+                    </div>
                     <select class="form-select" data-trigger name="choices-single-default" id="choices-single-default"
                         v-model="bonusForm.bonus_type" @change="handleBonusTypeChange">
                         <option value="" selected>اختر ... </option>
-                        <option value="activity" >مشاركة في نشاط</option>
+                        <option value="activity">مشاركة في نشاط</option>
                         <option value="leading_course">دورة القادة</option>
                         <option value="eligible_book">توثيق كتاب </option>
                     </select>
                     <small style="color: red" v-if="v$.bonusForm.bonus_type.$error">يجب اختيار نوع الاعتماد</small>
 
                 </div>
+
                 <div class="form-group" v-if="activities">
                     <input type="text" class="form-control mb-0" id="number_of_activites" placeholder=" عدد الأنشطة"
                         v-model="bonusForm.amount" />
@@ -137,7 +108,12 @@ export default {
     async created() {
         this.current_bonus_points = await MarathonPoints.getBonusPoints(this.$route.params.user_id, this.$route.params.marathon_id)
     },
-
+    props: {
+        current_marathon: {
+            type: [Object],
+            required: true,
+        },
+    },
     data() {
         return {
             current_bonus_points: null,
@@ -145,6 +121,7 @@ export default {
                 osboha_marthon_id: this.$route.params.marathon_id,
                 user_id: this.$route.params.user_id,
                 bonus_type: "",
+                week_key: "",
                 amount: 1,
                 eligible_book_avg: '',
             },
@@ -180,6 +157,7 @@ export default {
                         osboha_marthon_id: this.$route.params.marathon_id,
                         user_id: this.$route.params.user_id,
                         bonus_type: "",
+                        week_key: "",
                         amount: 1,
                         eligible_book_avg: '',
                     };
@@ -208,12 +186,12 @@ export default {
                 }
             }
         },
-        async subtractPoints(selected_bonus_type) {
+        async subtractPoints(bonus_id) {
             try {
                 const form = {
                     osboha_marthon_id: this.$route.params.marathon_id,
                     user_id: this.$route.params.user_id,
-                    bonus_type: selected_bonus_type,
+                    bonus_id: bonus_id,
                 };
                 const response = await MarathonPoints.subtractPoints(form);
                 this.current_bonus_points = response;
@@ -242,6 +220,9 @@ export default {
     validations() {
         return {
             bonusForm: {
+                week_key: {
+                    required,
+                },
                 bonus_type: {
                     required,
                 },

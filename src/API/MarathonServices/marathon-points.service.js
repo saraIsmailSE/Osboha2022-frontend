@@ -28,6 +28,7 @@ class MarathonPointsServices {
             let formData = new FormData();
             formData.append('user_id', form.user_id);
             formData.append('osboha_marthon_id', form.osboha_marthon_id);
+            formData.append('week_key', form.week_key);
             formData.append('bonus_type', form.bonus_type);
             formData.append('amount', form.amount);
             formData.append('eligible_book_avg', form.eligible_book_avg);
@@ -66,7 +67,7 @@ class MarathonPointsServices {
             let formData = new FormData();
             formData.append('user_id', form.user_id);
             formData.append('osboha_marthon_id', form.osboha_marthon_id);
-            formData.append('bonus_type', form.bonus_type);
+            formData.append('bonus_id', form.bonus_id);
             const response = await api.post(`${this.prefix}/subtract-bonus`, formData, {
                 headers: { "Content-type": "multipart/form-data" },
             });

@@ -100,8 +100,11 @@ export default {
       return this.$store.getters.getUser;
     },
     allowedToAddNotes() {
-      const groupAdministrators = ['admin', 'consultant', 'advisor', 'supervisor', 'leader']
-      return groupAdministrators.includes(this.authInGroup.user_type)
+      if (this.authInGroup) {
+        const groupAdministrators = ['admin', 'consultant', 'advisor', 'supervisor', 'leader']
+        return groupAdministrators.includes(this.authInGroup.user_type)
+      }
+      return false;
     }
   },
 
